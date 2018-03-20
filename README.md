@@ -6,7 +6,7 @@ The tools are based on research conducted by the Chair of Architecture and Build
 
 ## Projects currently in this repository:
 
-### **HIVE grasshopper library** 
+### **GH_RC_simulator** 
 
 A series of user objects based on resistor-capacitor model in the [RC_BuildingSimulator](https://github.com/architecture-building-systems/RC_BuildingSimulator) repository. Documentation and developer's notes can be found in the [project wiki](https://github.com/architecture-building-systems/hive/wiki).
 
@@ -17,3 +17,5 @@ A series of user objects based on resistor-capacitor model in the [RC_BuildingSi
 ## Projects to be included:
 
 * **Net-zero energy building assesment**: Workflows in Ladybug and Honeybee developed by Laura Cowie to assess design options for a net-zero building refurbishment.
+
+* **Panelling tool**: Stefan Caranovic recently circulated a working version within the chair. A possible enhancement of this tool would be to include PV panel visualisation.
