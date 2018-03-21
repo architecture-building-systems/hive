@@ -18,4 +18,4 @@ A series of user objects based on resistor-capacitor model in the [RC_BuildingSi
 
 * **Net-zero energy building assesment**: Workflows in Ladybug and Honeybee developed by Laura Cowie to assess design options for a net-zero building refurbishment.
 
-* **Panelling tool**: Stefan Caranovic recently circulated a working version within the chair. A possible enhancement of this tool would be to include PV panel visualisation.
+* **Panelling tool**: Stefan Caranovic recently circulated a working version within the chair. A possible enhancement of this tool would be to include PV panel visualisation (Linus Walker).
