@@ -1,30 +1,30 @@
 ﻿# This comoponent contains a car-builder system of objects which define simple 
 # emission systems.
 #
-# Nest: An educational plugin developed by the A/S chair at ETH Zurich
+# Oasys: An educational plugin developed by the A/S chair at ETH Zurich
 # This component is based on emission_system.py in the RC_BuildingSimulator github repository
 # https://github.com/architecture-building-systems/RC_BuildingSimulator
 #
 # Authors: Prageeth Jayathissa <jayathissa@arch.ethz.ch>, Michael Fehr
 # Converted into a grasshopper plugin by Justin Zarb <zarbj@student.ethz.ch>
 #
-# This file is part of Nest
+# This file is part of Oasys
 #
 # Licensing/Copywrite and liability comments go here.
 # Copyright 2018, Architecture and Building Systems - ETH Zurich
 # Licence: MIT
 
 """
-Place this component in the grasshopper workspace so that other Nest components can access the emission systems object definitions
+Place this component in the grasshopper workspace so that other Oasys components can access the emission systems object definitions
 -
-Provided by Nest 0.0.1
+Provided by Oasys 0.0.1
 """
 
 ghenv.Component.Name = "Emission Systems"
 ghenv.Component.NickName = 'EmissionSystems'
 ghenv.Component.Message = 'VER 0.0.1\nFEB_21_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
-ghenv.Component.Category = "Nest"
+ghenv.Component.Category = "Oasys"
 ghenv.Component.SubCategory = "0 | Core"
 
 try: ghenv.Component.AdditionalHelpFromDocStrings = "2"
@@ -204,12 +204,28 @@ class Flows:
     cooling_supply_temperature = float("nan")
     # return temperatures
 
-sc.sticky["EmissionDirector"] = EmissionDirector
-sc.sticky["OldRadiators"] = OldRadiators
-sc.sticky["AirConditioning"] = AirConditioning
-sc.sticky["NewRadiators"] = NewRadiators
-sc.sticky["ChilledBeams"] = ChilledBeams
-sc.sticky["FloorHeating"] = FloorHeating
-sc.sticky["TABS"] = TABS
+connected = False
 
-print 'Emission systems are go!'
+while not connected:
+    try:
+        sc.sticky["SupplyDirector"]
+        connected = True
+    except NameError:
+        error = "Add the supply_systems component to the canvas!"
+        e = gh.GH_RuntimeMessageLevel.error
+        ghenv.Component.AddRuntimeMessage(e, error)
+
+
+if connected:
+    sc.sticky["EmissionDirector"] = EmissionDirector
+    sc.sticky["OldRadiators"] = OldRadiators
+    sc.sticky["AirConditioning"] = AirConditioning
+    sc.sticky["NewRadiators"] = NewRadiators
+    sc.sticky["ChilledBeams"] = ChilledBeams
+    sc.sticky["FloorHeating"] = FloorHeating
+    sc.sticky["TABS"] = TABS
+    
+    sc.sticky["emission_systems_ok"] = True
+    sc.sticky["pushback"]()
+
+    print 'Emission systems are go!'

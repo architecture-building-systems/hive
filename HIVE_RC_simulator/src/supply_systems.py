@@ -1,30 +1,30 @@
 ﻿# This comoponent contains a car-builder system of objects which define simple 
 # emission systems.
 #
-# Nest: An educational plugin developed by the A/S chair at ETH Zurich
+# Oasys: An educational plugin developed by the A/S chair at ETH Zurich
 # This component is based on code in the RC_BuildingSimulator github repository
 # https://github.com/architecture-building-systems/RC_BuildingSimulator
 #
 # Authors: Prageeth Jayathissa <jayathissa@arch.ethz.ch>, Michael Fehr
 # Converted into a grasshopper plugin by Justin Zarb <zarbj@student.ethz.ch>
 #
-# This file is part of Nest
+# This file is part of Oasys
 #
 # Licensing/Copywrite and liability comments go here.
 # Copyright 2018, Architecture and Building Systems - ETH Zurich
 # Licence: MIT
 
 """
-Place this component in the grasshopper workspace so that other Nest components can access the supply systems objects.
+Place this component in the grasshopper workspace so that other Oasys components can access the supply systems objects.
 -
-Provided by Nest 0.0.1
+Provided by Oasys 0.0.1
 """
 
 ghenv.Component.Name = "Supply Systems"
 ghenv.Component.NickName = 'SupplySystems'
 ghenv.Component.Message = 'VER 0.0.1\nFEB_22_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
-ghenv.Component.Category = "Nest"
+ghenv.Component.Category = "Oasys"
 ghenv.Component.SubCategory = "0 | Core"
 
 try: ghenv.Component.AdditionalHelpFromDocStrings = "2"
@@ -252,6 +252,18 @@ class SupplyOut:
     cop = float("nan")
 
 
+def pushback():
+    """
+    Push RC component to back. 
+    The following lines are taken from Ladybug_Ladybug. Their purpose is to 
+    initialise the sticky components upon startup. Without them, the components 
+    need to be manually refreshed.
+    """
+    ghenv.Component.OnPingDocument().SelectAll()
+    ghenv.Component.Attributes.Selected = False
+    ghenv.Component.OnPingDocument().BringSelectionToTop()
+    ghenv.Component.OnPingDocument().DeselectAll()
+
 sc.sticky["OilBoilerOld"] = OilBoilerOld
 sc.sticky["OilBoilerMed"] = OilBoilerMed
 sc.sticky["OilBoilerNew"] = OilBoilerNew
@@ -262,4 +274,10 @@ sc.sticky["CHP"] = CHP
 sc.sticky["DirectHeater"] = DirectHeater
 sc.sticky["DirectCooler"] = DirectCooler
 sc.sticky["SupplyDirector"] = SupplyDirector
+
+
+sc.sticky["pushback"] = pushback
+pushback()
+sc.sticky["supply_systems_ok"] = True
+
 print 'Supply systems are go!'

@@ -39,8 +39,10 @@ import scriptcontext as sc
 import rhinoscriptsyntax as rs
 import Rhino as rc
 import ghpythonlib.components as gh
+import Grasshopper.Kernel as ghKernel
 import math
 import datetime
+import time
 
 
 class RadiationWindow(object):
@@ -1100,11 +1102,19 @@ class Building(object):
         
         self.t_opperative = 0.3 * self.t_air + 0.7 * self.t_s
 
-sc.sticky["RadiationWindow"] = RadiationWindow
-sc.sticky["Element"] = Element
-sc.sticky["ElementBuilder"] = ElementBuilder
-sc.sticky["ThermalBridge"] = ThermalBridge
-sc.sticky["Zone"] = Zone
-sc.sticky["ModularRCZone"] = Building
 
-print 'Modular Building Physics is go!'
+error = "Connect emissions_systems and supply_systems components!"
+e = ghKernel.GH_RuntimeMessageLevel.Error
+
+if systems == [] or len(systems) != 2:
+    ghenv.Component.AddRuntimeMessage(e, error)
+
+if any(['Emission' in s for s in systems]) and any(['Supply' in s for s in systems]):
+    sc.sticky["RadiationWindow"] = RadiationWindow
+    sc.sticky["Element"] = Element
+    sc.sticky["ElementBuilder"] = ElementBuilder
+    sc.sticky["ThermalBridge"] = ThermalBridge
+    sc.sticky["Zone"] = Zone
+    sc.sticky["ModularRCZone"] = Building
+    sc.sticky['pushback']()
+    print 'Modular Building Physics is go!'

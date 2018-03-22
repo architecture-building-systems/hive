@@ -32,6 +32,7 @@ try: ghenv.Component.AdditionalHelpFromDocStrings = "1"
 except: pass
 
 import scriptcontext as sc
+import Grasshopper.Kernel as ghKernel
 
 class Building(object):
     '''Sets the parameters of the building. '''
@@ -547,6 +548,15 @@ class Building(object):
 
         self.t_opperative = 0.3 * self.t_air + 0.7 * self.t_s
 
-sc.sticky["RC_Zone"] = Building
 
-print 'Building Physics is go!'
+error = "Connect emissions_systems and supply_systems components!"
+e = ghKernel.GH_RuntimeMessageLevel.Error
+
+if systems == [] or len(systems) != 2:
+    ghenv.Component.AddRuntimeMessage(e, error)
+
+if any(['Emission' in s for s in systems]) and any(['Supply' in s for s in systems]):
+    sc.sticky["RC_Zone"] = Building
+    sc.sticky['pushback']()    
+    sc.sticky['pushback']()
+    print 'Building Physics is go!'
