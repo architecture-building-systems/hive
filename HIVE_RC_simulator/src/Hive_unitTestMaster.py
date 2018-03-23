@@ -1,6 +1,6 @@
-﻿# This component runs unit tests on the RC model
+# This component runs unit tests on the RC model
 #
-# Nest: A energy simulation plugin developed by the A/S chair at ETH Zurich
+# Hive: A energy simulation plugin developed by the A/S chair at ETH Zurich
 #
 # This component is based on tests\testRCmodel.py (accessed 2/22/2018) 
 # in the RC_BuildingSimulator Github repository:
@@ -10,7 +10,7 @@
 # Author: Prageeth Jayathissa
 # Adapted for Grasshopper by Justin Zarb <zarbj@student.ethz.ch>
 #
-# This file is part of Nest
+# This file is part of Hive
 #
 # Licensing/Copyright and liability comments go here.
 # <Copyright 2018, Architecture and Building Systems - ETH Zurich>
@@ -24,7 +24,7 @@ As opposed to the python unit tests, where test parameters are defined within
 the function for that specific test, all the parameters are declared within 
 dictionaries at the beginning of the script.
 -
-Provided by Nest 0.0.1
+Provided by Hive 0.0.1
     
     Args:
         Run: The index of the test to be run. 
@@ -38,15 +38,13 @@ Provided by Nest 0.0.1
         occupancy: Occupancy for the timestep [people/hour/square_meter]
 """
 
-ghenv.Component.Name = "Unit Test Master"
-ghenv.Component.NickName = 'unit_test_master'
+ghenv.Component.Name = "Hive_unitTestMaster"
+ghenv.Component.NickName = 'unitTestMaster'
 ghenv.Component.Message = 'VER 0.0.1\nFEB_28_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
-ghenv.Component.Category = "Nest"
-ghenv.Component.SubCategory = "Simulation"
-#compatibleNestVersion = VER 0.0.1\nFEB_21_2018
-try: ghenv.Component.AdditionalHelpFromDocStrings = "3"
-except: pass
+ghenv.Component.Category = "Hive"
+ghenv.Component.SubCategory = "3 | Testing"
+# ComponentExposure=1
 
 import scriptcontext as sc
 import time
@@ -104,6 +102,7 @@ sc.sticky['expected_results'] = {
 
 number_of_tests= len(sc.sticky['expected_results']['name']) -1
 print zones[run]
+
 try:
     Zone = zones[run]
     outdoor_air_temperature = tests['t_out'][run]

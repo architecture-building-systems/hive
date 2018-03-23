@@ -1,6 +1,6 @@
-﻿# This component confirms that the model outputs match predefined values
+# This component confirms that the model outputs match predefined values
 #
-# Nest: A energy simulation plugin developed by the A/S chair at ETH Zurich
+# Hive: A energy simulation plugin developed by the A/S chair at ETH Zurich
 #
 # This component is based on tests\testRCmodel.py (accessed 2/22/2018) 
 # in the RC_BuildingSimulator Github repository:
@@ -9,7 +9,7 @@
 #
 # Author: Justin Zarb <zarbj@student.ethz.ch>
 #
-# This file is part of Nest
+# This file is part of Hive
 #
 # Licensing/Copyright and liability comments go here.
 # <Copyright 2018, Architecture and Building Systems - ETH Zurich>
@@ -19,7 +19,7 @@
 Use this component to run standard tests on the RC model within the GH environment.
 This test ensures that the grasshopper component returns the same results as the python model.
 -
-Provided by Nest 0.0.1
+Provided by Hive 0.0.1
     
     Args:
         mass_temperature: The mass node temperature for the hour simulated
@@ -34,15 +34,13 @@ Provided by Nest 0.0.1
         test_passed: True if all tests have been passed.
 """
 
-ghenv.Component.Name = "Unit Test Slave"
-ghenv.Component.NickName = 'unit_test_slave'
+ghenv.Component.Name = "Hive_unitTestSlave"
+ghenv.Component.NickName = 'unitTestSlave'
 ghenv.Component.Message = 'VER 0.0.1\nFEB_28_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
-ghenv.Component.Category = "Nest"
-ghenv.Component.SubCategory = "Simulation"
-#compatibleNestVersion = VER 0.0.1\nFEB_21_2018
-try: ghenv.Component.AdditionalHelpFromDocStrings = "3"
-except: pass
+ghenv.Component.Category = "Hive"
+ghenv.Component.SubCategory = "3 | Testing"
+# ComponentExposure=2
 
 import scriptcontext as sc
 
@@ -87,18 +85,21 @@ x,test_passed = run_test(run)
 
 # record result
 if 'recL' in locals():
-    if not (run in tests_run):
-        tests_run.append(run)
-        recL.append(x)
-        
-    # reset when slider goes to zero
-    if run == 0:
-        tests_run = [0]
-        recL = [run_test(0)[0]]
-
+    if 'tests_run' in locals():
+        if not (run in tests_run):
+            tests_run.append(run)
+            recL.append(x)
+            
+        # reset when slider goes to zero
+        if run == 0:
+            tests_run = [0]
+            recL = [run_test(0)[0]]
+        else:
+            pass
+    else:
+        tests_run = []
 else:
     recL = []
-    tests_run=[]
 
 
 # Print results

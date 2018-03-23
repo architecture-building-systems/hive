@@ -1,34 +1,33 @@
-﻿# This comoponent contains a car-builder system of objects which define simple 
+# This comoponent contains a car-builder system of objects which define simple 
 # emission systems.
 #
-# Oasys: An educational plugin developed by the A/S chair at ETH Zurich
+# Hive: An educational plugin developed by the A/S chair at ETH Zurich
 # This component is based on code in the RC_BuildingSimulator github repository
 # https://github.com/architecture-building-systems/RC_BuildingSimulator
 #
 # Authors: Prageeth Jayathissa <jayathissa@arch.ethz.ch>, Michael Fehr
 # Converted into a grasshopper plugin by Justin Zarb <zarbj@student.ethz.ch>
 #
-# This file is part of Oasys
+# This file is part of Hive
 #
 # Licensing/Copywrite and liability comments go here.
 # Copyright 2018, Architecture and Building Systems - ETH Zurich
 # Licence: MIT
 
 """
-Place this component in the grasshopper workspace so that other Oasys components can access the supply systems objects.
+Place this component in the grasshopper workspace so that other Hive components can access the supply systems objects.
 -
-Provided by Oasys 0.0.1
+Provided by Hive 0.0.1
 """
 
-ghenv.Component.Name = "Supply Systems"
+ghenv.Component.Name = "Hive_SupplySystems"
 ghenv.Component.NickName = 'SupplySystems'
 ghenv.Component.Message = 'VER 0.0.1\nFEB_22_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
-ghenv.Component.Category = "Oasys"
+ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "0 | Core"
+# ComponentExposure=2
 
-try: ghenv.Component.AdditionalHelpFromDocStrings = "2"
-except: pass
 
 import scriptcontext as sc
 

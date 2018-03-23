@@ -1,39 +1,38 @@
-﻿# This comoponent contains an object-oriented adaptation of the RC model referred to as the 'Simple Hourly Method' in ISO 13790, (superceded by EN ISO 52016-1).
-# The code is a slightly modified version of building_physics.py in the main 
-# branch, and is based on the nested_rc branch. The modifications make it easier
-# to accomodate a more modular zone definiton, made of a zone and elements. 
-
-# Oasys: An educational plugin developed by the A/S chair at ETH Zurich
-# This component is based on building_physics.py in the RC_BuildingSimulator 
-# github repository
-# https://github.com/architecture-building-systems/RC_BuildingSimulator
-# Extensive documentation is available on the project wiki.
 #
+# Hive: An educational plugin developed by the A/S chair at ETH Zurich
+#
+# This comoponent contains an object-oriented adaptation of the RC model 
+# referred to as the 'Simple Hourly Method' in ISO 13790, (superceded by 
+# EN ISO 52016-1).
+
+# The code contains the version of building_physics.py found in the nested_rc 
+# branch. The modifications make it easier to accomodate a more modular zone 
+# definiton, made of a zone and elements. 
+# See https://github.com/architecture-building-systems/RC_BuildingSimulator for
+# extensive documentation is available on the project wiki.
+
 # Authors: Prageeth Jayathissa <jayathissa@arch.ethz.ch>, Justin Zarb 
 # <zarbj@student.ethz.ch>
 # Adapted for Grasshopper by Justin Zarb
 #
-# This file is part of Oasys
+# This file is part of Hive
 #
-# Licensing/Copywrite and liability comments go here.
-# Copyright 2018, Architecture and Building Systems - ETH Zurich
-# Licence: MIT
+#TODO: Licensing/Copyright and liability stuff
+
 
 """
 Place this component in the grasshopper workspace so that zones can be defined and simulations run.
 -
-Provided by Oasys 0.0.1
+Provided by Hive 0.0.1
 """
 
-ghenv.Component.Name = "Modular Building Physics"
-ghenv.Component.NickName = 'ModularBuildingPhysics'
-ghenv.Component.Message = 'VER 0.0.1\nFEB_28_2018'
+ghenv.Component.Name = "Hive_Hive"
+ghenv.Component.NickName = 'Hive'
+ghenv.Component.Message = 'VER 0.0.1\nMAR_23_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
-ghenv.Component.Category = "Oasys"
+ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "0 | Core"
-
-try: ghenv.Component.AdditionalHelpFromDocStrings = "1"
-except: pass
+# ComponentExposure=1
 
 import scriptcontext as sc
 import rhinoscriptsyntax as rs
@@ -43,6 +42,24 @@ import Grasshopper.Kernel as ghKernel
 import math
 import datetime
 import time
+
+class HivePreparation(object):
+    """ 
+    Credits: Ladybug
+    This object is a stripped-down version of the Ladybug Preparation component,
+    which provides support for other components which have been adapted from
+    Ladybug to Hive    
+    """
+
+    def __init__(self):
+        self.monthList = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
+        self.numOfDays = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365]
+        self.numOfDaysEachMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+        self.numOfHours = [24 * numOfDay for numOfDay in self.numOfDays]
+    
+    def getJD(self, month, day):
+        numOfDays = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
+        return numOfDays[int(month)-1] + int(day)
 
 
 class RadiationWindow(object):
@@ -116,7 +133,7 @@ class RadiationWindow(object):
 
     def calc_sun_position(self, hoy):
         """
-        Credits: Prageeth Jayathissa, Joan Domènech Masferrer 
+        Credits: Prageeth Jayathissa, Joan Domnech Masferrer 
         Calculates the sun position for a specific hour of the year and location,
         according to traditional convention.
         :param latitude_deg: Local Latitude [Degrees]. North+, South-.
@@ -1116,5 +1133,6 @@ if any(['Emission' in s for s in systems]) and any(['Supply' in s for s in syste
     sc.sticky["ThermalBridge"] = ThermalBridge
     sc.sticky["Zone"] = Zone
     sc.sticky["ModularRCZone"] = Building
+    sc.sticky["HivePreparation"] = HivePreparation
     sc.sticky['pushback']()
     print 'Modular Building Physics is go!'

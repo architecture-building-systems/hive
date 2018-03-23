@@ -1,24 +1,24 @@
-﻿# This comoponent creates a basic default zone: the user is allowed 
+# This comoponent creates a basic default zone: the user is allowed 
 # to override the default attributes and customize it.
 #
-# Nest: A energy simulation plugin developed by the A/S chair at ETH Zurich
+# Hive: A energy simulation plugin developed by the A/S chair at ETH Zurich
 # This component is based on building_physics.py in the RC_BuildingSimulator Github repository
 # https://github.com/architecture-building-systems/RC_BuildingSimulator
 # Extensive documentation is available on the project wiki.
 #
 # Author: Justin Zarb <zarbj@student.ethz.ch>
 #
-# This file is part of Nest
+# This file is part of Hive
 #
 # Licensing/Copyright and liability comments go here.
 # <Copyright 2018, Architecture and Building Systems - ETH Zurich>
 # <Licence: MIT>
 
 """
-Create a custom thermal zone. This method is more manual than the
-element-based approach. Parameters left blank will be filled with default values.
+Create a custom thermal zone in the format used in the main branch of 
+RC_BuildingSimulator. Parameters left blank will be replaced by defaults.
 -
-Provided by Nest 0.0.1
+Provided by Hive 0.0.1
     
     Args:
         window_area: Window area used to calculate losses.
@@ -55,15 +55,13 @@ Provided by Nest 0.0.1
         
 """
 
-ghenv.Component.Name = "Zone1"
+ghenv.Component.Name = "Hive_Zone1"
 ghenv.Component.NickName = 'Zone1'
 ghenv.Component.Message = 'VER 0.0.1\nMAR_06_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
-ghenv.Component.Category = "Nest"
-ghenv.Component.SubCategory = " 1 | Zone"
-#compatibleNestVersion = VER 0.0.1\nFEB_21_2018
-try: ghenv.Component.AdditionalHelpFromDocStrings = "1"
-except: pass
+ghenv.Component.Category = "Hive"
+ghenv.Component.SubCategory = "1 | Zone"
+# ComponentExposure=2
 
 import Grasshopper.Kernel as gh
 import scriptcontext as sc

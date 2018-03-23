@@ -1,4 +1,4 @@
-﻿# Opaque element
+# Opaque element
 #
 # Oasys: A energy simulation plugin developed by the A/S chair at ETH Zurich
 # This component is based on building_physics.py in the RC_BuildingSimulator Github repository
@@ -28,20 +28,30 @@ Provided by Oasys 0.0.1
         opaque_elements: list of element objects representing each surface that was inputted.
 """
 
-ghenv.Component.Name = "Opaque Element"
+ghenv.Component.Name = "Hive_OpaqueElement"
 ghenv.Component.NickName = 'OpaqueElement'
-ghenv.Component.Message = 'VER 0.0.1\nMAR_06_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAR_22_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
-ghenv.Component.Category = "Oasys"
-ghenv.Component.SubCategory = " 1 | Zone"
-#compatibleOasysVersion = VER 0.0.1\nFEB_21_2018
-try: ghenv.Component.AdditionalHelpFromDocStrings = "2"
-except: pass
+ghenv.Component.Category = "Hive"
+ghenv.Component.SubCategory = "1 | Zone"
+# ComponentExposure=1
 
 import scriptcontext as sc
 
-Builder = sc.sticky['ElementBuilder'](element_name,u_value,None,False)
-centers,normals,opaque_element = Builder.add_element(_geometry)
 
-for e in opaque_element:
-    print e.name,':', e.u_value,'W/m2K'
+def main(element_name,u_value):
+    if not sc.sticky.has_key('ElementBuilder'): 
+        return "Add the modular RC component to the canvas!"
+
+    Builder = sc.sticky['ElementBuilder'](element_name,u_value,1,True)
+    centers,normals,opaque_element = Builder.add_element(_geometry)
+    
+    for e in opaque_element:
+        print e.name,':', e.u_value,'W/m2K'
+    
+    return centers, normals, opaque_element
+
+try:
+    centers,normals,opaque_element = main(element_name,u_value)
+except ValueError:
+    print main(element_name,u_value)

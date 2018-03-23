@@ -1,14 +1,14 @@
-﻿# This comoponent creates a zone made of elements: the user is allowed 
+# This comoponent creates a zone made of elements: the user is allowed 
 # to override the default attributes and customize it.
 #
-# Oasys: A energy simulation plugin developed by the A/S chair at ETH Zurich
+# Hive: A energy simulation plugin developed by the A/S chair at ETH Zurich
 # This component is based on building_physics.py in the RC_BuildingSimulator Github repository
 # https://github.com/architecture-building-systems/RC_BuildingSimulator
 # Extensive documentation is available on the project wiki.
 #
 # Author: Justin Zarb <zarbj@student.ethz.ch>
 #
-# This file is part of Oasys
+# This file is part of Hive
 #
 # Licensing/Copyright and liability comments go here.
 # <Copyright 2018, Architecture and Building Systems - ETH Zurich>
@@ -18,7 +18,7 @@
 Create a customized zone using elements as inputs.
 Parameters left blank will be filled with default values.
 -
-Provided by Oasys 0.0.1
+Provided by Hive 0.0.1
     
     Args:
         glazed_elements: Element objects with additional glazing properties
@@ -58,23 +58,20 @@ Provided by Oasys 0.0.1
         
 """
 
-ghenv.Component.Name = "Zone2"
+ghenv.Component.Name = "Hive_Zone2"
 ghenv.Component.NickName = 'Zone2'
 ghenv.Component.Message = 'VER 0.0.1\nFEB_28_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
-ghenv.Component.Category = "Oasys"
-ghenv.Component.SubCategory = " 1 | Zone"
-#compatibleOasysVersion = VER 0.0.1\nFEB_21_2018
-try: ghenv.Component.AdditionalHelpFromDocStrings = "1"
-except: pass
+ghenv.Component.Category = "Hive"
+ghenv.Component.SubCategory = "1 | Zone"
+# ComponentExposure=2
 
 import scriptcontext as sc
 import Grasshopper.Kernel as gh
 
-
-#==============================================================================
-#                            Set up thermal zone
-#==============================================================================
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+#Manage Inputs
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 #  Initialize default values if no input is detected
 thermal_attributes = {"elements":None,
@@ -94,13 +91,11 @@ thermal_attributes = {"elements":None,
               "heating_emission_system":sc.sticky["AirConditioning"],
               "cooling_emission_system":sc.sticky["AirConditioning"]
               }
+lighting_attributes = {'lighting_load':11.7,
+                       'lighting_control':300.0,
+                       'lighting_utilisation_factor':0.45,
+                       'lighting_maintenance_factor':0.9}
 
-def validate_element(element):
-    # Check if the element object has the mian three parameters
-    if [x in dir(element) for x in ['name','area','u_value']]:
-        return True
-    else:
-        return False
 
 # keep valid element objects and combine them into a single list.
 g = [x for x in glazed_elements if validate_element(x)]
@@ -141,46 +136,56 @@ for t in thermal_attributes.keys():
             value = t+': emission_system.'+str(locals()[t])[22:-2]
         unique_inputs[t] = value
 
-#Declare zone
-ThermalZone = sc.sticky['Zone'](elements = elements,
-                         thermal_bridges = thermal_bridges,
-                         floor_area = thermal_attributes['floor_area'],
-                         volume = thermal_attributes['volume'],
-                         thermal_capacitance_per_floor_area=thermal_attributes['thermal_capacitance_per_floor_area'],
-                         ach_vent=thermal_attributes['ach_vent'],
-                         ach_infl=thermal_attributes['ach_infl'],
-                         ventilation_efficiency=thermal_attributes['ventilation_efficiency'],
-                         t_set_heating = thermal_attributes['t_set_heating'],
-                         t_set_cooling = thermal_attributes['t_set_cooling'],
-                         max_heating_energy_per_floor_area = thermal_attributes['max_heating_energy_per_floor_area'],
-                         max_cooling_energy_per_floor_area = thermal_attributes['max_cooling_energy_per_floor_area'],
-                         heating_supply_system=thermal_attributes['heating_supply_system'],
-                         cooling_supply_system=thermal_attributes['cooling_supply_system'],
-                         heating_emission_system=thermal_attributes['heating_emission_system'],
-                         cooling_emission_system=thermal_attributes['cooling_emission_system'],
-                         )
-
-ThermalZone.summary()
-
-
-#==============================================================================
-#                        Add lighting attributes
-#==============================================================================
-
-lighting_attributes = {'lighting_load':11.7,
-                       'lighting_control':300.0,
-                       'lighting_utilisation_factor':0.45,
-                       'lighting_maintenance_factor':0.9}
-                       
+# Add lighting attributes
 for l in lighting_attributes.keys():
     if locals()[l] is not None:
         lighting_attributes[l] = locals()[l]
         value = l+':'+str(locals()[l])
         unique_inputs[l] = value
 
-# Zone with thermal and lighting attributes
-Zone = sc.sticky['ModularRCZone'](zone=ThermalZone,                 
-              lighting_load=lighting_attributes['lighting_load'],
-              lighting_control=lighting_attributes['lighting_control'],
-              lighting_utilisation_factor=lighting_attributes['lighting_utilisation_factor'],
-              lighting_maintenance_factor=lighting_attributes['lighting_maintenance_factor'])
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+def validate_element(element):
+    # Check if the element object has the mian three parameters
+    if [x in dir(element) for x in ['name','area','u_value']]:
+        return True
+    else:
+        return False
+
+def main(elements,thermal_bridges,thermal_attributes,lighting_attributes):
+    if not sc.sticky.has_key('Zone'): return "Add the modular RC component to the canvas!"
+    
+    #Declare zone
+    ThermalZone = sc.sticky['Zone'](elements = elements,
+                             thermal_bridges = thermal_bridges,
+                             floor_area = thermal_attributes['floor_area'],
+                             volume = thermal_attributes['volume'],
+                             thermal_capacitance_per_floor_area=thermal_attributes['thermal_capacitance_per_floor_area'],
+                             ach_vent=thermal_attributes['ach_vent'],
+                             ach_infl=thermal_attributes['ach_infl'],
+                             ventilation_efficiency=thermal_attributes['ventilation_efficiency'],
+                             t_set_heating = thermal_attributes['t_set_heating'],
+                             t_set_cooling = thermal_attributes['t_set_cooling'],
+                             max_heating_energy_per_floor_area = thermal_attributes['max_heating_energy_per_floor_area'],
+                             max_cooling_energy_per_floor_area = thermal_attributes['max_cooling_energy_per_floor_area'],
+                             heating_supply_system=thermal_attributes['heating_supply_system'],
+                             cooling_supply_system=thermal_attributes['cooling_supply_system'],
+                             heating_emission_system=thermal_attributes['heating_emission_system'],
+                             cooling_emission_system=thermal_attributes['cooling_emission_system'],
+                             )
+    
+    ThermalZone.summary()
+    
+    # Zone with thermal and lighting attributes
+    Zone = sc.sticky['ModularRCZone'](zone=ThermalZone,                 
+                  lighting_load=lighting_attributes['lighting_load'],
+                  lighting_control=lighting_attributes['lighting_control'],
+                  lighting_utilisation_factor=lighting_attributes['lighting_utilisation_factor'],
+                  lighting_maintenance_factor=lighting_attributes['lighting_maintenance_factor'])
+    
+    return Zone
+
+
+Zone = main(elements,thermal_bridges,thermal_attributes,lighting_attributes)
