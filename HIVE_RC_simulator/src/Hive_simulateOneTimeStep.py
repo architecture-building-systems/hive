@@ -46,7 +46,7 @@ ghenv.Component.Message = 'VER 0.0.1\nMAR_23_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "2 | Simulation"
-# ComponentExposure=1
+# ComponentExposure=2
 
 import Grasshopper.Kernel as gh
 import scriptcontext as sc

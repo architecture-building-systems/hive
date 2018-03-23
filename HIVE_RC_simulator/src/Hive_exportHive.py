@@ -16,7 +16,7 @@ Based on Ladybug_Export Ladybug. Code Developers of Hive can use this component 
 This eases and automates the steps before commiting new components to the Github.
 This component was written thanks to Giulio Piacentino a really helpful example.
 -
-Provided by Ladybug 0.0.66
+Provided by Hive 0.0.1
 
     Args:
         _components: Any output from a new Ladybug (or Honeybee) component that you wish to export. Right now, only one component can be connected at a time but you can input a "*" (without quotation marsk) to search all changed Ladybug components on a grasshopper canvas.

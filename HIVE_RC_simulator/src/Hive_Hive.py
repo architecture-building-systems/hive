@@ -60,6 +60,75 @@ class HivePreparation(object):
     def getJD(self, month, day):
         numOfDays = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
         return numOfDays[int(month)-1] + int(day)
+    
+    def epwLocation(self, epw_file):
+        epwfile = open(epw_file,"r")
+        headline = epwfile.readline()
+        csheadline = headline.split(',')
+        while 1>0: #remove empty cells from the end of the list if any
+            try: float(csheadline[-1]); break
+            except: csheadline.pop()
+        locName = ''
+        for hLine in range(1,4):
+            if csheadline[hLine] != '-':
+                locName = locName + csheadline[hLine] + '_'
+        locName = locName[:-1]
+        lat = csheadline[-4]
+        lngt = csheadline[-3]
+        timeZone = csheadline[-2]
+        elev = csheadline[-1].strip()
+        locationString = "Site:Location,\n" + \
+            locName + ',\n' + \
+            lat+',      !Latitude\n' + \
+            lngt+',     !Longitude\n' + \
+            timeZone+',     !Time Zone\n' + \
+            elev + ';       !Elevation'
+        epwfile.close
+        return locName, lat, lngt, timeZone, elev, locationString
+    
+    strToBeFound = 'key:location/dataType/units/frequency/startsAt/endsAt'
+    
+    def epwDataReader(self, epw_file, location = 'Somewhere!'):
+        # weather data
+        modelYear = [self.strToBeFound, location, 'Year', 'Year', 'Hourly', (1, 1, 1), (12, 31, 24)];
+        dbTemp = [self.strToBeFound, location, 'Dry Bulb Temperature', 'C', 'Hourly', (1, 1, 1), (12, 31, 24)];
+        dewPoint = [self.strToBeFound, location, 'Dew Point Temperature', 'C', 'Hourly', (1, 1, 1), (12, 31, 24)];
+        RH = [self.strToBeFound, location, 'Relative Humidity', '%', 'Hourly', (1, 1, 1), (12, 31, 24)];
+        windSpeed = [self.strToBeFound, location, 'Wind Speed', 'm/s', 'Hourly', (1, 1, 1), (12, 31, 24)];
+        windDir = [self.strToBeFound, location, 'Wind Direction', 'degrees', 'Hourly', (1, 1, 1), (12, 31, 24)];
+        dirRad = [self.strToBeFound, location, 'Direct Normal Radiation', 'Wh/m2', 'Hourly', (1, 1, 1), (12, 31, 24)];
+        difRad = [self.strToBeFound, location, 'Diffuse Horizontal Radiation', 'Wh/m2', 'Hourly', (1, 1, 1), (12, 31, 24)];
+        glbRad = [self.strToBeFound, location, 'Global Horizontal Radiation', 'Wh/m2', 'Hourly', (1, 1, 1), (12, 31, 24)];
+        infRad = [self.strToBeFound, location, 'Horizontal Infrared Radiation Intensity', 'Wh/m2', 'Hourly', (1, 1, 1), (12, 31, 24)];
+        dirIll = [self.strToBeFound, location, 'Direct Normal Illuminance', 'lux', 'Hourly', (1, 1, 1), (12, 31, 24)];
+        difIll = [self.strToBeFound, location, 'Diffuse Horizontal Illuminance', 'lux', 'Hourly', (1, 1, 1), (12, 31, 24)];
+        glbIll = [self.strToBeFound, location, 'Global Horizontal Illuminance', 'lux', 'Hourly', (1, 1, 1), (12, 31, 24)];
+        cloudCov = [self.strToBeFound, location, 'Total Cloud Cover', 'tenth', 'Hourly', (1, 1, 1), (12, 31, 24)];
+        visibility = [self.strToBeFound, location, 'Visibility', 'km', 'Hourly', (1, 1, 1), (12, 31, 24)];
+        barPress = [self.strToBeFound, location, 'Barometric Pressure', 'Pa', 'Hourly', (1, 1, 1), (12, 31, 24)];
+        epwfile = open(epw_file,"r")
+        lnum = 1 # line number
+        for line in epwfile:
+            if lnum > 8:
+                modelYear.append(float(line.split(',')[0]))
+                dbTemp.append(float(line.split(',')[6]))
+                dewPoint.append(float(line.split(',')[7]))
+                RH.append(float(line.split(',')[8]))
+                barPress.append(float(line.split(',')[9]))
+                windSpeed.append(float(line.split(',')[21]))
+                windDir.append(float(line.split(',')[20]))
+                dirRad.append(float(line.split(',')[14]))
+                difRad.append(float(line.split(',')[15]))
+                glbRad.append(float(line.split(',')[13]))
+                infRad.append(float(line.split(',')[12]))
+                dirIll.append(float(line.split(',')[17]))
+                difIll.append(float(line.split(',')[18]))
+                glbIll.append(float(line.split(',')[16]))
+                cloudCov.append(float(line.split(',')[22]))
+            lnum += 1
+        epwfile.close()
+        return dbTemp, dewPoint, RH, windSpeed, windDir, dirRad, difRad, glbRad, dirIll, difIll, glbIll, cloudCov, infRad, barPress, modelYear
+    
 
 
 class RadiationWindow(object):
