@@ -1,21 +1,21 @@
 # HIVE
 
-HIVE (working name) is a collection of Grasshopper components and workflow templates designed to facilitate flexibility in informed decision making during the early stages of building design.
+HIVE is a collection of Grasshopper components and workflow templates designed to facilitate flexibility in informed decision making during the early stages of building design.
 
-The tools are based on research conducted by the Chair of Architecture and Building Systems, ETH Zurich.  
+The aim of HIVE is to increase the availability of tools developed during research projects at the Chair of Architecture and Building Systems, ETH Zurich.  
 
 ## Projects currently in this repository:
 
-### **GH_RC_simulator** 
+### **RC_simulator** 
 
-A series of user objects based on resistor-capacitor model in the [RC_BuildingSimulator](https://github.com/architecture-building-systems/RC_BuildingSimulator) repository. Documentation and developer's notes can be found in the [project wiki](https://github.com/architecture-building-systems/hive/wiki).
+A native energy simulation toolset for Grasshopper! A series of user objects based on resistor-capacitor model in the [RC_BuildingSimulator](https://github.com/architecture-building-systems/RC_BuildingSimulator) repository. For tool documentation and developer's notes check the [project wiki](https://github.com/architecture-building-systems/hive/wiki). Currently still under development.
 
-**Use Case:** The first use case is based on an exercise in the course Energy and Climate Systems III, where the energy impact of the length of an overhang is assessed.
+**Use Case:** As a proof of concept of the tool, a parametric shading surface is applied to a window. The energy impact of the different shading length can be viewed in real time in Grasshopper. This can be used to optimize or compare geometries.
 
 ![Use case for an embedded resistor-capacitor model](https://github.com/architecture-building-systems/hive/blob/master/repository_files/hive_march_20.gif)
 
 ## Projects to be included:
 
-* **Net-zero energy building assesment**: Workflows in Ladybug and Honeybee developed by Laura Cowie to assess design options for a net-zero building refurbishment.
+* **Net-zero energy building assesment** (Laura Cowie): Workflows in Ladybug and Honeybee for assessing design options for a net-zero building refurbishment.
 
-* **Panelling tool**: Stefan Caranovic recently circulated a working version within the chair. A possible enhancement of this tool would be to include PV panel visualisation (Linus Walker).
+* **Panelling tool** (Stefan Caranovic): A panelling tool recently circulated within the chair. A possible enhancement of this tool would be to include PV panel visualisation (Linus Walker).
