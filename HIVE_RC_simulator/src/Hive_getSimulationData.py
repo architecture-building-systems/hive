@@ -124,7 +124,7 @@ def main(epw_file,start_HOY_,end_HOY_):
     start,end = set_simulation_period(start_HOY_,end_HOY_)
     hoy = [i for i in range(start,end)]
     
-    if (epw_file is not None) and (simulation_period is not None):
+    if (epw_file is not None):
         locationData = hive_preparation.epwLocation(epw_file)
         weatherData = hive_preparation.epwDataReader(epw_file, locationData[0])
 

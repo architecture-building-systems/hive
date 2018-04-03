@@ -8,7 +8,7 @@ The aim of HIVE is to increase the availability of tools developed during resear
 
 ### **RC_simulator** 
 
-A native energy simulation toolset for Grasshopper! A series of user objects based on resistor-capacitor model in the [RC_BuildingSimulator](https://github.com/architecture-building-systems/RC_BuildingSimulator) repository. For tool documentation and developer's notes check the [project wiki](https://github.com/architecture-building-systems/hive/wiki). Currently still under development.
+A native energy simulation toolset for Grasshopper! A series of user objects based on resistor-capacitor model in the [RC_BuildingSimulator](https://github.com/architecture-building-systems/RC_BuildingSimulator) repository. For tool documentation and developer's notes check the [project wiki](https://github.com/architecture-building-systems/hive/wiki/Hive_RC_simulator). Currently still under development.
 
 **Use Case:** As a proof of concept of the tool, a parametric shading surface is applied to a window. The energy impact of the different shading length can be viewed in real time in Grasshopper. This can be used to optimize or compare geometries.
 
