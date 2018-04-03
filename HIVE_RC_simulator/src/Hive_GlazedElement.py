@@ -29,11 +29,14 @@ Provided by HIVE 0.0.1
         centers: list of center points to check input
         normals: list of normals to check input
         glazed_elements: list of element objects representing each surface that was inputted.
+        solar_gains: hourly solar gains through the glazed element as a list
+        illuminance: hourly illuminance through the glazed element as a list
+        shadow: surface representing the shadow which corresponds to hour_to_visualise
 """
 
 ghenv.Component.Name = "Hive_GlazedElement"
 ghenv.Component.NickName = 'GlazedElement'
-ghenv.Component.Message = 'VER 0.0.1\nMar_23_2018'
+ghenv.Component.Message = 'VER 0.0.1\nAPR_03_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "1 | Zone"
@@ -70,7 +73,6 @@ def solar_gains_through_element(solar_transmittance,hoy_list,dni_list,dhi_list,h
     Window = sc.sticky['RadiationWindow'](window_geometry=_window_geometry,
                                          context_geometry=context_geometry, 
                                          location=location,
-                                         year=2005,
                                          glass_solar_transmittance = transmittance['st'],
                                          glass_light_transmittance = transmittance['lt'])
     

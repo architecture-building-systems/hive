@@ -28,7 +28,7 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_Hive"
 ghenv.Component.NickName = 'Hive'
-ghenv.Component.Message = 'VER 0.0.1\nMAR_23_2018'
+ghenv.Component.Message = 'VER 0.0.1\nAPR_03_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "0 | Core"
@@ -77,15 +77,9 @@ class HivePreparation(object):
         lngt = csheadline[-3]
         timeZone = csheadline[-2]
         elev = csheadline[-1].strip()
-        locationString = "Site:Location,\n" + \
-            locName + ',\n' + \
-            lat+',      !Latitude\n' + \
-            lngt+',     !Longitude\n' + \
-            timeZone+',     !Time Zone\n' + \
-            elev + ';       !Elevation'
         epwfile.close
-        return locName, lat, lngt, timeZone, elev, locationString
-    
+        return locName, lat, lngt, timeZone, elev
+
     strToBeFound = 'key:location/dataType/units/frequency/startsAt/endsAt'
     
     def epwDataReader(self, epw_file, location = 'Somewhere!'):
@@ -128,7 +122,6 @@ class HivePreparation(object):
             lnum += 1
         epwfile.close()
         return dbTemp, dewPoint, RH, windSpeed, windDir, dirRad, difRad, glbRad, dirIll, difIll, glbIll, cloudCov, infRad, barPress, modelYear
-    
 
 
 class RadiationWindow(object):
@@ -138,7 +131,7 @@ class RadiationWindow(object):
     returns solar_gains, illuminance through window as a list
     """
 
-    def __init__(self, window_geometry, context_geometry, location, year, 
+    def __init__(self, window_geometry, context_geometry, location, 
                  glass_solar_transmittance=0.7, glass_light_transmittance=0.8):
         
         self.window_geometry = window_geometry
@@ -147,14 +140,11 @@ class RadiationWindow(object):
         # initialize window centroid, vertices, normal and tilt
         self.extract_window_geometry()
         
-        #TODO: make this part of location
-        self.year = year 
-        
         # Extract location data
-        x_lines = [s.strip() for s in location.splitlines()]
-        self.latitude_deg = float(x_lines[2].split(',')[0])
-        self.longitude_deg = float(x_lines[3].split(',')[0])
-        self.utc_offset = float(x_lines[4].split(',')[0])
+        self.latitude_deg = float(location[0])
+        self.longitude_deg = float(location[1])
+        self.utc_offset = float(location[2])
+        self.year = int(location[3])
 
         self.glass_solar_transmittance = glass_solar_transmittance
         self.glass_light_transmittance = glass_light_transmittance

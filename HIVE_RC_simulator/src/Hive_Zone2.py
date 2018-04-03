@@ -60,7 +60,7 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_Zone2"
 ghenv.Component.NickName = 'Zone2'
-ghenv.Component.Message = 'VER 0.0.1\nFEB_28_2018'
+ghenv.Component.Message = 'VER 0.0.1\nAPR_03_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "1 | Zone"
@@ -96,6 +96,12 @@ lighting_attributes = {'lighting_load':11.7,
                        'lighting_utilisation_factor':0.45,
                        'lighting_maintenance_factor':0.9}
 
+def validate_element(element):
+    # Check if the element object has the mian three parameters
+    if [x in dir(element) for x in ['name','area','u_value']]:
+        return True
+    else:
+        return False
 
 # keep valid element objects and combine them into a single list.
 g = [x for x in glazed_elements if validate_element(x)]
@@ -147,12 +153,7 @@ for l in lighting_attributes.keys():
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-def validate_element(element):
-    # Check if the element object has the mian three parameters
-    if [x in dir(element) for x in ['name','area','u_value']]:
-        return True
-    else:
-        return False
+
 
 def main(elements,thermal_bridges,thermal_attributes,lighting_attributes):
     if not sc.sticky.has_key('Zone'): return "Add the modular RC component to the canvas!"

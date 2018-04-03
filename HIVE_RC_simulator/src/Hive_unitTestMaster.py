@@ -40,7 +40,7 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_unitTestMaster"
 ghenv.Component.NickName = 'unitTestMaster'
-ghenv.Component.Message = 'VER 0.0.1\nFEB_28_2018'
+ghenv.Component.Message = 'VER 0.0.1\nAPR_03_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "3 | Testing"
@@ -100,16 +100,23 @@ sc.sticky['expected_results'] = {
     3.83,7.9,3.75,4.62]
     }
 
+def main(run):
+    if not sc.sticky.has_key('RC_Zone'): return "Add the building physics component to the canvas!"
+    try:
+        Zone = zones[run]
+        outdoor_air_temperature = tests['t_out'][run]
+        previous_mass_temperature = tests['t_m_prev'][run]
+        internal_gains = tests['internal_gains'][run]
+        solar_gains = tests['solar_gains'][run]
+        illuminance = tests['ill'][run]
+        occupancy = tests['occ'][run]
+        return Zone, outdoor_air_temperature, previous_mass_temperature, internal_gains, solar_gains, illuminance, occupancy
+    except TypeError:
+        pass
+
 number_of_tests= len(sc.sticky['expected_results']['name']) -1
-print zones[run]
 
 try:
-    Zone = zones[run]
-    outdoor_air_temperature = tests['t_out'][run]
-    previous_mass_temperature = tests['t_m_prev'][run]
-    internal_gains = tests['internal_gains'][run]
-    solar_gains = tests['solar_gains'][run]
-    illuminance = tests['ill'][run]
-    occupancy = tests['occ'][run]
-except TypeError:
-    pass
+    Zone, outdoor_air_temperature, previous_mass_temperature, internal_gains, solar_gains, illuminance, occupancy = main(run)
+except ValueError:
+    print main(run)
