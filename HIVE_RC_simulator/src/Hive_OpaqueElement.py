@@ -38,7 +38,6 @@ ghenv.Component.SubCategory = "1 | Zone"
 
 import scriptcontext as sc
 
-
 def main(element_name,u_value):
     if not sc.sticky.has_key('ElementBuilder'): 
         return "Add the modular RC component to the canvas!"
