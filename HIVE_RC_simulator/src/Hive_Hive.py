@@ -28,7 +28,7 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_Hive"
 ghenv.Component.NickName = 'Hive'
-ghenv.Component.Message = 'VER 0.0.1\nAPR_03_2018'
+ghenv.Component.Message = 'VER 0.0.1\nAPR_20_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "0 | Core"
@@ -343,10 +343,14 @@ class RadiationWindow(object):
                 # Draw Shadow
                 shadow_points = rs.ProjectPointToSurface(shade_points,window_plane,sun_vector)
                 if shadow_points is not None:
-                    shadow = rs.AddSrfPt(shadow_points)
-                    if shadow is None:
-                        shadow = gh.SurfaceFromPoints(shadow_points)
-        
+                    try:
+                        shadow_rs = rs.AddSrfPt(shadow_points)
+                        shadow_gh = gh.SurfaceFromPoints(shadow_points)
+                        assert shadow_rs == True or shadow_gh == True
+                    except AssertionError:
+                        print 'ERROR: unable to draw shadow surface'
+                        shadow = None
+                
                 # First shadow
                 if shadow_geometry == []:
                     shadow_geometry = [shadow]
@@ -370,9 +374,10 @@ class RadiationWindow(object):
     
             # Initialise unshaded fragments
             unshaded_fragments = [self.window_geometry]
-            
+            print shadow_geometry
             for shadow in shadow_geometry:
                 for ff in range(0,len(unshaded_fragments)):
+                    print unshaded_fragments[ff], shadow
                     intersection = rs.BooleanIntersection(unshaded_fragments[ff], shadow, False)
                     
                     # Discard intersections outside window geometry

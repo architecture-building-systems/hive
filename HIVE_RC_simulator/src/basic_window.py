@@ -30,8 +30,8 @@ polyFillType = clipper_library.ClipperLib.PolyFillType
 IntPoint = clipper_library.ClipperLib.IntPoint
 
 
-class SunPath(object):
-    def __init__(self,location,azimuth_tilt_rad,altitude_tilt_rad):
+class RelativeSun(object):
+    def __init__(self,location,azimuth_tilt_rad, altitude_tilt_rad, normal):
         # Extract location data
         self.latitude_deg = float(location[0])
         self.longitude_deg = float(location[1])
@@ -40,9 +40,10 @@ class SunPath(object):
         
         self.azimuth_tilt_rad = azimuth_tilt_rad
         self.altitude_tilt_rad = altitude_tilt_rad
+        self.normal = normal
     
-    def is_sunny(self,sun_alt, relative_sun_az):
-        return sun_alt >= 0.0 
+    def is_sunny(self,relative_sun_alt, relative_sun_az):
+        return relative_sun_alt >= 0.0 and abs(relative_sun_az) < 90.0
     
     def calc_relative_sun_position(self, hoy):
         """
@@ -71,9 +72,9 @@ class SunPath(object):
         sun_alt, sun_az = self.calc_sun_position(hoy)
         
         # Redefine azimuth following ASF convention
-        relative_sun_az = self.calc_relative_position(sun_az)
-        
-        return sun_alt, relative_sun_az
+        relative_sun_az = self.calc_relative_azimuth(sun_az)
+        relative_sun_alt = self.calc_relative_altitude(sun_alt)
+        return relative_sun_alt, relative_sun_az
     
     def calc_sun_position(self, hoy):
         """
@@ -149,20 +150,32 @@ class SunPath(object):
     
         return math.degrees(sun_alt_rad), math.degrees(sun_az_rad)
     
-    def calc_relative_position(self, sun_az):
+    def calc_sun_vector(self,sun_alt, sun_az):
+        sun_alt_rad = math.radians(sun_alt)
+        sun_az_rad = math.radians(sun_az)
+        sunvec_x = -math.sin(sun_az_rad) * math.cos(sun_alt_rad)
+        sunvec_y = -math.cos(sun_az_rad) * math.cos(sun_alt_rad)
+        sunvec_z = -math.sin(sun_alt_rad)
+        
+        return rc.Geometry.Vector3d(sunvec_x,sunvec_y,sunvec_z)
+
+    def calc_relative_azimuth(self, sun_az):
         """
         Calculates the sun position relative to the facade orientation.
         :param sun_az: Sun azimuth [Degrees] (Traditional convention)
         :type sun_az: float
-        :param asf_normal_az: Azimuth position of normal to ASF plane  [Degrees] (Traditional convention)
-        :type asf_normal_az: int
-        :return: asf_sun_az: Sun azimuth [Degrees] (Facade convention)
-        :rtype: tuple
+        :return: relative_sun_az: Sun azimuth [Degrees] (Facade convention)
+        :rtype: float
         """
         relative_sun_az = sun_az - math.degrees(self.azimuth_tilt_rad)
         if relative_sun_az < - 180:
             relative_sun_az = 360 - abs(relative_sun_az)
         return relative_sun_az
+    
+    def calc_relative_altitude(self, sun_alt):
+        relative_sun_alt = sun_alt - math.degrees(self.altitude_tilt_rad)
+        return relative_sun_alt
+    
 
 
 class ShadedWindow(object):
@@ -171,21 +184,19 @@ class ShadedWindow(object):
     Returns window and self shading for user-defined geometries.
     """
 
-    def __init__(self, window_geometry, context_geometry,
+    def __init__(self, window_geometry, context_geometry, point_in_zone,
                  glass_solar_transmittance=0.7, glass_light_transmittance=0.8):
         
         self.window_geometry = window_geometry
-        
-        # initialize window centroid, vertices, normal and tilt
-        self.extract_window_geometry()
-        
-        #TODO: Explode polysurfaces into surfaces
+        self.extract_window_geometry(point_in_zone)
         self.transform_context_geometry(context_geometry)
         
         self.glass_solar_transmittance = glass_solar_transmittance
         self.glass_light_transmittance = glass_light_transmittance
+        
+        self.clipper_accuracy = 100000
     
-    def extract_window_geometry(self):
+    def extract_window_geometry(self,point_in_zone):
         """
         This function creates the following attributes during __init__:
         self.window_centroid
@@ -194,14 +205,22 @@ class ShadedWindow(object):
         self.altitude_tilt_rad
         self.azimuth_tilt_rad
         """
+        
         north = rc.Geometry.Vector3d(0,1,0)
         vertical = rc.Geometry.Vector3d(0,0,1)
-        faces_west = False
+        
         self.window_centroid = rs.SurfaceAreaCentroid(self.window_geometry)[0]
-        self.window_area = rs.Area(self.window_geometry)
         normal = rs.SurfaceNormal(self.window_geometry,[0.5,0.5])
         
-        self.window_normal = normal
+        # Ensure window normal is facing outwards
+        window_zone_vector = gh.Vector2Pt(self.window_centroid,point_in_zone)
+        if abs(rs.VectorAngle(normal,window_zone_vector[0])) < 90:
+            self.window_normal = rs.VectorReverse(normal)
+        else:
+            self.window_normal = normal
+
+        self.window_area = rs.Area(self.window_geometry)
+
         self.window_vertices = rs.SurfaceEditPoints(self.window_geometry)
         self.window_plane = rs.PlaneFromPoints(self.window_centroid,self.window_vertices[0],self.window_vertices[1])
         
@@ -212,23 +231,20 @@ class ShadedWindow(object):
         self.window_height = edge_lengths[0] if edge_vectors[0] !=0 else edge_lengths[1]
         self.window_points = [rc.Geometry.Point2d(0,0),rc.Geometry.Point2d(self.window_width,0),rc.Geometry.Point2d(self.window_width,self.window_height),rc.Geometry.Point2d(0,self.window_height)]
         
-        if normal[0] < 0:
-            faces_west = True
-        else:
-            faces_west = False
-        
-        normal_xy = rc.Geometry.Vector3d(normal[0],normal[1],0)
-        normal_xz = rc.Geometry.Vector3d(normal[0],0,normal[2])
+        normal_xy = rc.Geometry.Vector3d(self.window_normal[0],self.window_normal[1],0)
         
         try:
             azimuth = rs.VectorAngle(north,normal_xy)
-            if faces_west:
+            if normal[0] < 0:
+                # Faces west
                 azimuth = 360-azimuth
         except ValueError:
             azimuth = 0
         
-        try: 
-            altitude = rs.VectorAngle(vertical,normal_xz)
+        try:
+            altitude = rs.VectorAngle(rc.Geometry.Vector3d(normal[0],normal[1],0),normal)
+            if normal[2]<0:
+                altitude = -altitude
         except ValueError:
             altitude = 0
         
@@ -294,7 +310,7 @@ class ShadedWindow(object):
                     b = shade_points[ii]
         
         return a,b
-
+    
     def transform_shade(self,shade):
         """
         Return a list of edge points for a shading surface
@@ -321,6 +337,7 @@ class ShadedWindow(object):
         key: shade centroid
         value: transformed points for each shade
         """
+        #TODO: Explode shading polysurfaces into surfaces
         centroids_and_points = {}
         for xg in context_geometry:
             c,p = self.transform_shade(xg) 
@@ -340,7 +357,7 @@ class ShadedWindow(object):
         for x,y in product(range(self.nrows),range(self.ncols)):
             self.context[x,y] = centroids_and_points[x_dict[x],y_dict[y]]
     
-    def calc_shadow(self, shade, sun_alt, relative_sun_az):
+    def calc_shadow(self, shade, relative_sun_alt, relative_sun_az):
         """
         Coordinate system:
         X = Horizontal direction, parallel to glazing surface
@@ -358,12 +375,12 @@ class ShadedWindow(object):
         
         # Align relative_sun_az with window plane, convert angles to radians
         # Note: this procedure is only done when is sunny, hence relative_sun_az in range[-90, 90];
-        relative_sun_az_rad, sun_alt_rad = map(math.radians, [relative_sun_az + 90, sun_alt]);
+        relative_sun_az_rad, relative_sun_alt_rad = map(math.radians, [relative_sun_az + 90, relative_sun_alt]);
     
         # Create sun vector
-        sunvec_x = math.cos(relative_sun_az_rad) * math.cos(sun_alt_rad);
-        sunvec_y = math.sin(sun_alt_rad);
-        sunvec_z = math.sin(relative_sun_az_rad) * math.cos(sun_alt_rad);
+        sunvec_x = math.cos(relative_sun_az_rad) * math.cos(relative_sun_alt_rad);
+        sunvec_y = math.sin(relative_sun_alt_rad);
+        sunvec_z = math.sin(relative_sun_az_rad) * math.cos(relative_sun_alt_rad);
         
         shadowintpoints = [] # IntPoints for clipping
         shadowpoints = [] # 3d points
@@ -375,12 +392,12 @@ class ShadedWindow(object):
         # Calculate the projection on a 2-D surface (x,y)
         for point_3d in shade:
             x_point, y_point = transform_point(point_3d,sunvec_x,sunvec_y,sunvec_z)
-            shadowintpoints.append(IntPoint(10000*x_point,10000*y_point))
+            shadowintpoints.append(IntPoint(self.clipper_accuracy*x_point,self.clipper_accuracy*y_point))
             shadowpoints.append(rc.Geometry.Point3d(x_point,y_point,0))
             
-        return List[IntPoint](shadowintpoints), pv_shadow_vector, shadowpoints
+        return List[IntPoint](shadowintpoints)#, pv_shadow_vector, shadowpoints
     
-    def calc_gross_shadows(self,sun_alt,relative_sun_az):
+    def calc_gross_shadows(self,relative_sun_alt,relative_sun_az):
         """
         projects all shading objects onto window coordinate plane
         """
@@ -388,207 +405,155 @@ class ShadedWindow(object):
         pv_vectors = {}
         if type(self.context.keys()[0]) == float:
             for k in self.context.keys():
-                gross_shadows[k] = self.calc_shadow(self.context[k],sun_alt,relative_sun_az)
+                gross_shadows[k] = self.calc_shadow(self.context[k],relative_sun_alt,relative_sun_az)
         elif type(self.context.keys()[0]) == tuple:
             # an array configuration has been identified.
             for i,j in self.context.keys():
-                gross_shadows[i,j] = self.calc_shadow(self.context[i,j],sun_alt,relative_sun_az)
+                gross_shadows[i,j] = self.calc_shadow(self.context[i,j],relative_sun_alt,relative_sun_az)
         return gross_shadows
     
-    # Still being adapted for a generic geometry:
-    
-    def calc_shadow_window(self,gross_shadows):
-        """
-        Subtract from net_shadows dictionary the regions outside the window frame and
-        compute the total shadow laying on the window as a % of its area.
-    
-        :param net_shadows: Shadow on generic wall for every ASF panel with mutual_shading extracted
-        :type: dict{key:identifier(tuple), value:np.ndarray(floats)}
-        :param window_width: Width of the window behind the ASF [mm].
-        :type window_width: float    
-        :param window_height: Height of the window behind the ASF [mm].
-        :type window_height: float
-        :param panel_offset: Cartesian distance between window frame and nearest PV centerpoint [mm].
-        :type panel_offset: float
-        :return area_shadow_window: Global net ASF shadow laying on window as % of its area
-        :rtype: float
-        """
+    def draw_shadow_geometry(self,clipper_result):
+        clipper_result_geometry = []
+        for ms in clipper_result:
+            points = []
+            for p in ms:
+                points.append(rc.Geometry.Point3d(p.X/self.clipper_accuracy,p.Y/self.clipper_accuracy,0))
+            clipper_result_geometry.append(gh.PolyLine(points,closed=True))
+        return clipper_result_geometry
+
+    def clip_shadows_with_window(self,gross_shadows):
+        
+        # Initialise shadows list
+        subj = []
+        shadows = List[List[IntPoint]](gross_shadows.values())
+        merged_shadows = List[List[IntPoint]]()
+        clipper.Clear()
+        clipper.AddPolygons(shadows,polyType.ptSubject)
+        union = clipper.Execute(clipType.ctUnion, merged_shadows, polyFillType.pftNonZero, polyFillType.pftNonZero)
+
         # Construct window frame geometry
-        shadows = List[List[IntPoint]]([x[0] for x in gross_shadows.values()])
-        
-        shadow_points = [x[2] for x in gross_shadows.values()]
-        shadow_points = [item for sublist in shadow_points for item in sublist]
-        
-        window_vertices = [IntPoint(0,0), IntPoint(10000*self.window_width, 0), IntPoint(10000*self.window_width, 10000*self.window_height), IntPoint(0, 10000*self.window_height)]
+        window_vertices = [IntPoint(0,0), IntPoint(self.clipper_accuracy*self.window_width, 0), IntPoint(self.clipper_accuracy*self.window_width, self.clipper_accuracy*self.window_height), IntPoint(0, self.clipper_accuracy*self.window_height)]
         window_frame = List[IntPoint](window_vertices)
         
-        print 'window frame:', clipper.Area(window_frame)/100000000
+        # Remove parts of shadows which lie outside the window frame
+        unshaded_polygons = List[List[IntPoint]]()
+        clipper.Clear()
+        clipper.AddPolygon(window_frame,polyType.ptClip)
+        clipper.AddPolygons(merged_shadows,polyType.ptSubject)
+        diff = clipper.Execute(clipType.ctIntersection, unshaded_polygons, polyFillType.pftNonZero, polyFillType.pftNonZero)
         
-        # Initialize dictionary and result variable
-        shadow_window = {}
-        area_shadow_window = 0
-        
-        clipper.AddPolygons(shadows,polyType.ptSubject)
-        
-        solution_tree = List[List[IntPoint]]()
-        union = clipper.Execute(clipType.ctUnion, solution_tree, polyFillType.pftNonZero, polyFillType.pftNonZero)
-        shadow_area = 0
-        
-        print 'number of shadows:', len(solution_tree)
-        for sol in solution_tree:
-            shadow_area += clipper.Area(sol)
-        print 'shadow area:', shadow_area/100000000
-        
-        merged_shadows = solution_tree
-        
-        solution_tree = List[List[IntPoint]]()
-        clipper.AddPolygon(window_frame,polyType.ptSubject)
-        clipper.AddPolygons(merged_shadows,polyType.ptClip)
-
-        diff = clipper.Execute(clipType.ctDifference, solution_tree, polyFillType.pftEvenOdd, polyFillType.pftEvenOdd)
         if diff:
-            print 'number of clipped shadows:', len(solution_tree)
+            return unshaded_polygons, window_frame
+        else:
+            return None
+        
+    def calc_shadow_window(self,gross_shadows):
+        """
+        For a given set of shadows (one hour)
+        Subtract from net_shadows dictionary the regions outside the window frame and
+        compute the total shadow laying on the window as a % of its area.
+        """
+        
+        unshaded_polygons, window_frame = self.clip_shadows_with_window(gross_shadows)
+        
+        if unshaded_polygons is not None:
             shaded_area = 0
-            for sol in solution_tree:
-                shaded_area += clipper.Area(sol)
-            print 'unshaded area:', shaded_area/100000000
+            for p in unshaded_polygons:
+                shaded_area += abs(clipper.Area(p))
+            unshaded_ratio = 1 - shaded_area/clipper.Area(window_frame)
+            
+            try:
+                assert unshaded_ratio < 1.0
+                return unshaded_ratio
+            except AssertionError:
+                # clipper failed and returned overlapping geometries.
+                print 'clipping warning for hour: ', h
 
-        """
-        # Add all shadows
-        for index,shadow in .iteritems():
-            subj = shadow[0] # Shadow is subj
-            
-            if not clipper.Area(shadow) == 0:      
-                clipper.AddPolygon(clip, polyType.PT_CLIP)
-                if len(subj.shape) == 2: # Subject is one polygon
-                    clipper.AddPath(subj, clipper.PT_SUBJECT, True)
-                else: # Subject consists of several polygons (previously sliced)
-                    clipper.AddPaths(subj, clipper.PT_SUBJECT, True)
-                
-                # Exectue boolean intersection
-                solution = clipper.Execute(clipper.CT_INTERSECTION, clipper.PFT_EVENODD, clipper.PFT_EVENODD)
-                
-                if solution: # Boolean operation successful (not null)
-                    if len(np.asarray(solution)) == 1: # solution contains 1 element. has shape 3
-                        subj = np.asarray(solution[0]) # Rebuild the subject shadow
-                    else: # diff contains more than one element has shape 3
-                        subj = np.asarray(solution)
-                else: # Intersection not successful (all the shadow is outside window frame)
-                    subj *= 0
-            else:
-                subj *= 0
+        else:
+            #no clipping occured between shadow and window
+            return 1
     
-            shadow_window[index] = np.asarray(subj) # Add to the result
-    
-        for index, shadow in sorted(shadow_window.iteritems(), reverse = True):
-            if shadow.any():
-                if len(shadow.shape) == 2:  # Shadow is one polygon
-                    area_shadow_window += clipper.Area(shadow)
-                    
-                else: # Shadow consists of several polygons (previously sliced)
-                    for shadow_portion in shadow:
-                        test = np.asarray(shadow_portion)
-                        area_shadow_window += clipper.Area(test)
-        
-        return area_shadow_window
-        """
-    
-    def shading_pattern(self, sun_alt, relative_sun_az):
-        """    
-        credits: JoanDM
-        
-        For a given sun position, calculate the shaded area on the window 
-        [% window_area], and the mutual shading between panels.
-        
-        Main strategy -> Instead of computing sun-rays and 3D intersections, map 
-                        the shadows in 2D space (window and wall). Output 
-                        percentual data for applicable results.
-    
-        Steps:              
-            Project every panel on the wall according to sun rays -> Map the shadows on the wall
-            Detect and extract mutual shading -> Extract self intersections of the mapped shadows
-            Quantify mutual shading area as % panel area -> Divide new shadow and raw shadow areas
-            Particularize shading as % panel side -> Divide new shadow width (parallel to S0-S1) by S0-S3 vector
-            Detect and extract shadows outside window -> Keep only the resulting shadows inside window frame
-            Quantify shadow on window as % area -> Divide total net shadow area by window area
-            
-        :param panel_angles: Slope and azimuth of each panel [Deg].
-        :type panel_angles: dict{(identifier): [panel_tilt, panel_az]} (Facade convention)
-    
-            :identifier: (row_number, column_number). (0, 0). Top row, left column
-            :type identifier: tuple (int, int)
-            :panel_tilt range [0,90). 0 = open position.
-            :type panel_tilt: int
-            panel_az range [-45,45]. Example facade south: -45 = SE, 45 = SW. (Facade convention)
-            :type panel_az: int
-    
-        :param sun_alt: Sun altitude [Deg].
-        :type sun_alt: float
-        :param relative_sun_az: Sun azimuth [Deg]. (Facade convention, i.e. sun_position.py output)
-        :type relative_sun_az: float
-    
-            relative_sun_az is a relative angle in respect to ASF plane normal. From there, 
-            it ranges clockwise and counterclockise, so its range is [-180, 180)
+    """
 
-        :return shading_result: Window shaded area [% window_area], mutual shading [% panel_area, % horizontal]
-        :rtype: dict{key:string, value:float or np.ndarray(floats)}
-        """
-        #???
-        #shading_result = dict.fromkeys(panel_angles, [0, 0])
+    def calc_diffuse_irradiation():
+        return window_diffuse irradiation
     
-        if self.is_sunny(sun_alt, asf_sun_az): # Check if sun rays interact with the ASF
+    def calc_ground_ref_irradiation():
+        return window_ground_ref_irradiation
+    
+    def radiation(self,normal_irradiation,horizontal_irradiation,unshaded_ratio):
         
-            # Calculate the shadow on the window for every PV panel of the ASF
-            gross_shadows = self.calc_gross_shadow(sun_alt, asf_sun_az)
-    
-            # Extract mutual shading between panels by checking the intersection of gross_shadows
-            net_shadows, self_shading_param = extract_self_shading(gross_shadows, sun_alt, asf_sun_az)
+        # Direct Irradiation
+        if not normal_irradiation == 0:
+            dir_irradiation = normal_radiation * math.cos(angle_incidence)
+        
+        # Diffuse Irradiation
+        if not horizontal_irradiation == 0:
             
-            # Calculate the resulting shadow that lies on the window frame as a % area.
-            area_shadow_window = calc_shadow_window(net_shadows)
+            # Calculate the amount of diffuse radiation on the panel
+            # no idea why 0.4 (https://github.com/architecture-building-systems/ASF_Control/blob/662c06393c1cd9e2452375c9c9d47f17f03a6e64/ASF_simulation_framework/Radiation/dev_radiation.py#L468)
+            view_factor = 0.4 * unshaded_area
             
-            shading_result = self_shading_param
-            shading_result["shadow_on_window"] = area_shadow_window/self.window_area
-    
-        else: # It's dark. No sun direct rays interact with the facade 
-    
-            shading_result['shadow_on_window'] = 0.0
-    
-        return shading_result
+            diff_irradiation = calc_diff_irradiation(normal_irradiation, horizontal_irradiation, 
+                                                     view_factor, panel_tilt, panel_az,
+                                                     panel_size, sun_alt, 
+                                                     angle_incidence, perez_coef)  
+                            
+            # Calculate diffuse and reflected irradiation on the ASF
+            ground_ref_irradiation = calc_ground_ref_irradiation(albedo, 
+                                                                          norm_radiation, 
+                                                                          normal_irradiation, sun_alt,
+                                                                          view_factor)  
+        
+        window_irradiation = window_dir_irradiation + window_diff_irradiation + window_ground_ref_irradiation
+        
+        window_diff_lux = hor_lux * view_factor
+        window_ground_ref_lux = albedo * hor_lux * (1 - view_factor)
+        window_lighting =  window_dir_lux + window_diff_lux + window_ground_ref_lux
+        
+        return window_irradiation, window_lighting
+    """
+
+def list_to_tree(nestedlist):
+    layerTree = DataTree[object]()
+    for i, item_list in enumerate(nestedlist):
+        path = GH_Path(i)
+        layerTree.AddRange(item_list,path)
+    return layerTree
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+Window = ShadedWindow(window_geometry=_window_geometry,point_in_zone=_point_in_zone,
+                    context_geometry=context_geometry)
+
+Sun = RelativeSun(location=location,
+                  azimuth_tilt_rad=Window.azimuth_tilt_rad,
+                  altitude_tilt_rad=Window.altititude_tilt_rad,
+                  normal = Window.window_normal)
 
 window_centroid = Window.window_centroid
 window_normal = Window.window_normal
 
-Window = ShadedWindow(window_geometry=_window_geometry,
-                    context_geometry=context_geometry)
-
-Sun = SunPath(location=location,
-              azimuth_tilt_rad=Window.azimuth_tilt_rad,
-              altitude_tilt_rad=Window.altititude_tilt_rad)
-
-
-"""
-def nestedListToDataTree(nestedlist):
-    dataTree = DataTree[object]()
-    for i, item_list in enumerate(nestedlist):
-        path = GH_Path(i)
-        dataTree.AddRange(item_list,path)
-    return dataTree
-visualise = nestedListToDataTree(Window.context.values())
-"""
-
-sun_alt,relative_sun_az = Sun.calc_relative_sun_position(hoy)
-
-if Sun.is_sunny(sun_alt,relative_sun_az):
-    shadow_dict = Window.calc_gross_shadows(sun_alt,relative_sun_az)
-    shadow_points = Window.calc_shadow_window(shadow_dict)
+unshaded_ratio = []
+direct_solar = []
+#unshaded_polys = []
+for h in hoy:
     
-    shadows = [gh.PolyLine(Window.window_points,closed=True)]
-    for r,c in product(reversed(range(Window.nrows)),reversed(range(Window.ncols))):
-        shadows.append(gh.PolyLine(shadow_dict[r,c][2],closed=True))
-    visualise = shadows
+    relative_sun_alt,relative_sun_az = Sun.calc_relative_sun_position(h)
+    sun_alt,sun_az = Sun.calc_sun_position(h)
+    
+    incidence = math.acos(math.cos(math.radians(sun_alt)) * math.cos(math.radians(relative_sun_az)))
+    
+    
+    if Sun.is_sunny(relative_sun_alt,relative_sun_az):
+        shadow_dict = Window.calc_gross_shadows(relative_sun_alt,relative_sun_az)
+        unshaded = Window.calc_shadow_window(shadow_dict)
+        unshaded_ratio.append(unshaded)
+        #TODO: collect points and merge shadows in pyclipper for a faster shading visualisation.
 
+#        unshaded_polys.append(geometry)
+    else:
+        direct_solar.append(0)
+        unshaded_ratio.append(0)
+        unshaded_polys.append(rc.Geometry.Polyline())
 
-#net_shadow,self_shading = Window.extract_self_shading_right(sun_alt,relative_sun_az)
+visualise = list_to_tree(unshaded_polys)

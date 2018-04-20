@@ -37,6 +37,7 @@ ghenv.Component.SubCategory = "2 | Simulation"
 
 import rhinoscriptsyntax as rs
 import scriptcontext as sc
+import Grasshopper.Kernel as gh
 from System import Object
 
 def separate_data(inputList,start,end):
@@ -98,7 +99,7 @@ def set_simulation_period(start_hoy,end_hoy):
         else:
             warningMsg = "start_HOY_ must be an integer between 0 and 8760"
             w = gh.GH_RuntimeMessageLevel.Warning
-            GHComponent.AddRuntimeMessage(w, warningMsg)
+            ghenv.Component.AddRuntimeMessage(w, warningMsg)
             return None
     else:
         start = 0
@@ -109,7 +110,7 @@ def set_simulation_period(start_hoy,end_hoy):
         else:
             warningMsg = "end_HOY_ must be an integer between start_HOY_ and 8760"
             w = gh.GH_RuntimeMessageLevel.Warning
-            GHComponent.AddRuntimeMessage(w, warningMsg)
+            ghenv.Component.AddRuntimeMessage(w, warningMsg)
             return None
     else:
         end = 8759

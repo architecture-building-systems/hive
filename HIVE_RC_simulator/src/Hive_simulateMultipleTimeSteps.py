@@ -39,7 +39,7 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_simulateMultipleTimeSteps"
 ghenv.Component.NickName = 'simulateMultipleTimeSteps'
-ghenv.Component.Message = 'VER 0.0.1\nFEB_21_2018'
+ghenv.Component.Message = 'VER 0.0.1\nAPR_20_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "2 | Simulation"
@@ -58,16 +58,16 @@ for s in simulation_variables:
         variable_summary[s] = len(loc[s])
         # Raise warning if no value is detected
         if len(loc[s])==0:
-            error = "No data for %s"%s
-            e = gh.GH_RuntimeMessageLevel.Error
-            ghenv.Component.AddRuntimeMessage(e, error)
-
+            warning = "No data for %s"%s
+            w = gh.GH_RuntimeMessageLevel.Warning
+            ghenv.Component.AddRuntimeMessage(w, warning)
+"""
 # Raise error if one of the input streams is of different length
 if True in [variable_summary[s] != variable_summary['outdoor_air_temperature'] for s in variable_summary]:
     error = "Input data must all be of equal length"
     e = gh.GH_RuntimeMessageLevel.Error
     ghenv.Component.AddRuntimeMessage(e, error)
-
+"""
 previous_mass_temperature = previous_mass_temperature if previous_mass_temperature is not None else 20.0
 
 print 'Variable summary'
@@ -119,15 +119,20 @@ if connected:
     
     #Start simulation
     for hour in range(0,hours):
-        il = illuminance[hour]
+        oc = occupancy[hour]
         ig = internal_gains[hour]
         ta = outdoor_air_temperature[hour]
-        sg = solar_gains[hour]
-        oc = occupancy[hour]
-    
+        sg = 2000 if len(solar_gains) == 0 else solar_gains[hour]
+        il = 300 if len(illuminance) == 0 else illuminance[hour]
+        
+        
         #Solve
-        Zone.solve_building_energy(ig, sg, ta, previous_mass_temperature)    
-        Zone.solve_building_lighting(il, oc)
+        try:
+            Zone.solve_building_energy(ig, sg, ta, previous_mass_temperature)    
+            Zone.solve_building_lighting(il, oc)
+        except:
+            print ig, sg, ta, previous_mass_temperature
+            break
         
         #Set T_m as t_m_prev for next timestep
         t_m_prev = Zone.t_m
