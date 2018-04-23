@@ -344,8 +344,8 @@ class WindowRadiation(object):
         
         # Initialize window area and plane
         self.window_area = rs.Area(self.window_geometry)
-        window_vertices = rs.SurfaceEditPoints(self.window_geometry)
-        self.window_plane = rs.PlaneFromPoints(self.window_centroid,window_vertices[0],window_vertices[1])
+        self.window_vertices = rs.SurfaceEditPoints(self.window_geometry)
+        self.window_plane = rs.PlaneFromPoints(self.window_centroid,self.window_vertices[0],self.window_vertices[1])
         
         edges = rs.DuplicateEdgeCurves(self.window_geometry)
         edge_lengths = [rs.CurveLength(e) for e in edges]

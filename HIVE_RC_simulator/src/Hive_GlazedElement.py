@@ -143,15 +143,15 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
             dir_irradiation.append(0)
             diff_irradiation.append(0)
             ground_ref_irradiation.append(0)
-            unshaded_polys.append(rc.Geometry.Polyline())
-            sun_vectors.append(0)
+            unshaded_polys.append(gh.PolyLine())
+            sun_vectors.append(None)
     
-    unshaded = sc.sticky["list_to_tree"](unshaded_polys)
+    unshaded = None
     
-    return window_centroid, window_normal, sun_vectors, window_solar_gains, window_illuminance, dir_irradiation, diff_irradiation, ground_ref_irradiation, unshaded
+    return dni, window_centroid, window_normal, sun_vectors, window_solar_gains, window_illuminance, dir_irradiation, diff_irradiation, ground_ref_irradiation, unshaded
 
 
 centers, normals, glazed_elements = build_glazed_element(window_name, _window_geometry,u_value,frame_factor)
 
 
-window_centroid, window_normal, sun_vectors, solar_gains, illuminance, dir_irradiation, diff_irradiation, ground_ref_irradiation, unshaded = solar_gains_through_element(_window_geometry, _point_in_zone, context_geometry, location, irradiation, solar_transmittance, light_transmittance)
+dni, window_centroid, window_normal, sun_vectors, solar_gains, illuminance, dir_irradiation, diff_irradiation, ground_ref_irradiation, unshaded = solar_gains_through_element(_window_geometry, _point_in_zone, context_geometry, location, irradiation, solar_transmittance, light_transmittance)
