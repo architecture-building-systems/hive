@@ -23,14 +23,13 @@ Provided by Hive 0.0.1
     Returns:
         out: ...
         location: a list of longitude, latitude, utc offset and year
-        temperature: a list of temperatures for the analysis period
-        directRadiation: a list of direct radiation for the analysis period
-        diffuseRadiation: a list of diffuse radiation for the analysis period
+        temperature: a dictionary in the form: {hoy:temperature}
+        irradiation: a dictionary in the form: {hoy:[direct normal irradiation, diffuse horizontal irradiation, direct normal illuminance, diffuse horizontal illuminance)
 """
 
 ghenv.Component.Name = "Hive_getSimulationData"
 ghenv.Component.NickName = 'getSimulationData'
-ghenv.Component.Message = 'VER 0.0.1\nAPR_03_2018'
+ghenv.Component.Message = 'VER 0.0.1\nAPR_22_2018'
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "2 | Simulation"
 # ComponentExposure=1
@@ -38,9 +37,21 @@ ghenv.Component.SubCategory = "2 | Simulation"
 import rhinoscriptsyntax as rs
 import scriptcontext as sc
 import Grasshopper.Kernel as gh
+from Grasshopper.Kernel.Data import GH_Path
+from Grasshopper import DataTree
 from System import Object
 
-def separate_data(inputList,start,end):
+class GhPythonDictionary(object):
+    def __init__(self, pythonDict=None):
+        if pythonDict:
+            self.d = pythonDict
+        else:
+            self.d = {}
+    def ToString(self):
+        return 'GhPythonDictionary object'
+
+
+def separate_data(inputList):
     # Based on Ladybug_Separate data, but uses lists instead of DataTree objects
     num = []
     str = []
@@ -80,7 +91,7 @@ def separate_data(inputList,start,end):
                 p.append(strPath)
                 strings.append(item)
     
-    return numbers[start:end]
+    return numbers
 
 def open_epw(open):
     #Based on Ladybug_Open EPW Weather File
@@ -117,13 +128,21 @@ def set_simulation_period(start_hoy,end_hoy):
     
     return int(start),int(end)
 
+def list_to_tree(nestedlist):
+    layerTree = DataTree[object]()
+    for i, item_list in enumerate(nestedlist):
+        path = GH_Path(i)
+        layerTree.AddRange(item_list,path)
+    return layerTree
+
 def main(epw_file,start_HOY_,end_HOY_):
     if not sc.sticky.has_key('HivePreparation'): return "Add the modular RC component to the canvas!"
     #TODO: Set up compatibility checks like in Ladybug.
     
     hive_preparation = sc.sticky["HivePreparation"]()
     start,end = set_simulation_period(start_HOY_,end_HOY_)
-    hoy = [i for i in range(start,end)]
+    temperature = []
+    irradiation = []
     
     if (epw_file is not None):
         locationData = hive_preparation.epwLocation(epw_file)
@@ -133,14 +152,20 @@ def main(epw_file,start_HOY_,end_HOY_):
         dryBulbTemperature, dewPointTemperature, relativeHumidity, windSpeed, windDirection, directNormalRadiation, diffuseHorizontalRadiation, globalHorizontalRadiation, directNormalIlluminance, diffuseHorizontalIlluminance, globalHorizontalIlluminance, totalSkyCover, horizontalInfraredRadiation, barometricPressure, modelYear = weatherData
         location.append(modelYear[7])
 
-        temperature = separate_data(dryBulbTemperature, start, end)
-        directRadiation = separate_data(directNormalRadiation, start, end)
-        diffuseRadiation = separate_data(diffuseHorizontalRadiation, start, end)
+        dryBulbTemperature = separate_data(dryBulbTemperature)
+        directRadiation = separate_data(directNormalRadiation)
+        diffuseRadiation = separate_data(diffuseHorizontalRadiation)
+        directIlluminance = separate_data(directNormalIlluminance)
+        diffuseIlluminance = separate_data(diffuseHorizontalIlluminance)
 
-    return location,temperature,directRadiation,diffuseRadiation,hoy
+        for i in range(start,end):
+            temperature.append([i,dryBulbTemperature[i]])
+            irradiation.append([i, directRadiation[i], diffuseRadiation[i], directIlluminance[i], diffuseIlluminance[i]])
 
+    return location, list_to_tree(temperature), list_to_tree(irradiation)
 
 if _open:
     epw_file = open_epw(_open)
-    location,temperature,directRadiation,diffuseRadiation,hour_of_year = main(epw_file,start_HOY_,end_HOY_)
+    location, temperature, irradiation = main(epw_file,start_HOY_,end_HOY_)
+
 

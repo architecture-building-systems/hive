@@ -36,7 +36,7 @@ Provided by HIVE 0.0.1
 
 ghenv.Component.Name = "Hive_GlazedElement"
 ghenv.Component.NickName = 'GlazedElement'
-ghenv.Component.Message = 'VER 0.0.1\nAPR_03_2018'
+ghenv.Component.Message = 'VER 0.0.1\nAPR_23_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "1 | Zone"
@@ -52,7 +52,8 @@ import datetime
 def build_glazed_element(window_name,_window_geometry,u_value,frame_factor):
     if not sc.sticky.has_key('ElementBuilder'): return "Add the modular RC component to the canvas!"
     
-    name = 'Glazed element' if window_name is None else window_name
+    name = 'Window' if window_name is None else window_name
+
     Builder = sc.sticky['ElementBuilder'](name,u_value,frame_factor,False)
     centers,normals,glazed_elements = Builder.add_element(_window_geometry)
     
@@ -62,49 +63,95 @@ def build_glazed_element(window_name,_window_geometry,u_value,frame_factor):
     return centers, normals, glazed_elements
 
 
-def solar_gains_through_element(solar_transmittance,hoy_list,dni_list,dhi_list,hour_to_visualise):
-    if not sc.sticky.has_key('RadiationWindow'): return "Add the modular building physics component to the canvas!"
-   
+def solar_gains_through_element(window_geometry, point_in_zone, context_geometry, location, irradiation,solar_transmittance,light_transmittance):
+    """
+    
+    #TODO: Deal with polysurface input
+    
+    #TODO: account for the following:
     transmittance = {}
     transmittance['st'] = solar_transmittance if solar_transmittance is not None else 0.7
     transmittance['lt'] = light_transmittance if light_transmittance is not None else 0.8
+    """
     
-    #TODO: Deal with polysurface input
-    Window = sc.sticky['RadiationWindow'](window_geometry=_window_geometry,
-                                         context_geometry=context_geometry, 
-                                         location=location,
-                                         glass_solar_transmittance = transmittance['st'],
-                                         glass_light_transmittance = transmittance['lt'])
+    if not sc.sticky.has_key('WindowRadiation'): return "Add the modular building physics component to the canvas!"
     
-    if hour_to_visualise is not None:
-        sun_altitude,sun_azimuth,sun_vector = Window.calc_sun_position(hour_to_visualise)
-        shadow = Window.unshaded_window_surfaces(sun_vector)
+    Window = sc.sticky["WindowRadiation"](window_geometry=_window_geometry,
+                                          point_in_zone=_point_in_zone,
+                                          context_geometry=context_geometry)
+    try:
+        Sun = sc.sticky["RelativeSun"](location=location,
+                          window_azimuth_rad=Window.window_azimuth_rad,
+                          window_altitude_rad=Window.window_altitude_rad,
+                          normal = Window.window_normal)
+    except:
+        print 'Connect Location data from the Hive_getSimulationData'
     
-    solar_gains = []
-    illuminance = []
-
-    for ii in range(0,len(hoy_list)):
-        hoy = hoy_list[ii]
-        dni = dni_list[ii]
-        dhi = dhi_list[ii]
+    window_centroid = Window.window_centroid
+    window_normal = Window.window_normal
+    
+    dir_irradiation = []
+    diff_irradiation = []
+    ground_ref_irradiation = []
+    window_illuminance = []
+    unshaded_polys = []
+    sun_vectors = []
+    window_solar_gains = []
+    window_illuminance = []
+    dni = []
+    
+    for b in range(irradiation.BranchCount):
+        hoy, normal_irradiation, horizontal_irradiation, normal_illuminance, horizontal_illuminance = list(irradiation.Branch(b))
         
-        if Window.is_sunny(hoy):
-            solar_gains.append(Window.calc_solar_gains(hoy,dni,dhi))
-            illuminance.append(Window.calc_illuminance(hoy,dni,dhi))
+        dni.append(normal_irradiation)
+        
+        relative_sun_alt,relative_sun_az = Sun.calc_relative_sun_position(hoy)
+        sun_alt,sun_az = Sun.calc_sun_position(hoy)
+        
+        incidence = math.acos(math.cos(math.radians(sun_alt)) * math.cos(math.radians(relative_sun_az)))
+        
+        if Sun.is_sunny(relative_sun_alt,relative_sun_az):
+            
+            sun_vectors.append(Sun.calc_sun_vector(sun_alt,sun_az))
+            
+            if context_geometry == []:
+                # Window is unshaded
+                unshaded_area = Window.window_area
+                unshaded_polys.append(rc.Geometry.Polyline())
+            else:
+                shadow_dict = Window.calc_gross_shadows(relative_sun_alt,relative_sun_az)
+                unshaded_polygons = Window.calc_unshaded_polygons(shadow_dict)
+                unshaded_area = Window.calc_unshaded_area(unshaded_polygons)
+                unshaded_polys.append(Window.draw_unshaded_polygons(unshaded_polygons))
+            
+            dnirr, dhirr, grirr, lighting = Window.radiation(sun_alt, incidence, normal_irradiation, horizontal_irradiation, normal_illuminance, horizontal_illuminance, unshaded_area)
+            
+            print hoy, round(normal_irradiation,2), '    ' ,unshaded_area, '    ' , dnirr
+            
+            dir_irradiation.append(dnirr)
+            diff_irradiation.append(dhirr)
+            ground_ref_irradiation.append(grirr)
+            window_illuminance.append(lighting)
+            window_solar_gains.append(dnirr+dhirr+grirr)
+    
+            #TODO: collect points and merge shadows in pyclipper for a faster shading visualisation.
+    
         else:
-            solar_gains.append(0)
-            illuminance.append(0)
+            print hoy
+            window_solar_gains.append(0)
+            window_illuminance.append(0)
+            dir_irradiation.append(0)
+            diff_irradiation.append(0)
+            ground_ref_irradiation.append(0)
+            unshaded_polys.append(rc.Geometry.Polyline())
+            sun_vectors.append(0)
     
-    return solar_gains, illuminance, shadow
-
-
-try:
-    centers, normals, glazed_elements = build_glazed_element(window_name,
-        _window_geometry,u_value,frame_factor)
+    unshaded = sc.sticky["list_to_tree"](unshaded_polys)
     
-    if run_solar:
-        solar_gains, illuminance, shadow = solar_gains_through_element(
-            solar_transmittance,hoy_list,dni_list,dhi_list,hour_to_visualise)
+    return window_centroid, window_normal, sun_vectors, window_solar_gains, window_illuminance, dir_irradiation, diff_irradiation, ground_ref_irradiation, unshaded
 
-except ValueError:
-   print build_glazed_element(window_name,_window_geometry,u_value,frame_factor)
+
+centers, normals, glazed_elements = build_glazed_element(window_name, _window_geometry,u_value,frame_factor)
+
+
+window_centroid, window_normal, sun_vectors, solar_gains, illuminance, dir_irradiation, diff_irradiation, ground_ref_irradiation, unshaded = solar_gains_through_element(_window_geometry, _point_in_zone, context_geometry, location, irradiation, solar_transmittance, light_transmittance)

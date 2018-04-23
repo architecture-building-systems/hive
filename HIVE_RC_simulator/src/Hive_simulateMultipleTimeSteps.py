@@ -50,8 +50,7 @@ import scriptcontext as sc
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 loc = locals()
-simulation_variables = ['outdoor_air_temperature','internal_gains',
-                    'solar_irradiation','occupancy','illuminance']
+simulation_variables = ['internal_gains', 'solar_irradiation','occupancy','illuminance']
 variable_summary = {}
 for s in simulation_variables:
     if s in loc:
@@ -68,11 +67,13 @@ if True in [variable_summary[s] != variable_summary['outdoor_air_temperature'] f
     e = gh.GH_RuntimeMessageLevel.Error
     ghenv.Component.AddRuntimeMessage(e, error)
 """
+
+#print 'Variable summary'
+#for v in variable_summary:
+#    print v,variable_summary[v]
+
 previous_mass_temperature = previous_mass_temperature if previous_mass_temperature is not None else 20.0
 
-print 'Variable summary'
-for v in variable_summary:
-    print v,variable_summary[v]
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -88,7 +89,6 @@ while not connected:
         ghenv.Component.AddRuntimeMessage(e, error)
 
 if connected:
-    hours = len(outdoor_air_temperature)
     
     #Initialise zone object
     if Zone is None:
@@ -117,15 +117,15 @@ if connected:
     cooling_demand = []
     lighting_demand = []
     
+
     #Start simulation
-    for hour in range(0,hours):
-        oc = occupancy[hour]
-        ig = internal_gains[hour]
-        ta = outdoor_air_temperature[hour]
-        sg = 2000 if len(solar_gains) == 0 else solar_gains[hour]
-        il = 300 if len(illuminance) == 0 else illuminance[hour]
-        
-        
+    for b in range(outdoor_air_temperature.BranchCount):
+        hour, ta = outdoor_air_temperature.Branch(b)
+        oc = occupancy[b]
+        ig = internal_gains[b]
+        sg = 2000 if len(solar_gains) == 0 else solar_gains[b]
+        il = 300 if len(illuminance) == 0 else illuminance[b]
+
         #Solve
         try:
             Zone.solve_building_energy(ig, sg, ta, previous_mass_temperature)    

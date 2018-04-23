@@ -1,6 +1,6 @@
-# **GH_RC_simulator** 
+# **HIVE RC_simulator** 
 
-Still under development, but if you want to try it out here are the instructions to setting it up:
+Still under development, but testers are welcome! Installation instructions:
 
  1. Copy all the files in the userObjects folder into your local userObjects folder (see Grasshopper's <special folders>).
 

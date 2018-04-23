@@ -60,7 +60,7 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_Zone2"
 ghenv.Component.NickName = 'Zone2'
-ghenv.Component.Message = 'VER 0.0.1\nAPR_03_2018'
+ghenv.Component.Message = 'VER 0.0.1\nAPR_23_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "1 | Zone"
@@ -118,6 +118,8 @@ if len(o) != len(opaque_elements):
 elements = g + o
 if len(elements) == 0:
     elements = None
+
+print elements
 
 # keep valid thermal bridge objects
 t = [x for x in thermal_bridges if x is sc.sticky['ThermalBridge']]
