@@ -24,23 +24,23 @@ Provided by Hive 0.0.1
         glazed_elements: Element objects with additional glazing properties
         opaque_elements: Element objects
         thermal_bridges: Linear thermal bridge objects
-        floor_area: The conditioned floor area within the zone
-        zone_volume: Volume of the zone being simulated [m^2]
-        thermal_capacitance_per_floor_area: Thermal capacitance of the room per 
-            floor area [J/m2K]
-        lighting_load: Lighting Load [W/m2] 
-        lighting_control: Lux threshold at which the lights turn on [Lx]
-        lighting_utilization_factor: How the light entering the window is 
-            transmitted to the working plane []
-        lighting_maintenance_factor: How dirty the window is[]
-        ach_vent: Air changes per hour through ventilation [Air Changes Per Hour]
-        ach_infl: Air changes per hour through infiltration [Air Changes Per Hour]
-        ventilation_efficiency: The efficiency of the heat recovery system for ventilation. Set to 0 if there is no heat 
-            recovery []
-        t_set_heating : Thermal heating set point [C]
-        t_set_cooling: Thermal cooling set point [C]
-        max_cooling_energy_per_floor_area: Maximum cooling load. Set to -np.inf for unrestricted cooling [C]
-        max_heating_energy_per_floor_area: Maximum heating load per floor area. Set to no.inf for unrestricted heating [C]
+        floor_area: [default=] The conditioned floor area within the zone
+        zone_volume: [default=] Volume of the zone being simulated [m^2]
+        thermal_capacitance_per_floor_area: [default=165000] Thermal capacitance of the room per 
+            floor area [J/m2K]. Lightweight = 18000, medium weight = 165000, heavyweight = 360000
+        lighting_load: [default=11.7] Lighting Load [W/m2] 
+        lighting_control: [default=300] Lux threshold at which the lights turn on [Lx]
+        lighting_utilization_factor: [default=0.45] How the light entering the window is 
+            transmitted to the working plane
+        lighting_maintenance_factor: [default=0.9] How dirty the window is
+        ach_vent: [default= 1.5] Air changes per hour through ventilation [Air Changes Per Hour]
+        ach_infl: [default= 0.5]Air changes per hour through infiltration [Air Changes Per Hour]
+        ventilation_efficiency: [default=1] The efficiency of the heat recovery system for ventilation. Set to 0 if there is no heat 
+            recovery.
+        t_set_heating : [default=20] Thermal heating set point [C]
+        t_set_cooling: [default=26] Thermal cooling set point [C]
+        max_cooling_energy_per_floor_area: [default=12] Maximum cooling load. Set to -np.inf for unrestricted cooling [C]
+        max_heating_energy_per_floor_area: [default=-12] Maximum heating load per floor area. Set to no.inf for unrestricted heating [C]
         heating_supply_system: The type of heating system. Choices are DirectHeater, ResistiveHeater, HeatPumpHeater. 
             Direct heater has no changes to the heating demand load, a resistive heater takes an efficiency into account, 
             HeatPumpHeatercalculates a COP based on the outdoor and system supply temperature 
@@ -60,7 +60,7 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_Zone2"
 ghenv.Component.NickName = 'Zone2'
-ghenv.Component.Message = 'VER 0.0.1\nAPR_23_2018'
+ghenv.Component.Message = 'VER 0.0.1\nAPR_24_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "1 | Zone"
@@ -158,10 +158,10 @@ for l in lighting_attributes.keys():
 
 
 def main(elements,thermal_bridges,thermal_attributes,lighting_attributes):
-    if not sc.sticky.has_key('Zone'): return "Add the modular RC component to the canvas!"
+    if not sc.sticky.has_key('ThermalZone'): return "Add the modular RC component to the canvas!"
     
     #Declare zone
-    ThermalZone = sc.sticky['Zone'](elements = elements,
+    ThermalZone = sc.sticky['ThermalZone'](elements = elements,
                              thermal_bridges = thermal_bridges,
                              floor_area = thermal_attributes['floor_area'],
                              volume = thermal_attributes['volume'],
@@ -182,7 +182,7 @@ def main(elements,thermal_bridges,thermal_attributes,lighting_attributes):
     ThermalZone.summary()
     
     # Zone with thermal and lighting attributes
-    Zone = sc.sticky['ModularRCZone'](zone=ThermalZone,                 
+    Zone = sc.sticky['RCModel'](zone=ThermalZone,                 
                   lighting_load=lighting_attributes['lighting_load'],
                   lighting_control=lighting_attributes['lighting_control'],
                   lighting_utilisation_factor=lighting_attributes['lighting_utilisation_factor'],

@@ -303,7 +303,7 @@ def getListOfConnectedComponents(componentInputParamIndex = 0, onlyGHPython = Tr
     return components
 
 def main(components, targetFolder):
-    if not sc.sticky.has_key('RadiationWindow'): return "Add the modular building physics component to the canvas!"
+    if not sc.sticky.has_key('RCModel'): return "Add the modular building physics component to the canvas!"
     hive_preparation = sc.sticky["HivePreparation"]()
     
     if not os.path.isdir(targetFolder): os.mkdir(targetFolder)

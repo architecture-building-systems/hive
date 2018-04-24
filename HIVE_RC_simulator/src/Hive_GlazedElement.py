@@ -36,7 +36,7 @@ Provided by HIVE 0.0.1
 
 ghenv.Component.Name = "Hive_GlazedElement"
 ghenv.Component.NickName = 'GlazedElement'
-ghenv.Component.Message = 'VER 0.0.1\nAPR_23_2018'
+ghenv.Component.Message = 'VER 0.0.1\nAPR_24_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "1 | Zone"
@@ -50,7 +50,8 @@ import math
 import datetime
 
 def build_glazed_element(window_name,_window_geometry,u_value,frame_factor):
-    if not sc.sticky.has_key('ElementBuilder'): return "Add the modular RC component to the canvas!"
+    if not sc.sticky.has_key('ElementBuilder'): 
+        return "Add the modular RC component to the canvas!"
     
     name = 'Window' if window_name is None else window_name
 
@@ -63,9 +64,8 @@ def build_glazed_element(window_name,_window_geometry,u_value,frame_factor):
     return centers, normals, glazed_elements
 
 
-def solar_gains_through_element(window_geometry, point_in_zone, context_geometry, location, irradiation,solar_transmittance,light_transmittance):
+def solar_gains_through_element(window_geometry, point_in_zone, context_geometry, location, irradiation,solar_transmittance,light_transmittance, draw_shadows):
     """
-    
     #TODO: Deal with polysurface input
     
     #TODO: account for the following:
@@ -90,43 +90,47 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
     window_centroid = Window.window_centroid
     window_normal = Window.window_normal
     
+    # Results
     dir_irradiation = []
     diff_irradiation = []
     ground_ref_irradiation = []
     window_illuminance = []
-    unshaded_polys = []
-    sun_vectors = []
     window_solar_gains = []
-    window_illuminance = []
+    
+    # Diagnostic
+    sun_vectors = []
+    incidence_angle = []
     dni = []
+    unshaded_polys = []
     
     for b in range(irradiation.BranchCount):
         hoy, normal_irradiation, horizontal_irradiation, normal_illuminance, horizontal_illuminance = list(irradiation.Branch(b))
-        
         dni.append(normal_irradiation)
         
         relative_sun_alt,relative_sun_az = Sun.calc_relative_sun_position(hoy)
         sun_alt,sun_az = Sun.calc_sun_position(hoy)
+        print hoy,  sun_alt, sun_az
         
-        incidence = math.acos(math.cos(math.radians(sun_alt)) * math.cos(math.radians(relative_sun_az)))
-        
-        if Sun.is_sunny(relative_sun_alt,relative_sun_az):
-            
+        incidence = math.acos(math.cos(math.radians(relative_sun_alt)) * math.cos(math.radians(relative_sun_az)))
+        if Sun.is_sunny(sun_alt,relative_sun_az):
+            incidence_angle.append(math.degrees(incidence))
             sun_vectors.append(Sun.calc_sun_vector(sun_alt,sun_az))
             
             if context_geometry == []:
                 # Window is unshaded
                 unshaded_area = Window.window_area
-                unshaded_polys.append(rc.Geometry.Polyline())
+                if draw_shadows:
+                    unshaded_polys.append(Window.window_edges)
             else:
                 shadow_dict = Window.calc_gross_shadows(relative_sun_alt,relative_sun_az)
                 unshaded_polygons = Window.calc_unshaded_polygons(shadow_dict)
                 unshaded_area = Window.calc_unshaded_area(unshaded_polygons)
-                unshaded_polys.append(Window.draw_unshaded_polygons(unshaded_polygons))
+                if draw_shadows:
+                    unshaded_polys.append(Window.draw_unshaded_polygons(unshaded_polygons))
             
             dnirr, dhirr, grirr, lighting = Window.radiation(sun_alt, incidence, normal_irradiation, horizontal_irradiation, normal_illuminance, horizontal_illuminance, unshaded_area)
             
-            print hoy, round(normal_irradiation,2), '    ' ,unshaded_area, '    ' , dnirr
+            #  print hoy, round(normal_irradiation,2), '    ' ,unshaded_area, '    ' , dnirr
             
             dir_irradiation.append(dnirr)
             diff_irradiation.append(dhirr)
@@ -137,21 +141,23 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
             #TODO: collect points and merge shadows in pyclipper for a faster shading visualisation.
     
         else:
-            print hoy
+#            print hoy
+            incidence_angle.append(None)
             window_solar_gains.append(0)
             window_illuminance.append(0)
             dir_irradiation.append(0)
             diff_irradiation.append(0)
             ground_ref_irradiation.append(0)
-            unshaded_polys.append(gh.PolyLine())
             sun_vectors.append(None)
+            if draw_shadows:
+                unshaded_polys.append(Window.window_edges)
     
-    unshaded = None
-    
-    return dni, window_centroid, window_normal, sun_vectors, window_solar_gains, window_illuminance, dir_irradiation, diff_irradiation, ground_ref_irradiation, unshaded
+    unshaded = sc.sticky['list_to_tree'](unshaded_polys)
+    return dni, incidence_angle, window_centroid, window_normal, sun_vectors, window_solar_gains, window_illuminance, dir_irradiation, diff_irradiation, ground_ref_irradiation, unshaded
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+
+centers, normals, glazed_elements = build_glazed_element(window_name, _window_geometry, u_value, frame_factor)
 
 
-centers, normals, glazed_elements = build_glazed_element(window_name, _window_geometry,u_value,frame_factor)
-
-
-dni, window_centroid, window_normal, sun_vectors, solar_gains, illuminance, dir_irradiation, diff_irradiation, ground_ref_irradiation, unshaded = solar_gains_through_element(_window_geometry, _point_in_zone, context_geometry, location, irradiation, solar_transmittance, light_transmittance)
+dni, incidence_angle, window_centroid, window_normal, sun_vectors, solar_gains, illuminance, dir_irradiation, diff_irradiation, ground_ref_irradiation, unshaded = solar_gains_through_element(_window_geometry, _point_in_zone, context_geometry, location, irradiation, solar_transmittance, light_transmittance, draw_shadows)

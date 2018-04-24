@@ -30,7 +30,7 @@ Provided by Oasys 0.0.1
 
 ghenv.Component.Name = "Hive_OpaqueElement"
 ghenv.Component.NickName = 'OpaqueElement'
-ghenv.Component.Message = 'VER 0.0.1\nMAR_22_2018'
+ghenv.Component.Message = 'VER 0.0.1\nAPR_24_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "1 | Zone"
@@ -42,6 +42,7 @@ def main(element_name,u_value):
     if not sc.sticky.has_key('ElementBuilder'): 
         return "Add the modular RC component to the canvas!"
 
+    element_name = 'Wall' if element_name is None else element_name
     Builder = sc.sticky['ElementBuilder'](element_name,u_value,1,True)
     centers,normals,opaque_element = Builder.add_element(_geometry)
     

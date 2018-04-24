@@ -39,7 +39,7 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_simulateMultipleTimeSteps"
 ghenv.Component.NickName = 'simulateMultipleTimeSteps'
-ghenv.Component.Message = 'VER 0.0.1\nAPR_20_2018'
+ghenv.Component.Message = 'VER 0.0.1\nAPR_24_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "2 | Simulation"
@@ -76,23 +76,12 @@ previous_mass_temperature = previous_mass_temperature if previous_mass_temperatu
 
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-connected = False
-
-while not connected:
-    try:
-        sc.sticky['RadiationWindow']
-        connected = True
-    except NameError:
-        error = "Add modular_building_physics, emissions_systems and supply_systems components to the canvas!"
-        e = gh.GH_RuntimeMessageLevel.error
-        ghenv.Component.AddRuntimeMessage(e, error)
-
-if connected:
+def main(Zone, outdoor_air_temperature, previous_mass_temperature, internal_gains, solar_gains, occupancy, illuminance):
+    if not sc.sticky.has_key('RCModel'): return "Add the modular RC component to the canvas!"
     
     #Initialise zone object
     if Zone is None:
-        Zone = sc.sticky["RC_Zone"]()
+        Zone = sc.sticky["RCModel"]()
         warning = """No zone definition has been detected. The default zone will be
         applied."""
         w = gh.GH_RuntimeMessageLevel.Warning
@@ -101,9 +90,6 @@ if connected:
         Zone = Zone
     
     """
-    TODO: Check what the difference between this and the illuminance calculated in 
-    the window.
-    
     Spectral luminous efficacy (108)- can be calculated from the weather file 
     https://en.wikipedia.org/wiki/Luminous_efficacy
     ill = [s * 108 for s in solar_gains]
@@ -111,36 +97,48 @@ if connected:
     
     #Initialise result lists
     indoor_air_temperature = []
+    operative_temperature = []
     mass_temperature = []
     energy_demand = []
     heating_demand = []
     cooling_demand = []
     lighting_demand = []
     
-
     #Start simulation
     for b in range(outdoor_air_temperature.BranchCount):
         hour, ta = outdoor_air_temperature.Branch(b)
         oc = occupancy[b]
         ig = internal_gains[b]
-        sg = 2000 if len(solar_gains) == 0 else solar_gains[b]
-        il = 300 if len(illuminance) == 0 else illuminance[b]
-
-        #Solve
+        sg = 2000 if solar_gains == [] else solar_gains[b]
+        il = 300 if illuminance == [] else illuminance[b]
+        
         try:
             Zone.solve_building_energy(ig, sg, ta, previous_mass_temperature)    
             Zone.solve_building_lighting(il, oc)
         except:
-            print ig, sg, ta, previous_mass_temperature
+            print 'building energy could not be solved for the following inputs'
+            print 'outdoor air temperature: ', ta
+            print 'previous mass temperature: ', previous_mass_temperature
+            print 'internal gains: ', ig
+            print 'solar gains: ', sg
+            print 'illuminance: ',il
+            print 'occupancy: ',oc
+            Zone.solve_building_energy(ig, sg, ta, previous_mass_temperature) 
+            
             break
         
         #Set T_m as t_m_prev for next timestep
         t_m_prev = Zone.t_m
-    
+        
         #Record Results
         indoor_air_temperature.append(Zone.t_air)
+        operative_temperature.append(Zone.t_operative)
         mass_temperature.append(Zone.t_m)  # Printing Room Temperature of the medium
         lighting_demand.append(Zone.lighting_demand)  # Print Lighting Demand
         energy_demand.append(Zone.energy_demand)  # Print heating/cooling loads
         heating_demand.append(Zone.heating_demand)
         cooling_demand.append(Zone.cooling_demand)
+        
+    return indoor_air_temperature, operative_temperature, mass_temperature, lighting_demand, energy_demand, heating_demand, cooling_demand
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
+indoor_air_temperature, operative_temperature, mass_temperature, lighting_demand, energy_demand, heating_demand, cooling_demand = main(Zone, outdoor_air_temperature, previous_mass_temperature, internal_gains, solar_gains, occupancy, illuminance)

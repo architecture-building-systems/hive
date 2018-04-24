@@ -29,7 +29,7 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_getSimulationData"
 ghenv.Component.NickName = 'getSimulationData'
-ghenv.Component.Message = 'VER 0.0.1\nAPR_22_2018'
+ghenv.Component.Message = 'VER 0.0.1\nAPR_24_2018'
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "2 | Simulation"
 # ComponentExposure=1
@@ -164,8 +164,11 @@ def main(epw_file,start_HOY_,end_HOY_):
 
     return location, list_to_tree(temperature), list_to_tree(irradiation)
 
-if _open:
-    epw_file = open_epw(_open)
-    location, temperature, irradiation = main(epw_file,start_HOY_,end_HOY_)
+if epw_file is None:
+    if browse_for_epw:
+        epw_file = open_epw(_open)
+        location, temperature, irradiation = main(epw_file,start_HOY_,end_HOY_)
 
+else:
+    location, temperature, irradiation = main(epw_file,start_HOY_,end_HOY_)
 
