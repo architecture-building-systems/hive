@@ -36,7 +36,7 @@ Provided by HIVE 0.0.1
 
 ghenv.Component.Name = "Hive_GlazedElement"
 ghenv.Component.NickName = 'GlazedElement'
-ghenv.Component.Message = 'VER 0.0.1\nAPR_24_2018'
+ghenv.Component.Message = 'VER 0.0.1\nAPR_25_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "1 | Zone"
@@ -67,12 +67,10 @@ def build_glazed_element(window_name,_window_geometry,u_value,frame_factor):
 def solar_gains_through_element(window_geometry, point_in_zone, context_geometry, location, irradiation,solar_transmittance,light_transmittance, draw_shadows):
     """
     #TODO: Deal with polysurface input
-    
-    #TODO: account for the following:
-    transmittance = {}
-    transmittance['st'] = solar_transmittance if solar_transmittance is not None else 0.7
-    transmittance['lt'] = light_transmittance if light_transmittance is not None else 0.8
+    #TODO: collect points and merge shadows in pyclipper for a faster shading visualisation.
     """
+    solar_transmittance = solar_transmittance if solar_transmittance is not None else 0.7
+    light_transmittance = light_transmittance if light_transmittance is not None else 0.8
     
     if not sc.sticky.has_key('WindowRadiation'): return "Add the modular building physics component to the canvas!"
     
@@ -104,18 +102,27 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
     unshaded_polys = []
     
     for b in range(irradiation.BranchCount):
-        hoy, normal_irradiation, horizontal_irradiation, normal_illuminance, horizontal_illuminance = list(irradiation.Branch(b))
-        dni.append(normal_irradiation)
+        # Initialize results
+        incidence = 0
+        solar_gains_this_hour = 0
+        lighting = 0
+        dnirr = 0
+        dhirr = 0
+        grirr = 0
+        if draw_shadows:
+            unshaded_polys = Window.window_edges
         
+        # read radiation data
+        hoy, normal_irradiation, horizontal_irradiation, normal_illuminance, horizontal_illuminance = list(irradiation.Branch(b))
+        
+        # Calculate sun
         relative_sun_alt,relative_sun_az = Sun.calc_relative_sun_position(hoy)
         sun_alt,sun_az = Sun.calc_sun_position(hoy)
-        print hoy,  sun_alt, sun_az
-        
         incidence = math.acos(math.cos(math.radians(relative_sun_alt)) * math.cos(math.radians(relative_sun_az)))
+        
+        # Solve radiation
         if Sun.is_sunny(sun_alt,relative_sun_az):
-            incidence_angle.append(math.degrees(incidence))
-            sun_vectors.append(Sun.calc_sun_vector(sun_alt,sun_az))
-            
+            # Calculate shading
             if context_geometry == []:
                 # Window is unshaded
                 unshaded_area = Window.window_area
@@ -129,28 +136,21 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
                     unshaded_polys.append(Window.draw_unshaded_polygons(unshaded_polygons))
             
             dnirr, dhirr, grirr, lighting = Window.radiation(sun_alt, incidence, normal_irradiation, horizontal_irradiation, normal_illuminance, horizontal_illuminance, unshaded_area)
-            
-            #  print hoy, round(normal_irradiation,2), '    ' ,unshaded_area, '    ' , dnirr
-            
-            dir_irradiation.append(dnirr)
-            diff_irradiation.append(dhirr)
-            ground_ref_irradiation.append(grirr)
-            window_illuminance.append(lighting)
-            window_solar_gains.append(dnirr+dhirr+grirr)
-    
-            #TODO: collect points and merge shadows in pyclipper for a faster shading visualisation.
-    
+            solar_gains_this_hour = solar_transmittance * (dnirr + dhirr + grirr)
+        
+        # Append results
+        dni.append(normal_irradiation)
+        dir_irradiation.append(dnirr)
+        diff_irradiation.append(dhirr)
+        ground_ref_irradiation.append(grirr)
+        window_illuminance.append(lighting)
+        window_solar_gains.append(solar_gains_this_hour)
+        
+        if Sun.is_sunny:
+            sun_vectors.append(Sun.calc_sun_vector(sun_alt,sun_az))
+            incidence_angle.append(math.degrees(incidence))
         else:
-#            print hoy
-            incidence_angle.append(None)
-            window_solar_gains.append(0)
-            window_illuminance.append(0)
-            dir_irradiation.append(0)
-            diff_irradiation.append(0)
-            ground_ref_irradiation.append(0)
             sun_vectors.append(None)
-            if draw_shadows:
-                unshaded_polys.append(Window.window_edges)
     
     unshaded = sc.sticky['list_to_tree'](unshaded_polys)
     return dni, incidence_angle, window_centroid, window_normal, sun_vectors, window_solar_gains, window_illuminance, dir_irradiation, diff_irradiation, ground_ref_irradiation, unshaded
@@ -158,6 +158,5 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 centers, normals, glazed_elements = build_glazed_element(window_name, _window_geometry, u_value, frame_factor)
-
 
 dni, incidence_angle, window_centroid, window_normal, sun_vectors, solar_gains, illuminance, dir_irradiation, diff_irradiation, ground_ref_irradiation, unshaded = solar_gains_through_element(_window_geometry, _point_in_zone, context_geometry, location, irradiation, solar_transmittance, light_transmittance, draw_shadows)
