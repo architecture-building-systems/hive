@@ -59,7 +59,7 @@ def build_glazed_element(window_name,_window_geometry,u_value,frame_factor):
     centers,normals,glazed_elements = Builder.add_element(_window_geometry)
     
     for g in glazed_elements:
-        print g.name,':',g.u_value,'W/m2K',g.opaque
+        print 'element: ',g.name,'\n U-value:',g.u_value,'W/m2K \n area:',g.area,'m2'
     
     return centers, normals, glazed_elements
 
@@ -109,8 +109,6 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
         dnirr = 0
         dhirr = 0
         grirr = 0
-        if draw_shadows:
-            unshaded_polys = Window.window_edges
         
         # read radiation data
         hoy, normal_irradiation, horizontal_irradiation, normal_illuminance, horizontal_illuminance = list(irradiation.Branch(b))
