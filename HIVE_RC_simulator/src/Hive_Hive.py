@@ -289,7 +289,11 @@ class RelativeSun(object):
         :return: relative_sun_az: Sun azimuth [Degrees] (Facade convention)
         :rtype: float
         """
-        relative_sun_az = 180 - sun_az - math.degrees(self.window_azimuth_rad)
+                    
+        relative_sun_az = 180 - sun_az + math.degrees(self.window_azimuth_rad)
+        if relative_sun_az < -180:
+            relative_sun_az +=360
+#        print sun_az, relative_sun_az
         return relative_sun_az
     
     def calc_relative_altitude(self, sun_alt):
@@ -671,8 +675,7 @@ class WindowRadiation(object):
         
         if diff_circum > 2 * diff_horizon:
             diff_horizon = 0
-        
-        return diff_isotropic + diff_circum + diff_horizon 
+        return (diff_isotropic + diff_circum + diff_horizon) * self.window_area
     
     def calc_ground_ref_irradiation(self, norm_radiation, hor_radiation, sun_alt, view_factor):
         sun_alt_rad = math.radians(sun_alt)
@@ -685,19 +688,20 @@ class WindowRadiation(object):
         """
         credits: JoanDM
         """
-        
         dir_irradiation = 0
         diff_irradiation = 0
+        diff_irradiation_simple = 0
         ground_ref_irradiation = 0
         normal_lux = 0
         window_diff_lux = 0
         window_ground_ref_lux = 0
         
-        # no idea why 0.4 (https://github.com/architecture-building-systems/ASF_Control/blob/662c06393c1cd9e2452375c9c9d47f17f03a6e64/ASF_simulation_framework/Radiation/dev_radiation.py#L468)
-        view_factor = 0.4 * unshaded_area/self.window_area
+        # VF is a combination of tilt and shaded area
+        view_factor = ((1 + math.cos(self.window_altitude_rad)) / 2) * unshaded_area/self.window_area
         
         # Direct Irradiation
-        if normal_irradiation != 0:
+        if normal_irradiation != 0 and math.cos(angle_incidence) > 0:
+            
             dir_irradiation = normal_irradiation * math.cos(angle_incidence) * unshaded_area
         
         if normal_lux != 0:
@@ -705,21 +709,19 @@ class WindowRadiation(object):
         
         # Diffuse Irradiation
         if not horizontal_irradiation == 0:
-            diff_irradiation = self.calc_diffuse_irradiation(normal_irradiation, horizontal_irradiation, 
+            diff_irradiation_simple =  horizontal_irradiation * ((1 + math.cos(self.window_altitude_rad)) / 2) * self.window_area
+            diff_irradiation = self.calc_diffuse_irradiation(normal_irradiation, horizontal_irradiation,
                                                              view_factor, sun_alt, angle_incidence)  
-            
-            # Calculate diffuse and reflected irradiation 
+            # Calculate diffuse and reflected irradiation
             ground_ref_irradiation = self.calc_ground_ref_irradiation(normal_irradiation, 
                                                                  horizontal_irradiation, sun_alt,
                                                                  view_factor)  
-        
-        window_solar_gains = dir_irradiation + diff_irradiation + ground_ref_irradiation
         
         window_diff_lux = horizontal_lux * view_factor
         window_ground_ref_lux = self.albedo * horizontal_lux * (1 - view_factor)
         window_illuminance =  normal_lux + window_diff_lux + window_ground_ref_lux
         
-        return dir_irradiation, diff_irradiation, ground_ref_irradiation, window_illuminance
+        return dir_irradiation, diff_irradiation, diff_irradiation_simple, ground_ref_irradiation, window_illuminance
 
 
 class Element(object):
@@ -767,7 +769,7 @@ class ElementBuilder(object):
             # Invalid input
             if not (rs.IsSurface(geometry) or rs.IsPolysurface(geometry)):
                 error = """geometry is not a surface or polysurface"""
-                e = gh.GH_RuntimeMessageLevel.Error
+                e = ghKernel.GH_RuntimeMessageLevel.Error
                 ghenv.Component.AddRuntimeMessage(e, error)
         
             # Single surface
