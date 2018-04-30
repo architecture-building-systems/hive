@@ -28,7 +28,7 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_Hive"
 ghenv.Component.NickName = 'Hive'
-ghenv.Component.Message = 'VER 0.0.1\nAPR_24_2018'
+ghenv.Component.Message = 'VER 0.0.1\nAPR_30_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "0 | Core"
@@ -51,8 +51,7 @@ from System.Collections.Generic import List
 import System.Reflection
 import os 
 
-
-clipper_path = 'C:\Program Files\Rhinoceros 5.0 (64-bit)\System\clipper_library.dll'
+clipper_path = os.getenv('APPDATA')+'\Grasshopper\Libraries\clipper_library.dll'
 clipper_library = System.Reflection.Assembly.LoadFrom(clipper_path)
 
 clipper = clipper_library.ClipperLib.Clipper()
@@ -290,7 +289,7 @@ class RelativeSun(object):
         :return: relative_sun_az: Sun azimuth [Degrees] (Facade convention)
         :rtype: float
         """
-        relative_sun_az = sun_az -180 - math.degrees(self.window_azimuth_rad)
+        relative_sun_az = 180 - sun_az - math.degrees(self.window_azimuth_rad)
         return relative_sun_az
     
     def calc_relative_altitude(self, sun_alt):
@@ -924,7 +923,7 @@ class Building(object):
         self.zone = zone
         if self.zone == None:
             self.zone = Zone()
-        
+
         # Fenestration and Lighting Properties
         self.lighting_load = lighting_load  # [kW/m2] lighting load
         self.lighting_control = lighting_control  # [lux] Lighting set point
@@ -1170,10 +1169,8 @@ class Building(object):
 
         self.calc_t_air(t_out)
 
-        self.calc_t_operative()
-        
-        
-        return self.t_m, self.t_air, self.t_operative
+        self.calc_t_opperative()
+        return self.t_m, self.t_air, self.t_opperative
 
     def calc_energy_demand(self, internal_gains, solar_gains, t_out, t_m_prev):
         """
@@ -1239,7 +1236,6 @@ class Building(object):
         # calculate system temperatures for Step 3/Step 4
         self.calc_temperatures_crank_nicolson(
             self.energy_demand, internal_gains, solar_gains, t_out, t_m_prev)
-        
 
     def calc_energy_demand_unrestricted(self, energy_floorAx10, t_air_set, t_air_0, t_air_10):
         """
@@ -1367,7 +1363,6 @@ class Building(object):
         # (C.9) in [C.3 ISO 13790]
         """
         self.t_m = (self.t_m_next + t_m_prev) / 2.0
-
     def calc_t_s(self, t_out):
         """
         Calculate the temperature of the inside room surfaces
@@ -1394,14 +1389,14 @@ class Building(object):
         self.t_air = (self.h_tr_is * self.t_s + self.h_ve_adj *
                       t_supply + self.phi_ia) / (self.h_tr_is + self.h_ve_adj)
 
-    def calc_t_operative(self):
+    def calc_t_opperative(self):
         """
         The opperative temperature is a weighted average of the air and mean radiant temperatures.
         It is not used in any further calculation at this stage
         # (C.12) in [C.3 ISO 13790]
         """
         
-        self.t_operative = 0.3 * self.t_air + 0.7 * self.t_s
+        self.t_opperative = 0.3 * self.t_air + 0.7 * self.t_s
 
 
 error = "Connect emissions_systems and supply_systems components!"
