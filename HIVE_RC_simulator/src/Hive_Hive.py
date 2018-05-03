@@ -28,7 +28,7 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_Hive"
 ghenv.Component.NickName = 'Hive'
-ghenv.Component.Message = 'VER 0.0.1\nAPR_30_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_03_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "0 | Core"
@@ -51,7 +51,7 @@ from System.Collections.Generic import List
 import System.Reflection
 import os 
 
-clipper_path = os.getenv('APPDATA')+'\Grasshopper\Libraries\clipper_library.dll'
+clipper_path = os.path.join(os.getenv('APPDATA'), 'Grasshopper', 'Libraries', 'clipper_library.dll')
 clipper_library = System.Reflection.Assembly.LoadFrom(clipper_path)
 
 clipper = clipper_library.ClipperLib.Clipper()
@@ -538,14 +538,37 @@ class WindowRadiation(object):
     def draw_unshaded_polygons(self,clipper_result):
         """
         optional function which returns polylines of the trimmed shadows for each hour
+        :param clipper_result: a .net List of polygons (list of intPoints)
+        :type clipper_result: List(List(intPoint))
         """
         clipper_result_geometry = []
+
+        u_domain = rs.SurfaceDomain(self.window_geometry,0)[1]
+        
         for ms in clipper_result:
             points = []
             for p in ms:
-                points.append(rs.EvaluateSurface(self.window_geometry,p.X/self.clipper_accuracy,p.Y/self.clipper_accuracy))
+                points.append(rs.EvaluateSurface(self.window_geometry, u_domain - p.X/self.clipper_accuracy, p.Y/self.clipper_accuracy))
             clipper_result_geometry.append(gh.PolyLine(points,closed=True))
         return clipper_result_geometry
+
+    def calc_unshaded_area(self,unshaded_polygons):
+        """
+        For a given set of shadows (one hour)
+        Subtract from net_shadows dictionary the regions outside the window frame and
+        compute the total shadow laying on the window as a % of its area.
+        """
+        
+        shaded_area = 0
+        for p in unshaded_polygons:
+            shaded_area += abs(clipper.Area(p))
+         
+        try:
+            assert clipper.Area(self.window_frame) >= shaded_area
+            return (clipper.Area(self.window_frame) - shaded_area)/ self.clipper_accuracy**2
+        except AssertionError:
+            # clipper failed and returned overlapping geometries.
+            print 'clipping warning for hour: ', h
 
     def calc_unshaded_polygons(self,gross_shadows):
         """
@@ -571,24 +594,6 @@ class WindowRadiation(object):
             return unshaded_polygons
         else:
             return None
-
-    def calc_unshaded_area(self,unshaded_polygons):
-        """
-        For a given set of shadows (one hour)
-        Subtract from net_shadows dictionary the regions outside the window frame and
-        compute the total shadow laying on the window as a % of its area.
-        """
-        
-        shaded_area = 0
-        for p in unshaded_polygons:
-            shaded_area += abs(clipper.Area(p))
-         
-        try:
-            assert clipper.Area(self.window_frame) >= shaded_area
-            return (clipper.Area(self.window_frame) - shaded_area)/ self.clipper_accuracy**2
-        except AssertionError:
-            # clipper failed and returned overlapping geometries.
-            print 'clipping warning for hour: ', h
 
     def perez(self, angle_incidence, sun_alt, norm_radiation, hor_radiation):
         """"

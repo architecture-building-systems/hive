@@ -36,7 +36,7 @@ Provided by HIVE 0.0.1
 
 ghenv.Component.Name = "Hive_GlazedElement"
 ghenv.Component.NickName = 'GlazedElement'
-ghenv.Component.Message = 'VER 0.0.1\nAPR_25_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_03_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "1 | Zone"
@@ -46,6 +46,7 @@ import scriptcontext as sc
 import rhinoscriptsyntax as rs
 import Rhino as rc
 import ghpythonlib.components as gh
+import Grasshopper.Kernel as ghKernel
 import math
 import datetime
 
@@ -59,14 +60,14 @@ def build_glazed_element(window_name,_window_geometry,u_value,frame_factor):
     centers,normals,glazed_elements = Builder.add_element(_window_geometry)
     
     for g in glazed_elements:
-        print 'element: ',g.name,'\n U-value:',g.u_value,'W/m2K \n area:',g.area,'m2'
+        print 'element name: ',g.name,'\n U-value:',g.u_value,'W/m2K \n area:',g.area,'m2'
     
     return centers, normals, glazed_elements
 
 
 def solar_gains_through_element(window_geometry, point_in_zone, context_geometry, location, irradiation,solar_transmittance,light_transmittance, draw_shadows):
     """
-    #TODO: Deal with polysurface input
+    #TODO: Deal with polysurface input for shading
     #TODO: collect points and merge shadows in pyclipper for a faster shading visualisation.
     """
     solar_transmittance = solar_transmittance if solar_transmittance is not None else 0.7
@@ -91,15 +92,16 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
     # Results
     dir_irradiation = []
     diff_irradiation = []
+    diff_irradiation_simple = []
     ground_ref_irradiation = []
     window_illuminance = []
     window_solar_gains = []
     
     # Diagnostic
     sun_vectors = []
-    incidence_angle = []
-    dni = []
+    incidence_angles = []
     unshaded_polys = []
+    shading_factor = []
     
     for b in range(irradiation.BranchCount):
         # Initialize results
@@ -108,7 +110,10 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
         lighting = 0
         dnirr = 0
         dhirr = 0
+        dhirr_simple = 0
         grirr = 0
+        sun_vector = None
+        unshaded_polys_hour = [None]
         
         # read radiation data
         hoy, normal_irradiation, horizontal_irradiation, normal_illuminance, horizontal_illuminance = list(irradiation.Branch(b))
@@ -116,45 +121,63 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
         # Calculate sun
         relative_sun_alt,relative_sun_az = Sun.calc_relative_sun_position(hoy)
         sun_alt,sun_az = Sun.calc_sun_position(hoy)
+        # print sun_az, relative_sun_az
         incidence = math.acos(math.cos(math.radians(relative_sun_alt)) * math.cos(math.radians(relative_sun_az)))
-        
-        # Solve radiation
-        if Sun.is_sunny(sun_alt,relative_sun_az):
-            # Calculate shading
-            if context_geometry == []:
-                # Window is unshaded
-                unshaded_area = Window.window_area
-                if draw_shadows:
-                    unshaded_polys.append(Window.window_edges)
-            else:
-                shadow_dict = Window.calc_gross_shadows(relative_sun_alt,relative_sun_az)
-                unshaded_polygons = Window.calc_unshaded_polygons(shadow_dict)
-                unshaded_area = Window.calc_unshaded_area(unshaded_polygons)
-                if draw_shadows:
-                    unshaded_polys.append(Window.draw_unshaded_polygons(unshaded_polygons))
+
+        # Calculate shading
+        if context_geometry == []:
+            # Window is unshaded
+            unshaded_area = Window.window_area
             
-            dnirr, dhirr, grirr, lighting = Window.radiation(sun_alt, incidence, normal_irradiation, horizontal_irradiation, normal_illuminance, horizontal_illuminance, unshaded_area)
-            solar_gains_this_hour = solar_transmittance * (dnirr + dhirr + grirr)
+            if draw_shadows and sun_alt > 0 and abs(relative_sun_az) < 90:
+                unshaded_polys_hour = (Window.window_edges)
+        else:
+            #TODO: add a condition that checks shading geometry
+            shadow_dict = Window.calc_gross_shadows(relative_sun_alt,relative_sun_az)
+            unshaded_polygons = Window.calc_unshaded_polygons(shadow_dict)
+            unshaded_area = Window.calc_unshaded_area(unshaded_polygons)
+            if draw_shadows and sun_alt > 0 and abs(relative_sun_az) < 90:
+                unshaded_polys_hour = Window.draw_unshaded_polygons(unshaded_polygons)
+        
+        dnirr, dhirr, dhirr_simple, grirr, lighting = Window.radiation(sun_alt, incidence, normal_irradiation, horizontal_irradiation, normal_illuminance, horizontal_illuminance, unshaded_area)
+        solar_gains_this_hour = solar_transmittance * (dnirr + dhirr + grirr)
+        shading_factor.append(unshaded_area/Window.window_area)
+
+        if sun_alt > 0 and abs(relative_sun_az) < 90:
+            sun_vector = Sun.calc_sun_vector(sun_alt,sun_az)
+            incidence = math.degrees(incidence)
         
         # Append results
-        dni.append(normal_irradiation)
         dir_irradiation.append(dnirr)
         diff_irradiation.append(dhirr)
+        diff_irradiation_simple.append(dhirr_simple)
+        sun_vectors.append(sun_vector)
+        incidence_angles.append(incidence)
         ground_ref_irradiation.append(grirr)
         window_illuminance.append(lighting)
         window_solar_gains.append(solar_gains_this_hour)
-        
-        if Sun.is_sunny:
-            sun_vectors.append(Sun.calc_sun_vector(sun_alt,sun_az))
-            incidence_angle.append(math.degrees(incidence))
-        else:
-            sun_vectors.append(None)
-    
+        if draw_shadows and sun_alt>0:
+            unshaded_polys.append(unshaded_polys_hour)
+
     unshaded = sc.sticky['list_to_tree'](unshaded_polys)
-    return dni, incidence_angle, window_centroid, window_normal, sun_vectors, window_solar_gains, window_illuminance, dir_irradiation, diff_irradiation, ground_ref_irradiation, unshaded
+    print 'Total solar gains:', round(sum(window_solar_gains),2),'Wh'
+    print 'Mean shading factor: ', sum(shading_factor)/len(shading_factor)
+     
+    return incidence_angle, window_centroid, window_normal, sun_vectors, window_solar_gains, window_illuminance, dir_irradiation, diff_irradiation, diff_irradiation_simple, ground_ref_irradiation, unshaded
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 centers, normals, glazed_elements = build_glazed_element(window_name, _window_geometry, u_value, frame_factor)
+window_area = [g.area for g in glazed_elements]
 
-dni, incidence_angle, window_centroid, window_normal, sun_vectors, solar_gains, illuminance, dir_irradiation, diff_irradiation, ground_ref_irradiation, unshaded = solar_gains_through_element(_window_geometry, _point_in_zone, context_geometry, location, irradiation, solar_transmittance, light_transmittance, draw_shadows)
+if (location and _point_in_zone and  _window_geometry):
+    incidence_angle, window_centroid, window_normal, sun_vectors, solar_gains, illuminance, dir_irradiation, diff_irradiation, diff_irradiation_simple, ground_ref_irradiation, unshaded = solar_gains_through_element(_window_geometry, _point_in_zone, context_geometry, location, irradiation, solar_transmittance, light_transmittance, draw_shadows)
+    
+
+else:
+    warning = """Warning: Insufficient inputs for solar calculations"""
+    print 'location:',location
+    print '_point_in_zone',_point_in_zone
+    print '_window_geometry',_window_geometry
+    w = ghKernel.GH_RuntimeMessageLevel.Warning
+    ghenv.Component.AddRuntimeMessage(w, warning)
