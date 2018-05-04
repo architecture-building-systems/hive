@@ -36,7 +36,7 @@ Provided by HIVE 0.0.1
 
 ghenv.Component.Name = "Hive_GlazedElement"
 ghenv.Component.NickName = 'GlazedElement'
-ghenv.Component.Message = 'VER 0.0.1\nMAY_03_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_04_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "1 | Zone"
