@@ -14,15 +14,15 @@
 # <Licence: MIT>
 
 """
-Define an opaque by adding a surface.
+Dual function component which returns a building element and calculates solar gains.
 -
 Provided by HIVE 0.0.1
     
     Args:
         _window_geometry: a surface or polysurface representing the 
-            heat-transfer area of the element
+             of the element
         window_name: optional element name
-        _u_value: element u-value [W/(m^2.K)]
+        _u_value: element u-value [W/(m^2.K)]. Typical values for a single glazed window 4.8, good double-glazed window:1-1.2, triple-glazed window: 0.15.
         solar_transmittance: (aka. g-factor) the percentage of radiation that can pass through glazing
         light_transmittance: the percentage of light that passes through glazing
     Returns:
@@ -158,7 +158,7 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
         window_solar_gains.append(solar_gains_this_hour)
         if draw_shadows and sun_alt>0:
             unshaded_polys.append(unshaded_polys_hour)
-
+    
     unshaded = sc.sticky['list_to_tree'](unshaded_polys)
     print 'Total solar gains:', round(sum(window_solar_gains),2),'Wh'
     print 'Mean shading factor: ', sum(shading_factor)/len(shading_factor)
@@ -171,7 +171,7 @@ centers, normals, glazed_elements = build_glazed_element(window_name, _window_ge
 window_area = [g.area for g in glazed_elements]
 
 if (location and _point_in_zone and  _window_geometry):
-    incidence_angle, window_centroid, window_normal, sun_vectors, solar_gains, illuminance, dir_irradiation, diff_irradiation, diff_irradiation_simple, ground_ref_irradiation, unshaded = solar_gains_through_element(_window_geometry, _point_in_zone, context_geometry, location, irradiation, solar_transmittance, light_transmittance, draw_shadows)
+     incidence_angle, window_centroid, window_normal, sun_vectors, solar_gains, illuminance, dir_irradiation, diff_irradiation, diff_irradiation_simple, ground_ref_irradiation, unshaded = solar_gains_through_element(_window_geometry, _point_in_zone, context_geometry, location, irradiation, solar_transmittance, light_transmittance, draw_shadows)
     
 
 else:
