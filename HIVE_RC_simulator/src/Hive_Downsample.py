@@ -32,7 +32,7 @@ ghenv.Component.NickName = 'GlazedElement'
 ghenv.Component.Message = 'VER 0.0.1\nMAY_07_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
-ghenv.Component.SubCategory = "5 | Results"
+ghenv.Component.SubCategory = "3 | Results"
 # ComponentExposure=5
 
 import scriptcontext as sc

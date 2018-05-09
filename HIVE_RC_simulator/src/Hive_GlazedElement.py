@@ -36,7 +36,7 @@ Provided by HIVE 0.0.1
 
 ghenv.Component.Name = "Hive_GlazedElement"
 ghenv.Component.NickName = 'GlazedElement'
-ghenv.Component.Message = 'VER 0.0.1\nMAY_04_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_09_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "1 | Zone"
@@ -162,7 +162,7 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
     unshaded = sc.sticky['list_to_tree'](unshaded_polys)
     print 'Total solar gains:', round(sum(window_solar_gains),2),'Wh'
     print 'Mean shading factor: ', sum(shading_factor)/len(shading_factor)
-     
+    
     return incidence_angle, window_centroid, window_normal, sun_vectors, window_solar_gains, window_illuminance, dir_irradiation, diff_irradiation, diff_irradiation_simple, ground_ref_irradiation, unshaded
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -171,9 +171,8 @@ centers, normals, glazed_elements = build_glazed_element(window_name, _window_ge
 window_area = [g.area for g in glazed_elements]
 
 if (location and _point_in_zone and  _window_geometry):
-     incidence_angle, window_centroid, window_normal, sun_vectors, solar_gains, illuminance, dir_irradiation, diff_irradiation, diff_irradiation_simple, ground_ref_irradiation, unshaded = solar_gains_through_element(_window_geometry, _point_in_zone, context_geometry, location, irradiation, solar_transmittance, light_transmittance, draw_shadows)
+    incidence_angle, window_centroid, window_normal, sun_vectors, solar_gains, illuminance, dir_irradiation, diff_irradiation, diff_irradiation_simple, ground_ref_irradiation, unshaded = solar_gains_through_element(_window_geometry, _point_in_zone, context_geometry, location, irradiation, solar_transmittance, light_transmittance, draw_shadows)
     
-
 else:
     warning = """Warning: Insufficient inputs for solar calculations"""
     print 'location:',location

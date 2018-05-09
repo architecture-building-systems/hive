@@ -28,7 +28,7 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_Hive"
 ghenv.Component.NickName = 'Hive'
-ghenv.Component.Message = 'VER 0.0.1\nMAY_03_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_09_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "0 | Core"
@@ -66,16 +66,46 @@ IntPoint = clipper_library.ClipperLib.IntPoint
 class HivePreparation(object):
     """ 
     Credits: Ladybug
-    This object is a stripped-down version of the Ladybug Preparation component,
-    which provides support for other components which have been adapted from
-    Ladybug to Hive    
+    This object contains some hand-picked functions from the Ladybug Preparation component.
+    It provides support for other components which have been adapted from Ladybug to Hive.
     """
+
+    def hour2Date(self, hour, alternate = False):
+        numOfDays = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365]
+        numOfHours = [24 * numOfDay for numOfDay in numOfDays]
+        #print hour/24
+        if hour%8760==0 and not alternate: return `31`+ ' ' + 'DEC' + ' 24:00'
+        elif hour%8760==0: return 31, 11, 24
+    
+        for h in range(len(numOfHours)-1):
+            if hour <= numOfHours[h+1]: month = self.monthList[h]; break
+        try: month
+        except: month = self.monthList[h] # for the last hour of the year
+    
+        if (hour)%24 == 0:
+            day = int((hour - numOfHours[h]) / 24)
+            time = `24` + ':00'
+            hour = 24
+        else:
+            day = int((hour - numOfHours[h]) / 24) + 1
+            minutes = `int(round((hour - math.floor(hour)) * 60))`
+            if len(minutes) == 1: minutes = '0' + minutes
+            time = `int(hour%24)` + ':' + minutes
+        if alternate:
+            time = hour%24
+            if time == 0: time = 24
+            month = self.monthList.index(month)
+            return day, month, time
+            
+        return (`day` + ' ' + month + ' ' + time)
 
     def __init__(self):
         self.monthList = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
         self.numOfDays = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365]
         self.numOfDaysEachMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
         self.numOfHours = [24 * numOfDay for numOfDay in self.numOfDays]
+    
+    strToBeFound = 'key:location/dataType/units/frequency/startsAt/endsAt'
     
     def getJD(self, month, day):
         numOfDays = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
@@ -99,9 +129,48 @@ class HivePreparation(object):
         elev = csheadline[-1].strip()
         epwfile.close
         return locName, lat, lngt, timeZone, elev
-
-    strToBeFound = 'key:location/dataType/units/frequency/startsAt/endsAt'
     
+    
+    def cleanAndCoerceList(self, brepList):
+        """ This definition clean the list and add them to RhinoCommon"""
+        outputMesh = []
+        outputBrep = []
+        
+        for id in brepList:
+            if rs.IsMesh(id):
+                geo = rs.coercemesh(id)
+                if geo is not None:
+                    outputMesh.append(geo)
+                    try: rs.DeleteObject(id)
+                    except: pass
+                
+            elif rs.IsBrep(id):
+                geo = rs.coercebrep(id)
+                if geo is not None:
+                    outputBrep.append(geo)
+                    try: rs.DeleteObject(id)
+                    except: pass
+                    
+                else:
+                    # the idea was to remove the problematice surfaces
+                    # not all the geometry which is not possible since
+                    # badGeometries won't pass rs.IsBrep()
+                    tempBrep = []
+                    surfaces = rs.ExplodePolysurfaces(id)
+                    for surface in surfaces:
+                        geo = rs.coercesurface(surface)
+                        if geo is not None:
+                            tempBrep.append(geo)
+                            try: rs.DeleteObject(surface)
+                            except: pass
+                    geo = rc.Geometry.Brep.JoinBreps(tempBrep, sc.doc.ModelAbsoluteTolerance)
+                    for Brep in tempBrep:
+                        Brep.Dispose()
+                        try: rs.DeleteObject(id)
+                        except: pass
+                    outputBrep.append(geo)
+        return outputMesh, outputBrep
+        
     def epwDataReader(self, epw_file, location = 'Somewhere!'):
         # weather data
         modelYear = [self.strToBeFound, location, 'Year', 'Year', 'Hourly', (1, 1, 1), (12, 31, 24)];
@@ -142,14 +211,20 @@ class HivePreparation(object):
             lnum += 1
         epwfile.close()
         return dbTemp, dewPoint, RH, windSpeed, windDir, dirRad, difRad, glbRad, dirIll, difIll, glbIll, cloudCov, infRad, barPress, modelYear
-
-
-def list_to_tree(nestedlist):
-    layerTree = DataTree[object]()
-    for i, item_list in enumerate(nestedlist):
-        path = GH_Path(i)
-        layerTree.AddRange(item_list,path)
-    return layerTree
+    
+    def list_to_tree(self, nestedlist):
+        layerTree = DataTree[object]()
+        for i, item_list in enumerate(nestedlist):
+            path = GH_Path(i)
+            layerTree.AddRange(item_list,path)
+        return layerTree
+   
+    def dict_to_tree(self, dict):
+        dictTree = DataTree[object]()
+        for day,value in dict.iteritems():
+            path = GH_Path(day)
+            dictTree.Add(value,path)
+        return dictTree
 
 
 class RelativeSun(object):
@@ -293,7 +368,6 @@ class RelativeSun(object):
         relative_sun_az = 180 - sun_az + math.degrees(self.window_azimuth_rad)
         if relative_sun_az < -180:
             relative_sun_az +=360
-#        print sun_az, relative_sun_az
         return relative_sun_az
     
     def calc_relative_altitude(self, sun_alt):
@@ -312,9 +386,28 @@ class WindowRadiation(object):
     def __init__(self, window_geometry, context_geometry, point_in_zone, albedo=0.12, glass_solar_transmittance=0.7, glass_light_transmittance=0.8):
         
         self.window_geometry = window_geometry
+        self.point_in_zone = point_in_zone
+        
+        #context geometry can either be a single surface, a polysurface, or a mixed list.
+        context_surfaces = []
+        for geometry in context_geometry:
+            g = rs.coercebrep(geometry)
+            brep_faces = gh.DeconstructBrep(g)[0]
+            if brep_faces:
+                if type(brep_faces) is not list:
+                    # geometry is a single surface
+                    s = brep_faces.Faces[0].DuplicateSurface()
+                    context_surfaces.append(s)
+                else:
+                    # geometry was a polysurface and got deconstructed into a list
+                    for b in brep_faces:
+                        s = b.Faces[0].DuplicateSurface()
+                        context_surfaces.append(s)
+        
+        
         self.clipper_accuracy = 100000
-        self.extract_window_geometry(point_in_zone)
-        self.transform_all_shades(context_geometry)
+        self.extract_window_geometry()
+        self.transform_all_shades(context_surfaces)
         
         self.albedo = albedo
         self.glass_solar_transmittance = glass_solar_transmittance
@@ -327,7 +420,7 @@ class WindowRadiation(object):
               'f_22': [0.0721249, 0.065965, -0.0639588, -0.1519229, -0.4620442, -0.8230357, -1.127234, -1.3765031],
               'f_23': [-0.0220216, -0.0288748, -0.0260542, -0.0139754, 0.0012448, 0.0558651, 0.1310694, 0.2506212]}
     
-    def extract_window_geometry(self,point_in_zone):
+    def extract_window_geometry(self):
         """
         Extract geometry properties 
         """
@@ -340,7 +433,7 @@ class WindowRadiation(object):
         
         # Initialize outward facing normal
         normal = rs.SurfaceNormal(self.window_geometry,[0.5,0.5])
-        window_zone_vector = gh.Vector2Pt(self.window_centroid,point_in_zone)
+        window_zone_vector = gh.Vector2Pt(self.window_centroid,self.point_in_zone)
         if abs(rs.VectorAngle(normal,window_zone_vector[0])) < 90:
             self.window_normal = rs.VectorReverse(normal)
         else:
@@ -348,9 +441,10 @@ class WindowRadiation(object):
         
         # Initialize window area and plane
         self.window_area = rs.Area(self.window_geometry)
-        window_vertices = rs.SurfaceEditPoints(self.window_geometry)
-        self.window_plane = rs.PlaneFromPoints(self.window_centroid,window_vertices[0],window_vertices[1])
+        self.window_vertices = rs.SurfaceEditPoints(self.window_geometry)
+        self.window_plane = rs.SurfaceFrame(self.window_geometry,[0,0])
         self.window_edges = rs.JoinCurves(rs.DuplicateEdgeCurves(self.window_geometry))
+        self.window_transformation = gh.Orient(None,self.window_plane,gh.XYPlane(rc.Geometry.Point3d(0,0,0)))[1]
         
         edges = rs.DuplicateEdgeCurves(self.window_geometry)
         edge_lengths = [rs.CurveLength(e) for e in edges]
@@ -373,82 +467,80 @@ class WindowRadiation(object):
         self.window_altitude_rad = math.radians(altitude)
         self.window_azimuth_rad = azimuth
     
-    def parametrize_point_to_window(self,point):
-        u,v = rs.SurfaceClosestPoint(self.window_geometry,point)
-        x = u
-        y = v
-        z = abs(rs.DistanceToPlane(self.window_plane,point))
-        return rc.Geometry.Point3d(x,y,z)
-    
-    def sort_surface_vertices_clockwise(self,geometry):
+    def sort_surface_vertices_clockwise(self,points,centroid,normal):
         """
         :return sorted_points: list of points sorted clockwise
         :rtype sorted_points: list
         """
         
-        points = rs.SurfacePoints(geometry,True)
-        centroid, e= rs.SurfaceAreaCentroid(geometry)
-        normal = rs.SurfaceNormal(geometry,[0.5,0.5])
-        
         # Generate plane opposing the dominant direction of the surface
         if normal[0] == 0 and normal[2] == 0:
+            # Normal parallel to y axis
             if normal[1]>0:
                 plane = rc.Geometry.Plane(centroid,rc.Geometry.Vector3d(0,-1,0))
             else:
                 plane = rc.Geometry.Plane(centroid,rc.Geometry.Vector3d(0,1,0))
         
         if normal[1] == 0 and normal[2] == 0:
+            # Normal parallel to x axis
             if normal[0]>0:
                 plane = rc.Geometry.Plane(centroid,rc.Geometry.Vector3d(-1,0,0))
             else:
                 plane = rc.Geometry.Plane(centroid,rc.Geometry.Vector3d(1,0,0))
         
         if normal[2] != 0:
+            # Normal not on xy plane
             plane = rc.Geometry.Plane(centroid,rc.Geometry.Vector3d(0,0,-1))
-       
+        
+        else:
+            rs.VectorReverse(normal)
+            # Trying this out! Need to remember what the previous code did...
+            plane = rc.Geometry.Plane(centroid,rs.VectorReverse(normal))
+            
         # calculate vectors from center to points
         vecs = [centroid - point for point in points]
         
         # calculate angles between vectors and plane x-axis
         angles = [rc.Geometry.Vector3d.VectorAngle(plane.XAxis,v,plane) for v in vecs]
+
         sorted_points = [p[1] for p in sorted(zip(angles,points))] 
-        return centroid, sorted_points
-    
-    def longer_edge_of_shade(self,shade_points):
-        """
-        Identify the longer edge of the shading geometry, from 
-        the window-side outwards, in the window coordinate system.
-        Returns: a (closest to the window), b (farthest from the window)
-        """
-        long_edge_length = 0
-        for ii in range(0,len(shade_points)-1):
-            if abs(rs.Distance(shade_points[ii],shade_points[ii+1])) > long_edge_length:
-                long_edge_length = abs(rs.Distance(shade_points[ii],shade_points[ii+1]))
-                if rs.DistanceToPlane(self.window_plane,shade_points[ii]) < rs.DistanceToPlane(self.window_plane,shade_points[ii+1]):
-                    a = shade_points[ii]
-                    b = shade_points[ii+1]
-                else:
-                    a = shade_points[ii+1]
-                    b = shade_points[ii]
-        
-        return a,b
+        return sorted_points
     
     def transform_shade(self,shade):
         """
-        Return a list of edge points for a shading surface
+        Transform the vertices of a shading surface to match the window as projected on the xy plane.
+        If some vertices are behind the window, the part of the shade in front of the window is considered.
+        if all the vertices are behind the window, a null value is returned.
+        
+        :return rounded_oriented_centroid: oriented centroid. rounding affects how easily array patterns are identified.
+        :return transformed points: 
         """
+        points = rs.SurfacePoints(shade,True)
+        centroid, e= rs.SurfaceAreaCentroid(shade)
+        normal = rs.SurfaceNormal(shade,[0.5,0.5])
+        
+        # If the surface intersects with the window, add the intersection points.
+        intersection = gh.BrepXPlane(shade,self.window_plane)[0]
+        if intersection is not None:
+            start = rs.CurveParameter(intersection, 0)
+            end = rs.CurveParameter(intersection,1)
+            points.append(rs.EvaluateCurve(intersection, start))
+            points.append(rs.EvaluateCurve(intersection, end))
+        
+        clockwise_shade_points = self.sort_surface_vertices_clockwise(points,centroid,normal)
         
         def round2(x):
             return int(round(x*100))
-            
-        centroid, shade_points = self.sort_surface_vertices_clockwise(shade)
+        
+        oriented_centroid = gh.Transform(centroid,self.window_transformation)
+        rounded_oriented_centroid = [round2(oriented_centroid[0]),round2(oriented_centroid[1])]
         
         transformed_points = []
-        for p in shade_points:
-            transformed_points.append(self.parametrize_point_to_window(p))
-        
-        oriented_centroid = self.parametrize_point_to_window(centroid)
-        rounded_oriented_centroid = [round2(oriented_centroid[0]),round2(oriented_centroid[1])]
+        for p in clockwise_shade_points:
+            p1 = gh.Transform(p,self.window_transformation)
+            if round(p1[2],2) >= 0:
+                # point is in front of window
+                transformed_points.append(p1)
         
         return rounded_oriented_centroid, transformed_points
     
@@ -460,25 +552,35 @@ class WindowRadiation(object):
         key: shade centroid
         value: transformed points for each shade
         """
-        #TODO: Explode shading polysurfaces into surfaces
+        
         centroids_and_points = {}
         for xg in context_geometry:
-            c,p = self.transform_shade(xg) 
-            centroids_and_points[c[0],c[1]] = p
+            c,points = self.transform_shade(xg) 
+            for p in points:
+                centroids_and_points[c[0],c[1]] = points
         
         #TODO: give this more tolerance so that it can also pick up array-like configurations.
         unique_x = sorted(list(set([x[0] for x in centroids_and_points.keys()])))
-        x_dict = {k:v for k,v in enumerate(unique_x)}
-        self.nrows = len(unique_x)
+        if len(unique_x) < len(centroids_and_points):
+            x_dict = {k:v for k,v in enumerate(unique_x)}
+            self.nrows = len(unique_x)
         
         unique_y = sorted(list(set([x[1] for x in centroids_and_points.keys()])))
-        y_dict = {k:v for k,v in enumerate(unique_y)}
-        self.ncols = len(y_dict)
+        if len(unique_x) < len(centroids_and_points):
+            y_dict = {k:v for k,v in enumerate(unique_y)}
+            self.ncols = len(y_dict)
         
-        # Create new dictionary with tuple keys
         self.context = {}
-        for x,y in product(range(self.nrows),range(self.ncols)):
-            self.context[x,y] = centroids_and_points[x_dict[x],y_dict[y]]
+        if 'x_dict' in locals() or 'y_dict' in locals():
+            # Create new dictionary with tuple keys
+            # This step will be important when implementing self shading.
+            # It is not necessary when only considering window shading.
+            for x,y in product(range(self.nrows),range(self.ncols)):
+                self.context[x,y] = centroids_and_points[x_dict[x],y_dict[y]]
+        else:
+            # No array pattern, create a one-dimensional matrix
+            for i,x in enumerate(centroids_and_points.values()):
+                self.context[i,0] = x
     
     def calc_shadow(self, shade, relative_sun_alt, relative_sun_az):
         """
@@ -505,21 +607,38 @@ class WindowRadiation(object):
         sunvec_y = math.sin(relative_sun_alt_rad);
         sunvec_z = math.sin(relative_sun_az_rad) * math.cos(relative_sun_alt_rad);
         
-        shadowintpoints = [] # IntPoints for clipping
-        shadowpoints = [] # 3d points
-        pv_a, pv_b = self.longer_edge_of_shade(shade)
-        pv_a_shadow = transform_point(pv_a,sunvec_x,sunvec_y,sunvec_z)
-        pv_b_shadow = transform_point(pv_b,sunvec_x,sunvec_y,sunvec_z)
-        pv_shadow_vector = [pv_b_shadow[0] - pv_a_shadow[0], pv_b_shadow[1] - pv_a_shadow[1]]
+        a, b = self.longer_edge_of_shade(shade)
+        a_shadow = transform_point(a,sunvec_x,sunvec_y,sunvec_z)
+        b_shadow = transform_point(b,sunvec_x,sunvec_y,sunvec_z)
+        pv_shadow_vector = [b_shadow[0] - a_shadow[0], b_shadow[1] - a_shadow[1]]
         
         # Calculate the projection on a 2-D surface (x,y)
-        for point_3d in shade:
+        shadowintpoints = [] # IntPoints for clipping
+        for point_3d in shade:   
             x_point, y_point = transform_point(point_3d,sunvec_x,sunvec_y,sunvec_z)
             shadowintpoints.append(IntPoint(self.clipper_accuracy*x_point,self.clipper_accuracy*y_point))
-            shadowpoints.append(rc.Geometry.Point3d(x_point,y_point,0))
             
-        return List[IntPoint](shadowintpoints)#, pv_shadow_vector, shadowpoints
+        return List[IntPoint](shadowintpoints)#, pv_shadow_vector
     
+    def longer_edge_of_shade(self,shade_points):
+        """
+        Identify the longer edge of the shading geometry, from 
+        the window-side outwards, in the window coordinate system.
+        Returns: a (closest to the window), b (farthest from the window)
+        """
+        long_edge_length = 0
+        for ii in range(0,len(shade_points)-1):
+            if abs(rs.Distance(shade_points[ii],shade_points[ii+1])) > long_edge_length:
+                long_edge_length = abs(rs.Distance(shade_points[ii],shade_points[ii+1]))
+                if rs.DistanceToPlane(self.window_plane,shade_points[ii]) < rs.DistanceToPlane(self.window_plane,shade_points[ii+1]):
+                    a = shade_points[ii]
+                    b = shade_points[ii+1]
+                else:
+                    a = shade_points[ii+1]
+                    b = shade_points[ii]
+        
+        return a,b
+        
     def calc_gross_shadows(self,relative_sun_alt,relative_sun_az):
         """
         projects all shading objects onto window coordinate plane
@@ -548,7 +667,8 @@ class WindowRadiation(object):
         for ms in clipper_result:
             points = []
             for p in ms:
-                points.append(rs.EvaluateSurface(self.window_geometry, u_domain - p.X/self.clipper_accuracy, p.Y/self.clipper_accuracy))
+#                points.append(rc.Geometry.Point3d(p.X/self.clipper_accuracy, p.Y/self.clipper_accuracy,0))
+                points.append(rs.EvaluateSurface(self.window_geometry, p.X/self.clipper_accuracy, p.Y/self.clipper_accuracy))
             clipper_result_geometry.append(gh.PolyLine(points,closed=True))
         return clipper_result_geometry
 
@@ -915,8 +1035,11 @@ class ThermalZone(object):
             print '100% glazed'
 
 
-class Building(object):
-    '''Sets the parameters of the building. '''
+class ElementBuilding(object):
+    """
+    The modular version. 
+    Sets the parameters of the building.
+    """
 
     def __init__(self,
                  zone=None,
@@ -1406,6 +1529,522 @@ class Building(object):
         self.t_opperative = 0.3 * self.t_air + 0.7 * self.t_s
 
 
+class Building(object):
+    """
+    The original code as found in RC_BuildingSimulator
+    """
+
+    def __init__(self,
+                 window_area=13.5,
+                 external_envelope_area=15.19,
+                 room_depth=7,
+                 room_width=4.9,
+                 room_height=3.1,
+                 lighting_load=11.7,
+                 lighting_control=300,
+                 lighting_utilisation_factor=0.45,
+                 lighting_maintenance_factor=0.9,
+                 u_walls=0.2,
+                 u_windows=1.1,
+                 g_windows=0.6,
+                 ach_vent=1.5,
+                 ach_infl=0.5,
+                 ventilation_efficiency=0,
+                 thermal_capacitance_per_floor_area=165000,
+                 t_set_heating=20,
+                 t_set_cooling=26,
+                 max_cooling_energy_per_floor_area=-12,
+                 max_heating_energy_per_floor_area=12,
+                 heating_supply_system=sc.sticky["DirectHeater"],
+                 cooling_supply_system=sc.sticky["DirectCooler"],
+                 heating_emission_system=sc.sticky["AirConditioning"],
+                 cooling_emission_system=sc.sticky["AirConditioning"],
+                 ):
+
+        # Building Dimensions
+        self.window_area = window_area  # [m2] Window Area
+        self.room_depth = room_depth  # [m] Room Depth
+        self.room_width = room_width  # [m] Room Width
+        self.room_height = room_height  # [m] Room Height
+
+        # Fenestration and Lighting Properties
+        self.g_windows = g_windows
+        self.lighting_load = lighting_load  # [kW/m2] lighting load
+        self.lighting_control = lighting_control  # [lux] Lighting set point
+        # How the light entering the window is transmitted to the working plane
+        self.lighting_utilisation_factor = lighting_utilisation_factor
+        # How dirty the window is. Section 2.2.3.1 Environmental Science
+        # Handbook
+        self.lighting_maintenance_factor = lighting_maintenance_factor
+
+        # Calculated Properties
+        self.floor_area = room_depth * room_width  # [m2] Floor Area
+        # [m2] Effective Mass Area assuming a medium weight building #12.3.1.2
+        self.mass_area = self.floor_area * 2.5
+        self.room_vol = room_width * room_depth * \
+            room_height  # [m3] Room Volume
+        self.total_internal_area = self.floor_area * 2 + \
+            room_width * room_height * 2 + room_depth * room_height * 2
+        # TODO: Standard doesn't explain what A_t is. Needs to be checked
+        self.A_t = self.total_internal_area
+
+        # Single Capacitance  5 conductance Model Parameters
+        # [kWh/K] Room Capacitance. Default based on ISO standard 12.3.1.2 for medium heavy buildings
+        self.c_m = thermal_capacitance_per_floor_area * self.floor_area
+        # Conductance of opaque surfaces to exterior [W/K]
+        self.h_tr_em = u_walls * (external_envelope_area - window_area)
+        # Conductance to exterior through glazed surfaces [W/K], based on
+        # U-wert of 1W/m2K
+        self.h_tr_w = u_windows * window_area
+
+        # Determine the ventilation conductance
+        ach_tot = ach_infl + ach_vent  # Total Air Changes Per Hour
+        # temperature adjustment factor taking ventilation and infiltration
+        # [ISO: E -27]
+        b_ek = (1 - (ach_vent / (ach_tot)) * ventilation_efficiency)
+        self.h_ve_adj = 1200 * b_ek * self.room_vol * \
+            (ach_tot / 3600)  # Conductance through ventilation [W/M]
+        # transmittance from the internal air to the thermal mass of the
+        # building
+        self.h_tr_ms = 9.1 * self.mass_area
+        # Conductance from the conditioned air to interior building surface
+        self.h_tr_is = self.total_internal_area * 3.45
+
+        # Thermal set points
+        self.t_set_heating = t_set_heating
+        self.t_set_cooling = t_set_cooling
+
+        # Thermal Properties
+        self.has_heating_demand = False  # Boolean for if heating is required
+        self.has_cooling_demand = False  # Boolean for if cooling is required
+        self.max_cooling_energy = max_cooling_energy_per_floor_area * \
+            self.floor_area  # max cooling load (W/m2)
+        self.max_heating_energy = max_heating_energy_per_floor_area * \
+            self.floor_area  # max heating load (W/m2)
+
+        # Building System Properties
+        self.heating_supply_system = heating_supply_system
+        self.cooling_supply_system = cooling_supply_system
+        self.heating_emission_system = heating_emission_system
+        self.cooling_emission_system = cooling_emission_system
+
+    def solve_building_lighting(self, illuminance, occupancy):
+        """
+        Calculates the lighting demand for a set timestep
+
+        :param illuminance: Illuminance transmitted through the window [Lumens]
+        :type illuminance: float
+        :param occupancy: Probability of full occupancy
+        :type occupancy: float
+
+        :return: self.lighting_demand, Lighting Energy Required for the timestep
+        :rtype: float
+
+        """
+        # Cite: Environmental Science Handbook, SV Szokolay, Section 2.2.1.3
+        # also, this might be sped up by pre-calculating the constants, but idk. first check with profiler...
+        lux = (illuminance * self.lighting_utilisation_factor *
+               self.lighting_maintenance_factor) / self.floor_area  # [Lux]
+
+        if lux < self.lighting_control and occupancy > 0:
+            # Lighting demand for the hour
+            self.lighting_demand = self.lighting_load * self.floor_area
+        else:
+            self.lighting_demand = 0
+
+    def solve_building_energy(self, internal_gains, solar_gains, t_out, t_m_prev):
+        """
+        Calculates the heating and cooling consumption of a building for a set timestep
+
+        :param internal_gains: internal heat gains from people and appliances [W]
+        :type internal_gains: float
+        :param solar_gains: solar heat gains [W]
+        :type solar_gains: float
+        :param t_out: Outdoor air temperature [C]
+        :type t_out: float
+        :param t_m_prev: Previous air temperature [C]
+        :type t_m_prev: float
+
+        :return: self.heating_demand, space heating demand of the building
+        :return: self.heating_sys_electricity, heating electricity consumption
+        :return: self.heating_sys_fossils, heating fossil fuel consumption 
+        :return: self.cooling_demand, space cooling demand of the building
+        :return: self.cooling_sys_electricity, electricity consumption from cooling
+        :return: self.cooling_sys_fossils, fossil fuel consumption from cooling
+        :return: self.electricity_out, electricity produced from combined heat pump systems
+        :return: self.sys_total_energy, total exergy consumed (electricity + fossils) for heating and cooling
+        :return: self.heating_energy, total exergy consumed (electricity + fossils) for heating 
+        :return: self.cooling_energy, total exergy consumed (electricity + fossils) for cooling
+        :return: self.cop, Coefficient of Performance of the heating or cooling system
+        :rtype: float
+
+        """
+        # Main File
+
+        # Calculate the heat transfer definitions for formula simplification
+        self.calc_h_tr_1()
+        self.calc_h_tr_2()
+        self.calc_h_tr_3()
+
+        # check demand, and change state of self.has_heating_demand, and self._has_cooling_demand
+        self.has_demand(internal_gains, solar_gains, t_out, t_m_prev)
+
+        if not self.has_heating_demand and not self.has_cooling_demand:
+
+            # no heating or cooling demand
+            # calculate temperatures of building R-C-model and exit
+            # --> rc_model_function_1(...)
+            self.energy_demand = 0
+
+            # y u no pep8 bra?
+            self.heating_demand = 0  # Energy required by the zone
+            self.cooling_demand = 0  # Energy surplus of the zone
+            # Energy (in electricity) required by the supply system to provide
+            # HeatingDemand
+            self.heating_sys_electricity = 0
+            # Energy (in fossil fuel) required by the supply system to provide
+            # HeatingDemand
+            self.heating_sys_fossils = 0
+            # Energy (in electricity) required by the supply system to get rid
+            # of CoolingDemand
+            self.cooling_sys_electricity = 0
+            # Energy (in fossil fuel) required by the supply system to get rid
+            # of CoolingDemand
+            self.cooling_sys_fossils = 0
+            # Electricity produced by the supply system (e.g. CHP)
+            self.electricity_out = 0
+
+        else:
+
+            # has heating/cooling demand
+
+            # Calculates energy_demand used below
+            self.calc_energy_demand(
+                internal_gains, solar_gains, t_out, t_m_prev)
+
+            self.calc_temperatures_crank_nicolson(
+                self.energy_demand, internal_gains, solar_gains, t_out, t_m_prev)
+            # calculates the actual t_m resulting from the actual heating
+            # demand (energy_demand)
+
+            # Calculate the Heating/Cooling Input Energy Required
+
+            supply_director = sc.sticky["SupplyDirector"]()  # Initialise Heating System Manager
+
+            if self.has_heating_demand:
+                supply_director.set_builder(self.heating_supply_system(load=self.energy_demand, 
+                                                                t_out=t_out, 
+                                                                heating_supply_temperature=self.heating_supply_temperature,
+                                                                cooling_supply_temperature=self.cooling_supply_temperature, 
+                                                                has_heating_demand=self.has_heating_demand, 
+                                                                has_cooling_demand=self.has_cooling_demand))
+                supplyOut = supply_director.calc_system()
+                # All Variables explained underneath line 467
+                self.heating_demand = self.energy_demand
+                self.heating_sys_electricity = supplyOut.electricity_in
+                self.heating_sys_fossils = supplyOut.fossils_in
+                self.cooling_demand = 0
+                self.cooling_sys_electricity = 0
+                self.cooling_sys_fossils = 0
+                self.electricity_out = supplyOut.electricity_out
+
+            elif self.has_cooling_demand:
+                supply_director.set_builder(self.cooling_supply_system(load=self.energy_demand * (-1), 
+                                                                t_out=t_out, 
+                                                                heating_supply_temperature=self.heating_supply_temperature,
+                                                                cooling_supply_temperature=self.cooling_supply_temperature, 
+                                                                has_heating_demand=self.has_heating_demand, 
+                                                                has_cooling_demand=self.has_cooling_demand))
+                supplyOut = supply_director.calc_system()
+                self.heating_demand = 0
+                self.heating_sys_electricity = 0
+                self.heating_sys_fossils = 0
+                self.cooling_demand = self.energy_demand
+                self.cooling_sys_electricity = supplyOut.electricity_in
+                self.cooling_sys_fossils = supplyOut.fossils_in
+                self.electricity_out = supplyOut.electricity_out
+
+            self.cop = supplyOut.cop
+
+        self.sys_total_energy = self.heating_sys_electricity + self.heating_sys_fossils + \
+            self.cooling_sys_electricity + self.cooling_sys_fossils
+        self.heating_energy = self.heating_sys_electricity + self.heating_sys_fossils
+        self.cooling_energy = self.cooling_sys_electricity + self.cooling_sys_fossils
+
+    # TODO: rename. this is expected to return a boolean. instead, it changes state??? you don't want to change state...
+    # why not just return has_heating_demand and has_cooling_demand?? then call the function "check_demand"
+    # has_heating_demand, has_cooling_demand = self.check_demand(...)
+    def has_demand(self, internal_gains, solar_gains, t_out, t_m_prev):
+        """
+        Determines whether the building requires heating or cooling
+        Used in: solve_building_energy()
+
+        # step 1 in section C.4.2 in [C.3 ISO 13790]
+        """
+
+        # set energy demand to 0 and see if temperatures are within the comfort
+        # range
+        energy_demand = 0
+        # Solve for the internal temperature t_Air
+        self.calc_temperatures_crank_nicolson(
+            energy_demand, internal_gains, solar_gains, t_out, t_m_prev)
+
+        # If the air temperature is less or greater than the set temperature,
+        # there is a heating/cooling load
+        if self.t_air < self.t_set_heating:
+            self.has_heating_demand = True
+            self.has_cooling_demand = False
+        elif self.t_air > self.t_set_cooling:
+            self.has_cooling_demand = True
+            self.has_heating_demand = False
+        else:
+            self.has_heating_demand = False
+            self.has_cooling_demand = False
+
+    def calc_temperatures_crank_nicolson(self, energy_demand, internal_gains, solar_gains, t_out, t_m_prev):
+        """
+        Determines node temperatures and computes derivation to determine the new node temperatures
+        Used in: has_demand(), solve_building_energy(), calc_energy_demand()
+        # section C.3 in [C.3 ISO 13790]
+        """
+
+        self.calc_heat_flow(t_out, internal_gains, solar_gains, energy_demand)
+
+        self.calc_phi_m_tot(t_out)
+
+        # calculates the new bulk temperature POINT from the old one
+        self.calc_t_m_next(t_m_prev)
+
+        # calculates the AVERAGE bulk temperature used for the remaining
+        # calculation
+        self.calc_t_m(t_m_prev)
+
+        self.calc_t_s(t_out)
+
+        self.calc_t_air(t_out)
+
+        self.calc_t_opperative()
+
+        return self.t_m, self.t_air, self.t_opperative
+
+    def calc_energy_demand(self, internal_gains, solar_gains, t_out, t_m_prev):
+        """
+        Calculates the energy demand of the space if heating/cooling is active
+        Used in: solve_building_energy()
+        # Step 1 - Step 4 in Section C.4.2 in [C.3 ISO 13790]
+        """
+
+        # Step 1: Check if heating or cooling is needed 
+        #(Not needed, but doing so for readability when comparing with the standard)
+        # Set heating/cooling to 0
+        energy_demand_0 = 0
+        # Calculate the air temperature with no heating/cooling
+        t_air_0 = self.calc_temperatures_crank_nicolson(
+            energy_demand_0, internal_gains, solar_gains, t_out, t_m_prev)[1]
+
+        # Step 2: Calculate the unrestricted heating/cooling required
+
+        # determine if we need heating or cooling based based on the condition
+        # that no heating or cooling is required
+        if self.has_heating_demand:
+            t_air_set = self.t_set_heating
+        elif self.has_cooling_demand:
+            t_air_set = self.t_set_cooling
+        else:
+            raise NameError(
+                'heating function has been called even though no heating is required')
+
+        # Set a heating case where the heating load is 10x the floor area (10
+        # W/m2)
+        energy_floorAx10 = 10 * self.floor_area
+
+        # Calculate the air temperature obtained by having this 10 W/m2
+        # setpoint
+        t_air_10 = self.calc_temperatures_crank_nicolson(
+            energy_floorAx10, internal_gains, solar_gains, t_out, t_m_prev)[1]
+
+        # Determine the unrestricted heating/cooling off the building
+        self.calc_energy_demand_unrestricted(
+            energy_floorAx10, t_air_set, t_air_0, t_air_10)
+
+        # Step 3: Check if available heating or cooling power is sufficient
+        if self.max_cooling_energy <= self.energy_demand_unrestricted <= self.max_heating_energy:
+
+            self.energy_demand = self.energy_demand_unrestricted
+            self.t_air_ac = t_air_set  # not sure what this is used for at this stage TODO
+
+        # Step 4: if not sufficient then set the heating/cooling setting to the
+        # maximum
+        # necessary heating power exceeds maximum available power
+        elif self.energy_demand_unrestricted > self.max_heating_energy:
+
+            self.energy_demand = self.max_heating_energy
+
+        # necessary cooling power exceeds maximum available power
+        elif self.energy_demand_unrestricted < self.max_cooling_energy:
+
+            self.energy_demand = self.max_cooling_energy
+
+        else:
+            self.energy_demand = 0
+            raise ValueError('unknown radiative heating/cooling system status')
+
+        # calculate system temperatures for Step 3/Step 4
+        self.calc_temperatures_crank_nicolson(
+            self.energy_demand, internal_gains, solar_gains, t_out, t_m_prev)
+
+    def calc_energy_demand_unrestricted(self, energy_floorAx10, t_air_set, t_air_0, t_air_10):
+        """
+        Calculates the energy demand of the system if it has no maximum output restrictions
+        # (C.13) in [C.3 ISO 13790]
+
+
+        Based on the Thales Intercept Theorem. 
+        Where we set a heating case that is 10x the floor area and determine the temperature as a result 
+        Assuming that the relation is linear, one can draw a right angle triangle. 
+        From this we can determine the heating level required to achieve the set point temperature
+        This assumes a perfect HVAC control system
+        """
+        self.energy_demand_unrestricted = energy_floorAx10 * \
+            (t_air_set - t_air_0) / (t_air_10 - t_air_0)
+
+    def calc_heat_flow(self, t_out, internal_gains, solar_gains, energy_demand):
+        """
+        Calculates the heat flow from the solar gains, heating/cooling system, and internal gains into the building
+
+        The input of the building is split into the air node, surface node, and thermal mass node based on
+        on the following equations
+
+        #C.1 - C.3 in [C.3 ISO 13790]
+
+        Note that this equation has diverged slightly from the standard 
+        as the heating/cooling node can enter any node depending on the
+        emission system selected
+
+        """
+
+        # Calculates the heat flows to various points of the building based on the breakdown in section C.2, formulas C.1-C.3
+        # Heat flow to the air node
+        self.phi_ia = 0.5 * internal_gains
+        # Heat flow to the surface node
+        self.phi_st = (1 - (self.mass_area / self.A_t) - (self.h_tr_w /
+                            (9.1 * self.A_t))) * (0.5 * internal_gains + solar_gains)
+        # Heatflow to the thermal mass node
+        self.phi_m = (self.mass_area / self.A_t) * \
+            (0.5 * internal_gains + solar_gains)
+
+        # We call the EmissionDirector to modify these flows depending on the
+        # system and the energy demand
+        emDirector = sc.sticky["EmissionDirector"]()
+        # Set the emission system to the type specified by the user
+        emDirector.set_builder(self.heating_emission_system(
+            energy_demand=energy_demand))
+        # Calculate the new flows to each node based on the heating system
+        flows = emDirector.calc_flows()
+
+        # Set modified flows to building object
+        self.phi_ia += flows.phi_ia_plus
+        self.phi_st += flows.phi_st_plus
+        self.phi_m += flows.phi_m_plus
+
+        # Set supply temperature to building object
+        # TODO: This currently is constant for all emission systems, to be
+        # modified in the future
+        self.heating_supply_temperature = flows.heating_supply_temperature
+        self.cooling_supply_temperature = flows.cooling_supply_temperature
+
+    def calc_t_m_next(self, t_m_prev):
+        """
+        Primary Equation, calculates the temperature of the next time step
+        # (C.4) in [C.3 ISO 13790]
+        """
+
+        self.t_m_next = ((t_m_prev * ((self.c_m / 3600.0) - 0.5 * (self.h_tr_3 + self.h_tr_em))) +
+                         self.phi_m_tot) / ((self.c_m / 3600.0) + 0.5 * (self.h_tr_3 + self.h_tr_em))
+
+    def calc_phi_m_tot(self, t_out):
+        """
+        Calculates a global heat transfer. This is a definition used to simplify equation
+        calc_t_m_next so it's not so long to write out
+        # (C.5) in [C.3 ISO 13790]
+        # h_ve = h_ve_adj and t_supply = t_out [9.3.2 ISO 13790]
+        """
+
+        t_supply = t_out  # ASSUMPTION: Supply air comes straight from the outside air
+
+        self.phi_m_tot = self.phi_m + self.h_tr_em * t_out + \
+            self.h_tr_3 * (self.phi_st + self.h_tr_w * t_out + self.h_tr_1 *
+                           ((self.phi_ia / self.h_ve_adj) + t_supply)) / self.h_tr_2
+
+    def calc_h_tr_1(self):
+        """
+        Definition to simplify calc_phi_m_tot
+        # (C.6) in [C.3 ISO 13790]
+
+        """
+        self.h_tr_1 = 1.0 / (1.0 / self.h_ve_adj + 1.0 / self.h_tr_is)
+
+    def calc_h_tr_2(self):
+        """
+        Definition to simplify calc_phi_m_tot
+        # (C.7) in [C.3 ISO 13790]
+
+        """
+
+        self.h_tr_2 = self.h_tr_1 + self.h_tr_w
+
+    def calc_h_tr_3(self):
+        """
+        Definition to simplify calc_phi_m_tot
+        # (C.8) in [C.3 ISO 13790]
+
+        """
+
+        self.h_tr_3 = 1.0 / (1.0 / self.h_tr_2 + 1.0 / self.h_tr_ms)
+
+
+    def calc_t_m(self, t_m_prev):
+        """
+        Temperature used for the calculations, average between newly calculated and previous bulk temperature
+        # (C.9) in [C.3 ISO 13790]
+        """
+        self.t_m = (self.t_m_next + t_m_prev) / 2.0
+
+    def calc_t_s(self, t_out):
+        """
+        Calculate the temperature of the inside room surfaces
+        # (C.10) in [C.3 ISO 13790]
+        # h_ve = h_ve_adj and t_supply = t_out [9.3.2 ISO 13790]
+        """
+
+        t_supply = t_out  # ASSUMPTION: Supply air comes straight from the outside air
+
+        self.t_s = (self.h_tr_ms * self.t_m + self.phi_st + self.h_tr_w * t_out + self.h_tr_1 * \
+            (t_supply + self.phi_ia / self.h_ve_adj)) / \
+            (self.h_tr_ms + self.h_tr_w + self.h_tr_1)
+
+    def calc_t_air(self, t_out):
+        """
+        Calculate the temperature of the air node
+        # (C.11) in [C.3 ISO 13790]
+        # h_ve = h_ve_adj and t_supply = t_out [9.3.2 ISO 13790]
+        """
+
+        t_supply = t_out
+
+        # Calculate the temperature of the inside air
+        self.t_air = (self.h_tr_is * self.t_s + self.h_ve_adj *
+                      t_supply + self.phi_ia) / (self.h_tr_is + self.h_ve_adj)
+
+    def calc_t_opperative(self):
+        """
+        The opperative temperature is a weighted average of the air and mean radiant temperatures. 
+        It is not used in any further calculation at this stage
+        # (C.12) in [C.3 ISO 13790]
+        """
+
+        self.t_opperative = 0.3 * self.t_air + 0.7 * self.t_s
+
 error = "Connect emissions_systems and supply_systems components!"
 e = ghKernel.GH_RuntimeMessageLevel.Error
 
@@ -1413,14 +2052,14 @@ if systems == [] or len(systems) != 2:
     ghenv.Component.AddRuntimeMessage(e, error)
 
 if any(['Emission' in s for s in systems]) and any(['Supply' in s for s in systems]):
-    sc.sticky["list_to_tree"] = list_to_tree
     sc.sticky["RelativeSun"] = RelativeSun
     sc.sticky["WindowRadiation"] = WindowRadiation
     sc.sticky["Element"] = Element
     sc.sticky["ElementBuilder"] = ElementBuilder
     sc.sticky["ThermalBridge"] = ThermalBridge
     sc.sticky["ThermalZone"] = ThermalZone
-    sc.sticky["RCModel"] = Building
+    sc.sticky["RCModel"] = ElementBuilding
+    sc.sticky["RCModelClassic"] = Building
     sc.sticky["HivePreparation"] = HivePreparation
     sc.sticky['pushback']()
     print 'Modular Building Physics is go!'

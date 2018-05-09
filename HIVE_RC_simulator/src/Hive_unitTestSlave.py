@@ -36,10 +36,10 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_unitTestSlave"
 ghenv.Component.NickName = 'unitTestSlave'
-ghenv.Component.Message = 'VER 0.0.1\nFEB_28_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_8_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
-ghenv.Component.SubCategory = "3 | Testing"
+ghenv.Component.SubCategory = "4 | Development"
 # ComponentExposure=2
 
 import scriptcontext as sc

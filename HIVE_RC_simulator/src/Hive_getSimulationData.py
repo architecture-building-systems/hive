@@ -29,7 +29,7 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_getSimulationData"
 ghenv.Component.NickName = 'getSimulationData'
-ghenv.Component.Message = 'VER 0.0.1\nAPR_24_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_07_2018'
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "2 | Simulation"
 # ComponentExposure=1
@@ -49,7 +49,6 @@ class GhPythonDictionary(object):
             self.d = {}
     def ToString(self):
         return 'GhPythonDictionary object'
-
 
 def separate_data(inputList):
     # Based on Ladybug_Separate data, but uses lists instead of DataTree objects
@@ -128,13 +127,6 @@ def set_simulation_period(start_hoy,end_hoy):
     
     return int(start),int(end)
 
-def list_to_tree(nestedlist):
-    layerTree = DataTree[object]()
-    for i, item_list in enumerate(nestedlist):
-        path = GH_Path(i)
-        layerTree.AddRange(item_list,path)
-    return layerTree
-
 def main(epw_file,start_HOY_,end_HOY_):
     if not sc.sticky.has_key('HivePreparation'): return "Add the modular RC component to the canvas!"
     #TODO: Set up compatibility checks like in Ladybug.
@@ -147,22 +139,22 @@ def main(epw_file,start_HOY_,end_HOY_):
     if (epw_file is not None):
         locationData = hive_preparation.epwLocation(epw_file)
         weatherData = hive_preparation.epwDataReader(epw_file, locationData[0])
-
+    
         location = [locationData[1], locationData[2], locationData[3]]
         dryBulbTemperature, dewPointTemperature, relativeHumidity, windSpeed, windDirection, directNormalRadiation, diffuseHorizontalRadiation, globalHorizontalRadiation, directNormalIlluminance, diffuseHorizontalIlluminance, globalHorizontalIlluminance, totalSkyCover, horizontalInfraredRadiation, barometricPressure, modelYear = weatherData
         location.append(modelYear[7])
-
+    
         dryBulbTemperature = separate_data(dryBulbTemperature)
         directRadiation = separate_data(directNormalRadiation)
         diffuseRadiation = separate_data(diffuseHorizontalRadiation)
         directIlluminance = separate_data(directNormalIlluminance)
         diffuseIlluminance = separate_data(diffuseHorizontalIlluminance)
-
+    
         for i in range(start,end):
             temperature.append([i,dryBulbTemperature[i]])
             irradiation.append([i, directRadiation[i], diffuseRadiation[i], directIlluminance[i], diffuseIlluminance[i]])
-
-    return location, list_to_tree(temperature), list_to_tree(irradiation)
+    
+    return location, hive_preparation.list_to_tree(temperature), hive_preparation.list_to_tree(irradiation)
 
 if epw_file is None:
     if browse_for_epw:
@@ -170,5 +162,7 @@ if epw_file is None:
         location, temperature, irradiation = main(epw_file,start_HOY_,end_HOY_)
 
 else:
-    location, temperature, irradiation = main(epw_file,start_HOY_,end_HOY_)
-
+    try:
+        location, temperature, irradiation = main(epw_file,start_HOY_,end_HOY_)
+    except ValueError:
+        print 'refresh this component'
