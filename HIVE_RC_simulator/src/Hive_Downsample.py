@@ -36,8 +36,7 @@ ghenv.Component.SubCategory = "3 | Results"
 # ComponentExposure=5
 
 import scriptcontext as sc
-from Grasshopper import DataTree
-from Grasshopper.Kernel.Data import GH_Path
+import Grasshopper.Kernel as ghKernel
 
 def main(_start_hoy, _hourly_data):
     if not sc.sticky.has_key('HivePreparation'): 
@@ -63,5 +62,11 @@ def main(_start_hoy, _hourly_data):
     
     return dailyTree, monthlyTree, annual
 
+
 if _start_hoy and _hourly_data:
     daily_values, monthly_values, annual_value = main(_start_hoy,_hourly_data)
+
+elif _hourly_data and _start_hoy is None:
+    warning = """Warning: Add a value to _start_hoy!"""
+    w = ghKernel.GH_RuntimeMessageLevel.Warning
+    ghenv.Component.AddRuntimeMessage(w, warning)

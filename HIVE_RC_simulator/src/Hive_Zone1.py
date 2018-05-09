@@ -21,6 +21,7 @@ RC_BuildingSimulator. Parameters left blank will be replaced by defaults.
 Provided by Hive 0.0.1
     
     Args:
+        parameter_dictionary: a multiline list of building parameters in the following format: 'key = value'
         window_area: Window area used to calculate losses.
         external_envelope_area: Area of all envelope surfaces, including windows in contact with the outside
         room_depth: Depth of the modelled room [m]
@@ -50,14 +51,14 @@ Provided by Hive 0.0.1
     Returns:
         readMe!: ...
         Zone: A Zone object described by the args.
-        unique_inputs: a dictionary of non-default inputs, which can be used to reproduce results in python
+        input_string: A string which can be copy-pased into a python script running the rc-model
         zone_variables: variables of the Zone object, for diagnostics.
         
 """
 
 ghenv.Component.Name = "Hive_Zone1"
 ghenv.Component.NickName = 'Zone1'
-ghenv.Component.Message = 'VER 0.0.1\nMAR_06_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_09_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "1 | Zone"
@@ -65,9 +66,10 @@ ghenv.Component.SubCategory = "1 | Zone"
 
 import Grasshopper.Kernel as gh
 import scriptcontext as sc
+import re
 
 #  Initialize default values if no input is detected
-zone_attributes = ['window_area','external_envelope_area','room_depth',
+attribute_names = ['window_area','external_envelope_area','room_depth',
                   'room_width', 'room_height','lighting_load','lighting_control',
                   'lighting_utilisation_factor',  'lighting_maintenance_factor',
                   'u_walls', 'u_windows', 'g_windows', 'ach_vent', 'ach_infl',
@@ -82,55 +84,89 @@ default_values = [4.0,15.0,7.0,5.0,3.0,11.7,300.0,0.455,0.9,0.2,1.1,0.6,1.5,0.5,
                   sc.sticky["OilBoilerNew"],sc.sticky["HeatPumpAir"],
                   sc.sticky["OldRadiators"],sc.sticky["AirConditioning"]]
 
-default_attributes = {}
-for a,v in zip(zone_attributes,default_values):
-    default_attributes[a] = v
+zone_attributes = dict(zip(attribute_names,default_values))
 
-unique_inputs = {}
-for t in default_attributes.keys():
+# override defaults with values detected from parameter_dictionary 
+if parameter_dictionary is not []:
+    print 'parameter dictionary detected'
+    for line in parameter_dictionary:
+        equal = line.find('=')
+        key = line[:equal]
+        value = line[equal+1:]
+        if re.findall(r'\d+',value) != []:
+            comma = value.find(',')
+            semicolon = value.find(';')
+            if comma:
+                    value = value[:comma]
+            if semicolon:
+                value = value[:semicolon]
+            value = float(value)
+        elif '-np.inf' in value:
+            value = -100000.0
+        elif 'np.inf' in value:
+            value = 100000.0
+        else:
+            fullstop = value.find('.')
+            comma = value.find(',')
+            value = sc.sticky[value[fullstop+1:comma]]
+        
+        if key in attribute_names:
+            zone_attributes[key] = value
+
+# individual inputs override defaults and parameter_dictionary
+for t in zone_attributes.keys():
 #    print locals()[t]
     if locals()[t] is not None:
+        print 'value detected for',t
         # replace the default value with the value given to the component
-        default_attributes[t] = locals()[t]
-        # Generate a useful text output which can be used as an input in python
-        if 'supply' not in t and 'emission' not in t:
-            value = t+':'+str(locals()[t])
-        elif 'supply' in t:
-            value = t+': supply_system.'+str(locals()[t])[22:-2]
-        elif 'emission' in t:
-            value = t+': emission_system.'+str(locals()[t])[22:-2]
-        unique_inputs[t] = value
+        zone_attributes[t] = locals()[t]
+        
 
+# Generate a useful text output which can be used as an input in python
+locally_defined_values = {}
+for k,v in zip(attribute_names,default_values):
+    if zone_attributes[k] != v:
+        if 'supply' not in k and 'emission' not in k:
+            locally_defined_values[k] = zone_attributes[k]
+        elif 'supply' in k:
+            locally_defined_values[k] = 'supply_system.'+str(zone_attributes[k])[9:]
+        elif 'emission' in k:
+            locally_defined_values[k] = 'emission_system.'+str(zone_attributes[k])[9:]
 
 #Initialise zone object
-Zone = sc.sticky["RC_Zone"](
-     window_area=default_attributes['window_area'],
-     external_envelope_area=default_attributes['external_envelope_area'],
-     room_depth=default_attributes['room_depth'],
-     room_width=default_attributes['room_width'],
-     room_height=default_attributes['room_width'],
-     lighting_load=default_attributes['lighting_load'],
-     lighting_control=default_attributes['lighting_control'],
-     lighting_utilisation_factor=default_attributes['lighting_utilisation_factor'],
-     lighting_maintenance_factor=default_attributes['lighting_maintenance_factor'],
-     u_walls=default_attributes['u_walls'],
-     u_windows=default_attributes['u_windows'],
-     g_windows=default_attributes['g_windows'],
-     ach_vent=default_attributes['ach_vent'],
-     ach_infl=default_attributes['ach_infl'],
-     ventilation_efficiency=default_attributes['ventilation_efficiency'],
-     thermal_capacitance_per_floor_area=default_attributes['thermal_capacitance_per_floor_area'],
-     t_set_heating=default_attributes['t_set_heating'],
-     t_set_cooling=default_attributes['t_set_cooling'],
-     max_cooling_energy_per_floor_area=default_attributes['max_cooling_energy_per_floor_area'],
-     max_heating_energy_per_floor_area=default_attributes['max_heating_energy_per_floor_area'],
-     heating_supply_system=default_attributes['heating_supply_system'],  
-     cooling_supply_system=default_attributes['cooling_supply_system'],
-     heating_emission_system=default_attributes['heating_emission_system'],
-     cooling_emission_system=default_attributes['cooling_emission_system'])
+Zone = sc.sticky["RCModelClassic"](
+     window_area=zone_attributes['window_area'],
+     external_envelope_area=zone_attributes['external_envelope_area'],
+     room_depth=zone_attributes['room_depth'],
+     room_width=zone_attributes['room_width'],
+     room_height=zone_attributes['room_width'],
+     lighting_load=zone_attributes['lighting_load'],
+     lighting_control=zone_attributes['lighting_control'],
+     lighting_utilisation_factor=zone_attributes['lighting_utilisation_factor'],
+     lighting_maintenance_factor=zone_attributes['lighting_maintenance_factor'],
+     u_walls=zone_attributes['u_walls'],
+     u_windows=zone_attributes['u_windows'],
+     g_windows=zone_attributes['g_windows'],
+     ach_vent=zone_attributes['ach_vent'],
+     ach_infl=zone_attributes['ach_infl'],
+     ventilation_efficiency=zone_attributes['ventilation_efficiency'],
+     thermal_capacitance_per_floor_area=zone_attributes['thermal_capacitance_per_floor_area'],
+     t_set_heating=zone_attributes['t_set_heating'],
+     t_set_cooling=zone_attributes['t_set_cooling'],
+     max_cooling_energy_per_floor_area=zone_attributes['max_cooling_energy_per_floor_area'],
+     max_heating_energy_per_floor_area=zone_attributes['max_heating_energy_per_floor_area'],
+     heating_supply_system=zone_attributes['heating_supply_system'],  
+     cooling_supply_system=zone_attributes['cooling_supply_system'],
+     heating_emission_system=zone_attributes['heating_emission_system'],
+     cooling_emission_system=zone_attributes['cooling_emission_system'])
 
 zone_variables = vars(Zone)
 
-for i in unique_inputs:
-    print i,unique_inputs[i]
+input_string = 'Building('
+for k,v in locally_defined_values.iteritems():
+    input_string += k
+    input_string += '='
+    input_string += str(v)
+    input_string += ', '
+input_string += ')'
 
