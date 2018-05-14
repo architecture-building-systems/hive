@@ -28,7 +28,7 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_Hive"
 ghenv.Component.NickName = 'Hive'
-ghenv.Component.Message = 'VER 0.0.1\nMAY_09_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_14_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "0 | Core"
@@ -404,7 +404,6 @@ class WindowRadiation(object):
                         s = b.Faces[0].DuplicateSurface()
                         context_surfaces.append(s)
         
-        
         self.clipper_accuracy = 100000
         self.extract_window_geometry()
         self.transform_all_shades(context_surfaces)
@@ -441,12 +440,25 @@ class WindowRadiation(object):
         
         # Initialize window area and plane
         self.window_area = rs.Area(self.window_geometry)
+        edges = rs.DuplicateEdgeCurves(self.window_geometry)
         self.window_vertices = rs.SurfaceEditPoints(self.window_geometry)
-        self.window_plane = rs.SurfaceFrame(self.window_geometry,[0,0])
-        self.window_edges = rs.JoinCurves(rs.DuplicateEdgeCurves(self.window_geometry))
+        
+        
+        lower_points = [p for p in self.window_vertices if p[2] == min([z[2] for z in self.window_vertices])]
+        
+        x_n = self.window_normal[0]
+        if x_n > 0:
+            basepoint = [p for p in lower_points if p[1] == min([y[1] for y in lower_points])][0]
+        else:
+            basepoint = [p for p in lower_points if p[1] == max([y[1] for y in lower_points])][0]
+        
+        plane_y = rc.Geometry.Vector3d(0,0,1)
+        plane_x = rs.VectorRotate(plane_y,270,self.window_normal)
+        self.window_plane = rc.Geometry.Plane(basepoint,plane_x,plane_y)
+        
         self.window_transformation = gh.Orient(None,self.window_plane,gh.XYPlane(rc.Geometry.Point3d(0,0,0)))[1]
         
-        edges = rs.DuplicateEdgeCurves(self.window_geometry)
+        self.window_edges = rs.JoinCurves(edges)
         edge_lengths = [rs.CurveLength(e) for e in edges]
         edge_vectors = [round(rs.VectorCreate(rs.CurveStartPoint(e),rs.CurveEndPoint(e))[2]) for e in edges] 
         window_width = edge_lengths[0] if edge_vectors[0] == 0 else edge_lengths[1]
@@ -509,24 +521,35 @@ class WindowRadiation(object):
     def transform_shade(self,shade):
         """
         Transform the vertices of a shading surface to match the window as projected on the xy plane.
-        If some vertices are behind the window, the part of the shade in front of the window is considered.
-        if all the vertices are behind the window, a null value is returned.
+        case 1: All vertices are in front of the window
+        case 2: Some vertices are behind the window.
+        case 3: All the vertices are behind the window, a null value is returned.
         
         :return rounded_oriented_centroid: oriented centroid. rounding affects how easily array patterns are identified.
         :return transformed points: 
         """
+        
+        # Test shading position
         points = rs.SurfacePoints(shade,True)
+        a,b,c,d = rs.PlaneEquation(self.window_plane)
+        point_is_outside_window = [a*p[0] + b*p[1] + c*p[2] + d > 0 for p in points]
+        if all(point_is_outside_window):
+            # Case 1
+            pass
+        elif any(point_is_outside_window):
+            # case 2: add the intersection points to the list of points
+            intersection = gh.BrepXPlane(shade,self.window_plane)[0]
+            if intersection is not None:
+                # Case 2
+                points.append(rs.CurveEndPoint(intersection))
+                points.append(rs.CurveStartPoint(intersection))
+        else:
+            # Case 3
+            return None, None
+            print 'shade element ignored as it is behind the window.'
+        
         centroid, e= rs.SurfaceAreaCentroid(shade)
         normal = rs.SurfaceNormal(shade,[0.5,0.5])
-        
-        # If the surface intersects with the window, add the intersection points.
-        intersection = gh.BrepXPlane(shade,self.window_plane)[0]
-        if intersection is not None:
-            start = rs.CurveParameter(intersection, 0)
-            end = rs.CurveParameter(intersection,1)
-            points.append(rs.EvaluateCurve(intersection, start))
-            points.append(rs.EvaluateCurve(intersection, end))
-        
         clockwise_shade_points = self.sort_surface_vertices_clockwise(points,centroid,normal)
         
         def round2(x):
@@ -552,35 +575,14 @@ class WindowRadiation(object):
         key: shade centroid
         value: transformed points for each shade
         """
-        
-        centroids_and_points = {}
-        for xg in context_geometry:
-            c,points = self.transform_shade(xg) 
-            for p in points:
-                centroids_and_points[c[0],c[1]] = points
-        
-        #TODO: give this more tolerance so that it can also pick up array-like configurations.
-        unique_x = sorted(list(set([x[0] for x in centroids_and_points.keys()])))
-        if len(unique_x) < len(centroids_and_points):
-            x_dict = {k:v for k,v in enumerate(unique_x)}
-            self.nrows = len(unique_x)
-        
-        unique_y = sorted(list(set([x[1] for x in centroids_and_points.keys()])))
-        if len(unique_x) < len(centroids_and_points):
-            y_dict = {k:v for k,v in enumerate(unique_y)}
-            self.ncols = len(y_dict)
-        
         self.context = {}
-        if 'x_dict' in locals() or 'y_dict' in locals():
-            # Create new dictionary with tuple keys
-            # This step will be important when implementing self shading.
-            # It is not necessary when only considering window shading.
-            for x,y in product(range(self.nrows),range(self.ncols)):
-                self.context[x,y] = centroids_and_points[x_dict[x],y_dict[y]]
-        else:
-            # No array pattern, create a one-dimensional matrix
-            for i,x in enumerate(centroids_and_points.values()):
-                self.context[i,0] = x
+        points_dict = {}
+        index = 0
+        for xg in context_geometry:
+            c,points = self.transform_shade(xg)
+            if c is not None:
+                self.context[index] = points
+                index += 1
     
     def calc_shadow(self, shade, relative_sun_alt, relative_sun_az):
         """
@@ -603,7 +605,7 @@ class WindowRadiation(object):
         relative_sun_az_rad, relative_sun_alt_rad = map(math.radians, [relative_sun_az + 90, relative_sun_alt]);
     
         # Create sun vector
-        sunvec_x = math.cos(relative_sun_az_rad) * math.cos(relative_sun_alt_rad);
+        sunvec_x = -math.cos(relative_sun_az_rad) * math.cos(relative_sun_alt_rad);
         sunvec_y = math.sin(relative_sun_alt_rad);
         sunvec_z = math.sin(relative_sun_az_rad) * math.cos(relative_sun_alt_rad);
         
@@ -636,22 +638,19 @@ class WindowRadiation(object):
                 else:
                     a = shade_points[ii+1]
                     b = shade_points[ii]
-        
         return a,b
         
     def calc_gross_shadows(self,relative_sun_alt,relative_sun_az):
         """
         projects all shading objects onto window coordinate plane
         """
+        if self.context == {}:
+            return None
+        
         gross_shadows = {}
         pv_vectors = {}
-        if type(self.context.keys()[0]) == float:
-            for k in self.context.keys():
-                gross_shadows[k] = self.calc_shadow(self.context[k],relative_sun_alt,relative_sun_az)
-        elif type(self.context.keys()[0]) == tuple:
-            # an array configuration has been identified.
-            for i,j in self.context.keys():
-                gross_shadows[i,j] = self.calc_shadow(self.context[i,j],relative_sun_alt,relative_sun_az)
+        for k in self.context.keys():
+            gross_shadows[k] = self.calc_shadow(self.context[k],relative_sun_alt,relative_sun_az)
         return gross_shadows
     
     def draw_unshaded_polygons(self,clipper_result):
@@ -668,7 +667,7 @@ class WindowRadiation(object):
             points = []
             for p in ms:
 #                points.append(rc.Geometry.Point3d(p.X/self.clipper_accuracy, p.Y/self.clipper_accuracy,0))
-                points.append(rs.EvaluateSurface(self.window_geometry, p.X/self.clipper_accuracy, p.Y/self.clipper_accuracy))
+                points.append(rs.EvaluatePlane(self.window_plane, [p.X/self.clipper_accuracy, p.Y/self.clipper_accuracy]))
             clipper_result_geometry.append(gh.PolyLine(points,closed=True))
         return clipper_result_geometry
 
@@ -826,7 +825,6 @@ class WindowRadiation(object):
         
         # Direct Irradiation
         if normal_irradiation != 0 and math.cos(angle_incidence) > 0:
-            
             dir_irradiation = normal_irradiation * math.cos(angle_incidence) * unshaded_area
         
         if normal_lux != 0:

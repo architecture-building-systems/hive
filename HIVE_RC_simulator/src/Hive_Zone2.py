@@ -104,22 +104,16 @@ def validate_element(element):
         return False
 
 # keep valid element objects and combine them into a single list.
-g = [x for x in glazed_elements if validate_element(x)]
-o = [x for x in opaque_elements if validate_element(x)]
+e = [x for x in elements if validate_element(x)]
 
-if len(g) != len(glazed_elements):
-    warning = "Invalid glazed element detected"
+if len(e) != len(elements):
+    warning = "Invalid element detected"
     w = gh.GH_RuntimeMessageLevel.Warning
     ghenv.Component.AddRuntimeMessage(w, warning)
-if len(o) != len(opaque_elements):
-    warning = "Invalid opaque element detected"
-    w = gh.GH_RuntimeMessageLevel.Warning
-    ghenv.Component.AddRuntimeMessage(w, warning)    
-elements = g + o
+
 if len(elements) == 0:
     elements = None
 
-print elements
 
 # keep valid thermal bridge objects
 t = [x for x in thermal_bridges if x is sc.sticky['ThermalBridge']]

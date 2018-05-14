@@ -38,20 +38,20 @@ ghenv.Component.SubCategory = "1 | Zone"
 
 import scriptcontext as sc
 
-def main(element_name,u_value):
+def main(element_name,u_value,_geometry):
     if not sc.sticky.has_key('ElementBuilder'): 
         return "Add the modular RC component to the canvas!"
 
-    element_name = 'Wall' if element_name is None else element_name
+    element_name = 'Opaque Element' if element_name is None else element_name
     Builder = sc.sticky['ElementBuilder'](element_name,u_value,1,True)
     centers,normals,opaque_element = Builder.add_element(_geometry)
     
     for e in opaque_element:
-        print e.name,':', e.u_value,'W/m2K'
+        print 'element name: ',e.name,'\n U-value:',e.u_value,'W/m2K \n area:',round(e.area,2),'m2'
     
     return centers, normals, opaque_element
 
 try:
-    centers,normals,opaque_element = main(element_name,u_value)
+    centers,normals,opaque_element = main(element_name,u_value,_geometry)
 except ValueError:
-    print main(element_name,u_value)
+    print main(element_name,u_value,_geometry)

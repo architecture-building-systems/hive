@@ -112,6 +112,8 @@ def main(Zone, outdoor_air_temperature, previous_mass_temperature, internal_gain
         sg = 2000 if solar_gains == [] else solar_gains[b]
         il = 300 if illuminance == [] else illuminance[b]
         
+#        Zone.solve_building_energy(ig, sg, ta, previous_mass_temperature)
+
         try:
             Zone.solve_building_energy(ig, sg, ta, previous_mass_temperature)    
             Zone.solve_building_lighting(il, oc)

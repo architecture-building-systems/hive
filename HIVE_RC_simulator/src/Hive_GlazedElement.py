@@ -14,7 +14,7 @@
 # <Licence: MIT>
 
 """
-Dual function component which returns a building element and calculates solar gains.
+Dual-purpose component which outputs an element and calculates solar gains.
 -
 Provided by HIVE 0.0.1
     
@@ -36,7 +36,7 @@ Provided by HIVE 0.0.1
 
 ghenv.Component.Name = "Hive_GlazedElement"
 ghenv.Component.NickName = 'GlazedElement'
-ghenv.Component.Message = 'VER 0.0.1\nMAY_09_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_14_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "1 | Zone"
@@ -54,7 +54,7 @@ def build_glazed_element(window_name,_window_geometry,u_value,frame_factor):
     if not sc.sticky.has_key('ElementBuilder'): 
         return "Add the modular RC component to the canvas!"
     
-    name = 'Window' if window_name is None else window_name
+    name = 'Glazed Element' if window_name is None else window_name
 
     Builder = sc.sticky['ElementBuilder'](name,u_value,frame_factor,False)
     centers,normals,glazed_elements = Builder.add_element(_window_geometry)
@@ -70,10 +70,11 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
     #TODO: Deal with polysurface input for shading
     #TODO: collect points and merge shadows in pyclipper for a faster shading visualisation.
     """
+    if not sc.sticky.has_key('WindowRadiation'): return "Add the modular building physics component to the canvas!"
+    hive_preparation = sc.sticky["HivePreparation"]()
+    
     solar_transmittance = solar_transmittance if solar_transmittance is not None else 0.7
     light_transmittance = light_transmittance if light_transmittance is not None else 0.8
-    
-    if not sc.sticky.has_key('WindowRadiation'): return "Add the modular building physics component to the canvas!"
     
     Window = sc.sticky["WindowRadiation"](window_geometry=_window_geometry,
                                           point_in_zone=_point_in_zone,
@@ -84,10 +85,7 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
                           window_altitude_rad=Window.window_altitude_rad,
                           normal = Window.window_normal)
     except:
-        print 'Connect Location data from the Hive_getSimulationData'
-    
-    window_centroid = Window.window_centroid
-    window_normal = Window.window_normal
+        print 'For solar calculations, connect Location data from the Hive_getSimulationData'
     
     # Results
     dir_irradiation = []
@@ -125,24 +123,23 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
         incidence = math.acos(math.cos(math.radians(relative_sun_alt)) * math.cos(math.radians(relative_sun_az)))
 
         # Calculate shading
-        if context_geometry == []:
+        if context_geometry == [] or not (sun_alt > 0 and abs(relative_sun_az) < 90):
             # Window is unshaded
             unshaded_area = Window.window_area
-            
-            if draw_shadows and sun_alt > 0 and abs(relative_sun_az) < 90:
-                unshaded_polys_hour = (Window.window_edges)
         else:
-            #TODO: add a condition that checks shading geometry
             shadow_dict = Window.calc_gross_shadows(relative_sun_alt,relative_sun_az)
-            unshaded_polygons = Window.calc_unshaded_polygons(shadow_dict)
-            unshaded_area = Window.calc_unshaded_area(unshaded_polygons)
-            if draw_shadows and sun_alt > 0 and abs(relative_sun_az) < 90:
-                unshaded_polys_hour = Window.draw_unshaded_polygons(unshaded_polygons)
+            if shadow_dict is not None:
+                unshaded_polygons = Window.calc_unshaded_polygons(shadow_dict)
+                unshaded_area = Window.calc_unshaded_area(unshaded_polygons)
+                if draw_shadows:
+                    unshaded_polys_hour = Window.draw_unshaded_polygons(unshaded_polygons)
+            else:
+                unshaded_area = Window.window_area
         
         dnirr, dhirr, dhirr_simple, grirr, lighting = Window.radiation(sun_alt, incidence, normal_irradiation, horizontal_irradiation, normal_illuminance, horizontal_illuminance, unshaded_area)
         solar_gains_this_hour = solar_transmittance * (dnirr + dhirr + grirr)
         shading_factor.append(unshaded_area/Window.window_area)
-
+        
         if sun_alt > 0 and abs(relative_sun_az) < 90:
             sun_vector = Sun.calc_sun_vector(sun_alt,sun_az)
             incidence = math.degrees(incidence)
@@ -156,14 +153,14 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
         ground_ref_irradiation.append(grirr)
         window_illuminance.append(lighting)
         window_solar_gains.append(solar_gains_this_hour)
-        if draw_shadows and sun_alt>0:
-            unshaded_polys.append(unshaded_polys_hour)
+        unshaded_polys.append(unshaded_polys_hour)
     
-    unshaded = sc.sticky['list_to_tree'](unshaded_polys)
+    unshaded = hive_preparation.list_to_tree(unshaded_polys)
+    
     print 'Total solar gains:', round(sum(window_solar_gains),2),'Wh'
     print 'Mean shading factor: ', sum(shading_factor)/len(shading_factor)
     
-    return incidence_angle, window_centroid, window_normal, sun_vectors, window_solar_gains, window_illuminance, dir_irradiation, diff_irradiation, diff_irradiation_simple, ground_ref_irradiation, unshaded
+    return incidence_angles, Window.window_centroid, Window.window_normal, sun_vectors, window_solar_gains, window_illuminance, dir_irradiation, diff_irradiation, diff_irradiation_simple, ground_ref_irradiation, unshaded
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
