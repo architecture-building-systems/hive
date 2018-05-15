@@ -158,7 +158,8 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
     unshaded = hive_preparation.list_to_tree(unshaded_polys)
     
     print 'Total solar gains:', round(sum(window_solar_gains),2),'Wh'
-    print 'Mean shading factor: ', sum(shading_factor)/len(shading_factor)
+    sf = [sf for sf,sv in zip(shading_factor,sun_vectors) if sv is not None]
+    print 'Mean shading factor: ', sum(sf)/len(sf)
     
     return incidence_angles, Window.window_centroid, Window.window_normal, sun_vectors, window_solar_gains, window_illuminance, dir_irradiation, diff_irradiation, diff_irradiation_simple, ground_ref_irradiation, unshaded
 
@@ -167,7 +168,7 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
 centers, normals, glazed_elements = build_glazed_element(window_name, _window_geometry, u_value, frame_factor)
 window_area = [g.area for g in glazed_elements]
 
-if (location and _point_in_zone and  _window_geometry):
+if len(location) == 4 and _point_in_zone and  _window_geometry:
     incidence_angle, window_centroid, window_normal, sun_vectors, solar_gains, illuminance, dir_irradiation, diff_irradiation, diff_irradiation_simple, ground_ref_irradiation, unshaded = solar_gains_through_element(_window_geometry, _point_in_zone, context_geometry, location, irradiation, solar_transmittance, light_transmittance, draw_shadows)
     
 else:
