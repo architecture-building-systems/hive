@@ -1,8 +1,5 @@
 #Folders
-**/hive/HIVE_RC_simulator/tests*
-**/hive/HIVE_RC_simulator/justin*
-**/hive/HIVE_RC_simulator/graphics*
-**/hive/HIVE_RC_simulator/tests*
+
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
