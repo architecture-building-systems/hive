@@ -36,7 +36,7 @@ Provided by HIVE 0.0.1
 
 ghenv.Component.Name = "Hive_GlazedElement"
 ghenv.Component.NickName = 'GlazedElement'
-ghenv.Component.Message = 'VER 0.0.1\nMAY_14_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_15_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "1 | Zone"
@@ -145,23 +145,27 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
             incidence = math.degrees(incidence)
         
         # Append results
+        window_illuminance.append([lighting])
+        window_solar_gains.append([solar_gains_this_hour])
+        
         dir_irradiation.append(dnirr)
         diff_irradiation.append(dhirr)
         diff_irradiation_simple.append(dhirr_simple)
         sun_vectors.append(sun_vector)
         incidence_angles.append(incidence)
         ground_ref_irradiation.append(grirr)
-        window_illuminance.append(lighting)
-        window_solar_gains.append(solar_gains_this_hour)
         unshaded_polys.append(unshaded_polys_hour)
     
+    solar_gains = hive_preparation.list_to_tree(window_solar_gains)
+    illuminance = hive_preparation.list_to_tree(window_illuminance)
     unshaded = hive_preparation.list_to_tree(unshaded_polys)
     
-    print 'Total solar gains:', round(sum(window_solar_gains),2),'Wh'
+    total_solar_gains = round(sum([i[0] for i in window_solar_gains])/1000,2)
+    print 'Total solar gains:', total_solar_gains,'kWh'
     sf = [sf for sf,sv in zip(shading_factor,sun_vectors) if sv is not None]
     print 'Mean shading factor: ', sum(sf)/len(sf)
     
-    return incidence_angles, Window.window_centroid, Window.window_normal, sun_vectors, window_solar_gains, window_illuminance, dir_irradiation, diff_irradiation, diff_irradiation_simple, ground_ref_irradiation, unshaded
+    return incidence_angles, Window.window_centroid, Window.window_normal, sun_vectors, solar_gains, illuminance, dir_irradiation, diff_irradiation, diff_irradiation_simple, ground_ref_irradiation, unshaded
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 

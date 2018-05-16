@@ -29,7 +29,7 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_getSimulationData"
 ghenv.Component.NickName = 'getSimulationData'
-ghenv.Component.Message = 'VER 0.0.1\nMAY_07_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_16_2018'
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "2 | Simulation"
 # ComponentExposure=1
@@ -49,6 +49,7 @@ class GhPythonDictionary(object):
             self.d = {}
     def ToString(self):
         return 'GhPythonDictionary object'
+
 
 def separate_data(inputList):
     # Based on Ladybug_Separate data, but uses lists instead of DataTree objects
@@ -102,59 +103,41 @@ def open_epw(open):
     else:
         print 'Please set open to True'
 
-def set_simulation_period(start_hoy,end_hoy):
-    if start_hoy is not None:
-        if 0 <= int(start_hoy) < 8760:
-            start = start_hoy
-        else:
-            warningMsg = "start_HOY_ must be an integer between 0 and 8760"
-            w = gh.GH_RuntimeMessageLevel.Warning
-            ghenv.Component.AddRuntimeMessage(w, warningMsg)
-            return None
-    else:
-        start = 0
-    
-    if end_hoy is not None:
-        if start <= end_hoy < 8760:
-            end = end_hoy
-        else:
-            warningMsg = "end_HOY_ must be an integer between start_HOY_ and 8760"
-            w = gh.GH_RuntimeMessageLevel.Warning
-            ghenv.Component.AddRuntimeMessage(w, warningMsg)
-            return None
-    else:
-        end = 8759
-    
-    return int(start),int(end)
+def list_to_tree(nestedlist):
+    layerTree = DataTree[object]()
+    for i, item_list in enumerate(nestedlist):
+        path = GH_Path(i)
+        layerTree.AddRange(item_list,path)
+    return layerTree
 
 def main(epw_file,start_HOY_,end_HOY_):
     if not sc.sticky.has_key('HivePreparation'): return "Add the modular RC component to the canvas!"
     #TODO: Set up compatibility checks like in Ladybug.
     
-    hive_preparation = sc.sticky["HivePreparation"]()
-    start,end = set_simulation_period(start_HOY_,end_HOY_)
+    HivePreparation = sc.sticky["HivePreparation"]()
+    start,end = HivePreparation.set_simulation_period(start_HOY_,end_HOY_)
     temperature = []
     irradiation = []
     
     if (epw_file is not None):
-        locationData = hive_preparation.epwLocation(epw_file)
-        weatherData = hive_preparation.epwDataReader(epw_file, locationData[0])
-    
+        locationData = HivePreparation.epwLocation(epw_file)
+        weatherData = HivePreparation.epwDataReader(epw_file, locationData[0])
+
         location = [locationData[1], locationData[2], locationData[3]]
         dryBulbTemperature, dewPointTemperature, relativeHumidity, windSpeed, windDirection, directNormalRadiation, diffuseHorizontalRadiation, globalHorizontalRadiation, directNormalIlluminance, diffuseHorizontalIlluminance, globalHorizontalIlluminance, totalSkyCover, horizontalInfraredRadiation, barometricPressure, modelYear = weatherData
         location.append(modelYear[7])
-    
+
         dryBulbTemperature = separate_data(dryBulbTemperature)
         directRadiation = separate_data(directNormalRadiation)
         diffuseRadiation = separate_data(diffuseHorizontalRadiation)
         directIlluminance = separate_data(directNormalIlluminance)
         diffuseIlluminance = separate_data(diffuseHorizontalIlluminance)
-    
-        for i in range(start,end):
+        
+        for i in range(start-1,end):
             temperature.append([i,dryBulbTemperature[i]])
             irradiation.append([i, directRadiation[i], diffuseRadiation[i], directIlluminance[i], diffuseIlluminance[i]])
     
-    return location, hive_preparation.list_to_tree(temperature), hive_preparation.list_to_tree(irradiation)
+    return location, list_to_tree(temperature), list_to_tree(irradiation)
 
 if epw_file is None:
     if browse_for_epw:
@@ -162,7 +145,4 @@ if epw_file is None:
         location, temperature, irradiation = main(epw_file,start_HOY_,end_HOY_)
 
 else:
-    try:
-        location, temperature, irradiation = main(epw_file,start_HOY_,end_HOY_)
-    except ValueError:
-        print 'refresh this component'
+    location, temperature, irradiation = main(epw_file,start_HOY_,end_HOY_)

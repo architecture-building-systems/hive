@@ -48,37 +48,9 @@ ghenv.Component.SubCategory = "2 | Simulation"
 import Grasshopper.Kernel as gh
 import scriptcontext as sc
 
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-loc = locals()
-simulation_variables = ['internal_gains', 'solar_irradiation','occupancy','illuminance']
-variable_summary = {}
-for s in simulation_variables:
-    if s in loc:
-        variable_summary[s] = len(loc[s])
-        # Raise warning if no value is detected
-        if len(loc[s])==0:
-            warning = "No data for %s"%s
-            w = gh.GH_RuntimeMessageLevel.Warning
-            ghenv.Component.AddRuntimeMessage(w, warning)
-"""
-# Raise error if one of the input streams is of different length
-if True in [variable_summary[s] != variable_summary['outdoor_air_temperature'] for s in variable_summary]:
-    error = "Input data must all be of equal length"
-    e = gh.GH_RuntimeMessageLevel.Error
-    ghenv.Component.AddRuntimeMessage(e, error)
-"""
-
-#print 'Variable summary'
-#for v in variable_summary:
-#    print v,variable_summary[v]
-
-previous_mass_temperature = previous_mass_temperature if previous_mass_temperature is not None else 20.0
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 def main(Zone, outdoor_air_temperature, previous_mass_temperature, internal_gains, solar_gains, occupancy, illuminance):
     if not sc.sticky.has_key('RCModel'): return "Add the modular RC component to the canvas!"
-    
+    HivePreparateion = sc.sticky['HivePreparation']()
     #Initialise zone object
     if Zone is None:
         Zone = sc.sticky["RCModel"]()
@@ -107,13 +79,11 @@ def main(Zone, outdoor_air_temperature, previous_mass_temperature, internal_gain
     #Start simulation
     for b in range(outdoor_air_temperature.BranchCount):
         hour, ta = outdoor_air_temperature.Branch(b)
-        oc = occupancy[b]
-        ig = internal_gains[b]
-        sg = 2000 if solar_gains == [] else solar_gains[b]
-        il = 300 if illuminance == [] else illuminance[b]
+        oc = 0 if occupancy is False else occupancy[b]
+        ig = 0 if internal_gains is False else internal_gains[b]
+        sg = 0 if solar_gains is False else solar_gains[b]
+        il = 0 if illuminance is False else illuminance[b]
         
-#        Zone.solve_building_energy(ig, sg, ta, previous_mass_temperature)
-
         try:
             Zone.solve_building_energy(ig, sg, ta, previous_mass_temperature)    
             Zone.solve_building_lighting(il, oc)
@@ -126,21 +96,53 @@ def main(Zone, outdoor_air_temperature, previous_mass_temperature, internal_gain
             print 'illuminance: ',il
             print 'occupancy: ',oc
             Zone.solve_building_energy(ig, sg, ta, previous_mass_temperature) 
-            
             break
         
         #Set T_m as t_m_prev for next timestep
         t_m_prev = Zone.t_m
         
         #Record Results
-        indoor_air_temperature.append(Zone.t_air)
-        operative_temperature.append(Zone.t_operative)
-        mass_temperature.append(Zone.t_m)  # Printing Room Temperature of the medium
-        lighting_demand.append(Zone.lighting_demand)  # Print Lighting Demand
-        energy_demand.append(Zone.energy_demand)  # Print heating/cooling loads
-        heating_demand.append(Zone.heating_demand)
-        cooling_demand.append(Zone.cooling_demand)
+        indoor_air_temperature.append([Zone.t_air])
+        operative_temperature.append([Zone.t_operative])
+        mass_temperature.append([Zone.t_m])  # Printing Room Temperature of the medium
+        lighting_demand.append([Zone.lighting_demand])  # Print Lighting Demand
+        energy_demand.append([Zone.energy_demand])  # Print heating/cooling loads
+        heating_demand.append([Zone.heating_demand])
+        cooling_demand.append([Zone.cooling_demand])
         
-    return indoor_air_temperature, operative_temperature, mass_temperature, lighting_demand, energy_demand, heating_demand, cooling_demand
+    return HivePreparation.list_to_tree(indoor_air_temperature), \
+    HivePreparation.list_to_tree(operative_temperature), \
+    HivePreparation.list_to_tree(mass_temperature), \
+    HivePreparation.list_to_tree(lighting_demand), \
+    HivePreparation.list_to_tree(energy_demand), \
+    HivePreparation.list_to_tree(heating_demand), \
+    HivePreparation.list_to_tree(cooling_demand)
+
+def check_input_tree(input_tree,input_tree_name):
+    if input_tree.BranchCount>0:
+        total_per_hour = []
+        for b in range(0,input_tree.BranchCount):
+            total_per_hour.append(sum(input_tree.Branch(b)))
+        return total_per_hour
+    else:
+        HivePreparation.raise_warning('No data for %s'%input_tree_name)
+        return False
+
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-indoor_air_temperature, operative_temperature, mass_temperature, lighting_demand, energy_demand, heating_demand, cooling_demand = main(Zone, outdoor_air_temperature, previous_mass_temperature, internal_gains, solar_gains, occupancy, illuminance)
+HivePreparation = sc.sticky['HivePreparation']()
+
+# Initialise previous mass temperature if it hasn't been specified
+previous_mass_temperature = initial_mass_temperature if initial_mass_temperature is not None else 20.0
+
+# Check input for outdoor air temperature
+if outdoor_air_temperature.BranchCount==0:
+    HivePreparation.raise_warning('No data for outdoor_air_temperature')
+
+# Check input and add all data streams
+sg_list = check_input_tree(solar_gains,'solar_gains')
+ill_list = check_input_tree(illuminance,'illuminance')
+ig_list = check_input_tree(internal_gains,'internal_gains')
+occ_list = check_input_tree(occupancy,'occupancy')
+
+#if sg_list and ill_list and ig_list and occ_list:
+indoor_air_temperature, operative_temperature, mass_temperature, lighting_demand, energy_demand, heating_demand, cooling_demand = main(Zone, outdoor_air_temperature, previous_mass_temperature, ig_list, sg_list, occ_list, ill_list)

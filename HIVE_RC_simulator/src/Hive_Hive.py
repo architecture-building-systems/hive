@@ -69,7 +69,14 @@ class HivePreparation(object):
     This object contains some hand-picked functions from the Ladybug Preparation component.
     It provides support for other components which have been adapted from Ladybug to Hive.
     """
-
+    def __init__(self):
+        self.monthList = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
+        self.numOfDays = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365]
+        self.numOfDaysEachMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+        self.numOfHours = [24 * numOfDay for numOfDay in self.numOfDays]
+    
+    strToBeFound = 'key:location/dataType/units/frequency/startsAt/endsAt'
+    
     def hour2Date(self, hour, alternate = False):
         numOfDays = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365]
         numOfHours = [24 * numOfDay for numOfDay in numOfDays]
@@ -98,14 +105,31 @@ class HivePreparation(object):
             return day, month, time
             
         return (`day` + ' ' + month + ' ' + time)
-
-    def __init__(self):
-        self.monthList = ['JAN', 'FEB', 'MAR', 'APR', 'MAY', 'JUN', 'JUL', 'AUG', 'SEP', 'OCT', 'NOV', 'DEC']
-        self.numOfDays = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334, 365]
-        self.numOfDaysEachMonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-        self.numOfHours = [24 * numOfDay for numOfDay in self.numOfDays]
     
-    strToBeFound = 'key:location/dataType/units/frequency/startsAt/endsAt'
+    def set_simulation_period(self,start_hoy,end_hoy):
+        if start_hoy is None:
+            start = 1
+        else:
+            if 1 <= int(start_hoy) < 8760:
+                start = start_hoy
+            else:
+                warningMsg = "Invalid start_HOY_ replaced with 1."
+                w = gh.GH_RuntimeMessageLevel.Warning
+                ghenv.Component.AddRuntimeMessage(w, warningMsg)
+                start = 1
+        
+        if end_hoy is None:
+            end = 8760
+        else:
+            if start <= end_hoy < 8761:
+                end = end_hoy
+            else:
+                warningMsg = "Invalid start_HOY_ replaced with 8759."
+                w = gh.GH_RuntimeMessageLevel.Warning
+                ghenv.Component.AddRuntimeMessage(w, warningMsg)
+                end = 8760
+        
+        return int(start),int(end)
     
     def getJD(self, month, day):
         numOfDays = [0, 31, 59, 90, 120, 151, 181, 212, 243, 273, 304, 334]
@@ -129,7 +153,6 @@ class HivePreparation(object):
         elev = csheadline[-1].strip()
         epwfile.close
         return locName, lat, lngt, timeZone, elev
-    
     
     def cleanAndCoerceList(self, brepList):
         """ This definition clean the list and add them to RhinoCommon"""
@@ -225,7 +248,16 @@ class HivePreparation(object):
             path = GH_Path(day)
             dictTree.Add(value,path)
         return dictTree
-
+    
+    def raise_warning(self,warning_str):
+        warning = warning_str
+        w = ghKernel.GH_RuntimeMessageLevel.Warning
+        ghenv.Component.AddRuntimeMessage(w, warning)
+    
+    def raise_error(self,error_str):
+        error = error_str
+        e = ghKernel.GH_RuntimeMessageLevel.Error
+        ghenv.Component.AddRuntimeMessage(e, error)
 
 class RelativeSun(object):
     def __init__(self,location,window_azimuth_rad, window_altitude_rad, normal):
@@ -666,7 +698,7 @@ class WindowRadiation(object):
         for ms in clipper_result:
             points = []
             for p in ms:
-#                points.append(rc.Geometry.Point3d(p.X/self.clipper_accuracy, p.Y/self.clipper_accuracy,0))
+                # points.append(rc.Geometry.Point3d(p.X/self.clipper_accuracy, p.Y/self.clipper_accuracy,0))
                 points.append(rs.EvaluatePlane(self.window_plane, [p.X/self.clipper_accuracy, p.Y/self.clipper_accuracy]))
             clipper_result_geometry.append(gh.PolyLine(points,closed=True))
         return clipper_result_geometry
@@ -1297,8 +1329,8 @@ class ElementBuilding(object):
 
         self.calc_t_air(t_out)
 
-        self.calc_t_opperative()
-        return self.t_m, self.t_air, self.t_opperative
+        self.calc_t_operative()
+        return self.t_m, self.t_air, self.t_operative
 
     def calc_energy_demand(self, internal_gains, solar_gains, t_out, t_m_prev):
         """
@@ -1517,14 +1549,14 @@ class ElementBuilding(object):
         self.t_air = (self.h_tr_is * self.t_s + self.h_ve_adj *
                       t_supply + self.phi_ia) / (self.h_tr_is + self.h_ve_adj)
 
-    def calc_t_opperative(self):
+    def calc_t_operative(self):
         """
-        The opperative temperature is a weighted average of the air and mean radiant temperatures.
+        The operative temperature is a weighted average of the air and mean radiant temperatures.
         It is not used in any further calculation at this stage
         # (C.12) in [C.3 ISO 13790]
         """
         
-        self.t_opperative = 0.3 * self.t_air + 0.7 * self.t_s
+        self.t_operative = 0.3 * self.t_air + 0.7 * self.t_s
 
 
 class Building(object):
@@ -1821,9 +1853,9 @@ class Building(object):
 
         self.calc_t_air(t_out)
 
-        self.calc_t_opperative()
+        self.calc_t_operative()
 
-        return self.t_m, self.t_air, self.t_opperative
+        return self.t_m, self.t_air, self.t_operative
 
     def calc_energy_demand(self, internal_gains, solar_gains, t_out, t_m_prev):
         """
@@ -2034,14 +2066,14 @@ class Building(object):
         self.t_air = (self.h_tr_is * self.t_s + self.h_ve_adj *
                       t_supply + self.phi_ia) / (self.h_tr_is + self.h_ve_adj)
 
-    def calc_t_opperative(self):
+    def calc_t_operative(self):
         """
-        The opperative temperature is a weighted average of the air and mean radiant temperatures. 
+        The operative temperature is a weighted average of the air and mean radiant temperatures. 
         It is not used in any further calculation at this stage
         # (C.12) in [C.3 ISO 13790]
         """
 
-        self.t_opperative = 0.3 * self.t_air + 0.7 * self.t_s
+        self.t_operative = 0.3 * self.t_air + 0.7 * self.t_s
 
 error = "Connect emissions_systems and supply_systems components!"
 e = ghKernel.GH_RuntimeMessageLevel.Error

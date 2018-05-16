@@ -68,89 +68,9 @@ ghenv.Component.SubCategory = "1 | Zone"
 
 import scriptcontext as sc
 import Grasshopper.Kernel as gh
+HivePreparation = sc.sticky['HivePreparation']()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-#Manage Inputs
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-#  Initialize default values if no input is detected
-thermal_attributes = {"elements":None,
-              "thermal_bridges":None,
-              "floor_area":34.3,
-              "volume":106.33,
-              "thermal_capacitance_per_floor_area":165000,
-              "ach_vent":1.5,
-              "ach_infl":0.5,
-              "ventilation_efficiency":1,
-              "t_set_heating":20,
-              "t_set_cooling":26,
-              "max_heating_energy_per_floor_area":12,
-              "max_cooling_energy_per_floor_area":-12,
-              "heating_supply_system":sc.sticky["DirectHeater"],
-              "cooling_supply_system":sc.sticky["DirectCooler"],
-              "heating_emission_system":sc.sticky["AirConditioning"],
-              "cooling_emission_system":sc.sticky["AirConditioning"]
-              }
-lighting_attributes = {'lighting_load':11.7,
-                       'lighting_control':300.0,
-                       'lighting_utilisation_factor':0.45,
-                       'lighting_maintenance_factor':0.9}
-
-def validate_element(element):
-    # Check if the element object has the mian three parameters
-    if [x in dir(element) for x in ['name','area','u_value']]:
-        return True
-    else:
-        return False
-
-# keep valid element objects and combine them into a single list.
-e = [x for x in elements if validate_element(x)]
-
-if len(e) != len(elements):
-    warning = "Invalid element detected"
-    w = gh.GH_RuntimeMessageLevel.Warning
-    ghenv.Component.AddRuntimeMessage(w, warning)
-
-if len(elements) == 0:
-    elements = None
-
-
-# keep valid thermal bridge objects
-t = [x for x in thermal_bridges if x is sc.sticky['ThermalBridge']]
-if len(t) != len(thermal_bridges):
-    warning = "Invalid thermal bridge detected"
-    w = gh.GH_RuntimeMessageLevel.Warning
-    ghenv.Component.AddRuntimeMessage(w, warning)
-if len(t) == 0:
-    thermal_bridges = None
-
-# Replace default values with whatever is inputted to the component
-unique_inputs = {}
-for t in thermal_attributes.keys():
-    if locals()[t] is not None:
-        thermal_attributes[t] = locals()[t]
-        # Add item to unique_inputs
-        if 'supply' not in t and 'emission' not in t:
-            value = t+':'+str(locals()[t])
-        elif 'supply' in t:
-            value = t+': supply_system.'+str(locals()[t])[22:-2]
-        elif 'emission' in t:
-            value = t+': emission_system.'+str(locals()[t])[22:-2]
-        unique_inputs[t] = value
-
-# Add lighting attributes
-for l in lighting_attributes.keys():
-    if locals()[l] is not None:
-        lighting_attributes[l] = locals()[l]
-        value = l+':'+str(locals()[l])
-        unique_inputs[l] = value
-
-
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
-
-
 def main(elements,thermal_bridges,thermal_attributes,lighting_attributes):
     if not sc.sticky.has_key('ThermalZone'): return "Add the modular RC component to the canvas!"
     
@@ -184,5 +104,66 @@ def main(elements,thermal_bridges,thermal_attributes,lighting_attributes):
     
     return Zone
 
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-Zone = main(elements,thermal_bridges,thermal_attributes,lighting_attributes)
+#  Initialize default values which will be used if no input is detected
+thermal_attributes = {"elements":None,
+              "thermal_bridges":None,
+              "floor_area":34.3,
+              "volume":106.33,
+              "thermal_capacitance_per_floor_area":165000,
+              "ach_vent":1.5,
+              "ach_infl":0.5,
+              "ventilation_efficiency":1,
+              "t_set_heating":20,
+              "t_set_cooling":26,
+              "max_heating_energy_per_floor_area":12,
+              "max_cooling_energy_per_floor_area":-12,
+              "heating_supply_system":sc.sticky["DirectHeater"],
+              "cooling_supply_system":sc.sticky["DirectCooler"],
+              "heating_emission_system":sc.sticky["AirConditioning"],
+              "cooling_emission_system":sc.sticky["AirConditioning"]
+              }
+lighting_attributes = {'lighting_load':11.7,
+                       'lighting_control':300.0,
+                       'lighting_utilisation_factor':0.45,
+                       'lighting_maintenance_factor':0.9}
+
+
+# Replace default values with whatever is inputted to the component
+unique_inputs = {}
+for t in thermal_attributes.keys():
+    if locals()[t] is not None:
+        thermal_attributes[t] = locals()[t]
+        # Add item to unique_inputs
+        if 'supply' not in t and 'emission' not in t:
+            value = t+':'+str(locals()[t])
+        elif 'supply' in t:
+            value = t+': supply_system.'+str(locals()[t])[22:-2]
+        elif 'emission' in t:
+            value = t+': emission_system.'+str(locals()[t])[22:-2]
+        unique_inputs[t] = value
+
+# Add lighting attributes
+for l in lighting_attributes.keys():
+    if locals()[l] is not None:
+        lighting_attributes[l] = locals()[l]
+        value = l+':'+str(locals()[l])
+        unique_inputs[l] = value
+
+# Initialise thermal bridge objects
+t = [x for x in thermal_bridges if x is sc.sticky['ThermalBridge']]
+if len(t) != len(thermal_bridges):
+    HivePreparation.raise_warning("Invalid thermal bridge detected")
+if len(t) == 0:
+    thermal_bridges = None
+
+if any([e==None for e in elements]):
+    print elements
+    HivePreparation.raise_warning('Invalid Element input')
+
+elif len(elements) == 0:
+    Zone = main(None,thermal_bridges,thermal_attributes,lighting_attributes)
+
+else:
+    Zone = main(elements,thermal_bridges,thermal_attributes,lighting_attributes)

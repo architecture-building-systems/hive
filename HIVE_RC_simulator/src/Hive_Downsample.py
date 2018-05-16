@@ -23,23 +23,26 @@ Provided by HIVE 0.0.1
         _start_hoy: the hour of the year corresponding to the first value.
         resample_type: 0:sum (default) or 1:mean
     Returns:
+        readMe!:...
         daily_values:
         monthly_values:
         annual_value:
 """
 
 ghenv.Component.Name = "Hive_Downsample"
-ghenv.Component.NickName = 'GlazedElement'
-ghenv.Component.Message = 'VER 0.0.1\nMAY_15_2018'
+ghenv.Component.NickName = 'Downsample'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_16_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "3 | Results"
-# ComponentExposure=5
+# ComponentExposure=1
 
 import scriptcontext as sc
-import Grasshopper.Kernel as ghKernel
 
-def main(_start_hoy, _hourly_data, resample_type):
+def main(_start_hoy, hourly_data, resample_type):
+    if not sc.sticky.has_key('HivePreparation'): 
+        return "Add the modular RC component to the canvas!"
+    hive_preparation = sc.sticky['HivePreparation']()
     
     def resample(dict,resample_type):
         if resample_type == 0:
@@ -48,39 +51,75 @@ def main(_start_hoy, _hourly_data, resample_type):
         if resample_type == 1:
             for key in dict:
                 dict[key] = sum(dict[key])/len(dict[key])
-        return dict
+        return dict.values()
     
-    if not sc.sticky.has_key('HivePreparation'): 
-        return "Add the modular RC component to the canvas!"
-    hive_preparation = sc.sticky['HivePreparation']()
-    data_dict = dict(zip(range(int(_start_hoy),int(_start_hoy+len(_hourly_data))),_hourly_data))
-    dates = [hive_preparation.hour2Date(hoy,True) for hoy in data_dict.keys()]
+    hoys = range(int(_start_hoy),int(_start_hoy+len(hourly_data[0])))
+    doys = [(h-1)//24 for h in hoys]
+    moys = [hive_preparation.hour2Date(hoy,True)[1] for hoy in hoys]
     
-    days = max(data_dict.keys())//24+1
-    daily = dict(zip(range(0,days), [list()]*days))
-    monthly = dict(zip(range(0,12),[list()]*12))
-    annual = sum(_hourly_data)
+    daily_streams = []
+    monthly_streams = []
+    annual = []
     
-    for hoy,data in data_dict.iteritems():
-        date = hive_preparation.hour2Date(hoy,True)
-        monthly[date[1]].append(data)
-        doy = (hoy-1)//24
-        daily[doy].append(data)
-    
-    monthly = resample(monthly,resample_type)
-    daily = resample(daily,resample_type)
-    
-    dailyTree = hive_preparation.dict_to_tree(daily)
-    monthlyTree = hive_preparation.dict_to_tree(monthly)
-    
-    return dailyTree, monthlyTree, annual
+    for stream in hourly_data:
+        daily = dict(zip(range(0,365),[list()]*365))
+        monthly = dict(zip(range(0,11),[list()]*11))
+        day_last_hour = 0
+        values_this_day = []
+        month_last_hour = 0
+        values_this_month = []
+        
+        for value,doy,moy in zip(hourly_data[stream],doys,moys):
+            # Split values into days
+            if doy == day_last_hour:
+                values_this_day.append(value)
+            else:
+                daily[day_last_hour] = values_this_day
+                values_this_day = []
+                day_last_hour = doy
+            daily[day_last_hour] = values_this_day
+            
+            # Split values into months
+            if moy == month_last_hour:
+                values_this_month.append(value)
+            else:
+                monthly[month_last_hour] = values_this_month
+                values_this_month = []
+                month_last_hour = moy
+            monthly[month_last_hour] = values_this_month
+        
+        daily_streams.append(resample(daily,resample_type))
+        monthly_streams.append(resample(monthly,resample_type))
+        
+        if resample_type == 0:
+            annual.append([sum(hourly_data[stream])])
+        if resample_type == 1:
+            annual.append([sum(hourly_data[stream])/len(hourly_data[stream])])
+        
+    dailyTree = hive_preparation.list_to_tree(daily_streams)
+    monthlyTree = hive_preparation.list_to_tree(monthly_streams)
+    annualTree = hive_preparation.list_to_tree(annual)
+    return dailyTree, monthlyTree, annualTree
 
-resample = 0 if resample_type is None else resample_type
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
-if _start_hoy and _hourly_data:
-    daily_values, monthly_values, annual_value = main(_start_hoy,_hourly_data,resample)
+resample_type_ = 0 if resample_type_ is None else resample_type_
 
-elif _hourly_data and _start_hoy is None:
-    warning = """Warning: Add a value to _start_hoy!"""
-    w = ghKernel.GH_RuntimeMessageLevel.Warning
-    ghenv.Component.AddRuntimeMessage(w, warning)
+#convert _hourly_data into a dictionary.
+if _hourly_data.BranchCount > 0 :
+    hourly_data = {}
+    for stream in range(0,len(_hourly_data.Branch(0))):
+        hourly_data[stream] = []
+        for b in range(0,_hourly_data.BranchCount):
+            hourly_data[stream].append(_hourly_data.Branch(b)[stream])
+    if _start_HOY:
+        daily_values, monthly_values, annual_value = main(_start_HOY,hourly_data,resample_type_)
+        print '%i data streams resampled'%len(_hourly_data.Branch(0))
+    else:
+        warning = """Warning: Add a value to _start_HOY!"""
+        w = ghKernel.GH_RuntimeMessageLevel.Warning
+        ghenv.Component.AddRuntimeMessage(w, warning)
+else:
+    print 'Connect a data stream to _hourly_data'
+
+
