@@ -52,15 +52,14 @@ Provided by Hive 0.0.1
     Returns:
         readMe!: ...
         Zone: ModularRCZone object
-        local_and_global_variables: a list of tuples seperated by a colon which 
-            can be used to export and quickly reproduce the zone properties in 
-            a Python-based testing environment.
+        Zone1_string_: a string which can be pasted into a Python script to test the Building object
+        Zone2_string_: a string which can be pasted into a Python script to test the ElementBuilding object
         
 """
 
 ghenv.Component.Name = "Hive_Zone2"
 ghenv.Component.NickName = 'Zone2'
-ghenv.Component.Message = 'VER 0.0.1\nAPR_24_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_17_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "1 | Zone"
@@ -68,7 +67,9 @@ ghenv.Component.SubCategory = "1 | Zone"
 
 import scriptcontext as sc
 import Grasshopper.Kernel as gh
+import Grasshopper.Kernel as ghKernel
 HivePreparation = sc.sticky['HivePreparation']()
+import math
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 def main(elements,thermal_bridges,thermal_attributes,lighting_attributes):
@@ -92,7 +93,6 @@ def main(elements,thermal_bridges,thermal_attributes,lighting_attributes):
                              heating_emission_system=thermal_attributes['heating_emission_system'],
                              cooling_emission_system=thermal_attributes['cooling_emission_system'],
                              )
-    
     ThermalZone.summary()
     
     # Zone with thermal and lighting attributes
@@ -104,6 +104,54 @@ def main(elements,thermal_bridges,thermal_attributes,lighting_attributes):
     
     return Zone
 
+def raise_error(error_str):
+    error = error_str
+    e = ghKernel.GH_RuntimeMessageLevel.Error
+    ghenv.Component.AddRuntimeMessage(e, error)
+        
+def raise_warning(warning_str):
+    warning = warning_str
+    w = ghKernel.GH_RuntimeMessageLevel.Warning
+    ghenv.Component.AddRuntimeMessage(w, warning)
+
+def zone_object_string(Zone,unique_inputs):
+    
+    room_depth = math.sqrt(Zone.floor_area)
+    room_width = room_depth
+    room_height = volume/Zone.floor_area
+    if 'elements' in unique_inputs.keys():
+        window_area =  sum([e.area for e in unique_inputs['elements'] if not e.opaque])
+        external_envelope_area =  sum([e.area for e in unique_inputs['elements']])
+        wall_area = sum([e.area for e in unique_inputs['elements'] if e.opaque])
+        u_windows = sum([e.area * e.u_value for e in unique_inputs['elements'] if not e.opaque])/window_area
+        u_walls = sum([e.area * e.u_value for e in unique_inputs['elements'] if e.opaque])/wall_area
+    
+    classic_zone_inputs = {'window_area':window_area,
+                           'external_envelope_area':external_envelope_area,
+                           'u_windows':u_windows,
+                           'u_walls':u_walls}
+    for k in unique_inputs:
+        if k not in ['floor_area','thermal_bridges','elements','volume']:
+            classic_zone_inputs[k] = unique_inputs[k]
+
+    zone1 = 'Building('
+    for k,v in classic_zone_inputs.iteritems():
+        zone1 += k
+        zone1 += '='
+        zone1 += str(v)
+        zone1 += ', '
+    zone1 += ')'
+    
+    zone2 = 'ElementBuilding('
+    for k,v in unique_inputs.iteritems():
+        zone2 += k
+        zone2 += '='
+        zone2 += str(v)
+        zone2 += ', '
+    zone2 += ')'
+
+    return zone1, zone2
+    
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
 #  Initialize default values which will be used if no input is detected
@@ -137,7 +185,7 @@ for t in thermal_attributes.keys():
         thermal_attributes[t] = locals()[t]
         # Add item to unique_inputs
         if 'supply' not in t and 'emission' not in t:
-            value = t+':'+str(locals()[t])
+            value = locals()[t]
         elif 'supply' in t:
             value = t+': supply_system.'+str(locals()[t])[22:-2]
         elif 'emission' in t:
@@ -151,19 +199,19 @@ for l in lighting_attributes.keys():
         value = l+':'+str(locals()[l])
         unique_inputs[l] = value
 
-# Initialise thermal bridge objects
+# Initialise thermal bridges
 t = [x for x in thermal_bridges if x is sc.sticky['ThermalBridge']]
 if len(t) != len(thermal_bridges):
-    HivePreparation.raise_warning("Invalid thermal bridge detected")
+    raise_error("Invalid thermal bridge detected")
 if len(t) == 0:
     thermal_bridges = None
 
-if any([e==None for e in elements]):
-    print elements
-    HivePreparation.raise_warning('Invalid Element input')
-
+# Initialise elements
+if any([type(e).__name__!='Element' for e in elements]):
+    raise_error('Invalid Element input')
 elif len(elements) == 0:
     Zone = main(None,thermal_bridges,thermal_attributes,lighting_attributes)
-
+    Zone1_string_, Zone2_string_ = zone_object_string(Zone,unique_inputs)
 else:
     Zone = main(elements,thermal_bridges,thermal_attributes,lighting_attributes)
+    Zone1_string_, Zone2_string_ = zone_object_string(Zone,unique_inputs)

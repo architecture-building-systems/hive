@@ -45,6 +45,8 @@ ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "2 | Simulation"
 # ComponentExposure=2
 
+
+import Grasshopper.Kernel as ghKernel
 import Grasshopper.Kernel as gh
 import scriptcontext as sc
 
@@ -106,10 +108,18 @@ def main(Zone, outdoor_air_temperature, previous_mass_temperature, internal_gain
         operative_temperature.append([Zone.t_operative])
         mass_temperature.append([Zone.t_m])  # Printing Room Temperature of the medium
         lighting_demand.append([Zone.lighting_demand])  # Print Lighting Demand
-        energy_demand.append([Zone.energy_demand])  # Print heating/cooling loads
+        energy_demand.append([abs(Zone.energy_demand)])  # Print heating/cooling loads
         heating_demand.append([Zone.heating_demand])
         cooling_demand.append([Zone.cooling_demand])
-        
+    
+    print 'Solar gains: %f kWh/m2'%(sum(solar_gains)/(1000*Zone.floor_area))
+    print 'Internal gains: %f kWh/m2'%(sum(internal_gains)/(1000*Zone.floor_area))
+    print 'Lighting demand: %f kWh/m2'%(sum([l[0] for l in lighting_demand])/(1000*Zone.floor_area))
+    print 'Heating demand: %f kWh/m2'%(sum([l[0] for l in heating_demand])/(1000*Zone.floor_area))
+    print 'Cooling demand: %f kWh/m2'%(sum([l[0] for l in cooling_demand])/(1000*Zone.floor_area))
+    print 'Total energy demand: %f kWh/m2'%(sum([l[0] for l in energy_demand])/(1000*Zone.floor_area))
+    
+    
     return HivePreparation.list_to_tree(indoor_air_temperature), \
     HivePreparation.list_to_tree(operative_temperature), \
     HivePreparation.list_to_tree(mass_temperature), \
@@ -118,6 +128,16 @@ def main(Zone, outdoor_air_temperature, previous_mass_temperature, internal_gain
     HivePreparation.list_to_tree(heating_demand), \
     HivePreparation.list_to_tree(cooling_demand)
 
+def raise_error(error_str):
+    error = error_str
+    e = ghKernel.GH_RuntimeMessageLevel.Error
+    ghenv.Component.AddRuntimeMessage(e, error)
+        
+def raise_warning(warning_str):
+    warning = warning_str
+    w = ghKernel.GH_RuntimeMessageLevel.Warning
+    ghenv.Component.AddRuntimeMessage(w, warning)
+    
 def check_input_tree(input_tree,input_tree_name):
     if input_tree.BranchCount>0:
         total_per_hour = []
@@ -125,7 +145,7 @@ def check_input_tree(input_tree,input_tree_name):
             total_per_hour.append(sum(input_tree.Branch(b)))
         return total_per_hour
     else:
-        HivePreparation.raise_warning('No data for %s'%input_tree_name)
+        raise_warning('No data for %s'%input_tree_name)
         return False
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
@@ -136,7 +156,7 @@ previous_mass_temperature = initial_mass_temperature if initial_mass_temperature
 
 # Check input for outdoor air temperature
 if outdoor_air_temperature.BranchCount==0:
-    HivePreparation.raise_warning('No data for outdoor_air_temperature')
+    raise_warning('No data for outdoor_air_temperature')
 
 # Check input and add all data streams
 sg_list = check_input_tree(solar_gains,'solar_gains')
@@ -144,5 +164,6 @@ ill_list = check_input_tree(illuminance,'illuminance')
 ig_list = check_input_tree(internal_gains,'internal_gains')
 occ_list = check_input_tree(occupancy,'occupancy')
 
-#if sg_list and ill_list and ig_list and occ_list:
-indoor_air_temperature, operative_temperature, mass_temperature, lighting_demand, energy_demand, heating_demand, cooling_demand = main(Zone, outdoor_air_temperature, previous_mass_temperature, ig_list, sg_list, occ_list, ill_list)
+if sg_list and ill_list and ig_list and occ_list:
+    indoor_air_temperature, operative_temperature, mass_temperature, lighting_demand, energy_demand, heating_demand, cooling_demand = main(Zone, outdoor_air_temperature, previous_mass_temperature, ig_list, sg_list, occ_list, ill_list)
+

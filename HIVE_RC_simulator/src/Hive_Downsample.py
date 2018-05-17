@@ -21,7 +21,7 @@ Provided by HIVE 0.0.1
     Args:
         _hourly_data: a list of hourly values
         _start_hoy: the hour of the year corresponding to the first value.
-        resample_type: 0:sum (default) or 1:mean
+        resample_type: [0:sum, 1:mean] (default=0)
     Returns:
         readMe!:...
         daily_values:
@@ -95,10 +95,11 @@ def main(_start_hoy, hourly_data, resample_type):
             annual.append([sum(hourly_data[stream])])
         if resample_type == 1:
             annual.append([sum(hourly_data[stream])/len(hourly_data[stream])])
-        
+    
     dailyTree = hive_preparation.list_to_tree(daily_streams)
     monthlyTree = hive_preparation.list_to_tree(monthly_streams)
     annualTree = hive_preparation.list_to_tree(annual)
+    
     return dailyTree, monthlyTree, annualTree
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""

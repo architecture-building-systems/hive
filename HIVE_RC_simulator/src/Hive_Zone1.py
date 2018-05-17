@@ -108,8 +108,10 @@ if parameter_dictionary is not []:
         else:
             fullstop = value.find('.')
             comma = value.find(',')
-            value = sc.sticky[value[fullstop+1:comma]]
-        
+            if comma>0:
+                value = sc.sticky[value[fullstop+1:comma]]
+            elif comma<0:
+                value = sc.sticky[value[fullstop+1:]]
         if key in attribute_names:
             zone_attributes[key] = value
 
@@ -169,4 +171,3 @@ for k,v in locally_defined_values.iteritems():
     input_string += str(v)
     input_string += ', '
 input_string += ')'
-

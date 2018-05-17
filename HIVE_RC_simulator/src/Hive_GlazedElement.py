@@ -23,8 +23,8 @@ Provided by HIVE 0.0.1
              of the element
         window_name: optional element name
         _u_value: element u-value [W/(m^2.K)]. Typical values for a single glazed window 4.8, good double-glazed window:1-1.2, triple-glazed window: 0.15.
-        solar_transmittance: (aka. g-factor) the percentage of radiation that can pass through glazing
-        light_transmittance: the percentage of light that passes through glazing
+        solar_transmittance: [default:0.7] (aka. g-factor) % radiation that can pass through glazing
+        light_transmittance: [default:0.8] % light that passes through glazing
     Returns:
         centers: list of center points to check input
         normals: list of normals to check input
@@ -36,7 +36,7 @@ Provided by HIVE 0.0.1
 
 ghenv.Component.Name = "Hive_GlazedElement"
 ghenv.Component.NickName = 'GlazedElement'
-ghenv.Component.Message = 'VER 0.0.1\nMAY_15_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_17_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "1 | Zone"
@@ -73,12 +73,15 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
     if not sc.sticky.has_key('WindowRadiation'): return "Add the modular building physics component to the canvas!"
     hive_preparation = sc.sticky["HivePreparation"]()
     
-    solar_transmittance = solar_transmittance if solar_transmittance is not None else 0.7
-    light_transmittance = light_transmittance if light_transmittance is not None else 0.8
+    glass_solar_transmittance = 0.7 if solar_transmittance is None else solar_transmittance
+    glass_light_transmittance = 0.8 if light_transmittance is None else light_transmittance
     
     Window = sc.sticky["WindowRadiation"](window_geometry=_window_geometry,
                                           point_in_zone=_point_in_zone,
-                                          context_geometry=context_geometry)
+                                          context_geometry=context_geometry,
+                                          glass_solar_transmittance=glass_solar_transmittance,
+                                          glass_light_transmittance=glass_light_transmittance
+                                          )
     try:
         Sun = sc.sticky["RelativeSun"](location=location,
                           window_azimuth_rad=Window.window_azimuth_rad,
@@ -137,7 +140,10 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
                 unshaded_area = Window.window_area
         
         dnirr, dhirr, dhirr_simple, grirr, lighting = Window.radiation(sun_alt, incidence, normal_irradiation, horizontal_irradiation, normal_illuminance, horizontal_illuminance, unshaded_area)
-        solar_gains_this_hour = solar_transmittance * (dnirr + dhirr + grirr)
+        
+        solar_gains_this_hour = Window.glass_solar_transmittance * (dnirr + dhirr + grirr)
+        lighting *= Window.glass_light_transmittance
+        
         shading_factor.append(unshaded_area/Window.window_area)
         
         if sun_alt > 0 and abs(relative_sun_az) < 90:

@@ -56,47 +56,45 @@ def read_csv(path,col,start,end):
     f.close()
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-try: 
-    HivePreparation = sc.sticky['HivePreparation']()
-except: 
-    pass
-
-gains_per_person = 100 #W
-appliance_gains = 14  # W per sqm
-
-profile_type = None
-occupancy_profile = None
-
-if len(custom_pattern) > 0:
-    if any([x<0 or x>1 for x in custom_pattern]):
-        HiveOreparation.raise_warning('values in custom pattern must be between 0 and 1')
-    occupancy_profile = custom_pattern
-    profile_type = 'user defined pattern'
-
-elif _file_path:
-    HivePreparation = sc.sticky['HivePreparation']()
-    start,end = HivePreparation.set_simulation_period(start_HOY,end_HOY)
-    path = r'%s'%_file_path
-    building_type = 3 if _building_type is None else int(_building_type)
-    profile_type, occupancy_profile = read_csv(path,_building_type,start,end)
-
-if occupancy_profile is not None:
-    max_occupancy = 1 if _max_occupancy is None else _max_occupancy
-    occupancy = [float(p)*max_occupancy for p in occupancy_profile]
-    
-    if type(_floor_area) is float:
-        internal_gains = [x*gains_per_person + _floor_area * appliance_gains for x in occupancy]
-    
-    print 'profile with %i values'%len(occupancy)
-    print
-    print 'Pattern type: ',profile_type
-    print 'occupancy = occupancy_pattern * %i people'%max_occupancy
-    print 'internal gains = occupant gains + appliance gains'
-    print 'occupant gains = 100W * occupancy_pattern'
-    print 'appliance gains = 14W * area'
-
+if not sc.sticky.has_key('HivePreparation'): 
+    print "Add the modular RC component to the canvas!"
 else:
-    print 'Specify an occupancy profile to generate occupancy and internal gains'
-
-occupancy = HivePreparation.list_to_tree([[o] for o in occupancy])
-internal_gains = HivePreparation.list_to_tree([[ig] for ig in internal_gains])
+    gains_per_person = 100 #W
+    appliance_gains = 14  # W per sqm
+    
+    profile_type = None
+    occupancy_profile = None
+    
+    if len(custom_pattern) > 0:
+        if any([x<0 or x>1 for x in custom_pattern]):
+            HiveOreparation.raise_warning('values in custom pattern must be between 0 and 1')
+        occupancy_profile = custom_pattern
+        profile_type = 'user defined pattern'
+    
+    elif _file_path:
+        HivePreparation = sc.sticky['HivePreparation']()
+        start,end = HivePreparation.set_simulation_period(start_HOY,end_HOY)
+        path = r'%s'%_file_path
+        building_type = 3 if _building_type is None else int(_building_type)
+        profile_type, occupancy_profile = read_csv(path,_building_type,start,end)
+    
+    if occupancy_profile is not None:
+        max_occupancy = 1 if _max_occupancy is None else _max_occupancy
+        occupancy = [float(p)*max_occupancy for p in occupancy_profile]
+        
+        if type(_floor_area) is float:
+            internal_gains = [x*gains_per_person + _floor_area * appliance_gains for x in occupancy]
+        
+        print 'profile with %i values'%len(occupancy)
+        print
+        print 'Pattern type: ',profile_type
+        print 'occupancy = occupancy_pattern * %i people'%max_occupancy
+        print 'internal gains = occupant gains + appliance gains'
+        print 'occupant gains = 100W * occupancy_pattern'
+        print 'appliance gains = 14W * area'
+    
+    else:
+        print 'Specify an occupancy profile to generate occupancy and internal gains'
+    
+    occupancy = HivePreparation.list_to_tree([[o] for o in occupancy])
+    internal_gains = HivePreparation.list_to_tree([[ig] for ig in internal_gains])

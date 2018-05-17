@@ -259,6 +259,7 @@ class HivePreparation(object):
         e = ghKernel.GH_RuntimeMessageLevel.Error
         ghenv.Component.AddRuntimeMessage(e, error)
 
+
 class RelativeSun(object):
     def __init__(self,location,window_azimuth_rad, window_altitude_rad, normal):
         # Extract location data
@@ -443,6 +444,7 @@ class WindowRadiation(object):
         self.albedo = albedo
         self.glass_solar_transmittance = glass_solar_transmittance
         self.glass_light_transmittance = glass_light_transmittance
+        print self.glass_light_transmittance
         
         self.perez_coef = {'f_11': [-0.0083117, 0.1299457, 0.3296958, 0.5682053, 0.873028, 1.1326077, 1.0601591, 0.677747],
               'f_12': [0.5877285, 0.6825954, 0.4868735, 0.1874525, -0.3920403, -1.2367284, -1.5999137, -0.3272588],
