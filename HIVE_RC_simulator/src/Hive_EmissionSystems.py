@@ -22,13 +22,15 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_EmissionSystems"
 ghenv.Component.NickName = 'EmissionSystems'
-ghenv.Component.Message = 'VER 0.0.1\nFEB_23_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_25_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "0 | Core"
 # ComponentExposure=2
 
 import scriptcontext as sc
+
+
 class EmissionDirector:
 
     """
@@ -70,7 +72,6 @@ class EmissionSystemBase:
     Also determines the return and supply temperatures for the heating/cooling system
     """
 
-
 class OldRadiators(EmissionSystemBase):
     """
     Old building with radiators and high supply temperature
@@ -89,7 +90,6 @@ class OldRadiators(EmissionSystemBase):
         flows.cooling_return_temperature = 21
 
         return flows
-
 
 class NewRadiators(EmissionSystemBase):
     """    
@@ -128,7 +128,6 @@ class ChilledBeams(EmissionSystemBase):
         flows.cooling_return_temperature = 21
 
         return flows
-
 
 class AirConditioning(EmissionSystemBase):
     """
@@ -188,7 +187,6 @@ class TABS(EmissionSystemBase):
 
         return flows
 
-
 class Flows:
     """
     A base object to store output variables
@@ -202,6 +200,8 @@ class Flows:
     cooling_supply_temperature = float("nan")
     # return temperatures
 
+
+""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 connected = False
 
 while not connected:

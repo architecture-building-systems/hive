@@ -58,7 +58,7 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_Zone1"
 ghenv.Component.NickName = 'Zone1'
-ghenv.Component.Message = 'VER 0.0.1\nMAY_09_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_25_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "1 | Zone"
@@ -88,30 +88,40 @@ zone_attributes = dict(zip(attribute_names,default_values))
 
 # override defaults with values detected from parameter_dictionary 
 if parameter_dictionary is not []:
+    #Clean dirty string
+    parameter_dictionary = ' '.join(parameter_dictionary.split())
+    if parameter_dictionary[-1] == ',':
+        parameter_dictionary = parameter_dictionary[:-1]
+    parameter_dictionary = parameter_dictionary.split(',')
+
     print 'parameter dictionary detected'
     for line in parameter_dictionary:
         equal = line.find('=')
         key = line[:equal]
-        value = line[equal+1:]
-        if re.findall(r'\d+',value) != []:
-            comma = value.find(',')
-            semicolon = value.find(';')
-            if comma:
-                    value = value[:comma]
-            if semicolon:
-                value = value[:semicolon]
+        if re.findall(r'\d+',line) != []:
+            # value contains digits
+            comma = line.find(',')
+            semicolon = line.find(';')
+            if comma != -1:
+                value = line[equal+1:comma]
+            if semicolon!= -1:
+                value = line[equal+1:semicolon]
+            else:
+                value = line[equal+1:]
             value = float(value)
-        elif '-np.inf' in value:
+            
+        elif '-np.inf' in line:
             value = -100000.0
-        elif 'np.inf' in value:
+        elif 'np.inf' in line:
             value = 100000.0
         else:
-            fullstop = value.find('.')
-            comma = value.find(',')
-            if comma>0:
-                value = sc.sticky[value[fullstop+1:comma]]
-            elif comma<0:
-                value = sc.sticky[value[fullstop+1:]]
+            # Supply and emission systems
+            fullstop = line.find('.')
+            comma = line.find(',')
+            if comma!=-1:
+                value = sc.sticky[line[fullstop+1:comma]]
+            else:
+                value = sc.sticky[line[fullstop+1:]]
         if key in attribute_names:
             zone_attributes[key] = value
 
@@ -141,7 +151,7 @@ Zone = sc.sticky["RCModelClassic"](
      external_envelope_area=zone_attributes['external_envelope_area'],
      room_depth=zone_attributes['room_depth'],
      room_width=zone_attributes['room_width'],
-     room_height=zone_attributes['room_width'],
+     room_height=zone_attributes['room_height'],
      lighting_load=zone_attributes['lighting_load'],
      lighting_control=zone_attributes['lighting_control'],
      lighting_utilisation_factor=zone_attributes['lighting_utilisation_factor'],
@@ -162,12 +172,13 @@ Zone = sc.sticky["RCModelClassic"](
      heating_emission_system=zone_attributes['heating_emission_system'],
      cooling_emission_system=zone_attributes['cooling_emission_system'])
 
-zone_variables = vars(Zone)
+
+#print Zone.external_envelope_area
 
 input_string = 'Building('
 for k,v in locally_defined_values.iteritems():
     input_string += k
     input_string += '='
     input_string += str(v)
-    input_string += ', '
+    input_string += ', \n'
 input_string += ')'

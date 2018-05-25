@@ -20,7 +20,7 @@ Provided by Hive 0.0.1
     
     Args:
         Zone: Input a customized Zone from the Zone component.
-        outdoor_air_temperature: List of hourly outdoor air temperatures
+        outdoor_air_temperature: Tree where each branch contains a HOY and the corresponding outdoor air temperatures
         previous_mass_temperature: The temperature of the mass node during the hour prior to the first time step. This temperature represents the average temperature of the building envelope itself.
         internal_gains: List of hourly internal heat gains [Watts].
         solar_irradiation: List of solar irradiation gains [Watts].
@@ -39,7 +39,7 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_simulateMultipleTimeSteps"
 ghenv.Component.NickName = 'simulateMultipleTimeSteps'
-ghenv.Component.Message = 'VER 0.0.1\nAPR_24_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_25_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "2 | Simulation"
@@ -53,15 +53,9 @@ import scriptcontext as sc
 def main(Zone, outdoor_air_temperature, previous_mass_temperature, internal_gains, solar_gains, occupancy, illuminance):
     if not sc.sticky.has_key('RCModel'): return "Add the modular RC component to the canvas!"
     HivePreparateion = sc.sticky['HivePreparation']()
-    #Initialise zone object
-    if Zone is None:
-        Zone = sc.sticky["RCModel"]()
-        warning = """No zone definition has been detected. The default zone will be
-        applied."""
-        w = gh.GH_RuntimeMessageLevel.Warning
-        ghenv.Component.AddRuntimeMessage(w, warning)
-    else:
-        Zone = Zone
+    
+    # Initialise previous mass temperature if it hasn't been specified
+    t_m_prev = initial_mass_temperature if initial_mass_temperature is not None else 20.0
     
     """
     Spectral luminous efficacy (108)- can be calculated from the weather file 
@@ -87,7 +81,7 @@ def main(Zone, outdoor_air_temperature, previous_mass_temperature, internal_gain
         il = 0 if illuminance is False else illuminance[b]
         
         try:
-            Zone.solve_building_energy(ig, sg, ta, previous_mass_temperature)    
+            Zone.solve_building_energy(ig, sg, ta, t_m_prev)
             Zone.solve_building_lighting(il, oc)
         except:
             print 'building energy could not be solved for the following inputs'
@@ -106,19 +100,18 @@ def main(Zone, outdoor_air_temperature, previous_mass_temperature, internal_gain
         #Record Results
         indoor_air_temperature.append([Zone.t_air])
         operative_temperature.append([Zone.t_operative])
-        mass_temperature.append([Zone.t_m])  # Printing Room Temperature of the medium
-        lighting_demand.append([Zone.lighting_demand])  # Print Lighting Demand
-        energy_demand.append([abs(Zone.energy_demand)])  # Print heating/cooling loads
+        mass_temperature.append([Zone.t_m]) 
+        lighting_demand.append([Zone.lighting_demand])  
+        energy_demand.append([abs(Zone.energy_demand)]) 
         heating_demand.append([Zone.heating_demand])
         cooling_demand.append([Zone.cooling_demand])
     
-    print 'Solar gains: %f kWh/m2'%(sum(solar_gains)/(1000*Zone.floor_area))
-    print 'Internal gains: %f kWh/m2'%(sum(internal_gains)/(1000*Zone.floor_area))
-    print 'Lighting demand: %f kWh/m2'%(sum([l[0] for l in lighting_demand])/(1000*Zone.floor_area))
     print 'Heating demand: %f kWh/m2'%(sum([l[0] for l in heating_demand])/(1000*Zone.floor_area))
     print 'Cooling demand: %f kWh/m2'%(sum([l[0] for l in cooling_demand])/(1000*Zone.floor_area))
+    print 'Lighting demand: %f kWh/m2'%(sum([l[0] for l in lighting_demand])/(1000*Zone.floor_area))
     print 'Total energy demand: %f kWh/m2'%(sum([l[0] for l in energy_demand])/(1000*Zone.floor_area))
-    
+    print 'Solar gains: %f kWh/m2'%(sum(solar_gains)/(1000*Zone.floor_area))
+    print 'Internal gains: %f kWh/m2'%(sum(internal_gains)/(1000*Zone.floor_area))
     
     return HivePreparation.list_to_tree(indoor_air_temperature), \
     HivePreparation.list_to_tree(operative_temperature), \
@@ -139,7 +132,7 @@ def raise_warning(warning_str):
     ghenv.Component.AddRuntimeMessage(w, warning)
     
 def check_input_tree(input_tree,input_tree_name):
-    if input_tree.BranchCount>0:
+    if input_tree.BranchCount>1 or input_tree.Branch(0)!=None:
         total_per_hour = []
         for b in range(0,input_tree.BranchCount):
             total_per_hour.append(sum(input_tree.Branch(b)))
@@ -151,8 +144,12 @@ def check_input_tree(input_tree,input_tree_name):
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 HivePreparation = sc.sticky['HivePreparation']()
 
-# Initialise previous mass temperature if it hasn't been specified
-previous_mass_temperature = initial_mass_temperature if initial_mass_temperature is not None else 20.0
+#Initialise zone object
+if Zone is None:
+    Zone = sc.sticky["RCModel"]()
+    warning = 'No zone definition has been detected. The default zone will be applied.'
+    w = gh.GH_RuntimeMessageLevel.Warning
+    ghenv.Component.AddRuntimeMessage(w, warning)
 
 # Check input for outdoor air temperature
 if outdoor_air_temperature.BranchCount==0:
@@ -165,5 +162,8 @@ ig_list = check_input_tree(internal_gains,'internal_gains')
 occ_list = check_input_tree(occupancy,'occupancy')
 
 if sg_list and ill_list and ig_list and occ_list:
-    indoor_air_temperature, operative_temperature, mass_temperature, lighting_demand, energy_demand, heating_demand, cooling_demand = main(Zone, outdoor_air_temperature, previous_mass_temperature, ig_list, sg_list, occ_list, ill_list)
+    indoor_air_temperature, operative_temperature, mass_temperature, lighting_demand, energy_demand, heating_demand, cooling_demand = main(Zone, outdoor_air_temperature, initial_mass_temperature, ig_list, sg_list, occ_list, ill_list)
 
+attrs = vars(Zone)
+zone_variables = ["%s: %s" % item for item in attrs.items()]
+#zone_variables = '\n'.join("%s: %s" % item for item in attrs.items())

@@ -22,7 +22,7 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_SupplySystems"
 ghenv.Component.NickName = 'SupplySystems'
-ghenv.Component.Message = 'VER 0.0.1\nFEB_22_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_25_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "0 | Core"

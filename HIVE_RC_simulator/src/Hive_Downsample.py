@@ -31,13 +31,14 @@ Provided by HIVE 0.0.1
 
 ghenv.Component.Name = "Hive_Downsample"
 ghenv.Component.NickName = 'Downsample'
-ghenv.Component.Message = 'VER 0.0.1\nMAY_16_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_24_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "3 | Results"
 # ComponentExposure=1
 
 import scriptcontext as sc
+import Grasshopper.Kernel as ghKernel
 
 def main(_start_hoy, hourly_data, resample_type):
     if not sc.sticky.has_key('HivePreparation'): 
