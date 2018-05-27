@@ -24,13 +24,19 @@ Provided by Hive 0.0.1
         input_string: Plug in an output of the Zone1 component.
     Returns:
         readMe!: ...
-        Zone: A Zone object described by the args.
-        input_string: A string which can be copy-pased into a python script running the rc-model
-        zone_variables: variables of the Zone object, for diagnostics.
+        hoy: list of hours of the year being simulated
+        outdoor_air: Tree of hourly temperature read from the csv.
+        solar_gains: Tree of hourly solar gains read from the csv.
+        illuminance:Tree of hourly illuminance read from the csv.
+        internal_gains:Tree of hourly internal gains read from the csv.
+        occupancy:Tree of hourly occupancy read from the csv.
+        heating:Tree of hourly heating demand read from the csv.
+        indoor_air:Tree of hourly indoor air temperature read from the csv.
+        results: A summary of heating, cooling and lighting energy in kWh/m2
         
 """
 
-ghenv.Component.Name = "Hive_Zone1"
+ghenv.Component.Name = "Hive_ImportPythonResult"
 ghenv.Component.NickName = 'ImportPythonResult'
 ghenv.Component.Message = 'VER 0.0.1\nMAY_27_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application

@@ -51,7 +51,4 @@ def main(element_name,u_value,_geometry):
     
     return centers, normals, opaque_element
 
-try:
-    centers,normals,opaque_element = main(element_name,u_value,_geometry)
-except ValueError:
-    print main(element_name,u_value,_geometry)
+centers,normals,opaque_element = main(element_name,u_value,_geometry)

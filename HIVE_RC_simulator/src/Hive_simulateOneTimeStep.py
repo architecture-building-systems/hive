@@ -42,10 +42,10 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_simulateOneTimeStep"
 ghenv.Component.NickName = 'simulateOneTimeStep'
-ghenv.Component.Message = 'VER 0.0.1\nMAR_23_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_27_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
-ghenv.Component.SubCategory = "2 | Simulation"
+ghenv.Component.SubCategory = "4 | Developers"
 # ComponentExposure=2
 
 import Grasshopper.Kernel as gh
@@ -78,7 +78,7 @@ if connected:
             'solar_gains':2000,
             'illuminance':44000,
             'occupancy':0.1,
-            'Zone':sc.sticky["RC_Zone"]()}
+            'Zone':sc.sticky["RCModelClassic"]()}
     
     
     # Initialise parameters
