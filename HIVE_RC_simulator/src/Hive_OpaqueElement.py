@@ -30,7 +30,7 @@ Provided by Oasys 0.0.1
 
 ghenv.Component.Name = "Hive_OpaqueElement"
 ghenv.Component.NickName = 'OpaqueElement'
-ghenv.Component.Message = 'VER 0.0.1\nAPR_24_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_29_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
 ghenv.Component.SubCategory = "1 | Zone"
