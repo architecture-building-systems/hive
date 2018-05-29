@@ -126,6 +126,7 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
         incidence = math.acos(math.cos(math.radians(relative_sun_alt)) * math.cos(math.radians(relative_sun_az)))
 
         # Calculate shading
+        print abs(relative_sun_az) <90
         if context_geometry == [] or not (sun_alt > 0 and abs(relative_sun_az) < 90):
             # Window is unshaded
             unshaded_area = Window.window_area
@@ -164,12 +165,14 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
     
     solar_gains = hive_preparation.list_to_tree(window_solar_gains)
     illuminance = hive_preparation.list_to_tree(window_illuminance)
+    unshaded_polys = [up[0] for up in unshaded_polys if up[0] is not None]
     unshaded = hive_preparation.list_to_tree(unshaded_polys)
     
     total_solar_gains = round(sum([i[0] for i in window_solar_gains])/1000,2)
     print 'Total solar gains:', total_solar_gains,'kWh'
     sf = [sf for sf,sv in zip(shading_factor,sun_vectors) if sv is not None]
-    print 'Mean shading factor: ', sum(sf)/len(sf)
+    if sf:
+        print 'Mean shading factor: ', sum(sf)/len(sf)
     
     return incidence_angles, Window.window_centroid, Window.window_normal, sun_vectors, solar_gains, illuminance, dir_irradiation, diff_irradiation, diff_irradiation_simple, ground_ref_irradiation, unshaded
 

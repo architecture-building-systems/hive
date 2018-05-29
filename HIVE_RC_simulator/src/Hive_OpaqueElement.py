@@ -19,7 +19,7 @@ Define an opaque by adding a surface.
 Provided by Oasys 0.0.1
     
     Args:
-        geometry: a surface or polysurface representing the heat-transfer area of the element
+        geometry: A brep or list of breps representing the heat-transfer area of the element
         element_name: optional element name
         u_value: element u-value in W/(m^2.K)
     Returns:
@@ -40,15 +40,30 @@ import scriptcontext as sc
 
 def main(element_name,u_value,_geometry):
     if not sc.sticky.has_key('ElementBuilder'): 
-        return "Add the modular RC component to the canvas!"
+        print "Add the modular RC component to the canvas!"
+        return -1
 
     element_name = 'Opaque Element' if element_name is None else element_name
     Builder = sc.sticky['ElementBuilder'](element_name,u_value,1,True)
-    centers,normals,opaque_element = Builder.add_element(_geometry)
     
-    for e in opaque_element:
-        print 'element name: ',e.name,'\n U-value:',e.u_value,'W/m2K \n area:',round(e.area,2),'m2'
+    HivePreparation = sc.sticky['HivePreparation']()
+    surfaces = HivePreparation.deconstruct_input_geometry(_geometry)
     
-    return centers, normals, opaque_element
+    centers = []
+    normals = []
+    elements = []
+    
+    for s in surfaces:
+        c, n, element = Builder.add_element(s)
+        centers.append(c)
+        normals.append(n)
+        elements+=element
+    
+        for e in element:
+            print e.name,'\n U=',e.u_value,'W/m2K, area:',round(e.area,2),'m2'
+    
+    return centers, normals, elements
 
-centers,normals,opaque_element = main(element_name,u_value,_geometry)
+result = main(element_name,u_value,_geometry)
+if result != -1:
+    centers,normals,elements = result

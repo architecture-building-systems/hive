@@ -17,7 +17,7 @@ Extract temperature, location and irradiation data from a weather file.
 Provided by Hive 0.0.1
 
     Args:
-        _open: Set Boolean to True to browse for a weather file on your system.
+        browse_for_EPW: Set Boolean to True to browse for a weather file on your system.
         start_HOY_: optional HOY for the start of the analysis period
         end_HOY_: optional HOY for the end of the analysis period
     Returns:
@@ -141,7 +141,7 @@ def main(epw_file,start_HOY_,end_HOY_):
 
 if epw_file is None:
     if browse_for_epw:
-        epw_file = open_epw(_open)
+        epw_file = open_epw(browse_for_epw)
         location, temperature, irradiation = main(epw_file,start_HOY_,end_HOY_)
 
 else:

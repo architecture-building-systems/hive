@@ -111,8 +111,12 @@ def main(Zone, outdoor_air_temperature, previous_mass_temperature, internal_gain
     if internal_gains:
         print 'Internal gains: %f kWh/m2'%(sum(internal_gains)/(1000*Zone.floor_area))
     
-    energy_pie = energy_pie_chart(heating_demand,cooling_demand,lighting_demand)
-    comfort_pie = comfort_pie_chart(Zone, indoor_air_temperature)
+    if len(indoor_air_temperature)>0:
+        energy_pie = energy_pie_chart(heating_demand,cooling_demand,lighting_demand)
+        comfort_pie = comfort_pie_chart(Zone, indoor_air_temperature)
+    else:
+        energy_pie = None
+        comfort_pie = None
     
     return HivePreparation.list_to_tree(indoor_air_temperature), \
     HivePreparation.list_to_tree(operative_temperature), \
@@ -148,6 +152,9 @@ def energy_pie_chart(heating_demand,cooling_demand,lighting_demand):
     lighting = round(sum([l[0] for l in lighting_demand])/1000,2)
     
     value = [heating,cooling,lighting]
+    if value == [0,0,0]:
+        return None
+    
     lengths = [len(str(int(v))) for v in value if v>0]
     ratio = [round(v / 10**(min(lengths)-2)) for v in value]
     
@@ -164,6 +171,9 @@ def comfort_pie_chart(Zone, temperature):
     comfy = sum([Zone.t_set_heating < round(t[0]) < Zone.t_set_cooling for t in temperature])
     
     value = [hot,cold,comfy]
+    if value == [0,0,0]:
+        return None
+    
     lengths = [len(str(int(v))) for v in value if v>0]
     ratio = [round(v / 10**(min(lengths)-2)) for v in value]
     

@@ -249,6 +249,23 @@ class HivePreparation(object):
             dictTree.Add(value,path)
         return dictTree
     
+    def deconstruct_input_geometry(self,brep_geometry):
+        surfaces = []
+        for geometry in brep_geometry:
+            g = rs.coercebrep(geometry)
+            brep_faces = gh.DeconstructBrep(g)[0]
+            if brep_faces:
+                if type(brep_faces) is not list:
+                    # geometry is a single surface
+                    s = brep_faces.Faces[0].DuplicateSurface()
+                    surfaces.append(s)
+                else:
+                    # geometry was a polysurface and got deconstructed into a list
+                    for b in brep_faces:
+                        s = b.Faces[0].DuplicateSurface()
+                        surfaces.append(s)
+        return surfaces
+    
     def raise_warning(self,warning_str):
         warning = warning_str
         w = ghKernel.GH_RuntimeMessageLevel.Warning
@@ -422,20 +439,8 @@ class WindowRadiation(object):
         self.point_in_zone = point_in_zone
         
         #context geometry can either be a single surface, a polysurface, or a mixed list.
-        context_surfaces = []
-        for geometry in context_geometry:
-            g = rs.coercebrep(geometry)
-            brep_faces = gh.DeconstructBrep(g)[0]
-            if brep_faces:
-                if type(brep_faces) is not list:
-                    # geometry is a single surface
-                    s = brep_faces.Faces[0].DuplicateSurface()
-                    context_surfaces.append(s)
-                else:
-                    # geometry was a polysurface and got deconstructed into a list
-                    for b in brep_faces:
-                        s = b.Faces[0].DuplicateSurface()
-                        context_surfaces.append(s)
+        HivePreparation = sc.sticky['HivePreparation']()
+        context_surfaces = HivePreparation.deconstruct_input_geometry(context_geometry)
         
         self.clipper_accuracy = 100000
         self.extract_window_geometry()
@@ -444,7 +449,6 @@ class WindowRadiation(object):
         self.albedo = albedo
         self.glass_solar_transmittance = glass_solar_transmittance
         self.glass_light_transmittance = glass_light_transmittance
-        print self.glass_light_transmittance
         
         self.perez_coef = {'f_11': [-0.0083117, 0.1299457, 0.3296958, 0.5682053, 0.873028, 1.1326077, 1.0601591, 0.677747],
               'f_12': [0.5877285, 0.6825954, 0.4868735, 0.1874525, -0.3920403, -1.2367284, -1.5999137, -0.3272588],
@@ -702,7 +706,8 @@ class WindowRadiation(object):
             for p in ms:
                 # points.append(rc.Geometry.Point3d(p.X/self.clipper_accuracy, p.Y/self.clipper_accuracy,0))
                 points.append(rs.EvaluatePlane(self.window_plane, [p.X/self.clipper_accuracy, p.Y/self.clipper_accuracy]))
-            clipper_result_geometry.append(gh.PolyLine(points,closed=True))
+            # clipper_result_geometry.append(PolyLine(points,closed=True)) 
+            clipper_result_geometry.append(points) 
         return clipper_result_geometry
 
     def calc_unshaded_area(self,unshaded_polygons):

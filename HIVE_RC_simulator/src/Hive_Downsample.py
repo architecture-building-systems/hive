@@ -114,13 +114,14 @@ if _hourly_data.BranchCount > 0 :
         hourly_data[stream] = []
         for b in range(0,_hourly_data.BranchCount):
             hourly_data[stream].append(_hourly_data.Branch(b)[stream])
-    if _start_HOY:
-        daily_values, monthly_values, annual_value = main(_start_HOY,hourly_data,resample_type_)
-        print '%i data streams resampled'%len(_hourly_data.Branch(0))
-    else:
-        warning = """Warning: Add a value to _start_HOY!"""
-        w = ghKernel.GH_RuntimeMessageLevel.Warning
-        ghenv.Component.AddRuntimeMessage(w, warning)
+    if not _start_HOY:
+        print """Start_HOY assumed to be 0: If this is not the case, add a 
+        value to _start_HOY!"""
+        _start_HOY = 0
+    daily_values, monthly_values, annual_value = main(_start_HOY,hourly_data,resample_type_)
+    print '%i data streams resampled'%len(_hourly_data.Branch(0))
+
+
 else:
     print 'Connect a data stream to _hourly_data'
 
