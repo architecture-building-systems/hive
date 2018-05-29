@@ -21,17 +21,17 @@
 
 
 """
-Place this component in the grasshopper workspace so that zones can be defined and simulations run.
+This needs to be on the canvas for Hive components to work.
 -
 Provided by Hive 0.0.1
 """
 
 ghenv.Component.Name = "Hive_Hive"
-ghenv.Component.NickName = 'Hive'
-ghenv.Component.Message = 'VER 0.0.1\nMAY_14_2018'
+ghenv.Component.NickName = '0.Hive'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_29_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
-ghenv.Component.SubCategory = "0 | Core"
+ghenv.Component.SubCategory = "Hive"
 # ComponentExposure=1
 
 import scriptcontext as sc
@@ -2082,21 +2082,414 @@ class Building(object):
 
         self.t_operative = 0.3 * self.t_air + 0.7 * self.t_s
 
-error = "Connect emissions_systems and supply_systems components!"
-e = ghKernel.GH_RuntimeMessageLevel.Error
+"""""""""""""""Emission Systems"""""""""""""""""""""
 
-if systems == [] or len(systems) != 2:
-    ghenv.Component.AddRuntimeMessage(e, error)
+class EmissionDirector:
 
-if any(['Emission' in s for s in systems]) and any(['Supply' in s for s in systems]):
-    sc.sticky["RelativeSun"] = RelativeSun
-    sc.sticky["WindowRadiation"] = WindowRadiation
-    sc.sticky["Element"] = Element
-    sc.sticky["ElementBuilder"] = ElementBuilder
-    sc.sticky["ThermalBridge"] = ThermalBridge
-    sc.sticky["ThermalZone"] = ThermalZone
-    sc.sticky["RCModel"] = ElementBuilding
-    sc.sticky["RCModelClassic"] = Building
-    sc.sticky["HivePreparation"] = HivePreparation
-    sc.sticky['pushback']()
-    print 'Modular Building Physics is go!'
+    """
+    The director sets what Emission system is being used, and runs that set Emission system
+    """
+
+    builder = None
+
+    # Sets what Emission system is used
+    def set_builder(self, builder):
+        #        self.__builder = builder
+        self.builder = builder
+    # Calcs the energy load of that system. This is the main() fu
+
+    def calc_flows(self):
+
+        # Director asks the builder to produce the system body. self.builder
+        # is an instance of the class
+
+        body = self.builder.heat_flows()
+
+        return body
+
+class EmissionSystemBase:
+
+    """ 
+    The base class in which systems are built from
+    """
+
+    def __init__(self, energy_demand):
+
+        self.energy_demand = energy_demand
+
+
+    def heat_flows(self): pass
+    """
+    determines the node where the heating/cooling system is active based on the system used
+    Also determines the return and supply temperatures for the heating/cooling system
+    """
+
+class OldRadiators(EmissionSystemBase):
+    """
+    Old building with radiators and high supply temperature
+    Heat is emitted to the air node
+    """
+
+    def heat_flows(self):
+        flows = Flows()
+        flows.phi_ia_plus = self.energy_demand
+        flows.phi_st_plus = 0
+        flows.phi_m_plus = 0
+
+        flows.heating_supply_temperature = 65
+        flows.heating_return_temperature = 45
+        flows.cooling_supply_temperature = 12
+        flows.cooling_return_temperature = 21
+
+        return flows
+
+class NewRadiators(EmissionSystemBase):
+    """    
+    Newer building with radiators and medium supply temperature
+    Heat is emitted to the air node
+    """
+
+    def heat_flows(self):
+        flows = Flows()
+        flows.phi_ia_plus = self.energy_demand
+        flows.phi_st_plus = 0
+        flows.phi_m_plus = 0
+
+        flows.heating_supply_temperature = 50
+        flows.heating_return_temperature = 35
+        flows.cooling_supply_temperature = 12
+        flows.cooling_return_temperature = 21
+
+        return flows
+
+class ChilledBeams(EmissionSystemBase):
+    """
+    Chilled beams: identical to newRadiators but used for cooling
+    Heat is emitted to the air node
+    """
+
+    def heat_flows(self):
+        flows = Flows()
+        flows.phi_ia_plus = self.energy_demand
+        flows.phi_st_plus = 0
+        flows.phi_m_plus = 0
+
+        flows.heating_supply_temperature = 50
+        flows.heating_return_temperature = 35
+        flows.cooling_supply_temperature = 18
+        flows.cooling_return_temperature = 21
+
+        return flows
+
+class AirConditioning(EmissionSystemBase):
+    """
+    All heat is given to the air via an AC-unit. HC input via the air node as in the ISO 13790 Annex C.
+    supplyTemperature as with new radiators (assumption)
+    Heat is emitted to the air node
+    """
+
+    def heat_flows(self):
+        flows = Flows()
+        flows.phi_ia_plus = self.energy_demand
+        flows.phi_st_plus = 0
+        flows.phi_m_plus = 0
+
+        flows.heating_supply_temperature = 40
+        flows.heating_return_temperature = 20
+        flows.cooling_supply_temperature = 6
+        flows.cooling_return_temperature = 15
+
+        return flows
+
+class FloorHeating(EmissionSystemBase):
+    """
+    All HC energy goes into the surface node, supplyTemperature low
+    Heat is emitted to the surface node
+    """
+
+    def heat_flows(self):
+        flows = Flows()
+        flows.phi_ia_plus = 0
+        flows.phi_st_plus = self.energy_demand
+        flows.phi_m_plus = 0
+
+        flows.heating_supply_temperature = 40
+        flows.heating_return_temperature = 5
+        flows.cooling_supply_temperature = 12
+        flows.cooling_return_temperature = 21
+
+        return flows
+
+class TABS(EmissionSystemBase):
+    """
+    Thermally activated Building systems. HC energy input into bulk node. Supply Temperature low.
+    Heat is emitted to the thermal mass node
+    """
+
+    def heat_flows(self):
+        flows = Flows()
+        flows.phi_ia_plus = 0
+        flows.phi_st_plus = 0
+        flows.phi_m_plus = self.energy_demand
+        
+        flows.heating_supply_temperature = 50
+        flows.heating_return_temperature = 35
+        flows.cooling_supply_temperature = 12
+        flows.cooling_return_temperature = 21
+        
+        return flows
+
+class Flows:
+    """
+    A base object to store output variables
+    """
+
+    phi_ia_plus = float("nan")
+    phi_m_plus = float("nan")
+    phi_st_plus = float("nan")
+
+    heating_supply_temperature = float("nan")
+    cooling_supply_temperature = float("nan")
+    # return temperatures
+
+"""""""""""""""Supply Systems"""""""""""""""""""""
+
+class SupplyDirector:
+
+    """
+    The director sets what Supply system is being used, and runs that set Supply system
+    """
+
+    builder = None
+
+    # Sets what building system is used
+    def set_builder(self, builder):
+        self.builder = builder
+
+    # Calcs the energy load of that system. This is the main() function
+    def calc_system(self):
+
+        # Director asks the builder to produce the system body. self.builder
+        # is an instance of the class
+
+        body = self.builder.calc_loads()
+
+        return body
+
+class SupplySystemBase:
+
+    """
+     The base class in which Supply systems are built from 
+    """
+
+    def __init__(self, load, t_out, heating_supply_temperature, cooling_supply_temperature, has_heating_demand, has_cooling_demand):
+        self.load = load  # Energy Demand of the building at that time step
+        self.t_out = t_out  # Outdoor Air Temperature
+        # Temperature required by the emission system
+        self.heating_supply_temperature = heating_supply_temperature
+        self.cooling_supply_temperature = cooling_supply_temperature
+        self.has_heating_demand = has_heating_demand
+        self.has_cooling_demand = has_cooling_demand
+
+    def calc_loads(self): pass
+    """
+    Caculates the electricty / fossil fuel consumption of the set supply system
+    If the system also generates electricity, then this is stored as electricity_out
+    """
+
+class OilBoilerOld(SupplySystemBase):
+    """
+    Old oil boiler with fuel efficiency of 63 percent (medium of range in report of semester project M. Fehr)
+    No condensation, pilot light
+    """
+
+    def calc_loads(self):
+        system = SupplyOut()
+        system.fossils_in = self.load / 0.63
+        system.electricity_in = 0
+        system.electricity_out = 0
+        return system
+
+class OilBoilerMed(SupplySystemBase):
+    """
+    Classic oil boiler with fuel efficiency of 82 percent (medium of range in report of semester project M. Fehr)
+    No condensation, but better nozzles etc.
+    """
+
+    def calc_loads(self):
+        system = SupplyOut()
+        system.fossils_in = self.load / 0.82
+        system.electricity_in = 0
+        system.electricity_out = 0
+        return system
+
+class OilBoilerNew(SupplySystemBase):
+    """
+    New oil boiler with fuel efficiency of 98 percent (value from report of semester project M. Fehr)
+    Condensation boiler, latest generation
+    """
+
+    def calc_loads(self):
+        system = SupplyOut()
+        system.fossils_in = self.load / 0.98
+        system.electricity_in = 0
+        system.electricity_out = 0
+        return system
+
+class HeatPumpAir(SupplySystemBase):
+    """
+    BETA Version
+    Air-Water heat pump. Outside Temperature as reservoir temperature.
+    COP based off regression analysis of manufacturers data
+    Source: "A review of domestic heat pumps, Iain Staffell, Dan Brett, Nigel Brandonc and Adam Hawkes"
+    http://pubs.rsc.org/en/content/articlepdf/2012/ee/c2ee22653g
+
+    TODO: Validate this methodology
+    """
+
+    def calc_loads(self):
+        system = SupplyOut()
+
+        if self.has_heating_demand:
+            # determine the temperature difference, if negative, set to 0
+            deltaT = max(0, self.heating_supply_temperature - self.t_out)
+            # Eq (4) in Staggell et al.
+            system.cop = 6.81 - 0.121 * deltaT + 0.000630 * deltaT**2
+            system.electricity_in = self.load / system.cop
+
+        elif self.has_cooling_demand:
+            # determine the temperature difference, if negative, set to 0
+            deltaT = max(0, self.t_out - self.cooling_supply_temperature)
+            # Eq (4) in Staggell et al.
+            system.cop = 6.81 - 0.121 * deltaT + 0.000630 * deltaT**2
+            system.electricity_in = self.load / system.cop
+
+        else:
+            raise ValueError(
+                'HeatPumpAir called although there is no heating/cooling demand')
+
+        system.fossils_in = 0
+        system.electricity_out = 0
+        return system
+
+class HeatPumpWater(SupplySystemBase):
+    """"
+    BETA Version
+    Reservoir temperatures 7 degC (winter) and 12 degC (summer).
+    Ground-Water heat pump. Outside Temperature as reservoir temperature.
+    COP based off regression analysis of manufacturers data
+    Source: "A review of domestic heat pumps, Iain Staffell, Dan Brett, Nigel Brandonc and Adam Hawkes"
+    http://pubs.rsc.org/en/content/articlepdf/2012/ee/c2ee22653g
+
+        # TODO: Validate this methodology
+    """
+
+
+    def calc_loads(self):
+        system = SupplyOut()
+        if self.has_heating_demand:
+            deltaT = max(0, self.heating_supply_temperature - 7.0)
+            # Eq (4) in Staggell et al.
+            system.cop = 8.77 - 0.150 * deltaT + 0.000734 * deltaT**2
+            system.electricity_in = self.load / system.cop
+
+        elif self.has_cooling_demand:
+            deltaT = max(0, 12.0 - self.cooling_supply_temperature)
+            # Eq (4) in Staggell et al.
+            system.cop = 8.77 - 0.150 * deltaT + 0.000734 * deltaT**2
+            system.electricity_in = self.load / system.cop
+
+        system.fossils_in = 0
+        system.electricity_out = 0
+        return system
+
+class ElectricHeating(SupplySystemBase):
+    """
+    Straight forward electric heating. 100 percent conversion to heat.
+    """
+
+    def calc_loads(self):
+        system = SupplyOut()
+        system.electricity_in = self.load
+        system.fossils_in = 0
+        system.electricity_out = 0
+        return system
+
+class CHP(SupplySystemBase):
+    """
+    Combined heat and power unit with 60 percent thermal and 33 percent
+    electrical fuel conversion. 93 percent overall
+    """
+
+    def calc_loads(self):
+        system = SupplyOut()
+        system.fossils_in = self.load / 0.6
+        system.electricity_in = 0
+        system.electricity_out = system.fossils_in * 0.33
+        return system
+
+class DirectHeater(SupplySystemBase):
+    """
+    Created by PJ to check accuracy against previous simulation
+    """
+
+    def calc_loads(self):
+        system = SupplyOut()
+        system.electricity_in = self.load
+        system.fossils_in = 0
+        system.electricity_out = 0
+        return system
+
+class DirectCooler(SupplySystemBase):
+    """
+    Created by PJ to check accuracy against previous simulation
+    """
+
+    def calc_loads(self):
+        system = SupplyOut()
+        system.electricity_in = self.load
+        system.fossils_in = 0
+        system.electricity_out = 0
+        return system
+
+class SupplyOut:
+    """
+    The System class which is used to output the final results
+    """
+    fossils_in = float("nan")
+    electricity_in = float("nan")
+    electricity_out = float("nan")
+    cop = float("nan")
+
+""""""""""""""""""""""""""""""""""""""""""""""""
+
+sc.sticky["OilBoilerOld"] = OilBoilerOld
+sc.sticky["OilBoilerMed"] = OilBoilerMed
+sc.sticky["OilBoilerNew"] = OilBoilerNew
+sc.sticky["HeatPumpAir"] = HeatPumpAir
+sc.sticky["HeatPumpWater"] = HeatPumpWater
+sc.sticky["ElectricHeating"] = ElectricHeating
+sc.sticky["CHP"] = CHP
+sc.sticky["DirectHeater"] = DirectHeater
+sc.sticky["DirectCooler"] = DirectCooler
+sc.sticky["SupplyDirector"] = SupplyDirector
+
+sc.sticky["EmissionDirector"] = EmissionDirector
+sc.sticky["OldRadiators"] = OldRadiators
+sc.sticky["AirConditioning"] = AirConditioning
+sc.sticky["NewRadiators"] = NewRadiators
+sc.sticky["ChilledBeams"] = ChilledBeams
+sc.sticky["FloorHeating"] = FloorHeating
+sc.sticky["TABS"] = TABS
+    
+sc.sticky["RelativeSun"] = RelativeSun
+sc.sticky["WindowRadiation"] = WindowRadiation
+sc.sticky["Element"] = Element
+sc.sticky["ElementBuilder"] = ElementBuilder
+sc.sticky["ThermalBridge"] = ThermalBridge
+sc.sticky["ThermalZone"] = ThermalZone
+sc.sticky["RCModel"] = ElementBuilding
+sc.sticky["RCModelClassic"] = Building
+sc.sticky["HivePreparation"] = HivePreparation
+
+print 'Modular Building Physics is go!'
