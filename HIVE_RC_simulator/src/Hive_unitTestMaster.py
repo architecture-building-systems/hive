@@ -40,11 +40,11 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_unitTestMaster"
 ghenv.Component.NickName = 'unitTestMaster'
-ghenv.Component.Message = 'VER 0.0.1\nAPR_03_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_08_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
-ghenv.Component.SubCategory = "3 | Testing"
-# ComponentExposure=1
+ghenv.Component.SubCategory = "5. Development"
+# ComponentExposure=2
 
 import scriptcontext as sc
 import time
@@ -61,18 +61,18 @@ tests['ill'][5] = 4000
 tests['ill'][10] = 14000
 
 zones = [None,None,None,None,None,None,
-         sc.sticky['RC_Zone'](ventilation_efficiency=0.66),
-         sc.sticky['RC_Zone'](ventilation_efficiency=0.6),
-         sc.sticky['RC_Zone'](ventilation_efficiency=0.6),
-         sc.sticky['RC_Zone'](ventilation_efficiency=0.6),
-         sc.sticky['RC_Zone'](ventilation_efficiency=0.6),
-         sc.sticky['RC_Zone'](ventilation_efficiency=0.6),
-         sc.sticky['RC_Zone'](cooling_supply_system=sc.sticky["HeatPumpAir"]),
-         sc.sticky['RC_Zone'](cooling_supply_system=sc.sticky["HeatPumpAir"]),
-         sc.sticky['RC_Zone'](cooling_supply_system=sc.sticky["HeatPumpWater"]),
-         sc.sticky['RC_Zone'](ventilation_efficiency=0.6, 
+         sc.sticky['RCModelClassic'](ventilation_efficiency=0.66),
+         sc.sticky['RCModelClassic'](ventilation_efficiency=0.6),
+         sc.sticky['RCModelClassic'](ventilation_efficiency=0.6),
+         sc.sticky['RCModelClassic'](ventilation_efficiency=0.6),
+         sc.sticky['RCModelClassic'](ventilation_efficiency=0.6),
+         sc.sticky['RCModelClassic'](ventilation_efficiency=0.6),
+         sc.sticky['RCModelClassic'](cooling_supply_system=sc.sticky["HeatPumpAir"]),
+         sc.sticky['RCModelClassic'](cooling_supply_system=sc.sticky["HeatPumpAir"]),
+         sc.sticky['RCModelClassic'](cooling_supply_system=sc.sticky["HeatPumpWater"]),
+         sc.sticky['RCModelClassic'](ventilation_efficiency=0.6, 
                               heating_supply_system=sc.sticky["HeatPumpAir"]),
-         sc.sticky['RC_Zone'](ventilation_efficiency=0.6, 
+         sc.sticky['RCModelClassic'](ventilation_efficiency=0.6, 
                               heating_supply_system=sc.sticky["HeatPumpWater"]),
          ]
 
@@ -101,7 +101,7 @@ sc.sticky['expected_results'] = {
     }
 
 def main(run):
-    if not sc.sticky.has_key('RC_Zone'): return "Add the building physics component to the canvas!"
+    if not sc.sticky.has_key('RCModelClassic'): return "Add the building physics component to the canvas!"
     try:
         Zone = zones[run]
         outdoor_air_temperature = tests['t_out'][run]
@@ -118,5 +118,5 @@ number_of_tests= len(sc.sticky['expected_results']['name']) -1
 
 try:
     Zone, outdoor_air_temperature, previous_mass_temperature, internal_gains, solar_gains, illuminance, occupancy = main(run)
-except ValueError:
+except:
     print main(run)

@@ -29,8 +29,8 @@ ghenv.Component.Name = "Hive_exportHive"
 ghenv.Component.NickName = 'exportHive'
 ghenv.Component.Message = 'VER 0.0.1\nMAR_22_2018'
 ghenv.Component.Category = "Hive"
-ghenv.Component.SubCategory = "4 | Developers"
-
+ghenv.Component.SubCategory = "5. Development"
+# ComponentExposure=1
 
 import Grasshopper.Folders as folders
 import Grasshopper.Kernel as gh

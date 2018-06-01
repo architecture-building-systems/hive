@@ -36,10 +36,10 @@ Provided by HIVE 0.0.1
 
 ghenv.Component.Name = "Hive_GlazedElement"
 ghenv.Component.NickName = 'GlazedElement'
-ghenv.Component.Message = 'VER 0.0.1\nMAY_17_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_31_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
-ghenv.Component.SubCategory = "1 | Zone"
+ghenv.Component.SubCategory = "2. Zone"
 # ComponentExposure=1
 
 import scriptcontext as sc
@@ -71,7 +71,7 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
     #TODO: collect points and merge shadows in pyclipper for a faster shading visualisation.
     """
     if not sc.sticky.has_key('WindowRadiation'): return "Add the modular building physics component to the canvas!"
-    hive_preparation = sc.sticky["HivePreparation"]()
+    HivePreparation = sc.sticky["HivePreparation"]()
     
     glass_solar_transmittance = 0.7 if solar_transmittance is None else solar_transmittance
     glass_light_transmittance = 0.8 if light_transmittance is None else light_transmittance
@@ -101,7 +101,7 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
     # Diagnostic
     sun_vectors = []
     incidence_angles = []
-    unshaded_polys = []
+    shadows = []
     shading_factor = []
     
     for b in range(irradiation.BranchCount):
@@ -114,29 +114,30 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
         dhirr_simple = 0
         grirr = 0
         sun_vector = None
-        unshaded_polys_hour = [None]
+        shadows_hour = [None]
         
         # read radiation data
         hoy, normal_irradiation, horizontal_irradiation, normal_illuminance, horizontal_illuminance = list(irradiation.Branch(b))
+        day,month,hour = HivePreparation.hour2Date(hoy,alternate=True)
         
         # Calculate sun
         relative_sun_alt,relative_sun_az = Sun.calc_relative_sun_position(hoy)
         sun_alt,sun_az = Sun.calc_sun_position(hoy)
+        
         # print sun_az, relative_sun_az
         incidence = math.acos(math.cos(math.radians(relative_sun_alt)) * math.cos(math.radians(relative_sun_az)))
 
         # Calculate shading
-        print abs(relative_sun_az) <90
         if context_geometry == [] or not (sun_alt > 0 and abs(relative_sun_az) < 90):
             # Window is unshaded
             unshaded_area = Window.window_area
         else:
             shadow_dict = Window.calc_gross_shadows(relative_sun_alt,relative_sun_az)
             if shadow_dict is not None:
-                unshaded_polygons = Window.calc_unshaded_polygons(shadow_dict)
-                unshaded_area = Window.calc_unshaded_area(unshaded_polygons)
-                if draw_shadows:
-                    unshaded_polys_hour = Window.draw_unshaded_polygons(unshaded_polygons)
+                shadows_polygons = Window.calc_shadow_polygons(shadow_dict)
+                unshaded_area = Window.calc_unshaded_area(shadows_polygons)
+                if draw_shadows and day%7 ==0:
+                    shadows_hour = Window.draw_shadow_points(shadows_polygons)
             else:
                 unshaded_area = Window.window_area
         
@@ -154,27 +155,31 @@ def solar_gains_through_element(window_geometry, point_in_zone, context_geometry
         # Append results
         window_illuminance.append([lighting])
         window_solar_gains.append([solar_gains_this_hour])
-        
         dir_irradiation.append(dnirr)
         diff_irradiation.append(dhirr)
         diff_irradiation_simple.append(dhirr_simple)
         sun_vectors.append(sun_vector)
         incidence_angles.append(incidence)
         ground_ref_irradiation.append(grirr)
-        unshaded_polys.append(unshaded_polys_hour)
+        shadows.append(shadows_hour)
     
-    solar_gains = hive_preparation.list_to_tree(window_solar_gains)
-    illuminance = hive_preparation.list_to_tree(window_illuminance)
-    unshaded_polys = [up[0] for up in unshaded_polys if up[0] is not None]
-    unshaded = hive_preparation.list_to_tree(unshaded_polys)
+    solar_gains = HivePreparation.list_to_tree(window_solar_gains)
+    illuminance = HivePreparation.list_to_tree(window_illuminance)
     
+    try:
+        shadows = [s[0] for s in shadows if (s[0] is not None)]
+    except:
+        shadows = [s for s in shadows if len(s)>0]
+        shadows = [s[0] for s in shadows if s[0] is not None]
+    shadows = HivePreparation.list_to_tree(shadows)
+
     total_solar_gains = round(sum([i[0] for i in window_solar_gains])/1000,2)
     print 'Total solar gains:', total_solar_gains,'kWh'
     sf = [sf for sf,sv in zip(shading_factor,sun_vectors) if sv is not None]
     if sf:
         print 'Mean shading factor: ', sum(sf)/len(sf)
     
-    return incidence_angles, Window.window_centroid, Window.window_normal, sun_vectors, solar_gains, illuminance, dir_irradiation, diff_irradiation, diff_irradiation_simple, ground_ref_irradiation, unshaded
+    return incidence_angles, Window.window_centroid, Window.window_normal, sun_vectors, solar_gains, illuminance, dir_irradiation, diff_irradiation, diff_irradiation_simple, ground_ref_irradiation, shadows
 
 """"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
 
@@ -182,7 +187,7 @@ centers, normals, glazed_elements = build_glazed_element(window_name, _window_ge
 window_area = [g.area for g in glazed_elements]
 
 if len(location) == 4 and _point_in_zone and  _window_geometry:
-    incidence_angle, window_centroid, window_normal, sun_vectors, solar_gains, illuminance, dir_irradiation, diff_irradiation, diff_irradiation_simple, ground_ref_irradiation, unshaded = solar_gains_through_element(_window_geometry, _point_in_zone, context_geometry, location, irradiation, solar_transmittance, light_transmittance, draw_shadows)
+    incidence_angle, window_centroid, window_normal, sun_vectors, solar_gains, illuminance, dir_irradiation, diff_irradiation, diff_irradiation_simple, ground_ref_irradiation, shadow_points = solar_gains_through_element(_window_geometry, _point_in_zone, context_geometry, location, irradiation, solar_transmittance, light_transmittance, draw_shadows)
     
 else:
     warning = """Warning: Insufficient inputs for solar calculations"""

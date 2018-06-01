@@ -112,7 +112,7 @@ def main(epw_file,start_HOY,end_HOY):
     if not sc.sticky.has_key('HivePreparation'): return "Add the modular RC component to the canvas!"
     #TODO: Set up compatibility checks like in Ladybug.
     
-    print '[%i,%i]'%(start_HOY,end_HOY)
+    sc.sticky['simulation_period'] = '[%i,%i]'%(start_HOY,end_HOY)
     
     HivePreparation = sc.sticky["HivePreparation"]()
     start,end = HivePreparation.set_simulation_period(start_HOY,end_HOY)

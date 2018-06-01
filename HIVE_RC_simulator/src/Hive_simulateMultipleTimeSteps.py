@@ -41,10 +41,10 @@ Provided by Hive 0.0.1
 
 ghenv.Component.Name = "Hive_simulateMultipleTimeSteps"
 ghenv.Component.NickName = 'simulateMultipleTimeSteps'
-ghenv.Component.Message = 'VER 0.0.1\nMAY_27_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_29_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
-ghenv.Component.SubCategory = "2 | Simulation"
+ghenv.Component.SubCategory = "3. Simulate"
 # ComponentExposure=2
 
 
@@ -147,20 +147,18 @@ def check_input_tree(input_tree,input_tree_name):
         return False
 
 def energy_pie_chart(heating_demand,cooling_demand,lighting_demand):
-    heating = round(sum([h[0] for h in heating_demand])/1000,2)
-    cooling = round(-sum([c[0] for c in cooling_demand])/1000,2)
-    lighting = round(sum([l[0] for l in lighting_demand])/1000,2)
+    heating = round(sum([h[0] for h in heating_demand]),2)
+    cooling = round(-sum([c[0] for c in cooling_demand]),2)
+    lighting = round(sum([l[0] for l in lighting_demand]),2)
     
     value = [heating,cooling,lighting]
-    if value == [0,0,0]:
-        return None
-    
     lengths = [len(str(int(v))) for v in value if v>0]
     ratio = [round(v / 10**(min(lengths)-2)) for v in value]
     
-    energy_pie = ['Heating demand \n %fkWh'%heating]*int(ratio[0]) + \
-        ['Cooling demand \n %fkWh'%cooling]*int(ratio[1]) + \
-        ['lighting demand \n %fkWh'%lighting]*int(ratio[2])
+    
+    energy_pie = ['Heating demand \n %fkWh'%(heating/1000.)]*int(ratio[0]) + \
+        ['Cooling demand \n %fkWh'%(cooling/1000.)]*int(ratio[1]) + \
+        ['lighting demand \n %fkWh'%(lighting/1000.)]*int(ratio[2])
     
     return energy_pie
 
@@ -168,11 +166,9 @@ def comfort_pie_chart(Zone, temperature):
     """A very crude comfort assessment... just looking at the temperature setpoints"""
     hot = sum([round(t[0])>Zone.t_set_cooling for t in temperature])
     cold = sum([round(t[0])<Zone.t_set_heating for t in temperature])
-    comfy = sum([Zone.t_set_heating < round(t[0]) < Zone.t_set_cooling for t in temperature])
+    comfy = sum([Zone.t_set_heating <= round(t[0]) <= Zone.t_set_cooling for t in temperature])
     
     value = [hot,cold,comfy]
-    if value == [0,0,0]:
-        return None
     
     lengths = [len(str(int(v))) for v in value if v>0]
     ratio = [round(v / 10**(min(lengths)-2)) for v in value]

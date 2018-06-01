@@ -14,7 +14,7 @@
 # <Licence: MIT>
 
 """
-Define an opaque by adding a surface.
+Convert hourly values to daily,monthly or annual results.
 -
 Provided by HIVE 0.0.1
     
@@ -31,10 +31,10 @@ Provided by HIVE 0.0.1
 
 ghenv.Component.Name = "Hive_Downsample"
 ghenv.Component.NickName = 'Downsample'
-ghenv.Component.Message = 'VER 0.0.1\nMAY_24_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_30_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
-ghenv.Component.SubCategory = "3 | Results"
+ghenv.Component.SubCategory = "4. Results"
 # ComponentExposure=1
 
 import scriptcontext as sc
@@ -117,7 +117,7 @@ if _hourly_data.BranchCount > 0 :
     if not _start_HOY:
         print """Start_HOY assumed to be 0: If this is not the case, add a 
         value to _start_HOY!"""
-        _start_HOY = 0
+        _start_HOY = 1
     daily_values, monthly_values, annual_value = main(_start_HOY,hourly_data,resample_type_)
     print '%i data streams resampled'%len(_hourly_data.Branch(0))
 

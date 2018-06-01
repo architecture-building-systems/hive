@@ -45,7 +45,7 @@ ghenv.Component.NickName = 'simulateOneTimeStep'
 ghenv.Component.Message = 'VER 0.0.1\nMAY_27_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
-ghenv.Component.SubCategory = "4 | Developers"
+ghenv.Component.SubCategory = "5. Development"
 # ComponentExposure=2
 
 import Grasshopper.Kernel as gh

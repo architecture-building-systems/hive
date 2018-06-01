@@ -21,7 +21,7 @@ Provided by Oasys 0.0.1
     Args:
         geometry: A brep or list of breps representing the heat-transfer area of the element
         element_name: optional element name
-        u_value: element u-value in W/(m^2.K)
+        u_value: Default=0.2W/(m2.K). Typical values:  solid wall = 0.2, cavity wall w/o insulation = 1.5, insulated wall = 0.18, solid timber door = 3
     Returns:
         centers: list of center points to check input
         normals: list of normals to check input
@@ -30,10 +30,10 @@ Provided by Oasys 0.0.1
 
 ghenv.Component.Name = "Hive_OpaqueElement"
 ghenv.Component.NickName = 'OpaqueElement'
-ghenv.Component.Message = 'VER 0.0.1\nMAY_29_2018'
+ghenv.Component.Message = 'VER 0.0.1\nMAY_30_2018'
 ghenv.Component.IconDisplayMode = ghenv.Component.IconDisplayMode.application
 ghenv.Component.Category = "Hive"
-ghenv.Component.SubCategory = "1 | Zone"
+ghenv.Component.SubCategory = "2. Zone"
 # ComponentExposure=1
 
 import scriptcontext as sc
