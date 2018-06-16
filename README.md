@@ -10,12 +10,18 @@ The aim of HIVE is to increase the availability of tools developed during resear
 
 A native energy simulation toolset for Grasshopper! A series of user objects based on resistor-capacitor model in the [RC_BuildingSimulator](https://github.com/architecture-building-systems/RC_BuildingSimulator) repository. For tool documentation and developer's notes check the [project wiki](https://github.com/architecture-building-systems/hive/wiki/Hive_RC_simulator). Currently still under development.
 
-**Use Case:** As a proof of concept of the tool, a parametric shading surface is applied to a window. The energy impact of the different shading length can be viewed in real time in Grasshopper. This can be used to optimize or compare geometries.
+**Demo** As a proof of concept of the tool, a parametric shading surface is applied to a window. The energy impact of the different shading length can be viewed in real time in Grasshopper. This can be used to optimize or compare geometries.
 
-![Use case for an embedded resistor-capacitor model](https://github.com/architecture-building-systems/hive/blob/master/repository_files/hive_march_20.gif)
+![Hourly radiation calculations](https://github.com/architecture-building-systems/hive/blob/master/repository_files/radiation1.mp4)
 
-## Projects to be included:
+![Some shading tests](https://github.com/architecture-building-systems/hive/blob/master/repository_files/radiation2.mp4)
 
-* **Net-zero energy building assesment** (Laura Cowie): Workflows in Ladybug and Honeybee for assessing design options for a net-zero building refurbishment.
+![How to set up your first demonstration](https://github.com/architecture-building-systems/hive/blob/master/repository_files/zone.mp4)
+
+![Real-world application](https://github.com/architecture-building-systems/hive/blob/master/repository_files/case_study.mp4)
+
+## Other projects in the pipeline:
+
+* **Net-zero energy building assesment** (Laura Cowie): Workflow sets in Ladybug and Honeybee for assessing design options for a net-zero building refurbishment.
 
 * **Panelling tool** (Stefan Caranovic): A panelling tool recently circulated within the chair. A possible enhancement of this tool would be to include PV panel visualisation (Linus Walker).
