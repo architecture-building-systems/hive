@@ -17,7 +17,7 @@
       "main-module": "sia380",
       "main-function": "monthly",
       "inputs": [
-        {"type": "float", "name": "tau", "nick-name": "tau", "description": "Zeitkonstante des Gebäudes [h]"},
+        {"type": "float", "name": "tau", "nick-name": "ntau", "description": "Zeitkonstante des Gebäudes [h]"},
         {"type": "float", "name": "theta_e", "nick-name": "theta_e", "description": "Aussenlufttemperatur"},
         {"type": "float", "name": "theta_i", "nick-name": "theta_i", "description": "Raumlufttemperatur"},
         {"type": "float", "name": "t", "nick-name": "t", "description": "Länge der Berechnungsperiode [h]"},
