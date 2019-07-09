@@ -7,8 +7,76 @@ import System
 import Rhino
 import rhinoscriptsyntax as rs
 import importlib
+import json
 
-BADGER_CONFIG = {'description': 'Photovoltaic calculations', 'name': 'pv', 'id': '72eb1244-b95a-4624-9832-c6640a36fae9', 'components': [{'subcategory': 'pv', 'inputs': [{'nick-name': 'Gh', 'type': 'float', 'name': 'Gh', 'description': 'Global horizontal irradiation [kWh/m2]'}, {'nick-name': 'OF', 'type': 'float', 'name': 'OF', 'description': 'Orientation factor [%] (Default Value: 100%)'}, {'nick-name': u'\u03b7', 'type': 'float', 'name': 'eta', 'description': 'PV module efficiency [%] (Default Value: 18%)'}, {'nick-name': 'PR', 'type': 'float', 'name': 'PR', 'description': 'Performance ratio [%] (Default Value: 75%)'}, {'nick-name': 'A', 'type': 'float', 'name': 'A', 'description': 'PV area[m2] (Default Value: 100 m2)'}], 'description': 'A simplified PV calculation', 'outputs': [{'nick-name': 'E', 'type': 'float', 'name': 'E', 'description': 'PV electricity generation [kWh]'}], 'name': 'Simplified PV', 'id': 'b43f79db-a2bf-42a2-8b9f-5a0dada0b14f', 'main-module': 'simple_pv', 'category': '[hive]', 'class-name': 'SimplePV', 'abbreviation': 'simple-pv', 'main-function': 'simple_pv'}], 'version': '0.1', 'author': 'daren-thomas', 'include-files': ['simple_pv.py']}
+BADGER_CONFIG = json.loads('''{
+    "description": "Photovoltaic calculations", 
+    "name": "pv", 
+    "id": "72eb1244-b95a-4624-9832-c6640a36fae9", 
+    "components": [
+        {
+            "subcategory": "pv", 
+            "inputs": [
+                {
+                    "description": "Global horizontal irradiation [kWh/m2]", 
+                    "nick-name": "Gh", 
+                    "default": null, 
+                    "name": "Gh", 
+                    "type": "float"
+                }, 
+                {
+                    "description": "Orientation factor [%] (Default Value: 100%)", 
+                    "nick-name": "OF", 
+                    "default": null, 
+                    "name": "OF", 
+                    "type": "float"
+                }, 
+                {
+                    "description": "PV module efficiency [%] (Default Value: 18%)", 
+                    "nick-name": "\u03b7", 
+                    "default": null, 
+                    "name": "eta", 
+                    "type": "float"
+                }, 
+                {
+                    "description": "Performance ratio [%] (Default Value: 75%)", 
+                    "nick-name": "PR", 
+                    "default": null, 
+                    "name": "PR", 
+                    "type": "float"
+                }, 
+                {
+                    "description": "PV area[m2] (Default Value: 100 m2)", 
+                    "nick-name": "A", 
+                    "default": null, 
+                    "name": "A", 
+                    "type": "float"
+                }
+            ], 
+            "description": "A simplified PV calculation", 
+            "outputs": [
+                {
+                    "nick-name": "E", 
+                    "type": "float", 
+                    "name": "E", 
+                    "description": "PV electricity generation [kWh]"
+                }
+            ], 
+            "name": "Simplified PV", 
+            "id": "b43f79db-a2bf-42a2-8b9f-5a0dada0b14f", 
+            "main-module": "simple_pv", 
+            "category": "[hive]", 
+            "class-name": "SimplePV", 
+            "abbreviation": "simple-pv", 
+            "main-function": "simple_pv"
+        }
+    ], 
+    "version": "0.1", 
+    "author": "daren-thomas", 
+    "include-files": [
+        "simple_pv.py"
+    ]
+}''')
 
 PARAMETER_MAP = {
     'string': Grasshopper.Kernel.Parameters.Param_GenericObject,
@@ -61,6 +129,8 @@ for component in BADGER_CONFIG['components']:
         else:
             main_function = getattr(main_module, 'main')
         inputs = [self.marshal.GetInput(DA, i) for i in range(len(component['inputs']))]
+        # apply default values
+        
         results = main_function(*inputs)
         if len(component['outputs']) == 1:
             self.marshal.SetOutput(results, DA, 0, True)
