@@ -45,6 +45,23 @@
         {"type": "float", "name": "eta_g", "nick-name": "η_g", "description": "Ausnutzungsgrad für Wärmegewinne [-]"},
         {"type": "float", "name": "Q_i", "nick-name": "Q_i", "description": "Interne Wärmeeinträge [Wh]"},
         {"type": "float", "name": "Q_s", "nick-name": "Q_s", "description": "Solare Wärmeeinträge [Wh]"}]
+    },
+    {
+      "class-name": "HelloWorld",
+      "name": "Hello, World",
+      "abbreviation": "hw",
+      "description": "Hello World example for Saso Basic",
+      "category": "[hive]",
+      "subcategory": "demand",
+      "id": "8a8cecfd-0197-4669-8de3-1aadeb21b4ef",
+      "main-module": "helloworld",
+      "main-function": "say",
+      "inputs": [
+        {"type": "string", "name": "name", "nick-name": "name", "description": "name", "default": "Dave"}
+      ],
+      "outputs": [
+        {"type": "string", "name": "message", "nick-name": "message", "description": "Hello, Dave"}
+      ]
     }
   ]
 }
