@@ -4,7 +4,7 @@
   "version": "0.1",
   "author": "daren-thomas",
   "id": "4b5ec46e-cafa-4a72-ac7b-fb839ce3c618",
-  "include-files": ["sia380.py"],
+  "include-files": ["sia380.py", "helloworld.py"],
   "components": [
     {
       "class-name": "Sia380",

@@ -233,7 +233,8 @@ BADGER_CONFIG = json.loads('''{
     "version": "0.1", 
     "author": "daren-thomas", 
     "include-files": [
-        "sia380.py"
+        "sia380.py", 
+        "helloworld.py"
     ]
 }''')
 
