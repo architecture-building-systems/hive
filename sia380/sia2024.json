@@ -1,0 +1,53 @@
+{
+  "name": "sia2024",
+  "description": "A simplistic implementation of SIA 2024",
+  "version": "0.1",
+  "author": "saso-basic",
+  "id": "f5cd6a0b-c7f9-42c9-b58c-045640dfe65d",
+  "include-files": ["sia2024.py"],
+  "components": [
+    {
+      "class-name": "Sia2024",
+      "name": "SIA 2024",
+      "abbreviation": "sia2024",
+      "description": "Default values for SIA 380.1",
+      "category": "[hive]",
+      "subcategory": "demand",
+      "id": "99dd97f1-b633-44e9-866c-6b6dc3bb8ae0",
+      "main-module": "sia2024",
+      "main-function": "default_values",
+      "inputs": [
+        {"type": "string", "name": "use_case", "nick-name": "use",
+          "default": "mfh",
+          "description": "Use case"},
+        {"type": "float", "name": "area", "nick-name": "area",
+          "default": 100.0,
+          "description": "Area in m2"},
+        {"type": "integer", "name": "month", "nick-name": "month", "description": "Time period",
+          "default": 1
+        }
+      ],
+      "outputs": [
+        {"type": "float", "name": "tau", "nick-name": "τ", "description": "Zeitkonstante des Gebäudes [h]"},
+        {"type": "float", "name": "theta_e", "nick-name": "θ_e", "description": "Aussenlufttemperatur"},
+        {"type": "float", "name": "theta_i", "nick-name": "θ_i", "description": "Raumlufttemperatur"},
+        {"type": "float", "name": "t", "nick-name": "t", "description": "Länge der Berechnungsperiode [h]"},
+        {"type": "float", "name": "A_op", "nick-name": "A_op", "description": "Aussenwandfläche (opak) [m2]"},
+        {"type": "float", "name": "A_w", "nick-name": "A_w", "description": "Fensterfläche [m2]"},
+        {"type": "float", "name": "U_op", "nick-name": "U_op", "description": "Wärmedurchgangskoeffizient Aussenwand [W/m2K]"},
+        {"type": "float", "name": "U_w", "nick-name": "U_w", "description": "Wärmedurchgangskoeffizient Fenster [W/m2K]"},
+        {"type": "float", "name": "Vdot_e", "nick-name": "V\u0307_e", "description": "Aussenluft-Volumenstrom [m3/h]"},
+        {"type": "float", "name": "Vdot_inf", "nick-name": "V\u0307_inf", "description": "Aussenluft-Volumenstrom durch Infiltration [m3/h]"},
+        {"type": "float", "name": "eta_rec", "nick-name": "η_rec", "description": "Nutzungsgrad der Wärmerückgewinnung [-]"},
+        {"type": "float", "name": "phi_P", "nick-name": "φ_P", "description": "Wärmeabgabe Personen [W]"},
+        {"type": "float", "name": "phi_B", "nick-name": "φ_B", "description": "Wärmeabgabe Beleuchtung [W]"},
+        {"type": "float", "name": "phi_G", "nick-name": "φ_G", "description": "Wärmeabgabe Geräte [W]"},
+        {"type": "float", "name": "t_P", "nick-name": "t_P", "description": "Vollaststunden Personen [h]"},
+        {"type": "float", "name": "t_B", "nick-name": "t_B", "description": "Vollaststunden Beleuchtung [h]"},
+        {"type": "float", "name": "t_G", "nick-name": "t_G", "description": "Vollaststunden Geräter [h]"},
+        {"type": "float", "name": "g", "nick-name": "g", "description": "g-Wert [-]"},
+        {"type": "float", "name": "f_sh", "nick-name": "f_sh", "description": "Reduktionsfaktor solare Wärmeeinträge [-]"},
+        {"type": "float", "name": "I", "nick-name": "I", "description": "Solare Strahlung [Wh/m2]"}]
+    }
+  ]
+}
