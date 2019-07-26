@@ -1,0 +1,53 @@
+{
+  "name": "sia2028",
+  "description": "Solar Irradiation Model",
+  "version": "0.1",
+  "author": "daren-thomas",
+  "id": "d724889c-9acf-4cd1-b561-8b0caaa059ac",
+  "include-files": [
+    "sia2028.py"
+  ],
+  "components": [
+    {
+      "class-name": "Sia2028",
+      "name": "SIA 2028",
+      "abbreviation": "sia2028",
+      "description": "SIA 2028 Solar Irradiation Model",
+      "category": "[hive]",
+      "subcategory": "demand",
+      "id": "ba1ccccc-e98e-4274-b74a-7401b516e104",
+      "main-module": "sia2028",
+      "main-function": "solar_irradiation_model",
+      "inputs": [
+        {
+          "type": "string",
+          "name": "location",
+          "nick-name": "location",
+          "description": "Location for the calculation",
+          "default": "Zürich"
+        },
+        {
+          "type": "integer",
+          "name": "month",
+          "nick-name": "month",
+          "description": "Month of the year (1 for January, 12 for December)",
+          "default": 1
+        }
+      ],
+      "outputs": [
+        {
+          "type": "float",
+          "name": "G_h",
+          "nick-name": "G_h",
+          "description": "Global horizontal irradiation [kWh/m2]"
+        },
+        {
+          "type": "float",
+          "name": "theta_e",
+          "nick-name": "θ_e",
+          "description": "External air temperature [°C]"
+        }
+      ]
+    }
+  ]
+}
