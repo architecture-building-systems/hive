@@ -2,28 +2,6 @@
 """
 Implements predefined default values for SIA 380.1 calculations.
 
-TODO: create dropdowns for input prameters?
-
-Inputs:
-Use case (Default value: Single family home)
-A - Living area [m2]
-month [-]
-
-Outputs:
-U_op - U value opaque walls [W/(m2K)]
-U_w - U value windows [W/(m2K)]
-tau - time constant [h]
-Ve - Exterior air volume flow rate per square meter of living area [m3/h]
-Vinf - Infiltration air volume flow rate per square meter of living area [m3/h]
-eta_rec,theta - ventilation heat recovery efficiency [-]
-Phi_Peop - Heat release People [W]
-Phi_Light - Heat release Lightning [W]
-Phi_Appl - Heat release Appliances [W]
-t_Peop - full load hours People [h]
-t_Light - full load hours Lightning [h]
-t_Appl - full load hours Appliances [h]
-g - g-Value windows [-]
-
 """
 
 
@@ -32,7 +10,7 @@ def default_values(use_case, area, month):
         "mfh": {'tau': 182.0,
                 'theta_i': 26.0,
                 'theta_e': 0,
-                't': 0,
+                't': month,
                 'A_op': 20.0,
                 'A_w': 26.0,
                 'U_op': 0.2,
@@ -52,7 +30,7 @@ def default_values(use_case, area, month):
         "efh": {'tau': 164.0,
                 'theta_i': 26.0,
                 'theta_e': 0,
-                't': 0,
+                't': month,
                 'A_op': 20.0,
                 'A_w': 38.0,
                 'U_op': 0.2,
@@ -72,7 +50,7 @@ def default_values(use_case, area, month):
         "office": {'tau': 117.0,
                    'theta_i': 26.0,
                    'theta_e': 0,
-                   't': 0,
+                   't': month,
                    'A_op': 36.0,
                    'A_w': 42.0,
                    'U_op': 0.2,
@@ -92,7 +70,7 @@ def default_values(use_case, area, month):
         "school": {'tau': 72.0,
                    'theta_i': 26.0,
                    'theta_e': 0,
-                   't': 0,
+                   't': month,
                    'A_op': 70.0,
                    'A_w': 95.0,
                    'U_op': 0.2,
@@ -112,6 +90,7 @@ def default_values(use_case, area, month):
     }
 
     tmp = use_case_data[use_case]
+
     return tmp['tau'], tmp['theta_i'], tmp['theta_e'], tmp['t'], tmp['A_op'], tmp['A_w'], tmp['U_op'], tmp['U_w'], tmp[
         'Vdot_e'], tmp['Vdot_inf'], tmp['eta_rec'], tmp['phi_P'], tmp['phi_B'], tmp['phi_G'], tmp['t_P'], tmp['t_B'], \
            tmp['t_G'], tmp['g'], tmp['f_sh'], tmp['I']
