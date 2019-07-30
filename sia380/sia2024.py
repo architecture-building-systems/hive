@@ -92,5 +92,5 @@ def default_values(use_case, area, month):
     tmp = use_case_data[use_case]
 
     return tmp['tau'], tmp['theta_i'], tmp['theta_e'], tmp['t'], tmp['A_op'], tmp['A_w'], tmp['U_op'], tmp['U_w'], tmp[
-        'Vdot_e'], tmp['Vdot_inf'], tmp['eta_rec'], tmp['phi_P'], tmp['phi_B'], tmp['phi_G'], tmp['t_P'], tmp['t_B'], \
-           tmp['t_G'], tmp['g'], tmp['f_sh'], tmp['I']
+        'Vdot_e'] * area, tmp['Vdot_inf'] * area, tmp['eta_rec'], tmp['phi_P'] * area, tmp['phi_B'] * area, tmp[
+               'phi_G'] * area, tmp['t_P'], tmp['t_B'], tmp['t_G'], tmp['g'], tmp['f_sh'] * area, tmp['I']

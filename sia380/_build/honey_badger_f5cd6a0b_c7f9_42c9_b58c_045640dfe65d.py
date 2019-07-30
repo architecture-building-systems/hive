@@ -38,7 +38,7 @@ BADGER_CONFIG = json.loads('''{
             "description": "Default values for SIA 380.1", 
             "outputs": [
                 {
-                    "nick-name": "\u03c4", 
+                    "nick-name": "tau - time constant [h]", 
                     "type": "float", 
                     "name": "tau", 
                     "description": "Zeitkonstante des Geb\u00e4udes [h]"
@@ -74,25 +74,25 @@ BADGER_CONFIG = json.loads('''{
                     "description": "Fensterfl\u00e4che [m2]"
                 }, 
                 {
-                    "nick-name": "U_op", 
+                    "nick-name": "U_op - U value opaque walls [W/(m2K)]", 
                     "type": "float", 
                     "name": "U_op", 
                     "description": "W\u00e4rmedurchgangskoeffizient Aussenwand [W/m2K]"
                 }, 
                 {
-                    "nick-name": "U_w", 
+                    "nick-name": "U_w - U value windows [W/(m2K)]", 
                     "type": "float", 
                     "name": "U_w", 
                     "description": "W\u00e4rmedurchgangskoeffizient Fenster [W/m2K]"
                 }, 
                 {
-                    "nick-name": "V\u0307_e", 
+                    "nick-name": "V\u0307_e - exterior air volume flow", 
                     "type": "float", 
                     "name": "Vdot_e", 
                     "description": "Aussenluft-Volumenstrom [m3/h]"
                 }, 
                 {
-                    "nick-name": "V\u0307_inf", 
+                    "nick-name": "V\u0307_inf - infiltration air volume flow", 
                     "type": "float", 
                     "name": "Vdot_inf", 
                     "description": "Aussenluft-Volumenstrom durch Infiltration [m3/h]"
@@ -104,43 +104,43 @@ BADGER_CONFIG = json.loads('''{
                     "description": "Nutzungsgrad der W\u00e4rmer\u00fcckgewinnung [-]"
                 }, 
                 {
-                    "nick-name": "\u03c6_P", 
+                    "nick-name": "\u03c6_P - heat release People [W]", 
                     "type": "float", 
                     "name": "phi_P", 
                     "description": "W\u00e4rmeabgabe Personen [W]"
                 }, 
                 {
-                    "nick-name": "\u03c6_B", 
+                    "nick-name": "\u03c6_B - heat release Lightning [W]", 
                     "type": "float", 
                     "name": "phi_B", 
                     "description": "W\u00e4rmeabgabe Beleuchtung [W]"
                 }, 
                 {
-                    "nick-name": "\u03c6_G", 
+                    "nick-name": "\u03c6_G - heat release Appliances [W]", 
                     "type": "float", 
                     "name": "phi_G", 
                     "description": "W\u00e4rmeabgabe Ger\u00e4te [W]"
                 }, 
                 {
-                    "nick-name": "t_P", 
+                    "nick-name": "t_P - full load hours People [h]", 
                     "type": "float", 
                     "name": "t_P", 
                     "description": "Vollaststunden Personen [h]"
                 }, 
                 {
-                    "nick-name": "t_B", 
+                    "nick-name": "t_B - full load hours Lightning [h]", 
                     "type": "float", 
                     "name": "t_B", 
                     "description": "Vollaststunden Beleuchtung [h]"
                 }, 
                 {
-                    "nick-name": "t_G", 
+                    "nick-name": "t_G - full load hours Appliances [h]", 
                     "type": "float", 
                     "name": "t_G", 
                     "description": "Vollaststunden Ger\u00e4ter [h]"
                 }, 
                 {
-                    "nick-name": "g", 
+                    "nick-name": "g - g-Value windows [-]", 
                     "type": "float", 
                     "name": "g", 
                     "description": "g-Wert [-]"
