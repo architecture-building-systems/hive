@@ -8,7 +8,7 @@ import Grasshopper
 BADGER_CONFIG = json.loads('''{
     "description": "A simplistic implementation of Electricity and DHW demand", 
     "name": "EDandDHW", 
-    "id": "4b5ec46e-cafa-4a72-ac7b-fb839ce3c618", 
+    "id": "56fc77b3-1423-4b73-8577-54eb8b773823", 
     "components": [
         {
             "subcategory": "demand", 
