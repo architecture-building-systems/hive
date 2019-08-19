@@ -1,0 +1,40 @@
+{
+  "name": "EDandDHW",
+  "description": "A simplistic implementation of Electricity and DHW demand",
+  "version": "0.1",
+  "author": "saso-basic",
+  "id": "4b5ec46e-cafa-4a72-ac7b-fb839ce3c618",
+  "include-files": ["EDandDHW.py"],
+  "components": [
+    {
+      "class-name": "EDandDHW",
+      "name": "EDandDHW",
+      "abbreviation": "EDandDHW",
+      "description": "Elecrticity and DHW demand calculation",
+      "category": "[hive]",
+      "subcategory": "demand",
+      "id": "6bbb1401-7fb5-4219-ab56-e806b4ec3113",
+      "main-module": "EDandDHW",
+      "main-function": "monthly",
+      "inputs": [
+        {"type": "float", "name": "", "nick-name": "", "description": "NFA_Total (m^2)"},
+        {"type": "float", "name": "", "nick-name": "", "description": "NFA_Laundry (m^2)"},
+        {"type": "float", "name": "", "nick-name": "", "description": "NFA_Adjacent rooms (incl. Cellar) (m^2)"},
+        {"type": "float", "name": "", "nick-name": "", "description": "Annual electricity demand of EA equipment (kWh/m^2)"},
+        {"type": "float", "name": "", "nick-name": "", "description": "Annual electricity requirement Lighting EL+L,Ac (kWh/m^2)"},
+        {"type": "float", "name": "", "nick-name": "", "description": "Annual electricity requirement Simple ventilation Ev (kWh/m^2)"},
+        {"type": "float", "name": "", "nick-name": "", "description": "Washing equipment (kWh/m^2)"},
+        {"type": "float", "name": "", "nick-name": "", "description": "Washing Light (kWh/m^2)"},
+        {"type": "float", "name": "", "nick-name": "", "description": "Washing simple ventilation (kWh/m^2)"},
+        {"type": "float", "name": "", "nick-name": "", "description": "Next room equipment (kWh/m^2)"},
+        {"type": "float", "name": "", "nick-name": "", "description": "Lighting in adjoining room (kWh/m^2)"},
+        {"type": "float", "name": "", "nick-name": "", "description": "Annual DHW demand (kWh/m^2)"},
+        {"type": "float", "name": "", "nick-name": "", "description": "Washing (kWh/m^2)"},
+        {"type": "float", "name": "", "nick-name": "", "description": "Adjacent_room (kWh/m^2)"}
+      ],
+      "outputs": [
+        {"type": "float", "name": "", "nick-name": "", "description": "Total Annual Electricity Demand (kWh/a)"},
+        {"type": "float", "name": "", "nick-name": "", "description": "Total Annual DHW Demand (kWh/a)"}]
+    }
+  ]
+}
