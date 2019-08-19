@@ -36,23 +36,23 @@ BADGER_CONFIG = json.loads('''{
                 }, 
                 {
                     "description": "Annual electricity demand of EA equipment (kWh/m^2)", 
-                    "nick-name": "Annual electricity demand", 
+                    "nick-name": "Annual elect. demand", 
                     "default": 14, 
-                    "name": "Annual electricity demand", 
+                    "name": "Annual elect. demand", 
                     "type": "float"
                 }, 
                 {
                     "description": "Annual electricity requirement lighting EL+L,Ac (kWh/m^2)", 
-                    "nick-name": "Annual electricity requirement lighting", 
+                    "nick-name": "Annual elect. req. lighting", 
                     "default": 4, 
-                    "name": "Annual electricity requirement lighting", 
+                    "name": "Annual elect. req. lighting", 
                     "type": "float"
                 }, 
                 {
                     "description": "Annual electricity requirement simple ventilation Ev (kWh/m^2)", 
-                    "nick-name": "Annual electricity requirement ventilation", 
+                    "nick-name": "Annual elect. req. vent.", 
                     "default": 1, 
-                    "name": "Annual electricity requirement ventilation", 
+                    "name": "Annual elect. req. vent.", 
                     "type": "float"
                 }, 
                 {
@@ -71,9 +71,9 @@ BADGER_CONFIG = json.loads('''{
                 }, 
                 {
                     "description": "Washing simple ventilation (kWh/m^2)", 
-                    "nick-name": "Washing simple ventilation", 
+                    "nick-name": "Washing simple vent.", 
                     "default": 3, 
-                    "name": "Washing simple ventilation", 
+                    "name": "Washing simple vent.", 
                     "type": "float"
                 }, 
                 {
@@ -92,9 +92,9 @@ BADGER_CONFIG = json.loads('''{
                 }, 
                 {
                     "description": "Next room simple ventilation (kWh/m^2)", 
-                    "nick-name": "Next room ventilation", 
+                    "nick-name": "Next room simple vent.", 
                     "default": 0.40000000000000002, 
-                    "name": "Next room simple ventilation", 
+                    "name": "Next room simple vent.", 
                     "type": "float"
                 }, 
                 {
@@ -119,28 +119,28 @@ BADGER_CONFIG = json.loads('''{
                     "type": "float"
                 }
             ], 
-            "description": "Elecrticity and DHW demand calculation", 
+            "description": "Electricity and DHW demand calculation", 
             "outputs": [
                 {
-                    "nick-name": "Total electricity demand", 
+                    "nick-name": "Total electricity demand (kWh/a)", 
                     "type": "float", 
                     "name": "Total Annual Electricity Demand", 
                     "description": "Total Annual Electricity Demand (kWh/a)"
                 }, 
                 {
-                    "nick-name": "Total DHW demand", 
+                    "nick-name": "Total DHW demand (kWh/a)", 
                     "type": "float", 
                     "name": "Total Annual DHW Demand", 
                     "description": "Total Annual DHW Demand (kWh/a)"
                 }
             ], 
-            "name": "EDandDHW", 
-            "id": "6bbb1401-7fb5-4219-ab56-e806b4ec3113", 
+            "name": "Electricity and DHW demand", 
+            "id": "80230b7e-cae1-4998-9483-f7ac1279d1be", 
             "main-module": "EDandDHW", 
             "category": "[hive]", 
             "class-name": "EDandDHW", 
-            "abbreviation": "EDandDHW", 
-            "main-function": "monthly"
+            "abbreviation": "Electricity and DHW demand", 
+            "main-function": "ed_and_dhw"
         }
     ], 
     "version": "0.1", 
