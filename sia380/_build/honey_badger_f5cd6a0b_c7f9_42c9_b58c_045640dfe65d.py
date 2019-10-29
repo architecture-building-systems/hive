@@ -2,22 +2,24 @@
 import json
 import GhPython
 import System
-import hblib
+import hblib_f5cd6a0b_c7f9_42c9_b58c_045640dfe65d as hblib
 import Grasshopper
 
 BADGER_CONFIG = json.loads('''{
     "description": "A simplistic implementation of SIA 2024", 
     "name": "sia2024", 
+    "include-install": [], 
     "id": "f5cd6a0b-c7f9-42c9-b58c-045640dfe65d", 
     "components": [
         {
             "subcategory": "demand", 
             "inputs": [
                 {
-                    "description": "Use case", 
+                    "description": "Use case. Options: 'mfh', 'efh', 'office', 'school'.", 
                     "nick-name": "use", 
                     "default": "mfh", 
                     "name": "use_case", 
+                    "access": "item", 
                     "type": "string"
                 }, 
                 {
@@ -25,6 +27,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "area", 
                     "default": 100.0, 
                     "name": "area", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -32,6 +35,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "month", 
                     "default": 1, 
                     "name": "month", 
+                    "access": "item", 
                     "type": "integer"
                 }
             ], 

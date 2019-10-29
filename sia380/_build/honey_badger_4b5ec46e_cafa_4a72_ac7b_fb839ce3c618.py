@@ -2,12 +2,13 @@
 import json
 import GhPython
 import System
-import hblib
+import hblib_4b5ec46e_cafa_4a72_ac7b_fb839ce3c618 as hblib
 import Grasshopper
 
 BADGER_CONFIG = json.loads('''{
     "description": "A simplistic implementation of SIA 380.1", 
     "name": "sia380", 
+    "include-install": [], 
     "id": "4b5ec46e-cafa-4a72-ac7b-fb839ce3c618", 
     "components": [
         {
@@ -18,6 +19,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "\u03c4", 
                     "default": null, 
                     "name": "tau", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -25,6 +27,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "\u03b8_e", 
                     "default": null, 
                     "name": "theta_e", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -32,6 +35,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "\u03b8_i", 
                     "default": null, 
                     "name": "theta_i", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -39,6 +43,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "t", 
                     "default": null, 
                     "name": "t", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -46,6 +51,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "A_op", 
                     "default": null, 
                     "name": "A_op", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -53,6 +59,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "A_w", 
                     "default": null, 
                     "name": "A_w", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -60,6 +67,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "U_op", 
                     "default": null, 
                     "name": "U_op", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -67,6 +75,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "U_w", 
                     "default": null, 
                     "name": "U_w", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -74,6 +83,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "V\u0307_e", 
                     "default": null, 
                     "name": "Vdot_e", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -81,6 +91,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "V\u0307_inf", 
                     "default": null, 
                     "name": "Vdot_inf", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -88,6 +99,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "\u03b7_rec", 
                     "default": null, 
                     "name": "eta_rec", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -95,6 +107,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "\u03c6_P", 
                     "default": null, 
                     "name": "phi_P", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -102,6 +115,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "\u03c6_B", 
                     "default": null, 
                     "name": "phi_B", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -109,6 +123,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "\u03c6_G", 
                     "default": null, 
                     "name": "phi_G", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -116,6 +131,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "t_P", 
                     "default": null, 
                     "name": "t_P", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -123,6 +139,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "t_B", 
                     "default": null, 
                     "name": "t_B", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -130,6 +147,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "t_G", 
                     "default": null, 
                     "name": "t_G", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -137,6 +155,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "g", 
                     "default": null, 
                     "name": "g", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -144,6 +163,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "f_sh", 
                     "default": null, 
                     "name": "f_sh", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -151,6 +171,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "I", 
                     "default": null, 
                     "name": "I", 
+                    "access": "item", 
                     "type": "float"
                 }
             ], 
