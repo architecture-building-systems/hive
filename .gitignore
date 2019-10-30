@@ -3,6 +3,9 @@
 **/hive/HIVE_RC_simulator/justin*
 **/hive/HIVE_RC_simulator/graphics*
 
+**/_build/
+*.3dm.rhl
+
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
