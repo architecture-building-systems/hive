@@ -2,12 +2,13 @@
 import json
 import GhPython
 import System
-import hblib
+import hblib_56fc77b3_1423_4b73_8577_54eb8b773823 as hblib
 import Grasshopper
 
 BADGER_CONFIG = json.loads('''{
     "description": "A simplistic implementation of Electricity and DHW demand", 
     "name": "EDandDHW", 
+    "include-install": [], 
     "id": "56fc77b3-1423-4b73-8577-54eb8b773823", 
     "components": [
         {
@@ -18,6 +19,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "NFA total", 
                     "default": 250.90000000000001, 
                     "name": "NFA total", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -25,6 +27,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "NFA laundry", 
                     "default": 2.7000000000000002, 
                     "name": "NFA laundry", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -32,6 +35,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "NFA adjacent rooms", 
                     "default": 12.1, 
                     "name": "NFA adjacent rooms", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -39,6 +43,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "Annual elect. demand", 
                     "default": 14, 
                     "name": "Annual elect. demand", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -46,6 +51,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "Annual elect. req. lighting", 
                     "default": 4, 
                     "name": "Annual elect. req. lighting", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -53,6 +59,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "Annual elect. req. vent.", 
                     "default": 1, 
                     "name": "Annual elect. req. vent.", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -60,6 +67,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "Washing equipment", 
                     "default": 34, 
                     "name": "Washing equipment", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -67,6 +75,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "Washing light", 
                     "default": 17, 
                     "name": "Washing light", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -74,6 +83,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "Washing simple vent.", 
                     "default": 3, 
                     "name": "Washing simple vent.", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -81,6 +91,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "Next room equipment", 
                     "default": 0, 
                     "name": "Next room equipment", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -88,6 +99,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "Lighting in adjoining room", 
                     "default": 13, 
                     "name": "Lighting in adjoining room", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -95,6 +107,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "Next room simple vent.", 
                     "default": 0.40000000000000002, 
                     "name": "Next room simple vent.", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -102,6 +115,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "Annual DHW demand", 
                     "default": 13.5, 
                     "name": "Annual DHW demand", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -109,6 +123,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "Washing", 
                     "default": 0, 
                     "name": "Washing", 
+                    "access": "item", 
                     "type": "float"
                 }, 
                 {
@@ -116,6 +131,7 @@ BADGER_CONFIG = json.loads('''{
                     "nick-name": "Adjacent room", 
                     "default": 0, 
                     "name": "Adjacent room", 
+                    "access": "item", 
                     "type": "float"
                 }
             ], 
