@@ -1,0 +1,113 @@
+{
+  "name": "solar",
+  "description": "Solar irradiance simulation on external surfaces",
+  "version": "0.1",
+  "author": "christophwaibel",
+  "id": "3b4dd266-f7e0-4614-aef5-cadf1e3319d2",
+  "include-files": ["simple_panel.py", "obstructed_panel.py"],
+  "components": [
+    {
+      "class-name": "SimplePanel",
+      "name": "SimplePanel",
+      "abbreviation": "SimplePanel",
+      "description": "Calculates solar irradiance on an unobstructed external surface",
+      "category": "[hive]",
+      "subcategory": "Solar",
+      "id": "880708bb-5f9d-4dbc-8fb9-db44e90f0290",
+      "main-module": "simple_panel",
+      "inputs": [
+        {
+          "name": "tilt",
+          "nick-name": "tilt",
+          "type": "float",
+          "description": "Panel tilt in degree"
+        },
+        {
+          "name": "azimuth",
+          "nick-name": "azimuth",
+          "type": "float",
+          "description": "Panel azimuth in degree"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "annual potential",
+          "nick-name": "annual",
+          "type": "float",
+          "description": "annual hourly solar irradiance [W/m²] of panel"
+        },
+        {
+          "name": "beam",
+          "nick-name": "beam",
+          "type": "float",
+          "description": "beam"
+        },
+        {
+          "name": "diff",
+          "nick-name": "diff",
+          "type": "float",
+          "description": "diff"
+        },
+        {
+          "name": "diff_refl",
+          "nick-name": "diff_refl",
+          "type": "float",
+          "description": "diff_refl"
+        }
+      ]
+    },
+    {
+      "class-name": "ObstructedPanel",
+      "name": "ObstructedPanel",
+      "abbreviation": "ObstructedPanel",
+      "description": "Calculates solar irradiance on obstructed building surface.",
+      "category": "[hive]",
+      "subcategory": "Solar",
+      "id": "c8215941-ca5f-4d47-8e4f-032f41eccc4f",
+      "main-module": "obstructed_panel",
+      "inputs": [
+        {
+          "name": "mesh_analysis",
+          "nick-name": "mesh_in",
+          "type": "mesh",
+          "description": "Analysis surface as rhino grasshopper mesh"
+        },
+        {
+          "name": "obstructions",
+          "nick-name": "obstructions",
+          "type": "mesh",
+          "description": "Obstructions as rhino grasshopper mesh objects",
+          "access": "list"
+        },
+        {
+          "name": "DHI",
+          "nick-name": "DHI",
+          "type": "float",
+          "description": "DHI",
+          "access": "list"
+        },
+        {
+          "name": "DNI",
+          "nick-name": "DNI",
+          "type": "float",
+          "description": "DNI",
+          "access": "list"
+        }
+      ],
+      "outputs": [
+        {
+          "name": "annual potential",
+          "nick-name": "annual",
+          "type": "float",
+          "description": "annual hourly solar irradiance [W/m²] of panel"
+        },
+        {
+          "name": "mesh_visu",
+          "nick-name": "mesh_visu",
+          "type": "mesh",
+          "description": "mesh_visu"
+        }
+      ]
+    }
+  ]
+}
