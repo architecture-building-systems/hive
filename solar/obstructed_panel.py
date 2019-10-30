@@ -13,11 +13,11 @@ clr.AddReferenceToFileAndPath(os.path.join(path, "Libraries", "GHSolar.gha"))
 import GHSolar as ghs
 
 
-def main(mesh_analysis, mesh_obstructions, dhi_in, dni_in):
-    return simulate_obstructed_panel(mesh_analysis, mesh_obstructions, dhi_in, dni_in)
+def main(mesh_analysis, mesh_obstructions, DHI, DNI, latitude, longitude, solarazi, solaralti):
+    return simulate_obstructed_panel(mesh_analysis, mesh_obstructions, DHI, DNI, latitude, longitude, solarazi, solaralti)
 
 
-def simulate_obstructed_panel(mesh_analysis, mesh_obstructions, dhi_in, dni_in):
+def simulate_obstructed_panel(mesh_analysis, mesh_obstructions, dhi_in, dni_in, latitude, longitude, solarazi, solaralti):
     horizon = 8760
 
     # Model parameters
@@ -55,11 +55,12 @@ def simulate_obstructed_panel(mesh_analysis, mesh_obstructions, dhi_in, dni_in):
         dni.Add(dni_in[i])
         dhi.Add(dhi_in[i])
         building_albedos.Add(0.3)
+    if (solarazi) and (solaralti):
+        for i in range(0, horizon):
+            solar_altitude.Add(solaralti[i])
+            solar_azimuth.Add(solarazi[i])
 
-    # Zurich
-    latitude = 47.36667
-    longitude = 8.55
-    year = 2013
+    year = 2013 # ASSUMPTION
 
     treeObj = System.Collections.Generic.List[ghs.CPermObject]()
     mshObj = ghs.CObstacleObject(mesh_analysis, building_albedos, building_specular,
