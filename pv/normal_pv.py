@@ -35,5 +35,5 @@ def pv_yield(A, eta_PVref, beta, NOCT, NOCT_ref, NOCT_sol, T_amb, I):
     eta_pv = pv_efficiency(eta_PVref, beta, NOCT, NOCT_ref, NOCT_sol, T_amb, I)
     pvyield = [0.0] * len(eta_pv)
     for i in range(0, len(eta_pv)):
-        pvyield[i] = A * eta_pv[i]
-    return pvyield
+        pvyield[i] = A * eta_pv[i] * I[i]
+    return pvyield, eta_pv
