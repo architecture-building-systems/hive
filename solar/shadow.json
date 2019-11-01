@@ -1,0 +1,29 @@
+{
+  "name": "shadow",
+  "description": "Shadow visualisation",
+  "version": "0.1",
+  "author": "christophwaibel",
+  "id": "97d7d080-cc32-4969-a353-13ce1ba5207e",
+  "include-files": ["shadow.py"],
+  "components": [
+    {
+      "class-name": "shadow",
+      "name": "shadow",
+      "abbreviation": "shadow",
+      "description": "Shadow visualisation. Using which algorithm?",
+      "category": "[hive]",
+      "subcategory": "solar",
+      "id": "12c16731-83f8-4582-8ba3-43063c4c0716",
+      "main-module": "shadow",
+      "main-function": "main",
+      "inputs": [
+        {"type": "brep", "name": "geometry", "nick-name": "geometry",
+          "description": "Geometry as breps for casting shadow"},
+        {"type": "plane", "name": "area", "nick-name": "area",
+          "default": "None",
+          "description": "Groundplane"}
+      ],
+      "outputs": []
+    }
+  ]
+}
