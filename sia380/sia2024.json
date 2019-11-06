@@ -18,31 +18,31 @@
       "main-function": "default_values",
       "inputs": [
         {"type": "string", "name": "use_case", "nick-name": "use", "default": "mfh", "description": "Use case. Options: 'mfh', 'efh', 'office', 'school'."},
-        {"type": "string", "name": "type", "nick-name": "type", "default": "standard", "description": "Building type: 'standard', 'ideal', 'existing' - table 2 in SIA2024:2015"},
-        {"type": "float", "name": "area", "nick-name": "area", "default": 100.0, "description": "Area in m²"},
-        {"type": "integer", "name": "month", "nick-name": "month", "description": "Time period", "default": 1}
+        {"type": "string", "name": "bldgtype", "nick-name": "bldgtype", "default": "standard", "description": "Building type: 'standard', 'ideal', 'existing' - table 2 in SIA2024:2015"},
+        {"type": "float", "name": "area", "nick-name": "area", "description": "Area in m². If no input given, default values as from SIA2024:2015 are used."},
+        {"type": "integer", "name": "month", "nick-name": "month", "description": "Time period", "default": 1},
+        {"type": "string", "name": "season", "nick-name": "season", "description": "Season, either 'winter' or 'summer'."}
       ],
       "outputs": [
-        {"type": "float", "name": "tau", "nick-name": "tau [h]", "description": "Zeitkonstante des Gebäudes [h] - time constant"},
-        {"type": "float", "name": "theta_e", "nick-name": "θ_e", "description": "Aussenlufttemperatur"},
-        {"type": "float", "name": "theta_i", "nick-name": "θ_i", "description": "Raumlufttemperatur"},
-        {"type": "float", "name": "t", "nick-name": "t", "description": "Länge der Berechnungsperiode [h]"},
-        {"type": "float", "name": "A_op", "nick-name": "A_op", "description": "Aussenwandfläche (opak) [m2]"},
-        {"type": "float", "name": "A_w", "nick-name": "A_w", "description": "Fensterfläche [m2]"},
+        {"type": "float", "name": "tau", "nick-name": "τ [h]", "description": "Zeitkonstante des Gebäudes [h] - time constant"},
+        {"type": "float", "name": "theta_e", "nick-name": "θ_e [°C]", "description": "Aussenlufttemperatur"},
+        {"type": "float", "name": "theta_i", "nick-name": "θ_i [°C]", "description": "Raumlufttemperatur"},
+        {"type": "float", "name": "t", "nick-name": "t [h]", "description": "Länge der Berechnungsperiode [h]"},
+        {"type": "float", "name": "A_op", "nick-name": "A_op [m2]", "description": "Aussenwandfläche (opak) [m2]"},
+        {"type": "float", "name": "A_w", "nick-name": "A_w [m2]", "description": "Fensterfläche [m2]"},
         {"type": "float", "name": "U_op", "nick-name": "U_op [W/(m2K)]", "description": "Wärmedurchgangskoeffizient Aussenwand [W/m2K] - U value opaque walls"},
         {"type": "float", "name": "U_w", "nick-name": "U_w [W/(m2K)]", "description": "Wärmedurchgangskoeffizient Fenster [W/m2K] - U value windows"},
-        {"type": "float", "name": "Vdot_e", "nick-name": "V\u0307_e", "description": "Aussenluft-Volumenstrom [m3/h] - exterior air volume flow"},
-        {"type": "float", "name": "Vdot_inf", "nick-name": "V\u0307_inf", "description": "Aussenluft-Volumenstrom durch Infiltration [m3/h] - infiltration air volume flow"},
-        {"type": "float", "name": "eta_rec", "nick-name": "η_rec", "description": "Nutzungsgrad der Wärmerückgewinnung [-]"},
+        {"type": "float", "name": "Vdot_e", "nick-name": "V\u0307_e [m3/h]", "description": "Aussenluft-Volumenstrom [m3/h] - exterior air volume flow"},
+        {"type": "float", "name": "Vdot_inf", "nick-name": "V\u0307_inf [m3/h]", "description": "Aussenluft-Volumenstrom durch Infiltration [m3/h] - infiltration air volume flow"},
+        {"type": "float", "name": "eta_rec", "nick-name": "η_rec [-]", "description": "Nutzungsgrad der Wärmerückgewinnung [-]"},
         {"type": "float", "name": "phi_P", "nick-name": "φ_P [W]", "description": "Wärmeabgabe Personen [W] - heat release People "},
-        {"type": "float", "name": "phi_L", "nick-name": "φ_L[W]", "description": "Wärmeabgabe Beleuchtung [W] - heat release Lightning "},
-        {"type": "float", "name": "phi_A", "nick-name": "φ_G", "description": "Wärmeabgabe Geräte [W] - heat release Appliances [W]"},
+        {"type": "float", "name": "phi_L", "nick-name": "φ_L [W]", "description": "Wärmeabgabe Beleuchtung [W] - heat release Lightning "},
+        {"type": "float", "name": "phi_A", "nick-name": "φ_G [W]", "description": "Wärmeabgabe Geräte [W] - heat release Appliances [W]"},
         {"type": "float", "name": "t_P", "nick-name": "t_P [h]", "description": "Vollaststunden Personen [h] - full load hours People"},
         {"type": "float", "name": "t_L", "nick-name": "t_L [h]", "description": "Vollaststunden Beleuchtung [h] - full load hours Lightning"},
         {"type": "float", "name": "t_A", "nick-name": "t_A [h]", "description": "Vollaststunden Geräte [h] - full load hours Appliances"},
         {"type": "float", "name": "g", "nick-name": "g [-]", "description": "g-Wert [-] - g-Value windows"},
-        {"type": "float", "name": "f_sh", "nick-name": "f_sh", "description": "Reduktionsfaktor solare Wärmeeinträge [-]"},
-        {"type": "float", "name": "I", "nick-name": "I", "description": "Solare Strahlung [Wh/m2]"}]
+        {"type": "float", "name": "f_sh", "nick-name": "f_sh [-]", "description": "Reduktionsfaktor solare Wärmeeinträge [-]"}]
     }
   ]
 }
