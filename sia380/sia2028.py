@@ -15,6 +15,6 @@ def default_values(station):
 
 
 if __name__ == '__main__':
-    values = default_values("Zürich-Kloten")
+    values = default_values("Zuerich-Kloten")
     for i in range(len(values)):
         print(values[i])
