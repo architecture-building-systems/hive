@@ -25,7 +25,6 @@
       ],
       "outputs": [
         {"type": "float", "name": "tau", "nick-name": "τ [h]", "description": "Zeitkonstante des Gebäudes [h] - time constant"},
-        {"type": "float", "name": "theta_e", "nick-name": "θ_e [°C]", "description": "Aussenlufttemperatur"},
         {"type": "float", "name": "theta_i", "nick-name": "θ_i [°C]", "description": "Raumlufttemperatur"},
         {"type": "float", "name": "t", "nick-name": "t [h]", "description": "Länge der Berechnungsperiode [h]"},
         {"type": "float", "name": "A_op", "nick-name": "A_op [m2]", "description": "Aussenwandfläche (opak) [m2]"},

@@ -43,7 +43,7 @@ def default_values(use_case, bldgtype, area, month, season):
 
     # Data according to testcase in sia380.py
     # but this should be variable...
-    theta_e = [0.5, 1.7, 5.8, 8.9, 14.1, 16.5, 18.5, 18.4, 14.2, 10.4, 4.7, 1.7]    # ambient air temperature [°C]
+    # theta_e = [0.5, 1.7, 5.8, 8.9, 14.1, 16.5, 18.5, 18.4, 14.2, 10.4, 4.7, 1.7]    # ambient air temperature [°C]
     t = [744.0, 672.0, 744.0, 720.0, 744.0, 720.0, 744.0, 744.0, 720.0, 744.0, 720.0, 744.0]    # length of calculation period (hours per month) [h]
 
     """
@@ -323,7 +323,7 @@ def default_values(use_case, bldgtype, area, month, season):
     if (area == None):
         area = tmp['A_NGF']
 
-    return tmp['tau'], theta_e[month - 1], theta_i, t[month - 1], \
+    return tmp['tau'], theta_i, t[month - 1], \
            tmp['A_th'] - tmp['A_w'], tmp['A_w'], tmp['U_op'], tmp['U_w'], \
            tmp['q_ve'] * area, tmp['q_vinf'] * area, tmp['eta_rec'], \
            tmp['phi_P'] * area, tmp['phi_L'] * area, tmp['phi_A'] * area, \
