@@ -25,7 +25,7 @@ def calc_eta_g(Q_T, Q_V, gamma, tau):
             return (1.0 - gamma ** (1.0 + tau / 15.0)) / (1.0 - gamma ** (2.0 + tau / 15.0))
 
 
-def monthly(tau, theta_i, theta_e, t, A_op, A_w, U_op, U_w, Vdot_e, Vdot_inf, eta_rec, phi_P, phi_B, phi_G, t_P, t_B,
+def monthly(tau, theta_e, theta_i, t, A_op, A_w, U_op, U_w, Vdot_e, Vdot_inf, eta_rec, phi_P, phi_B, phi_G, t_P, t_B,
             t_G, g, f_sh, I):
     """
 
