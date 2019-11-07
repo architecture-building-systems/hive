@@ -17,7 +17,8 @@
       "main-module": "sia2028",
       "main-function": "default_values",
       "inputs": [
-        {"type": "string", "name": "station", "nick-name": "station", "default": "Zürich-Kloten", "description": "Weather station according to SIA 2028:2010 Klimadaten. Default is Zurich-Kloten"}
+        {"type": "string", "name": "station", "nick-name": "station", "default": "Zurich-Kloten", "description": "Weather station according to SIA 2028:2010 Klimadaten. Default is Zurich-Kloten"},
+        {"type": "integer", "name": "month", "nick-name": "month", "default": 1, "description": "Month of the year, [1, 12]."}
       ],
       "outputs": [
         {"type": "float", "name": "I-hor", "nick-name": "I-hor [Wh/m2]", "description": "Monthly horizontal global irradiation in [Wh/m2]"},
