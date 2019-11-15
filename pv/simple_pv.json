@@ -1,6 +1,6 @@
 {
-  "name": "pv",
-  "description": "Photovoltaic calculations",
+  "name": "simple-pv",
+  "description": "A simple Photovoltaic calculation",
   "version": "0.1",
   "author": "daren-thomas",
   "id": "72eb1244-b95a-4624-9832-c6640a36fae9",
