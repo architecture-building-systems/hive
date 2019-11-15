@@ -22,29 +22,31 @@ def simulate_obstructed_panel(mesh_analysis, mesh_obstructions, dhi_in, dni_in, 
 
     # Model parameters
     # see Waibel et al. (2017) 'Efficient time-resolved 3D solar potential modelling' for description of parameters
-    main_sky_res = 2        # MainSkyRes
-    main_interp_mode = 0    # InterpMode
-    spec_bounces = 0        # SpecBounces
-    spec_interp_mode = 0    # SpecInterp
-    diff_sky_res = 0        # DiffSkyRes
-    diff_2ndsky_res = 0     # Diff2ndSkyRes
-    diff_refl_mode = 0      # DiffMode
-    mt = True               # .Net multi-threading
+    main_sky_res = 2  # MainSkyRes
+    main_interp_mode = 0  # InterpMode
+    spec_bounces = 0  # SpecBounces
+    spec_interp_mode = 0  # SpecInterp
+    diff_sky_res = 0  # DiffSkyRes
+    diff_2ndsky_res = 0  # Diff2ndSkyRes
+    diff_refl_mode = 0  # DiffMode
+    mt = True  # .Net multi-threading
 
-    snow_threshold = 1.0    # no sun penetrates if snow value on surface is 1.0. time series from weather file [0.0, 1.0]
-    tilt_threshold = 60.0   # in degrees. with tilts higher than this value, snow is assumed to slip down the surface entirely (snow ignored)
+    snow_threshold = 1.0  # no sun penetrates if snow value on surface is 1.0. time series from weather file [0.0, 1.0]
+    tilt_threshold = 60.0  # in degrees. with tilts higher than this value, snow is assumed to slip down the surface entirely (snow ignored)
 
-    dni = System.Collections.Generic.List[float]()              # 8760 time series for direct normal irradiance
-    dhi = System.Collections.Generic.List[float]()              # 8760 time series for diffuse horizontal irradiance
-    snow = System.Collections.Generic.List[float]()             # 8760 time series for snow coverage [0.0, 1.0]
-    ground_albedo = System.Collections.Generic.List[float]()    # 8760 time series for surface albedo (e.g. in winter higher albedo because of snow)
-    solar_azimuth = System.Collections.Generic.List[float]()    # optional. 8760 time series. If no data provided, azimuth will be computed according to algorithm by Blanco-Muriel et al. (2001)
-    solar_altitude = System.Collections.Generic.List[float]()   # same as azimuth
+    dni = System.Collections.Generic.List[float]()  # 8760 time series for direct normal irradiance
+    dhi = System.Collections.Generic.List[float]()  # 8760 time series for diffuse horizontal irradiance
+    snow = System.Collections.Generic.List[float]()  # 8760 time series for snow coverage [0.0, 1.0]
+    ground_albedo = System.Collections.Generic.List[
+        float]()  # 8760 time series for surface albedo (e.g. in winter higher albedo because of snow)
+    solar_azimuth = System.Collections.Generic.List[
+        float]()  # optional. 8760 time series. If no data provided, azimuth will be computed according to algorithm by Blanco-Muriel et al. (2001)
+    solar_altitude = System.Collections.Generic.List[float]()  # same as azimuth
 
-    building_albedos = System.Collections.Generic.List[float]() # 8760 albedos of the building surfaces
-    building_specular = System.Collections.Generic.List[float]()# 8760 specular coefficients of building surfaces
-    building_refltype = 0                                       # reflection type. 0=diffuse, 1=specular (expensive!), 2=diffuse and specular, 3=blind (no reflection)
-    building_tolerance = 0.001                                  # tolerance used to offset analysis surface from original geometry to avoid self-obstruction
+    building_albedos = System.Collections.Generic.List[float]()  # 8760 albedos of the building surfaces
+    building_specular = System.Collections.Generic.List[float]()  # 8760 specular coefficients of building surfaces
+    building_refltype = 0  # reflection type. 0=diffuse, 1=specular (expensive!), 2=diffuse and specular, 3=blind (no reflection)
+    building_tolerance = 0.001  # tolerance used to offset analysis surface from original geometry to avoid self-obstruction
     building_name = "analysis_surface"
     building_mt = True
 
@@ -55,34 +57,29 @@ def simulate_obstructed_panel(mesh_analysis, mesh_obstructions, dhi_in, dni_in, 
         dni.Add(dni_in[i])
         dhi.Add(dhi_in[i])
         building_albedos.Add(0.3)
-    if (solarazi) and (solaralti):
+    if solarazi and solaralti:
         for i in range(0, horizon):
             solar_altitude.Add(solaralti[i])
             solar_azimuth.Add(solarazi[i])
 
-    year = 2013 # ASSUMPTION
+    year = 2013  # ASSUMPTION
 
-    treeObj = System.Collections.Generic.List[ghs.CPermObject]()
-    mshObj = ghs.CObstacleObject(mesh_analysis, building_albedos, building_specular,
-                                building_refltype, building_tolerance, building_name, building_mt)
-    obstaclesObj = System.Collections.Generic.List[ghs.CObstacleObject]()
+    tree_obj = System.Collections.Generic.List[ghs.CPermObject]()
+    mesh_obj = ghs.CObstacleObject(mesh_analysis, building_albedos, building_specular,
+                                 building_refltype, building_tolerance, building_name, building_mt)
+    obstacles_obj = System.Collections.Generic.List[ghs.CObstacleObject]()
     for i in range(len(mesh_obstructions)):
-        obstaclesObj.Add(ghs.CObstacleObject(mesh_obstructions[i], building_albedos, building_specular,
-                                            building_refltype, building_tolerance, "obstructions", building_mt))
+        obstacles_obj.Add(ghs.CObstacleObject(mesh_obstructions[i], building_albedos, building_specular,
+                                             building_refltype, building_tolerance, "obstructions", building_mt))
 
-    calcmesh = ghs.CCalculateSolarMesh(mshObj, obstaclesObj, treeObj, latitude, longitude, dni, dhi, snow,
+    calc_mesh = ghs.CCalculateSolarMesh(mesh_obj, obstacles_obj, tree_obj, latitude, longitude, dni, dhi, snow,
                                        ground_albedo, snow_threshold, tilt_threshold, year, None, mt,
                                        solar_azimuth, solar_altitude)
 
-    if mt:
-        calcmesh.RunAnnualSimulation_MT(mshObj.tolerance, main_sky_res, main_interp_mode, spec_bounces,
-                                        spec_interp_mode, diff_sky_res, diff_2ndsky_res, diff_refl_mode)
-    else:
-        calcmesh.RunAnnualSimulation(mshObj.tolerance, main_sky_res, main_interp_mode, spec_bounces,
-                                     spec_interp_mode, diff_sky_res, diff_2ndsky_res, diff_refl_mode)
+    calc_mesh.RunAnnualSimulation_MT(mesh_obj.tolerance, main_sky_res, main_interp_mode, spec_bounces,
+                                    spec_interp_mode, diff_sky_res, diff_2ndsky_res, diff_refl_mode, mt)
 
-    results = calcmesh.getResults() # GHSolar.CResults
-
+    results = calc_mesh.getResults()  # GHSolar.CResults
 
     # use GHSolar.GHResultsRead component to read GHSolar.CResults
     irradiance = read_results(results, mesh_analysis)
