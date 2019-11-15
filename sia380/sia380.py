@@ -25,15 +25,15 @@ def calc_eta_g(Q_T, Q_V, gamma, tau):
             return (1.0 - gamma ** (1.0 + tau / 15.0)) / (1.0 - gamma ** (2.0 + tau / 15.0))
 
 
-def monthly(tau, theta_i, theta_e, t, A_op, A_w, U_op, U_w, Vdot_e, Vdot_inf, eta_rec, phi_P, phi_B, phi_G, t_P, t_B,
+def monthly(tau, theta_e, theta_i, t, A_op, A_w, U_op, U_w, Vdot_e, Vdot_inf, eta_rec, phi_P, phi_B, phi_G, t_P, t_B,
             t_G, g, f_sh, I):
     """
-    Monthly heating energy demand according to SIA 380.1, eqt. ??
-    :param tau: Zeitkonstante für thermische Trägheit des beheizten Raumes [h]
-    :param theta_i: Raumtemperatur, gemittelt über den Monat [°C]
-    :param theta_e: Aussenlufttemperatur, gemittelt über den Monat [°C]
+
+    :param tau: Zeitkonstante des Gebäudes [h]
+    :param theta_i: Aussenlufttemperatur [°C]
+    :param theta_e: Raumlufttemperatur [°C]
     :param t: hours in month [h] (de: Länge der Berechnungsperiode)
-    :param A_op: Aussenwandfläche, opak [m²]
+    :param A_op: Aussenwandfläche (opak) [m2]
     :param A_w: Window area [m2] (de: Fensterfläche)
     :param U_op: Wärmedurchgangskoeffizient Aussenwand [W/m2K]
     :param U_w: Wärmedurchgangskoeffizient Fenster [W/m2K]
@@ -48,10 +48,10 @@ def monthly(tau, theta_i, theta_e, t, A_op, A_w, U_op, U_w, Vdot_e, Vdot_inf, et
     :param t_G: Vollaststunden Geräter [h]
     :param g: g-Wert [-]
     :param f_sh: Reduktionsfaktor solare Wärmeeinträge [-]
-    :param I: Solare Strahlung, gemittelt über alle Flächen und den Monat [Wh/m2]
-    :return: Q_H, Heizwärmebedarf [Wh]; Q_T, Transmissionswärmeverluste [Wh]; Q_V, Lüftungswäremeverluste [Wh];
-                eta_g, Ausnutzungsgrad für Wärmegewinne [-]; Q_i, Interne Wärmeeinträge [Wh];
-                Q_s, Solare Wärmeeinträge [Wh]
+    :param I: Solare Strahlung [Wh/m2]
+    :return: Q_H (Heizwärmebedarf [Wh]), Q_T (Transmissionswärmeverluste [Wh]),
+    Q_V (Lüftungswäremeverluste [Wh]), eta_g (Ausnutzungsgrad für Wärmegewinne [-]),
+    Q_i (Interne Wärmeeinträge [Wh]), Q_s (Solare Wärmeeinträge [Wh])
     """
     # some constants:
     c_a = 1005.0  # specific heat capacity of air [J/kg*K] (de: Spezifische Wärmekapazität Luft)
