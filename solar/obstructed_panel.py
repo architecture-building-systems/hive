@@ -6,18 +6,22 @@ import System
 import Rhino.Geometry as rg
 import Grasshopper as gh
 import Grasshopper.Kernel as ghk
+
 path = gh.Folders.AppDataFolder
 import clr
 import os
+
 clr.AddReferenceToFileAndPath(os.path.join(path, "Libraries", "GHSolar.gha"))
 import GHSolar as ghs
 
 
 def main(mesh_analysis, mesh_obstructions, DHI, DNI, latitude, longitude, solarazi, solaralti):
-    return simulate_obstructed_panel(mesh_analysis, mesh_obstructions, DHI, DNI, latitude, longitude, solarazi, solaralti)
+    return simulate_obstructed_panel(mesh_analysis, mesh_obstructions, DHI, DNI, latitude, longitude, solarazi,
+                                     solaralti)
 
 
-def simulate_obstructed_panel(mesh_analysis, mesh_obstructions, dhi_in, dni_in, latitude, longitude, solarazi, solaralti):
+def simulate_obstructed_panel(mesh_analysis, mesh_obstructions, dhi_in, dni_in, latitude, longitude, solarazi,
+                              solaralti):
     horizon = 8760
 
     # Model parameters
@@ -66,18 +70,18 @@ def simulate_obstructed_panel(mesh_analysis, mesh_obstructions, dhi_in, dni_in, 
 
     tree_obj = System.Collections.Generic.List[ghs.CPermObject]()
     mesh_obj = ghs.CObstacleObject(mesh_analysis, building_albedos, building_specular,
-                                 building_refltype, building_tolerance, building_name, building_mt)
+                                   building_refltype, building_tolerance, building_name, building_mt)
     obstacles_obj = System.Collections.Generic.List[ghs.CObstacleObject]()
     for i in range(len(mesh_obstructions)):
         obstacles_obj.Add(ghs.CObstacleObject(mesh_obstructions[i], building_albedos, building_specular,
-                                             building_refltype, building_tolerance, "obstructions", building_mt))
+                                              building_refltype, building_tolerance, "obstructions", building_mt))
 
     calc_mesh = ghs.CCalculateSolarMesh(mesh_obj, obstacles_obj, tree_obj, latitude, longitude, dni, dhi, snow,
-                                       ground_albedo, snow_threshold, tilt_threshold, year, None, mt,
-                                       solar_azimuth, solar_altitude)
+                                        ground_albedo, snow_threshold, tilt_threshold, year, None, mt,
+                                        solar_azimuth, solar_altitude)
 
     calc_mesh.RunAnnualSimulation_MT(mesh_obj.tolerance, main_sky_res, main_interp_mode, spec_bounces,
-                                    spec_interp_mode, diff_sky_res, diff_2ndsky_res, diff_refl_mode, mt)
+                                     spec_interp_mode, diff_sky_res, diff_2ndsky_res, diff_refl_mode, mt)
 
     results = calc_mesh.getResults()  # GHSolar.CResults
 
@@ -119,7 +123,8 @@ def read_results(ghsolar_results, mshin):
             valVertex3 = valin[mshin.Faces[i].C][t]
             if mshin.Faces[i].IsQuad:
                 valVertex4 = valin[mshin.Faces[i].D][t]
-                FaceVal = ((valVertex1 + valVertex2 + valVertex3 + valVertex4) / 4) * ghs.CMisc.getMeshFaceArea(i, mshin)
+                FaceVal = ((valVertex1 + valVertex2 + valVertex3 + valVertex4) / 4) * ghs.CMisc.getMeshFaceArea(i,
+                                                                                                                mshin)
             else:
                 FaceVal = ((valVertex1 + valVertex2 + valVertex3) / 3) * ghs.CMisc.getMeshFaceArea(i, mshin)
             totVal = totVal + FaceVal
