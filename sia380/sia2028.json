@@ -1,0 +1,32 @@
+{
+  "name": "sia2028",
+  "description": "Implementation of SIA 2028:2010 Klimadaten",
+  "version": "0.1",
+  "author": "christophwaibel",
+  "id": "99d86c7c-9978-4524-80e1-8bbf11437103",
+  "include-files": ["sia2028.py"],
+  "components": [
+    {
+      "class-name": "Sia2028",
+      "name": "SIA 2028",
+      "abbreviation": "sia2028",
+      "description": "Default values for SIA 380.1",
+      "category": "[hive]",
+      "subcategory": "demand",
+      "id": "6138ccc3-89dd-4ff5-9685-aac29b8f9c11",
+      "main-module": "sia2028",
+      "main-function": "default_values",
+      "inputs": [
+        {"type": "string", "name": "station", "nick-name": "station", "default": "Zurich-Kloten", "description": "Weather station according to SIA 2028:2010 Klimadaten. Default is Zurich-Kloten"},
+        {"type": "integer", "name": "month", "nick-name": "month", "default": 1, "description": "Month of the year, [1, 12]."}
+      ],
+      "outputs": [
+        {"type": "float", "name": "I-hor", "nick-name": "I-hor [Wh/m2]", "description": "Monthly horizontal global irradiation in [Wh/m2]"},
+        {"type": "float", "name": "I-E", "nick-name": "I-E [Wh/m2]", "description": "Monthly global irradiation, East facade, in [Wh/m2]"},
+        {"type": "float", "name": "I-S", "nick-name": "I-S [Wh/m2]", "description": "Monthly global irradiation, South facade, in [Wh/m2]"},
+        {"type": "float", "name": "I-W", "nick-name": "I-W [Wh/m2]", "description": "Monthly global irradiation, West facade, in [Wh/m2]"},
+        {"type": "float", "name": "I-N", "nick-name": "I-N [Wh/m2]", "description": "Monthly global irradiation, North facade, in [Wh/m2]"},
+        {"type": "float", "name": "theta_e", "nick-name": "θ_e [°C]", "description": "Average monthly ambient air temperature - Aussenlufttemperatur, in [°C]"}]
+    }
+  ]
+}

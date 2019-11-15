@@ -299,7 +299,6 @@ def default_values(use_case, bldgtype, area, month, season):
     else:
         tmp = use_case_data_existing[use_case]
 
-    # I = [37778.0, 46944.0, 57222.0, 53611.0, 56389.0, 53889.0, 56944.0, 56389.0, 50278.0, 45000.0, 32778.0, 29444.0] # sia380.py; where is that from?
     f_sh = 0.9  # sia2024, p.12, 1.3.1.9 Reduktion solare Wärmeeinträge
 
     # transforming yearly sia2024 data to monthly
@@ -308,19 +307,18 @@ def default_values(use_case, bldgtype, area, month, season):
         tmp['t_L'][i] *= dayspermonth[i] / 365.0
         tmp['t_A'][i] *= dayspermonth[i] / 365.0
 
-    if (season == None):
-        if month >= summerstart and month <= summerend:
+    if not season:
+        if summerstart <= month <= summerend:
             theta_i = tmp['theta_i_summer']
         else:
             theta_i = tmp['theta_i_winter']
     else:
-        if season =="summer":
+        if season == "summer":
             theta_i = tmp['theta_i_summer']
         else:
             theta_i = tmp['theta_i_winter']
 
-
-    if (area == None):
+    if area is None:
         area = tmp['A_NGF']
 
     return tmp['tau'], theta_i, t[month - 1], \
