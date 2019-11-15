@@ -1,6 +1,8 @@
 """
 Implements predefined default values from SIA 2028:2010 Klimadaten for SIA 380.1 calculations.
 """
+from __future__ import division
+from __future__ import print_function
 
 
 def default_values(station, month):
@@ -22,12 +24,14 @@ def default_values(station, month):
                                 'I_N': [43.0, 63.0, 94.0, 111.0, 150.0, 166.0, 166.0, 134.0, 91.0, 62.0, 39.0, 32.0]}
     }
 
-    tmp = station_data[station]
-
-    return tmp['I'][month-1] * 1000.0 / 3.6, \
-           tmp['I_E'][month-1] * 1000.0 / 3.6, tmp['I_S'][month-1] * 1000.0 / 3.6, \
-           tmp['I_W'][month-1] * 1000.0 / 3.6, tmp['I_N'][month-1] * 1000.0 / 3.6, \
-           tmp['theta_e'][month-1]
+    MJ_to_Wh = 1000.0 / 3.6
+    I = station_data[station]['I'][month - 1] * MJ_to_Wh
+    I_E = station_data[station]['I_E'][month - 1] * MJ_to_Wh
+    I_S = station_data[station]['I_S'][month - 1] * MJ_to_Wh
+    I_W = station_data[station]['I_W'][month - 1] * MJ_to_Wh
+    I_N = station_data[station]['I_N'][month - 1] * MJ_to_Wh
+    theta_e = station_data[station]['theta_e'][month - 1]
+    return I, I_E, I_S, I_W, I_N, theta_e
 
 
 if __name__ == '__main__':
