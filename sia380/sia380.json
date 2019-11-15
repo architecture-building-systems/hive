@@ -18,8 +18,8 @@
       "main-function": "monthly",
       "inputs": [
         {"type": "float", "name": "tau", "nick-name": "τ", "description": "Zeitkonstante des Gebäudes [h]"},
-        {"type": "float", "name": "theta_e", "nick-name": "θ_e", "description": "Aussenlufttemperatur"},
-        {"type": "float", "name": "theta_i", "nick-name": "θ_i", "description": "Raumlufttemperatur"},
+        {"type": "float", "name": "theta_e", "nick-name": "θ_e", "description": "Aussenlufttemperatur [°C]"},
+        {"type": "float", "name": "theta_i", "nick-name": "θ_i", "description": "Raumlufttemperatur [°C]"},
         {"type": "float", "name": "t", "nick-name": "t", "description": "Länge der Berechnungsperiode [h]"},
         {"type": "float", "name": "A_op", "nick-name": "A_op", "description": "Aussenwandfläche (opak) [m2]"},
         {"type": "float", "name": "A_w", "nick-name": "A_w", "description": "Fensterfläche [m2]"},
