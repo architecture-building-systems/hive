@@ -81,7 +81,7 @@ def simulate_obstructed_panel(mesh_analysis, mesh_obstructions, dhi_in, dni_in, 
                                         solar_azimuth, solar_altitude)
 
     calc_mesh.RunAnnualSimulation_MT(mesh_obj.tolerance, main_sky_res, main_interp_mode, spec_bounces,
-                                     spec_interp_mode, diff_sky_res, diff_2ndsky_res, diff_refl_mode, mt)
+                                     spec_interp_mode, diff_sky_res, diff_2ndsky_res, diff_refl_mode)
 
     results = calc_mesh.getResults()  # GHSolar.CResults
 
