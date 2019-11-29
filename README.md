@@ -4,6 +4,10 @@ HIVE is a collection of Grasshopper components and workflow templates designed t
 
 The aim of HIVE is to increase the availability of tools developed during research projects at the Chair of Architecture and Building Systems, ETH Zurich.  
 
+
+![Hive Architecture](https://github.com/architecture-building-systems/hive/blob/master/repository_files/00_Hive_Architecture.jpg)
+
+
 ## Projects currently in this repository:
 
 ### **RC_simulator** 
