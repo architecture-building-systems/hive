@@ -1,39 +1,57 @@
-﻿using System;
+﻿using Grasshopper.GUI;
+using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
-using System.Windows.Forms;
+using Grasshopper.Kernel.Attributes;
+using System;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace Hive.GUI
 {
-    public class HiveGUIComponent : GH_Component
+    class HiveGUIComponentCustom : GH_ComponentAttributes
     {
+        public HiveGUIComponentCustom(IGH_Component owner) : base(owner) { }
+        public bool IsBtnDown { get; set; }
+        //public RectangleF rec2;
+
         private Form window;
         private ComboBox componentSelect;
         private string component = "";
 
-        public HiveGUIComponent()
-          : base("Hive.GUI", "HiveGUI",
-              "GUI testing",
-              "[hive]", "GUI")
+        //private GH_Capsule capsuleBtn;
+
+        protected override void Layout()
         {
+            Pivot = GH_Convert.ToPoint(Pivot);
+
+            m_innerBounds = new RectangleF(Pivot.X, Pivot.Y, 175, 120);
+            LayoutInputParams(Owner, m_innerBounds);
+            LayoutOutputParams(Owner, m_innerBounds);
+            Bounds = LayoutBounds(Owner, m_innerBounds);
         }
 
-        public override void CreateAttributes()
+        public override GH_ObjectResponse RespondToMouseDoubleClick(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
-            m_attributes = new HiveGUIComponentCustom(this);
+            CreateWindow();
+
+            return base.RespondToMouseDoubleClick(sender, e);
         }
 
-        public override bool AppendMenuItems(ToolStripDropDown menu)
+        public override GH_ObjectResponse RespondToMouseUp(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
-            Menu_AppendItem(menu, "Get component", Menu_ItemClicked);
-            Menu_AppendSeparator(menu);
-            Menu_AppendItem(menu, "Read me!");
-
-            return true;
+            bool bd = IsBtnDown;
+            if ((e.Button == MouseButtons.Left) && (this.Owner != null) && (bd == true))
+            {
+                CreateWindow();
+            }
+            return base.RespondToMouseUp(sender, e);
         }
 
-        private void Menu_ItemClicked(object sender, EventArgs e)
+        private GH_ObjectResponse CreateWindow()
         {
+            IsBtnDown = false;
+            Owner.ExpireSolution(true);
+
             window = new Form();
             window.Text = "Testing popup window";
             window.Size = new Size(590, 175);
@@ -42,6 +60,7 @@ namespace Hive.GUI
             window.MaximizeBox = false;
             window.MinimizeBox = false;
             window.ShowIcon = false;
+            window.Name = "popup";
 
             var groupLabel = new Label();
             groupLabel.Text = "Select component group:";
@@ -109,12 +128,16 @@ namespace Hive.GUI
             window.Controls.Add(rspYearsLabel);
             window.Controls.Add(OKbtn);
             window.Controls.Add(Cancelbtn);
+
             window.Show();
+
+            return GH_ObjectResponse.Release;
         }
 
         private void ComponentSelect_SelectedIndexChanged(object sender, EventArgs e)
         {
             component = componentSelect.SelectedItem.ToString();
+            TestData.xxx = componentSelect.SelectedItem.ToString();
         }
 
         private void Cancelbtn_Click(object sender, EventArgs e)
@@ -124,71 +147,44 @@ namespace Hive.GUI
 
         private void OKbtn_Click(object sender, EventArgs e)
         {
-            ExpireSolution(true);
             window.Close();
         }
 
-        protected override void RegisterInputParams(GH_InputParamManager pManager)
+        protected override void Render(GH_Canvas canvas, Graphics graphics, GH_CanvasChannel channel)
         {
-            pManager.AddTextParameter("in1", "in1", "in1", GH_ParamAccess.item);
-            pManager[0].Optional = true;
-        }
+            GH_Capsule capsule = GH_Capsule.CreateCapsule(Bounds, GH_Palette.Transparent, 0, 0);
+            capsule.AddInputGrip(InputGrip.X, InputGrip.Y);
+            capsule.AddOutputGrip(OutputGrip.X, OutputGrip.Y - 40);
+            capsule.AddOutputGrip(OutputGrip.X, OutputGrip.Y);
+            capsule.AddOutputGrip(OutputGrip.X, OutputGrip.Y + 40);
+            capsule.Render(graphics, Selected, Owner.Locked, true);
+            capsule.Dispose();
+            capsule = null;
 
-        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
-        {
-            pManager.AddTextParameter("out1", "out1", "out1", GH_ParamAccess.item);
-            pManager.AddTextParameter("out2", "out2", "out2", GH_ParamAccess.item);
-            pManager.AddTextParameter("out3", "out3", "out3", GH_ParamAccess.item);
-        }
+            StringFormat format = new StringFormat();
+            format.Alignment = StringAlignment.Center;
+            format.LineAlignment = StringAlignment.Center;
 
-        protected override void SolveInstance(IGH_DataAccess DA)
-        {
-            Message = "aaaaaa";
+            RectangleF textRectangle = Bounds;
+            textRectangle.Height = 40;
 
-            //GrasshopperDocument = OnPingDocument();
+            graphics.DrawString(Owner.NickName, GH_FontServer.Large, Brushes.Black, textRectangle, format);
+            graphics.DrawString("out", GH_FontServer.Console, Brushes.Black, m_innerBounds.X + 145, m_innerBounds.Y + 75, format);
+            graphics.DrawImage(Icons.Hexagon_hive_mc, m_innerBounds.X - 27, m_innerBounds.Y - 65, 240, 250);
 
-            //Random r = new Random(23);
-            //int min = 0;
-            //int step = 20;
-            //int max = step;
-            //Grasshopper.Kernel.Parameters.Param_GenericObject comp = null;
-            //Grasshopper.Kernel.Parameters.Param_GenericObject lastComp = null;
-            //for (int i = 0; i < 10; i++)
-            //{
+            SolidBrush brush = new SolidBrush(Color.Pink);
+            Pen pen = new Pen(brush, 1);
+            Font font = new Font("MS UI Gothic", 3, FontStyle.Italic);
 
-            //    min += step;
-            //    max += step;
-            //    for (int j = 0; j < 10; j++)
-            //    {
-            //        comp = new Grasshopper.Kernel.Parameters.Param_GenericObject();
-            //        GrasshopperDocument.AddObject(comp, false, GrasshopperDocument.ObjectCount);
-            //        comp.Attributes.Pivot = new System.Drawing.PointF((float)r.Next(min, max), (float)r.Next(0, 2000));
-            //    }
+            //rec2 = new RectangleF(m_innerBounds.X + 5, m_innerBounds.Y + 130, 80, 20);
+            //capsuleBtn = GH_Capsule.CreateTextCapsule(rec2, rec2, GH_Palette.Grey, "click", 2, 0);
+            //capsuleBtn.Render(graphics, this.Selected, base.Owner.Locked, false);
+            //capsuleBtn.Dispose();
 
-            //    if (lastComp != null && comp != null)
-            //    {
-            //        comp.AddSource(lastComp);
-            //    }
-            //}
+            InputGrip.Equals(component);
+            OutputGrip.Equals(component);
 
-
-            //comp.Params.Input[0].AddSource(lastComp);
-            //lastComp = comp;
-
-            DA.SetData(0, component);
-        }
-
-        protected override Bitmap Icon
-        {
-            get
-            {
-                return Icons.testSmall;
-            }
-        }
-
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("42fc54f3-90ad-4d11-8104-44f42521a265"); }
+            format.Dispose();
         }
     }
 }
