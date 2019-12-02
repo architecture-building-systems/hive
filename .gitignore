@@ -100,3 +100,9 @@ Python data_from_sensors/plot_data.py
 
 .DS_Store
 .idea/
+/Mothercell/Hive.GUI/.vs/Hive.GUI/v16/Server/sqlite3
+/Mothercell/Hive.GUI/.vs/Hive.GUI/v16
+/.vs/Hive/v16
+/.vs
+/Mothercell/Hive.GUI/Hive.GUI/bin
+/Mothercell/Hive.GUI/Hive.GUI/obj/Debug
