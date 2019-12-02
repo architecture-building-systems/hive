@@ -3,6 +3,7 @@ using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
 using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 
@@ -152,6 +153,11 @@ namespace Hive.GUI
 
         protected override void Render(GH_Canvas canvas, Graphics graphics, GH_CanvasChannel channel)
         {
+            if(channel == GH_CanvasChannel.Wires)
+            {
+                base.Render(canvas, graphics, channel);
+            }
+
             GH_Capsule capsule = GH_Capsule.CreateCapsule(Bounds, GH_Palette.Transparent, 0, 0);
             capsule.AddInputGrip(InputGrip.X, InputGrip.Y);
             capsule.AddOutputGrip(OutputGrip.X, OutputGrip.Y - 40);
@@ -159,7 +165,7 @@ namespace Hive.GUI
             capsule.AddOutputGrip(OutputGrip.X, OutputGrip.Y + 40);
             capsule.Render(graphics, Selected, Owner.Locked, true);
             capsule.Dispose();
-            capsule = null;
+            capsule = null;  
 
             StringFormat format = new StringFormat();
             format.Alignment = StringAlignment.Center;
