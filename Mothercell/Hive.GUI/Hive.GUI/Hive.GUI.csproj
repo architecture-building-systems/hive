@@ -56,6 +56,8 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="DropDownComponent.cs" />
+    <Compile Include="DropDownComponentCustom.cs" />
     <Compile Include="HiveGUIComponent.cs" />
     <Compile Include="HiveGUIComponentCustom.cs" />
     <Compile Include="HiveGUIInfo.cs" />
@@ -78,6 +80,9 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\testSmall.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\1.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -12,9 +12,11 @@ namespace Hive.GUI
         private string component = "";
 
         public HiveGUIComponent()
-          : base("Hive.GUI", "HiveGUI",
-              "GUI testing",
-              "[hive]", "GUI")
+          : base("Hive.GUI", 
+                 "HiveGUI",
+                 "GUI testing",
+                 "[hive]", 
+                 "GUI")
         {
         }
 
