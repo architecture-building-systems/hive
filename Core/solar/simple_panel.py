@@ -20,6 +20,9 @@ def main(tilt, azimuth, DHI, DNI, latitude, longitude, solarazi, solaralti):
 
 
 def simulate_simple_panel(tilt, azimuth, _dhi, _dni, latitude, longitude, solarazi, solaralti):
+    paropts = System.Threading.Tasks.ParallelOptions()
+    paropts.MaxDegreeOfParallelism = 1
+
     year = 2013 # ASSUMPTION
 
     recursion = 2
@@ -47,9 +50,9 @@ def simulate_simple_panel(tilt, azimuth, _dhi, _dni, latitude, longitude, solara
 
     #  Calculation points
     p = sm.Sensorpoints(System.Array[float]([tilt]), System.Array[float]([azimuth]), System.Array[sm.Sensorpoints.p3d](coord), System.Array[sm.Sensorpoints.v3d](normal), recursion)
-    p.SetSimpleSky(System.Array[float]([tilt]))
-    p.SetSimpleGroundReflection(System.Array[float]([tilt]), System.Array[float](albedo), weather, System.Array[sm.SunVector](sunvectors))
-    p.CalcIrradiation(weather, System.Array[sm.SunVector](sunvectors))
+    p.SetSimpleSkyMT(System.Array[float]([tilt]), paropts)
+    p.SetSimpleGroundReflectionMT(System.Array[float]([tilt]), System.Array[float](albedo), weather, System.Array[sm.SunVector](sunvectors), paropts)
+    p.CalcIrradiationMT(weather, System.Array[sm.SunVector](sunvectors), paropts)
 
     total = [0.0] * horizon
     # beam = [0.0] * horizon
