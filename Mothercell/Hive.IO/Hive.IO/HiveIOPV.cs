@@ -12,9 +12,9 @@ namespace Hive.IO
         /// Initializes a new instance of the HiveIOPV class.
         /// </summary>
         public HiveIOPV()
-          : base("HiveIOPV", "Nickname",
-              "Description",
-              "Category", "Subcategory")
+          : base("HiveIOPV", "IO_PV",
+              "Hive.IO PV component",
+              "[hive]", "IO")
         {
         }
 
@@ -25,8 +25,6 @@ namespace Hive.IO
         {
             pManager.AddNumberParameter("area", "area", "Area of PV", GH_ParamAccess.item);
             pManager.AddNumberParameter("refefficiency", "refeff", "Reference efficiency. E.g. 0.19.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("irradiance", "irradiance", "Irradiance on panel in [W/m²]", GH_ParamAccess.list);
-            pManager.AddNumberParameter("airTemp", "airTemp", "Air temperature at the panel", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -49,13 +47,7 @@ namespace Hive.IO
             double refEff = 0.19;
             if (!DA.GetData(1, ref refEff)) { refEff = 0.19; }
 
-            List<double> irradiance = new List<double>();
-            DA.GetDataList(2, irradiance);
-
-            List<double> airTemp = new List<double>();
-            DA.GetDataList(3, airTemp);
-
-            EnergySystem.PV pv = new EnergySystem.PV(area, refEff, irradiance.ToArray(), airTemp.ToArray());
+            EnergySystem.PV pv = new EnergySystem.PV(area, refEff);
 
             DA.SetData(0, pv);
         }

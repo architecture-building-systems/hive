@@ -12,9 +12,9 @@ namespace Hive.IO
         /// Initializes a new instance of the HiveIOGroundCollector class.
         /// </summary>
         public HiveIOGroundCollector()
-          : base("HiveIOGroundCollector", "Nickname",
-              "Description",
-              "Category", "Subcategory")
+          : base("HiveIOGroundCollector", "IO_GroundColl",
+              "Hive.IO Ground solar collector component",
+              "[hive]", "IO")
         {
         }
 

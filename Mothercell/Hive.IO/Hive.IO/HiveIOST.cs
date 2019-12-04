@@ -12,9 +12,9 @@ namespace Hive.IO
         /// Initializes a new instance of the HiveIOST class.
         /// </summary>
         public HiveIOST()
-          : base("HiveIOST", "Nickname",
-              "Description",
-              "Category", "Subcategory")
+          : base("HiveIOST", "IO_ST",
+              "Hive.IO Solar Thermal component",
+              "[hive]", "IO")
         {
         }
 
