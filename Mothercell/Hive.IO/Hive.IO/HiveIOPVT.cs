@@ -23,6 +23,9 @@ namespace Hive.IO
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
+            pManager.AddNumberParameter("area", "area", "Area of PVT", GH_ParamAccess.item);
+            pManager.AddNumberParameter("refeffthermal", "refeffthermal", "Reference thermal efficiency. E.g. 0.8.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("reffeffelectric", "refeffelectric", "Reference electric efficiency. E.g. 0.19", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -30,6 +33,7 @@ namespace Hive.IO
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
+            pManager.AddGenericParameter("PVTObj", "PVTObj", "Hive.IO.EnergySystems.PVT Object", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -38,6 +42,18 @@ namespace Hive.IO
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            double area = 1.0;
+            if (!DA.GetData(0, ref area)) { area = 1.0; }
+
+            double refEffThermal = 0.8;
+            if (!DA.GetData(1, ref refEffThermal)) { refEffThermal = 0.8; }
+
+            double refEffElectric = 0.19;
+            if (!DA.GetData(2, ref refEffElectric)) { refEffElectric = 0.19; }
+
+            EnergySystem.PVT pvt = new EnergySystem.PVT(area, refEffThermal, refEffElectric);
+
+            DA.SetData(0, pvt);
         }
 
         /// <summary>

@@ -47,7 +47,7 @@ namespace Hive.IO
             double refEff = 0.19;
             if (!DA.GetData(1, ref refEff)) { refEff = 0.19; }
 
-            EnergySystem.PV pv = new EnergySystem.PV(area, refEff);
+            EnergySystem.PV pv = new EnergySystem.PV(area, 0.0, refEff);
 
             DA.SetData(0, pv);
         }

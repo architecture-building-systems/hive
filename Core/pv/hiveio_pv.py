@@ -11,4 +11,4 @@ clr.AddReferenceToFileAndPath(os.path.join(path, "Libraries", "Hive.IO.gha"))
 import Hive.IO as hio
 
 def main(hivepv):
-    return [hivepv.Area, hivepv.RefEfficiency]
+    return [hivepv.Area, hivepv.RefEfficiencyElectric]

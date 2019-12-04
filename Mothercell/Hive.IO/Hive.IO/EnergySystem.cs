@@ -14,13 +14,14 @@ namespace Hive.IO
         public abstract class SurfaceSystem
         {
             public double Area { get; private set; }
-            public double RefEfficiency { get; private set; }
+            public double RefEfficiencyThermal { get; private set; }
+            public double RefEfficiencyElectric { get; private set; }
 
-
-            protected SurfaceSystem(double area, double refEfficiency)
+            protected SurfaceSystem(double area, double refEfficiencyThermal, double refEfficiencyElectric)
             {
                 Area = area;
-                RefEfficiency = refEfficiency;
+                RefEfficiencyThermal = refEfficiencyThermal;
+                RefEfficiencyElectric = refEfficiencyElectric;
             }
         }
 
@@ -30,8 +31,8 @@ namespace Hive.IO
         /// </summary>
         public class PV : SurfaceSystem
         {
-            public PV(double area, double refEfficiency) 
-                : base(area, refEfficiency){ }
+            public PV(double area, double refEfficiencyThermal, double refEfficiencyElectric) 
+                : base(area, refEfficiencyThermal, refEfficiencyElectric){ }
         }
 
 
@@ -40,8 +41,8 @@ namespace Hive.IO
         /// </summary>
         public class ST : SurfaceSystem
         {
-            public ST(double area, double refEfficiency)
-                : base(area, refEfficiency) { }
+            public ST(double area, double refEfficiencyThermal, double refEfficiencyElectric)
+                : base(area, refEfficiencyThermal, refEfficiencyElectric) { }
         }
 
 
@@ -50,8 +51,8 @@ namespace Hive.IO
         /// </summary>
         public class PVT : SurfaceSystem
         {
-            public PVT(double area, double refEfficiency)
-                : base(area, refEfficiency) { }
+            public PVT(double area, double refEfficiencyThermal, double refEfficiencyElectric)
+                : base(area, refEfficiencyThermal, refEfficiencyElectric) { }
         }
 
 
@@ -60,8 +61,8 @@ namespace Hive.IO
         /// </summary>
         public class GroundCollector : SurfaceSystem
         {
-            public GroundCollector(double area, double refEfficiency)
-                : base(area, refEfficiency) { }
+            public GroundCollector(double area, double refEfficiencyThermal, double refEfficiencyElectric)
+                : base(area, refEfficiencyThermal, refEfficiencyElectric) { }
         }
     }
 }
