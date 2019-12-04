@@ -7,3 +7,5 @@ It shall be the main interface for inputs and outputs.
 It shall be...
 
 ...the Mothercell.
+
+![Hive Architecture](https://github.com/architecture-building-systems/hive/blob/master/repository_files/HiveIOGUI.png)
