@@ -8,4 +8,11 @@ It shall be...
 
 ...the Mothercell.
 
+
+## GUI and IO
+GUI is the GHCluster, which can be opened to fiddle with the individual grasshopper components.
+
+In order to get Rhino information into the Mothercell, we build some IO grassshopper components. They create Hive.IO objects, like Hive.IO.EnergySystems.PV, that are all fed into the Mothercell. The idea here is that the inputs are flexible, i.e. just throw in as many .IO objects as you want. The Mothercell should then take care of identifying the objects (easy, because they all have specific classes) and feed them into the right components inside the cluster. So much for the idea...
+
+
 ![Hive Architecture](https://github.com/architecture-building-systems/hive/blob/master/repository_files/HiveIOGUI.png)
