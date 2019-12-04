@@ -1,0 +1,30 @@
+{
+  "name": "hiveio-pv",
+  "description": "A HiveIO_PV object reader",
+  "version": "0.1",
+  "author": "christophwaibel",
+  "id": "1e970f3f-7922-4312-a9be-38e97816a2f1",
+  "include-files": ["hiveio_pv.py"],
+  "components": [
+    {
+      "class-name": "HiveIOPV",
+      "name": "HiveIO PV",
+      "abbreviation": "hiveio-pv",
+      "description": "A component that reads a HiveIO_PV object",
+      "category": "[hive]",
+      "subcategory": "pv",
+      "id": "a25f5be1-c199-4ca5-b8f8-1e78de658617",
+      "main-module": "hiveio_pv",
+      "main-function": "main",
+      "inputs": [
+        {"type": "generic", "name": "hiveio_pv", "nick-name": "hiveio_pv", "description": "HiveIO_PV object"}
+      ],
+      "outputs": [
+        {"type": "float", "name": "A", "nick-name": "A", "description": "Area of PV system in [m²].Default is 1.0"},
+        {"type": "float", "name": "eta_PVref", "nick-name": "eta_PVref", "description": "Reference PV efficiency under NOCT in [-]."},
+        {"type": "float", "name": "T_amb", "nick-name": "T_amb", "description": "Ambient temperature hourly time series, 8760 entries, in [°C]"},
+        {"type": "float", "name": "I", "nick-name": "I", "description": "Solar irradiance on the panel. Time series with 8760 entries, in [W/m²]"}
+      ]
+    }
+  ]
+}
