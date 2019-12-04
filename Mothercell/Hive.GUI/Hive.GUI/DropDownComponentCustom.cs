@@ -2,6 +2,7 @@
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
 using System.Drawing;
+using System.Windows.Forms;
 
 namespace Hive.GUI
 {
@@ -13,8 +14,6 @@ namespace Hive.GUI
         {
             base.Layout();
 
-            //Rectangle rectangle1 = GH_Convert.ToRectangle(this.Bounds);
-            //rectangle1.Height += 44;
             Rectangle textBox = GH_Convert.ToRectangle(Bounds); ;
             textBox.X = (int)Bounds.X + 23;
             textBox.Y = (int)Bounds.Y + 45;
@@ -46,10 +45,16 @@ namespace Hive.GUI
                 capsule.Render(graphics, Selected, Owner.Locked, true);
                 capsule.Dispose();
 
-                Font font = new Font("Arial", 14f, FontStyle.Bold);
+                Font font = new Font("Arial", 16f, FontStyle.Bold);
                 GH_Capsule textCapsule = GH_Capsule.CreateTextCapsule(TextBounds, TextBounds, GH_Palette.Black, "Horizontal text", font, 5, 0);
                 textCapsule.Render(graphics, Selected, Owner.Locked, false);
                 textCapsule.Dispose();
+
+                //ComboBox x = new ComboBox
+                //{
+                //    Location = new Point(TextBounds.X + 10, TextBounds.Y + 10),
+                //    Size = new Size(200, 25)
+                //};
             }
 
             if (channel != GH_CanvasChannel.Objects)
