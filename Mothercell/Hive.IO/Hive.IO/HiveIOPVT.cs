@@ -12,9 +12,9 @@ namespace Hive.IO
         /// Initializes a new instance of the HiveIOPVT class.
         /// </summary>
         public HiveIOPVT()
-          : base("HiveIOPVT", "Nickname",
-              "Description",
-              "Category", "Subcategory")
+          : base("HiveIOPVT", "IO_PVT",
+              "Hive.IO PVT component",
+              "[hive]", "IO")
         {
         }
 

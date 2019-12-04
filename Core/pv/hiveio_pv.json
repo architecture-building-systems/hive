@@ -21,9 +21,7 @@
       ],
       "outputs": [
         {"type": "float", "name": "A", "nick-name": "A", "description": "Area of PV system in [m²].Default is 1.0"},
-        {"type": "float", "name": "eta_PVref", "nick-name": "eta_PVref", "description": "Reference PV efficiency under NOCT in [-]."},
-        {"type": "float", "name": "T_amb", "nick-name": "T_amb", "description": "Ambient temperature hourly time series, 8760 entries, in [°C]"},
-        {"type": "float", "name": "I", "nick-name": "I", "description": "Solar irradiance on the panel. Time series with 8760 entries, in [W/m²]"}
+        {"type": "float", "name": "eta_PVref", "nick-name": "eta_PVref", "description": "Reference PV efficiency under NOCT in [-]."}
       ]
     }
   ]
