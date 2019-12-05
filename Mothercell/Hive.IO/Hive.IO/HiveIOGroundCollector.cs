@@ -23,7 +23,7 @@ namespace Hive.IO
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("area", "area", "Area of collector", GH_ParamAccess.item);
+            pManager.AddMeshParameter("mesh", "mesh", "Mesh geometry of the collector", GH_ParamAccess.item);
             pManager.AddNumberParameter("refeffthermal", "refeffthermal", "Reference thermal efficiency. E.g. 0.8.", GH_ParamAccess.item);
         }
 
@@ -41,13 +41,13 @@ namespace Hive.IO
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            double area = 1.0;
-            if (!DA.GetData(0, ref area)) { area = 1.0; }
+            Mesh mesh = new Mesh();
+            if (!DA.GetData(0, ref mesh)) { return; }
 
             double refEffThermal = 0.8;
             if (!DA.GetData(1, ref refEffThermal)) { refEffThermal = 0.8; }
 
-            EnergySystem.GroundCollector gc = new EnergySystem.GroundCollector(area, refEffThermal, 0.0);
+            EnergySystem.GroundCollector gc = new EnergySystem.GroundCollector(mesh, refEffThermal, 0.0);
 
             DA.SetData(0, gc);
         }
