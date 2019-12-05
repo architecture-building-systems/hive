@@ -87,12 +87,20 @@ namespace Hive.IO
                 bool isConvex = true;
 
                 int vertexCount = brep.Vertices.Count;
+                
                 for (int i = 0; i < vertexCount; i++)
                 {
+                    rg.BrepVertex vert1 = brep.Vertices[i];
                     for (int u=0; u<vertexCount; u++)
                     {
                         if (i == u) continue;
-
+                        
+                        rg.BrepVertex vert2 = brep.Vertices[u];
+                        rg.Line line = new rg.Line(vert1.Location, vert2.Location);
+                        //if((rg.Intersect.Intersection.CurveBrep(line, brep,0.01,0.01,)) 
+                        //{
+                        //    isConvex = false;
+                        //}
                         // !!! connect point i to u and check, if this line is within the brep
                     }
                 }
