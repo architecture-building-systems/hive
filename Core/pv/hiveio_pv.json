@@ -20,7 +20,7 @@
         {"type": "generic", "name": "hiveio_pv", "nick-name": "hiveio_pv", "description": "HiveIO_PV object"}
       ],
       "outputs": [
-        {"type": "float", "name": "A", "nick-name": "A", "description": "Area of PV system in [m²].Default is 1.0"},
+        {"type": "mesh", "name": "mesh", "nick-name": "mesh", "description": "Mesh geometry of the PV system."},
         {"type": "float", "name": "eta_PVref", "nick-name": "eta_PVref", "description": "Reference PV efficiency under NOCT in [-]."}
       ]
     }

@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Rhino.Geometry;
 
 namespace Hive.IO
 {
@@ -11,15 +7,27 @@ namespace Hive.IO
     /// </summary>
     namespace EnergySystem
     {
+        /// <summary>
+        /// Surface based energy technologies, such as PV, solar thermal, PVT, ground collectors, etc.
+        /// </summary>
         public abstract class SurfaceSystem
         {
-            public double Area { get; private set; }
+            /// <summary>
+            /// Rhino mesh geometry object representing the energy system. Can be quad or triangles.
+            /// </summary>
+            public Mesh SurfaceGeometry { get; private set; }
+            /// <summary>
+            /// Reference thermal efficiency. Functional efficiencies (e.g. time-resolved and/or based on irradiance) are computed in Hive.CORE components.
+            /// </summary>
             public double RefEfficiencyThermal { get; private set; }
+            /// <summary>
+            /// Reference electric efficiency. Functional efficiencies (e.g. time-resolved and/or based on irradiance) are computed in Hive.CORE components.
+            /// </summary>
             public double RefEfficiencyElectric { get; private set; }
 
-            protected SurfaceSystem(double area, double refEfficiencyThermal, double refEfficiencyElectric)
+            protected SurfaceSystem(Mesh surfaceGeometry, double refEfficiencyThermal, double refEfficiencyElectric)
             {
-                Area = area;
+                SurfaceGeometry = surfaceGeometry;
                 RefEfficiencyThermal = refEfficiencyThermal;
                 RefEfficiencyElectric = refEfficiencyElectric;
             }
@@ -31,8 +39,8 @@ namespace Hive.IO
         /// </summary>
         public class PV : SurfaceSystem
         {
-            public PV(double area, double refEfficiencyThermal, double refEfficiencyElectric) 
-                : base(area, refEfficiencyThermal, refEfficiencyElectric){ }
+            public PV(Mesh surfaceGeometry, double refEfficiencyThermal, double refEfficiencyElectric) 
+                : base(surfaceGeometry, refEfficiencyThermal, refEfficiencyElectric){ }
         }
 
 
@@ -41,8 +49,8 @@ namespace Hive.IO
         /// </summary>
         public class ST : SurfaceSystem
         {
-            public ST(double area, double refEfficiencyThermal, double refEfficiencyElectric)
-                : base(area, refEfficiencyThermal, refEfficiencyElectric) { }
+            public ST(Mesh surfaceGeometry, double refEfficiencyThermal, double refEfficiencyElectric)
+                : base(surfaceGeometry, refEfficiencyThermal, refEfficiencyElectric) { }
         }
 
 
@@ -51,8 +59,8 @@ namespace Hive.IO
         /// </summary>
         public class PVT : SurfaceSystem
         {
-            public PVT(double area, double refEfficiencyThermal, double refEfficiencyElectric)
-                : base(area, refEfficiencyThermal, refEfficiencyElectric) { }
+            public PVT(Mesh surfaceGeometry, double refEfficiencyThermal, double refEfficiencyElectric)
+                : base(surfaceGeometry, refEfficiencyThermal, refEfficiencyElectric) { }
         }
 
 
@@ -61,8 +69,8 @@ namespace Hive.IO
         /// </summary>
         public class GroundCollector : SurfaceSystem
         {
-            public GroundCollector(double area, double refEfficiencyThermal, double refEfficiencyElectric)
-                : base(area, refEfficiencyThermal, refEfficiencyElectric) { }
+            public GroundCollector(Mesh surfaceGeometry, double refEfficiencyThermal, double refEfficiencyElectric)
+                : base(surfaceGeometry, refEfficiencyThermal, refEfficiencyElectric) { }
         }
     }
 }

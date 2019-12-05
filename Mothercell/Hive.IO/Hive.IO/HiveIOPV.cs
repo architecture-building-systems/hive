@@ -23,7 +23,7 @@ namespace Hive.IO
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("area", "area", "Area of PV", GH_ParamAccess.item);
+            pManager.AddMeshParameter("mesh", "mesh", "Mesh geometry of the PV", GH_ParamAccess.item);
             pManager.AddNumberParameter("refefficiency", "refeff", "Reference efficiency. E.g. 0.19.", GH_ParamAccess.item);
         }
 
@@ -41,13 +41,13 @@ namespace Hive.IO
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            double area = 1.0;
-            if(!DA.GetData(0, ref area)) { area = 1.0; }
+            Mesh mesh = new Mesh();
+            if(!DA.GetData(0, ref mesh)) { return; }
 
             double refEff = 0.19;
             if (!DA.GetData(1, ref refEff)) { refEff = 0.19; }
 
-            EnergySystem.PV pv = new EnergySystem.PV(area, 0.0, refEff);
+            EnergySystem.PV pv = new EnergySystem.PV(mesh, 0.0, refEff);
 
             DA.SetData(0, pv);
         }
