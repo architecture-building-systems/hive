@@ -23,13 +23,46 @@ Starting at row [8]:
 [28] Precipitable Water [mm], [29] Aerosol Optical depth [0.001],
 [30] Snow Depth [cm], [31] Days Since Last Snowfall, [32] Albedo,
 [33] Liquid Precipitation Depth [mm], [34] Liquid Precipitation Quantity [hr]
+
+
+to do:
+- {"type": "string", "name": "Resolution", "nick-name": "Resolution", "description": "Time resolution of the output.
+Default is 'hourly'. Alternatives: 'monthly', 'daily', 'quarter-hourly', 'five-minutes', 'minutes'. !!!NOT IMPLEMENTED"}
+- GROUNDTEMPERATURE
 """
+
+import csv
 
 
 def main(path):
-    return epw_reader(path)
+    result = epw_reader(path)
+    return result
 
 
 def epw_reader(path):
+    with open(path) as csvfile:
+        readCSV = csv.reader(csvfile, delimiter=',')
+        rows = list(readCSV)
 
-    return 0.0
+        latitude = rows[0][6]
+        longitude = rows[0][7]
+        city_country = rows[0][1], rows[0][3]
+
+        horizon = (len(rows) - 8)
+        drybulb = [0.0] * horizon
+        dewpoint = [0.0] * horizon
+        dni = [0.0] * horizon
+        dhi = [0.0] * horizon
+        rh = [0.0] * horizon
+        for i in range(8, len(rows)):
+            drybulb[i-8] = rows[i][6]
+            dewpoint[i-8] = rows[i][7]
+            dni[i-8] = rows[i][14]
+            dhi[i-8] = rows[i][15]
+            rh[i-8] = rows[i][8]
+    return latitude, longitude, city_country, dni, dhi, drybulb, dewpoint, rh
+
+
+if __name__ == '__main__':
+    path = 'USA_CA_San.Francisco.Intl.AP.724940_TMY3.epw'
+    main(path)
