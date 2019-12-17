@@ -2,9 +2,9 @@
   "name": "sia2024",
   "description": "A simplistic implementation of SIA 2024",
   "version": "0.1",
-  "author": "saso-basic",
+  "author": "saso-basic, christophwaibel",
   "id": "f5cd6a0b-c7f9-42c9-b58c-045640dfe65d",
-  "include-files": ["sia2024.py"],
+  "include-files": ["sia2024.py", "sia2024roomselector.py"],
   "components": [
     {
       "class-name": "Sia2024",
@@ -42,6 +42,36 @@
         {"type": "float", "name": "t_A", "nick-name": "t_A [h]", "description": "Vollaststunden Geräte [h] - full load hours Appliances"},
         {"type": "float", "name": "g", "nick-name": "g [-]", "description": "g-Wert [-] - g-Value windows"},
         {"type": "float", "name": "f_sh", "nick-name": "f_sh [-]", "description": "Reduktionsfaktor solare Wärmeeinträge [-]"}]
+    },
+    {
+      "class-name": "Sia2024Room",
+      "name": "Sia2024Room",
+      "abbreviation": "sia2024room",
+      "description": "SIA 2024 room type selector",
+      "category": "[hive]",
+      "subcategory": "demand",
+      "id": "910cb65e-5a7e-46a7-b55f-b1f35e282be2",
+      "main-module": "sia2024roomselector",
+      "main-function": "show_room",
+      "inputs": [
+        {"name": "room", "nick-name": "room", "type": "json", "description": "select a room", "default": "<add room>"}
+      ],
+      "outputs": [
+        {"name": "output", "nick-name": "o", "type": "string", "description": "output of the script"}
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "class-name": "Sia2024RoomList",
+      "name": "Rooms",
+      "abbreviation": "rms",
+      "description": "A list of SIA2024 rooms",
+      "category": "[hive]",
+      "subcategory": "demand",
+      "id": "8903e11e-abba-4318-a9b2-6728e2999652",
+      "parameter-type": "ValueList",
+      "csv": "191217_SIA2024_Raumdaten_Standardwert.csv"
     }
   ]
 }
