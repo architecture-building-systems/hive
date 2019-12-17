@@ -41,10 +41,8 @@ def default_values(use_case, bldgtype, area, month, season):
     summerstart, summerend = 3, 10
     dayspermonth = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
 
-    # Data according to testcase in sia380.py
-    # but this should be variable...
-    # theta_e = [0.5, 1.7, 5.8, 8.9, 14.1, 16.5, 18.5, 18.4, 14.2, 10.4, 4.7, 1.7]    # ambient air temperature [°C]
-    t = [744.0, 672.0, 744.0, 720.0, 744.0, 720.0, 744.0, 744.0, 720.0, 744.0, 720.0, 744.0]    # length of calculation period (hours per month) [h]
+    # length of calculation period (hours per month) [h]
+    t = [744.0, 672.0, 744.0, 720.0, 744.0, 720.0, 744.0, 744.0, 720.0, 744.0, 720.0, 744.0]
 
     """
     cases according to SIA 2024:2015.
@@ -64,6 +62,10 @@ def default_values(use_case, bldgtype, area, month, season):
         _____________________________________________________________________________________
     """
     # how do you know: A_op, A_w? must be from rhino geometry!
+
+    # load csv database
+
+
     # following data implements standard values of SIA 2024:2015 - table 2, p.10 (Standardwert)
     use_case_data = {
         "mfh": {'tau': 182.0,
