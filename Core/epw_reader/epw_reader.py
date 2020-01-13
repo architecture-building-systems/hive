@@ -33,6 +33,13 @@ Default is 'hourly'. Alternatives: 'monthly', 'daily', 'quarter-hourly', 'five-m
 
 import csv
 
+# indexes into .epw data rows:
+DRYBULB_INDEX = 6
+DEWPOINT_INDEX = 7
+DNI_INDEX = 14
+DHI_INDEX = 15
+RH_INDEX = 8
+
 
 def main(path):
     result = epw_reader(path)
@@ -40,29 +47,39 @@ def main(path):
 
 
 def epw_reader(path):
+    drybulb = []
+    dewpoint = []
+    dni = []
+    dhi = []
+    rh = []
+    latitude = None
+    longitude = None
+    city_country = None
+
     with open(path) as csvfile:
-        readCSV = csv.reader(csvfile, delimiter=',')
-        rows = list(readCSV)
+        for row in csv.reader(csvfile):
+            if row[0] == "LOCATION":
+                # read in location stuff here
+                _, city, _, country, _, _, latitude, longitude, _, _ = row
+                city_country = (city, country)
+                break  # this is important: skip the for/else clause
+            elif not row[0].isdigit():
+                # still parsing header portion of epw file
+                continue
 
-        latitude = rows[0][6]
-        longitude = rows[0][7]
-        city_country = rows[0][1], rows[0][3]
+            drybulb.append(row[DRYBULB_INDEX])
+            dewpoint.append(row[DEWPOINT_INDEX])
+            dni.append(row[DNI_INDEX])
+            dhi.append(row[DHI_INDEX])
+            rh.append(row[RH_INDEX])
 
-        horizon = (len(rows) - 8)
-        drybulb = [0.0] * horizon
-        dewpoint = [0.0] * horizon
-        dni = [0.0] * horizon
-        dhi = [0.0] * horizon
-        rh = [0.0] * horizon
-        for i in range(8, len(rows)):
-            drybulb[i-8] = rows[i][6]
-            dewpoint[i-8] = rows[i][7]
-            dni[i-8] = rows[i][14]
-            dhi[i-8] = rows[i][15]
-            rh[i-8] = rows[i][8]
+    # let's just be sure we actually read an .epw file with a LOCATION entry
+    assert latitude is not None
+    assert longitude is not None
+
     return latitude, longitude, city_country, dni, dhi, drybulb, dewpoint, rh
 
 
 if __name__ == '__main__':
     path = 'USA_CA_San.Francisco.Intl.AP.724940_TMY3.epw'
-    main(path)
+    latitude, longitude, city_country, dni, dhi, drybulb, dewpoint, rh = main(path)
