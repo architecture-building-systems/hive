@@ -52,6 +52,7 @@ def epw_reader(path):
     dni = []
     dhi = []
     rh = []
+
     latitude = None
     longitude = None
     city_country = None
@@ -62,16 +63,15 @@ def epw_reader(path):
                 # read in location stuff here
                 _, city, _, country, _, _, latitude, longitude, _, _ = row
                 city_country = (city, country)
-                break  # this is important: skip the for/else clause
             elif not row[0].isdigit():
                 # still parsing header portion of epw file
                 continue
-
-            drybulb.append(row[DRYBULB_INDEX])
-            dewpoint.append(row[DEWPOINT_INDEX])
-            dni.append(row[DNI_INDEX])
-            dhi.append(row[DHI_INDEX])
-            rh.append(row[RH_INDEX])
+            else:
+                drybulb.append(float(row[DRYBULB_INDEX]))
+                dewpoint.append(float(row[DEWPOINT_INDEX]))
+                dni.append(float(row[DNI_INDEX]))
+                dhi.append(float(row[DHI_INDEX]))
+                rh.append(float(row[RH_INDEX]))
 
     # let's just be sure we actually read an .epw file with a LOCATION entry
     assert latitude is not None
@@ -81,5 +81,12 @@ def epw_reader(path):
 
 
 if __name__ == '__main__':
-    path = 'USA_CA_San.Francisco.Intl.AP.724940_TMY3.epw'
-    latitude, longitude, city_country, dni, dhi, drybulb, dewpoint, rh = main(path)
+    def mean(lst):
+        return sum(lst) / len(lst)
+
+    def test():
+        path = 'USA_CA_San.Francisco.Intl.AP.724940_TMY3.epw'
+        latitude, longitude, city_country, dni, dhi, drybulb, dewpoint, rh = main(path)
+        print(latitude, longitude, city_country, mean(dni), mean(dhi), mean(drybulb), mean(dewpoint), mean(rh))
+
+    test()
