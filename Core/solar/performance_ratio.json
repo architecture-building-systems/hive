@@ -1,0 +1,40 @@
+{
+  "name": "performanceratio",
+  "description": "A performance ratio selector",
+  "version": "0.1",
+  "author": "christophwaibel",
+  "id": "c0a5053c-012f-4ac9-b2b0-9f014c227734",
+  "include-files": ["performance_ratio.py"],
+  "components": [
+    {
+      "class-name": "PerformanceRatio",
+      "name": "PerformanceRatio",
+      "abbreviation": "perfrat",
+      "description": "Some options for performance ratios",
+      "category": "[hive]",
+      "subcategory": "solar",
+      "id": "6ff9899d-64a9-46ef-817c-f1521fa605e1",
+      "main-module": "performance_ratio",
+      "main-function": "get_performance_ratio",
+      "inputs": [
+        {"type": "json", "name": "performance_scenario", "nick-name": "scenario", "default": "<add scenario>", "description": "Scenario for performance ratio, like dirty roof, clean facade, shaded roof, etc"}
+      ],
+      "outputs": [
+        {"type": "string", "name": "output", "nick-name": "o", "description": "Performance ratio of surface"}
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "class-name": "PerformanceRatioList",
+      "name": "PerformanceRatio",
+      "abbreviation": "prl",
+      "description": "A list of performance ratios",
+      "category": "[hive]",
+      "subcategory": "solar",
+      "id": "f39f9eae-f665-4356-b4ba-4f9db73197ea",
+      "parameter-type": "ValueList",
+      "csv": "performance_ratio.csv"
+    }
+  ]
+}
