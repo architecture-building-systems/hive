@@ -4,7 +4,7 @@
   "version": "0.1",
   "author": "christophwaibel",
   "id": "3b4dd266-f7e0-4614-aef5-cadf1e3319d2",
-  "include-files": ["simple_panel.py", "obstructed_panel.py"],
+  "include-files": ["simple_panel.py", "obstructed_panel.py", "performance_ratio.py"],
   "components": [
     { "class-name": "SimplePanel",
       "name": "SimplePanel",
@@ -51,6 +51,36 @@
         {"name": "annual potential", "nick-name": "annual", "type": "float", "description": "annual hourly solar irradiance [Wh] of surface"},
         {"name": "mesh_visu", "nick-name": "mesh_visu", "type": "mesh", "description": "mesh_visu"}
       ]
+    },
+    {
+      "class-name": "PerformanceRatio",
+      "name": "PerformanceRatio",
+      "abbreviation": "perfrat",
+      "description": "Some options for performance ratios",
+      "category": "[hive]",
+      "subcategory": "solar",
+      "id": "6ff9899d-64a9-46ef-817c-f1521fa605e1",
+      "main-module": "performance_ratio",
+      "main-function": "get_performance_ratio",
+      "inputs": [
+        {"type": "json", "name": "performance_scenario", "nick-name": "perf_ratio", "default": "<add scenario>", "description": "Scenario for performance ratio, like dirty roof, clean facade, shaded roof, etc"}
+      ],
+      "outputs": [
+        {"type": "string", "name": "output", "nick-name": "o", "description": "Performance ratio of surface"}
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "class-name": "PerformanceRatioList",
+      "name": "PerformanceRatio",
+      "abbreviation": "prl",
+      "description": "A list of performance ratios",
+      "category": "[hive]",
+      "subcategory": "solar",
+      "id": "f39f9eae-f665-4356-b4ba-4f9db73197ea",
+      "parameter-type": "ValueList",
+      "csv": "performance_ratio.csv"
     }
   ]
 }
