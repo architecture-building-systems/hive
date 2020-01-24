@@ -1,0 +1,7 @@
+Scenario,performance ratio
+Roof perfect,0.85
+Roof normal,0.75
+Roof dirty,0.7
+Facade perfect,0.75
+Facade normal,0.7
+Facade shaded,0.6
