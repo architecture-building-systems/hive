@@ -4,7 +4,7 @@
   "version": "0.1",
   "author": "christophwaibel",
   "id": "3b4dd266-f7e0-4614-aef5-cadf1e3319d2",
-  "include-files": ["simple_panel.py", "obstructed_panel.py", "performance_ratio.py", "pv_efficiency.py", "simplest_panel.py"],
+  "include-files": ["simple_panel.py", "obstructed_panel.py", "performance_ratio.py", "pv_efficiency.py", "simplest_panel.py", "orientation_factor.py"],
   "components": [
     {
       "class-name": "EaCSPanel",
@@ -66,11 +66,27 @@
         {"name": "latitude", "nick-name": "latitude", "type": "float", "description": "Latitude of the location. Default value is for Zurich, Switzerland", "default": 47.36667},
         {"name": "longitude", "nick-name": "longitude", "type": "float", "description": "Longitude of the location. Default value is for Zurich, Switzerland", "default": 8.55},
         {"name": "solarazi", "nick-name": "solarazi", "type": "float", "description": "8760 time series of solar azimuth angles in [°], e.g from a weatherfile. If no data provided, azimuth will be calculated according to Blanco-Muriel (2001).", "access": "list", "default": []},
-        {"name": "solaralti", "nick-name": "solaralti", "type": "float", "description": "8760 time series of solar altitude angles in [°], e.g from a weatherfile. If no data provided, altitude will be calculated according to Blanco-Muriel (2001).", "access": "list", "default": []}
-      ],
+        {"name": "solaralti", "nick-name": "solaralti", "type": "float", "description": "8760 time series of solar altitude angles in [°], e.g from a weatherfile. If no data provided, altitude will be calculated according to Blanco-Muriel (2001).", "access": "list", "default": []}      ],
       "outputs": [
         {"name": "annual potential", "nick-name": "annual", "type": "float", "description": "annual hourly solar irradiance [Wh] of surface"},
         {"name": "mesh_visu", "nick-name": "mesh_visu", "type": "mesh", "description": "mesh_visu"}
+      ]
+    },
+    {
+      "class-name": "OrientationFactor",
+      "name": "OrientationFactor",
+      "abbreviation": "orfac",
+      "description": "Orientation factor of surace",
+      "category": "[hive]",
+      "subcategory": "solar",
+      "id": "dfde3d64-e63d-4715-a6b9-b045920d8c97",
+      "main-module": "orientation_factor",
+      "inputs": [
+        {"name": "G_flat", "nick-name": "G_flat", "type": "float", "description": "Global irradiation, i.e. on the flat, in [kWh/m2a]"},
+        {"name": "G_angled", "nick-name": "G_angled", "type": "float", "description": "Irradiation on an angle in [kWh/m2a]"}
+      ],
+      "outputs": [
+        {"name": "OF", "nick-name": "OF", "type": "float", "description": "Orientation factor as a fraction [0.0, >1.0]"}
       ]
     },
     {
