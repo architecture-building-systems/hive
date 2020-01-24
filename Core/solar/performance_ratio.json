@@ -17,7 +17,7 @@
       "main-module": "performance_ratio",
       "main-function": "get_performance_ratio",
       "inputs": [
-        {"type": "json", "name": "performance_scenario", "nick-name": "scenario", "default": "<add scenario>", "description": "Scenario for performance ratio, like dirty roof, clean facade, shaded roof, etc"}
+        {"type": "json", "name": "performance_scenario", "nick-name": "perf_ratio", "default": "<add scenario>", "description": "Scenario for performance ratio, like dirty roof, clean facade, shaded roof, etc"}
       ],
       "outputs": [
         {"type": "string", "name": "output", "nick-name": "o", "description": "Performance ratio of surface"}
