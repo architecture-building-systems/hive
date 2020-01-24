@@ -7,5 +7,6 @@ from __future__ import print_function
 
 
 def get_performance_ratio(performance_scenario):
-    return "\n".join("{key}: {value}".format(key=key, value=value)
-                     for key, value in performance_scenario.items())
+    # return "\n".join("{key}: {value}".format(key=key, value=value)
+    #                  for key, value in performance_scenario.items())
+    return performance_scenario["performance ratio"]

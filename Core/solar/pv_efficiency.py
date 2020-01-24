@@ -7,5 +7,6 @@ from __future__ import print_function
 
 
 def get_pv_efficiency(pv_efficiency):
-    return "\n".join("{key}: {value}".format(key=key, value=value)
-                     for key, value in pv_efficiency.items())
+    #return "\n".join("{key}: {value}".format(key=key, value=value)
+    #                 for key, value in pv_efficiency.items())
+    return pv_efficiency['efficiency']
