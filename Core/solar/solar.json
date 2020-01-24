@@ -4,9 +4,30 @@
   "version": "0.1",
   "author": "christophwaibel",
   "id": "3b4dd266-f7e0-4614-aef5-cadf1e3319d2",
-  "include-files": ["simple_panel.py", "obstructed_panel.py", "performance_ratio.py"],
+  "include-files": ["simple_panel.py", "obstructed_panel.py", "performance_ratio.py", "pv_efficiency.py", "simplest_panel.py"],
   "components": [
-    { "class-name": "SimplePanel",
+    {
+      "class-name": "EaCSPanel",
+      "name": "EaCSPanel",
+      "abbreviation": "EaCSPanel",
+      "description": "Calculates total annual PV yield, using simplified equation E_PV = G x F_F x A x eta_PV x PR, from the lecture Energy and Climate Systems.",
+      "category": "[hive]",
+      "subcategory": "Solar",
+      "id": "49efa3bc-c59f-4b77-9adb-761e45f67aea",
+      "main-module": "simplest_panel",
+      "inputs": [
+        {"name": "Global_Irradiation", "nick-name": "G", "type": "float", "description": "Annual Global Irradiation, annual in [kWh/m²a]"},
+        {"name": "FormFactor", "nick-name": "F_F", "type": "float", "description": "Form factor, also known as orientation factor, that defines how much of the global annual irradiation is effectively used, depending on the angle of the PV surface. Fractional value [0.0, >1.0]", "default": 1.0},
+        {"name": "SurfaceArea", "nick-name": "A", "type": "float", "description": "Surface are in [m²]", "default": 1.0},
+        {"name": "PVEfficiency", "nick-name": "eta_PV", "type": "float", "description": "PV technology efficiency, fractional value [0.0, 1.0]", "default": 0.15},
+        {"name": "PerformanceRatio", "nick-name": "PR", "type": "float", "description": "Performance Ratio, depends on how well the PV is exposed (shaded, not) and how clean it is (dirty, dusty, super clean). Fractional [0.0, 1.0]", "default": 0.75}
+      ],
+      "outputs": [
+        {"name": "annual yield", "nick-name": "annual", "type": "float", "description": "Annual yield for solar electricity generation [kWh/m²a] of the entire PV area"}
+      ]
+    },
+    {
+      "class-name": "SimplePanel",
       "name": "SimplePanel",
       "abbreviation": "SimplePanel",
       "description": "Calculates solar irradiance on an unobstructed external surface",
@@ -68,6 +89,23 @@
       "outputs": [
         {"type": "string", "name": "output", "nick-name": "o", "description": "Performance ratio of surface"}
       ]
+    },
+    {
+      "class-name": "PVEfficiency",
+      "name": "PVEfficiency",
+      "abbreviation": "pveff",
+      "description": "Some options for PV technologies",
+      "category": "[hive]",
+      "subcategory": "solar",
+      "id": "6a08088d-a79c-4360-860e-d1d0bf22d2b5",
+      "main-module": "pv_efficiency",
+      "main-function": "get_pv_efficiency",
+      "inputs": [
+        {"type": "json", "name": "PV_tech", "nick-name": "PV_tech", "default": "<add scenario>", "description": "Choose PV technology"}
+      ],
+      "outputs": [
+        {"type": "string", "name": "output", "nick-name": "o", "description": "PV technology efficiency"}
+      ]
     }
   ],
   "parameters": [
@@ -81,6 +119,17 @@
       "id": "f39f9eae-f665-4356-b4ba-4f9db73197ea",
       "parameter-type": "ValueList",
       "csv": "performance_ratio.csv"
+    },
+    {
+      "class-name": "PVEfficiencyList",
+      "name": "PVEfficiency",
+      "abbreviation": "pveffl",
+      "description": "A list of PV technologies",
+      "category": "[hive]",
+      "subcategory": "solar",
+      "id": "0605fc15-6405-4da5-9cf9-75737374f19f",
+      "parameter-type": "ValueList",
+      "csv": "pv_efficiency.csv"
     }
   ]
 }
