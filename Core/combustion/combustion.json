@@ -47,6 +47,31 @@
         {"type": "float", "name": "cost", "nick-name": "cost", "description": "Total operation cost [CHF/h]"},
         {"type": "float", "name": "carbon", "nick-name": "carbon", "description": "Total operation carbon emissions [kgCO2eq./h]"}
       ]
+    },
+    {
+      "class-name": "chp",
+      "name": "chp",
+      "abbreviation": "chp",
+      "description": "Calculate heating or electricity generation, cost and carbon from a CHP",
+      "category": "[hive]",
+      "subcategory": "combustion",
+      "id": "85ea9737-e422-4e02-bec8-44fdf1531568",
+      "main-module": "chp",
+      "main-function": "main",
+      "inputs": [
+        {"type": "string", "name": "htg_or_elec_in", "nick-name": "str", "description": "Heating or electricity in as loads? {'heating_in' 'elec_in'}. (default: 'heating_in')", "default": "heating_in"},
+        {"type": "float", "name": "loads", "nick-name": "loads", "description": "Loads in [kWh]. Either heating or electricity loads that need to be supplied."},
+        {"type": "float", "name": "eta", "nick-name": "eta", "description": "Efficiency of CHP, i.e. from fuel into electricity [-]"},
+        {"type": "float", "name": "htp", "nick-name": "htp", "description": "Heat-to-power ratio, i.e. how much heat comes with generated electricity [-]"},
+        {"type": "float", "name": "fuelcost", "nick-name": "cost", "description": "Fuel cost [CHF/kWh]"},
+        {"type": "float", "name": "fuelemissions", "nick-name": "carbon", "description": "Fuel emissions [kgCO2/kWh]"}
+      ],
+      "outputs": [
+        {"type": "float", "name": "total_cost", "nick-name": "cost", "description": "Total operation cost [CHF]"},
+        {"type": "float", "name": "total_emissions", "nick-name": "carbon", "description": "Total carbon emissions from operation [kgCO2]"},
+        {"type": "float", "name": "heating_gen", "nick-name": "htg_gen", "description": "Heating energy generated from CHP [kWh]"},
+        {"type": "float", "name": "elec_gen", "nick-name": "el_gen", "description": "Electricity generated from CHP [kWh]"}
+      ]
     }
   ]
 }
