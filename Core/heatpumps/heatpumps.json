@@ -4,7 +4,7 @@
   "version": "0.1",
   "author": "christophwaibel",
   "id": "44e6ec6a-b5b9-47b3-be86-1ff4c1d769af",
-  "include-files": ["ashp_timeresolved.py", "simple_hp.py", "gshp_timeresolved.py"],
+  "include-files": ["ashp_timeresolved.py", "simple_hp.py"],
   "components": [
     {
       "class-name": "ASHP-t",
