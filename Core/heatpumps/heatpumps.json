@@ -4,8 +4,27 @@
   "version": "0.1",
   "author": "christophwaibel",
   "id": "44e6ec6a-b5b9-47b3-be86-1ff4c1d769af",
-  "include-files": ["ashp_timeresolved.py", "simple_hp.py"],
+  "include-files": ["ashp_timeresolved.py", "simple_hp.py", "simple_hp_cop.py"],
   "components": [
+    {
+      "class-name": "simple-hp-cop",
+      "name": "simple-hp-cop",
+      "abbreviation": "hp-cop",
+      "description": "Simple calculation of heat pump COP according to EaCS lecture",
+      "category": "[hive]",
+      "subcategory": "heatpumps",
+      "id": "844f55ec-acf3-4f26-bc4a-dda72ae6a5ea",
+      "main-module": "simple_hp_cop",
+      "main-function": "main",
+      "inputs": [
+        {"type": "float", "name": "eta", "nick-name": "eta", "description": "Efficiency of heat pump [-]"},
+        {"type": "float", "name": "T_1", "nick-name": "T_1", "description": "Temperature of warm reservoir [k]"},
+        {"type": "float", "name": "T_2", "nick-name": "T_2", "description": "Temperature of cold reservoir [k]"}
+      ],
+      "outputs": [
+        {"type": "float", "name": "COP_W", "nick-name": "COP_W", "description": "COP of heat pump [-]"}
+      ]
+    },
     {
       "class-name": "ASHP-t",
       "name": "ASHP-t",
