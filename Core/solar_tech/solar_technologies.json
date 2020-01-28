@@ -4,7 +4,7 @@
   "version": "0.1",
   "author": "christophwaibel",
   "id": "2a2178f1-08f7-4f68-afc9-0845516aba8e",
-  "include-files": ["simple_pv.py", "pv_efficiency.py", "noct_pv.py", "simple_solar_thermal.py", "sum_over_timeperiod.py"],
+  "include-files": ["simple_pv.py", "pv_efficiency.py", "noct_pv.py", "simple_solar_thermal.py", "sum_over_timeperiod.py", "st_efficiency.py"],
   "components": [
     {
       "class-name": "SummarizeYield",
@@ -12,7 +12,7 @@
       "abbreviation": "sum-yield",
       "description": "Summarize the PV yield per specified time period, e.g. monthly, daily, or entire year.",
       "category": "[hive]",
-      "subcategory": "pv",
+      "subcategory": "solartech",
       "id": "9d0764bf-ebc8-4d61-92a7-8c6e7297def9",
       "main-module": "sum_over_timeperiod",
       "main-function": "main",
@@ -30,7 +30,7 @@
       "abbreviation": "SimpleST",
       "description": "Calculates total yield from Solar thermal collector, using simplified equation Q_th = G * F_F * A * eta_K * R_V, from the lecture Energy and Climate Systems.",
       "category": "[hive]",
-      "subcategory": "pv",
+      "subcategory": "solartech",
       "id": "b1ddb905-855d-4997-b22b-e33aa58e7ab8",
       "main-module": "simple_solar_thermal",
       "main-function": "simple_solar_thermal",
@@ -51,7 +51,7 @@
       "abbreviation": "noct-pv",
       "description": "A PV calculation tool according to Nominal Operating Cell Temperature method Eqt. A.10 in doi: 10.1016/j.apenergy.2019.03.177",
       "category": "[hive]",
-      "subcategory": "pv",
+      "subcategory": "solartech",
       "id": "05dca691-8d6b-455c-a8d4-3cf0c98eaf7e",
       "main-module": "noct_pv",
       "main-function": "main",
@@ -76,7 +76,7 @@
       "abbreviation": "SimplePV",
       "description": "Calculates total PV electricity generation, using simplified equation E_PV = G * F_F * A * eta_PV * PR, from the lecture Energy and Climate Systems.",
       "category": "[hive]",
-      "subcategory": "pv",
+      "subcategory": "solartech",
       "id": "49efa3bc-c59f-4b77-9adb-761e45f67aea",
       "main-module": "simple_pv",
       "main-function": "simple_pv",
@@ -97,7 +97,7 @@
       "abbreviation": "pveff",
       "description": "Some options for PV technologies",
       "category": "[hive]",
-      "subcategory": "pv",
+      "subcategory": "solartech",
       "id": "6a08088d-a79c-4360-860e-d1d0bf22d2b5",
       "main-module": "pv_efficiency",
       "main-function": "get_pv_efficiency",
@@ -106,6 +106,23 @@
       ],
       "outputs": [
         {"type": "string", "name": "output", "nick-name": "o", "description": "PV technology efficiency"}
+      ]
+    },
+    {
+      "class-name": "STEfficiency",
+      "name": "STEfficiency",
+      "abbreviation": "steff",
+      "description": "Some options for ST technologies",
+      "category": "[hive]",
+      "subcategory": "solartech",
+      "id": "87abaa57-0797-4f86-854f-4797ad4d677b",
+      "main-module": "st_efficiency",
+      "main-function": "get_st_efficiency",
+      "inputs": [
+        {"type": "json", "name": "ST_tech", "nick-name": "ST_tech", "default": "<add scenario>", "description": "Choose ST technology"}
+      ],
+      "outputs": [
+        {"type": "string", "name": "output", "nick-name": "o", "description": "ST technology efficiency"}
       ]
     }
   ],
@@ -116,10 +133,21 @@
       "abbreviation": "pveffl",
       "description": "A list of PV technologies",
       "category": "[hive]",
-      "subcategory": "pv",
+      "subcategory": "solartech",
       "id": "0605fc15-6405-4da5-9cf9-75737374f19f",
       "parameter-type": "ValueList",
       "csv": "pv_efficiency.csv"
+    },
+    {
+      "class-name": "STEfficiencyList",
+      "name": "STEfficiency",
+      "abbreviation": "steffl",
+      "description": "A list of ST technologies",
+      "category": "[hive]",
+      "subcategory": "solartech",
+      "id": "99cd8c9d-d63c-4e30-9c67-7de8d46e20bf",
+      "parameter-type": "ValueList",
+      "csv": "st_efficiency.csv"
     }
   ]
 }
