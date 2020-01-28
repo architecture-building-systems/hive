@@ -12,3 +12,10 @@ should return
     - cost [CHF]
     - carbon emissions [kgCO2eq.]
 """
+
+
+def main(heating_loads, carrier_cost, carrier_emissions, eta):
+    final_energy = heating_loads * eta
+    total_cost = final_energy * carrier_cost
+    total_emissions = final_energy * carrier_emissions
+    return total_cost, total_emissions

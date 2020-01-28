@@ -1,0 +1,31 @@
+{
+  "name": "combustion",
+  "description": "Combustion technologies",
+  "version": "0.1",
+  "author": "christophwaibel",
+  "id": "d9a3beb9-1931-4d42-b3bf-4b3af45b4236",
+  "include-files": ["boiler.py", "chp.py"],
+  "components": [
+    {
+      "class-name": "boiler",
+      "name": "boiler",
+      "abbreviation": "boiler",
+      "description": "Calculate total operation cost and emissions using a boiler to meet heating loads.",
+      "category": "[hive]",
+      "subcategory": "combustion",
+      "id": "5d47ce6e-44ed-4ac6-9890-93dc91fb8529",
+      "main-module": "boiler",
+      "main-function": "main",
+      "inputs": [
+        {"type": "float", "name": "heating_loads", "nick-name": "htg", "description": "Heating loads [kWh]"},
+        {"type": "float", "name": "carrier_cost", "nick-name": "cost", "description": "Cost of energy carrier [CHF/kWh]"},
+        {"type": "float", "name": "carrier_emissions", "nick-name": "CO2", "description": "Carbon emissions of energy carrier [kgCO2/kWheq.]"},
+        {"type": "float", "name": "efficiency", "nick-name": "eta", "description": "Efficiency of boiler [-]"}
+      ],
+      "outputs": [
+        {"type": "float", "name": "cost", "nick-name": "cost", "description": "Total operation cost [CHF]"},
+        {"type": "float", "name": "carbon", "nick-name": "carbon", "description": "Total operation carbon emissions [kgCO2eq.]"}
+      ]
+    }
+  ]
+}
