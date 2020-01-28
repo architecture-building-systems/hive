@@ -4,7 +4,7 @@
   "version": "0.1",
   "author": "christophwaibel",
   "id": "d9a3beb9-1931-4d42-b3bf-4b3af45b4236",
-  "include-files": ["boiler.py", "chp.py"],
+  "include-files": ["boiler.py", "boiler_timeresolved.py", "chp.py"],
   "components": [
     {
       "class-name": "boiler",
@@ -25,6 +25,27 @@
       "outputs": [
         {"type": "float", "name": "cost", "nick-name": "cost", "description": "Total operation cost [CHF]"},
         {"type": "float", "name": "carbon", "nick-name": "carbon", "description": "Total operation carbon emissions [kgCO2eq.]"}
+      ]
+    },
+    {
+      "class-name": "boiler-tr",
+      "name": "boiler-tr",
+      "abbreviation": "boiler-tr",
+      "description": "Calculate time-resolved operating cost and emissions using a boiler to meet heating loads.",
+      "category": "[hive]",
+      "subcategory": "combustion",
+      "id": "a74557e1-e382-44fd-b4a9-7c315e670b51",
+      "main-module": "boiler_timeresolved",
+      "main-function": "main",
+      "inputs": [
+        {"type": "float", "name": "heating_loads", "nick-name": "htg", "description": "Heating loads, time resolved [kWh/h]", "access": "list"},
+        {"type": "float", "name": "carrier_cost", "nick-name": "cost", "description": "Cost of energy carrier, time resolved [CHF/kWh]", "access": "list"},
+        {"type": "float", "name": "carrier_emissions", "nick-name": "CO2", "description": "Carbon emissions of energy carrier time resolved [kgCO2/kWheq.]", "access": "list"},
+        {"type": "float", "name": "efficiency", "nick-name": "eta", "description": "Efficiency of boiler, time resolved [-/h]. Could change depending on supply temp.", "access": "list"}
+      ],
+      "outputs": [
+        {"type": "float", "name": "cost", "nick-name": "cost", "description": "Total operation cost [CHF/h]"},
+        {"type": "float", "name": "carbon", "nick-name": "carbon", "description": "Total operation carbon emissions [kgCO2eq./h]"}
       ]
     }
   ]
