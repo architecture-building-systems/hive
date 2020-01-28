@@ -4,7 +4,7 @@
   "version": "0.1",
   "author": "christophwaibel",
   "id": "3b4dd266-f7e0-4614-aef5-cadf1e3319d2",
-  "include-files": ["simple_panel.py", "obstructed_panel.py", "performance_ratio.py", "pv_efficiency.py", "orientation_factor.py"],
+  "include-files": ["simple_panel.py", "obstructed_panel.py", "performance_ratio.py", "orientation_factor.py"],
   "components": [
     {
       "class-name": "SimplePanel",
@@ -85,23 +85,6 @@
       "outputs": [
         {"type": "string", "name": "output", "nick-name": "o", "description": "Performance ratio of surface"}
       ]
-    },
-    {
-      "class-name": "PVEfficiency",
-      "name": "PVEfficiency",
-      "abbreviation": "pveff",
-      "description": "Some options for PV technologies",
-      "category": "[hive]",
-      "subcategory": "solar",
-      "id": "6a08088d-a79c-4360-860e-d1d0bf22d2b5",
-      "main-module": "pv_efficiency",
-      "main-function": "get_pv_efficiency",
-      "inputs": [
-        {"type": "json", "name": "PV_tech", "nick-name": "PV_tech", "default": "<add scenario>", "description": "Choose PV technology"}
-      ],
-      "outputs": [
-        {"type": "string", "name": "output", "nick-name": "o", "description": "PV technology efficiency"}
-      ]
     }
   ],
   "parameters": [
@@ -115,17 +98,6 @@
       "id": "f39f9eae-f665-4356-b4ba-4f9db73197ea",
       "parameter-type": "ValueList",
       "csv": "performance_ratio.csv"
-    },
-    {
-      "class-name": "PVEfficiencyList",
-      "name": "PVEfficiency",
-      "abbreviation": "pveffl",
-      "description": "A list of PV technologies",
-      "category": "[hive]",
-      "subcategory": "solar",
-      "id": "0605fc15-6405-4da5-9cf9-75737374f19f",
-      "parameter-type": "ValueList",
-      "csv": "pv_efficiency.csv"
     }
   ]
 }
