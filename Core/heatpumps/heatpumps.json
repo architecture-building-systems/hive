@@ -1,0 +1,34 @@
+{
+  "name": "heatpumps",
+  "description": "Heat pumps",
+  "version": "0.1",
+  "author": "christophwaibel",
+  "id": "44e6ec6a-b5b9-47b3-be86-1ff4c1d769af",
+  "include-files": ["ashp_timeresolved.py", "ashp.py", "gshp.py"],
+  "components": [
+    {
+      "class-name": "ASHP-t",
+      "name": "ASHP-t",
+      "abbreviation": "ASHP-t",
+      "description": "Time resolved heat energy generation of an air source heat pump",
+      "category": "[hive]",
+      "subcategory": "heatpumps",
+      "id": "b41bbc9d-1b0f-4b8c-8485-5f666ae7be5f",
+      "main-module": "ashp_timeresolved",
+      "main-function": "main",
+      "inputs": [
+        {"type": "float", "name": "Q_th", "nick-name": "Q_th", "description": "Heating load, time resolved [kW]", "access": "list"},
+        {"type": "float", "name": "T_supply", "nick-name": "T_supply", "description": "Supply temperature of ASHP [°C]"},
+        {"type": "float", "name": "T_amb,t", "nick-name": "T_amb,t", "description": "Ambient air temperature, time resolved [°C]", "access": "list"},
+        {"type": "float", "name": "PI_HP,1", "nick-name": "PI_HP,1", "description": "Technology parameter 1 for ASHP"},
+        {"type": "float", "name": "PI_HP,2", "nick-name": "PI_HP,2", "description": "Technology parameter 2 for ASHP"},
+        {"type": "float", "name": "PI_HP,3", "nick-name": "PI_HP,3", "description": "Technology parameter 3 for ASHP"},
+        {"type": "float", "name": "PI_HP,4", "nick-name": "PI_HP,4", "description": "Technology parameter 4 for ASHP"}
+      ],
+      "outputs": [
+        {"type": "float", "name": "x_el", "nick-name": "x_el", "description": "Electricity demand to fulfil heating load [kW]"},
+        {"type": "float", "name": "COP", "nick-name": "COP", "description": "COP of ASHP [-]"}
+      ]
+    }
+  ]
+}
