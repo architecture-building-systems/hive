@@ -1,16 +1,16 @@
 # coding=utf-8
 """
 Simple heat pump calculation according to Energy and Climate Systems lecture FS 2019
-Q = E * COP
+E = Q / COP
 
 input:
-    E = electricity [kWh]
+    Q = heating loads [kWh]
     COP = coefficient of performance [-]
 
 output:
-    Q = thermal energy [kWh]
+    E = electricity loads [kWh]
 """
 
 
-def main(E, COP):
-    return E * COP
+def main(Q, COP):
+    return Q / COP
