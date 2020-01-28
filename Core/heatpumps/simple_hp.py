@@ -1,6 +1,6 @@
 # coding=utf-8
 """
-Simple air source heat pump calculation according to Energy and Climate Systems lecture FS 2019
+Simple heat pump calculation according to Energy and Climate Systems lecture FS 2019
 Q = E * COP
 
 input:
