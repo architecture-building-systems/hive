@@ -1,22 +1,20 @@
 # coding=utf-8
 """
-Implements a simplified PV calculation base on the formula:
+Calculates total solar electricity yield using simple equation from Energy and Climate Systems course FS2019:
+E_PV = G * F_F * A * eta_PV * PR
 
-E = Gh * OF * eta * PR * A
+Inputs:
+- G - Global horizontal irradiation [kWh/m2]
+- F_F - Form factor, also: Orientation factor [0.0, >1.0]
+- A - PV area [m2]
+- eta_PV - PV module efficiency [0.0, 1.0]
+- PR - Performance ratio [0.0, 1.0]
 
-for inputs:
-
-- Gh - Global horizontal irradiation [kWh/m2]
-- OF - Orientation factor [%] (Default Value: 100%)
-- eta - PV module efficiency [%] (Default Value: 18%)
-- PR - Performance ratio [%] (Default Value: 75%)
-- A - PV area[m2] (Default Value: 100 m2)
-
-and outputs:
-
-- E - PV electricity generation [kWh]
+outputs:
+- E_PV - PV electricity generation [kWh]
 """
 
 
-def simple_pv(Gh, OF, eta, PR, A):
-    return Gh * OF * eta * PR * A
+def simple_pv(G, F_F, A, eta_PV, PR):
+    E_PV = G * F_F * A * eta_PV * PR
+    return E_PV
