@@ -1,7 +1,6 @@
 """
 Chiller (air con)
-Eq. (A.8) from: 10.1016/j.apenergy.2019.03.177
-found in: 10.1016/j.energy.2004.08.004
+Simple equation: electricity loads = cooling loads / COP
 
 arguments:
     - cooling loads [kWh]

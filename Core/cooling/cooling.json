@@ -4,7 +4,7 @@
   "version": "0.1",
   "author": "christophwaibel",
   "id": "55759696-f0b4-47a6-90fc-13e2a11cdfa1",
-  "include-files": ["chiller.py"],
+  "include-files": ["chiller.py", "chiller_timeresolved.py"],
   "components": [
     {
       "class-name": "chiller",
@@ -26,6 +26,29 @@
         {"type": "float", "name": "elec", "nick-name": "elec", "description": "Electricity loads from operating the chiller [kWh]"},
         {"type": "float", "name": "cost", "nick-name": "cost", "description": "Total operation cost [CHF]"},
         {"type": "float", "name": "carbon", "nick-name": "carbon", "description": "Total operation carbon emissions [kgCO2eq.]"}
+      ]
+    },
+    {
+      "class-name": "chiller-tr",
+      "name": "chiller-tr",
+      "abbreviation": "chiller-tr",
+      "description": "Calculate time resolved operation cost and emissions using a chiller (air con) to meet cooling loads",
+      "category": "[hive]",
+      "subcategory": "cooling",
+      "id": "699ed23d-ea43-4905-ae2b-0a242bda7eb0",
+      "main-module": "chiller_timeresolved",
+      "main-function": "main",
+      "inputs": [
+        {"type": "float", "name": "cooling_loads", "nick-name": "clg", "description": "Cooling loads [kWh], time series", "access": "list"},
+        {"type": "float", "name": "elec_cost", "nick-name": "cost", "description": "Cost of electricity [CHF/kWh], time series", "access": "list"},
+        {"type": "float", "name": "elec_emissions", "nick-name": "CO2", "description": "Carbon emissions of electricity [kgCO2/kWh eq.], time series", "access": "list"},
+        {"type": "float", "name": "temperature", "nick-name": "temp", "description": "Ambient temperature at the inlet of the chiller [°C], time series", "access": "list"}
+      ],
+      "outputs": [
+        {"type": "float", "name": "elec", "nick-name": "elec", "description": "Electricity loads from operating the chiller [kWh]"},
+        {"type": "float", "name": "cost", "nick-name": "cost", "description": "Total operation cost [CHF]"},
+        {"type": "float", "name": "carbon", "nick-name": "carbon", "description": "Total operation carbon emissions [kgCO2eq.]"},
+        {"type": "float", "name": "COP", "nick-name": "COP", "description": "Time resolved COP of the chiller [-]"}
       ]
     }
   ]
