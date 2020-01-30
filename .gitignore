@@ -106,3 +106,7 @@ Python data_from_sensors/plot_data.py
 /.vs
 /Mothercell/Hive.GUI/Hive.GUI/bin
 /Mothercell/Hive.GUI/Hive.GUI/obj/Debug
+*.ide-shm
+Mothercell/Hive.IO/.vs/Hive.IO/v16/.suo
+Mothercell/Hive.IO/.vs/Hive.IO/v16/Server/sqlite3/storage.ide-wal
+Mothercell/Hive.IO/.vs/Hive.IO/v16/.suo
