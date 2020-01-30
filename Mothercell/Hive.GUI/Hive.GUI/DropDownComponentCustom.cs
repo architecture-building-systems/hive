@@ -50,6 +50,7 @@ namespace Hive.GUI
                 textCapsule.Render(graphics, Selected, Owner.Locked, false);
                 textCapsule.Dispose();
 
+                
                 //ComboBox x = new ComboBox
                 //{
                 //    Location = new Point(TextBounds.X + 10, TextBounds.Y + 10),

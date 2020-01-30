@@ -56,10 +56,13 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="ClusterTest.cs" />
     <Compile Include="DrawingComponent.cs" />
     <Compile Include="DrawingComponentCustom.cs" />
     <Compile Include="DropDownComponent.cs" />
     <Compile Include="DropDownComponentCustom.cs" />
+    <Compile Include="GH_ClusterAttributes.cs" />
+    <Compile Include="GH_ClusterFile.cs" />
     <Compile Include="HiveGUIComponent.cs" />
     <Compile Include="HiveGUIComponentCustom.cs" />
     <Compile Include="HiveGUIInfo.cs" />
