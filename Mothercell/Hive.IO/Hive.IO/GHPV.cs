@@ -6,12 +6,12 @@ using Rhino.Geometry;
 
 namespace Hive.IO
 {
-    public class HiveIOPV : GH_Component
+    public class GHPV : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the HiveIOPV class.
         /// </summary>
-        public HiveIOPV()
+        public GHPV()
           : base("HiveIOPV", "IO_PV",
               "Hive.IO PV component",
               "[hive]", "IO")

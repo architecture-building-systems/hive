@@ -6,12 +6,12 @@ using Rhino.Geometry;
 
 namespace Hive.IO
 {
-    public class Distributor : GH_Component
+    public class GHDistributor : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the Distributor class.
         /// </summary>
-        public Distributor()
+        public GHDistributor()
           : base("Distributor", "Nickname",
               "Description",
               "Category", "Subcategory")
