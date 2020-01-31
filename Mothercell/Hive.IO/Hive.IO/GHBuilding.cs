@@ -9,12 +9,12 @@ namespace Hive.IO
     public class GHBuilding : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the GHBuilding class.
+        /// Initializes a new instance of the GHBuilding class. Uses Building.cs. This one here is just the interface to Grasshopper
         /// </summary>
         public GHBuilding()
-          : base("GHBuilding", "Nickname",
-              "Description",
-              "Category", "Subcategory")
+          : base("GHBuilding", "Building",
+              "Hive Building, representing thermal and construction properties. Like a multi-zone building model.",
+              "[hive]", "IO")
         {
         }
 

@@ -6,12 +6,12 @@ using Rhino.Geometry;
 
 namespace Hive.IO
 {
-    public class HiveIOGroundCollector : GH_Component
+    public class GHGroundCollector : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the HiveIOGroundCollector class.
         /// </summary>
-        public HiveIOGroundCollector()
+        public GHGroundCollector()
           : base("HiveIOGroundCollector", "IO_GroundColl",
               "Hive.IO Ground solar collector component",
               "[hive]", "IO")

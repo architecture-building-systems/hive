@@ -6,12 +6,12 @@ using Rhino.Geometry;
 
 namespace Hive.IO
 {
-    public class HiveIOST : GH_Component
+    public class GHST : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the HiveIOST class.
         /// </summary>
-        public HiveIOST()
+        public GHST()
           : base("HiveIOST", "IO_ST",
               "Hive.IO Solar Thermal component",
               "[hive]", "IO")
