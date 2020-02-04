@@ -8,6 +8,7 @@ of variable naming.
 """
 
 from __future__ import division
+import math
 
 def isclose(a, b, rel_tol=1e-09, abs_tol=0.0):
     # from here: https://stackoverflow.com/a/33024979/2260
@@ -57,6 +58,10 @@ def monthly(tau, theta_e, theta_i, t, A_op, A_w, U_op, U_w, Vdot_e, Vdot_inf, et
     c_a = 1005.0  # specific heat capacity of air [J/kg*K] (de: Spezifische Wärmekapazität Luft)
     rho_a = 1.2  # density of air [kg/m3] (de: Dichte Luft)
     SECONDS_PER_HOUR = 3600.0  # seconds per hour [-]
+
+    # check for NaNs... especially from Existing database
+    if math.isnan(eta_rec):
+        eta_rec = 0.0
 
     Vdot_th = (Vdot_e * (1 - eta_rec) + Vdot_inf) / SECONDS_PER_HOUR  # [m3/s]
     H_V = Vdot_th * rho_a * c_a
