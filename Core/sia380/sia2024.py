@@ -72,12 +72,12 @@ def default_values(room, area, month, season):
         if summerstart <= month <= summerend:
             theta_i = room["Raumlufttemperatur Auslegung Kuehlung (Sommer)"]
         else:
-            theta_i = room["Raumlufttemperatur Auslegung Kuehlung (Winter)"]
+            theta_i = room["Raumlufttemperatur Auslegung Heizen (Winter)"]
     else:
         if season == "summer":
             theta_i = room["Raumlufttemperatur Auslegung Kuehlung (Sommer)"]
         else:
-            theta_i = room["Raumlufttemperatur Auslegung Kuehlung (Winter)"]
+            theta_i = room["Raumlufttemperatur Auslegung Heizen (Winter)"]
 
     A_th = room["Thermische Gebaeudehuellflaeche"]
     A_w = A_th * room["Glasanteil"]
