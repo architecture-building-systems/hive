@@ -1,4 +1,4 @@
-description,Zeitkonstante,Raumlufttemperatur Auslegung Kuehlung (Sommer),Raumlufttemperatur Auslegung Heizen (Winter),Nettogeschossflaeche,Thermische Gebaeudehuellflaeche,Glasanteil,U-Wert opake Bauteile,U-Wert Fenster,Abminderungsfaktor fuer Fensterrahmen,Aussenluft-Volumenstrom (pro NGF),Aussenluft-Volumenstrom durch Infiltration,Temperatur-Aenderungsgrad der Waermerueckgewinnung,Waermeeintragsleistung Personen (bei 24.0 deg C bzw. 70 W),Waermeeintragsleistung der Raumbeleuchtung,Waermeeintragsleistung der Geraete,Vollaststunden pro Jahr (Personen),Jaehrliche Vollaststunden der Raumbeleuchtung,Jaehrliche Vollaststunden der Geraete,Gesamtenergiedurchlassgrad Verglasung
+"description","Zeitkonstante","Raumlufttemperatur Auslegung Kuehlung (Sommer)","Raumlufttemperatur Auslegung Heizen (Winter)","Nettogeschossflaeche","Thermische Gebaeudehuellflaeche","Glasanteil","U-Wert opake Bauteile","U-Wert Fenster","Abminderungsfaktor fuer Fensterrahmen","Aussenluft-Volumenstrom (pro NGF)","Aussenluft-Volumenstrom durch Infiltration","Temperatur-Aenderungsgrad der Waermerueckgewinnung","Waermeeintragsleistung Personen (bei 24.0 deg C, bzw. 70 W)","Waermeeintragsleistung der Raumbeleuchtung","Waermeeintragsleistung der Geraete","Vollaststunden pro Jahr (Personen)","Jaehrliche Vollaststunden der Raumbeleuchtung","Jaehrliche Vollaststunden der Geraete","Gesamtenergiedurchlassgrad Verglasung"
 "1.1 Wohnen Mehrfamilienhaus",182,26,21,20,26,30,0.2,1.2,0.75,1,0.15,0.7,2.3,2.7,8,4090,1450,1780,0.5
 "1.2 Wohnen Einfamilienhaus",164,26,21,20,38,30,0.2,1.2,0.75,0.6,0.15,0.7,1.4,2.7,8,4090,1450,1780,0.5
 "2.1 Hotelzimmer",151,26,21,20,26,30,0.2,1.2,0.75,2.4,0.15,0.7,4.7,2.7,8,3120,1150,1530,0.5
@@ -10,7 +10,7 @@ description,Zeitkonstante,Raumlufttemperatur Auslegung Kuehlung (Sommer),Raumluf
 "4.1 Schulzimmer",72,26,21,70,95,50,0.2,1.2,0.75,8.3,0.15,0.7,23.3,14,4,1390,1180,1770,0.5
 "4.2 Lehrerzimmer",59,26,21,36,64,50,0.2,1.2,0.75,12,0.15,0.7,23.3,11.6,4,1090,1090,1510,0.5
 "4.3 Bibliothek",88,26,21,144,127,50,0.2,1.2,0.75,7.2,0.15,0.7,14,6.9,2,1090,1240,1510,0.5
-"4.4 Hoersaal",53,26,21,144,127,50,0.2,1.2,0.75,15,0.15,0.7,35,12.5,4,1390,1630,1770,0.5
+"4.4 Hoehrsaal",53,26,21,144,127,50,0.2,1.2,0.75,15,0.15,0.7,35,12.5,4,1390,1630,1770,0.5
 "4.5 Schulfachraum",84,26,21,70,95,50,0.2,1.2,0.75,6,0.15,0.7,14,14,4,1390,1180,1770,0.5
 "5.1 Lebensmittelverkauf",127,26,20,400,376,50,0.2,1.2,0.75,3.8,0.15,0.7,8.8,9.3,-10,1650,2670,4010,0.5
 "5.2 Fachgeschaeft",127,26,20,400,376,50,0.2,1.2,0.75,3.8,0.15,0.7,8.8,9.3,2,1650,2670,3630,0.5
