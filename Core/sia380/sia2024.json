@@ -17,7 +17,7 @@
       "main-module": "sia2024",
       "main-function": "default_values",
       "inputs": [
-        {"type": "string", "name": "use_case", "nick-name": "use", "default": "mfh", "description": "Use case. Options: 'mfh', 'efh', 'office', 'school'."},
+        {"type": "json", "name": "room", "nick-name": "room", "description": "Room type according to sia2024. should be a dictionary containing all properties."},
         {"type": "float", "name": "area", "nick-name": "area", "description": "Area in m². If no input given, default values as from SIA2024:2015 are used."},
         {"type": "integer", "name": "month", "nick-name": "month", "description": "Time period", "default": 1},
         {"type": "string", "name": "season", "nick-name": "season", "description": "Season, either 'winter' or 'summer'."}
