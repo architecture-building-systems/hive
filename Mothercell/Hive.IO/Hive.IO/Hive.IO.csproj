@@ -57,6 +57,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Building.cs" />
+    <Compile Include="FormEnSysPV.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormEnSysPV.Designer.cs">
+      <DependentUpon>FormEnSysPV.cs</DependentUpon>
+    </Compile>
     <Compile Include="GHBuilding.cs" />
     <Compile Include="GHDistributor.cs" />
     <Compile Include="GHGroundCollector.cs" />
@@ -66,6 +72,11 @@
     <Compile Include="GHST.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EnergySystem.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <EmbeddedResource Include="FormEnSysPV.resx">
+      <DependentUpon>FormEnSysPV.cs</DependentUpon>
+    </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
