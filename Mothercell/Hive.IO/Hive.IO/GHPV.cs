@@ -133,7 +133,7 @@ namespace Hive.IO
             //if (!DA.GetData(1, ref refEff)) { refEff = 0.19; }
             string pvname = PVName;
 
-            EnergySystem.PV pv = new EnergySystem.PV(mesh, 0.0, refEff, pvname);
+            EnergySystem.PV pv = new EnergySystem.PV(mesh, refEff, pvname);
             DA.SetData(0, pv);
             DA.SetData(1, pv.RefEfficiencyElectric);
             DA.SetData(2, pv.Name);

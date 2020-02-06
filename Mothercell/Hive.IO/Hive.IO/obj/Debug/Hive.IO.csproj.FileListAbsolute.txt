@@ -10,4 +10,3 @@ C:\Users\chwaibel\Documents\GitHub\hive\Mothercell\Hive.IO\Hive.IO\obj\Debug\Hiv
 C:\Users\chwaibel\Documents\GitHub\hive\Mothercell\Hive.IO\Hive.IO\obj\Debug\Hive.IO.FormEnSysPV.resources
 C:\Users\chwaibel\Documents\GitHub\hive\Mothercell\Hive.IO\Hive.IO\obj\Debug\Hive.IO.csproj.GenerateResource.cache
 C:\Users\chwaibel\Documents\GitHub\hive\Mothercell\Hive.IO\Hive.IO\obj\Debug\Hive.IO.Properties.Resources.resources
-C:\Users\chwaibel\Documents\GitHub\hive\Mothercell\Hive.IO\Hive.IO\obj\Debug\Hive.IO.csprojAssemblyReference.cache
