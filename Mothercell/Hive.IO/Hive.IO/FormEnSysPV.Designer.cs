@@ -74,7 +74,7 @@
             this.helpProvider1.SetHelpKeyword(this.comboBox1, "pv tech");
             this.helpProvider1.SetHelpString(this.comboBox1, "choosing the pv technology");
             this.comboBox1.Items.AddRange(new object[] {
-            "Mono-cristalline",
+            "Mono-crystalline",
             "fraunhofer cutting edge",
             "A/S crazy ass invention",
             "alien-super-technology"});

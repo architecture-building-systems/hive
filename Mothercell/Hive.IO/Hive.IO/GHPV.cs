@@ -14,7 +14,7 @@ namespace Hive.IO
     {
         public double Value { get; set; }
         public string PVName { get; set; }
-        private int combobox1_indexnow { get; set; }
+        private int indexnow { get; set; }
 
 
         public GHPV()
@@ -23,8 +23,8 @@ namespace Hive.IO
               "[hive]", "IO")
         {
             Value = 0.15;
-            PVName = "Mono-cristalline";
-            combobox1_indexnow = 0;
+            PVName = "Mono-crystalline";
+            indexnow = 0;
 
             //List<string> combobox1_text = new List<string>();
             //combobox1_text.Add("")
@@ -69,7 +69,9 @@ namespace Hive.IO
 
             _form = new FormEnSysPV();
             _form.textBox1.Text = Convert.ToString(Value);
-            _form.comboBox1.SelectedIndex= combobox1_indexnow;
+            _form.comboBox1.SelectedIndex= indexnow;
+            _form.pictureBox1.Image = _form.Image[indexnow];
+            _form.helpProvider1.SetHelpString(_form.pictureBox1, _form.HelperText[indexnow]);
 
             _form.FormClosed += OnFormClosed;
             _form.button1.MouseClick += Button1_ValueChanged;
@@ -84,39 +86,18 @@ namespace Hive.IO
 
         private void ComboBox1_ItemChanged(object sender, EventArgs e)
         {
-            if (_form.comboBox1.SelectedItem.Equals("Mono-cristalline"))
-            {
-                _form.pictureBox1.Image = global::Hive.IO.Properties.Resources.article_18;
-                _form.textBox1.Text = "0.1";
-                _form.helpProvider1.SetHelpString(_form.pictureBox1, "Mono-cristalline PV is like super old, boring");
-            }
-            else if (_form.comboBox1.SelectedItem.Equals("fraunhofer cutting edge"))
-            {
-                _form.pictureBox1.Image = global::Hive.IO.Properties.Resources.fraunhofer;
-                _form.textBox1.Text = "0.2";
-                _form.helpProvider1.SetHelpString(_form.pictureBox1, "Breakthrough technology, Fraunhofer have reached a new milestone");
-            }
-            else if (_form.comboBox1.SelectedItem.Equals("A/S crazy ass invention"))
-            {
-                _form.pictureBox1.Image = global::Hive.IO.Properties.Resources.asf;
-                _form.textBox1.Text = "0.3";
-                _form.helpProvider1.SetHelpString(_form.pictureBox1, "A/S shows everyone how to do it. innovations everywhere");
-            }
-            else if (_form.comboBox1.SelectedItem.Equals("alien-super-technology"))
-            {
-                _form.pictureBox1.Image = global::Hive.IO.Properties.Resources.stardestroyer;
-                _form.textBox1.Text = "0.99";
-                _form.helpProvider1.SetHelpString(_form.pictureBox1, "Execute order 66");
-            }
-            //Value = Convert.ToDouble(_form.textBox1.Text);
-            //ExpireSolution(true);       // do i need this? what is it doing?!
+            int i = _form.comboBox1.SelectedIndex;
+            
+            _form.pictureBox1.Image = _form.Image[i];
+            _form.textBox1.Text = _form.Efficiency[i].ToString();
+            _form.helpProvider1.SetHelpString(_form.pictureBox1, _form.HelperText[i]);
         }
 
         private void Button1_ValueChanged(object sender, EventArgs e)
         {
             Value = Convert.ToDouble(_form.textBox1.Text);
             PVName = _form.comboBox1.SelectedItem.ToString();
-            combobox1_indexnow = _form.comboBox1.SelectedIndex;
+            indexnow = _form.comboBox1.SelectedIndex;
             ExpireSolution(true);
         }
 
