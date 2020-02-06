@@ -8,41 +8,38 @@ namespace Hive.IO
 {
     public class GHDistributor : GH_Component
     {
-        /// <summary>
-        /// Initializes a new instance of the Distributor class.
-        /// </summary>
         public GHDistributor()
-          : base("Distributor", "Nickname",
-              "Description",
-              "Category", "Subcategory")
+          : base("Distributor", "Distributor",
+              "Distributor",
+              "[hive]", "Mothercell")
         {
         }
 
         /// <summary>
-        /// Registers all the input parameters for this component.
+        /// Takes ALL Hive Input objects (e.g. Hive.IO.PV, Hive.IO.Building, etc.)
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
+            pManager.AddGenericParameter("Hive Input Objects", "Hive Input Objects", "Hive Input Objects, all comes in here", GH_ParamAccess.list);
         }
 
         /// <summary>
-        /// Registers all the output parameters for this component.
+        /// Output data that needs to be distributed within the mothercell to each respective simulation/calculation component
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
         }
 
         /// <summary>
-        /// This is the method that actually does the work.
+        /// Manages all the incoming Hive.IO objects, and splits it into required output data
         /// </summary>
-        /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
+        /// <param name="DA"></param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            List<object> input_objects = new List<object>();
+            if ((!DA.GetDataList(0, input_objects))) return;
         }
 
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
         protected override System.Drawing.Bitmap Icon
         {
             get
@@ -53,9 +50,6 @@ namespace Hive.IO
             }
         }
 
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
         public override Guid ComponentGuid
         {
             get { return new Guid("8757ee6f-03c4-4f5e-ac6d-db04b4d20297"); }

@@ -47,7 +47,7 @@ namespace Hive.IO
             double refEffThermal = 0.8;
             if (!DA.GetData(1, ref refEffThermal)) { refEffThermal = 0.8; }
 
-            EnergySystem.GroundCollector gc = new EnergySystem.GroundCollector(mesh, refEffThermal, 0.0, "name");
+            EnergySystem.GroundCollector gc = new EnergySystem.GroundCollector(mesh, refEffThermal, "name");
 
             DA.SetData(0, gc);
         }
