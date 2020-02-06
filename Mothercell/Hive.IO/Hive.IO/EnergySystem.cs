@@ -1,5 +1,10 @@
 ﻿using Rhino.Geometry;
 
+
+// either add marker / identifier for each object,
+// or try to switch accordinog to object type.
+//whatever is betta
+
 namespace Hive.IO
 {
     /// <summary>
@@ -7,6 +12,7 @@ namespace Hive.IO
     /// </summary>
     namespace EnergySystem
     {
+        #region Solar technology
         /// <summary>
         /// Surface based energy technologies, such as PV, solar thermal, PVT, ground collectors, etc.
         /// </summary>
@@ -77,5 +83,63 @@ namespace Hive.IO
             public GroundCollector(Mesh surfaceGeometry, double refEfficiencyThermal, string name)
                 : base(surfaceGeometry, refEfficiencyThermal, 0.0, name) { }
         }
+        #endregion
+
+
+        /// <summary>
+        /// Electric lighting and daylight
+        /// Including set points, daylight controls, luminaire technology, etc...
+        /// </summary>
+        public abstract class LightingSystems
+        {
+
+        }
+
+        /// <summary>
+        /// Domestic hot water systems
+        /// E.g. showers, sinks, tanks...? Do I need that?
+        /// </summary>
+        public abstract class DomesticHotWater
+        {
+            
+        }
+
+        /// <summary>
+        /// Ventilation systems
+        /// heat recovery, windows, mechanical ventilation, ...
+        /// </summary>
+        public abstract class VentilationSystem
+        {
+
+        }
+
+        /// <summary>
+        /// Heating, Cooling, Electricity generation systems (no solar tech though)
+        /// E.g. CHP, boiler, heat pump, chiller, ...
+        /// </summary>
+        public abstract class GenerationSystem
+        {
+
+        }
+
+        /// <summary>
+        /// Storage systems
+        /// E.g. batteries, hot water tanks, ice storage, ...
+        /// </summary>
+        public abstract class StorageSystem
+        {
+
+        }
+
+        /// <summary>
+        /// Systems that distribute heat/cooling to the room
+        /// E.g. Underfloor heater, radiator, floor heating, ceiling cooling panels, etc.
+        /// Also setting supply and return temperatures, cooling and heating set points...
+        /// </summary>
+        public abstract class DistributionSystem
+        {
+
+        }
+
     }
 }

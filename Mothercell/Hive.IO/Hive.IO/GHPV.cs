@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Grasshopper.GUI;
 using Grasshopper.Kernel;
@@ -13,6 +14,8 @@ namespace Hive.IO
     {
         public double Value { get; set; }
         public string PVName { get; set; }
+        private int combobox1_indexnow { get; set; }
+
 
         public GHPV()
           : base("HiveIOPV", "IO_PV",
@@ -21,6 +24,10 @@ namespace Hive.IO
         {
             Value = 0.15;
             PVName = "Mono-cristalline";
+            combobox1_indexnow = 0;
+
+            //List<string> combobox1_text = new List<string>();
+            //combobox1_text.Add("")
         }
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
@@ -62,6 +69,7 @@ namespace Hive.IO
 
             _form = new FormEnSysPV();
             _form.textBox1.Text = Convert.ToString(Value);
+            _form.comboBox1.SelectedIndex= combobox1_indexnow;
 
             _form.FormClosed += OnFormClosed;
             _form.button1.MouseClick += Button1_ValueChanged;
@@ -71,6 +79,7 @@ namespace Hive.IO
 
             GH_WindowsFormUtil.CenterFormOnCursor(_form, true);
             _form.Show(Grasshopper.Instances.DocumentEditor);
+            _form.Location = Cursor.Position;
         }
 
         private void ComboBox1_ItemChanged(object sender, EventArgs e)
@@ -107,6 +116,7 @@ namespace Hive.IO
         {
             Value = Convert.ToDouble(_form.textBox1.Text);
             PVName = _form.comboBox1.SelectedItem.ToString();
+            combobox1_indexnow = _form.comboBox1.SelectedIndex;
             ExpireSolution(true);
         }
 
@@ -128,7 +138,7 @@ namespace Hive.IO
         {
             Mesh mesh = new Mesh();
             if (!DA.GetData(0, ref mesh)) { return; }
-
+            
             double refEff = Value;
             //if (!DA.GetData(1, ref refEff)) { refEff = 0.19; }
             string pvname = PVName;
