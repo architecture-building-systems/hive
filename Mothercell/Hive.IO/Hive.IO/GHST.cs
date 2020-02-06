@@ -47,7 +47,7 @@ namespace Hive.IO
             double refEffThermal = 0.8;
             if (!DA.GetData(1, ref refEffThermal)) { refEffThermal = 0.8; }
 
-            EnergySystem.ST st = new EnergySystem.ST(mesh, refEffThermal, 0.0);
+            EnergySystem.ST st = new EnergySystem.ST(mesh, refEffThermal, 0.0,"name");
 
             DA.SetData(0, st);
         }

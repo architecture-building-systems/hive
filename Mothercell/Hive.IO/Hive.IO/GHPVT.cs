@@ -51,7 +51,7 @@ namespace Hive.IO
             double refEffElectric = 0.19;
             if (!DA.GetData(2, ref refEffElectric)) { refEffElectric = 0.19; }
 
-            EnergySystem.PVT pvt = new EnergySystem.PVT(mesh, refEffThermal, refEffElectric);
+            EnergySystem.PVT pvt = new EnergySystem.PVT(mesh, refEffThermal, refEffElectric, "name");
 
             DA.SetData(0, pvt);
         }
