@@ -12,22 +12,39 @@ namespace Hive.IO
 {
     public partial class FormEnSysPV : Form
     {
+        public List<double> Efficiency { get; private set; }
+        public List<string> Technology { get; private set; }
+        public List<System.Drawing.Bitmap> Image { get; private set; }
+        public List<string> HelperText { get; private set; }
+
         public FormEnSysPV()
         {
             InitializeComponent();
+
+            Technology = new List<string>();
+            Efficiency = new List<double>();
+            Image = new List<Bitmap>();
+            HelperText = new List<string>();
+
+            foreach (string tech in this.comboBox1.Items)
+                Technology.Add(tech);
+
+            Image.Add(global::Hive.IO.Properties.Resources.article_18);
+            Image.Add(global::Hive.IO.Properties.Resources.fraunhofer);
+            Image.Add(global::Hive.IO.Properties.Resources.asf);
+            Image.Add(global::Hive.IO.Properties.Resources.stardestroyer);
+
+            Efficiency.Add(0.1);
+            Efficiency.Add(0.2);
+            Efficiency.Add(0.3);
+            Efficiency.Add(0.99);
+
+            HelperText.Add("Mono-cristalline PV is like super old, boring");
+            HelperText.Add("Breakthrough technology, Fraunhofer have reached a new milestone");
+            HelperText.Add("A/S shows everyone how to do it. innovations everywhere");
+            HelperText.Add("Execute order 66");
         }
 
-        //private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
-        //{
-        //    if (comboBox1.SelectedItem.Equals("Mono-cristalline"))
-        //        pictureBox1.Image = global::Hive.IO.Properties.Resources.article_18;
-        //    else if (comboBox1.SelectedItem.Equals("fraunhofer cutting edge"))
-        //        pictureBox1.Image = global::Hive.IO.Properties.Resources.article_18;
-        //    else if (comboBox1.SelectedItem.Equals("A / S crazy ass invention"))
-        //        pictureBox1.Image = global::Hive.IO.Properties.Resources.asf;
-        //    else if (comboBox1.SelectedItem.Equals("alien-super-technology"))
-        //        pictureBox1.Image = global::Hive.IO.Properties.Resources.asf;
-        //}
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
