@@ -72,11 +72,32 @@
     <Compile Include="GHST.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EnergySystem.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormEnSysPV.resx">
       <DependentUpon>FormEnSysPV.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Properties\Resources.resx">
+      <Generator>ResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\article_18.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\asf.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\fraunhofer.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\stardestroyer.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

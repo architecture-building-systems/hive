@@ -12,7 +12,7 @@ namespace Hive.IO
     public class GHPV : GH_Component
     {
         public double Value { get; set; }
-
+        public string PVName { get; set; }
 
         public GHPV()
           : base("HiveIOPV", "IO_PV",
@@ -20,18 +20,21 @@ namespace Hive.IO
               "[hive]", "IO")
         {
             Value = 0.15;
+            PVName = "Mono-cristalline";
         }
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            //pManager.AddMeshParameter("mesh", "mesh", "Mesh geometry of the PV", GH_ParamAccess.item);
+            pManager.AddMeshParameter("mesh", "mesh", "Mesh geometry of the PV", GH_ParamAccess.item);
             //pManager.AddNumberParameter("refefficiency", "refeff", "Reference efficiency. E.g. 0.19.", GH_ParamAccess.item);
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            //pManager.AddGenericParameter("PVObj", "PVObj", "Hive.IO.EnergySystems.PV Object", GH_ParamAccess.item);
+            pManager.AddGenericParameter("PVObj", "PVObj", "Hive.IO.EnergySystems.PV Object", GH_ParamAccess.item);
             pManager.AddNumberParameter("eff", "eff", "eff", GH_ParamAccess.item);
+            pManager.AddTextParameter("name", "name", "name", GH_ParamAccess.item);
+            pManager.AddMeshParameter("geo", "geo", "geo", GH_ParamAccess.item);
         }
 
         public override void CreateAttributes()
@@ -63,13 +66,47 @@ namespace Hive.IO
             _form.FormClosed += OnFormClosed;
             _form.button1.MouseClick += Button1_ValueChanged;
 
+            _form.comboBox1.SelectedIndexChanged += ComboBox1_ItemChanged;
+
+
             GH_WindowsFormUtil.CenterFormOnCursor(_form, true);
             _form.Show(Grasshopper.Instances.DocumentEditor);
+        }
+
+        private void ComboBox1_ItemChanged(object sender, EventArgs e)
+        {
+            if (_form.comboBox1.SelectedItem.Equals("Mono-cristalline"))
+            {
+                _form.pictureBox1.Image = global::Hive.IO.Properties.Resources.article_18;
+                _form.textBox1.Text = "0.1";
+                _form.helpProvider1.SetHelpString(_form.pictureBox1, "Mono-cristalline PV is like super old, boring");
+            }
+            else if (_form.comboBox1.SelectedItem.Equals("fraunhofer cutting edge"))
+            {
+                _form.pictureBox1.Image = global::Hive.IO.Properties.Resources.fraunhofer;
+                _form.textBox1.Text = "0.2";
+                _form.helpProvider1.SetHelpString(_form.pictureBox1, "Breakthrough technology, Fraunhofer have reached a new milestone");
+            }
+            else if (_form.comboBox1.SelectedItem.Equals("A/S crazy ass invention"))
+            {
+                _form.pictureBox1.Image = global::Hive.IO.Properties.Resources.asf;
+                _form.textBox1.Text = "0.3";
+                _form.helpProvider1.SetHelpString(_form.pictureBox1, "A/S shows everyone how to do it. innovations everywhere");
+            }
+            else if (_form.comboBox1.SelectedItem.Equals("alien-super-technology"))
+            {
+                _form.pictureBox1.Image = global::Hive.IO.Properties.Resources.stardestroyer;
+                _form.textBox1.Text = "0.99";
+                _form.helpProvider1.SetHelpString(_form.pictureBox1, "Execute order 66");
+            }
+            //Value = Convert.ToDouble(_form.textBox1.Text);
+            //ExpireSolution(true);       // do i need this? what is it doing?!
         }
 
         private void Button1_ValueChanged(object sender, EventArgs e)
         {
             Value = Convert.ToDouble(_form.textBox1.Text);
+            PVName = _form.comboBox1.SelectedItem.ToString();
             ExpireSolution(true);
         }
 
@@ -89,16 +126,18 @@ namespace Hive.IO
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            //Mesh mesh = new Mesh();
-            //if(!DA.GetData(0, ref mesh)) { return; }
+            Mesh mesh = new Mesh();
+            if (!DA.GetData(0, ref mesh)) { return; }
 
             double refEff = Value;
             //if (!DA.GetData(1, ref refEff)) { refEff = 0.19; }
+            string pvname = PVName;
 
-
-            //EnergySystem.PV pv = new EnergySystem.PV(mesh, 0.0, refEff);
-            //DA.SetData(0, pv);
-            DA.SetData(0, refEff);
+            EnergySystem.PV pv = new EnergySystem.PV(mesh, 0.0, refEff, pvname);
+            DA.SetData(0, pv);
+            DA.SetData(1, pv.RefEfficiencyElectric);
+            DA.SetData(2, pv.Name);
+            DA.SetData(3, pv.SurfaceGeometry);
         }
 
         /// <summary>
