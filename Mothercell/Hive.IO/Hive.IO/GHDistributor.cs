@@ -38,6 +38,44 @@ namespace Hive.IO
         {
             List<object> input_objects = new List<object>();
             if ((!DA.GetDataList(0, input_objects))) return;
+
+            Dictionary<Type, int> typeDict = new Dictionary<Type, int>
+            {
+                {typeof(Hive.IO.EnergySystem.PV), 0}
+            };
+
+
+            //Rhino.RhinoApp.WriteLine(input_objects[0].RefEfficiencyElectric.ToString());
+
+            List<Hive.IO.EnergySystem.PV> pv = new List<EnergySystem.PV>();
+
+            //// can't cast GH_ObjectWrapper to Hive.IO.EnergySystem.PV...
+            
+            //foreach (object hive_input in input_objects)
+            //{
+            //    string data_type = hive_input.ToString();
+            //    if (data_type == "Hive.IO.EnergySystem.PV")
+            //    {
+                    
+            //        Hive.IO.EnergySystem.PV _pv = (Hive.IO.EnergySystem.PV)hive_input;
+            //        pv.Add(_pv);
+            //        Rhino.RhinoApp.WriteLine(_pv.RefEfficiencyElectric.ToString());
+            //    }
+
+
+
+            //        Rhino.RhinoApp.WriteLine(hive_input.GetType().ToString());
+            //    //Rhino.RhinoApp.WriteLine(hive_input.RefEfficiencyElectric.ToString());
+            //    switch (typeDict[hive_input.GetType()])
+            //    {
+            //        case 0:
+            //            Rhino.RhinoApp.WriteLine("I am a PV object");
+            //            break;
+            //        default:
+            //            break;
+            //    }
+            //}
+
         }
 
         protected override System.Drawing.Bitmap Icon
