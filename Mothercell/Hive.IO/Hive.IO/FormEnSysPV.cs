@@ -55,5 +55,10 @@ namespace Hive.IO
         {
 
         }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            System.Diagnostics.Process.Start("http://www.materialarchiv.ch/app-tablet/");
+        }
     }
 }
