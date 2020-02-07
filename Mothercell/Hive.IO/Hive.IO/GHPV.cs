@@ -74,10 +74,9 @@ namespace Hive.IO
             _form.helpProvider1.SetHelpString(_form.pictureBox1, _form.HelperText[indexnow]);
 
             _form.FormClosed += OnFormClosed;
-            _form.button1.MouseClick += Button1_ValueChanged;
 
             _form.comboBox1.SelectedIndexChanged += ComboBox1_ItemChanged;
-
+            _form.textBox1.TextChanged += TextBox1_TextChanged;
 
             GH_WindowsFormUtil.CenterFormOnCursor(_form, true);
             _form.Show(Grasshopper.Instances.DocumentEditor);
@@ -91,9 +90,15 @@ namespace Hive.IO
             _form.pictureBox1.Image = _form.Image[i];
             _form.textBox1.Text = _form.Efficiency[i].ToString();
             _form.helpProvider1.SetHelpString(_form.pictureBox1, _form.HelperText[i]);
+
+            Form_Update();
+        }
+        private void TextBox1_TextChanged(object sender, EventArgs e)
+        {
+            Form_Update();
         }
 
-        private void Button1_ValueChanged(object sender, EventArgs e)
+        private void Form_Update()
         {
             Value = Convert.ToDouble(_form.textBox1.Text);
             PVName = _form.comboBox1.SelectedItem.ToString();
