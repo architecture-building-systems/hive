@@ -33,16 +33,19 @@ namespace Hive.IO
             Image.Add(global::Hive.IO.Properties.Resources.fraunhofer);
             Image.Add(global::Hive.IO.Properties.Resources.asf);
             Image.Add(global::Hive.IO.Properties.Resources.stardestroyer);
+            Image.Add(global::Hive.IO.Properties.Resources.stardestroyer);
 
             Efficiency.Add(0.1);
             Efficiency.Add(0.2);
             Efficiency.Add(0.3);
             Efficiency.Add(0.99);
+            Efficiency.Add(0.2);
 
             HelperText.Add("Mono-cristalline PV is like super old, boring");
             HelperText.Add("Breakthrough technology, Fraunhofer have reached a new milestone");
             HelperText.Add("A/S shows everyone how to do it. innovations everywhere");
             HelperText.Add("Execute order 66");
+            HelperText.Add("Custom technology, enter efficiency manually.");
         }
 
 

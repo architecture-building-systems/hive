@@ -68,12 +68,14 @@
             "Mono-crystalline",
             "fraunhofer cutting edge",
             "A/S crazy ass invention",
-            "alien-super-technology"});
+            "alien-super-technology",
+            "Custom"});
             this.comboBox1.Location = new System.Drawing.Point(12, 22);
             this.comboBox1.Name = "comboBox1";
             this.helpProvider1.SetShowHelp(this.comboBox1, true);
             this.comboBox1.Size = new System.Drawing.Size(121, 21);
             this.comboBox1.TabIndex = 4;
+            this.comboBox1.Text = "Mono-crystalline";
             // 
             // label2
             // 
