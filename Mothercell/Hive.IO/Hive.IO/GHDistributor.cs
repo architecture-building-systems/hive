@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
 namespace Hive.IO
@@ -36,46 +37,30 @@ namespace Hive.IO
         /// <param name="DA"></param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<object> input_objects = new List<object>();
-            if ((!DA.GetDataList(0, input_objects))) return;
-
-            Dictionary<Type, int> typeDict = new Dictionary<Type, int>
-            {
-                {typeof(Hive.IO.EnergySystem.PV), 0}
-            };
-
-
-            //Rhino.RhinoApp.WriteLine(input_objects[0].RefEfficiencyElectric.ToString());
-
-            List<Hive.IO.EnergySystem.PV> pv = new List<EnergySystem.PV>();
-
-            //// can't cast GH_ObjectWrapper to Hive.IO.EnergySystem.PV...
+            List<GH_ObjectWrapper> input_objects = new List<GH_ObjectWrapper>();
+            if (!DA.GetDataList(0, input_objects)) return;
             
-            //foreach (object hive_input in input_objects)
-            //{
-            //    string data_type = hive_input.ToString();
-            //    if (data_type == "Hive.IO.EnergySystem.PV")
-            //    {
-                    
-            //        Hive.IO.EnergySystem.PV _pv = (Hive.IO.EnergySystem.PV)hive_input;
-            //        pv.Add(_pv);
-            //        Rhino.RhinoApp.WriteLine(_pv.RefEfficiencyElectric.ToString());
-            //    }
+            List<EnergySystem.PV> pv = new List<EnergySystem.PV>();
+            List<EnergySystem.PVT> pvt = new List<EnergySystem.PVT>();
+            List<EnergySystem.ST> st = new List<EnergySystem.ST>();
 
+            foreach (GH_ObjectWrapper hive_input in input_objects)
+            {
+                switch (hive_input.Value.ToString())
+                {
+                    case "Hive.IO.EnergySystem.PV":
+                        pv.Add(hive_input.Value as EnergySystem.PV);
+                        break;
+                    case "Hive.IO.EnergySystem.ST":
+                        st.Add(hive_input.Value as EnergySystem.ST);
+                        break;
+                    case "Hive.IO.EnergySystem.PVT":
+                        pvt.Add(hive_input.Value as EnergySystem.PVT);
+                        break;
+                }
+            }
 
-
-            //        Rhino.RhinoApp.WriteLine(hive_input.GetType().ToString());
-            //    //Rhino.RhinoApp.WriteLine(hive_input.RefEfficiencyElectric.ToString());
-            //    switch (typeDict[hive_input.GetType()])
-            //    {
-            //        case 0:
-            //            Rhino.RhinoApp.WriteLine("I am a PV object");
-            //            break;
-            //        default:
-            //            break;
-            //    }
-            //}
-
+            Rhino.RhinoApp.WriteLine("pv: {0}; st: {1}; pvt: {2}", pv.Count, st.Count, pvt.Count);
         }
 
         protected override System.Drawing.Bitmap Icon
