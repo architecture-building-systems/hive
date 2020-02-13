@@ -63,9 +63,9 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap article_18 {
+        internal static System.Drawing.Bitmap CdTe {
             get {
-                object obj = ResourceManager.GetObject("article_18", resourceCulture);
+                object obj = ResourceManager.GetObject("CdTe", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -73,9 +73,9 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap asf {
+        internal static System.Drawing.Bitmap CIGS {
             get {
-                object obj = ResourceManager.GetObject("asf", resourceCulture);
+                object obj = ResourceManager.GetObject("CIGS", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -83,9 +83,9 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap fraunhofer {
+        internal static System.Drawing.Bitmap HIT {
             get {
-                object obj = ResourceManager.GetObject("fraunhofer", resourceCulture);
+                object obj = ResourceManager.GetObject("HIT", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -93,10 +93,39 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap stardestroyer {
+        internal static System.Drawing.Bitmap monocristalline {
             get {
-                object obj = ResourceManager.GetObject("stardestroyer", resourceCulture);
+                object obj = ResourceManager.GetObject("monocristalline", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap polycristalline {
+            get {
+                object obj = ResourceManager.GetObject("polycristalline", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PV tech,efficiency,cost per m2,life cycle GHG factor kgCO2eq per m2
+        ///polycristalline,0.160,400.0,35.96
+        ///polycristalline_high,0.206,400.0,35.96
+        ///monocristalline,0.184,400.0,35.96
+        ///monocristalline_high,0.228,400.0,35.96
+        ///CIGS,0.133,400.0,35.96
+        ///CIGS_high,0.156,400.0,35.96
+        ///CdTe,0.162,400.0,35.96
+        ///CdTe_high,0.182,400.0,35.96
+        ///HIT,0.194,400.0,35.96
+        ///HIT_high,0.209,400.0,35.96.
+        /// </summary>
+        internal static string pv_efficiency {
+            get {
+                return ResourceManager.GetString("pv_efficiency", resourceCulture);
             }
         }
     }

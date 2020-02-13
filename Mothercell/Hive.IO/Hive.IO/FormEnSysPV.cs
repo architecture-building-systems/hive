@@ -8,12 +8,19 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
+using Hive.IO.Properties;
+using System.IO;
+using System.Reflection;
+
 namespace Hive.IO
 {
     public partial class FormEnSysPV : Form
     {
         public List<double> Efficiency { get; private set; }
         public List<string> Technology { get; private set; }
+        public List<double> Cost { get; private set; }
+        public List<double> CO2 { get; private set; }
+
         public List<System.Drawing.Bitmap> Image { get; private set; }
         public List<string> HelperText { get; private set; }
 
@@ -23,29 +30,49 @@ namespace Hive.IO
 
             Technology = new List<string>();
             Efficiency = new List<double>();
+            Cost = new List<double>();
+            CO2 = new List<double>();
             Image = new List<Bitmap>();
             HelperText = new List<string>();
 
-            foreach (string tech in this.comboBox1.Items)
-                Technology.Add(tech);
+            // image names could be the same as the technology names (Technology[index]). And if there is no match, use empty image
+            // currently, this has to be manually changed if the database.csv changes
+            Image.Add(global::Hive.IO.Properties.Resources.polycristalline);
+            Image.Add(global::Hive.IO.Properties.Resources.polycristalline);
+            Image.Add(global::Hive.IO.Properties.Resources.monocristalline);
+            Image.Add(global::Hive.IO.Properties.Resources.monocristalline);
+            Image.Add(global::Hive.IO.Properties.Resources.CIGS);
+            Image.Add(global::Hive.IO.Properties.Resources.CIGS);
+            Image.Add(global::Hive.IO.Properties.Resources.CdTe);
+            Image.Add(global::Hive.IO.Properties.Resources.CdTe);
+            Image.Add(global::Hive.IO.Properties.Resources.HIT);
+            Image.Add(global::Hive.IO.Properties.Resources.HIT);
 
-            Image.Add(global::Hive.IO.Properties.Resources.article_18);
-            Image.Add(global::Hive.IO.Properties.Resources.fraunhofer);
-            Image.Add(global::Hive.IO.Properties.Resources.asf);
-            Image.Add(global::Hive.IO.Properties.Resources.stardestroyer);
-            Image.Add(global::Hive.IO.Properties.Resources.stardestroyer);
 
-            Efficiency.Add(0.1);
-            Efficiency.Add(0.2);
-            Efficiency.Add(0.3);
-            Efficiency.Add(0.99);
-            Efficiency.Add(0.2);
+            // helper text could also be added into the database csv
+            HelperText.Add("Polycristalline");
+            HelperText.Add("Polycristalline");
+            HelperText.Add("Monocristalline");
+            HelperText.Add("Monocristalline");
+            HelperText.Add("CIGS");
+            HelperText.Add("CIGS");
+            HelperText.Add("CdTe");
+            HelperText.Add("CdTe");
+            HelperText.Add("HIT");
+            HelperText.Add("HIT");
 
-            HelperText.Add("Mono-cristalline PV is like super old, boring");
-            HelperText.Add("Breakthrough technology, Fraunhofer have reached a new milestone");
-            HelperText.Add("A/S shows everyone how to do it. innovations everywhere");
-            HelperText.Add("Execute order 66");
-            HelperText.Add("Custom technology, enter efficiency manually.");
+
+            string pvDatabase = Resources.pv_efficiency;
+            string[] splitString = pvDatabase.Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
+            for (int i = 1; i < splitString.Length; i++)
+            {
+                string[] values = splitString[i].Split(new string[] { "," }, StringSplitOptions.RemoveEmptyEntries);
+                Technology.Add(values[0]);
+                Efficiency.Add(Convert.ToDouble(values[1]));
+                Cost.Add(Convert.ToDouble(values[2]));
+                CO2.Add(Convert.ToDouble(values[3]));
+            }
+            comboBox1.Items.AddRange(Technology.ToArray());
         }
 
 
