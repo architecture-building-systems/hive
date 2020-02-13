@@ -63,13 +63,13 @@ namespace Hive.IO
             }
         }
 
-        FormEnSysPV _form;
+        FormEnSysSolar _form;
         public void DisplayForm()
         {
             if (_form != null)
                 return;
 
-            _form = new FormEnSysPV();
+            _form = new FormEnSysSolar();
             _form.comboBox1.SelectedIndex= Indexnow;
             _form.textBox1.Text = _form.Efficiency[Indexnow].ToString();// Convert.ToString(Form_pv_eff);
             _form.textBox2.Text = _form.Cost[Indexnow].ToString();

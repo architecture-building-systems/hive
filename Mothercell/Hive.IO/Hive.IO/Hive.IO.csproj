@@ -57,11 +57,11 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Building.cs" />
-    <Compile Include="FormEnSysPV.cs">
+    <Compile Include="FormEnSysSolar.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormEnSysPV.Designer.cs">
-      <DependentUpon>FormEnSysPV.cs</DependentUpon>
+    <Compile Include="FormEnSysSolar.Designer.cs">
+      <DependentUpon>FormEnSysSolar.cs</DependentUpon>
     </Compile>
     <Compile Include="GHBuilding.cs" />
     <Compile Include="GHDistributor.cs" />
@@ -79,8 +79,8 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FormEnSysPV.resx">
-      <DependentUpon>FormEnSysPV.cs</DependentUpon>
+    <EmbeddedResource Include="FormEnSysSolar.resx">
+      <DependentUpon>FormEnSysSolar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
