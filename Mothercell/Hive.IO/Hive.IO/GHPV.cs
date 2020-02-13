@@ -132,8 +132,10 @@ namespace Hive.IO
             double refEff = Form_pv_eff;
             //if (!DA.GetData(1, ref refEff)) { refEff = 0.19; }
             string pvname = Form_pv_name;
+            double pvcost = Form_pv_cost;
+            double pvghg = Form_pv_co2;
 
-            EnergySystem.PV pv = new EnergySystem.PV(mesh, refEff, pvname);
+            EnergySystem.PV pv = new EnergySystem.PV(mesh, refEff, pvcost, pvghg, pvname);
             DA.SetData(0, pv);
             DA.SetData(1, pv.RefEfficiencyElectric);
             DA.SetData(2, pv.Name);

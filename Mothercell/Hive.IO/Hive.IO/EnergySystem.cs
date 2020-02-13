@@ -31,15 +31,26 @@ namespace Hive.IO
             /// </summary>
             public double RefEfficiencyElectric { get; private set; }
             /// <summary>
+            /// Investment cost per m2
+            /// </summary>
+            public double Cost { get; private set; }
+            /// <summary>
+            /// Life cycle GHG emissions, in kgCO2eq./m2
+            /// </summary>
+            public double GHG { get; private set; }
+            /// <summary>
             /// Name of the technology (e.g. 'Mono-cristalline PV')
             /// </summary>
             public string Name { get; private set; }
 
-            protected SurfaceSystem(Mesh surfaceGeometry, double refEfficiencyThermal, double refEfficiencyElectric, string name)
+            protected SurfaceSystem(Mesh surfaceGeometry, double refEfficiencyThermal, double refEfficiencyElectric, 
+                double cost, double ghg, string name)
             {
                 SurfaceGeometry = surfaceGeometry;
                 RefEfficiencyThermal = refEfficiencyThermal;
                 RefEfficiencyElectric = refEfficiencyElectric;
+                Cost = cost;
+                GHG = ghg;
                 Name = name;
             }
         }
@@ -50,8 +61,8 @@ namespace Hive.IO
         /// </summary>
         public class PV : SurfaceSystem
         {
-            public PV(Mesh surfaceGeometry, double refEfficiencyElectric, string name) 
-                : base(surfaceGeometry, 0.0, refEfficiencyElectric, name){ }
+            public PV(Mesh surfaceGeometry, double refEfficiencyElectric, double cost, double ghg, string name) 
+                : base(surfaceGeometry, 0.0, refEfficiencyElectric, cost, ghg, name){ }
         }
 
 
@@ -60,8 +71,8 @@ namespace Hive.IO
         /// </summary>
         public class ST : SurfaceSystem
         {
-            public ST(Mesh surfaceGeometry, double refEfficiencyThermal, string name)
-                : base(surfaceGeometry, refEfficiencyThermal, 0.0, name) { }
+            public ST(Mesh surfaceGeometry, double refEfficiencyThermal, double cost, double ghg, string name)
+                : base(surfaceGeometry, refEfficiencyThermal, 0.0, cost, ghg, name) { }
         }
 
 
@@ -70,8 +81,8 @@ namespace Hive.IO
         /// </summary>
         public class PVT : SurfaceSystem
         {
-            public PVT(Mesh surfaceGeometry, double refEfficiencyThermal, double refEfficiencyElectric, string name)
-                : base(surfaceGeometry, refEfficiencyThermal, refEfficiencyElectric, name) { }
+            public PVT(Mesh surfaceGeometry, double refEfficiencyThermal, double refEfficiencyElectric, double cost, double ghg, string name)
+                : base(surfaceGeometry, refEfficiencyThermal, refEfficiencyElectric, cost, ghg, name) { }
         }
 
 
@@ -80,8 +91,8 @@ namespace Hive.IO
         /// </summary>
         public class GroundCollector : SurfaceSystem
         {
-            public GroundCollector(Mesh surfaceGeometry, double refEfficiencyThermal, string name)
-                : base(surfaceGeometry, refEfficiencyThermal, 0.0, name) { }
+            public GroundCollector(Mesh surfaceGeometry, double refEfficiencyThermal, double cost, double ghg, string name)
+                : base(surfaceGeometry, refEfficiencyThermal, 0.0, cost, ghg, name) { }
         }
         #endregion
 
