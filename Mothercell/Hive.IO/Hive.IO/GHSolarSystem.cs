@@ -10,7 +10,7 @@ using Rhino.Geometry;
 
 namespace Hive.IO
 {
-    public class GHPV : GH_Component
+    public class GHSolarSystem : GH_Component
     {
         public double Form_pv_eff { get; set; }
         public double Form_pv_cost { get; set; }
@@ -19,18 +19,8 @@ namespace Hive.IO
         private int Indexnow { get; set; }
 
 
-        public GHPV()
-          : base("HiveIOPV", "IO_PV",
-              "Hive.IO PV component",
-              "[hive]", "IO")
-        {
-            //Form_pv_eff = 0.15;
-            //PVName = "Mono-crystalline";
-            Indexnow = 0;
-
-            //List<string> combobox1_text = new List<string>();
-            //combobox1_text.Add("")
-        }
+        public GHSolarSystem()
+          : base("HiveIOPV", "IO_PV", "Hive.IO PV component", "[hive]", "IO") { Indexnow = 0; }
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
@@ -58,7 +48,7 @@ namespace Hive.IO
 
             public override GH_ObjectResponse RespondToMouseDoubleClick(GH_Canvas sender, GH_CanvasMouseEvent e)
             {
-                (Owner as GHPV)?.DisplayForm();
+                (Owner as GHSolarSystem)?.DisplayForm();
                 return GH_ObjectResponse.Handled;
             }
         }
@@ -130,7 +120,7 @@ namespace Hive.IO
             if (!DA.GetData(0, ref mesh)) { return; }
             
             double refEff = Form_pv_eff;
-            //if (!DA.GetData(1, ref refEff)) { refEff = 0.19; }
+            
             string pvname = Form_pv_name;
             double pvcost = Form_pv_cost;
             double pvghg = Form_pv_co2;

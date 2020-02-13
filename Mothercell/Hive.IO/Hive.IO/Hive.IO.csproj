@@ -67,7 +67,7 @@
     <Compile Include="GHDistributor.cs" />
     <Compile Include="GHGroundCollector.cs" />
     <Compile Include="HiveIOInfo.cs" />
-    <Compile Include="GHPV.cs" />
+    <Compile Include="GHSolarSystem.cs" />
     <Compile Include="GHPVT.cs" />
     <Compile Include="GHST.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

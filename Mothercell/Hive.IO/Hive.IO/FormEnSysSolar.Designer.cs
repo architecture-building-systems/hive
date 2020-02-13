@@ -30,22 +30,76 @@
         private void InitializeComponent()
         {
             this.helpProvider1 = new System.Windows.Forms.HelpProvider();
+            this.textBox3 = new System.Windows.Forms.TextBox();
+            this.textBox2 = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.comboBox1 = new System.Windows.Forms.ComboBox();
+            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.radioButton1 = new System.Windows.Forms.RadioButton();
             this.radioButton2 = new System.Windows.Forms.RadioButton();
             this.radioButton3 = new System.Windows.Forms.RadioButton();
             this.radioButton4 = new System.Windows.Forms.RadioButton();
             this.label4 = new System.Windows.Forms.Label();
-            this.textBox3 = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
-            this.textBox2 = new System.Windows.Forms.TextBox();
             this.label1 = new System.Windows.Forms.Label();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.label2 = new System.Windows.Forms.Label();
-            this.comboBox1 = new System.Windows.Forms.ComboBox();
-            this.pictureBox1 = new System.Windows.Forms.PictureBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
+            // 
+            // textBox3
+            // 
+            this.helpProvider1.SetHelpKeyword(this.textBox3, "pf efficiency");
+            this.helpProvider1.SetHelpString(this.textBox3, "set the pv efficiency");
+            this.textBox3.Location = new System.Drawing.Point(12, 221);
+            this.textBox3.Name = "textBox3";
+            this.helpProvider1.SetShowHelp(this.textBox3, true);
+            this.textBox3.Size = new System.Drawing.Size(121, 20);
+            this.textBox3.TabIndex = 24;
+            // 
+            // textBox2
+            // 
+            this.helpProvider1.SetHelpKeyword(this.textBox2, "pf efficiency");
+            this.helpProvider1.SetHelpString(this.textBox2, "set the pv efficiency");
+            this.textBox2.Location = new System.Drawing.Point(12, 195);
+            this.textBox2.Name = "textBox2";
+            this.helpProvider1.SetShowHelp(this.textBox2, true);
+            this.textBox2.Size = new System.Drawing.Size(121, 20);
+            this.textBox2.TabIndex = 22;
+            // 
+            // textBox1
+            // 
+            this.helpProvider1.SetHelpKeyword(this.textBox1, "pf efficiency");
+            this.helpProvider1.SetHelpString(this.textBox1, "set the pv efficiency");
+            this.textBox1.Location = new System.Drawing.Point(12, 169);
+            this.textBox1.Name = "textBox1";
+            this.helpProvider1.SetShowHelp(this.textBox1, true);
+            this.textBox1.Size = new System.Drawing.Size(121, 20);
+            this.textBox1.TabIndex = 20;
+            // 
+            // comboBox1
+            // 
+            this.comboBox1.FormattingEnabled = true;
+            this.helpProvider1.SetHelpKeyword(this.comboBox1, "pv tech");
+            this.helpProvider1.SetHelpString(this.comboBox1, "choosing the pv technology");
+            this.comboBox1.Location = new System.Drawing.Point(12, 142);
+            this.comboBox1.Name = "comboBox1";
+            this.helpProvider1.SetShowHelp(this.comboBox1, true);
+            this.comboBox1.Size = new System.Drawing.Size(121, 21);
+            this.comboBox1.TabIndex = 18;
+            this.comboBox1.Text = "Mono-crystalline";
+            // 
+            // pictureBox1
+            // 
+            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
+            this.helpProvider1.SetHelpString(this.pictureBox1, "A lil picture of the currently chosen PV technology");
+            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
+            this.pictureBox1.Name = "pictureBox1";
+            this.helpProvider1.SetShowHelp(this.pictureBox1, true);
+            this.pictureBox1.Size = new System.Drawing.Size(309, 116);
+            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
+            this.pictureBox1.TabIndex = 17;
+            this.pictureBox1.TabStop = false;
             // 
             // linkLabel1
             // 
@@ -110,16 +164,6 @@
             this.label4.TabIndex = 25;
             this.label4.Text = "Life cycle GHG factor [kgCO2eq./m²]";
             // 
-            // textBox3
-            // 
-            this.helpProvider1.SetHelpKeyword(this.textBox3, "pf efficiency");
-            this.helpProvider1.SetHelpString(this.textBox3, "set the pv efficiency");
-            this.textBox3.Location = new System.Drawing.Point(12, 221);
-            this.textBox3.Name = "textBox3";
-            this.helpProvider1.SetShowHelp(this.textBox3, true);
-            this.textBox3.Size = new System.Drawing.Size(121, 20);
-            this.textBox3.TabIndex = 24;
-            // 
             // label3
             // 
             this.label3.AutoSize = true;
@@ -128,16 +172,6 @@
             this.label3.Size = new System.Drawing.Size(128, 13);
             this.label3.TabIndex = 23;
             this.label3.Text = "Investment cost [CHF/m²]";
-            // 
-            // textBox2
-            // 
-            this.helpProvider1.SetHelpKeyword(this.textBox2, "pf efficiency");
-            this.helpProvider1.SetHelpString(this.textBox2, "set the pv efficiency");
-            this.textBox2.Location = new System.Drawing.Point(12, 195);
-            this.textBox2.Name = "textBox2";
-            this.helpProvider1.SetShowHelp(this.textBox2, true);
-            this.textBox2.Size = new System.Drawing.Size(121, 20);
-            this.textBox2.TabIndex = 22;
             // 
             // label1
             // 
@@ -148,16 +182,6 @@
             this.label1.TabIndex = 21;
             this.label1.Text = "System Efficiency [0.0, 1.0]";
             // 
-            // textBox1
-            // 
-            this.helpProvider1.SetHelpKeyword(this.textBox1, "pf efficiency");
-            this.helpProvider1.SetHelpString(this.textBox1, "set the pv efficiency");
-            this.textBox1.Location = new System.Drawing.Point(12, 169);
-            this.textBox1.Name = "textBox1";
-            this.helpProvider1.SetShowHelp(this.textBox1, true);
-            this.textBox1.Size = new System.Drawing.Size(121, 20);
-            this.textBox1.TabIndex = 20;
-            // 
             // label2
             // 
             this.label2.AutoSize = true;
@@ -167,31 +191,7 @@
             this.label2.TabIndex = 19;
             this.label2.Text = "Technology";
             // 
-            // comboBox1
-            // 
-            this.comboBox1.FormattingEnabled = true;
-            this.helpProvider1.SetHelpKeyword(this.comboBox1, "pv tech");
-            this.helpProvider1.SetHelpString(this.comboBox1, "choosing the pv technology");
-            this.comboBox1.Location = new System.Drawing.Point(12, 142);
-            this.comboBox1.Name = "comboBox1";
-            this.helpProvider1.SetShowHelp(this.comboBox1, true);
-            this.comboBox1.Size = new System.Drawing.Size(121, 21);
-            this.comboBox1.TabIndex = 18;
-            this.comboBox1.Text = "Mono-crystalline";
-            // 
-            // pictureBox1
-            // 
-            this.pictureBox1.BackgroundImageLayout = System.Windows.Forms.ImageLayout.None;
-            this.helpProvider1.SetHelpString(this.pictureBox1, "A lil picture of the currently chosen PV technology");
-            this.pictureBox1.Location = new System.Drawing.Point(12, 12);
-            this.pictureBox1.Name = "pictureBox1";
-            this.helpProvider1.SetShowHelp(this.pictureBox1, true);
-            this.pictureBox1.Size = new System.Drawing.Size(309, 116);
-            this.pictureBox1.SizeMode = System.Windows.Forms.PictureBoxSizeMode.StretchImage;
-            this.pictureBox1.TabIndex = 17;
-            this.pictureBox1.TabStop = false;
-            // 
-            // FormEnSysPV
+            // FormEnSysSolar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
@@ -214,8 +214,8 @@
             this.HelpButton = true;
             this.MaximizeBox = false;
             this.MinimizeBox = false;
-            this.Name = "FormEnSysPV";
-            this.Text = "FormEnSysPV";
+            this.Name = "FormEnSysSolar";
+            this.Text = "Solar Energy System Technology";
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).EndInit();
             this.ResumeLayout(false);
             this.PerformLayout();
