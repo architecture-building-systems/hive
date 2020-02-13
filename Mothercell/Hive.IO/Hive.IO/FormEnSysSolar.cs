@@ -14,7 +14,7 @@ using System.Reflection;
 
 namespace Hive.IO
 {
-    public partial class FormEnSysPV : Form
+    public partial class FormEnSysSolar : Form
     {
         public List<double> Efficiency { get; private set; }
         public List<string> Technology { get; private set; }
@@ -24,7 +24,7 @@ namespace Hive.IO
         public List<System.Drawing.Bitmap> Image { get; private set; }
         public List<string> HelperText { get; private set; }
 
-        public FormEnSysPV()
+        public FormEnSysSolar()
         {
             InitializeComponent();
 
