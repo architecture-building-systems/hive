@@ -97,7 +97,23 @@
     <None Include="Resources\fraunhofer.jpg" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\pv_efficiency.csv" />
     <None Include="Resources\stardestroyer.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CdTe.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\CIGS.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\HIT.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\monocristalline.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\polycristalline.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

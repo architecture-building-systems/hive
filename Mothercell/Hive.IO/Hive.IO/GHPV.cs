@@ -12,9 +12,11 @@ namespace Hive.IO
 {
     public class GHPV : GH_Component
     {
-        public double Value { get; set; }
-        public string PVName { get; set; }
-        private int indexnow { get; set; }
+        public double Form_pv_eff { get; set; }
+        public double Form_pv_cost { get; set; }
+        public double Form_pv_co2 { get; set; }
+        public string Form_pv_name { get; set; }
+        private int Indexnow { get; set; }
 
 
         public GHPV()
@@ -22,9 +24,9 @@ namespace Hive.IO
               "Hive.IO PV component",
               "[hive]", "IO")
         {
-            Value = 0.15;
-            PVName = "Mono-crystalline";
-            indexnow = 0;
+            //Form_pv_eff = 0.15;
+            //PVName = "Mono-crystalline";
+            Indexnow = 0;
 
             //List<string> combobox1_text = new List<string>();
             //combobox1_text.Add("")
@@ -68,10 +70,12 @@ namespace Hive.IO
                 return;
 
             _form = new FormEnSysPV();
-            _form.textBox1.Text = Convert.ToString(Value);
-            _form.comboBox1.SelectedIndex= indexnow;
-            _form.pictureBox1.Image = _form.Image[indexnow];
-            _form.helpProvider1.SetHelpString(_form.pictureBox1, _form.HelperText[indexnow]);
+            _form.comboBox1.SelectedIndex= Indexnow;
+            _form.textBox1.Text = _form.Efficiency[Indexnow].ToString();// Convert.ToString(Form_pv_eff);
+            _form.textBox2.Text = _form.Cost[Indexnow].ToString();
+            _form.textBox3.Text = _form.CO2[Indexnow].ToString();
+            _form.pictureBox1.Image = _form.Image[Indexnow];
+            _form.helpProvider1.SetHelpString(_form.pictureBox1, _form.HelperText[Indexnow]);
 
             _form.FormClosed += OnFormClosed;
 
@@ -100,9 +104,9 @@ namespace Hive.IO
 
         private void Form_Update()
         {
-            Value = Convert.ToDouble(_form.textBox1.Text);
-            PVName = _form.comboBox1.SelectedItem.ToString();
-            indexnow = _form.comboBox1.SelectedIndex;
+            Form_pv_eff = Convert.ToDouble(_form.textBox1.Text);
+            Form_pv_name = _form.comboBox1.SelectedItem.ToString();
+            Indexnow = _form.comboBox1.SelectedIndex;
             ExpireSolution(true);
         }
 
@@ -125,9 +129,9 @@ namespace Hive.IO
             Mesh mesh = new Mesh();
             if (!DA.GetData(0, ref mesh)) { return; }
             
-            double refEff = Value;
+            double refEff = Form_pv_eff;
             //if (!DA.GetData(1, ref refEff)) { refEff = 0.19; }
-            string pvname = PVName;
+            string pvname = Form_pv_name;
 
             EnergySystem.PV pv = new EnergySystem.PV(mesh, refEff, pvname);
             DA.SetData(0, pv);
