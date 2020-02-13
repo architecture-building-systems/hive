@@ -124,6 +124,9 @@
   <data name="CIGS" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\CIGS.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="gc_efficiency" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\gc_efficiency.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="HIT" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\HIT.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -133,7 +136,13 @@
   <data name="polycristalline" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\polycristalline.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="pvt_efficiency" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\pvt_efficiency.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
   <data name="pv_efficiency" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\pv_efficiency.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="st_efficiency" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\st_efficiency.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
 </root>

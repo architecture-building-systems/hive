@@ -12,7 +12,9 @@ namespace Hive.IO
 {
     public class GHSolarSystem : GH_Component
     {
+        public string Form_SystemType { get; set; }
         public double Form_pv_eff { get; set; }
+        public double Form_thermal_eff { get; set; }
         public double Form_pv_cost { get; set; }
         public double Form_pv_co2 { get; set; }
         public string Form_pv_name { get; set; }
@@ -60,21 +62,65 @@ namespace Hive.IO
                 return;
 
             _form = new FormEnSysSolar();
-            _form.comboBox1.SelectedIndex= Indexnow;
-            _form.textBox1.Text = _form.Efficiency[Indexnow].ToString();// Convert.ToString(Form_pv_eff);
+            _form.comboBox1.SelectedIndex = Indexnow;
+            _form.textBox1.Text = _form.ElectricEfficiency[Indexnow].ToString();// Convert.ToString(Form_pv_eff);
             _form.textBox2.Text = _form.Cost[Indexnow].ToString();
             _form.textBox3.Text = _form.CO2[Indexnow].ToString();
+            _form.textBox4.Text = _form.ThermalEfficiency[Indexnow].ToString();
             _form.pictureBox1.Image = _form.Image[Indexnow];
             _form.helpProvider1.SetHelpString(_form.pictureBox1, _form.HelperText[Indexnow]);
 
             _form.FormClosed += OnFormClosed;
 
             _form.comboBox1.SelectedIndexChanged += ComboBox1_ItemChanged;
-            _form.textBox1.TextChanged += TextBox1_TextChanged;
+            _form.textBox1.TextChanged += TextBox_TextChanged;
+            _form.textBox2.TextChanged += TextBox_TextChanged;
+            _form.textBox3.TextChanged += TextBox_TextChanged;
+            _form.textBox4.TextChanged += TextBox_TextChanged;
+
+            _form.radioButton1.CheckedChanged += RadioButton_Changed;
+            _form.radioButton2.CheckedChanged += RadioButton_Changed;
+            _form.radioButton3.CheckedChanged += RadioButton_Changed;
+            _form.radioButton4.CheckedChanged += RadioButton_Changed;
 
             GH_WindowsFormUtil.CenterFormOnCursor(_form, true);
             _form.Show(Grasshopper.Instances.DocumentEditor);
             _form.Location = Cursor.Position;
+        }
+
+
+
+        private void Form_Update_Display()
+        {
+            // when radio buttons change, text on the form needs to change
+        }
+
+        private void RadioButton_Changed(object sender, EventArgs e)
+        {
+            RadioButton rb = sender as RadioButton;
+            if (rb != null)
+            {
+                if (rb.Checked)
+                {
+                     switch (rb.Name)
+                    {
+                        default:
+                        case "radioButton1":
+                            _form.LoadData("pv");
+                            break;
+                        case "radioButton2":
+                            _form.LoadData("st");
+                            break;
+                        case "radioButton3":
+                            _form.LoadData("pvt");
+                            break;
+                        case "radioButton4":
+                            _form.LoadData("gc");
+                            break;
+                    }
+                }
+            }
+            Form_Update();
         }
 
         private void ComboBox1_ItemChanged(object sender, EventArgs e)
@@ -82,12 +128,15 @@ namespace Hive.IO
             int i = _form.comboBox1.SelectedIndex;
             
             _form.pictureBox1.Image = _form.Image[i];
-            _form.textBox1.Text = _form.Efficiency[i].ToString();
+            _form.textBox1.Text = _form.ElectricEfficiency[i].ToString();
+            _form.textBox2.Text = _form.Cost[i].ToString();
+            _form.textBox3.Text = _form.CO2[i].ToString();
+            _form.textBox4.Text = _form.ThermalEfficiency[i].ToString();
             _form.helpProvider1.SetHelpString(_form.pictureBox1, _form.HelperText[i]);
 
             Form_Update();
         }
-        private void TextBox1_TextChanged(object sender, EventArgs e)
+        private void TextBox_TextChanged(object sender, EventArgs e)
         {
             Form_Update();
         }
@@ -95,8 +144,14 @@ namespace Hive.IO
         private void Form_Update()
         {
             Form_pv_eff = Convert.ToDouble(_form.textBox1.Text);
+            Form_pv_cost = Convert.ToDouble(_form.textBox2.Text);
+            Form_pv_co2 = Convert.ToDouble(_form.textBox3.Text);
+            Form_thermal_eff = Convert.ToDouble(_form.textBox4.Text);
             Form_pv_name = _form.comboBox1.SelectedItem.ToString();
+            Form_SystemType = _form.SystemType;
+
             Indexnow = _form.comboBox1.SelectedIndex;
+
             ExpireSolution(true);
         }
 
@@ -125,11 +180,15 @@ namespace Hive.IO
             double pvcost = Form_pv_cost;
             double pvghg = Form_pv_co2;
 
-            EnergySystem.PV pv = new EnergySystem.PV(mesh, refEff, pvcost, pvghg, pvname);
-            DA.SetData(0, pv);
-            DA.SetData(1, pv.RefEfficiencyElectric);
-            DA.SetData(2, pv.Name);
-            DA.SetData(3, pv.SurfaceGeometry);
+            EnergySystem.SurfaceSystem solartech = new EnergySystem.PV(mesh, refEff, pvcost, pvghg, pvname);
+            if (Form_SystemType == "pvt") solartech = new EnergySystem.PVT(mesh, Form_thermal_eff, Form_pv_eff, Form_pv_cost, Form_pv_co2, Form_pv_name);
+            else if (Form_SystemType == "st") solartech = new EnergySystem.ST(mesh, Form_thermal_eff, Form_pv_cost, Form_pv_co2, Form_pv_name);
+            else if (Form_SystemType == "gc") solartech = new EnergySystem.GroundCollector(mesh, Form_thermal_eff, Form_pv_cost, Form_pv_co2, Form_pv_name);
+
+            DA.SetData(0, solartech);
+            DA.SetData(1, solartech.RefEfficiencyElectric);
+            DA.SetData(2, solartech.Name);
+            DA.SetData(3, solartech.SurfaceGeometry);
         }
 
         /// <summary>

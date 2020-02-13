@@ -44,6 +44,8 @@
             this.label3 = new System.Windows.Forms.Label();
             this.label1 = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
+            this.label5 = new System.Windows.Forms.Label();
+            this.textBox4 = new System.Windows.Forms.TextBox();
             ((System.ComponentModel.ISupportInitialize)(this.pictureBox1)).BeginInit();
             this.SuspendLayout();
             // 
@@ -51,7 +53,7 @@
             // 
             this.helpProvider1.SetHelpKeyword(this.textBox3, "pf efficiency");
             this.helpProvider1.SetHelpString(this.textBox3, "set the pv efficiency");
-            this.textBox3.Location = new System.Drawing.Point(12, 221);
+            this.textBox3.Location = new System.Drawing.Point(12, 247);
             this.textBox3.Name = "textBox3";
             this.helpProvider1.SetShowHelp(this.textBox3, true);
             this.textBox3.Size = new System.Drawing.Size(121, 20);
@@ -61,7 +63,7 @@
             // 
             this.helpProvider1.SetHelpKeyword(this.textBox2, "pf efficiency");
             this.helpProvider1.SetHelpString(this.textBox2, "set the pv efficiency");
-            this.textBox2.Location = new System.Drawing.Point(12, 195);
+            this.textBox2.Location = new System.Drawing.Point(12, 221);
             this.textBox2.Name = "textBox2";
             this.helpProvider1.SetShowHelp(this.textBox2, true);
             this.textBox2.Size = new System.Drawing.Size(121, 20);
@@ -104,7 +106,7 @@
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(12, 258);
+            this.linkLabel1.Location = new System.Drawing.Point(9, 281);
             this.linkLabel1.Name = "linkLabel1";
             this.linkLabel1.Size = new System.Drawing.Size(116, 13);
             this.linkLabel1.TabIndex = 12;
@@ -158,7 +160,7 @@
             // label4
             // 
             this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(139, 224);
+            this.label4.Location = new System.Drawing.Point(139, 250);
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(182, 13);
             this.label4.TabIndex = 25;
@@ -167,7 +169,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(139, 198);
+            this.label3.Location = new System.Drawing.Point(139, 224);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(128, 13);
             this.label3.TabIndex = 23;
@@ -178,9 +180,9 @@
             this.label1.AutoSize = true;
             this.label1.Location = new System.Drawing.Point(139, 172);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(135, 13);
+            this.label1.Size = new System.Drawing.Size(136, 13);
             this.label1.TabIndex = 21;
-            this.label1.Text = "System Efficiency [0.0, 1.0]";
+            this.label1.Text = "Electric Efficiency [0.0, 1.0]";
             // 
             // label2
             // 
@@ -191,11 +193,32 @@
             this.label2.TabIndex = 19;
             this.label2.Text = "Technology";
             // 
+            // label5
+            // 
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(139, 198);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(139, 13);
+            this.label5.TabIndex = 27;
+            this.label5.Text = "Thermal Efficiency [0.0, 1.0]";
+            // 
+            // textBox4
+            // 
+            this.helpProvider1.SetHelpKeyword(this.textBox4, "pf efficiency");
+            this.helpProvider1.SetHelpString(this.textBox4, "set the pv efficiency");
+            this.textBox4.Location = new System.Drawing.Point(12, 195);
+            this.textBox4.Name = "textBox4";
+            this.helpProvider1.SetShowHelp(this.textBox4, true);
+            this.textBox4.Size = new System.Drawing.Size(121, 20);
+            this.textBox4.TabIndex = 26;
+            // 
             // FormEnSysSolar
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(455, 283);
+            this.ClientSize = new System.Drawing.Size(455, 303);
+            this.Controls.Add(this.label5);
+            this.Controls.Add(this.textBox4);
             this.Controls.Add(this.label4);
             this.Controls.Add(this.textBox3);
             this.Controls.Add(this.label3);
@@ -225,10 +248,10 @@
         #endregion
         public System.Windows.Forms.HelpProvider helpProvider1;
         private System.Windows.Forms.LinkLabel linkLabel1;
-        private System.Windows.Forms.RadioButton radioButton1;
-        private System.Windows.Forms.RadioButton radioButton2;
-        private System.Windows.Forms.RadioButton radioButton3;
-        private System.Windows.Forms.RadioButton radioButton4;
+        public System.Windows.Forms.RadioButton radioButton1;
+        public System.Windows.Forms.RadioButton radioButton2;
+        public System.Windows.Forms.RadioButton radioButton3;
+        public System.Windows.Forms.RadioButton radioButton4;
         private System.Windows.Forms.Label label4;
         public System.Windows.Forms.TextBox textBox3;
         private System.Windows.Forms.Label label3;
@@ -238,5 +261,7 @@
         private System.Windows.Forms.Label label2;
         public System.Windows.Forms.ComboBox comboBox1;
         public System.Windows.Forms.PictureBox pictureBox1;
+        private System.Windows.Forms.Label label5;
+        public System.Windows.Forms.TextBox textBox4;
     }
 }
