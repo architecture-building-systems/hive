@@ -81,6 +81,18 @@ namespace Hive.IO.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to GC tech,electric efficiency,thermal efficiency,cost per m2,life cycle GHG factor kgCO2eq per m2
+        ///GC_cheap,0.0,0.1,300.0,1.0
+        ///GC_normal,0.0,0.2,400.0,2.0
+        ///GC_high_tech,0.0,0.3,500.0,3.0.
+        /// </summary>
+        internal static string gc_efficiency {
+            get {
+                return ResourceManager.GetString("gc_efficiency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
         internal static System.Drawing.Bitmap HIT {
@@ -111,21 +123,45 @@ namespace Hive.IO.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PV tech,efficiency,cost per m2,life cycle GHG factor kgCO2eq per m2
-        ///polycristalline,0.160,400.0,35.96
-        ///polycristalline_high,0.206,400.0,35.96
-        ///monocristalline,0.184,400.0,35.96
-        ///monocristalline_high,0.228,400.0,35.96
-        ///CIGS,0.133,400.0,35.96
-        ///CIGS_high,0.156,400.0,35.96
-        ///CdTe,0.162,400.0,35.96
-        ///CdTe_high,0.182,400.0,35.96
-        ///HIT,0.194,400.0,35.96
-        ///HIT_high,0.209,400.0,35.96.
+        ///   Looks up a localized string similar to PV tech,electric efficiency,thermal efficiency,cost per m2,life cycle GHG factor kgCO2eq per m2
+        ///polycristalline,0.160,0,400.0.0,35.96
+        ///polycristalline_high,0.206,0.0,400.0,35.96
+        ///monocristalline,0.184,0.0,400.0,35.96
+        ///monocristalline_high,0.228,0.0,400.0,35.96
+        ///CIGS,0.133,0.0,400.0,35.96
+        ///CIGS_high,0.156,0.0,400.0,35.96
+        ///CdTe,0.162,0.0,400.0,35.96
+        ///CdTe_high,0.182,0.0,400.0,35.96
+        ///HIT,0.194,0.0,400.0,35.96
+        ///HIT_high,0.209,0.0,400.0,35.96.
         /// </summary>
         internal static string pv_efficiency {
             get {
                 return ResourceManager.GetString("pv_efficiency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to PVT tech,electric efficiency,thermal efficiency,cost per m2,life cycle GHG factor kgCO2eq per m2
+        ///PVT_cheap,0.1,0.1,300.0,1.0
+        ///PVT_normal,0.2,0.2,400.0,2.0
+        ///PVT_high_tech,0.3,0.3,500.0,3.0.
+        /// </summary>
+        internal static string pvt_efficiency {
+            get {
+                return ResourceManager.GetString("pvt_efficiency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to ST tech,electric efficiency,thermal efficiency,cost per m2,life cycle GHG factor kgCO2eq per m2
+        ///solar_thermal_cheap,0.0,0.1,300.0,1.0
+        ///solar_thermal_normal,0.0,0.2,400.0,2.0
+        ///solar_thermal_high_tech,0.0,0.3,500.0,3.0.
+        /// </summary>
+        internal static string st_efficiency {
+            get {
+                return ResourceManager.GetString("st_efficiency", resourceCulture);
             }
         }
     }
