@@ -126,6 +126,7 @@ namespace Hive.IO
                 Cost.Add(Convert.ToDouble(values[3]));
                 CO2.Add(Convert.ToDouble(values[4]));
             }
+            comboBox1.Items.Clear();
             comboBox1.Items.AddRange(Technology.ToArray());
         }
 
