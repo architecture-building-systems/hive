@@ -1,16 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
-
 using Hive.IO.Properties;
-using System.IO;
-using System.Reflection;
 
 namespace Hive.IO
 {
@@ -22,12 +14,8 @@ namespace Hive.IO
         public List<string> Technology { get; private set; }
         public List<double> Cost { get; private set; }
         public List<double> CO2 { get; private set; }
-
         public List<System.Drawing.Bitmap> Image { get; private set; }
         public List<string> HelperText { get; private set; }
-
-
-
 
         public FormEnSysSolar()
         {
@@ -113,9 +101,6 @@ namespace Hive.IO
                     break;
             }
 
-
-
-
             string[] splitString = database.Split(new string[] { "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
             for (int i = 1; i < splitString.Length; i++)
             {
@@ -129,7 +114,6 @@ namespace Hive.IO
             comboBox1.Items.Clear();
             comboBox1.Items.AddRange(Technology.ToArray());
         }
-
 
         private void textBox1_TextChanged(object sender, EventArgs e)
         {
