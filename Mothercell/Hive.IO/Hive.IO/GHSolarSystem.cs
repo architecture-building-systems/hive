@@ -93,6 +93,14 @@ namespace Hive.IO
         private void Form_Update_Display()
         {
             // when radio buttons change, text on the form needs to change
+            Indexnow = 0;
+            _form.comboBox1.SelectedIndex = Indexnow;
+            _form.textBox1.Text = _form.ElectricEfficiency[Indexnow].ToString();// Convert.ToString(Form_pv_eff);
+            _form.textBox2.Text = _form.Cost[Indexnow].ToString();
+            _form.textBox3.Text = _form.CO2[Indexnow].ToString();
+            _form.textBox4.Text = _form.ThermalEfficiency[Indexnow].ToString();
+            _form.pictureBox1.Image = _form.Image[Indexnow];
+            _form.helpProvider1.SetHelpString(_form.pictureBox1, _form.HelperText[Indexnow]);
         }
 
         private void RadioButton_Changed(object sender, EventArgs e)
@@ -120,6 +128,7 @@ namespace Hive.IO
                     }
                 }
             }
+            Form_Update_Display();
             Form_Update();
         }
 
