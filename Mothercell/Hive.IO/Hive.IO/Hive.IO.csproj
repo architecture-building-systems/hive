@@ -57,6 +57,12 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Building.cs" />
+    <Compile Include="FormBuilding.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="FormBuilding.Designer.cs">
+      <DependentUpon>FormBuilding.cs</DependentUpon>
+    </Compile>
     <Compile Include="FormEnSysSolar.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -76,6 +82,9 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="FormBuilding.resx">
+      <DependentUpon>FormBuilding.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="FormEnSysSolar.resx">
       <DependentUpon>FormEnSysSolar.cs</DependentUpon>
     </EmbeddedResource>

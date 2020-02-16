@@ -1,10 +1,5 @@
 ﻿using Rhino.Geometry;
 
-
-// either add marker / identifier for each object,
-// or try to switch accordinog to object type.
-//whatever is betta
-
 namespace Hive.IO
 {
     /// <summary>
