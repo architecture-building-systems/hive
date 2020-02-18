@@ -84,6 +84,13 @@ namespace Hive.IO
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            List<Brep> breps = new List<Brep>();
+            if ((!DA.GetDataList(0, breps))) 
+                return;
+            if (breps.Count == 0)   // could get an empty list
+                return;
+
+
         }
 
 
