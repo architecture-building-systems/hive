@@ -1,0 +1,4 @@
+ST tech,electric efficiency,thermal efficiency,cost per m2,life cycle GHG factor kgCO2eq per m2
+solar_thermal_cheap,0.0,0.1,300.0,1.0
+solar_thermal_normal,0.0,0.2,400.0,2.0
+solar_thermal_high_tech,0.0,0.3,500.0,3.0
