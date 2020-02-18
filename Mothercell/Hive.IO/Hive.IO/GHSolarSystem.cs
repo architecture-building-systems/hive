@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Drawing;
-using System.Collections.Generic;
 using System.Windows.Forms;
 using Grasshopper.GUI;
 using Grasshopper.Kernel;
@@ -22,7 +20,7 @@ namespace Hive.IO
 
 
         public GHSolarSystem()
-          : base("HiveIOPV", "IO_PV", "Hive.IO PV component", "[hive]", "IO") { Indexnow = 0; }
+          : base("Hive.IO.SolarTech", "Hive.IO.SolarTech", "Hive.IO Solar Energy Systems component", "[hive]", "IO") { Indexnow = 0; }
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
