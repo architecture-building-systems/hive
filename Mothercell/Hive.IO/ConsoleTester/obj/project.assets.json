@@ -8,23 +8,23 @@
     ".NETCoreApp,Version=v3.0": []
   },
   "packageFolders": {
-    "C:\\Users\\Christoph\\.nuget\\packages\\": {},
+    "C:\\Users\\chwaibel\\.nuget\\packages\\": {},
     "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder": {}
   },
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\Christoph\\Documents\\GitHub\\hive\\Mothercell\\Hive.IO\\ConsoleTester\\ConsoleTester.csproj",
+      "projectUniqueName": "C:\\Users\\chwaibel\\Documents\\GitHub\\hive\\Mothercell\\Hive.IO\\ConsoleTester\\ConsoleTester.csproj",
       "projectName": "ConsoleTester",
-      "projectPath": "C:\\Users\\Christoph\\Documents\\GitHub\\hive\\Mothercell\\Hive.IO\\ConsoleTester\\ConsoleTester.csproj",
-      "packagesPath": "C:\\Users\\Christoph\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\Christoph\\Documents\\GitHub\\hive\\Mothercell\\Hive.IO\\ConsoleTester\\obj\\",
+      "projectPath": "C:\\Users\\chwaibel\\Documents\\GitHub\\hive\\Mothercell\\Hive.IO\\ConsoleTester\\ConsoleTester.csproj",
+      "packagesPath": "C:\\Users\\chwaibel\\.nuget\\packages\\",
+      "outputPath": "C:\\Users\\chwaibel\\Documents\\GitHub\\hive\\Mothercell\\Hive.IO\\ConsoleTester\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files\\dotnet\\sdk\\NuGetFallbackFolder"
       ],
       "configFilePaths": [
-        "C:\\Users\\Christoph\\AppData\\Roaming\\NuGet\\NuGet.Config",
+        "C:\\Users\\chwaibel\\AppData\\Roaming\\NuGet\\NuGet.Config",
         "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
       ],
       "originalTargetFrameworks": [
