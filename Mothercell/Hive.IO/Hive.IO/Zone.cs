@@ -50,6 +50,10 @@ namespace Hive.IO
             public double[] Lighting;
         }
 
+        /// <summary>
+        /// Tolerance for geometric operations. Get from RhinoDoc.ModelAbsoluteTolerance?
+        /// </summary>
+        public double Tolerance { get; private set; }
 
         /// <summary>
         /// fix the horizon to one year, hourly
@@ -107,7 +111,7 @@ namespace Hive.IO
         /// </summary>
         /// <param name="geometry">Brep geometry. Must be closed, linear and convex.</param>
         /// <param name="index">Unique identifier</param>
-        public Zone(rg.Brep geometry, int index)
+        public Zone(rg.Brep geometry, int index, double tolerance)
         {
             this.Index = index;
 
@@ -115,7 +119,7 @@ namespace Hive.IO
             this.IsLinear = CheckLinearity(this.Geometry);
             if (this.IsLinear)
             {
-                this.IsConvex = CheckConvexity(this.Geometry);
+                this.IsConvex = CheckConvexity(this.Geometry, this.Tolerance);
                 this.IsClosed = CheckClosedness(this.Geometry);
             }
             else
@@ -157,7 +161,7 @@ namespace Hive.IO
         /// </summary>
         /// <param name="brep"></param>
         /// <returns>True, if convex</returns>
-        private bool CheckConvexity(rg.Brep brep)
+        private bool CheckConvexity(rg.Brep brep, double tolerance)
         {
             bool isConvex = true;
 
@@ -171,14 +175,33 @@ namespace Hive.IO
                     if (i == u) continue;
 
                     rg.BrepVertex vert2 = brep.Vertices[u];
-                    rg.Line line = new rg.Line(vert1.Location, vert2.Location);
+                    rg.LineCurve line = new rg.LineCurve(vert1.Location, vert2.Location);
                     //if((rg.Intersect.Intersection.CurveBrep(line, brep,0.01,0.01,)) 
                     //{
                     //    isConvex = false;
                     //}
-                    // !!! connect point i to u and check, if this line is within the brep
+                    rg.Curve[] overlap_curves;
+                    rg.Point3d[] inter_points;
+                    if (rg.Intersect.Intersection.CurveBrep(line, brep, tolerance, out overlap_curves, out inter_points))
+                    {
+                        if (overlap_curves.Length > 0 || inter_points.Length > 0)
+                        {
+                            if (inter_points.Length > 2)
+                                return false;
+                            else if(inter_points.Length ==2)
+                            {
+                                Console.WriteLine("hi");
+                                //check if middle point is within the brep or not. if not, its convex
+                            }else
+                            {
+                                // do i need this?
+                            }
+                        }
+                    }
+                    // !!! connect point i to u and check, if this line is within the brep OR on an edge of the brep
+                    // if not, cancel the loop and return false
 
-                    // test
+                    
                 }
             }
             return isConvex;
