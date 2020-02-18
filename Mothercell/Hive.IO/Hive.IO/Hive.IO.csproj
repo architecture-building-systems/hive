@@ -57,6 +57,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Building.cs" />
+    <Compile Include="BuildingComponents.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="FormBuilding.cs">
       <SubType>Form</SubType>
@@ -81,6 +82,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Include="Zone.cs" />
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="FormBuilding.resx">
