@@ -177,6 +177,8 @@ namespace Hive.IO
                     //    isConvex = false;
                     //}
                     // !!! connect point i to u and check, if this line is within the brep
+
+                    // test
                 }
             }
             return isConvex;
