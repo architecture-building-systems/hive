@@ -32,6 +32,7 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Microsoft.VisualBasic" />
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Data" />
@@ -56,13 +57,17 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ClusterTest.cs" />
     <Compile Include="DrawingComponent.cs" />
     <Compile Include="DrawingComponentCustom.cs" />
     <Compile Include="DropDownComponent.cs" />
     <Compile Include="DropDownComponentCustom.cs" />
+    <Compile Include="GH_Cluster.cs" />
     <Compile Include="GH_ClusterAttributes.cs" />
     <Compile Include="GH_ClusterFile.cs" />
+    <Compile Include="GH_ClusterPropertiesEditor.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="GH_PreviewArgs.cs" />
     <Compile Include="HiveGUIComponent.cs" />
     <Compile Include="HiveGUIComponentCustom.cs" />
     <Compile Include="HiveGUIInfo.cs" />
@@ -91,6 +96,18 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\2.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\3.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\4.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\5.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\compGroups.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
