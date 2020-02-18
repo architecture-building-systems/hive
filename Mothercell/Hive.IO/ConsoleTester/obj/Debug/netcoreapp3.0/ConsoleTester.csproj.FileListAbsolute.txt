@@ -30,4 +30,3 @@ C:\Users\Christoph\Documents\GitHub\hive\Mothercell\Hive.IO\ConsoleTester\obj\De
 C:\Users\Christoph\Documents\GitHub\hive\Mothercell\Hive.IO\ConsoleTester\obj\Debug\netcoreapp3.0\ConsoleTester.AssemblyInfo.cs
 C:\Users\Christoph\Documents\GitHub\hive\Mothercell\Hive.IO\ConsoleTester\obj\Debug\netcoreapp3.0\ConsoleTester.dll
 C:\Users\Christoph\Documents\GitHub\hive\Mothercell\Hive.IO\ConsoleTester\obj\Debug\netcoreapp3.0\ConsoleTester.pdb
-C:\Users\chwaibel\Documents\GitHub\hive\Mothercell\Hive.IO\ConsoleTester\obj\Debug\netcoreapp3.0\ConsoleTester.csprojAssemblyReference.cache
