@@ -16,14 +16,13 @@ namespace Hive.GUI
     {
         private static readonly SortedDictionary<int, Bitmap> Patterns = new SortedDictionary<int, Bitmap>();
 
-        public GH_ClusterAttributes(GH_Cluster owner)
-          : base((IGH_Component)owner)
+        public GH_ClusterAttributes(ClusterTest owner) : base((IGH_Component)owner)
         {
         }
 
         private GH_Document ClusterDocument()
         {
-            return ((GH_Cluster)this.Owner).m_internalDocument;
+            return ((ClusterTest)this.Owner).m_internalDocument;
         }
 
         public override void SetupTooltip(PointF point, GH_TooltipDisplayEventArgs e)
@@ -31,7 +30,7 @@ namespace Hive.GUI
             e.Title = this.Owner.NickName;
             e.Text = this.Owner.Description;
             e.Icon = this.Owner.Icon_24x24;
-            switch (((GH_Cluster)this.Owner).Synchronisation)
+            switch (((ClusterTest)this.Owner).Synchronisation)
             {
                 case GH_Synchronisation.MissingReference:
                     e.Description = "This cluster references a file which no longer exists.";
@@ -46,7 +45,7 @@ namespace Hive.GUI
                     e.Description = "This cluster is out-of-date. Click here to re-load from the disk.";
                     break;
                 default:
-                    GH_Cluster owner = (GH_Cluster)this.Owner;
+                    ClusterTest owner = (ClusterTest)this.Owner;
                     if (this.ClusterDocument() == null)
                     {
                         e.Description = "Empty Cluster";
@@ -85,7 +84,7 @@ namespace Hive.GUI
                         int y = 0;
                         if (owner.ProtectionLevel == GH_ClusterProtection.Protected)
                         {
-                            g.DrawImage(Icons._3, Global_Proc.UiAdjust(2), y + Global_Proc.UiAdjust(2), Global_Proc.UiAdjust(20), Global_Proc.UiAdjust(20));
+                            g.DrawImage((Image)Res_GUI.Locked_20x20, Global_Proc.UiAdjust(2), y + Global_Proc.UiAdjust(2), Global_Proc.UiAdjust(20), Global_Proc.UiAdjust(20));
                             Rectangle rectangle = new Rectangle(x1, y + Global_Proc.UiAdjust(4), bitmap1.Width - x1, height - Global_Proc.UiAdjust(4));
                             g.DrawString("Cluster is password protected.", GH_FontServer.StandardItalic, Brushes.Black, (RectangleF)rectangle, GH_TextRenderingConstants.NearCenter);
                             GH_GraphicsUtil.EtchFadingHorizontal(g, rectangle.Left, rectangle.Right, rectangle.Bottom, 200, 35);
@@ -93,7 +92,7 @@ namespace Hive.GUI
                         }
                         if (num1 > 0)
                         {
-                            g.DrawImage(Icons._4, Global_Proc.UiAdjust(2), y + Global_Proc.UiAdjust(2), Global_Proc.UiAdjust(20), Global_Proc.UiAdjust(20));
+                            g.DrawImage((Image)Res_GUI.ClusterInstances_20x20, Global_Proc.UiAdjust(2), y + Global_Proc.UiAdjust(2), Global_Proc.UiAdjust(20), Global_Proc.UiAdjust(20));
                             Rectangle rectangle = new Rectangle(x1, y, bitmap1.Width - x1, height);
                             string empty = string.Empty;
                             string str1 = "This cluster occurs";
@@ -147,7 +146,7 @@ namespace Hive.GUI
                         }
                         if (!string.IsNullOrEmpty(owner.FilePath))
                         {
-                            g.DrawImage(Icons._5, Global_Proc.UiAdjust(2), y + Global_Proc.UiAdjust(2), Global_Proc.UiAdjust(20), Global_Proc.UiAdjust(20));
+                            g.DrawImage((Image)Res_MainMenu.Save_20x20, Global_Proc.UiAdjust(2), y + Global_Proc.UiAdjust(2), Global_Proc.UiAdjust(20), Global_Proc.UiAdjust(20));
                             Rectangle rectangle = new Rectangle(x1, y, bitmap1.Width - x1, height);
                             string s = GH_Format.FormatFilePath(owner.FilePath, 100);
                             g.DrawString(s, GH_FontServer.StandardItalic, Brushes.Black, (RectangleF)rectangle, GH_TextRenderingConstants.NearCenter);
@@ -182,7 +181,7 @@ namespace Hive.GUI
 
         private Bitmap DocumentDiagram()
         {
-            GH_Cluster owner = (GH_Cluster)this.Owner;
+            ClusterTest owner = (ClusterTest)this.Owner;
             GH_Document ghDocument = this.ClusterDocument();
             Bitmap bitmap;
             if (ghDocument == null)
@@ -205,7 +204,7 @@ namespace Hive.GUI
                 }
                 finally
                 {
-                    //enumerator?.Dispose();
+                    enumerator?.Dispose();
                 }
                 GH_DocDiagramPainter docDiagramPainter = new GH_DocDiagramPainter();
                 docDiagramPainter.IgnoreSelectedStates = true;
@@ -230,12 +229,10 @@ namespace Hive.GUI
             return bitmap;
         }
 
-        public override GH_ObjectResponse RespondToMouseDoubleClick(
-          GH_Canvas sender,
-          GH_CanvasMouseEvent e)
+        public override GH_ObjectResponse RespondToMouseDoubleClick(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
             int modifierKeys = (int)Control.ModifierKeys;
-            ((GH_Cluster)this.Owner).EditClusterAsSeparateDocument();
+            ((ClusterTest)this.Owner).EditClusterAsSeparateDocument();
             return GH_ObjectResponse.Handled;
         }
 
@@ -256,7 +253,7 @@ namespace Hive.GUI
                     base.Render(canvas, graphics, channel);
                     break;
                 case GH_CanvasChannel.Objects:
-                    switch (((GH_Cluster)this.Owner).Synchronisation)
+                    switch (((ClusterTest)this.Owner).Synchronisation)
                     {
                         case GH_Synchronisation.MissingReference:
                         case GH_Synchronisation.OutOfDate:
@@ -277,7 +274,7 @@ namespace Hive.GUI
                             }
                             finally
                             {
-                                //enumerator1.Dispose();
+                                enumerator1.Dispose();
                             }
                             List<IGH_Param>.Enumerator enumerator2;
                             try
@@ -291,7 +288,7 @@ namespace Hive.GUI
                             }
                             finally
                             {
-                                //enumerator2.Dispose();
+                                enumerator2.Dispose();
                             }
                             capsule.RenderEngine.RenderGrips(graphics);
                             capsule.RenderEngine.RenderBackground(graphics, canvas.Viewport.Zoom, style);
@@ -305,7 +302,7 @@ namespace Hive.GUI
                                 }
                                 else
                                 {
-                                    bitmap = Icons._1;
+                                    bitmap = Res_GUI.StripePattern_48x48;
                                     GH_MemoryBitmap ghMemoryBitmap = new GH_MemoryBitmap(bitmap);
                                     ghMemoryBitmap.Filter_Multiply(GH_BitmapChannel.A, (double)key / (double)byte.MaxValue);
                                     ghMemoryBitmap.Release(true);
@@ -324,8 +321,8 @@ namespace Hive.GUI
                             }
                             if (GH_Canvas.ZoomFadeLow > 5)
                             {
-                                //PointF center;
-                                PointF local, center;
+                                PointF center;
+                                ref PointF local = ref center;
                                 RectangleF bounds = this.Bounds;
                                 double x = (double)bounds.X;
                                 bounds = this.Bounds;
@@ -337,7 +334,6 @@ namespace Hive.GUI
                                 double num3 = 0.5 * (double)bounds.Height;
                                 double num4 = y + num3;
                                 local = new PointF((float)num2, (float)num4);
-                                center = local;
                                 GH_GraphicsUtil.RenderWarningIcon(graphics, center, 16f, GH_Canvas.ZoomFadeLow);
                             }
                             capsule.RenderEngine.RenderHighlight(graphics);
@@ -349,5 +345,4 @@ namespace Hive.GUI
                     }
             }
         }
-    }
 }

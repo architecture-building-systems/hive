@@ -2,7 +2,6 @@
 using GH_IO.Serialization;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Special;
-using Microsoft.VisualBasic.CompilerServices;
 using System;
 using System.IO;
 
@@ -235,19 +234,19 @@ namespace Hive.GUI
                             return;
                         this.m_sync = GH_Synchronisation.OutOfDate;
                         // ISSUE: reference to a compiler-generated field
-                        //GH_ClusterFile.FileChangedEventHandler fileChangedEvent = this.FileChangedEvent;
-                        //if (fileChangedEvent == null)
-                        //    return;
-                        //fileChangedEvent();
+                        GH_ClusterFile.FileChangedEventHandler fileChangedEvent = this.FileChangedEvent;
+                        if (fileChangedEvent == null)
+                            return;
+                        fileChangedEvent();
                     }
                     else
                     {
                         this.m_sync = GH_Synchronisation.MissingReference;
                         // ISSUE: reference to a compiler-generated field
-                        //GH_ClusterFile.FileChangedEventHandler fileChangedEvent = this.FileChangedEvent;
-                        //if (fileChangedEvent == null)
-                        //    return;
-                        //fileChangedEvent();
+                        GH_ClusterFile.FileChangedEventHandler fileChangedEvent = this.FileChangedEvent;
+                        if (fileChangedEvent == null)
+                            return;
+                        fileChangedEvent();
                     }
                 }
                 catch (Exception ex)
@@ -255,9 +254,9 @@ namespace Hive.GUI
                     //ProjectData.SetProjectError(ex);
                     this.m_sync = GH_Synchronisation.Unset;
                     // ISSUE: reference to a compiler-generated field
-                    //GH_ClusterFile.FileChangedEventHandler fileChangedEvent = this.FileChangedEvent;
-                    //if (fileChangedEvent != null)
-                    //    fileChangedEvent();
+                    GH_ClusterFile.FileChangedEventHandler fileChangedEvent = this.FileChangedEvent;
+                    if (fileChangedEvent != null)
+                        fileChangedEvent();
                     //ProjectData.ClearProjectError();
                 }
             }
