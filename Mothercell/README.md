@@ -1,4 +1,4 @@
-**MOTHERCELL**
+# MOTHERCELL
 
 The Mothercell is the main Grasshopper component of Hive. 
 
