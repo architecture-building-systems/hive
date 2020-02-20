@@ -113,14 +113,18 @@ namespace Hive.IO
         /// <param name="index">Unique identifier</param>
         public Zone(rg.Brep geometry, int index, double tolerance)
         {
-            this.Index = index;
-
             this.Geometry = geometry;
+            this.Index = index;
+            this.Tolerance = tolerance;
+
             this.IsLinear = CheckLinearity(this.Geometry);
             if (this.IsLinear)
             {
-                this.IsConvex = CheckConvexity(this.Geometry, this.Tolerance);
                 this.IsClosed = CheckClosedness(this.Geometry);
+                if (this.IsClosed)
+                    this.IsConvex = CheckConvexity(this.Geometry, this.Tolerance);
+                else
+                    this.IsConvex = false;
             }
             else
             {
@@ -163,8 +167,6 @@ namespace Hive.IO
         /// <returns>True, if convex</returns>
         private bool CheckConvexity(rg.Brep brep, double tolerance)
         {
-            bool isConvex = true;
-
             int vertexCount = brep.Vertices.Count;
 
             for (int i = 0; i < vertexCount; i++)
@@ -176,10 +178,6 @@ namespace Hive.IO
 
                     rg.BrepVertex vert2 = brep.Vertices[u];
                     rg.LineCurve line = new rg.LineCurve(vert1.Location, vert2.Location);
-                    //if((rg.Intersect.Intersection.CurveBrep(line, brep,0.01,0.01,)) 
-                    //{
-                    //    isConvex = false;
-                    //}
                     rg.Curve[] overlap_curves;
                     rg.Point3d[] inter_points;
                     if (rg.Intersect.Intersection.CurveBrep(line, brep, tolerance, out overlap_curves, out inter_points))
@@ -188,14 +186,15 @@ namespace Hive.IO
                         {
                             if (inter_points.Length > 2)
                                 return false;
-                            else if(inter_points.Length ==2)
+                            else if(inter_points.Length == 2)
                             {
-                                Console.WriteLine("hi");
                                 //check if middle point is within the brep or not. if not, its convex
-                            }else
-                            {
-                                // do i need this?
-                            }
+                                rg.Point3d middlepoint = (inter_points[0] + inter_points[1]) / 2.0;
+                                if (!brep.IsPointInside(middlepoint, tolerance, false))
+                                {
+                                    return false;
+                                }
+                            } //do i need a case with inter_points == 1
                         }
                     }
                     // !!! connect point i to u and check, if this line is within the brep OR on an edge of the brep
@@ -204,7 +203,7 @@ namespace Hive.IO
                     
                 }
             }
-            return isConvex;
+            return true;
         }
 
         /// <summary>

@@ -31,6 +31,10 @@ namespace Hive.IO
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             //pManager.AddGenericParameter("Hive.IO.Building", "Hive.IO.Building", "Hive.IO.Building Object, that contains all zones and windows. Solved for adjacencies", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("conxex", "convex", "convex", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("linear", "linear", "linear", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("closed", "closed", "closed", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("valid", "valid", "valid", GH_ParamAccess.item);
         }
 
 
@@ -90,9 +94,13 @@ namespace Hive.IO
             if (breps.Count == 0)   // could get an empty list
                 return;
 
-            // ModelAbsoluteTolerance is too much, it never finishes the intersection check?!
-            Zone zone = new Zone(breps[0], 0, Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance);
+            double tolerance = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
+            Zone zone = new Zone(breps[0], 0, tolerance);
 
+            DA.SetData(0, zone.IsConvex);
+            DA.SetData(1, zone.IsLinear);
+            DA.SetData(2, zone.IsClosed);
+            DA.SetData(3, zone.IsValid);
         }
 
 
