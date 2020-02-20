@@ -17,7 +17,7 @@ namespace Hive.IO
     /// </summary>
     public class Zone
     {
-        #region MainProperties
+        #region Main Properties
         /// <summary>
         /// The actual zone geometry, as rhino Brep
         /// </summary>
@@ -26,42 +26,54 @@ namespace Hive.IO
         /// Unique index, used to identify the zone when it is part of a Building object
         /// </summary>
         public int Index { get; private set; }
-
-
-        /// <summary>
-        /// Internal loads.
-        /// Values indicate full / maximal value.
-        /// Unit in W/sqm
-        /// </summary>
-        public struct InternalLoads
-        {
-            public double Occupants;
-            public double Devices;
-            public double Lighting;
-        }
-        /// <summary>
-        /// Time-resolved schedules, values are [0, 1].
-        /// Value of 1 indicates full load as defined in this.InternalLoads
-        /// </summary>
-        public struct Schedules
-        {
-            public double[] Occupants;
-            public double[] Devices;
-            public double[] Lighting;
-        }
-
         /// <summary>
         /// Tolerance for geometric operations. Get from RhinoDoc.ModelAbsoluteTolerance?
         /// </summary>
         public double Tolerance { get; private set; }
-
         /// <summary>
         /// fix the horizon to one year, hourly
         /// </summary>
         private const int _horizon = 8760;
         #endregion
 
-        #region BuildingComponents
+        #region Loads And Schedules
+        /// <summary>
+        /// Describes the building type, e.g. residential, office, school, etc.
+        /// </summary>
+        public string BuildingType { get; private set; }
+        /// <summary>
+        /// Internal loads.
+        /// Values indicate full / maximal value.
+        /// Unit in W/sqm
+        /// </summary>
+        public struct StructInternalLoads
+        {
+            public double Occupants;
+            public double Devices;
+            public double Lighting;
+        }
+        /// <summary>
+        /// Internal loads structure. Values in W/m2
+        /// </summary>
+        public StructInternalLoads InternalLoads;
+
+        /// <summary>
+        /// Time-resolved schedules, values are [0, 1].
+        /// Value of 1 indicates full load as defined in this.InternalLoads
+        /// </summary>
+        public struct StructSchedules
+        {
+            public double[] Occupants;
+            public double[] Devices;
+            public double[] Lighting;
+        }
+        /// <summary>
+        /// Schedules that define annual hourly internal loads schedules
+        /// </summary>
+        public StructSchedules Schedule;
+        #endregion
+
+        #region Building Components
         /// <summary>
         /// Wall components of this zone. Cannot be empty.
         /// </summary>
@@ -102,8 +114,7 @@ namespace Hive.IO
         /// </summary>
         public bool IsValid { get; private set; }
         #endregion
-
-
+        
 
         #region Constructor
         /// <summary>
@@ -134,7 +145,23 @@ namespace Hive.IO
             }
             this.IsValid = CheckValidity(this.IsClosed, this.IsConvex, this.IsLinear);
 
-            // define standard constructions?
+            // define standard building physical properties upon inizialization. 
+            // Can be changed later via Windows Form
+            this.BuildingType = "Residential";
+            this.InternalLoads.Occupants = 16.0;
+            this.InternalLoads.Lighting = 4.0;
+            this.InternalLoads.Devices = 3.0;
+            this.Schedule.Occupants = new double[_horizon];
+            this.Schedule.Lighting = new double[_horizon];
+            this.Schedule.Devices = new double[_horizon];
+            // windows form with interface to change schedules for workdays and weekends / holidays?
+            for(int i=0; i<_horizon; i++)
+            {
+                this.Schedule.Occupants[i] = 1.0;
+                this.Schedule.Lighting[i] = 1.0;
+                this.Schedule.Devices[i] = 1.0;
+            }
+
 
         }
         #endregion
@@ -161,9 +188,10 @@ namespace Hive.IO
         }
 
         /// <summary>
-        /// Check the convexity of the zone. Only convex spaces allowed for simplicity.
+        /// Check the convexity of the zone. Hive only allows convex spaces, for simplicity.
         /// </summary>
-        /// <param name="brep"></param>
+        /// <param name="brep">geometry that is checked for convexity</param>
+        /// <param name="tolerance">model tolerance, for intersection checks</param>
         /// <returns>True, if convex</returns>
         private bool CheckConvexity(rg.Brep brep, double tolerance)
         {
@@ -194,13 +222,9 @@ namespace Hive.IO
                                 {
                                     return false;
                                 }
-                            } //do i need a case with inter_points == 1
+                            } //do i need a case with inter_points == 1?
                         }
-                    }
-                    // !!! connect point i to u and check, if this line is within the brep OR on an edge of the brep
-                    // if not, cancel the loop and return false
-
-                    
+                    }                   
                 }
             }
             return true;

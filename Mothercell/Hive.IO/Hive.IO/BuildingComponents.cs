@@ -8,13 +8,70 @@ using rg = Rhino.Geometry;
 
 namespace Hive.IO
 {
+    /// <summary>
+    /// Building components indicate adjacencies to other components, surface areas, flags like external or internal, cost and emissions
+    /// </summary>
     namespace BuildingComponents
     {
+        public abstract class BuildingComponent
+        {
+            /// <summary>
+            /// Rhino Geometry of this component
+            /// </summary>
+            public rg.Brep Geometry;
+            /// <summary>
+            /// Unique identifier
+            /// </summary>
+            public int Index;
+            /// <summary>
+            /// Affiliation to Zone Index
+            /// </summary>
+            public int ZoneIdentifier;
+            /// <summary>
+            /// Flag for external, i.e. access to solar radiation and ambient environment
+            /// </summary>
+            public bool IsExternal;
+            /// <summary>
+            /// Total Cost in [Currency]
+            /// </summary>
+            public double Cost;
+            /// <summary>
+            /// Total CO2 emissions [kgCO2eq.]
+            /// </summary>
+            public double CO2;
+            /// <summary>
+            /// Total surface area of this component, in [sqm]
+            /// </summary>
+            public double Area;
+            /// <summary>
+            /// Total weight of the entire component, in [kg]
+            /// </summary>
+            public double Weight;
+            /// <summary>
+            /// U-Value of this component
+            /// </summary>
+            public double UValue;
+            /// <summary>
+            /// Wind pressure coefficient, C_p, of this component
+            /// </summary>
+            public double WindPressureCoefficient;
+
+            /// <summary>
+            /// Indices of adjacent components
+            /// </summary>
+            public int[] AdjacentComponents;
+            /// <summary>
+            /// Congruent area of respective adjacent component, in [sqm]
+            /// </summary>
+            public double[] CongruentArea;
+        }
+
+
 
         /// <summary>
         /// Openings on building hull, e.g. windows or doors. Could be opaque or transparent.
         /// </summary>
-        public struct Opening
+        public class Opening : BuildingComponent
         {
             // Should also contain information for dynamic shading
             // static shading is defined as static shading object
@@ -25,7 +82,7 @@ namespace Hive.IO
         /// <summary>
         /// Internal or external wall element
         /// </summary>
-        public struct Wall
+        public class Wall : BuildingComponent
         {
             // Wall, Roof, Floor, Ceiling are not input manually. But they need to be own classes, because they'll contain information like construction.
         }
@@ -34,7 +91,7 @@ namespace Hive.IO
         /// <summary>
         /// Roof. Always external
         /// </summary>
-        public struct Roof
+        public class Roof : BuildingComponent
         {
 
         }
@@ -43,7 +100,7 @@ namespace Hive.IO
         /// <summary>
         /// Ceiling, i.e. internal surface
         /// </summary>
-        public struct Ceiling
+        public class Ceiling : BuildingComponent
         {
 
         }
@@ -52,17 +109,19 @@ namespace Hive.IO
         /// <summary>
         /// Floor, i.e. internal surface
         /// </summary>
-        public struct Floor
+        public class Floor : BuildingComponent
         {
 
         }
+
+
 
 
         /// <summary>
         /// Static shading object, like louvers. Adjacent buildings are part of 'Environment.cs'
         /// Can be mesh or brep.
         /// </summary>
-        public struct ShadingDevice
+        public class ShadingDevice
         {
             /// <summary>
             /// indicating whether this shading device is dynamic, meaning it can move, like a louver. if false, it is static
@@ -124,6 +183,10 @@ namespace Hive.IO
 
 
         }
+
+
+
+
 
     }
 }
