@@ -13,65 +13,64 @@ namespace Hive.IO
     /// </summary>
     namespace BuildingComponents
     {
-        public abstract class BuildingComponent
+        public abstract class Component
         {
             /// <summary>
             /// Rhino Geometry of this component
             /// </summary>
-            public rg.Brep Geometry;
+            public rg.Brep Geometry { get; private set; }
             /// <summary>
             /// Unique identifier
             /// </summary>
-            public int Index;
+            public int Index { get; private set; }
             /// <summary>
-            /// Affiliation to Zone Index
+            /// Affiliation to Zone Index.
+            /// Index that serves as zone identifier. E.g. ZoneIdentifier = 0 means that this Component belongs to Zone 0
+            /// Components without zone affiliation can't exist. Otherwise, they would be an obstacle object in Environment.cs
             /// </summary>
-            public int ZoneIdentifier;
+            public int ZoneIdentifier { get; private set; }
             /// <summary>
             /// Flag for external, i.e. access to solar radiation and ambient environment
             /// </summary>
-            public bool IsExternal;
+            public bool IsExternal { get; private set; }
             /// <summary>
             /// Total Cost in [Currency]
             /// </summary>
-            public double Cost;
+            public double Cost { get; private set; }
             /// <summary>
             /// Total CO2 emissions [kgCO2eq.]
             /// </summary>
-            public double CO2;
+            public double CO2 { get; private set; }
             /// <summary>
             /// Total surface area of this component, in [sqm]
             /// </summary>
-            public double Area;
+            public double Area { get; private set; }
             /// <summary>
             /// Total weight of the entire component, in [kg]
             /// </summary>
-            public double Weight;
-            /// <summary>
-            /// U-Value of this component
-            /// </summary>
-            public double UValue;
+            public double Weight { get; private set; }
             /// <summary>
             /// Wind pressure coefficient, C_p, of this component
             /// </summary>
-            public double WindPressureCoefficient;
+            public double WindPressureCoefficient { get; private set; }
 
             /// <summary>
             /// Indices of adjacent components
             /// </summary>
-            public int[] AdjacentComponents;
+            public int[] AdjacentComponents { get; private set; }
             /// <summary>
             /// Congruent area of respective adjacent component, in [sqm]
             /// </summary>
-            public double[] CongruentArea;
+            public double[] CongruentArea { get; private set; }
         }
+
 
 
 
         /// <summary>
         /// Openings on building hull, e.g. windows or doors. Could be opaque or transparent.
         /// </summary>
-        public class Opening : BuildingComponent
+        public class Opening : Component
         {
             // Should also contain information for dynamic shading
             // static shading is defined as static shading object
@@ -82,7 +81,7 @@ namespace Hive.IO
         /// <summary>
         /// Internal or external wall element
         /// </summary>
-        public class Wall : BuildingComponent
+        public class Wall : Component
         {
             // Wall, Roof, Floor, Ceiling are not input manually. But they need to be own classes, because they'll contain information like construction.
         }
@@ -91,7 +90,7 @@ namespace Hive.IO
         /// <summary>
         /// Roof. Always external
         /// </summary>
-        public class Roof : BuildingComponent
+        public class Roof : Component
         {
 
         }
@@ -100,7 +99,7 @@ namespace Hive.IO
         /// <summary>
         /// Ceiling, i.e. internal surface
         /// </summary>
-        public class Ceiling : BuildingComponent
+        public class Ceiling : Component
         {
 
         }
@@ -109,47 +108,41 @@ namespace Hive.IO
         /// <summary>
         /// Floor, i.e. internal surface
         /// </summary>
-        public class Floor : BuildingComponent
+        public class Floor : Component
         {
 
         }
 
 
 
+        public class Shading : Component
+        {
+
+        }
 
         /// <summary>
-        /// Static shading object, like louvers. Adjacent buildings are part of 'Environment.cs'
+        /// Dynamic shading object, like louvers. Adjacent buildings are part of 'Environment.cs'
         /// Can be mesh or brep.
         /// </summary>
-        public class ShadingDevice
+        public class DynamicShading : Component
         {
+
+
             /// <summary>
             /// indicating whether this shading device is dynamic, meaning it can move, like a louver. if false, it is static
+            /// Furthermore, if true, it needs rg.Mesh [] DynamicGeometry that defines the different geometry states.
+            /// If false, base.Geometry is enough
             /// </summary>
             public bool IsDynamic { get; private set; }
 
             /// <summary>
-            /// Indicating whether this shading device is internal, i.e. inside the zone.
-            /// </summary>
-            public bool IsInternal { get; private set; }
-
-            /// <summary>
-            /// Absorptivity
-            /// </summary>
-            public double Absorbtivity { get; private set; }
-            /// <summary>
-            /// Reflectivity
-            /// </summary>
-            public double Reflectivity { get; private set; }
-            /// <summary>
-            /// Transmissivity
-            /// </summary>
-            public double Transmissivity { get; private set; }
-            /// <summary>
-            /// Shading geometry as mesh. 
+            /// Dynamic geometry as mesh. 
             /// Is an array, since it may contain different states, but only when (this.IsDynamic == true), otherwise this.ShadingGeometry.Length = 1
+            /// It get's its normal state from base.Geometry
             /// </summary>
-            public rg.Mesh[] ShadingGeometry { get; private set; }
+            public rg.Mesh[] DynamicGeometry { get; private set; }
+
+
 
             /// <summary>
             /// Time horizon for the schedule
@@ -172,11 +165,6 @@ namespace Hive.IO
             public double[] AbsorbtivitySchedule { get; private set; }
             public double[] ReflectivitySchedule { get; private set; }
 
-            /// <summary>
-            /// Index that serves as zone identifier. E.g. ZoneIdentifier = 0 means that this ShadingDevice belongs to Zone 0
-            /// Shading device without zone can't exist. Otherwise, it would belong to Environment.cs as obstacle object
-            /// </summary>
-            public int ZoneIdentifier { get; private set; }
 
 
 
