@@ -38,9 +38,9 @@ namespace Hive.IO
 
         #region Loads And Schedules
         /// <summary>
-        /// Describes the building type, e.g. residential, office, school, etc.
+        /// Zone name, e.g. 'Kitchen01'
         /// </summary>
-        public string BuildingType { get; private set; }
+        public string Name { get; private set; }
         /// <summary>
         /// Internal loads.
         /// Values indicate full / maximal value.
@@ -94,6 +94,12 @@ namespace Hive.IO
         /// Roof components of this zone. Can be empty.
         /// </summary>
         public Roof[] Roofs { get; private set; }
+
+        /// <summary>
+        /// Shading devices
+        /// </summary>
+        public Shading[] ShadingDevices { get; private set; }
+
         #endregion
 
         #region Boolean properties
@@ -147,7 +153,7 @@ namespace Hive.IO
 
             // define standard building physical properties upon inizialization. 
             // Can be changed later via Windows Form
-            this.BuildingType = "Residential";
+            this.Name = String.Concat("Zone", this.Index.ToString());
             this.InternalLoads.Occupants = 16.0;
             this.InternalLoads.Lighting = 4.0;
             this.InternalLoads.Devices = 3.0;
@@ -161,6 +167,8 @@ namespace Hive.IO
                 this.Schedule.Lighting[i] = 1.0;
                 this.Schedule.Devices[i] = 1.0;
             }
+
+
 
 
         }
