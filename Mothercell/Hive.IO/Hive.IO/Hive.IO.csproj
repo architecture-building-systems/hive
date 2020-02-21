@@ -75,6 +75,7 @@
     </Compile>
     <Compile Include="GHBuilding.cs" />
     <Compile Include="GHDistributor.cs" />
+    <Compile Include="HelloRhinoCommon.cs" />
     <Compile Include="HiveIOInfo.cs" />
     <Compile Include="GHSolarSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
