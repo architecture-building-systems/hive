@@ -18,7 +18,7 @@ namespace Hive.IO
         /// </summary>
         public int[][] Adjacencies { get; private set; }
         
-        public ShadingDevice [] ShadingDevices { get; private set; }
+        public Shading [] ShadingDevices { get; private set; }
 
 
 
