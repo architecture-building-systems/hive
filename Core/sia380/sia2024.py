@@ -80,7 +80,7 @@ def default_values(room, area, month, season):
             theta_i = room["Raumlufttemperatur Auslegung Heizen (Winter)"]
 
     A_th = room["Thermische Gebaeudehuellflaeche"]
-    A_w = A_th * room["Glasanteil"]
+    A_w = A_th * (room["Glasanteil"] / 100.0)
     U_op = room["U-Wert opake Bauteile"]
     U_w = room["U-Wert Fenster"]
     q_ve = room["Aussenluft-Volumenstrom (pro NGF)"]
