@@ -15,13 +15,9 @@ clr.AddReferenceToFileAndPath(os.path.join(path, "Libraries", "GHSolar.gha"))
 import GHSolar as ghs
 
 
-def main(mesh_analysis, mesh_obstructions, DHI, DNI, latitude, longitude, solarazi, solaralti):
-    return simulate_obstructed_panel(mesh_analysis, mesh_obstructions, DHI, DNI, latitude, longitude, solarazi,
-                                     solaralti)
-
-
-def simulate_obstructed_panel(mesh_analysis, mesh_obstructions, dhi_in, dni_in, latitude, longitude, solarazi,
-                              solaralti):
+def simulate_obstructed_panel(mesh_analysis, mesh_obstructions,
+                              dhi_in, dni_in, latitude, longitude, solarazi, solaralti,
+                              max_value, min_value):
     horizon = 8760
 
     # Model parameters
@@ -89,8 +85,7 @@ def simulate_obstructed_panel(mesh_analysis, mesh_obstructions, dhi_in, dni_in, 
     irradiance = read_results(results, mesh_analysis)
 
     # call visualize_as_mesh()
-    unit = 0
-    mesh_visu = visualize_as_mesh(results, mesh_analysis, unit)
+    mesh_visu = visualize_as_mesh(results, mesh_analysis, max_value, min_value)
 
     return [irradiance, mesh_visu]
 
@@ -133,20 +128,16 @@ def read_results(ghsolar_results, mshin):
     return timeseries
 
 
-def visualize_as_mesh(results, mshin, unit):
+def visualize_as_mesh(results, mshin, maxval, minval):
     """
     Script for visualizing solar mesh of GHSolar.gha in python
     Translated from C# from GHResultsVisualize.cs in github.com/christophwaibel/GH_Solar_V2
     :param results: CResults object from GHSolar.gha
     :param mshin: Rhino.Geometry.Mesh
-    :param unit: Integer. Unit of analysis 0: [kWh/m2a], yearly specific irradiation per vertex; 1: [kWh] yearly irradiation on entire mesh
-    :param max: Float. Max value for coloring (red)
-    :param min: Float. Min value for coloring (blue)
+    :param maxval: Float. Max value for coloring (red). In kWh/m2
+    :param minval: Float. Min value for coloring (blue). In kWh/m2
     :return: Colored Rhino.Geometry.Mesh, showing solar irradiation of entire mesh, or per vertex
     """
-
-    maxval = 1000
-    minval = 0
 
     valin = []
     # if unit == 0 or unit == 1:
@@ -161,65 +152,28 @@ def visualize_as_mesh(results, mshin, unit):
     mshcol = rg.Mesh()
     count = 0
 
-    if unit != 1:
-        maxval = max(valin)
-        minval = min(valin)
-        for i in range(mshin.Faces.Count):
-            c = ghs.CMisc.GetRGB(1, valin[mshin.Faces[i].A], maxval, minval)
-            mshcol.Vertices.Add(mshin.Vertices[mshin.Faces[i].A])
-            mshcol.VertexColors.SetColor(count, c)
+    for i in range(mshin.Faces.Count):
+        c = ghs.CMisc.GetRGB(1, valin[mshin.Faces[i].A], maxval, minval)
+        mshcol.Vertices.Add(mshin.Vertices[mshin.Faces[i].A])
+        mshcol.VertexColors.SetColor(count, c)
 
-            c = ghs.CMisc.GetRGB(1, valin[mshin.Faces[i].B], maxval, minval)
-            mshcol.Vertices.Add(mshin.Vertices[mshin.Faces[i].B])
-            mshcol.VertexColors.SetColor(count + 1, c)
+        c = ghs.CMisc.GetRGB(1, valin[mshin.Faces[i].B], maxval, minval)
+        mshcol.Vertices.Add(mshin.Vertices[mshin.Faces[i].B])
+        mshcol.VertexColors.SetColor(count + 1, c)
 
-            c = ghs.CMisc.GetRGB(1, valin[mshin.Faces[i].C], maxval, minval)
-            mshcol.Vertices.Add(mshin.Vertices[mshin.Faces[i].C])
-            mshcol.VertexColors.SetColor(count + 2, c)
+        c = ghs.CMisc.GetRGB(1, valin[mshin.Faces[i].C], maxval, minval)
+        mshcol.Vertices.Add(mshin.Vertices[mshin.Faces[i].C])
+        mshcol.VertexColors.SetColor(count + 2, c)
 
-            if mshin.Faces[i].IsQuad:
-                c = ghs.CMisc.GetRGB(1, valin[mshin.Faces[i].D], maxval, minval)
-                mshcol.Vertices.Add(mshin.Vertices[mshin.Faces[i].D])
-                mshcol.VertexColors.SetColor(count + 3, c)
-                mshcol.Faces.AddFace(count, count + 1, count + 2, count + 3)
-                count = count + 4
-            else:
-                mshcol.Faces.AddFace(count, count + 1, count + 2)
-                count = count + 3
-    else:
-        mshFaceAreas = [0.0] * mshin.Faces.Count
-        totVal = 0.0
-        for i in range(0, mshin.Faces.Count):
-            mshFaceAreas[i] = ghs.CMisc.getMeshFaceArea(i, mshin)
-            FaceVal = 0.0
-            valVertex1 = valin[mshin.Faces[i].A]
-            valVertex2 = valin[mshin.Faces[i].B]
-            valVertex3 = valin[mshin.Faces[i].C]
-            if mshin.Faces[i].IsQuad:
-                valVertex4 = valin[mshin.Faces[i].D]
-                FaceVal = ((valVertex1 + valVertex2 + valVertex3 + valVertex4) / 4) * ghs.CMisc.getMeshFaceArea(i,
-                                                                                                                mshin)
-            else:
-                FaceVal = ((valVertex1 + valVertex2 + valVertex3) / 3) * ghs.CMisc.getMeshFaceArea(i, mshin)
-            totVal = totVal + FaceVal
-        count = 0
-        for i in range(0, mshin.Faces.Count):
-            c = ghs.CMisc.GetRGB(1, totVal, maxval, minval)
-            mshcol.Vertices.Add(mshin.Vertices[mshin.Faces[i].A])
-            mshcol.VertexColors.SetColor(count, c)
-            mshcol.Vertices.Add(mshin.Vertices[mshin.Faces[i].B])
-            mshcol.VertexColors.SetColor(count + 1, c)
-            mshcol.Vertices.Add(mshin.Vertices[mshin.Faces[i].C])
-            mshcol.VertexColors.SetColor(count + 2, c)
-
-            if mshin.Faces[i].IsQuad:
-                mshcol.Vertices.Add(mshin.Vertices[mshin.Faces[i].D])
-                mshcol.VertexColors.SetColor(count + 3, c)
-                mshcol.Faces.AddFace(count, count + 1, count + 2, count + 3)
-                count = count + 4
-            else:
-                mshcol.Faces.AddFace(count, count + 1, count + 2)
-                count = count + 3
+        if mshin.Faces[i].IsQuad:
+            c = ghs.CMisc.GetRGB(1, valin[mshin.Faces[i].D], maxval, minval)
+            mshcol.Vertices.Add(mshin.Vertices[mshin.Faces[i].D])
+            mshcol.VertexColors.SetColor(count + 3, c)
+            mshcol.Faces.AddFace(count, count + 1, count + 2, count + 3)
+            count = count + 4
+        else:
+            mshcol.Faces.AddFace(count, count + 1, count + 2)
+            count = count + 3
 
     return mshcol
 

@@ -38,6 +38,7 @@
       "subcategory": "Solar",
       "id": "c8215941-ca5f-4d47-8e4f-032f41eccc4f",
       "main-module": "obstructed_panel",
+      "main-function": "simulate_obstructed_panel",
       "inputs": [
         {"name": "mesh_analysis", "nick-name": "mesh_in", "type": "mesh", "description": "Analysis surface as rhino grasshopper mesh"},
         {"name": "obstructions", "nick-name": "obstructions", "type": "mesh", "description": "Obstructions as rhino grasshopper mesh objects", "access": "list"},
@@ -46,7 +47,10 @@
         {"name": "latitude", "nick-name": "latitude", "type": "float", "description": "Latitude of the location. Default value is for Zurich, Switzerland", "default": 47.36667},
         {"name": "longitude", "nick-name": "longitude", "type": "float", "description": "Longitude of the location. Default value is for Zurich, Switzerland", "default": 8.55},
         {"name": "solarazi", "nick-name": "solarazi", "type": "float", "description": "8760 time series of solar azimuth angles in [°], e.g from a weatherfile. If no data provided, azimuth will be calculated according to Blanco-Muriel (2001).", "access": "list", "default": []},
-        {"name": "solaralti", "nick-name": "solaralti", "type": "float", "description": "8760 time series of solar altitude angles in [°], e.g from a weatherfile. If no data provided, altitude will be calculated according to Blanco-Muriel (2001).", "access": "list", "default": []}      ],
+        {"name": "solaralti", "nick-name": "solaralti", "type": "float", "description": "8760 time series of solar altitude angles in [°], e.g from a weatherfile. If no data provided, altitude will be calculated according to Blanco-Muriel (2001).", "access": "list", "default": []},
+        {"name": "max", "nick-name": "max", "type": "float", "description": "max value (kWh/m2) for mesh colour visualization", "default": 1000.0, "access": "item"},
+        {"name": "min", "nick-name": "min", "type": "float", "description": "min value (kWh/m2) for mesh colour visualization", "default": 0.0, "access": "item"}
+      ],
       "outputs": [
         {"name": "annual potential", "nick-name": "annual", "type": "float", "description": "annual hourly solar irradiance [Wh] of surface"},
         {"name": "mesh_visu", "nick-name": "mesh_visu", "type": "mesh", "description": "mesh_visu"}
