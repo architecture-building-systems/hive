@@ -6,6 +6,7 @@ using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
+using Grasshopper.Kernel.Types;
 
 using rg = Rhino.Geometry;
 using ri = Rhino.Input.Custom;
@@ -24,14 +25,16 @@ namespace Hive.IO
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            //pManager.AddBrepParameter("Zone Geometry", "Zone Geometry", "Zone geometries. Breps. Can be multiple boxes. Should have window surfaces overlaied (dont cut them out)", GH_ParamAccess.list);
+            pManager.AddBrepParameter("Zone Geometry", "Zone Geometry", "Zone geometry. Breps. Only one box for now. Must be closed and convex,", GH_ParamAccess.item);
+            pManager.AddSurfaceParameter("Windows", "Windows", "Window surfaces that lie on the zone geometry", GH_ParamAccess.list);
+            pManager.AddGenericParameter("SIA2024dict", "SIA2024dict", "SIA2024dict, defining which SIA 2024 room type this here is.", GH_ParamAccess.item);
         }
 
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            //pManager.AddGenericParameter("Hive.IO.Building", "Hive.IO.Building", "Hive.IO.Building Object, that contains all zones and windows. Solved for adjacencies", GH_ParamAccess.item);
-            
+            pManager.AddGenericParameter("Hive.IO.Building", "Hive.IO.Building", "Hive.IO.Building Object, that contains all zones and windows. Solved for adjacencies", GH_ParamAccess.item);
+
             //pManager.AddBooleanParameter("conxex", "convex", "convex", GH_ParamAccess.item);
             //pManager.AddBooleanParameter("linear", "linear", "linear", GH_ParamAccess.item);
             //pManager.AddBooleanParameter("closed", "closed", "closed", GH_ParamAccess.item);
@@ -113,9 +116,23 @@ namespace Hive.IO
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            rg.Brep zone = new rg.Brep();
+            if (!DA.GetData(0, ref zone)) return; 
+
+            List<rg.Surface> windows = new List<rg.Surface>();
+            if (!DA.GetDataList(1, windows)) return;
+
+            // try reading in a json string. google it
+            GH_ObjectWrapper siaDictionary = new GH_ObjectWrapper();
+            if (!DA.GetData(2, ref siaDictionary)) return;
+            Console.WriteLine(siaDictionary.Value.ToString());
+
+            
 
 
-
+            //// does not work. I think, I'll have to split a string
+            //Dictionary<string, string> siaDict = new Dictionary<string, string>();
+            //if (!DA.GetData(2, ref siaDict)) return;
 
 
             //List<Brep> breps = new List<Brep>();
