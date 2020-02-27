@@ -48,11 +48,12 @@ namespace Hive.IO
         {
             public BuildingComponentAttributes(IGH_Component component) : base(component) { }
 
-            public override GH_ObjectResponse RespondToMouseDoubleClick(GH_Canvas sender, GH_CanvasMouseEvent e)
-            {
-                (Owner as GHBuilding)?.DisplayForm();
-                return GH_ObjectResponse.Handled;
-            }
+            //// Hive 0.2
+            //public override GH_ObjectResponse RespondToMouseDoubleClick(GH_Canvas sender, GH_CanvasMouseEvent e)
+            //{
+            //    (Owner as GHBuilding)?.DisplayForm();
+            //    return GH_ObjectResponse.Handled;
+            //}
         }
 
         FormBuilding _form;
@@ -74,6 +75,8 @@ namespace Hive.IO
         }
 
         //maybe in the FormBuilding.cs?
+        // trying to jump into rhino viewport for selecting geometry there.
+        // leave for Hive 0.2
         private void OnButton11Click(object sender, EventArgs e)
         {
             ri.GetObject go = new ri.GetObject();
