@@ -339,31 +339,49 @@ namespace Hive.IO
                 }
             }
 
-            int wall_count = 0;
-            int ceiling_count = 0;
-            int roof_count = 0;
-            int floor_count = 0;
+            List<int> wall_indices = new List<int>();
+            List<int> ceiling_indices = new List<int>();
+            List<int> roof_indices = new List<int>();
+            List<int> floor_indices = new List<int>();
 
-            Rhino.Geometry.Collections.BrepSurfaceList srfs = zone_geometry.Surfaces;
-            foreach (rg.Surface srf in srfs)
+            for (int i=0; i< zone_geometry.Faces.Count(); i++)
             {
-                
-                rg.Vector3d normal = srf.NormalAt(0, 0);
-                // Floor: flat surface with  normal pointing downwards
+                rg.BrepFace srf = zone_geometry.Faces[i];
+                srf.ClosestPoint(rg.AreaMassProperties.Compute(srf).Centroid, out double u, out double v);
+                rg.Vector3d normal = srf.NormalAt(u, v); // for some reason, the bottom surface also has postivie normal here?!... using wrong point at line above?
+                double angle = rg.Vector3d.VectorAngle(normal, new rg.Vector3d(0, 0, 1)) * 180 / Math.PI;
 
-                // Roof: surface angle < 45? 
+                // Floor: flat surface with  normal pointing downwards. 
+                //  but careful, it could also be an overhanging wall. so floor is that surface with the lowest corner point
+                //  lets say, floor MUST be flat
                 // Ceiling: Same, but there must be an adjacent zone surface, such that this surface is internal. Hive 0.2
-
-                // Wall: surface angle >= 45?
-
-
+                if (normal.Z == -1.0)
+                {
+                    floor_indices.Add(i);
+                }
+                else if (angle < 45.0)                  // Roof: surface angle < 45? 
+                {
+                    roof_indices.Add(i);
+                }
+                else                                    // Wall: surface angle >= 45?
+                {
+                    wall_indices.Add(i);
+                }
             }
+            Wall [] walls = new Wall[wall_indices.Count()];
+            Ceiling [] ceilings = new Ceiling[ceiling_indices.Count()];
+            Roof [] roofs = new Roof[roof_indices.Count()];
+            Floor [] floors = new Floor[floor_indices.Count()];
 
+            for (int i = 0; i < walls.Length; i++)
+                walls[i] = new Wall(zone_geometry.Surfaces[wall_indices[i]]);
+            for (int i = 0; i < ceilings.Length; i++)
+                ceilings[i] = new Ceiling(zone_geometry.Surfaces[ceiling_indices[i]]);
+            for (int i = 0; i < roofs.Length; i++)
+                roofs[i] = new Roof(zone_geometry.Surfaces[roof_indices[i]]);
+            for (int i = 0; i < floors.Length; i++)
+                floors[i] = new Floor(zone_geometry.Surfaces[floor_indices[i]]);
 
-            Wall [] walls = new Wall[wall_count];
-            Ceiling [] ceilings = new Ceiling[ceiling_count];
-            Roof [] roofs = new Roof[roof_count];
-            Floor [] floors = new Floor[floor_count];
 
             return new Tuple<Wall[], Ceiling[], Roof[], Floor[], Opening[], Shading[]>(walls, ceilings, roofs, floors, openings, shadings);
         }
