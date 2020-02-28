@@ -28,6 +28,12 @@ namespace Hive.IO
         /// </summary>
         public BuildingType Type { get; private set; }
 
+        /// <summary>
+        /// Building properties, such as U-values, infiltration, etc., according to SIA2024
+        /// </summary>
+        public Dictionary<string, object> SIA2024 { get; private set; }
+
+
         public Building(Zone[] zones, BuildingType type)
         {
             this.Zones = zones;
@@ -35,6 +41,16 @@ namespace Hive.IO
 
             // Hive 0.2
             //this.Adjacencies = SolveAdjacencies(this.Zones);
+        }
+
+
+        /// <summary>
+        /// Sets the SIA2024 table. Optional.
+        /// </summary>
+        /// <param name="sia2024"></param>
+        public void SetSIA2024(Dictionary<string, object> sia2024)
+        {
+            this.SIA2024 = sia2024;
         }
 
 
