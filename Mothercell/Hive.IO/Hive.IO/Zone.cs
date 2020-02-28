@@ -26,6 +26,12 @@ namespace Hive.IO
         /// Unique index, used to identify the zone when it is part of a Building object
         /// </summary>
         public int Index { get; private set; }
+
+        /// <summary>
+        /// Zone volume in [m^3]
+        /// </summary>
+        public double Volume { get; private set; }
+
         /// <summary>
         /// Tolerance for geometric operations. Get from RhinoDoc.ModelAbsoluteTolerance?
         /// </summary>
@@ -162,6 +168,8 @@ namespace Hive.IO
                 this.Floors = tuple.Item4;
                 this.Openings = tuple.Item5;
                 this.ShadingDevices = tuple.Item6;
+
+                this.Volume = zone_geometry.GetVolume();
             }
             else 
             { 
@@ -289,16 +297,24 @@ namespace Hive.IO
         private Tuple<Wall [], Ceiling [], Roof [], Floor [], Opening[], Shading[]> 
             IdentifyComponents(rg.Brep zone_geometry, rg.Surface[] openings_geometry, rg.Surface[] shading_geometry)
         {
-            Opening [] openings = new Opening[openings_geometry.Length];
-            Shading [] shadings = new Shading[shading_geometry.Length];
-            if (openings_geometry.Length > 0)
+            Opening[] openings = new Opening[0];
+            Shading[] shadings = new Shading[0];
+            if (openings_geometry != null && openings_geometry.Length > 0)
             {
-
+                openings = new Opening[openings_geometry.Length];
+                for (int i=0; i<openings.Length; i++)
+                {
+                    openings[i] = new Opening(openings_geometry[i]);
+                }
             }
 
-            if (shading_geometry.Length > 0)
+            if (shading_geometry != null && shading_geometry.Length > 0)
             {
-
+                shadings = new Shading[shading_geometry.Length];
+                for (int i=0; i<shading_geometry.Length; i++)
+                {
+                    shadings[i] = new Shading(shading_geometry[i]);
+                }
             }
 
             int wall_count = 0;

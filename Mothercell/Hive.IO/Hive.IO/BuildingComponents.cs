@@ -10,9 +10,9 @@ namespace Hive.IO
         public abstract class Component
         {
             /// <summary>
-            /// Rhino Geometry of this component
+            /// Rhino Surface of this component
             /// </summary>
-            public rg.Brep Geometry { get; private set; }
+            public rg.Surface SurfaceGeometry { get; private set; }
             /// <summary>
             /// Unique identifier
             /// </summary>
@@ -56,6 +56,17 @@ namespace Hive.IO
             /// Congruent area of respective adjacent component, in [sqm]
             /// </summary>
             public double[] CongruentArea { get; private set; }
+
+            /// <summary>
+            /// Building construction of this component
+            /// </summary>
+            public Hive.IO.BuildingConstruction.Construction Construction { get; set; }
+
+            public Component(rg.Surface surface_geometry)
+            {
+                this.SurfaceGeometry = surface_geometry;
+                this.Area = rg.AreaMassProperties.Compute(surface_geometry).Area;
+            }
         }
 
 
@@ -68,7 +79,10 @@ namespace Hive.IO
         {
             // Should also contain information for dynamic shading
             // static shading is defined as static shading object
+            public Opening(rg.Surface surface_geometry) : base(surface_geometry)
+            {
 
+            }
         }
 
 
@@ -78,6 +92,10 @@ namespace Hive.IO
         public class Wall : Component
         {
             // Wall, Roof, Floor, Ceiling are not input manually. But they need to be own classes, because they'll contain information like construction.
+            public Wall(rg.Surface surface_geometry) : base(surface_geometry)
+            {
+
+            }
         }
 
 
@@ -86,7 +104,10 @@ namespace Hive.IO
         /// </summary>
         public class Roof : Component
         {
+            public Roof(rg.Surface surface_geometry) : base(surface_geometry)
+            {
 
+            }
         }
 
 
@@ -95,7 +116,10 @@ namespace Hive.IO
         /// </summary>
         public class Ceiling : Component
         {
+            public Ceiling(rg.Surface surface_geometry) : base(surface_geometry)
+            {
 
+            }
         }
 
 
@@ -104,14 +128,20 @@ namespace Hive.IO
         /// </summary>
         public class Floor : Component
         {
+            public Floor(rg.Surface surface_geometry) : base(surface_geometry)
+            {
 
+            }
         }
 
 
 
         public class Shading : Component
         {
+            public Shading(rg.Surface surface_geometry) : base(surface_geometry)
+            {
 
+            }
         }
 
         /// <summary>
@@ -162,7 +192,10 @@ namespace Hive.IO
 
 
 
+            public DynamicShading(rg.Surface surface_geometry) : base(surface_geometry)
+            {
 
+            }
 
         }
 
