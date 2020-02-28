@@ -10,6 +10,7 @@ using Grasshopper.Kernel.Types;
 
 using rg = Rhino.Geometry;
 using ri = Rhino.Input.Custom;
+using System.Web.Script.Serialization;
 
 namespace Hive.IO
 {
@@ -27,7 +28,7 @@ namespace Hive.IO
         {
             pManager.AddBrepParameter("Zone Geometry", "Zone Geometry", "Zone geometry. Breps. Only one box for now. Must be closed and convex,", GH_ParamAccess.item);
             pManager.AddSurfaceParameter("Windows", "Windows", "Window surfaces that lie on the zone geometry", GH_ParamAccess.list);
-            pManager.AddGenericParameter("SIA2024dict", "SIA2024dict", "SIA2024dict, defining which SIA 2024 room type this here is.", GH_ParamAccess.item);
+            pManager.AddTextParameter("SIA2024dict", "SIA2024dict", "SIA2024dict, defining which SIA 2024 room type this here is.", GH_ParamAccess.item);
         }
 
 
@@ -116,23 +117,18 @@ namespace Hive.IO
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            rg.Brep zone = new rg.Brep();
-            if (!DA.GetData(0, ref zone)) return; 
+            rg.Brep zoneBrep = new rg.Brep();
+            if (!DA.GetData(0, ref zoneBrep)) return;
 
             List<rg.Surface> windows = new List<rg.Surface>();
             if (!DA.GetDataList(1, windows)) return;
 
-            // try reading in a json string. google it
-            GH_ObjectWrapper siaDictionary = new GH_ObjectWrapper();
-            if (!DA.GetData(2, ref siaDictionary)) return;
-            Console.WriteLine(siaDictionary.Value.ToString());
-
+            string json = null;
+            if (!DA.GetData(2, ref json)) return;
+            var jss = new JavaScriptSerializer();
+            var sia2024 = (IDictionary<string, object>)jss.DeserializeObject(json);
             
-
-
-            //// does not work. I think, I'll have to split a string
-            //Dictionary<string, string> siaDict = new Dictionary<string, string>();
-            //if (!DA.GetData(2, ref siaDict)) return;
+            //var number = sia2024["Nettogeschossflaeche"];
 
 
             //List<Brep> breps = new List<Brep>();
@@ -141,13 +137,47 @@ namespace Hive.IO
             //if (breps.Count == 0)   // could get an empty list
             //    return;
 
-            //double tolerance = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
-            //Zone zone = new Zone(breps[0], 0, tolerance);
+            BuildingType bldg_type;
+            string zone_description = sia2024["description"].ToString();
+            switch (zone_description)
+            {
+                case "1.1 Wohnen Mehrfamilienhaus":
+                case "1.2 Wohnen Einfamilienhaus":
+                    bldg_type = BuildingType.Residential;
+                    break;
+                case "3.1 Einzel-, Gruppenbuero":
+                case "3.2 Grossraumbuero":
+                    bldg_type = BuildingType.Office;
+                    break;
+                case "9.1 Produktion (grobe Arbeit)":
+                case "9.2 Produktion (feine Arbeit)":
+                    bldg_type = BuildingType.Industry;
+                    break;
+                case "9.3 Laborraum":
+                    bldg_type = BuildingType.Laboratory;
+                    break;
+                case "4.1 Schulzimmer":
+                case "4.2 Lehrerzimmer":
+                case "4.3 Bibliothek":
+                case "4.4 Hoersaal":
+                    bldg_type = BuildingType.School;
+                    break;
+                case "5.1 Lebensmittelverkauf":
+                    bldg_type = BuildingType.Supermarket;
+                    break;
+                default:
+                    bldg_type = BuildingType.Undefined;
+                    break;
+            }
 
-            //DA.SetData(0, zone.IsConvex);
-            //DA.SetData(1, zone.IsLinear);
-            //DA.SetData(2, zone.IsClosed);
-            //DA.SetData(3, zone.IsValid);
+            double tolerance = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
+            Zone zone = new Zone(zoneBrep, 0, tolerance, zone_description);
+            if (!zone.IsValid) return;
+
+            Building building = new Building(new Zone [1]{ zone }, bldg_type);
+            building.SetSIA2024((Dictionary<string, object>)sia2024);
+
+            DA.SetData(0, building);
         }
 
 

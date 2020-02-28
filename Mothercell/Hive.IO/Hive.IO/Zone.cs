@@ -128,7 +128,8 @@ namespace Hive.IO
         /// </summary>
         /// <param name="geometry">Brep geometry. Must be closed, linear and convex.</param>
         /// <param name="index">Unique identifier</param>
-        public Zone(rg.Brep geometry, int index, double tolerance)
+        /// <param name="name">Zone name, e.g. kitchen 1</param>
+        public Zone(rg.Brep geometry, int index, double tolerance, string name)
         {
             this.Geometry = geometry;
             this.Index = index;
@@ -153,7 +154,7 @@ namespace Hive.IO
 
             // define standard building physical properties upon inizialization. 
             // Can be changed later via Windows Form
-            this.Name = String.Concat("Zone", this.Index.ToString());
+            this.Name = name;
             this.InternalLoads.Occupants = 16.0;
             this.InternalLoads.Lighting = 4.0;
             this.InternalLoads.Devices = 3.0;
