@@ -21,7 +21,7 @@ namespace Hive.IO
         /// <summary>
         /// The actual zone geometry, as rhino Brep
         /// </summary>
-        public rg.Brep Geometry { get; private set; }
+        public rg.Brep ZoneGeometry { get; private set; }
         /// <summary>
         /// Unique index, used to identify the zone when it is part of a Building object
         /// </summary>
@@ -126,21 +126,21 @@ namespace Hive.IO
         /// <summary>
         /// Create an instance of a Zone object
         /// </summary>
-        /// <param name="geometry">Brep geometry. Must be closed, linear and convex.</param>
+        /// <param name="zone_geometry">Brep geometry. Must be closed, linear and convex.</param>
         /// <param name="index">Unique identifier</param>
         /// <param name="name">Zone name, e.g. kitchen 1</param>
-        public Zone(rg.Brep geometry, int index, double tolerance, string name)
+        public Zone(rg.Brep zone_geometry, int index, double tolerance, string name, rg.Surface[] opening_srfs =  null, rg.Surface[] shading_srfs = null)
         {
-            this.Geometry = geometry;
+            this.ZoneGeometry = zone_geometry;
             this.Index = index;
             this.Tolerance = tolerance;
 
-            this.IsLinear = CheckLinearity(this.Geometry);
+            this.IsLinear = CheckLinearity(this.ZoneGeometry);
             if (this.IsLinear)
             {
-                this.IsClosed = CheckClosedness(this.Geometry);
+                this.IsClosed = CheckClosedness(this.ZoneGeometry);
                 if (this.IsClosed)
-                    this.IsConvex = CheckConvexity(this.Geometry, this.Tolerance);
+                    this.IsConvex = CheckConvexity(this.ZoneGeometry, this.Tolerance);
                 else
                     this.IsConvex = false;
             }
@@ -151,6 +151,23 @@ namespace Hive.IO
                 this.IsClosed = false;
             }
             this.IsValid = CheckValidity(this.IsClosed, this.IsConvex, this.IsLinear);
+
+
+            if (this.IsValid)
+            {
+                Tuple< Wall[], Ceiling[], Roof[], Floor[], Opening[], Shading[]> tuple = IdentifyComponents(zone_geometry, opening_srfs, shading_srfs);
+                this.Walls = tuple.Item1;
+                this.Ceilings = tuple.Item2;
+                this.Roofs = tuple.Item3;
+                this.Floors = tuple.Item4;
+                this.Openings = tuple.Item5;
+                this.ShadingDevices = tuple.Item6;
+            }
+            else 
+            { 
+                return; 
+            }
+
 
             // define standard building physical properties upon inizialization. 
             // Can be changed later via Windows Form
@@ -259,6 +276,56 @@ namespace Hive.IO
                 return true;
             else
                 return false;
+        }
+
+
+        /// <summary>
+        /// Identifies and initializes building components from input geometries
+        /// </summary>
+        /// <param name="zone_geometry"></param>
+        /// <param name="openings_geometry"></param>
+        /// <param name="shading_geometry"></param>
+        /// <returns></returns>
+        private Tuple<Wall [], Ceiling [], Roof [], Floor [], Opening[], Shading[]> 
+            IdentifyComponents(rg.Brep zone_geometry, rg.Surface[] openings_geometry, rg.Surface[] shading_geometry)
+        {
+            Opening [] openings = new Opening[openings_geometry.Length];
+            Shading [] shadings = new Shading[shading_geometry.Length];
+            if (openings_geometry.Length > 0)
+            {
+
+            }
+
+            if (shading_geometry.Length > 0)
+            {
+
+            }
+
+            int wall_count = 0;
+            int ceiling_count = 0;
+            int roof_count = 0;
+            int floor_count = 0;
+
+            Rhino.Geometry.Collections.BrepSurfaceList srfs = zone_geometry.Surfaces;
+            foreach (rg.Surface srf in srfs)
+            {
+                // Floor: flat surface with  normal pointing downwards
+
+                // Roof: surface angle < 45? 
+                // Ceiling: Same, but there must be an adjacent zone surface, such that this surface is internal. Hive 0.2
+
+                // Wall: surface angle >= 45?
+
+
+            }
+
+
+            Wall [] walls = new Wall[wall_count];
+            Ceiling [] ceilings = new Ceiling[ceiling_count];
+            Roof [] roofs = new Roof[roof_count];
+            Floor [] floors = new Floor[floor_count];
+
+            return new Tuple<Wall[], Ceiling[], Roof[], Floor[], Opening[], Shading[]>(walls, ceilings, roofs, floors, openings, shadings);
         }
         #endregion
     }
