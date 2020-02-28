@@ -122,6 +122,10 @@ namespace Hive.IO
         /// </summary>
         public bool IsClosed { get; private set; }
         /// <summary>
+        /// Check planarity of all surfaces. Must be for simplicity
+        /// </summary>
+        public bool IsPlanar { get; private set; }
+        /// <summary>
         /// Main bool, if this is false, then no thermal simulations can be done
         /// </summary>
         public bool IsValid { get; private set; }
@@ -141,22 +145,25 @@ namespace Hive.IO
             this.Index = index;
             this.Tolerance = tolerance;
 
+            // these might still be true, but let's set to false to save unnecessary computation
+            this.IsConvex = false;
+            this.IsClosed = false;
+            this.IsPlanar = false;
+
             this.IsLinear = CheckLinearity(this.ZoneGeometry);
             if (this.IsLinear)
             {
                 this.IsClosed = CheckClosedness(this.ZoneGeometry);
                 if (this.IsClosed)
-                    this.IsConvex = CheckConvexity(this.ZoneGeometry, this.Tolerance);
-                else
-                    this.IsConvex = false;
+                {
+                    this.IsPlanar = CheckPlanarity(this.ZoneGeometry);
+                    if (this.IsPlanar)
+                    {
+                        this.IsConvex = CheckConvexity(this.ZoneGeometry, this.Tolerance);
+                    }
+                }
             }
-            else
-            {
-                // these might still be true, but let's set to false to save unnecessary computation
-                this.IsConvex = false;
-                this.IsClosed = false;
-            }
-            this.IsValid = CheckValidity(this.IsClosed, this.IsConvex, this.IsLinear);
+            this.IsValid = CheckValidity(this.IsClosed, this.IsConvex, this.IsLinear, this.IsPlanar);
 
 
             if (this.IsValid)
@@ -275,12 +282,27 @@ namespace Hive.IO
         }
 
         /// <summary>
+        /// Check for planarity of surfaces
+        /// </summary>
+        /// <param name="brep"></param>
+        /// <returns></returns>
+        private bool CheckPlanarity(rg.Brep brep)
+        {
+            rg.Collections.BrepSurfaceList srfs = brep.Surfaces; 
+            foreach(rg.Surface srf in srfs)
+            {
+                if (!srf.IsPlanar()) return false;
+            }
+            return true;
+        }
+
+        /// <summary>
         /// Check if all three conditions (Closedness, Convexity, Linearity) are fulffilled.
         /// </summary>
         /// <returns>True, if zone geometry is valid</returns>
-        private bool CheckValidity(bool closed, bool convex, bool linear)
+        private bool CheckValidity(bool closed, bool convex, bool linear, bool planar)
         {
-            if (convex && closed && linear)
+            if (convex && closed && linear && planar)
                 return true;
             else
                 return false;
@@ -325,6 +347,8 @@ namespace Hive.IO
             Rhino.Geometry.Collections.BrepSurfaceList srfs = zone_geometry.Surfaces;
             foreach (rg.Surface srf in srfs)
             {
+                
+                rg.Vector3d normal = srf.NormalAt(0, 0);
                 // Floor: flat surface with  normal pointing downwards
 
                 // Roof: surface angle < 45? 
