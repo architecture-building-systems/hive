@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using rg = Rhino.Geometry;
 using Hive.IO.BuildingComponents;
+using System;
 
 namespace Hive.IO
 {
@@ -45,12 +46,31 @@ namespace Hive.IO
 
 
         /// <summary>
-        /// Sets the SIA2024 table. Optional.
+        /// Sets SIA2024 construtions. Optional.
         /// </summary>
         /// <param name="sia2024"></param>
-        public void SetSIA2024(Dictionary<string, object> sia2024)
+        public void SetSIA2024(Dictionary<string, object> sia2024, Zone[] zones)
         {
             this.SIA2024 = sia2024;
+            
+            BuildingConstruction.Opaque sia2024_opaque = new BuildingConstruction.Opaque("SIA2024_Wall");
+            sia2024_opaque.UValue = Convert.ToDouble(sia2024["U-Wert opake Bauteile"]);
+            BuildingConstruction.Transparent sia2024_window = new BuildingConstruction.Transparent("SIA2024_Window");
+            sia2024_window.UValue = Convert.ToDouble(sia2024["U-Wert Fenster"]);
+
+            foreach(Zone zone in zones)
+            {
+                foreach (Wall wall in zone.Walls)
+                    wall.Construction = sia2024_opaque;
+                foreach (Roof roof in zone.Roofs)
+                    roof.Construction = sia2024_opaque;
+                foreach (Ceiling ceiling in zone.Ceilings)
+                    ceiling.Construction = sia2024_opaque;
+                foreach (Floor floor in zone.Floors)
+                    floor.Construction = sia2024_opaque;
+                foreach (Opening opening in zone.Openings)
+                    opening.Construction = sia2024_window;
+            }
         }
 
 

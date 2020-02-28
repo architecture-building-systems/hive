@@ -171,11 +171,11 @@ namespace Hive.IO
             }
 
             double tolerance = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
-            Zone zone = new Zone(zoneBrep, 0, tolerance, zone_description);
+            Zone zone = new Zone(zoneBrep, 0, tolerance, zone_description, windows.ToArray());
             if (!zone.IsValid) return;
 
             Building building = new Building(new Zone [1]{ zone }, bldg_type);
-            building.SetSIA2024((Dictionary<string, object>)sia2024);
+            building.SetSIA2024((Dictionary<string, object>)sia2024, building.Zones);
 
             DA.SetData(0, building);
         }
