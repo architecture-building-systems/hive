@@ -64,6 +64,7 @@
   <ItemGroup>
     <Compile Include="Building.cs" />
     <Compile Include="BuildingComponents.cs" />
+    <Compile Include="GHVisualizer.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="FormBuilding.cs">
       <SubType>Form</SubType>
