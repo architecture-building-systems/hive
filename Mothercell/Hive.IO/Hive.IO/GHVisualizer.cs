@@ -95,9 +95,37 @@ namespace Hive.IO
 
         protected override void Layout()
         {
-            // Bounds = new RectangleF(Pivot, new SizeF(500, 600));
-            base.Layout();
-            Rhino.RhinoApp.WriteLine("Layout called!");
+            // make sure we have a minimum size
+            var minWidth = 200;
+            var minHeight = 150;
+
+            var bounds = this.Bounds;
+            bounds.Width = Math.Max(bounds.Width, minWidth);
+            bounds.Height = Math.Max(bounds.Height, minHeight);
+            this.Bounds = bounds;
+
+            Rhino.RhinoApp.WriteLine(string.Format("f<Layout {0} x {1}", bounds.Width, bounds.Height));
+        }
+
+        private RectangleF PlotBounds 
+        {
+            get 
+            {
+                var plotBounds = this.Bounds;
+                plotBounds.Inflate(-m_padding, -m_padding);
+                return plotBounds;
+            }
+        }
+
+        private PointF PlotLocation
+        {
+            get
+            {
+                var plotLocation = this.Bounds.Location;
+                plotLocation.X += m_padding;
+                plotLocation.Y += m_padding;
+                return plotLocation;
+            }
         }
 
         protected override void Render(GH_Canvas canvas, Graphics graphics, GH_CanvasChannel channel)
@@ -118,9 +146,9 @@ namespace Hive.IO
             // FIXME: Figure this out from the inputs
             var myModel = new PlotModel { Title = "Example 1" };
             myModel.Series.Add(new FunctionSeries(Math.Cos, 0, 10, 0.1, "cos(x)"));
-            var pngExporter = new PngExporter { Width = 600, Height = 400, Background = OxyColors.White };
+            var pngExporter = new PngExporter { Width = (int) this.PlotBounds.Width, Height = (int) this.PlotBounds.Height, Background = OxyColors.White };
             var bitmap = pngExporter.ExportToBitmap(myModel);
-            graphics.DrawImage(bitmap, new Point(0, 0));
+            graphics.DrawImage(bitmap, this.PlotBounds.Location);
 
 
             Rhino.RhinoApp.WriteLine("Completed DrawImage");
