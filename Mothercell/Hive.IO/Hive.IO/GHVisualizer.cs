@@ -8,20 +8,49 @@ using System.Threading.Tasks;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Attributes;
+using System.Windows.Forms;
+using OxyPlot;
+using OxyPlot.Series;
+using OxyPlot.WindowsForms;
 
 namespace Hive.IO
 {
-    public class GHVisualizer : GH_Component
+    public class GHVisualizer : GH_Param<GH_ObjectWrapper>
     {
-        private readonly Grasshopper.Kernel.Parameters.Param_GenericObject m_results;
+        private readonly GH_ObjectWrapper m_results;
 
         public GHVisualizer() : base("Hive.IO.Visualizer", "Hive.IO.Visualizer",
               "Hive Visualizer for simulation results",
-              "[hive]", "IO")
+              "[hive]", "IO", GH_ParamAccess.item)
         {
-            Rhino.RhinoApp.WriteLine("hello, world!");
         }
+
+        public override GH_ParamKind Kind
+        {
+            get
+            {
+                return GH_ParamKind.floating;
+            }
+        }
+
+        public override string TypeName
+        {
+            get
+            {
+                return "HiveResults";
+            }
+        }
+
+        public override GH_Exposure Exposure
+        {
+            get
+            {
+                return GH_Exposure.primary;
+            }
+        }
+
 
         public override void CreateAttributes()
         {
@@ -35,60 +64,67 @@ namespace Hive.IO
                 return new Guid("7b4ece55-07a0-4e87-815a-e3724a1317b1");
             }
         }
-
-        protected override void RegisterInputParams(GH_InputParamManager pManager)
-        {            
-            pManager.AddGenericParameter("Results", 
-                "Results", 
-                "Simulation results dictionary", 
-                GH_ParamAccess.list);
-        }
-
-        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
-        {
-        }
-
-        protected override void SolveInstance(IGH_DataAccess DA)
-        {
-        }
     }
 
-    public class GHVisualizerAttributes : GH_ComponentAttributes
+    public class GHVisualizerAttributes : GH_ResizableAttributes<GHVisualizer>
     {
+        private int m_padding = 6;
+
         public GHVisualizerAttributes(GHVisualizer owner) : base(owner)
         {
         }
+
+        public override string PathName
+        {
+            get
+            {
+                // FIXME: what goes here?
+                return "PathName_GHVisualizer";
+            }
+        }
+
+        protected override Size MinimumSize
+        {
+            get
+            {
+                return new Size(50, 50);
+            }
+        }
+
+        protected override Padding SizingBorders => new Padding(this.m_padding);
 
         protected override void Layout()
         {
             // Bounds = new RectangleF(Pivot, new SizeF(500, 600));
             base.Layout();
+            Rhino.RhinoApp.WriteLine("Layout called!");
         }
 
         protected override void Render(GH_Canvas canvas, Graphics graphics, GH_CanvasChannel channel)
         {
-            // Render all the wires that connect the Owner to all its Sources.
-            if (channel == GH_CanvasChannel.Wires)
-            {
-                //RenderIncomingWires(canvas.Painter, Owner.Sources, Owner.WireDisplay);
-                base.Render(canvas, graphics, channel);
+            if (channel == GH_CanvasChannel.Wires && this.Owner.SourceCount > 0)
+                this.RenderIncomingWires(canvas.Painter, (IEnumerable<IGH_Param>)this.Owner.Sources, this.Owner.WireDisplay);
+            if (channel != GH_CanvasChannel.Objects)
                 return;
-            }
 
-            // Render the parameter capsule and any additional text on top of it.
-            if (channel == GH_CanvasChannel.Objects)
-            {
-                // GH_Capsule capsule = GH_Capsule.CreateCapsule(Bounds, palette);
-                base.Render(canvas, graphics, channel);
-                return;
-            }
+            GH_Viewport viewport = canvas.Viewport;
+            RectangleF bounds = this.Bounds;
+            GH_Capsule capsule = this.Owner.RuntimeMessageLevel != GH_RuntimeMessageLevel.Error ? GH_Capsule.CreateCapsule(this.Bounds, GH_Palette.Hidden, 5, 30) : GH_Capsule.CreateCapsule(this.Bounds, GH_Palette.Error, 5, 30);
+            capsule.SetJaggedEdges(false, true);
+            capsule.AddInputGrip(this.InputGrip);
+            capsule.Render(graphics, this.Selected, this.Owner.Locked, true);
+            capsule.Dispose();
 
-            // Render an image??
-            if (channel == GH_CanvasChannel.Overlay)
-            {
-                base.Render(canvas, graphics, channel);
-                return;
-            }
+            // FIXME: Figure this out from the inputs
+            var myModel = new PlotModel { Title = "Example 1" };
+            myModel.Series.Add(new FunctionSeries(Math.Cos, 0, 10, 0.1, "cos(x)"));
+            var pngExporter = new PngExporter { Width = 600, Height = 400, Background = OxyColors.White };
+            var bitmap = pngExporter.ExportToBitmap(myModel);
+            graphics.DrawImage(bitmap, new Point(0, 0));
+
+
+            Rhino.RhinoApp.WriteLine("Completed DrawImage");
+            Rhino.RhinoApp.WriteLine("In Render");
 
         }
     }
