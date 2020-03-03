@@ -12,6 +12,7 @@ using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Attributes;
 using System.Windows.Forms;
 using OxyPlot;
+using OxyPlot.Axes;
 using OxyPlot.Series;
 using OxyPlot.WindowsForms;
 
@@ -19,13 +20,14 @@ namespace Hive.IO
 {
     public class GHVisualizer : GH_Param<GH_ObjectWrapper>
     {
-        private readonly GH_ObjectWrapper m_results;
-
         public GHVisualizer() : base("Hive.IO.Visualizer", "Hive.IO.Visualizer",
               "Hive Visualizer for simulation results",
               "[hive]", "IO", GH_ParamAccess.item)
         {
         }
+
+        public double[] DemandHeating { get; private set; } = new double[12];
+        public double[] DemandCooling { get; private set; } = new double[12];
 
         public override GH_ParamKind Kind
         {
@@ -49,6 +51,26 @@ namespace Hive.IO
             {
                 return GH_Exposure.primary;
             }
+        }
+
+        /// <summary>
+        /// FIXME: print out some of the data to see what it looks like
+        /// </summary>
+        protected override void OnVolatileDataCollected()
+        {
+            if (m_data.IsEmpty)
+            {
+                return;
+            }
+
+            var jsSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
+            Dictionary<string, object> dict = (Dictionary<string, object>)jsSerializer.DeserializeObject(m_data.First().Value.ToString());
+
+            DemandHeating = Array.ConvertAll((dict["demand_htg"] as object[]), x => decimal.ToDouble((decimal)x));
+            DemandCooling = Array.ConvertAll((dict["demand_clg"] as object[]), x => decimal.ToDouble((decimal)x));
+
+            Rhino.RhinoApp.WriteLine("DemandHeating: {0}", String.Join(", ", DemandHeating));
+            Rhino.RhinoApp.WriteLine("DemandCooling: {0}", String.Join(", ", DemandCooling));
         }
 
 
@@ -104,12 +126,12 @@ namespace Hive.IO
             bounds.Height = Math.Max(bounds.Height, minHeight);
             this.Bounds = bounds;
 
-            Rhino.RhinoApp.WriteLine(string.Format("f<Layout {0} x {1}", bounds.Width, bounds.Height));
+            Rhino.RhinoApp.WriteLine(string.Format("Layout {0} x {1}", bounds.Width, bounds.Height));
         }
 
-        private RectangleF PlotBounds 
+        private RectangleF PlotBounds
         {
-            get 
+            get
             {
                 var plotBounds = this.Bounds;
                 plotBounds.Inflate(-m_padding, -m_padding);
@@ -144,16 +166,51 @@ namespace Hive.IO
             capsule.Dispose();
 
             // FIXME: Figure this out from the inputs
-            var myModel = new PlotModel { Title = "Example 1" };
-            myModel.Series.Add(new FunctionSeries(Math.Cos, 0, 10, 0.1, "cos(x)"));
-            var pngExporter = new PngExporter { Width = (int) this.PlotBounds.Width, Height = (int) this.PlotBounds.Height, Background = OxyColors.White };
-            var bitmap = pngExporter.ExportToBitmap(myModel);
+            var model = new PlotModel { Title = "Demand" };
+
+            var demandHeating = new ColumnSeries
+            {
+                ItemsSource = Owner.DemandHeating.Select(demand => new ColumnItem { Value = demand }),
+                
+                LabelPlacement = LabelPlacement.Inside,
+                LabelFormatString = "{0:.00}",
+                Title = "Heating Demand"
+            };
+            model.Series.Add(demandHeating);
+
+            var demandCooling = new ColumnSeries
+            {
+                ItemsSource = Owner.DemandCooling.Select(demand => new ColumnItem { Value = demand }),
+
+                LabelPlacement = LabelPlacement.Inside,
+                LabelFormatString = "{0:.00}",
+                Title = "Cooling Demand"
+            };
+            model.Series.Add(demandCooling);
+
+            model.Axes.Add(new CategoryAxis
+            {
+                Position = AxisPosition.Bottom,
+                Key = "Months",
+                ItemsSource = new[]
+                {
+                    "J",
+                    "F",
+                    "M",
+                    "A",
+                    "M",
+                    "J",
+                    "J",
+                    "A",
+                    "O",
+                    "N",
+                    "D"
+                }
+            });
+
+            var pngExporter = new PngExporter { Width = (int)this.PlotBounds.Width, Height = (int)this.PlotBounds.Height, Background = OxyColors.White };
+            var bitmap = pngExporter.ExportToBitmap(model);
             graphics.DrawImage(bitmap, this.PlotBounds.Location);
-
-
-            Rhino.RhinoApp.WriteLine("Completed DrawImage");
-            Rhino.RhinoApp.WriteLine("In Render");
-
         }
     }
 }
