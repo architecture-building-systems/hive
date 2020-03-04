@@ -172,10 +172,16 @@ namespace Hive.IO
 
             double tolerance = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
             Zone zone = new Zone(zoneBrep, 0, tolerance, zone_description, windows.ToArray());
-            if (!zone.IsValid) return;
+            if (!zone.IsValid)
+            {
+                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, zone.ErrorText);
+                return;
+            }
 
             Building building = new Building(new Zone [1]{ zone }, bldg_type);
-            building.SetSIA2024((Dictionary<string, object>)sia2024, building.Zones);
+            building.SetSIA2024((Dictionary<string, object>)sia2024, building.Zones);   // can be changed in the future via Windows Form: FormBuilding.cs
+
+
 
             DA.SetData(0, building);
         }

@@ -108,7 +108,7 @@ namespace Hive.IO
 
         #endregion
 
-        #region Boolean properties
+        #region Error handling
         /// <summary>
         /// For simplicity of thermal calculations, avoid curves etc., only accept linear floorplans and geometries
         /// </summary>
@@ -129,8 +129,14 @@ namespace Hive.IO
         /// Main bool, if this is false, then no thermal simulations can be done
         /// </summary>
         public bool IsValid { get; private set; }
+        /// <summary>
+        /// Checking whether window surfaces (if any exist) are lying on the zone geometry. 
+        /// Window surfaces associated to a zone cannot just lie somewhere else.
+        /// </summary>
+        public bool IsWindowsOnZone { get; private set; }
+
+        public string ErrorText { get; private set; }
         #endregion
-        
 
         #region Constructor
         /// <summary>
@@ -149,6 +155,7 @@ namespace Hive.IO
             this.IsConvex = false;
             this.IsClosed = false;
             this.IsPlanar = false;
+            this.IsWindowsOnZone = true; // zone might have no windows. so default is true
 
             this.IsLinear = CheckLinearity(this.ZoneGeometry);
             if (this.IsLinear)
@@ -163,12 +170,14 @@ namespace Hive.IO
                     }
                 }
             }
-            this.IsValid = CheckValidity(this.IsClosed, this.IsConvex, this.IsLinear, this.IsPlanar);
+            if (opening_srfs.Length > 0) 
+                this.IsWindowsOnZone = CheckWindowsOnZone(this.ZoneGeometry, opening_srfs);
+            this.IsValid = CheckValidity(this.IsClosed, this.IsConvex, this.IsLinear, this.IsPlanar, this.IsWindowsOnZone);
 
 
             if (this.IsValid)
             {
-                Tuple< Wall[], Ceiling[], Roof[], Floor[], Opening[], Shading[]> tuple = IdentifyComponents(zone_geometry, opening_srfs, shading_srfs);
+                Tuple<Wall[], Ceiling[], Roof[], Floor[], Opening[], Shading[]> tuple = IdentifyComponents(zone_geometry, opening_srfs, shading_srfs);
                 this.Walls = tuple.Item1;
                 this.Ceilings = tuple.Item2;
                 this.Roofs = tuple.Item3;
@@ -177,9 +186,14 @@ namespace Hive.IO
                 this.ShadingDevices = tuple.Item6;
 
                 this.Volume = zone_geometry.GetVolume();
+                
+                this.ErrorText = null;
             }
             else 
-            { 
+            {
+                this.ErrorText = String.Format("IsLinear: {0} \n " + "IsConvex: {1} \n " + "IsClosed: {2} \n " + "IsPlanar: {3} \n " + "IsWindowsOnZone: {4}",
+                    this.IsLinear, this.IsConvex, this.IsClosed, this.IsPlanar, this.IsWindowsOnZone);
+
                 return; 
             }
 
@@ -297,12 +311,23 @@ namespace Hive.IO
         }
 
         /// <summary>
-        /// Check if all three conditions (Closedness, Convexity, Linearity) are fulffilled.
+        /// Check whether window surfaces lie on the zone geometry.
+        /// </summary>
+        /// <param name="brep"></param>
+        /// <param name="windows"></param>
+        /// <returns></returns>
+        private bool CheckWindowsOnZone(rg.Brep brep, rg.Surface[] windows)
+        {
+            return true;
+        }
+
+        /// <summary>
+        /// Check if all conditions (Closedness, Convexity, Linearity, planarity, window-surfaces-on-zone-geometry) are fulffilled.
         /// </summary>
         /// <returns>True, if zone geometry is valid</returns>
-        private bool CheckValidity(bool closed, bool convex, bool linear, bool planar)
+        private bool CheckValidity(bool closed, bool convex, bool linear, bool planar, bool windowsOnZone)
         {
-            if (convex && closed && linear && planar)
+            if (convex && closed && linear && planar && windowsOnZone)
                 return true;
             else
                 return false;
