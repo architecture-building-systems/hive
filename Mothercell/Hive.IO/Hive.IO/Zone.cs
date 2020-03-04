@@ -42,6 +42,7 @@ namespace Hive.IO
         private const int _horizon = 8760;
         #endregion
 
+
         #region Loads And Schedules
         /// <summary>
         /// Zone name, e.g. 'Kitchen01'
@@ -79,6 +80,7 @@ namespace Hive.IO
         public StructSchedules Schedule;
         #endregion
 
+
         #region Building Components
         /// <summary>
         /// Wall components of this zone. Cannot be empty.
@@ -107,6 +109,7 @@ namespace Hive.IO
         public Shading[] ShadingDevices { get; private set; }
 
         #endregion
+
 
         #region Error handling
         /// <summary>
@@ -140,6 +143,7 @@ namespace Hive.IO
         public bool IsWindowsSelfIntersect { get; private set; }
         public string ErrorText { get; private set; }
         #endregion
+
 
         #region Constructor
         /// <summary>
