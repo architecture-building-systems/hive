@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Web.Script.Serialization;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
@@ -33,6 +33,12 @@ namespace Hive.IO
             pManager.AddGenericParameter("IO.EnergySystem.PV", "IO.EnergySystem.PV", "IO.EnergySystem.PV", GH_ParamAccess.list);
             pManager.AddGenericParameter("IO.EnergySystem.ST", "IO.EnergySystem.ST", "IO.EnergySystem.ST", GH_ParamAccess.list);
             pManager.AddGenericParameter("IO.EnergySystem.PVT", "IO.EnergySystem.PVT", "IO.EnergySystem.PVT", GH_ParamAccess.list);
+
+            pManager.AddNumberParameter("ZonesAreas", "ZoneAreas", "ZoneAreas", GH_ParamAccess.list);
+            pManager.AddTextParameter("SIA2024json", "SIA2024json", "SIA2024jsoN", GH_ParamAccess.item);
+
+            pManager.AddNumberParameter("WindowAreas", "WindowAreas", "WindowAreas", GH_ParamAccess.list);
+            pManager.AddNumberParameter("ExternalSrfsAreas", "ExternalSrfsAreas", "ExternalSrfsAreas", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -75,6 +81,62 @@ namespace Hive.IO
             DA.SetDataList(1, pv);
             DA.SetDataList(2, st);
             DA.SetDataList(3, pvt);
+
+
+
+            int zoneCount = building.Zones.Length;
+            double []zoneAreas = new double[zoneCount];
+            double[] windowAreas = new double[zoneCount];
+            double[] extSrfAreas = new double[zoneCount];
+            for (int i = 0; i < zoneCount; i++)
+            {
+                Zone zone = building.Zones[i];
+
+                zoneAreas[i] = 0.0;
+                foreach (BuildingComponents.Floor floor in zone.Floors)
+                {
+                    // TO DO: make check that it's not a void
+                    zoneAreas[i] += floor.Area;
+                }
+
+                windowAreas[i] = 0.0;
+                foreach(BuildingComponents.Opening opening in zone.Openings)
+                {
+                    windowAreas[i] += opening.Area;
+                }
+
+                extSrfAreas[i] = 0.0;
+                foreach(BuildingComponents.Wall wall in zone.Walls)
+                {
+                    // TO DO: for Hive 0.2
+                    //if (wall.IsExternal)
+                    //{
+
+                    //}
+                    extSrfAreas[i] += wall.Area;
+                }
+                foreach(BuildingComponents.Roof roof in zone.Roofs)
+                    extSrfAreas[i] += roof.Area;
+
+                //// Ceiling is always internal? 
+                //foreach (BuildingComponents.Ceiling ceiling in zone.Ceilings)
+                //    extSrfAreas[i] += ceiling.Area;
+
+                //// TO DO: only if the surface below is air, like an overhanging floor / cantilever. work with IxExternal
+                //foreach (BuildingComponents.Floor floor in zone.Floors)
+                //    extSrfAreas[i] += floor.Area;
+            }
+
+            DA.SetDataList(4, zoneAreas);
+            // serialize sia2024 dictionary back into a json. can we avoid this double work? (Deserialized in GHBuilding, now serialized again)
+            var json = building.SIA2024;
+            JavaScriptSerializer js = new JavaScriptSerializer();
+            DA.SetData(5, (string)js.Serialize(json));
+
+
+            DA.SetDataList(6, windowAreas);
+            DA.SetDataList(7, extSrfAreas);
+        
         }
 
         protected override System.Drawing.Bitmap Icon
