@@ -39,14 +39,20 @@ namespace Hive.IO
             pManager.AddNumberParameter("ZonesAreas", "ZoneAreas", "ZoneAreas", GH_ParamAccess.list);
             pManager.AddTextParameter("SIA2024json", "SIA2024json", "SIA2024jsoN", GH_ParamAccess.item);
 
-            // 6, 7
+            // 6, 7, 8
             pManager.AddNumberParameter("WindowAreas", "WindowAreas", "WindowAreas", GH_ParamAccess.list);
             pManager.AddNumberParameter("ExternalSrfsAreas", "ExternalSrfsAreas", "ExternalSrfsAreas", GH_ParamAccess.list);
+            pManager.AddSurfaceParameter("ExternalSrfs", "ExternalSrfs", "ExternalSrfs", GH_ParamAccess.list);
             
-            // 8, 9, 10
+            // 9, 10, 11
             pManager.AddPointParameter("BuildingCentroid", "BuildingCentroid", "BuildingCentroid", GH_ParamAccess.item);
             pManager.AddMeshParameter("EnvironmentMesh", "EnvironmentMesh", "EnvironmentMesh", GH_ParamAccess.list);
             pManager.AddTextParameter("epwPath", "epwPath", "epwPath", GH_ParamAccess.item);
+
+            // 12, 13, 14
+            pManager.AddMeshParameter("PVSrfs", "PVSrfs", "PVSrfs", GH_ParamAccess.list);
+            pManager.AddMeshParameter("PVTSrfs", "PVTSrfs", "PVTSrfs", GH_ParamAccess.list);
+            pManager.AddMeshParameter("STSrfs", "STSrfs", "STSrfs", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -94,6 +100,8 @@ namespace Hive.IO
             double[] zoneAreas = new double[zoneCount];
             double[] windowAreas = new double[zoneCount];
             double[] extSrfAreas = new double[zoneCount];
+            List<Surface> extSrfs = new List<Surface>();
+
             for (int i = 0; i < zoneCount; i++)
             {
                 Zone zone = building.Zones[i];
@@ -120,9 +128,16 @@ namespace Hive.IO
 
                     //}
                     extSrfAreas[i] += wall.Area;
+
+                    // TO DO: check, if external. VERY IMPORTANT
+                    extSrfs.Add(wall.SurfaceGeometry);
                 }
-                foreach(BuildingComponents.Roof roof in zone.Roofs)
+                foreach (BuildingComponents.Roof roof in zone.Roofs)
+                {
                     extSrfAreas[i] += roof.Area;
+                    //TO DO: check if external. VERY IMPORTANT
+                    extSrfs.Add(roof.SurfaceGeometry);
+                }
 
                 //// Ceiling is always internal? 
                 //foreach (BuildingComponents.Ceiling ceiling in zone.Ceilings)
@@ -150,7 +165,20 @@ namespace Hive.IO
                     environmentList.Add(msh);
                 epwPath = environment.EpwPath;
             }
-            
+
+
+            List<Mesh> pvSurfaces = new List<Mesh>();
+            List<Mesh> pvtSurfaces = new List<Mesh>();
+            List<Mesh> stSurfaces = new List<Mesh>();
+            foreach (EnergySystem.PV _pv in pv)
+                pvSurfaces.Add(_pv.SurfaceGeometry);
+            foreach (EnergySystem.PVT _pvt in pvt)
+                pvtSurfaces.Add(_pvt.SurfaceGeometry);
+            foreach (EnergySystem.ST _st in st)
+                stSurfaces.Add(_st.SurfaceGeometry);
+
+
+
             DA.SetData(0, building);
             DA.SetDataList(1, pv);
             DA.SetDataList(2, st);
@@ -161,9 +189,15 @@ namespace Hive.IO
 
             DA.SetDataList(6, windowAreas);
             DA.SetDataList(7, extSrfAreas);
-            DA.SetData(8, centroid);
-            DA.SetDataList(9, environmentList);
-            DA.SetData(10, epwPath);
+            DA.SetDataList(8, extSrfs);
+
+            DA.SetData(9, centroid);
+            DA.SetDataList(10, environmentList);
+            DA.SetData(11, epwPath);
+
+            DA.SetDataList(12, pvSurfaces);
+            DA.SetDataList(13, pvtSurfaces);
+            DA.SetDataList(14, stSurfaces);
         
         }
 
