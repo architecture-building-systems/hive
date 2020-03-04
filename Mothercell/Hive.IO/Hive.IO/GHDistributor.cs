@@ -29,6 +29,10 @@ namespace Hive.IO
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
+            pManager.AddGenericParameter("IO.Building", "IO.Building", "IO.Building", GH_ParamAccess.item);
+            pManager.AddGenericParameter("IO.EnergySystem.PV", "IO.EnergySystem.PV", "IO.EnergySystem.PV", GH_ParamAccess.list);
+            pManager.AddGenericParameter("IO.EnergySystem.ST", "IO.EnergySystem.ST", "IO.EnergySystem.ST", GH_ParamAccess.list);
+            pManager.AddGenericParameter("IO.EnergySystem.PVT", "IO.EnergySystem.PVT", "IO.EnergySystem.PVT", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -43,6 +47,7 @@ namespace Hive.IO
             List<EnergySystem.PV> pv = new List<EnergySystem.PV>();
             List<EnergySystem.PVT> pvt = new List<EnergySystem.PVT>();
             List<EnergySystem.ST> st = new List<EnergySystem.ST>();
+            Building building = null;
 
             foreach (GH_ObjectWrapper hive_input in input_objects)
             {
@@ -57,10 +62,19 @@ namespace Hive.IO
                     case "Hive.IO.EnergySystem.PVT":
                         pvt.Add(hive_input.Value as EnergySystem.PVT);
                         break;
+                    case "Hive.IO.Building":
+                        building = hive_input.Value as Building;
+                        break;
                 }
             }
 
-            Rhino.RhinoApp.WriteLine("pv: {0}; st: {1}; pvt: {2}", pv.Count, st.Count, pvt.Count);
+            if (building != null) Rhino.RhinoApp.WriteLine("Building '{0}' read successfully", building.Type.ToString());
+            Rhino.RhinoApp.WriteLine("Surface Energy Systems read in: \n PV: {0}; ST: {1}; PVT: {2}", pv.Count, st.Count, pvt.Count);
+
+            DA.SetData(0, building);
+            DA.SetDataList(1, pv);
+            DA.SetDataList(2, st);
+            DA.SetDataList(3, pvt);
         }
 
         protected override System.Drawing.Bitmap Icon
