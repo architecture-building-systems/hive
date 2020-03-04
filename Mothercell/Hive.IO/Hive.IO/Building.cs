@@ -53,7 +53,7 @@ namespace Hive.IO
         {
             this.SIA2024 = sia2024;
             
-            BuildingConstruction.Opaque sia2024_opaque = new BuildingConstruction.Opaque("SIA2024_Wall");
+            BuildingConstruction.Opaque sia2024_opaque = new BuildingConstruction.Opaque("SIA2024_Opaque");
             sia2024_opaque.UValue = Convert.ToDouble(sia2024["U-Wert opake Bauteile"]);
             BuildingConstruction.Transparent sia2024_window = new BuildingConstruction.Transparent("SIA2024_Window");
             sia2024_window.UValue = Convert.ToDouble(sia2024["U-Wert Fenster"]);
