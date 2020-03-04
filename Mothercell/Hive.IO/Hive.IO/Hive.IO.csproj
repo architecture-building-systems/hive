@@ -67,7 +67,8 @@
     <Compile Include="BuildingComponents.cs" />
     <Compile Include="BuildingConstruction.cs" />
     <Compile Include="BuildingMaterial.cs" />
-	<Compile Include="GHVisualizer.cs" />
+    <Compile Include="GHEnvironment.cs" />
+    <Compile Include="GHVisualizer.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="FormBuilding.cs">
       <SubType>Form</SubType>
