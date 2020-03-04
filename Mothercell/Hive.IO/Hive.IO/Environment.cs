@@ -14,12 +14,17 @@ namespace Hive.IO
     /// </summary>
     public class Environment
     {
-        public Climate ClimateData;
-        public Location LocationData;
+        public Climate ClimateData { get; private set; }
+        public Location LocationData { get; private set; }
 
-        public Environment(string epwFilePath)
+        public string EpwPath { get; private set; }
+
+        public rg.Mesh[] Geometry { get; private set; }
+
+        public Environment(string epwFilePath, rg.Mesh [] geometry)
         {
-
+            this.Geometry = geometry;
+            this.EpwPath = epwFilePath;
         }
 
         /// <summary>
