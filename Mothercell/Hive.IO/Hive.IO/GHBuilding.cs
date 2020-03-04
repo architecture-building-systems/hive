@@ -28,6 +28,7 @@ namespace Hive.IO
         {
             pManager.AddBrepParameter("Zone Geometry", "Zone Geometry", "Zone geometry. Breps. Only one box for now. Must be closed and convex,", GH_ParamAccess.item);
             pManager.AddSurfaceParameter("Windows", "Windows", "Window surfaces that lie on the zone geometry", GH_ParamAccess.list);
+            pManager[1].Optional = true;
             pManager.AddTextParameter("SIA2024dict", "SIA2024dict", "SIA2024dict, defining which SIA 2024 room type this here is.", GH_ParamAccess.item);
         }
 
@@ -121,7 +122,7 @@ namespace Hive.IO
             if (!DA.GetData(0, ref zoneBrep)) return;
 
             List<rg.Surface> windows = new List<rg.Surface>();
-            if (!DA.GetDataList(1, windows)) return;
+            DA.GetDataList(1, windows);
 
             string json = null;
             if (!DA.GetData(2, ref json)) return;
