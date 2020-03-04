@@ -33,6 +33,9 @@ namespace Hive.IO
         /// Building properties, such as U-values, infiltration, etc., according to SIA2024
         /// </summary>
         public Dictionary<string, object> SIA2024 { get; private set; }
+        // TO DO: Should be property of Zone, since each zone could have a different room usage
+        // but then we copy paste so much data... maybe dictionarys are here in building, but it should be a list of dictionaries
+        // and each zone has an identifier, which sia2024 room it is
 
 
         public Building(Zone[] zones, BuildingType type)
