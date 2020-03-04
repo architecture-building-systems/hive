@@ -25,15 +25,11 @@ namespace Hive.IO
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddMeshParameter("mesh", "mesh", "Mesh geometry of the PV", GH_ParamAccess.item);
-            //pManager.AddNumberParameter("refefficiency", "refeff", "Reference efficiency. E.g. 0.19.", GH_ParamAccess.item);
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddGenericParameter("PVObj", "PVObj", "Hive.IO.EnergySystems.PV Object", GH_ParamAccess.item);
-            pManager.AddNumberParameter("eff", "eff", "eff", GH_ParamAccess.item);
-            pManager.AddTextParameter("name", "name", "name", GH_ParamAccess.item);
-            pManager.AddMeshParameter("geo", "geo", "geo", GH_ParamAccess.item);
         }
 
         public override void CreateAttributes()
@@ -193,14 +189,9 @@ namespace Hive.IO
             else if (Form_SystemType == "gc") solartech = new EnergySystem.GroundCollector(mesh, Form_thermal_eff, Form_pv_cost, Form_pv_co2, Form_pv_name);
 
             DA.SetData(0, solartech);
-            DA.SetData(1, solartech.RefEfficiencyElectric);
-            DA.SetData(2, solartech.Name);
-            DA.SetData(3, solartech.SurfaceGeometry);
         }
 
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
+
         protected override System.Drawing.Bitmap Icon
         {
             get
@@ -211,9 +202,7 @@ namespace Hive.IO
             }
         }
 
-        /// <summary>
-        /// Gets the unique ID for this component. Do not change this ID after release.
-        /// </summary>
+
         public override Guid ComponentGuid
         {
             get { return new Guid("59389231-9a1b-4732-99dd-2bdda6b78bb8"); }
