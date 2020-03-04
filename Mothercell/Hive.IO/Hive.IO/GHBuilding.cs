@@ -128,15 +128,6 @@ namespace Hive.IO
             var jss = new JavaScriptSerializer();
             var sia2024 = (IDictionary<string, object>)jss.DeserializeObject(json);
             
-            //var number = sia2024["Nettogeschossflaeche"];
-
-
-            //List<Brep> breps = new List<Brep>();
-            //if ((!DA.GetDataList(0, breps))) 
-            //    return;
-            //if (breps.Count == 0)   // could get an empty list
-            //    return;
-
             BuildingType bldg_type;
             string zone_description = sia2024["description"].ToString();
             switch (zone_description)
