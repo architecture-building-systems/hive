@@ -4,7 +4,7 @@
   "version": "0.1",
   "author": "christophwaibel",
   "id": "3b4dd266-f7e0-4614-aef5-cadf1e3319d2",
-  "include-files": ["simple_panel.py", "obstructed_panel.py"],
+  "include-files": ["simple_panel.py", "obstructed_panel.py", "performance_ratio.py", "orientation_factor.py"],
   "components": [
     {
       "class-name": "SimplePanel",
@@ -16,70 +16,17 @@
       "id": "880708bb-5f9d-4dbc-8fb9-db44e90f0290",
       "main-module": "simple_panel",
       "inputs": [
-        {
-          "name": "tilt",
-          "nick-name": "tilt",
-          "type": "float",
-          "description": "Panel tilt in degree"
-        },
-        {
-          "name": "azimuth",
-          "nick-name": "azimuth",
-          "type": "float",
-          "description": "Panel azimuth in degree"
-        },
-        {
-          "name": "DHI",
-          "nick-name": "DHI",
-          "type": "float",
-          "description": "Diffuse Horizontal Irradiance time series, 8760 values in [W/m²] from a weatherfile.",
-          "access": "list"
-        },
-        {
-          "name": "DNI",
-          "nick-name": "DNI",
-          "type": "float",
-          "description": "Direct Normal Irradiance time series, 8760 values in [W/m²] from a weatherfile.",
-          "access": "list"
-        },
-        {
-          "name": "latitude",
-          "nick-name": "latitude",
-          "type": "float",
-          "description": "Latitude of the location. Default value is for Zurich, Switzerland",
-          "default": 47.36667
-        },
-        {
-          "name": "longitude",
-          "nick-name": "longitude",
-          "type": "float",
-          "description": "Longitude of the location. Default value is for Zurich, Switzerland",
-          "default": 8.55
-        },
-        {
-          "name": "solarazi",
-          "nick-name": "solarazi",
-          "type": "float",
-          "description": "8760 time series of solar azimuth angles in [°], e.g from a weatherfile. If no data provided, azimuth will be calculated according to Blanco-Muriel (2001).",
-          "access": "list",
-          "default": []
-        },
-        {
-          "name": "solaralti",
-          "nick-name": "solaralti",
-          "type": "float",
-          "description": "8760 time series of solar altitude angles in [°], e.g from a weatherfile. If no data provided, altitude will be calculated according to Blanco-Muriel (2001).",
-          "access": "list",
-          "default": []
-        }
+        {"name": "tilt", "nick-name": "tilt", "type": "float", "description": "Panel tilt in degree"},
+        {"name": "azimuth", "nick-name": "azimuth", "type": "float", "description": "Panel azimuth in degree"},
+        {"name": "DHI", "nick-name": "DHI", "type": "float", "description": "Diffuse Horizontal Irradiance time series, 8760 values in [W/m²] from a weatherfile.", "access": "list"},
+        {"name": "DNI", "nick-name": "DNI", "type": "float", "description": "Direct Normal Irradiance time series, 8760 values in [W/m²] from a weatherfile.", "access": "list"},
+        {"name": "latitude", "nick-name": "latitude", "type": "float", "description": "Latitude of the location. Default value is for Zurich, Switzerland", "default": 47.36667},
+        {"name": "longitude", "nick-name": "longitude", "type": "float", "description": "Longitude of the location. Default value is for Zurich, Switzerland", "default": 8.55},
+        {"name": "solarazi", "nick-name": "solarazi", "type": "float", "description": "8760 time series of solar azimuth angles in [°], e.g from a weatherfile. If no data provided, azimuth will be calculated according to Blanco-Muriel (2001).", "access": "list", "default": []},
+        {"name": "solaralti", "nick-name": "solaralti", "type": "float", "description": "8760 time series of solar altitude angles in [°], e.g from a weatherfile. If no data provided, altitude will be calculated according to Blanco-Muriel (2001).", "access": "list", "default": []}
       ],
       "outputs": [
-        {
-          "name": "annual potential",
-          "nick-name": "annual",
-          "type": "float",
-          "description": "annual hourly solar irradiance [Wh/m²] of panel"
-        }
+        {"name": "annual potential", "nick-name": "annual", "type": "float", "description": "annual hourly solar irradiance [Wh/m²] of panel"}
       ]
     },
     {
@@ -91,79 +38,70 @@
       "subcategory": "Solar",
       "id": "c8215941-ca5f-4d47-8e4f-032f41eccc4f",
       "main-module": "obstructed_panel",
+      "main-function": "simulate_obstructed_panel",
       "inputs": [
-        {
-          "name": "mesh_analysis",
-          "nick-name": "mesh_in",
-          "type": "mesh",
-          "description": "Analysis surface as rhino grasshopper mesh"
-        },
-        {
-          "name": "obstructions",
-          "nick-name": "obstructions",
-          "type": "mesh",
-          "description": "Obstructions as rhino grasshopper mesh objects",
-          "access": "list"
-        },
-        {
-          "name": "DHI",
-          "nick-name": "DHI",
-          "type": "float",
-          "description": "Diffuse Horizontal Irradiance time series, 8760 values in [W/m²] from a weatherfile.",
-          "access": "list"
-        },
-        {
-          "name": "DNI",
-          "nick-name": "DNI",
-          "type": "float",
-          "description": "Direct Normal Irradiance time series, 8760 values in [W/m²] from a weatherfile.",
-          "access": "list"
-        },
-        {
-          "name": "latitude",
-          "nick-name": "latitude",
-          "type": "float",
-          "description": "Latitude of the location. Default value is for Zurich, Switzerland",
-          "default": 47.36667
-        },
-        {
-          "name": "longitude",
-          "nick-name": "longitude",
-          "type": "float",
-          "description": "Longitude of the location. Default value is for Zurich, Switzerland",
-          "default": 8.55
-        },
-        {
-          "name": "solarazi",
-          "nick-name": "solarazi",
-          "type": "float",
-          "description": "8760 time series of solar azimuth angles in [°], e.g from a weatherfile. If no data provided, azimuth will be calculated according to Blanco-Muriel (2001).",
-          "access": "list",
-          "default": []
-        },
-        {
-          "name": "solaralti",
-          "nick-name": "solaralti",
-          "type": "float",
-          "description": "8760 time series of solar altitude angles in [°], e.g from a weatherfile. If no data provided, altitude will be calculated according to Blanco-Muriel (2001).",
-          "access": "list",
-          "default": []
-        }
+        {"name": "mesh_analysis", "nick-name": "mesh_in", "type": "mesh", "description": "Analysis surface as rhino grasshopper mesh"},
+        {"name": "obstructions", "nick-name": "obstructions", "type": "mesh", "description": "Obstructions as rhino grasshopper mesh objects", "access": "list"},
+        {"name": "DHI", "nick-name": "DHI", "type": "float", "description": "Diffuse Horizontal Irradiance time series, 8760 values in [W/m²] from a weatherfile.", "access": "list"},
+        {"name": "DNI", "nick-name": "DNI", "type": "float", "description": "Direct Normal Irradiance time series, 8760 values in [W/m²] from a weatherfile.", "access": "list"},
+        {"name": "latitude", "nick-name": "latitude", "type": "float", "description": "Latitude of the location. Default value is for Zurich, Switzerland", "default": 47.36667},
+        {"name": "longitude", "nick-name": "longitude", "type": "float", "description": "Longitude of the location. Default value is for Zurich, Switzerland", "default": 8.55},
+        {"name": "solarazi", "nick-name": "solarazi", "type": "float", "description": "8760 time series of solar azimuth angles in [°], e.g from a weatherfile. If no data provided, azimuth will be calculated according to Blanco-Muriel (2001).", "access": "list", "default": []},
+        {"name": "solaralti", "nick-name": "solaralti", "type": "float", "description": "8760 time series of solar altitude angles in [°], e.g from a weatherfile. If no data provided, altitude will be calculated according to Blanco-Muriel (2001).", "access": "list", "default": []},
+        {"name": "max", "nick-name": "max", "type": "float", "description": "max value (kWh/m2) for mesh colour visualization", "default": 1000.0, "access": "item"},
+        {"name": "min", "nick-name": "min", "type": "float", "description": "min value (kWh/m2) for mesh colour visualization", "default": 0.0, "access": "item"}
       ],
       "outputs": [
-        {
-          "name": "annual potential",
-          "nick-name": "annual",
-          "type": "float",
-          "description": "annual hourly solar irradiance [Wh] of surface"
-        },
-        {
-          "name": "mesh_visu",
-          "nick-name": "mesh_visu",
-          "type": "mesh",
-          "description": "mesh_visu"
-        }
+        {"name": "annual potential", "nick-name": "annual", "type": "float", "description": "annual hourly solar irradiance [Wh] of surface"},
+        {"name": "mesh_visu", "nick-name": "mesh_visu", "type": "mesh", "description": "mesh_visu"}
       ]
+    },
+    {
+      "class-name": "OrientationFactor",
+      "name": "OrientationFactor",
+      "abbreviation": "orfac",
+      "description": "Orientation factor of surace",
+      "category": "[hive]",
+      "subcategory": "solar",
+      "id": "dfde3d64-e63d-4715-a6b9-b045920d8c97",
+      "main-module": "orientation_factor",
+      "inputs": [
+        {"name": "G_flat", "nick-name": "G_flat", "type": "float", "description": "Global irradiation, i.e. on the flat, in [kWh/m2]"},
+        {"name": "G_angled", "nick-name": "G_angled", "type": "float", "description": "Irradiation on an angle in [kWh/m2]"}
+      ],
+      "outputs": [
+        {"name": "OF", "nick-name": "OF", "type": "float", "description": "Orientation factor as a fraction [0.0, >1.0]"}
+      ]
+    },
+    {
+      "class-name": "PerformanceRatio",
+      "name": "PerformanceRatio",
+      "abbreviation": "perfrat",
+      "description": "Some options for performance ratios",
+      "category": "[hive]",
+      "subcategory": "solar",
+      "id": "6ff9899d-64a9-46ef-817c-f1521fa605e1",
+      "main-module": "performance_ratio",
+      "main-function": "get_performance_ratio",
+      "inputs": [
+        {"type": "json", "name": "performance_scenario", "nick-name": "perf_ratio", "default": "<add scenario>", "description": "Scenario for performance ratio, like dirty roof, clean facade, shaded roof, etc"}
+      ],
+      "outputs": [
+        {"type": "string", "name": "output", "nick-name": "o", "description": "Performance ratio of surface"}
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "class-name": "PerformanceRatioList",
+      "name": "PerformanceRatio",
+      "abbreviation": "prl",
+      "description": "A list of performance ratios",
+      "category": "[hive]",
+      "subcategory": "solar",
+      "id": "f39f9eae-f665-4356-b4ba-4f9db73197ea",
+      "parameter-type": "ValueList",
+      "csv": "performance_ratio.csv"
     }
   ]
 }
