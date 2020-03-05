@@ -67,6 +67,10 @@
     <Compile Include="BuildingComponents.cs" />
     <Compile Include="BuildingConstruction.cs" />
     <Compile Include="BuildingMaterial.cs" />
+    <Compile Include="GHDistributorEPW.cs" />
+    <Compile Include="GHDistributorSIA.cs" />
+    <Compile Include="GHDistributorSolar.cs" />
+    <Compile Include="GHDistributorSupplySystem.cs" />
     <Compile Include="GHEnvironment.cs" />
     <Compile Include="GHVisualizer.cs" />
     <Compile Include="Environment.cs" />
