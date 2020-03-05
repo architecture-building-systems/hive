@@ -53,7 +53,11 @@ namespace Hive.IO
             pManager.AddMeshParameter("PVSrfs", "PVSrfs", "PVSrfs", GH_ParamAccess.list);
             pManager.AddMeshParameter("PVTSrfs", "PVTSrfs", "PVTSrfs", GH_ParamAccess.list);
             pManager.AddMeshParameter("STSrfs", "STSrfs", "STSrfs", GH_ParamAccess.list);
+
+            // 15
+            pManager.AddGenericParameter("IO.Environment", "IO.Environment", "IO.Environment", GH_ParamAccess.item);
         }
+
 
         /// <summary>
         /// Manages all the incoming Hive.IO objects, and splits it into required output data
@@ -198,6 +202,8 @@ namespace Hive.IO
             DA.SetDataList(12, pvSurfaces);
             DA.SetDataList(13, pvtSurfaces);
             DA.SetDataList(14, stSurfaces);
+
+            DA.SetData(15, environment);
         
         }
 
