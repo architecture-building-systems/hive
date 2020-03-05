@@ -29,31 +29,13 @@ namespace Hive.IO
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            // 0, 1, 2, 3
             pManager.AddGenericParameter("IO.Building", "IO.Building", "IO.Building", GH_ParamAccess.item);
             pManager.AddGenericParameter("IO.EnergySystem.PV", "IO.EnergySystem.PV", "IO.EnergySystem.PV", GH_ParamAccess.list);
             pManager.AddGenericParameter("IO.EnergySystem.ST", "IO.EnergySystem.ST", "IO.EnergySystem.ST", GH_ParamAccess.list);
             pManager.AddGenericParameter("IO.EnergySystem.PVT", "IO.EnergySystem.PVT", "IO.EnergySystem.PVT", GH_ParamAccess.list);
-
-            // 4, 5
-            pManager.AddNumberParameter("ZonesAreas", "ZoneAreas", "ZoneAreas", GH_ParamAccess.list);
-            pManager.AddTextParameter("SIA2024json", "SIA2024json", "SIA2024jsoN", GH_ParamAccess.item);
-
-            // 6, 7, 8
-            pManager.AddNumberParameter("WindowAreas", "WindowAreas", "WindowAreas", GH_ParamAccess.list);
-            pManager.AddNumberParameter("ExternalSrfsAreas", "ExternalSrfsAreas", "ExternalSrfsAreas", GH_ParamAccess.list);
-            pManager.AddSurfaceParameter("ExternalSrfs", "ExternalSrfs", "ExternalSrfs", GH_ParamAccess.list);
-            
-            // 9, 10, 11
-            pManager.AddPointParameter("BuildingCentroid", "BuildingCentroid", "BuildingCentroid", GH_ParamAccess.item);
-            pManager.AddMeshParameter("EnvironmentMesh", "EnvironmentMesh", "EnvironmentMesh", GH_ParamAccess.list);
-            pManager.AddTextParameter("epwPath", "epwPath", "epwPath", GH_ParamAccess.item);
-
-            // 12, 13, 14
-            pManager.AddMeshParameter("PVSrfs", "PVSrfs", "PVSrfs", GH_ParamAccess.list);
-            pManager.AddMeshParameter("PVTSrfs", "PVTSrfs", "PVTSrfs", GH_ParamAccess.list);
-            pManager.AddMeshParameter("STSrfs", "STSrfs", "STSrfs", GH_ParamAccess.list);
+            pManager.AddGenericParameter("IO.Environment", "IO.Environment", "IO.Environment", GH_ParamAccess.item);
         }
+
 
         /// <summary>
         /// Manages all the incoming Hive.IO objects, and splits it into required output data
@@ -95,110 +77,11 @@ namespace Hive.IO
             if (building != null) Rhino.RhinoApp.WriteLine("Building '{0}' read successfully", building.Type.ToString());
             Rhino.RhinoApp.WriteLine("Surface Energy Systems read in: \n PV: {0}; ST: {1}; PVT: {2}", pv.Count, st.Count, pvt.Count);
 
-
-            int zoneCount = building.Zones.Length;
-            double[] zoneAreas = new double[zoneCount];
-            double[] windowAreas = new double[zoneCount];
-            double[] extSrfAreas = new double[zoneCount];
-            List<Surface> extSrfs = new List<Surface>();
-
-            for (int i = 0; i < zoneCount; i++)
-            {
-                Zone zone = building.Zones[i];
-
-                zoneAreas[i] = 0.0;
-                foreach (BuildingComponents.Floor floor in zone.Floors)
-                {
-                    // TO DO: make check that it's not a void
-                    zoneAreas[i] += floor.Area;
-                }
-
-                windowAreas[i] = 0.0;
-                foreach(BuildingComponents.Opening opening in zone.Openings)
-                {
-                    windowAreas[i] += opening.Area;
-                }
-
-                extSrfAreas[i] = 0.0;
-                foreach(BuildingComponents.Wall wall in zone.Walls)
-                {
-                    // TO DO: for Hive 0.2
-                    //if (wall.IsExternal)
-                    //{
-
-                    //}
-                    extSrfAreas[i] += wall.Area;
-
-                    // TO DO: check, if external. VERY IMPORTANT
-                    extSrfs.Add(wall.SurfaceGeometry);
-                }
-                foreach (BuildingComponents.Roof roof in zone.Roofs)
-                {
-                    extSrfAreas[i] += roof.Area;
-                    //TO DO: check if external. VERY IMPORTANT
-                    extSrfs.Add(roof.SurfaceGeometry);
-                }
-
-                //// Ceiling is always internal? 
-                //foreach (BuildingComponents.Ceiling ceiling in zone.Ceilings)
-                //    extSrfAreas[i] += ceiling.Area;
-
-                //// TO DO: only if the surface below is air, like an overhanging floor / cantilever. work with IxExternal
-                //foreach (BuildingComponents.Floor floor in zone.Floors)
-                //    extSrfAreas[i] += floor.Area;
-            }
-
-
-            // serialize sia2024 dictionary back into a json. can we avoid this double work? (Deserialized in GHBuilding, now serialized again)
-            var json = building.SIA2024;
-            JavaScriptSerializer js = new JavaScriptSerializer();
-
-
-            // get centroid of building. just use a floor for now. TO DO for Hive 0.2: Come up with better idea
-            Point3d centroid = AreaMassProperties.Compute(building.Zones[0].Floors[0].SurfaceGeometry).Centroid;
-
-            List<Mesh> environmentList = new List<Mesh>();
-            string epwPath = null;
-            if (environment != null) 
-            { 
-                foreach (Mesh msh in environment.Geometry)
-                    environmentList.Add(msh);
-                epwPath = environment.EpwPath;
-            }
-
-
-            List<Mesh> pvSurfaces = new List<Mesh>();
-            List<Mesh> pvtSurfaces = new List<Mesh>();
-            List<Mesh> stSurfaces = new List<Mesh>();
-            foreach (EnergySystem.PV _pv in pv)
-                pvSurfaces.Add(_pv.SurfaceGeometry);
-            foreach (EnergySystem.PVT _pvt in pvt)
-                pvtSurfaces.Add(_pvt.SurfaceGeometry);
-            foreach (EnergySystem.ST _st in st)
-                stSurfaces.Add(_st.SurfaceGeometry);
-
-
-
             DA.SetData(0, building);
             DA.SetDataList(1, pv);
             DA.SetDataList(2, st);
             DA.SetDataList(3, pvt);
-
-            DA.SetDataList(4, zoneAreas);
-            DA.SetData(5, (string)js.Serialize(json));
-
-            DA.SetDataList(6, windowAreas);
-            DA.SetDataList(7, extSrfAreas);
-            DA.SetDataList(8, extSrfs);
-
-            DA.SetData(9, centroid);
-            DA.SetDataList(10, environmentList);
-            DA.SetData(11, epwPath);
-
-            DA.SetDataList(12, pvSurfaces);
-            DA.SetDataList(13, pvtSurfaces);
-            DA.SetDataList(14, stSurfaces);
-        
+            DA.SetData(4, environment);
         }
 
         protected override System.Drawing.Bitmap Icon
