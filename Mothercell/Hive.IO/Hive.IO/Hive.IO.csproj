@@ -70,6 +70,7 @@
     <Compile Include="GHDistributorEPW.cs" />
     <Compile Include="GHDistributorSIA.cs" />
     <Compile Include="GHDistributorSolar.cs" />
+    <Compile Include="GHDistributorSupplySystem.cs" />
     <Compile Include="GHEnvironment.cs" />
     <Compile Include="GHVisualizer.cs" />
     <Compile Include="Environment.cs" />
