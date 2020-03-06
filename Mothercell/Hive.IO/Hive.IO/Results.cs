@@ -26,21 +26,21 @@ namespace Hive.IO
         public double[] TotalElecMonthly { get; private set; }
         public double[] TotalElecHourly { get; private set; }
 
-        public double[] TotalClgMonthly { get; private set; }
-        public double[] TotalClgHourly { get; private set; }
+        public double[] TotalCoolingMonthly { get; private set; }
+        public double[] TotalCoolingHourly { get; private set; }
 
-        public double[] TotalHtgMonthly { get; private set; }
-        public double[] TotalHtgHourly { get; private set; }
+        public double[] TotalHeatingMonthly { get; private set; }
+        public double[] TotalHeatingHourly { get; private set; }
         #endregion
 
 
         #region Zone-wise loads
-        public double [][] ZoneElecMonthly { get; private set; }
+        public double[][] ZoneElecMonthly { get; private set; }
         public double[][] ZoneElecHourly { get; private set; }
-        public double[][] ZoneClgMonthly { get; private set; }
-        public double[][] ZoneClgHourly { get; private set; }
-        public double[][] ZoneHtgMonthly { get; private set; }
-        public double[][] ZoneHtgHourly { get; private set; }
+        public double[][] ZoneCoolingMonthly { get; private set; }
+        public double[][] ZoneCoolingHourly { get; private set; }
+        public double[][] ZoneHeatingMonthly { get; private set; }
+        public double[][] ZoneHeatingHourly { get; private set; }
         #endregion
 
 
@@ -54,94 +54,101 @@ namespace Hive.IO
         /// Rows: Technologies
         /// Columns: [0]: Electricity, [1]: Heating, [2]: Cooling
         /// </summary>
-        public bool [,] SupplyTypes { get; private set; }
+        public bool[,] SupplyTypes { get; private set; }
         /// <summary>
         /// Capacity per technology. Unit is defined in 'SupplyCapUnits
         /// </summary>
-        public double [] SupplyCapacities { get; private set; }
+        public double[] SupplyCapacities { get; private set; }
         /// <summary>
         /// Defining Capacity unit per technology. E.g. m2, kW, kWh, ...
         /// </summary>
-        public string [] SupplyCapUnits { get; private set; }
+        public string[] SupplyCapUnits { get; private set; }
         /// <summary>
         /// Total investment cost per technology
         /// </summary>
-        public double [] SupplyCapex { get; private set; }
+        public double[] SupplyCapex { get; private set; }
         /// <summary>
         /// Levelized investment cost per technology (considering their lifetime and interest rate)
         /// </summary>
-        public double [] SupplyCapexLev { get; private set; }     
+        public double[] SupplyCapexLev { get; private set; }
         /// <summary>
         /// Total levelized operation expenditures per supply technology
         /// </summary>
-        public double [] SupplyOpexLev { get; private set; }
+        public double[] SupplyOpexLev { get; private set; }
         /// <summary>
         /// Time-resolved (hourly for a year) OPEX per technology
         /// </summary>
-        public double [][] SupplyOpexHourly { get; private set; }
+        public double[][] SupplyOpexHourly { get; private set; }
         /// <summary>
         /// Operation schedule per technology and hour. Unit defined in 'SupplyOperationUnit'
         /// </summary>
-        public double [][] SupplyOperationHourly { get; private set; }
+        public double[][] SupplyOperationHourly { get; private set; }
         /// <summary>
         /// Defining unit of operation per technology, e.g. "kWh", "Wh", ...
         /// </summary>
-        public string [] SupplyOperationUnit { get; private set; }
+        public string[] SupplyOperationUnit { get; private set; }
         #endregion
 
 
         #region constants
-        public const int months = 12;
-        public const int days = 365;
-        public const int hours = 8760;
+        private const int months = 12;
+        private const int days = 365;
+        private const int hours = 8760;
         #endregion
 
 
 
         public Results()
         {
-            this.TotalClgMonthly = new double[Results.months];
+            this.TotalCoolingMonthly = new double[Results.months];
             this.TotalElecMonthly = new double[Results.months];
-            this.TotalHtgMonthly = new double[Results.months];
+            this.TotalHeatingMonthly = new double[Results.months];
 
+            this.TotalCoolingHourly = new double[Results.hours];
+            this.TotalHeatingHourly = new double[Results.hours];
+            this.TotalElecHourly = new double[Results.hours];
 
         }
 
 
-        public void SetTotalDemandMonthly(double[] clgDemand, double[] htgDemand, double[] elecDemand)
+        public void SetTotalDemandMonthly(double[] coolingDemand, double[] heatingDemand, double[] electricityDemand)
         {
-            if (clgDemand != null && clgDemand.Length == Results.months)
-                clgDemand.CopyTo(this.TotalClgMonthly, 0);
+            if (coolingDemand != null && coolingDemand.Length == Results.months)
+                coolingDemand.CopyTo(this.TotalCoolingMonthly, 0);
             else
-                this.TotalClgMonthly = null;
+                this.TotalCoolingMonthly = null;
+            if (heatingDemand is null)
+            {
+                throw new ArgumentNullException(nameof(heatingDemand));
+            }
 
-            if (htgDemand != null && htgDemand.Length == Results.months)
-                htgDemand.CopyTo(this.TotalHtgMonthly, 0);
+            if (heatingDemand != null && heatingDemand.Length == Results.months)
+                heatingDemand.CopyTo(this.TotalHeatingMonthly, 0);
             else
-                this.TotalHtgMonthly = null;
+                this.TotalHeatingMonthly = null;
 
-            if (elecDemand != null && elecDemand.Length == Results.months)
-                elecDemand.CopyTo(this.TotalElecMonthly, 0);
+            if (electricityDemand != null && electricityDemand.Length == Results.months)
+                electricityDemand.CopyTo(this.TotalElecMonthly, 0);
             else
                 this.TotalElecMonthly = null;
         }
 
 
-        public void SetTotalDemandHourly(double[] clgDemand, double[] htgDemand, double[] elecDemand)
+        public void SetTotalDemandHourly(double[] coolingDemand, double[] heatingDemand, double[] electricityDemand)
         {
 
-            if (clgDemand != null && clgDemand.Length == Results.hours)
-                clgDemand.CopyTo(this.TotalClgHourly, 0);
+            if (coolingDemand != null && coolingDemand.Length == Results.hours)
+                coolingDemand.CopyTo(this.TotalCoolingHourly, 0);
             else
-                this.TotalClgHourly = null;
+                this.TotalCoolingHourly = null;
 
-            if (htgDemand != null && htgDemand.Length == Results.hours)
-                htgDemand.CopyTo(this.TotalHtgHourly, 0);
+            if (heatingDemand != null && heatingDemand.Length == Results.hours)
+                heatingDemand.CopyTo(this.TotalHeatingHourly, 0);
             else
-                this.TotalHtgHourly = null;
+                this.TotalHeatingHourly = null;
 
-            if (elecDemand != null && elecDemand.Length == Results.hours)
-                elecDemand.CopyTo(this.TotalElecHourly, 0);
+            if (electricityDemand != null && electricityDemand.Length == Results.hours)
+                electricityDemand.CopyTo(this.TotalElecHourly, 0);
             else
                 this.TotalElecHourly = null;
         }
