@@ -90,8 +90,6 @@ namespace Hive.IO
         #endregion
 
 
-
-
         #region constants
         public const int months = 12;
         public const int days = 365;
@@ -99,8 +97,13 @@ namespace Hive.IO
         #endregion
 
 
+
         public Results()
         {
+            this.TotalClgMonthly = new double[Results.months];
+            this.TotalElecMonthly = new double[Results.months];
+            this.TotalHtgMonthly = new double[Results.months];
+
 
         }
 
