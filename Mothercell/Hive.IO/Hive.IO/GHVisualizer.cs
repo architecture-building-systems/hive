@@ -2,8 +2,6 @@
 using System.Drawing;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
@@ -26,8 +24,7 @@ namespace Hive.IO
         {
         }
 
-        public double[] DemandHeating { get; private set; } = new double[12];
-        public double[] DemandCooling { get; private set; } = new double[12];
+        public Results Results { get; private set; }
 
         public override GH_ParamKind Kind
         {
@@ -63,14 +60,7 @@ namespace Hive.IO
                 return;
             }
 
-            var jsSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
-            Dictionary<string, object> dict = (Dictionary<string, object>)jsSerializer.DeserializeObject(m_data.First().Value.ToString());
-
-            DemandHeating = Array.ConvertAll((dict["demand_htg"] as object[]), x => decimal.ToDouble((decimal)x));
-            DemandCooling = Array.ConvertAll((dict["demand_clg"] as object[]), x => decimal.ToDouble((decimal)x));
-
-            Rhino.RhinoApp.WriteLine("DemandHeating: {0}", String.Join(", ", DemandHeating));
-            Rhino.RhinoApp.WriteLine("DemandCooling: {0}", String.Join(", ", DemandCooling));
+            Results = m_data.First().Value as Results;
         }
 
 
@@ -124,9 +114,8 @@ namespace Hive.IO
             var bounds = this.Bounds;
             bounds.Width = Math.Max(bounds.Width, minWidth);
             bounds.Height = Math.Max(bounds.Height, minHeight);
-            this.Bounds = bounds;
 
-            Rhino.RhinoApp.WriteLine(string.Format("Layout {0} x {1}", bounds.Width, bounds.Height));
+            this.Bounds = new RectangleF(this.Pivot, bounds.Size);
         }
 
         private RectangleF PlotBounds
@@ -170,7 +159,7 @@ namespace Hive.IO
 
             var demandHeating = new ColumnSeries
             {
-                ItemsSource = Owner.DemandHeating.Select(demand => new ColumnItem { Value = demand }),
+                ItemsSource = Owner.Results.TotalHtgMonthly.Select(demand => new ColumnItem { Value = demand }),
                 
                 LabelPlacement = LabelPlacement.Inside,
                 LabelFormatString = "{0:.00}",
@@ -180,7 +169,7 @@ namespace Hive.IO
 
             var demandCooling = new ColumnSeries
             {
-                ItemsSource = Owner.DemandCooling.Select(demand => new ColumnItem { Value = demand }),
+                ItemsSource = Owner.Results.TotalClgMonthly.Select(demand => new ColumnItem { Value = demand }),
 
                 LabelPlacement = LabelPlacement.Inside,
                 LabelFormatString = "{0:.00}",

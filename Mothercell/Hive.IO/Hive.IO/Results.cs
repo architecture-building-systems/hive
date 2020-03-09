@@ -91,7 +91,7 @@ namespace Hive.IO
 
 
         #region constants
-        public const int months = 12;
+        public const int Months = 12;
         public const int days = 365;
         public const int hours = 8760;
         #endregion
@@ -100,9 +100,9 @@ namespace Hive.IO
 
         public Results()
         {
-            this.TotalClgMonthly = new double[Results.months];
-            this.TotalElecMonthly = new double[Results.months];
-            this.TotalHtgMonthly = new double[Results.months];
+            this.TotalClgMonthly = new double[Results.Months];
+            this.TotalElecMonthly = new double[Results.Months];
+            this.TotalHtgMonthly = new double[Results.Months];
 
 
         }
@@ -110,17 +110,17 @@ namespace Hive.IO
 
         public void SetTotalDemandMonthly(double[] clgDemand, double[] htgDemand, double[] elecDemand)
         {
-            if (clgDemand != null && clgDemand.Length == Results.months)
+            if (clgDemand != null && clgDemand.Length == Results.Months)
                 clgDemand.CopyTo(this.TotalClgMonthly, 0);
             else
                 this.TotalClgMonthly = null;
 
-            if (htgDemand != null && htgDemand.Length == Results.months)
+            if (htgDemand != null && htgDemand.Length == Results.Months)
                 htgDemand.CopyTo(this.TotalHtgMonthly, 0);
             else
                 this.TotalHtgMonthly = null;
 
-            if (elecDemand != null && elecDemand.Length == Results.months)
+            if (elecDemand != null && elecDemand.Length == Results.Months)
                 elecDemand.CopyTo(this.TotalElecMonthly, 0);
             else
                 this.TotalElecMonthly = null;
