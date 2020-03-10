@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
+using Grasshopper.Kernel.Data;
 using Rhino.Geometry;
 
 namespace Hive.IO
@@ -22,9 +23,16 @@ namespace Hive.IO
             // Hive 0.1 supports only one zone
             // TO DO: list of lists? each zone has demand and you could have multiple zones here
 
+            // 0, 1, 2, 3
             pManager.AddNumberParameter("ClgMonthly", "ClgMonthly", "ClgMonthly", GH_ParamAccess.list);
             pManager.AddNumberParameter("HtgMonthly", "HtgMonthly", "HtgMonthly", GH_ParamAccess.list);
             pManager.AddNumberParameter("ElecMonthly", "ElecMonthly", "ElecMonthly", GH_ParamAccess.list);
+            pManager.AddNumberParameter("DHWMonthly", "DHWMonthly", "DHWMonthly", GH_ParamAccess.list);
+
+            // 4, 5, 6
+            pManager.AddNumberParameter("SupplyCapacities", "SupplyCapacities", "SupplyCapacities", GH_ParamAccess.list);
+            pManager.AddTextParameter("SupplyNames", "SupplyNames", "SupplyNames", GH_ParamAccess.list);
+            pManager.AddNumberParameter("SupplyOpMonthly", "SupplyOpMonthly", "SupplyOpMonthly", GH_ParamAccess.tree);
 
             for (int i = 0; i < pManager.ParamCount; i++)
                 pManager[i].Optional = true;
@@ -51,9 +59,16 @@ namespace Hive.IO
             List<double> clgMonthly = new List<double>();
             List<double> htgMonthly = new List<double>();
             List<double> elecMonthly = new List<double>();
+            List<double> dhwMonthly = new List<double>();
             DA.GetDataList(0, clgMonthly);
             DA.GetDataList(1, htgMonthly);
             DA.GetDataList(2, elecMonthly);
+            DA.GetDataList(3, dhwMonthly);
+
+            List<double> supplyCap = new List<double>();
+            List<string> supplyNames = new List<string>();
+            List<double> supplyOpMonthly = new List<double>();
+            //GH_Structure<double> 
 
             Results results = new Results();
             results.SetTotalDemandMonthly(clgMonthly.ToArray(), htgMonthly.ToArray(), elecMonthly.ToArray(), null);
