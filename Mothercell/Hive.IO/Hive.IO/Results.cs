@@ -31,6 +31,9 @@ namespace Hive.IO
 
         public double[] TotalHeatingMonthly { get; private set; }
         public double[] TotalHeatingHourly { get; private set; }
+
+        public double[] TotalDHWMonthly { get; private set; }
+        public double[] TotalDHWHourly { get; private set; }
         #endregion
 
 
@@ -41,6 +44,8 @@ namespace Hive.IO
         public double[][] ZoneCoolingHourly { get; private set; }
         public double[][] ZoneHeatingMonthly { get; private set; }
         public double[][] ZoneHeatingHourly { get; private set; }
+        public double[][] ZoneDHWMonthly { get; private set; }
+        public double[][] ZoneDHWHourly { get; private set; }
         #endregion
 
 
@@ -84,6 +89,10 @@ namespace Hive.IO
         /// </summary>
         public double[][] SupplyOperationHourly { get; private set; }
         /// <summary>
+        /// Operation schedule per technology and month. Unit defined in 'SupplyOperationUnit'
+        /// </summary>
+        public double [][] SupplyOperationMonthly { get; private set; }
+        /// <summary>
         /// Defining unit of operation per technology, e.g. "kWh", "Wh", ...
         /// </summary>
         public string[] SupplyOperationUnit { get; private set; }
@@ -92,7 +101,6 @@ namespace Hive.IO
 
         #region constants
         private const int months = 12;
-        private const int days = 365;
         private const int hours = 8760;
         #endregion
 
@@ -103,24 +111,87 @@ namespace Hive.IO
             this.TotalCoolingMonthly = new double[Results.months];
             this.TotalElecMonthly = new double[Results.months];
             this.TotalHeatingMonthly = new double[Results.months];
+            this.TotalDHWMonthly = new double[Results.months];
 
             this.TotalCoolingHourly = new double[Results.hours];
             this.TotalHeatingHourly = new double[Results.hours];
             this.TotalElecHourly = new double[Results.hours];
+            this.TotalDHWHourly = new double[Results.hours];
+
+            this.SupplyNames = null;
+            this.SupplyTypes = null;
+            this.SupplyCapacities = null;
+            this.SupplyCapUnits = null;
+        }
+
+
+        public void SetSupplySystemsCapacity(string [] supplyTechNames, bool [,] supplyTypes, double[] supplyCapacities, string[] supplyCapUnits)
+        {
+            // should contain checks, like lengths of arrays match etc
+
+
+            this.SupplyNames = new string[supplyTechNames.Length];
+            supplyTechNames.CopyTo(this.SupplyNames, 0);
+
+            this.SupplyTypes = supplyTypes.Clone() as bool[,];
+            /// Rows: Technologies
+            /// Columns: [0]: Electricity, [1]: Heating, [2]: Cooling
+
+            this.SupplyCapacities = new double[supplyCapacities.Length];
+            supplyCapacities.CopyTo(this.SupplyCapacities, 0);
+
+            this.SupplyCapUnits = new string[supplyCapUnits.Length];
+            supplyCapUnits.CopyTo(this.SupplyCapUnits, 0);
+        }
+
+
+        public void SetSupplySystemsGenerationMonthly(double [][] supplyOperationMonthly)
+        {
+            if (supplyOperationMonthly.Length <= 0) return;
+
+            this.SupplyOperationMonthly = new double[supplyOperationMonthly.Length][];
+            for (int i = 0; i < this.SupplyOperationMonthly.Length; i++)
+            {
+                if(supplyOperationMonthly[i].Length == Results.months) 
+                {
+                    this.SupplyOperationMonthly[i] = new double[Results.months];
+                    supplyOperationMonthly.CopyTo(this.SupplyOperationMonthly, 0);
+                }
+            }
 
         }
 
 
-        public void SetTotalDemandMonthly(double[] coolingDemand, double[] heatingDemand, double[] electricityDemand)
+        public void SetSupplySystemsGenerationHourly(double[][] supplyOperationHourly)
+        {
+            if (supplyOperationHourly.Length <= 0) return;
+
+            this.SupplyOperationMonthly = new double[supplyOperationHourly.Length][];
+            for (int i = 0; i < this.SupplyOperationMonthly.Length; i++)
+            {
+                if (supplyOperationHourly[i].Length == Results.hours)
+                {
+                    this.SupplyOperationMonthly[i] = new double[Results.hours];
+                    supplyOperationHourly.CopyTo(this.SupplyOperationMonthly, 0);
+                }
+            }
+        }
+
+
+        /// <summary>
+        /// Setting monthly energy demand of the entire building for heating, cooling, electricity, and domestic hot water
+        /// </summary>
+        /// <param name="coolingDemand"></param>
+        /// <param name="heatingDemand"></param>
+        /// <param name="electricityDemand"></param>
+        /// <param name="dhwDemand"></param>
+        public void SetTotalDemandMonthly(double[] coolingDemand, double[] heatingDemand, 
+            double[] electricityDemand, double [] dhwDemand)
         {
             if (coolingDemand != null && coolingDemand.Length == Results.months)
                 coolingDemand.CopyTo(this.TotalCoolingMonthly, 0);
             else
                 this.TotalCoolingMonthly = null;
-            if (heatingDemand is null)
-            {
-                throw new ArgumentNullException(nameof(heatingDemand));
-            }
 
             if (heatingDemand != null && heatingDemand.Length == Results.months)
                 heatingDemand.CopyTo(this.TotalHeatingMonthly, 0);
@@ -131,12 +202,22 @@ namespace Hive.IO
                 electricityDemand.CopyTo(this.TotalElecMonthly, 0);
             else
                 this.TotalElecMonthly = null;
+
+            if (dhwDemand != null && dhwDemand.Length == Results.months)
+                dhwDemand.CopyTo(this.TotalDHWMonthly, 0);
         }
 
 
-        public void SetTotalDemandHourly(double[] coolingDemand, double[] heatingDemand, double[] electricityDemand)
+        /// <summary>
+        /// Setting hourly energy demand of the entire building for heating, cooling, electricity, and domestic hot water
+        /// </summary>
+        /// <param name="coolingDemand"></param>
+        /// <param name="heatingDemand"></param>
+        /// <param name="electricityDemand"></param>
+        /// <param name="dhwDemand"></param>
+        public void SetTotalDemandHourly(double[] coolingDemand, double[] heatingDemand, 
+            double[] electricityDemand, double [] dhwDemand)
         {
-
             if (coolingDemand != null && coolingDemand.Length == Results.hours)
                 coolingDemand.CopyTo(this.TotalCoolingHourly, 0);
             else
@@ -151,6 +232,9 @@ namespace Hive.IO
                 electricityDemand.CopyTo(this.TotalElecHourly, 0);
             else
                 this.TotalElecHourly = null;
+
+            if (dhwDemand != null && dhwDemand.Length == Results.hours)
+                dhwDemand.CopyTo(this.TotalDHWHourly, 0);
         }
 
     }
