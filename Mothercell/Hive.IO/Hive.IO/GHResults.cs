@@ -44,7 +44,8 @@ namespace Hive.IO
 
             // input: all kinds of results from the Core 
 
-            // output: jsons for Darens Visualizer, and GHREsults object for an updated Visualizer component
+            // output: GHREsults object for an updated Visualizer component...
+            // change to IGOO, so ghpython components could also read it?
 
 
             List<double> clgMonthly = new List<double>();
@@ -55,7 +56,7 @@ namespace Hive.IO
             DA.GetDataList(2, elecMonthly);
 
             Results results = new Results();
-            results.SetTotalDemandMonthly(clgMonthly.ToArray(), htgMonthly.ToArray(), elecMonthly.ToArray());
+            results.SetTotalDemandMonthly(clgMonthly.ToArray(), htgMonthly.ToArray(), elecMonthly.ToArray(), null);
 
             DA.SetData(0, results);
         }
