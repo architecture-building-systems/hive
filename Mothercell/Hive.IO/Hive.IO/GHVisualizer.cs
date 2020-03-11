@@ -64,11 +64,6 @@ namespace Hive.IO
             Results = m_data.First().Value as Results;
         }
 
-        protected override void CollectVolatileData_FromSources()
-        {
-            base.CollectVolatileData_FromSources();
-        }
-
 
         public override void CreateAttributes()
         {
