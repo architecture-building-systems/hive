@@ -57,6 +57,7 @@ namespace Hive.IO
         {
             if (m_data.IsEmpty)
             {
+                Results = new Results();
                 return;
             }
 
@@ -199,7 +200,7 @@ namespace Hive.IO
 
             var pngExporter = new PngExporter { Width = (int)this.PlotBounds.Width, Height = (int)this.PlotBounds.Height, Background = OxyColors.White };
             var bitmap = pngExporter.ExportToBitmap(model);
-            graphics.DrawImage(bitmap, this.PlotBounds.Location);
+            graphics.DrawImage(bitmap, this.PlotLocation.X, this.PlotLocation.Y, this.PlotBounds.Width, this.PlotBounds.Height);
         }
     }
 }
