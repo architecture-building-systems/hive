@@ -16,15 +16,40 @@ using OxyPlot.WindowsForms;
 
 namespace Hive.IO
 {
+    public enum VisualizerPlot
+    {
+        DemandMonthly,
+        DemandHourly,
+    }
+
     public class GHVisualizer : GH_Param<GH_ObjectWrapper>
     {
+        private VisualizerPlot currentPlot;
+
         public GHVisualizer() : base("Hive.IO.Visualizer", "Hive.IO.Visualizer",
               "Hive Visualizer for simulation results",
               "[hive]", "IO", GH_ParamAccess.item)
         {
+            currentPlot = VisualizerPlot.DemandMonthly;
         }
 
         public Results Results { get; private set; }
+
+        public VisualizerPlot CurrentPlot => currentPlot;
+
+        public void NextPlot()
+        {
+            var values = (VisualizerPlot[])Enum.GetValues(typeof(VisualizerPlot));
+            var currentIndex = Array.FindIndex(values, t => t == this.currentPlot);
+            this.currentPlot = values[(currentIndex + 1) % values.Length];
+        }
+
+        public void PreviousPlot()
+        {
+            var values = (VisualizerPlot[])Enum.GetValues(typeof(VisualizerPlot));
+            var currentIndex = Array.FindIndex(values, t => t == this.currentPlot);
+            this.currentPlot = values[(currentIndex - 1) % values.Length];
+        }
 
         public override GH_ParamKind Kind
         {
@@ -155,28 +180,57 @@ namespace Hive.IO
             capsule.Render(graphics, this.Selected, this.Owner.Locked, true);
             capsule.Dispose();
 
-            // FIXME: Figure this out from the inputs
-            var model = new PlotModel { Title = "Demand" };
+            PlotModel model;
+            switch (this.Owner.CurrentPlot)
+            {
+                case VisualizerPlot.DemandMonthly:
+                    model = DemandMonthlyPlotModel();
+                    break;
+                case VisualizerPlot.DemandHourly:
+                    model = DemandHourlyPlotModel();
+                    break;
+                default:
+                    model = DemandMonthlyPlotModel();
+                    break;
+            }
+
+        var pngExporter = new PngExporter { Width = (int)this.PlotBounds.Width, Height = (int)this.PlotBounds.Height, Background = OxyColors.White };
+            var bitmap = pngExporter.ExportToBitmap(model);
+            graphics.DrawImage(bitmap, this.PlotLocation.X, this.PlotLocation.Y, this.PlotBounds.Width, this.PlotBounds.Height);
+        }
+
+        private PlotModel DemandMonthlyPlotModel()
+        {
+            var model = new PlotModel {Title = "Demand"};
 
             var demandHeating = new ColumnSeries
             {
-                ItemsSource = Owner.Results.TotalHtgMonthly.Select(demand => new ColumnItem { Value = demand }),
-                
+                ItemsSource = Owner.Results.TotalHtgMonthly.Select(demand => new ColumnItem {Value = demand}),
+
                 LabelPlacement = LabelPlacement.Inside,
                 LabelFormatString = "{0:.00}",
-                Title = "Heating Demand"
+                Title = " Heating Demand"
             };
             model.Series.Add(demandHeating);
 
             var demandCooling = new ColumnSeries
             {
-                ItemsSource = Owner.Results.TotalClgMonthly.Select(demand => new ColumnItem { Value = demand }),
+                ItemsSource = Owner.Results.TotalClgMonthly.Select(demand => new ColumnItem {Value = demand}),
 
                 LabelPlacement = LabelPlacement.Inside,
                 LabelFormatString = "{0:.00}",
-                Title = "Cooling Demand"
+                Title = " Cooling Demand"
             };
             model.Series.Add(demandCooling);
+
+            var demandElectricity = new ColumnSeries
+            {
+                ItemsSource = Owner.Results.TotalElecMonthly.Select(demand => new ColumnItem {Value = demand}),
+                LabelPlacement = LabelPlacement.Inside,
+                LabelFormatString = "{0:.00}",
+                Title = " Electricity Demand"
+            };
+            model.Series.Add(demandElectricity);
 
             model.Axes.Add(new CategoryAxis
             {
@@ -197,10 +251,27 @@ namespace Hive.IO
                     "D"
                 }
             });
+            return model;
+        }
 
-            var pngExporter = new PngExporter { Width = (int)this.PlotBounds.Width, Height = (int)this.PlotBounds.Height, Background = OxyColors.White };
-            var bitmap = pngExporter.ExportToBitmap(model);
-            graphics.DrawImage(bitmap, this.PlotLocation.X, this.PlotLocation.Y, this.PlotBounds.Width, this.PlotBounds.Height);
+        private PlotModel DemandHourlyPlotModel()
+        {
+            var model = new PlotModel { Title = "Demand Hourly" };
+
+            var demandHeating = new ColumnSeries
+            {
+                ItemsSource = Owner.Results.TotalHtgHourly.Select(demand => new ColumnItem { Value = demand }),
+                Title = " Heating Demand"
+            };
+            model.Series.Add(demandHeating);
+
+            var demandCooling = new ColumnSeries
+            {
+                ItemsSource = Owner.Results.TotalClgHourly.Select(demand => new ColumnItem { Value = demand }),
+                Title = " Cooling Demand"
+            };
+            model.Series.Add(demandCooling);
+            return model;
         }
     }
 }
