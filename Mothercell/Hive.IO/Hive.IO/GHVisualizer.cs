@@ -55,12 +55,21 @@ namespace Hive.IO
         /// </summary>
         protected override void OnVolatileDataCollected()
         {
+            Rhino.RhinoApp.WriteLine("Before OnVolatileDataCollected");
             if (m_data.IsEmpty)
             {
+                Results = new Results();
                 return;
             }
 
             Results = m_data.First().Value as Results;
+        }
+
+        protected override void CollectVolatileData_FromSources()
+        {
+            Rhino.RhinoApp.WriteLine("Before CollectVolatileData_FromSources");
+            base.CollectVolatileData_FromSources();
+            Rhino.RhinoApp.WriteLine("After CollectVolatileData_FromSources");
         }
 
 
