@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Drawing;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
 
 using Grasshopper.GUI;
@@ -106,6 +107,8 @@ namespace Hive.IO
 
     public class GHVisualizerAttributes : GH_ResizableAttributes<GHVisualizer>
     {
+        private const float ArrowBoxSide = 10f;
+        private const float ArrowBoxPadding = 10f;
         private int m_padding = 6;
 
         public GHVisualizerAttributes(GHVisualizer owner) : base(owner)
@@ -165,6 +168,29 @@ namespace Hive.IO
             }
         }
 
+        public override GH_ObjectResponse RespondToMouseDown(GH_Canvas sender, GH_CanvasMouseEvent e)
+        {
+            if (e.Button != MouseButtons.Left)
+            {
+                return base.RespondToMouseDown(sender, e);
+            }
+
+            if (LeftArrowBox.Contains(e.CanvasLocation))
+            {
+                this.Owner.PreviousPlot();
+                return GH_ObjectResponse.Handled;
+            }
+
+            if (RightArrowBox.Contains(e.CanvasLocation))
+            {
+                this.Owner.NextPlot();
+                return GH_ObjectResponse.Handled;
+            }
+            
+
+            return base.RespondToMouseDown(sender, e);
+        }
+
         protected override void Render(GH_Canvas canvas, Graphics graphics, GH_CanvasChannel channel)
         {
             if (channel == GH_CanvasChannel.Wires && this.Owner.SourceCount > 0)
@@ -172,14 +198,50 @@ namespace Hive.IO
             if (channel != GH_CanvasChannel.Objects)
                 return;
 
-            GH_Viewport viewport = canvas.Viewport;
-            RectangleF bounds = this.Bounds;
-            GH_Capsule capsule = this.Owner.RuntimeMessageLevel != GH_RuntimeMessageLevel.Error ? GH_Capsule.CreateCapsule(this.Bounds, GH_Palette.Hidden, 5, 30) : GH_Capsule.CreateCapsule(this.Bounds, GH_Palette.Error, 5, 30);
-            capsule.SetJaggedEdges(false, true);
-            capsule.AddInputGrip(this.InputGrip);
-            capsule.Render(graphics, this.Selected, this.Owner.Locked, true);
-            capsule.Dispose();
+            RenderCapsule(canvas, graphics);
+            RenderPlot(graphics);
+            RenderArrows(graphics);
+        }
 
+        /// <summary>
+        /// Render the arrows next to the title - we'll be making these clickable to cycle through the plots
+        /// </summary>
+        /// <param name="graphics"></param>
+        private void RenderArrows(Graphics graphics)
+        {
+            // the style to draw the arrows with
+            GH_PaletteStyle impliedStyle = GH_CapsuleRenderEngine.GetImpliedStyle(GH_Palette.Normal, (IGH_Attributes)this);
+            Color color = impliedStyle.Text;
+            var pen = new Pen(color, 1f) { LineJoin = System.Drawing.Drawing2D.LineJoin.Round };
+
+            // the base arrow polygons
+            var leftArrow = new PointF[] { new PointF(ArrowBoxSide, 0), new PointF(0, ArrowBoxSide / 2), new PointF(ArrowBoxSide, ArrowBoxSide) };
+            var rightArrow = new PointF[] { new PointF(0, 0), new PointF(ArrowBoxSide, ArrowBoxSide / 2), new PointF(0, ArrowBoxSide) };
+            
+            // shift the polygons to their positions
+            leftArrow = leftArrow.Select(p => new PointF(p.X + LeftArrowBox.Left, p.Y + LeftArrowBox.Top)).ToArray();
+            rightArrow = rightArrow.Select(p => new PointF(p.X + RightArrowBox.Left, p.Y + RightArrowBox.Top)).ToArray();
+            
+            graphics.DrawPolygon(pen, leftArrow);
+            graphics.DrawPolygon(pen, rightArrow);
+
+            // fill out the polygon
+            LinearGradientBrush leftBrush = new LinearGradientBrush(LeftArrowBox, color, GH_GraphicsUtil.OffsetColour(color, 50), LinearGradientMode.Vertical);
+            leftBrush.WrapMode = WrapMode.TileFlipXY;
+            graphics.FillPolygon((Brush)leftBrush, leftArrow);
+            leftBrush.Dispose();
+
+            LinearGradientBrush rightBrush = new LinearGradientBrush(RightArrowBox, color, GH_GraphicsUtil.OffsetColour(color, 50), LinearGradientMode.Vertical);
+            rightBrush.WrapMode = WrapMode.TileFlipXY;
+            graphics.FillPolygon((Brush)rightBrush, rightArrow);
+            rightBrush.Dispose();
+        }
+
+        private RectangleF LeftArrowBox => new RectangleF(PlotBounds.Left + ArrowBoxPadding, PlotBounds.Top + ArrowBoxPadding, ArrowBoxSide, ArrowBoxSide);
+        private RectangleF RightArrowBox => new RectangleF(PlotBounds.Right - ArrowBoxSide - ArrowBoxPadding, PlotBounds.Top + ArrowBoxPadding, ArrowBoxSide, ArrowBoxSide);
+
+        private void RenderPlot(Graphics graphics)
+        {
             PlotModel model;
             switch (this.Owner.CurrentPlot)
             {
@@ -194,9 +256,23 @@ namespace Hive.IO
                     break;
             }
 
-        var pngExporter = new PngExporter { Width = (int)this.PlotBounds.Width, Height = (int)this.PlotBounds.Height, Background = OxyColors.White };
+            var pngExporter = new PngExporter
+                {Width = (int) this.PlotBounds.Width, Height = (int) this.PlotBounds.Height, Background = OxyColors.White};
             var bitmap = pngExporter.ExportToBitmap(model);
             graphics.DrawImage(bitmap, this.PlotLocation.X, this.PlotLocation.Y, this.PlotBounds.Width, this.PlotBounds.Height);
+        }
+
+        private void RenderCapsule(GH_Canvas canvas, Graphics graphics)
+        {
+            GH_Viewport viewport = canvas.Viewport;
+            RectangleF bounds = this.Bounds;
+            GH_Capsule capsule = this.Owner.RuntimeMessageLevel != GH_RuntimeMessageLevel.Error
+                ? GH_Capsule.CreateCapsule(this.Bounds, GH_Palette.Hidden, 5, 30)
+                : GH_Capsule.CreateCapsule(this.Bounds, GH_Palette.Error, 5, 30);
+            capsule.SetJaggedEdges(false, true);
+            capsule.AddInputGrip(this.InputGrip);
+            capsule.Render(graphics, this.Selected, this.Owner.Locked, true);
+            capsule.Dispose();
         }
 
         private PlotModel DemandMonthlyPlotModel()
