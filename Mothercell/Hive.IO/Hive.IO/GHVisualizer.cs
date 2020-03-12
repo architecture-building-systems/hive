@@ -95,6 +95,12 @@ namespace Hive.IO
         private const float ArrowBoxPadding = 10f;
         private int m_padding = 6;
 
+        // keep track of the last exported bitmap to avoid re-exporting unnecessarily...
+        private int lastPlotWidth = 0;
+        private int lastPlotHeight = 0;
+        private VisualizerPlot lastPlot = VisualizerPlot.DemandMonthly;
+        private Bitmap lastBitmap = null;
+
         private VisualizerPlot currentPlot;
 
         public GHVisualizerAttributes(GHVisualizer owner) : base(owner)
@@ -247,26 +253,42 @@ namespace Hive.IO
 
         private void RenderPlot(Graphics graphics)
         {
-            PlotModel model;
-            switch (this.currentPlot)
-            {
-                case VisualizerPlot.DemandMonthly:
-                    model = DemandMonthlyPlotModel();
-                    break;
-                case VisualizerPlot.DemandHourly:
-                    model = DemandHourlyPlotModel();
-                    break;
-                default:
-                    model = DemandMonthlyPlotModel();
-                    break;
-            }
+            
+            var plotWidth = (int) this.PlotBounds.Width;
+            var plotHeight = (int) this.PlotBounds.Height;
 
-            Rhino.RhinoApp.WriteLine("RenderPlot: Before exporting Bitmap");
-            var pngExporter = new PngExporter
-                {Width = (int) this.PlotBounds.Width, Height = (int) this.PlotBounds.Height, Background = OxyColors.White};
-            var bitmap = pngExporter.ExportToBitmap(model);
-            Rhino.RhinoApp.WriteLine("RenderPlot: After exporting Bitmap");
-            graphics.DrawImage(bitmap, this.PlotLocation.X, this.PlotLocation.Y, this.PlotBounds.Width, this.PlotBounds.Height);
+            if (plotWidth == lastPlotWidth && plotHeight == lastPlotHeight && currentPlot == lastPlot)
+            {
+                graphics.DrawImage(lastBitmap, this.PlotLocation.X, this.PlotLocation.Y, this.PlotBounds.Width, this.PlotBounds.Height);
+            }
+            else
+            {
+                PlotModel model;
+                switch (this.currentPlot)
+                {
+                    case VisualizerPlot.DemandMonthly:
+                        model = DemandMonthlyPlotModel();
+                        break;
+                    case VisualizerPlot.DemandHourly:
+                        model = DemandHourlyPlotModel();
+                        break;
+                    default:
+                        model = DemandMonthlyPlotModel();
+                        break;
+                }
+
+                Rhino.RhinoApp.WriteLine("RenderPlot: Before exporting Bitmap");
+                var pngExporter = new PngExporter
+                    { Width = plotWidth, Height = plotHeight, Background = OxyColors.White };
+                var bitmap = pngExporter.ExportToBitmap(model);
+                Rhino.RhinoApp.WriteLine("RenderPlot: After exporting Bitmap");
+                graphics.DrawImage(bitmap, this.PlotLocation.X, this.PlotLocation.Y, this.PlotBounds.Width, this.PlotBounds.Height);
+
+                lastPlotWidth = plotWidth;
+                lastPlotHeight = plotHeight;
+                lastPlot = currentPlot;
+                lastBitmap = bitmap;
+            }
         }
 
         private void RenderCapsule(GH_Canvas canvas, Graphics graphics)
