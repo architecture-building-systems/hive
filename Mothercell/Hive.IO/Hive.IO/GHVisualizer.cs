@@ -25,32 +25,15 @@ namespace Hive.IO
 
     public class GHVisualizer : GH_Param<GH_ObjectWrapper>
     {
-        private VisualizerPlot currentPlot;
 
         public GHVisualizer() : base("Hive.IO.Visualizer", "Hive.IO.Visualizer",
               "Hive Visualizer for simulation results",
               "[hive]", "IO", GH_ParamAccess.item)
         {
-            currentPlot = VisualizerPlot.DemandMonthly;
         }
 
         public Results Results { get; private set; }
 
-        public VisualizerPlot CurrentPlot => currentPlot;
-
-        public void NextPlot()
-        {
-            var values = (VisualizerPlot[])Enum.GetValues(typeof(VisualizerPlot));
-            var currentIndex = Array.FindIndex(values, t => t == this.currentPlot);
-            this.currentPlot = values[(currentIndex + 1) % values.Length];
-        }
-
-        public void PreviousPlot()
-        {
-            var values = (VisualizerPlot[])Enum.GetValues(typeof(VisualizerPlot));
-            var currentIndex = Array.FindIndex(values, t => t == this.currentPlot);
-            this.currentPlot = values[(currentIndex - 1) % values.Length];
-        }
 
         public override GH_ParamKind Kind
         {
@@ -81,6 +64,7 @@ namespace Hive.IO
         /// </summary>
         protected override void OnVolatileDataCollected()
         {
+            Rhino.RhinoApp.WriteLine("GHVisualizer.OnVolatileDataCollected");
             if (m_data.IsEmpty)
             {
                 Results = new Results();
@@ -111,8 +95,27 @@ namespace Hive.IO
         private const float ArrowBoxPadding = 10f;
         private int m_padding = 6;
 
+        private VisualizerPlot currentPlot;
+
         public GHVisualizerAttributes(GHVisualizer owner) : base(owner)
         {
+            this.currentPlot = VisualizerPlot.DemandMonthly;
+        }
+
+
+        private void NextPlot()
+        {
+
+            var values = (VisualizerPlot[])Enum.GetValues(typeof(VisualizerPlot));
+            var currentIndex = Array.FindIndex(values, t => t == this.currentPlot);
+            this.currentPlot = values[(currentIndex + 1) % values.Length];
+        }
+
+        private void PreviousPlot()
+        {
+            var values = (VisualizerPlot[])Enum.GetValues(typeof(VisualizerPlot));
+            var currentIndex = Array.FindIndex(values, t => t == this.currentPlot);
+            this.currentPlot = values[(currentIndex - 1) % values.Length];
         }
 
         public override string PathName
@@ -170,6 +173,7 @@ namespace Hive.IO
 
         public override GH_ObjectResponse RespondToMouseDown(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
+            Rhino.RhinoApp.WriteLine($"GHVisualizer: RespondToMouseDown");
             if (e.Button != MouseButtons.Left)
             {
                 return base.RespondToMouseDown(sender, e);
@@ -177,17 +181,18 @@ namespace Hive.IO
 
             if (LeftArrowBox.Contains(e.CanvasLocation))
             {
-                this.Owner.PreviousPlot();
-                return GH_ObjectResponse.Handled;
+                Rhino.RhinoApp.WriteLine($"GHVisualizer: RespondToMouseDown - inside LeftArrowBox");
+                this.PreviousPlot();
+                Rhino.RhinoApp.WriteLine($"GHVisualizer: RespondToMouseDown - after this.Owner.PreviousPlot()");
             }
 
             if (RightArrowBox.Contains(e.CanvasLocation))
             {
-                this.Owner.NextPlot();
-                return GH_ObjectResponse.Handled;
+                Rhino.RhinoApp.WriteLine($"GHVisualizer: RespondToMouseDown - inside RightArrowBox");
+                this.NextPlot();
+                Rhino.RhinoApp.WriteLine($"GHVisualizer: RespondToMouseDown - after this.Owner.PreviousPlot()");
             }
             
-
             return base.RespondToMouseDown(sender, e);
         }
 
@@ -243,7 +248,7 @@ namespace Hive.IO
         private void RenderPlot(Graphics graphics)
         {
             PlotModel model;
-            switch (this.Owner.CurrentPlot)
+            switch (this.currentPlot)
             {
                 case VisualizerPlot.DemandMonthly:
                     model = DemandMonthlyPlotModel();
@@ -256,9 +261,11 @@ namespace Hive.IO
                     break;
             }
 
+            Rhino.RhinoApp.WriteLine("RenderPlot: Before exporting Bitmap");
             var pngExporter = new PngExporter
                 {Width = (int) this.PlotBounds.Width, Height = (int) this.PlotBounds.Height, Background = OxyColors.White};
             var bitmap = pngExporter.ExportToBitmap(model);
+            Rhino.RhinoApp.WriteLine("RenderPlot: After exporting Bitmap");
             graphics.DrawImage(bitmap, this.PlotLocation.X, this.PlotLocation.Y, this.PlotBounds.Width, this.PlotBounds.Height);
         }
 
@@ -277,7 +284,7 @@ namespace Hive.IO
 
         private PlotModel DemandMonthlyPlotModel()
         {
-            var model = new PlotModel {Title = "Demand"};
+            var model = new PlotModel {Title = "Demand (Monthly)"};
 
             var demandHeating = new ColumnSeries
             {
@@ -332,7 +339,7 @@ namespace Hive.IO
 
         private PlotModel DemandHourlyPlotModel()
         {
-            var model = new PlotModel { Title = "Demand Hourly" };
+            var model = new PlotModel { Title = "Demand (Hourly)" };
 
             var demandHeating = new ColumnSeries
             {
