@@ -92,8 +92,8 @@ namespace Hive.IO
 
         #region constants
         public const int Months = 12;
-        public const int days = 365;
-        public const int hours = 8760;
+        public const int Days = 365;
+        public const int Hours = 8760;
         #endregion
 
 
@@ -104,7 +104,9 @@ namespace Hive.IO
             this.TotalElecMonthly = new double[Results.Months];
             this.TotalHtgMonthly = new double[Results.Months];
 
-
+            this.TotalHtgHourly = new double[Results.Hours];
+            this.TotalClgHourly = new double[Results.Hours];
+            this.TotalElecHourly = new double[Results.Hours];
         }
 
 
@@ -130,17 +132,17 @@ namespace Hive.IO
         public void SetTotalDemandHourly(double[] clgDemand, double[] htgDemand, double[] elecDemand)
         {
 
-            if (clgDemand != null && clgDemand.Length == Results.hours)
+            if (clgDemand != null && clgDemand.Length == Results.Hours)
                 clgDemand.CopyTo(this.TotalClgHourly, 0);
             else
                 this.TotalClgHourly = null;
 
-            if (htgDemand != null && htgDemand.Length == Results.hours)
+            if (htgDemand != null && htgDemand.Length == Results.Hours)
                 htgDemand.CopyTo(this.TotalHtgHourly, 0);
             else
                 this.TotalHtgHourly = null;
 
-            if (elecDemand != null && elecDemand.Length == Results.hours)
+            if (elecDemand != null && elecDemand.Length == Results.Hours)
                 elecDemand.CopyTo(this.TotalElecHourly, 0);
             else
                 this.TotalElecHourly = null;
