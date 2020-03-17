@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Drawing;
 using System.Collections.Generic;
+using System.Drawing.Drawing2D;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
@@ -18,16 +17,23 @@ using OxyPlot.WindowsForms;
 
 namespace Hive.IO
 {
+    public enum VisualizerPlot
+    {
+        DemandMonthly,
+        DemandHourly,
+    }
+
     public class GHVisualizer : GH_Param<GH_ObjectWrapper>
     {
+
         public GHVisualizer() : base("Hive.IO.Visualizer", "Hive.IO.Visualizer",
               "Hive Visualizer for simulation results",
               "[hive]", "IO", GH_ParamAccess.item)
         {
         }
 
-        public double[] DemandHeating { get; private set; } = new double[12];
-        public double[] DemandCooling { get; private set; } = new double[12];
+        public Results Results { get; private set; }
+
 
         public override GH_ParamKind Kind
         {
@@ -58,19 +64,14 @@ namespace Hive.IO
         /// </summary>
         protected override void OnVolatileDataCollected()
         {
+            Rhino.RhinoApp.WriteLine("GHVisualizer.OnVolatileDataCollected");
             if (m_data.IsEmpty)
             {
+                Results = new Results();
                 return;
             }
 
-            var jsSerializer = new System.Web.Script.Serialization.JavaScriptSerializer();
-            Dictionary<string, object> dict = (Dictionary<string, object>)jsSerializer.DeserializeObject(m_data.First().Value.ToString());
-
-            DemandHeating = Array.ConvertAll((dict["demand_htg"] as object[]), x => decimal.ToDouble((decimal)x));
-            DemandCooling = Array.ConvertAll((dict["demand_clg"] as object[]), x => decimal.ToDouble((decimal)x));
-
-            Rhino.RhinoApp.WriteLine("DemandHeating: {0}", String.Join(", ", DemandHeating));
-            Rhino.RhinoApp.WriteLine("DemandCooling: {0}", String.Join(", ", DemandCooling));
+            Results = m_data.First().Value as Results;
         }
 
 
@@ -90,10 +91,37 @@ namespace Hive.IO
 
     public class GHVisualizerAttributes : GH_ResizableAttributes<GHVisualizer>
     {
+        private const float ArrowBoxSide = 10f;
+        private const float ArrowBoxPadding = 10f;
         private int m_padding = 6;
+
+        // keep track of the last exported bitmap to avoid re-exporting unnecessarily...
+        private int lastPlotWidth = 0;
+        private int lastPlotHeight = 0;
+        private VisualizerPlot lastPlot = VisualizerPlot.DemandMonthly;
+        private Bitmap lastBitmap = null;
+
+        private VisualizerPlot currentPlot;
 
         public GHVisualizerAttributes(GHVisualizer owner) : base(owner)
         {
+            this.currentPlot = VisualizerPlot.DemandMonthly;
+        }
+
+
+        private void NextPlot()
+        {
+
+            var values = (VisualizerPlot[])Enum.GetValues(typeof(VisualizerPlot));
+            var currentIndex = Array.FindIndex(values, t => t == this.currentPlot);
+            this.currentPlot = values[(currentIndex + 1) % values.Length];
+        }
+
+        private void PreviousPlot()
+        {
+            var values = (VisualizerPlot[])Enum.GetValues(typeof(VisualizerPlot));
+            var currentIndex = Array.FindIndex(values, t => t == this.currentPlot);
+            this.currentPlot = values[(currentIndex - 1) % values.Length];
         }
 
         public override string PathName
@@ -124,9 +152,8 @@ namespace Hive.IO
             var bounds = this.Bounds;
             bounds.Width = Math.Max(bounds.Width, minWidth);
             bounds.Height = Math.Max(bounds.Height, minHeight);
-            this.Bounds = bounds;
 
-            Rhino.RhinoApp.WriteLine(string.Format("Layout {0} x {1}", bounds.Width, bounds.Height));
+            this.Bounds = new RectangleF(this.Pivot, bounds.Size);
         }
 
         private RectangleF PlotBounds
@@ -150,6 +177,31 @@ namespace Hive.IO
             }
         }
 
+        public override GH_ObjectResponse RespondToMouseDown(GH_Canvas sender, GH_CanvasMouseEvent e)
+        {
+            Rhino.RhinoApp.WriteLine($"GHVisualizer: RespondToMouseDown");
+            if (e.Button != MouseButtons.Left)
+            {
+                return base.RespondToMouseDown(sender, e);
+            }
+
+            if (LeftArrowBox.Contains(e.CanvasLocation))
+            {
+                Rhino.RhinoApp.WriteLine($"GHVisualizer: RespondToMouseDown - inside LeftArrowBox");
+                this.PreviousPlot();
+                Rhino.RhinoApp.WriteLine($"GHVisualizer: RespondToMouseDown - after this.Owner.PreviousPlot()");
+            }
+
+            if (RightArrowBox.Contains(e.CanvasLocation))
+            {
+                Rhino.RhinoApp.WriteLine($"GHVisualizer: RespondToMouseDown - inside RightArrowBox");
+                this.NextPlot();
+                Rhino.RhinoApp.WriteLine($"GHVisualizer: RespondToMouseDown - after this.Owner.PreviousPlot()");
+            }
+            
+            return base.RespondToMouseDown(sender, e);
+        }
+
         protected override void Render(GH_Canvas canvas, Graphics graphics, GH_CanvasChannel channel)
         {
             if (channel == GH_CanvasChannel.Wires && this.Owner.SourceCount > 0)
@@ -157,36 +209,133 @@ namespace Hive.IO
             if (channel != GH_CanvasChannel.Objects)
                 return;
 
+            RenderCapsule(canvas, graphics);
+            RenderPlot(graphics);
+            RenderArrows(graphics);
+        }
+
+        /// <summary>
+        /// Render the arrows next to the title - we'll be making these clickable to cycle through the plots
+        /// </summary>
+        /// <param name="graphics"></param>
+        private void RenderArrows(Graphics graphics)
+        {
+            // the style to draw the arrows with
+            GH_PaletteStyle impliedStyle = GH_CapsuleRenderEngine.GetImpliedStyle(GH_Palette.Normal, (IGH_Attributes)this);
+            Color color = impliedStyle.Text;
+            var pen = new Pen(color, 1f) { LineJoin = System.Drawing.Drawing2D.LineJoin.Round };
+
+            // the base arrow polygons
+            var leftArrow = new PointF[] { new PointF(ArrowBoxSide, 0), new PointF(0, ArrowBoxSide / 2), new PointF(ArrowBoxSide, ArrowBoxSide) };
+            var rightArrow = new PointF[] { new PointF(0, 0), new PointF(ArrowBoxSide, ArrowBoxSide / 2), new PointF(0, ArrowBoxSide) };
+            
+            // shift the polygons to their positions
+            leftArrow = leftArrow.Select(p => new PointF(p.X + LeftArrowBox.Left, p.Y + LeftArrowBox.Top)).ToArray();
+            rightArrow = rightArrow.Select(p => new PointF(p.X + RightArrowBox.Left, p.Y + RightArrowBox.Top)).ToArray();
+            
+            graphics.DrawPolygon(pen, leftArrow);
+            graphics.DrawPolygon(pen, rightArrow);
+
+            // fill out the polygon
+            LinearGradientBrush leftBrush = new LinearGradientBrush(LeftArrowBox, color, GH_GraphicsUtil.OffsetColour(color, 50), LinearGradientMode.Vertical);
+            leftBrush.WrapMode = WrapMode.TileFlipXY;
+            graphics.FillPolygon((Brush)leftBrush, leftArrow);
+            leftBrush.Dispose();
+
+            LinearGradientBrush rightBrush = new LinearGradientBrush(RightArrowBox, color, GH_GraphicsUtil.OffsetColour(color, 50), LinearGradientMode.Vertical);
+            rightBrush.WrapMode = WrapMode.TileFlipXY;
+            graphics.FillPolygon((Brush)rightBrush, rightArrow);
+            rightBrush.Dispose();
+        }
+
+        private RectangleF LeftArrowBox => new RectangleF(PlotBounds.Left + ArrowBoxPadding, PlotBounds.Top + ArrowBoxPadding, ArrowBoxSide, ArrowBoxSide);
+        private RectangleF RightArrowBox => new RectangleF(PlotBounds.Right - ArrowBoxSide - ArrowBoxPadding, PlotBounds.Top + ArrowBoxPadding, ArrowBoxSide, ArrowBoxSide);
+
+        private void RenderPlot(Graphics graphics)
+        {
+            
+            var plotWidth = (int) this.PlotBounds.Width;
+            var plotHeight = (int) this.PlotBounds.Height;
+
+            if (plotWidth == lastPlotWidth && plotHeight == lastPlotHeight && currentPlot == lastPlot)
+            {
+                graphics.DrawImage(lastBitmap, this.PlotLocation.X, this.PlotLocation.Y, this.PlotBounds.Width, this.PlotBounds.Height);
+            }
+            else
+            {
+                PlotModel model;
+                switch (this.currentPlot)
+                {
+                    case VisualizerPlot.DemandMonthly:
+                        model = DemandMonthlyPlotModel();
+                        break;
+                    case VisualizerPlot.DemandHourly:
+                        model = DemandHourlyPlotModel();
+                        break;
+                    default:
+                        model = DemandMonthlyPlotModel();
+                        break;
+                }
+
+                Rhino.RhinoApp.WriteLine("RenderPlot: Before exporting Bitmap");
+                var pngExporter = new PngExporter
+                    { Width = plotWidth, Height = plotHeight, Background = OxyColors.White };
+                var bitmap = pngExporter.ExportToBitmap(model);
+                Rhino.RhinoApp.WriteLine("RenderPlot: After exporting Bitmap");
+                graphics.DrawImage(bitmap, this.PlotLocation.X, this.PlotLocation.Y, this.PlotBounds.Width, this.PlotBounds.Height);
+
+                lastPlotWidth = plotWidth;
+                lastPlotHeight = plotHeight;
+                lastPlot = currentPlot;
+                lastBitmap = bitmap;
+            }
+        }
+
+        private void RenderCapsule(GH_Canvas canvas, Graphics graphics)
+        {
             GH_Viewport viewport = canvas.Viewport;
             RectangleF bounds = this.Bounds;
-            GH_Capsule capsule = this.Owner.RuntimeMessageLevel != GH_RuntimeMessageLevel.Error ? GH_Capsule.CreateCapsule(this.Bounds, GH_Palette.Hidden, 5, 30) : GH_Capsule.CreateCapsule(this.Bounds, GH_Palette.Error, 5, 30);
+            GH_Capsule capsule = this.Owner.RuntimeMessageLevel != GH_RuntimeMessageLevel.Error
+                ? GH_Capsule.CreateCapsule(this.Bounds, GH_Palette.Hidden, 5, 30)
+                : GH_Capsule.CreateCapsule(this.Bounds, GH_Palette.Error, 5, 30);
             capsule.SetJaggedEdges(false, true);
             capsule.AddInputGrip(this.InputGrip);
             capsule.Render(graphics, this.Selected, this.Owner.Locked, true);
             capsule.Dispose();
+        }
 
-            // FIXME: Figure this out from the inputs
-            var model = new PlotModel { Title = "Demand" };
+        private PlotModel DemandMonthlyPlotModel()
+        {
+            var model = new PlotModel {Title = "Demand (Monthly)"};
 
             var demandHeating = new ColumnSeries
             {
-                ItemsSource = Owner.DemandHeating.Select(demand => new ColumnItem { Value = demand }),
-                
+                ItemsSource = Owner.Results.TotalHtgMonthly.Select(demand => new ColumnItem {Value = demand}),
+
                 LabelPlacement = LabelPlacement.Inside,
                 LabelFormatString = "{0:.00}",
-                Title = "Heating Demand"
+                Title = " Heating Demand"
             };
             model.Series.Add(demandHeating);
 
             var demandCooling = new ColumnSeries
             {
-                ItemsSource = Owner.DemandCooling.Select(demand => new ColumnItem { Value = demand }),
+                ItemsSource = Owner.Results.TotalClgMonthly.Select(demand => new ColumnItem {Value = demand}),
 
                 LabelPlacement = LabelPlacement.Inside,
                 LabelFormatString = "{0:.00}",
-                Title = "Cooling Demand"
+                Title = " Cooling Demand"
             };
             model.Series.Add(demandCooling);
+
+            var demandElectricity = new ColumnSeries
+            {
+                ItemsSource = Owner.Results.TotalElecMonthly.Select(demand => new ColumnItem {Value = demand}),
+                LabelPlacement = LabelPlacement.Inside,
+                LabelFormatString = "{0:.00}",
+                Title = " Electricity Demand"
+            };
+            model.Series.Add(demandElectricity);
 
             model.Axes.Add(new CategoryAxis
             {
@@ -207,10 +356,27 @@ namespace Hive.IO
                     "D"
                 }
             });
+            return model;
+        }
 
-            var pngExporter = new PngExporter { Width = (int)this.PlotBounds.Width, Height = (int)this.PlotBounds.Height, Background = OxyColors.White };
-            var bitmap = pngExporter.ExportToBitmap(model);
-            graphics.DrawImage(bitmap, this.PlotBounds.Location);
+        private PlotModel DemandHourlyPlotModel()
+        {
+            var model = new PlotModel { Title = "Demand (Hourly)" };
+
+            var demandHeating = new ColumnSeries
+            {
+                ItemsSource = Owner.Results.TotalHtgHourly.Select(demand => new ColumnItem { Value = demand }),
+                Title = " Heating Demand"
+            };
+            model.Series.Add(demandHeating);
+
+            var demandCooling = new ColumnSeries
+            {
+                ItemsSource = Owner.Results.TotalClgHourly.Select(demand => new ColumnItem { Value = demand }),
+                Title = " Cooling Demand"
+            };
+            model.Series.Add(demandCooling);
+            return model;
         }
     }
 }
