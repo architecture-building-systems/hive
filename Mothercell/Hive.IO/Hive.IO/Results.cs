@@ -23,8 +23,8 @@ namespace Hive.IO
 
 
         #region Total Loads
-        public double[] TotalElecMonthly { get; private set; }
-        public double[] TotalElecHourly { get; private set; }
+        public double[] TotalElectricityMonthly { get; private set; }
+        public double[] TotalElectricityHourly { get; private set; }
 
         public double[] TotalCoolingMonthly { get; private set; }
         public double[] TotalCoolingHourly { get; private set; }
@@ -105,17 +105,16 @@ namespace Hive.IO
         #endregion
 
 
-
         public Results()
         {
             this.TotalCoolingMonthly = new double[Results.months];
-            this.TotalElecMonthly = new double[Results.months];
+            this.TotalElectricityMonthly = new double[Results.months];
             this.TotalHeatingMonthly = new double[Results.months];
             this.TotalDHWMonthly = new double[Results.months];
 
             this.TotalCoolingHourly = new double[Results.hours];
             this.TotalHeatingHourly = new double[Results.hours];
-            this.TotalElecHourly = new double[Results.hours];
+            this.TotalElectricityHourly = new double[Results.hours];
             this.TotalDHWHourly = new double[Results.hours];
 
             this.SupplyNames = null;
@@ -125,9 +124,24 @@ namespace Hive.IO
         }
 
 
+        /// <summary>
+        /// Sets the capacity of all supply systems
+        /// </summary>
+        /// <param name="supplyTechNames"></param>
+        /// <param name="supplyTypes"></param>
+        /// <param name="supplyCapacities"></param>
+        /// <param name="supplyCapUnits"></param>
         public void SetSupplySystemsCapacity(string [] supplyTechNames, bool [,] supplyTypes, double[] supplyCapacities, string[] supplyCapUnits)
         {
             // should contain checks, like lengths of arrays match etc
+            if (supplyTechNames == null || supplyTypes == null || supplyCapacities == null || supplyCapUnits == null)
+                return;
+
+            int shortestLength = int.MaxValue;
+            if (supplyTechNames.Length < shortestLength) shortestLength = supplyTechNames.Length;
+            if (supplyCapacities.Length < shortestLength) shortestLength = supplyCapacities.Length;
+            if (supplyCapUnits.Length < shortestLength) shortestLength = supplyCapUnits.Length;
+            if (supplyTypes.GetLength(0) < shortestLength) shortestLength = supplyTypes.GetLength(0);
 
 
             this.SupplyNames = new string[supplyTechNames.Length];
@@ -145,35 +159,47 @@ namespace Hive.IO
         }
 
 
+        /// <summary>
+        /// Sets the mpnthly operation schedule for all supply systems
+        /// </summary>
+        /// <param name="supplyOperationMonthly">first array represents technologies, second array represents schedule</param>
         public void SetSupplySystemsGenerationMonthly(double [][] supplyOperationMonthly)
         {
-            if (supplyOperationMonthly.Length <= 0) return;
+            if (supplyOperationMonthly.Length <= 0 || supplyOperationMonthly == null) return;
 
             this.SupplyOperationMonthly = new double[supplyOperationMonthly.Length][];
             for (int i = 0; i < this.SupplyOperationMonthly.Length; i++)
             {
-                if(supplyOperationMonthly[i].Length == Results.months) 
+                if (supplyOperationMonthly[i].Length == Results.months)
                 {
                     this.SupplyOperationMonthly[i] = new double[Results.months];
                     supplyOperationMonthly.CopyTo(this.SupplyOperationMonthly, 0);
-                }
+                } 
+                else 
+                    this.SupplyOperationMonthly[i] = null;
             }
 
         }
 
 
+        /// <summary>
+        /// Sets the hourly generation schedule of all supply systems
+        /// </summary>
+        /// <param name="supplyOperationHourly">first array represents technologies, second array represents schedule</param>
         public void SetSupplySystemsGenerationHourly(double[][] supplyOperationHourly)
         {
-            if (supplyOperationHourly.Length <= 0) return;
+            if (supplyOperationHourly.Length <= 0 || supplyOperationHourly == null) return;
 
-            this.SupplyOperationMonthly = new double[supplyOperationHourly.Length][];
-            for (int i = 0; i < this.SupplyOperationMonthly.Length; i++)
+            this.SupplyOperationHourly = new double[supplyOperationHourly.Length][];
+            for (int i = 0; i < this.SupplyOperationHourly.Length; i++)
             {
                 if (supplyOperationHourly[i].Length == Results.hours)
                 {
-                    this.SupplyOperationMonthly[i] = new double[Results.hours];
-                    supplyOperationHourly.CopyTo(this.SupplyOperationMonthly, 0);
+                    this.SupplyOperationHourly[i] = new double[Results.hours];
+                    supplyOperationHourly.CopyTo(this.SupplyOperationHourly, 0);
                 }
+                else
+                    this.SupplyOperationHourly[i] = null;
             }
         }
 
@@ -199,12 +225,14 @@ namespace Hive.IO
                 this.TotalHeatingMonthly = null;
 
             if (electricityDemand != null && electricityDemand.Length == Results.months)
-                electricityDemand.CopyTo(this.TotalElecMonthly, 0);
+                electricityDemand.CopyTo(this.TotalElectricityMonthly, 0);
             else
-                this.TotalElecMonthly = null;
+                this.TotalElectricityMonthly = null;
 
             if (dhwDemand != null && dhwDemand.Length == Results.months)
                 dhwDemand.CopyTo(this.TotalDHWMonthly, 0);
+            else
+                this.TotalDHWMonthly = null;
         }
 
 
@@ -229,12 +257,14 @@ namespace Hive.IO
                 this.TotalHeatingHourly = null;
 
             if (electricityDemand != null && electricityDemand.Length == Results.hours)
-                electricityDemand.CopyTo(this.TotalElecHourly, 0);
+                electricityDemand.CopyTo(this.TotalElectricityHourly, 0);
             else
-                this.TotalElecHourly = null;
+                this.TotalElectricityHourly = null;
 
             if (dhwDemand != null && dhwDemand.Length == Results.hours)
                 dhwDemand.CopyTo(this.TotalDHWHourly, 0);
+            else
+                this.TotalDHWHourly = null;
         }
 
     }
