@@ -310,7 +310,7 @@ namespace Hive.IO
 
             var demandHeating = new ColumnSeries
             {
-                ItemsSource = Owner.Results.TotalHtgMonthly.Select(demand => new ColumnItem {Value = demand}),
+                ItemsSource = Owner.Results.TotalHeatingMonthly.Select(demand => new ColumnItem {Value = demand}),
 
                 LabelPlacement = LabelPlacement.Inside,
                 LabelFormatString = "{0:.00}",
@@ -320,7 +320,7 @@ namespace Hive.IO
 
             var demandCooling = new ColumnSeries
             {
-                ItemsSource = Owner.Results.TotalClgMonthly.Select(demand => new ColumnItem {Value = demand}),
+                ItemsSource = Owner.Results.TotalCoolingMonthly.Select(demand => new ColumnItem {Value = demand}),
 
                 LabelPlacement = LabelPlacement.Inside,
                 LabelFormatString = "{0:.00}",
@@ -330,7 +330,7 @@ namespace Hive.IO
 
             var demandElectricity = new ColumnSeries
             {
-                ItemsSource = Owner.Results.TotalElecMonthly.Select(demand => new ColumnItem {Value = demand}),
+                ItemsSource = Owner.Results.TotalElectricityMonthly.Select(demand => new ColumnItem {Value = demand}),
                 LabelPlacement = LabelPlacement.Inside,
                 LabelFormatString = "{0:.00}",
                 Title = " Electricity Demand"
@@ -365,14 +365,14 @@ namespace Hive.IO
 
             var demandHeating = new ColumnSeries
             {
-                ItemsSource = Owner.Results.TotalHtgHourly.Select(demand => new ColumnItem { Value = demand }),
+                ItemsSource = Owner.Results.TotalHeatingHourly.Select(demand => new ColumnItem { Value = demand }),
                 Title = " Heating Demand"
             };
             model.Series.Add(demandHeating);
 
             var demandCooling = new ColumnSeries
             {
-                ItemsSource = Owner.Results.TotalClgHourly.Select(demand => new ColumnItem { Value = demand }),
+                ItemsSource = Owner.Results.TotalCoolingHourly.Select(demand => new ColumnItem { Value = demand }),
                 Title = " Cooling Demand"
             };
             model.Series.Add(demandCooling);
