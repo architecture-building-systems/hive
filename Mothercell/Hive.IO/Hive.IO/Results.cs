@@ -100,13 +100,16 @@ namespace Hive.IO
 
 
         #region constants
+
         private const int months = 12;
         private const int hours = 8760;
+
         #endregion
 
 
         public Results()
         {
+
             this.TotalCoolingMonthly = new double[Results.months];
             this.TotalElectricityMonthly = new double[Results.months];
             this.TotalHeatingMonthly = new double[Results.months];
@@ -143,7 +146,6 @@ namespace Hive.IO
             if (supplyCapUnits.Length < shortestLength) shortestLength = supplyCapUnits.Length;
             if (supplyTypes.GetLength(0) < shortestLength) shortestLength = supplyTypes.GetLength(0);
 
-
             this.SupplyNames = new string[supplyTechNames.Length];
             supplyTechNames.CopyTo(this.SupplyNames, 0);
 
@@ -179,6 +181,10 @@ namespace Hive.IO
                     this.SupplyOperationMonthly[i] = null;
             }
 
+
+            this.TotalHtgHourly = new double[Results.Hours];
+            this.TotalClgHourly = new double[Results.Hours];
+            this.TotalElecHourly = new double[Results.Hours];
         }
 
 
@@ -188,6 +194,7 @@ namespace Hive.IO
         /// <param name="supplyOperationHourly">first array represents technologies, second array represents schedule</param>
         public void SetSupplySystemsGenerationHourly(double[][] supplyOperationHourly)
         {
+
             if (supplyOperationHourly.Length <= 0 || supplyOperationHourly == null) return;
 
             this.SupplyOperationHourly = new double[supplyOperationHourly.Length][];
