@@ -180,11 +180,6 @@ namespace Hive.IO
                 else 
                     this.SupplyOperationMonthly[i] = null;
             }
-
-
-            this.TotalHtgHourly = new double[Results.Hours];
-            this.TotalClgHourly = new double[Results.Hours];
-            this.TotalElecHourly = new double[Results.Hours];
         }
 
 
