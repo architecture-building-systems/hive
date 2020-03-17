@@ -7,7 +7,7 @@ namespace Hive.IO
     /// </summary>
     namespace EnergySystem
     {
-        #region Solar technology
+        #region Surface based technology
         /// <summary>
         /// Surface based energy technologies, such as PV, solar thermal, PVT, ground collectors, etc.
         /// </summary>
@@ -125,7 +125,17 @@ namespace Hive.IO
         /// </summary>
         public abstract class GenerationSystem
         {
-
+            public enum TechnologyNames
+            {
+                Boiler,
+                CombinedHeatPower,
+                MicroCHP,
+                AirSourceHeatPump,
+                GroundSourceHeatPump,
+                Photovoltaic,
+                HybridPhotovoltaicThermal,
+                SolarCollector
+            }
         }
 
         /// <summary>
@@ -134,6 +144,13 @@ namespace Hive.IO
         /// </summary>
         public abstract class StorageSystem
         {
+            public enum TechnologyNames
+            {
+                Battery,
+                WaterTank,
+                IceStorage,
+                GroundStorage,
+            }
 
         }
 
