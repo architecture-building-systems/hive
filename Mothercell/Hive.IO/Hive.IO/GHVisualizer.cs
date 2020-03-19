@@ -51,13 +51,8 @@ namespace Hive.IO
             }
         }
 
-        public override GH_Exposure Exposure
-        {
-            get
-            {
-                return GH_Exposure.primary;
-            }
-        }
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
+
 
         /// <summary>
         /// FIXME: print out some of the data to see what it looks like
@@ -87,6 +82,8 @@ namespace Hive.IO
                 return new Guid("7b4ece55-07a0-4e87-815a-e3724a1317b1");
             }
         }
+
+
     }
 
     public class GHVisualizerAttributes : GH_ResizableAttributes<GHVisualizer>

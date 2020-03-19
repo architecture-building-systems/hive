@@ -9,8 +9,8 @@ namespace Hive.IO
     public class GHDistributorSolar : GH_Component
     {
         public GHDistributorSolar()
-          : base("DistributorSolar", "DistributorSolar",
-              "DistributorSolar",
+          : base("Hive.IO.DistributorSolar", "HiveIODistrSolar",
+              "Distributor for solar simulations. Reads in and outputs all relevant geometric, geographic and climatic information necessary for solar simulations.",
               "[hive]", "Mothercell")
         {
         }
@@ -18,22 +18,22 @@ namespace Hive.IO
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("BuildingObj", "BuildingObj", "BuildingObj", GH_ParamAccess.item);
-            pManager.AddGenericParameter("EnvironmentObj", "EnvironmentObj", "EnvironmentObj", GH_ParamAccess.item);
-            pManager.AddGenericParameter("PVObj", "PVObj", "PVObj", GH_ParamAccess.list);
-            pManager.AddGenericParameter("PVTObj", "PVTObj", "PVTObj", GH_ParamAccess.list);
-            pManager.AddGenericParameter("STObj", "STObj", "STObj", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Hive.IO.Building", "HiveIOBldg", "Reads in an Hive.IO.Building object.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.Environment", "HiveIOEnv", "Reads in an Hive.IO.Environment object.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.EnergySystem.PV", "HiveIOEnSysPV", "Reads in an Hive.IO.EnergySystem.PV object.", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Hive.IO.EnergySystem.PVT", "HiveIOEnSysPVT", "Reads in an Hive.IO.EnergySystem.PVT object.", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Hive.IO.EnergySystem.ST", "HiveIOEnSysST", "Reads in an Hive.IO.EnergySystem.ST object.", GH_ParamAccess.list);
         }
 
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddMeshParameter("EnvironmentMesh", "EnvironmentMesh", "EnvironmentMesh", GH_ParamAccess.list);    // 0
-            pManager.AddPointParameter("BldCentroid", "BldCentroid", "BldCentroid", GH_ParamAccess.item);               // 1
-            pManager.AddSurfaceParameter("ExtSrfs", "ExtSrfs", "ExtSrfs", GH_ParamAccess.list);                         // 2
-            pManager.AddMeshParameter("PVMesh", "PVMesh", "PVMesh", GH_ParamAccess.list);                               // 3
-            pManager.AddMeshParameter("PVTMesh", "PVTMesh", "PVTMesh", GH_ParamAccess.list);                            // 4
-            pManager.AddMeshParameter("STMesh", "StMesh", "STMesh", GH_ParamAccess.list);                               // 5
+            pManager.AddMeshParameter("Environment Mesh", "EnvMesh", "Mesh geometries of the environment (adjacent buildings, trees, obstacles, etc.).", GH_ParamAccess.list);    // 0
+            pManager.AddPointParameter("Building Centroid", "BldCentroid", "Centroid of the building bounding box.", GH_ParamAccess.item);               // 1
+            pManager.AddSurfaceParameter("External Surfaces", "ExtSrfs", "External Surfaces of the building that have access to the outside (i.e. are not internal walls).", GH_ParamAccess.list);                         // 2
+            pManager.AddMeshParameter("PV Mesh", "PVMesh", "Mesh geometries of the Photovoltaic (PV) objects.", GH_ParamAccess.list);                               // 3
+            pManager.AddMeshParameter("PVT Mesh", "PVTMesh", "Mesh geometries of the hybrid PVT objects.", GH_ParamAccess.list);                            // 4
+            pManager.AddMeshParameter("ST Mesh", "STMesh", "Mesh geometries of the Solar Thermal (ST) objects.", GH_ParamAccess.list);                               // 5
         }
 
 
