@@ -9,8 +9,8 @@ namespace Hive.IO
     public class GHDistributorSIA : GH_Component
     {
         public GHDistributorSIA()
-          : base("DistributorSIA", "DistributorSIA",
-              "DistributorSIA",
+          : base("Hive.IO.DistributorSIA", "HiveIODistrSIA",
+              "Sia 2024 distributor that reads in an Hive.IO.Building object and outputs its Sia 2024 room definition.",
               "[hive]", "Mothercell")
         {
         }
@@ -18,16 +18,17 @@ namespace Hive.IO
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("BuildingObj", "BuildingObj", "BuildingObj", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.Building", "HiveIOBldg", "Reads in an Hive.IO.Building object.", GH_ParamAccess.item);
         }
 
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("ZoneAreas", "ZoneAreas", "ZoneAreas", GH_ParamAccess.list);
-            pManager.AddNumberParameter("WindowsAreas", "WindowsAreas", "WindowsAreas", GH_ParamAccess.list);
-            pManager.AddNumberParameter("ExtSrfAreas", "ExtSrfAreas", "ExtSrfAreas", GH_ParamAccess.list);
-            pManager.AddTextParameter("SIA2024json", "SIA2024json", "SIA2024json", GH_ParamAccess.item);
+            // NOTE! descriptions not accurate. Currently, Hive only supports one zone and one room definition.
+            pManager.AddNumberParameter("Zone Areas", "ZoneAreas", "Floor areas in [m²] of all zone of the building.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Windows Areas", "WinAreas", "All window areas in [m²] of the building.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("External Surfaces Areas", "ExtSrfAreas", "ExtSrfAreas", GH_ParamAccess.list);
+            pManager.AddTextParameter("SIA 2024 Room", "SiaRoom", "SIA 2024 room definitions for each zone.", GH_ParamAccess.item);
 
         }
 

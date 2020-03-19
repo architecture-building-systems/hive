@@ -17,8 +17,8 @@ namespace Hive.IO
     public class GHBuilding : GH_Component
     {
         public GHBuilding()
-          : base("Hive.IO.Building", "Hive.IO.Building",
-              "Hive Building, representing thermal and construction properties. Like a multi-zone building model.",
+          : base("Hive.IO.Building", "Hive.IO.Bldg",
+              "Hive Building, representing the building geometry, as well as thermal and construction properties.",
               "[hive]", "IO")
         {
         }
@@ -26,21 +26,28 @@ namespace Hive.IO
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddBrepParameter("Zone Geometry", "Zone Geometry", "Zone geometry. Breps. Only one box for now. Must be closed and convex,", GH_ParamAccess.item);
-            pManager.AddSurfaceParameter("Windows", "Windows", "Window surfaces that lie on the zone geometry", GH_ParamAccess.list);
+            // NOTE! the descriptions are not fully accurate for the current Hive version. Zone Brep currently only takes one zone (in future it should take multiple zones), and SIARoom should also take multiple rooms in future, one for each zone).
+            pManager.AddBrepParameter("Zone Brep Geometries", "ZoneBreps", "Zone geometries as Breps." +
+                "\nStrict conditions: Must be a closed Polysurface." +
+                "\nOptional conditions (necessary for EnergyPlus): (i) Linearity of edges, (ii) convexity, (iii) planarity of faces.", GH_ParamAccess.item);
+            pManager.AddSurfaceParameter("Windows Surfaces", "WinSrfs", "Windows surfaces that lie on a zone Brep." +
+                "\nStrict conditions: (i) Windows must not intersect and (ii) Windows must lie entirely on a Brep face." +
+                "\nOptional input.", GH_ParamAccess.list);
             pManager[1].Optional = true;
-            pManager.AddTextParameter("SIA2024dict", "SIA2024dict", "SIA2024dict, defining which SIA 2024 room type this here is.", GH_ParamAccess.item);
+            pManager.AddTextParameter("SIA2024 Room", "SiaRoom", "SIA 2024 Room definition." +
+                "\nMust be a string containing information about the zone (internal loads, construction, etc)." +
+                "\nMust be in the correct format as defined in the Hive SIA 2024 Rooms list component." +
+                "\nOptional input.", GH_ParamAccess.item);
+            pManager[2].Optional = true;
         }
 
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Hive.IO.Building", "Hive.IO.Building", "Hive.IO.Building Object, that contains all zones and windows. Solved for adjacencies", GH_ParamAccess.item);
-
-            //pManager.AddBooleanParameter("conxex", "convex", "convex", GH_ParamAccess.item);
-            //pManager.AddBooleanParameter("linear", "linear", "linear", GH_ParamAccess.item);
-            //pManager.AddBooleanParameter("closed", "closed", "closed", GH_ParamAccess.item);
-            //pManager.AddBooleanParameter("valid", "valid", "valid", GH_ParamAccess.item);
+            // NOTE! description not accurate, zone adjacencies not implemented yet.
+            pManager.AddGenericParameter("Hive.IO.Building", "HiveIOBldg", "Creates an instance of a Hive.IO.Building." +
+                "\nIt contains all geometric information, such as zone definitions and windows, as well as thermal and construction properties." +
+                "\nThe object will also contain surface and zone adjacencies.", GH_ParamAccess.item);
         }
 
 
@@ -53,7 +60,7 @@ namespace Hive.IO
         {
             public BuildingComponentAttributes(IGH_Component component) : base(component) { }
 
-            //// Hive 0.2
+            //// NOTE! activate for Hive 0.3
             //public override GH_ObjectResponse RespondToMouseDoubleClick(GH_Canvas sender, GH_CanvasMouseEvent e)
             //{
             //    (Owner as GHBuilding)?.DisplayForm();
@@ -81,12 +88,12 @@ namespace Hive.IO
 
         //maybe in the FormBuilding.cs?
         // trying to jump into rhino viewport for selecting geometry there.
-        // leave for Hive 0.2
+        // leave for Hive 0.3
         private void OnButton11Click(object sender, EventArgs e)
         {
             ri.GetObject go = new ri.GetObject();
             go.SetCommandPrompt("pick building brep");
-            go.GroupSelect = false; //set to true for Hive0.2
+            go.GroupSelect = false; //set to true for Hive0.3
             if (go.CommandResult() != Rhino.Commands.Result.Success)
                 return;
 
@@ -183,8 +190,6 @@ namespace Hive.IO
         {
             get
             {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
                 return null;
             }
         }
