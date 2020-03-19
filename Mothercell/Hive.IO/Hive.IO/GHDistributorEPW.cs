@@ -9,8 +9,8 @@ namespace Hive.IO
     public class GHDistributorEPW : GH_Component
     {
         public GHDistributorEPW()
-          : base("DistributorEPW", "DistributorEPW",
-              "DistributorEPW",
+          : base("Hive.IO.DistributorEPW", "HiveIODistrEPW",
+              "Weather file (.epw) distributor. Reads in an Hive.IO.Environment object and outputs the filepath of the .epw",
               "[hive]", "Mothercell")
         {
         }
@@ -18,13 +18,13 @@ namespace Hive.IO
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("EnvironmentObj", "EnvironmentObj", "EnvironmentObj", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.Environment", "HiveIOEnv", "Reads in an Hive.IO.Environment object.", GH_ParamAccess.item);
         }
 
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddTextParameter("filepath", "filepath", "filepath", GH_ParamAccess.item);
+            pManager.AddTextParameter("Filepath", "Filepath", "Outputs the filepath of the .epw weather file belonging to Hive.IO.Environment. Can be used to e.g. open the weather file in another component.", GH_ParamAccess.item);
         }
 
 

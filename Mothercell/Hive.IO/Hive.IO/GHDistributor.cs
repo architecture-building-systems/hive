@@ -10,8 +10,8 @@ namespace Hive.IO
     public class GHDistributor : GH_Component
     {
         public GHDistributor()
-          : base("Distributor", "Distributor",
-              "Distributor",
+          : base("Hive.IO.Distributor", "HiveIODistr",
+              "The Hive.IO.Distributor collects all Hive Inputs from outside the Mothercell (the simulation core) and outputs them individually according to their class type, ready for deployment.",
               "[hive]", "Mothercell")
         {
         }
@@ -29,11 +29,11 @@ namespace Hive.IO
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("IO.Building", "IO.Building", "IO.Building", GH_ParamAccess.item);
-            pManager.AddGenericParameter("IO.EnergySystem.PV", "IO.EnergySystem.PV", "IO.EnergySystem.PV", GH_ParamAccess.list);
-            pManager.AddGenericParameter("IO.EnergySystem.ST", "IO.EnergySystem.ST", "IO.EnergySystem.ST", GH_ParamAccess.list);
-            pManager.AddGenericParameter("IO.EnergySystem.PVT", "IO.EnergySystem.PVT", "IO.EnergySystem.PVT", GH_ParamAccess.list);
-            pManager.AddGenericParameter("IO.Environment", "IO.Environment", "IO.Environment", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.Building", "HiveIOBldg", "Hive.IO.Building from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.EnergySystem.PV", "HiveIOEnSysPV", "Hive.IO.EnergySystem.PV from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Hive.IO.EnergySystem.ST", "HiveIOEnSysST", "Hive.IO.EnergySystem.ST from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Hive.IO.EnergySystem.PVT", "HiveIOEnSysPVT", "Hive.IO.EnergySystem.PVT from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Hive.IO.Environment", "HiveIOEnv", "Hive.IO.Environment from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.item);
         }
 
 

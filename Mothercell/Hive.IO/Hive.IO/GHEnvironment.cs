@@ -10,8 +10,8 @@ namespace Hive.IO
     public class GHEnvironment : GH_Component
     {
         public GHEnvironment()
-          : base("Hive.IO.Environment", "Hive.IO.Environment",
-              "Hive.IO.Environment",
+          : base("Hive.IO.Environment", "Hive.IO.Env",
+              "Creates an instance of the Hive.IO.Environment class, describing the environment of a building.",
               "[hive]", "IO")
         {
         }
@@ -19,14 +19,14 @@ namespace Hive.IO
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("epwPath", "epwPath", "epwPath", GH_ParamAccess.item);
-            pManager.AddMeshParameter("Geometry", "Geometry", "Geometry", GH_ParamAccess.list);
+            pManager.AddTextParameter("EPW Path", "epwPath", "epwPath", GH_ParamAccess.item);
+            pManager.AddMeshParameter("Obstacles Geometry", "ObstMesh", "Mesh geometries of any adjacent obstacles, such as buildings, trees, etc.", GH_ParamAccess.list);
         }
 
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("EnvironmentObj", "EnvironmentObj", "EnvironmentObj", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.Environment", "HiveIOEnv", "Hive.IO.Environment, containing geometric, geographic and climate information of the buildings's environment.", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -46,8 +46,6 @@ namespace Hive.IO
         {
             get
             {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
                 return null;
             }
         }
