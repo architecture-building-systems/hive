@@ -86,6 +86,8 @@ namespace Hive.IO
             DA.GetDataTree(10, out supplyOpMonthly);
             DA.GetDataTree(11, out supplyOpHourly);
 
+            // tech types need to be read from the input. how?
+            // PV will be read in here as just another supply technology, but with unit m², or kW_peak?
             int techtypes = 3;
             bool[,] supplyTypes = new bool[supplyCap.Count, techtypes];
             string[] supplyUnits = new string[supplyCap.Count];
