@@ -12,8 +12,8 @@ namespace Hive.IO
     {
 
         public GHResults()
-          : base("GHResults", "GHResults",
-              "GHResults",
+          : base("Hive.IO.Results", "HiveIOResults",
+              "Hive.IO.Results object, containing results of all simulations run within the Mothercell.",
               "[hive]", "Mothercell")
         {
         }
@@ -25,22 +25,22 @@ namespace Hive.IO
             // TO DO: list of lists? each zone has demand and you could have multiple zones here
 
             // 0, 1, 2, 3
-            pManager.AddNumberParameter("ClgMonthly", "ClgMonthly", "ClgMonthly", GH_ParamAccess.list);
-            pManager.AddNumberParameter("HtgMonthly", "HtgMonthly", "HtgMonthly", GH_ParamAccess.list);
-            pManager.AddNumberParameter("ElecMonthly", "ElecMonthly", "ElecMonthly", GH_ParamAccess.list);
-            pManager.AddNumberParameter("DHWMonthly", "DHWMonthly", "DHWMonthly", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Cooling Monthly", "ClgMonthly", "Monthly cooling energy demand in [kWh]. List with 12 elements.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Heating Monthly", "HtgMonthly", "Monthly heating energy in [kWh]. List with 12 elements.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Electricity Monthly", "ElecMonthly", "Monthly electricity demand in [kWh]. List with 12 elements.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Domestic Hot Water Monthly", "DHWMonthly", "Monthly domestic hot water demand in [kWh]. List with 12 elements.", GH_ParamAccess.list);
 
             // 4, 5, 6, 7
-            pManager.AddNumberParameter("CoolingHourly", "CoolingHourly", "CoolingHourly", GH_ParamAccess.list);
-            pManager.AddNumberParameter("HeatingHourly", "HeatingHourly", "HeatingHourly", GH_ParamAccess.list);
-            pManager.AddNumberParameter("ElectricityHourly", "ElectricityHourly", "ElectricityHourly", GH_ParamAccess.list);
-            pManager.AddNumberParameter("DHWHourly", "DHWHourly", "DHWHourly", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Cooling Hourly", "ClgHourly", "Hourly cooling energy demand in [kWh]. List with 8760 elements.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Heating Hourly", "HtgHourly", "Hourly heating energy demand in [kWh]. List with 8760 elements.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Electricity Hourly", "ElecHourly", "Hourly electricity demand in [kWh]. List with 8760 elements.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Domestic Hot Water Hourly", "DHWHourly", "Hourly domestic hot water demand in [kWh]. List with 8760 elements.", GH_ParamAccess.list);
 
             // 8, 9, 10, 11
-            pManager.AddNumberParameter("SupplyCapacities", "SupplyCapacities", "SupplyCapacities", GH_ParamAccess.list);
-            pManager.AddTextParameter("SupplyNames", "SupplyNames", "SupplyNames", GH_ParamAccess.list);
-            pManager.AddNumberParameter("SupplyOpMonthly", "SupplyOpMonthly", "SupplyOpMonthly", GH_ParamAccess.tree);
-            pManager.AddNumberParameter("SupplyOpHourly", "SupplyOpHourly", "SupplyOpHourly", GH_ParamAccess.tree);
+            pManager.AddNumberParameter("Supply System Capacities", "SupSysCap", "Capacities of the energy supply system technologies.", GH_ParamAccess.list);
+            pManager.AddTextParameter("Supply System Names", "SupSysNames", "Names of the energy supply system technologies.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Operation Monthly", "OpMonthly", "Monthly operation schedules of the energy supply systems.", GH_ParamAccess.tree);
+            pManager.AddNumberParameter("Operation Hourly", "OpHourly", "Hourly operation schedules of the energy supply systems.", GH_ParamAccess.tree);
 
             for (int i = 0; i < pManager.ParamCount; i++)
                 pManager[i].Optional = true;
@@ -49,7 +49,7 @@ namespace Hive.IO
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("ResultsObj", "ResultsObj", "ResultsObj", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.Results", "HiveIORes", "Writes an Hive.IO.Results object, ready to be shipped into the world, outside the Mothercell.", GH_ParamAccess.item);
         }
 
 
@@ -141,13 +141,13 @@ namespace Hive.IO
             //DA.SetDataTree(0, oCircles);
 
 
+            // writing data into results object
             Results results = new Results();
+
             // these methods should handle nulls or wrong list lengths themselves
             results.SetTotalDemandMonthly(coolingMonthly.ToArray(), heatingMonthly.ToArray(), electricityMonthly.ToArray(), domesticHotWaterMonthly.ToArray());
             results.SetTotalDemandHourly(coolingHourly.ToArray(), heatingHourly.ToArray(), electricityHourly.ToArray(), domesticHotWaterHourly.ToArray());
-
             results.SetSupplySystemsCapacity(supplyNames.ToArray(), supplyTypes, supplyCap.ToArray(), supplyUnits);
-
             results.SetSupplySystemsGenerationMonthly(operationMonthly);
             results.SetSupplySystemsGenerationHourly(operationHourly);
 

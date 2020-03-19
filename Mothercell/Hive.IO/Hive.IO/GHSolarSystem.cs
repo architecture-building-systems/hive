@@ -20,16 +20,18 @@ namespace Hive.IO
 
 
         public GHSolarSystem()
-          : base("Hive.IO.SolarTech", "Hive.IO.SolarTech", "Hive.IO Solar Energy Systems component", "[hive]", "IO") { Indexnow = 0; }
+          : base("Hive.IO.SolarTech", "HiveIOSolar", "Hive.IO Solar Energy Systems Technologies." +
+                "\nThe component opens a Form upon double click, where details of the solar energy system can be specified." +
+                "\nPossible technologies are Photovoltaic (PV), Solar Thermal (ST), hybrid PVT, or Ground Collector (GC).", "[hive]", "IO") { Indexnow = 0; }
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddMeshParameter("mesh", "mesh", "Mesh geometry of the PV", GH_ParamAccess.item);
+            pManager.AddMeshParameter("Mesh", "Mesh", "Mesh geometries of the solar energy systems (Photovolatic, Solar Thermal, or hybrid PVT)", GH_ParamAccess.item);
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("PVObj", "PVObj", "Hive.IO.EnergySystems.PV Object", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.EnergySystem.SurfaceSystem", "HiveIOEnSysSolar", "Surface based Solar Energy System, such as PV, ST, PVT or GC.", GH_ParamAccess.item);
         }
 
         public override void CreateAttributes()
