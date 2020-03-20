@@ -39,8 +39,12 @@ namespace Hive.IO
             // 8, 9, 10, 11
             pManager.AddNumberParameter("Supply System Capacities", "SupSysCap", "Capacities of the energy supply system technologies.", GH_ParamAccess.list);
             pManager.AddTextParameter("Supply System Names", "SupSysNames", "Names of the energy supply system technologies.", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Operation Monthly", "OpMonthly", "Monthly operation schedules of the energy supply systems.", GH_ParamAccess.tree);
-            pManager.AddNumberParameter("Operation Hourly", "OpHourly", "Hourly operation schedules of the energy supply systems.", GH_ParamAccess.tree);
+            pManager.AddNumberParameter("Operation Monthly", "OpMonthly", "Monthly operation schedules of the energy supply systems in [kWh/month].", GH_ParamAccess.tree);
+            pManager.AddNumberParameter("Operation Hourly", "OpHourly", "Hourly operation schedules of the energy supply systems in [kWh].", GH_ParamAccess.tree);
+
+            // 12, 13
+            pManager.AddBooleanParameter("Supply System Suitability", "SupSysSuit", "Suitability of supply sytem for electricity, heating and cooling generation.", GH_ParamAccess.tree);
+            pManager.AddTextParameter("Supply System Units", "SupSysUnits", "Unit of the supply system capacity / operation.", GH_ParamAccess.list);
 
             for (int i = 0; i < pManager.ParamCount; i++)
                 pManager[i].Optional = true;
@@ -55,7 +59,6 @@ namespace Hive.IO
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-
             // also sub-GHResults components, like distributor? Or just one massive Results reader?
 
             // input: all kinds of results from the Core 
@@ -83,18 +86,26 @@ namespace Hive.IO
             DA.GetDataList(9, supplyNames);
             DA.GetDataTree(10, out GH_Structure<GH_Number> supplyOpMonthly);
             DA.GetDataTree(11, out GH_Structure<GH_Number> supplyOpHourly);
+            DA.GetDataTree(12, out GH_Structure<GH_Boolean> supplySysSuitability);
+
+            List<string> supplyUnits = new List<string>();
+            DA.GetDataList(13, supplyUnits);
+
 
             // tech types need to be read from the input. how?
             // PV will be read in here as just another supply technology, but with unit m², or kW_peak?
             int techtypes = 3;
             bool[,] supplyTypes = new bool[supplyCap.Count, techtypes];
-            string[] supplyUnits = new string[supplyCap.Count];
-            for (int i = 0; i < supplyUnits.Length; i++)
+            for (int i=0; i<supplySysSuitability.PathCount; i++)
             {
-                supplyUnits[i] = "dummy";
-                for (int u = 0; u < techtypes; u++)
-                    supplyTypes[i, u] = true;
+                GH_Path path = supplySysSuitability.Paths[i];
+                List<GH_Boolean> suitability = supplySysSuitability[path];
+                for(int u=0; u<suitability.Count; u++)
+                {
+                    supplyTypes[i, u] = suitability[u].Value;
+                }
             }
+
 
             double[][] operationMonthly = new double[supplyOpMonthly.PathCount][];
             for (int i = 0; i < supplyOpMonthly.PathCount; i++)
@@ -147,7 +158,7 @@ namespace Hive.IO
             // these methods should handle nulls or wrong list lengths themselves
             results.SetTotalDemandMonthly(coolingMonthly.ToArray(), heatingMonthly.ToArray(), electricityMonthly.ToArray(), domesticHotWaterMonthly.ToArray());
             results.SetTotalDemandHourly(coolingHourly.ToArray(), heatingHourly.ToArray(), electricityHourly.ToArray(), domesticHotWaterHourly.ToArray());
-            results.SetSupplySystemsCapacity(supplyNames.ToArray(), supplyTypes, supplyCap.ToArray(), supplyUnits);
+            results.SetSupplySystemsCapacity(supplyNames.ToArray(), supplyTypes, supplyCap.ToArray(), supplyUnits.ToArray());
             results.SetSupplySystemsGenerationMonthly(operationMonthly);
             results.SetSupplySystemsGenerationHourly(operationHourly);
 
