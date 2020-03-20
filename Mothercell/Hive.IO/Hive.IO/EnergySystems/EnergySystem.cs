@@ -11,32 +11,13 @@ namespace Hive.IO
         /// <summary>
         /// Surface based energy technologies, such as PV, solar thermal, PVT, ground collectors, etc.
         /// </summary>
-        public abstract class SurfaceSystem
+        public abstract class SurfaceSystem : GenerationSystem
         {
             /// <summary>
             /// Rhino mesh geometry object representing the energy system. Can be quad or triangles.
             /// </summary>
             public Mesh SurfaceGeometry { get; private set; }
-            /// <summary>
-            /// Reference thermal efficiency. Functional efficiencies (e.g. time-resolved and/or based on irradiance) are computed in Hive.CORE components.
-            /// </summary>
-            public double RefEfficiencyThermal { get; private set; }
-            /// <summary>
-            /// Reference electric efficiency. Functional efficiencies (e.g. time-resolved and/or based on irradiance) are computed in Hive.CORE components.
-            /// </summary>
-            public double RefEfficiencyElectric { get; private set; }
-            /// <summary>
-            /// Investment cost per m2
-            /// </summary>
-            public double Cost { get; private set; }
-            /// <summary>
-            /// Life cycle GHG emissions, in kgCO2eq./m2
-            /// </summary>
-            public double GHG { get; private set; }
-            /// <summary>
-            /// Name of the technology (e.g. 'Mono-cristalline PV')
-            /// </summary>
-            public string Name { get; private set; }
+
 
             protected SurfaceSystem(Mesh surfaceGeometry, double refEfficiencyThermal, double refEfficiencyElectric, 
                 double cost, double ghg, string name)
@@ -134,8 +115,38 @@ namespace Hive.IO
                 GroundSourceHeatPump,
                 Photovoltaic,
                 HybridPhotovoltaicThermal,
-                SolarCollector
+                SolarCollector,
+                GroundCollector,
+                DistrictHeating,
+                DistrictCooling,
+                Grid
             }
+
+            /// <summary>
+            /// Reference thermal efficiency. Functional efficiencies (e.g. time-resolved and/or based on irradiance) are computed in Hive.CORE components.
+            /// </summary>
+            public double RefEfficiencyThermal { get; protected set; }
+            /// <summary>
+            /// Reference electric efficiency. Functional efficiencies (e.g. time-resolved and/or based on irradiance) are computed in Hive.CORE components.
+            /// </summary>
+            public double RefEfficiencyElectric { get; protected set; }
+            /// <summary>
+            /// Investment cost per m2
+            /// </summary>
+            public double Cost { get; protected set; }
+            /// <summary>
+            /// Life cycle GHG emissions, in kgCO2eq./m2
+            /// </summary>
+            public double GHG { get; protected set; }
+            /// <summary>
+            /// Name of the technology (e.g. 'Mono-cristalline PV')
+            /// </summary>
+            public string Name { get; protected set; }
+        }
+
+        public class Boiler : GenerationSystem
+        {
+
         }
 
         /// <summary>
@@ -150,6 +161,7 @@ namespace Hive.IO
                 WaterTank,
                 IceStorage,
                 GroundStorage,
+                Borehole
             }
 
         }
