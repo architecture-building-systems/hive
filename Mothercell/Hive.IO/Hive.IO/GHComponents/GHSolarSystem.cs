@@ -185,7 +185,7 @@ namespace Hive.IO
             double pvcost = Form_pv_cost;
             double pvghg = Form_pv_co2;
 
-            EnergySystem.SurfaceSystem solartech = new EnergySystem.PV(mesh, refEff, pvcost, pvghg, pvname);
+            EnergySystem.SurfaceBased solartech = new EnergySystem.PV(mesh, refEff, pvcost, pvghg, pvname);
             if (Form_SystemType == "pvt") solartech = new EnergySystem.PVT(mesh, Form_thermal_eff, Form_pv_eff, Form_pv_cost, Form_pv_co2, Form_pv_name);
             else if (Form_SystemType == "st") solartech = new EnergySystem.ST(mesh, Form_thermal_eff, Form_pv_cost, Form_pv_co2, Form_pv_name);
             else if (Form_SystemType == "gc") solartech = new EnergySystem.GroundCollector(mesh, Form_thermal_eff, Form_pv_cost, Form_pv_co2, Form_pv_name);
