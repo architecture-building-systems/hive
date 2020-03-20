@@ -79,12 +79,10 @@ namespace Hive.IO
 
             List<double> supplyCap = new List<double>();
             List<string> supplyNames = new List<string>();
-            GH_Structure<GH_Number> supplyOpMonthly;
-            GH_Structure<GH_Number> supplyOpHourly;
             DA.GetDataList(8, supplyCap);
             DA.GetDataList(9, supplyNames);
-            DA.GetDataTree(10, out supplyOpMonthly);
-            DA.GetDataTree(11, out supplyOpHourly);
+            DA.GetDataTree(10, out GH_Structure<GH_Number> supplyOpMonthly);
+            DA.GetDataTree(11, out GH_Structure<GH_Number> supplyOpHourly);
 
             // tech types need to be read from the input. how?
             // PV will be read in here as just another supply technology, but with unit m², or kW_peak?
