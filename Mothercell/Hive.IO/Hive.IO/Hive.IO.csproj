@@ -63,49 +63,54 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Building.cs" />
-    <Compile Include="BuildingComponents.cs" />
-    <Compile Include="BuildingConstruction.cs" />
-    <Compile Include="BuildingMaterial.cs" />
-    <Compile Include="GHDistributorEPW.cs" />
-    <Compile Include="GHDistributorSIA.cs" />
-    <Compile Include="GHDistributorSolar.cs" />
-    <Compile Include="GHDistributorSupplySystem.cs" />
-    <Compile Include="GHEnvironment.cs" />
-    <Compile Include="GHResults.cs" />
-    <Compile Include="GHVisualizer.cs" />
+    <Compile Include="Building\Building.cs" />
+    <Compile Include="Building\BuildingComponents.cs" />
+    <Compile Include="Building\BuildingConstruction.cs" />
+    <Compile Include="Building\BuildingMaterial.cs" />
+    <Compile Include="EnergySystems\Distribution.cs" />
+    <Compile Include="EnergySystems\DomesticHotWater.cs" />
+    <Compile Include="EnergySystems\LightingSystems.cs" />
+    <Compile Include="EnergySystems\Storage.cs" />
+    <Compile Include="EnergySystems\Ventilation.cs" />
+    <Compile Include="GHComponents\GHDistributorEPW.cs" />
+    <Compile Include="GHComponents\GHDistributorSIA.cs" />
+    <Compile Include="GHComponents\GHDistributorSolar.cs" />
+    <Compile Include="GHComponents\GHDistributorSupplySystem.cs" />
+    <Compile Include="GHComponents\GHEnvironment.cs" />
+    <Compile Include="GHComponents\GHResults.cs" />
+    <Compile Include="GHComponents\GHVisualizer.cs" />
     <Compile Include="Environment.cs" />
-    <Compile Include="FormBuilding.cs">
+    <Compile Include="GHComponents\FormBuilding.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormBuilding.Designer.cs">
+    <Compile Include="GHComponents\FormBuilding.Designer.cs">
       <DependentUpon>FormBuilding.cs</DependentUpon>
     </Compile>
-    <Compile Include="FormEnSysSolar.cs">
+    <Compile Include="GHComponents\FormEnSysSolar.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Include="FormEnSysSolar.Designer.cs">
+    <Compile Include="GHComponents\FormEnSysSolar.Designer.cs">
       <DependentUpon>FormEnSysSolar.cs</DependentUpon>
     </Compile>
-    <Compile Include="GHBuilding.cs" />
-    <Compile Include="GHDistributor.cs" />
-    <Compile Include="HiveIOInfo.cs" />
-    <Compile Include="GHSolarSystem.cs" />
+    <Compile Include="GHComponents\GHBuilding.cs" />
+    <Compile Include="GHComponents\GHDistributor.cs" />
+    <Compile Include="GHComponents\HiveIOInfo.cs" />
+    <Compile Include="GHComponents\GHSolarSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EnergySystem.cs" />
+    <Compile Include="EnergySystems\Generation.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="Results.cs" />
-    <Compile Include="Zone.cs" />
+    <Compile Include="DataHandling\Results.cs" />
+    <Compile Include="Building\Zone.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="FormBuilding.resx">
+    <EmbeddedResource Include="GHComponents\FormBuilding.resx">
       <DependentUpon>FormBuilding.cs</DependentUpon>
     </EmbeddedResource>
-    <EmbeddedResource Include="FormEnSysSolar.resx">
+    <EmbeddedResource Include="GHComponents\FormEnSysSolar.resx">
       <DependentUpon>FormEnSysSolar.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
