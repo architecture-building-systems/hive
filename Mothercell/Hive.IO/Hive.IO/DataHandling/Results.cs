@@ -4,6 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
+using rg = Rhino.Geometry;
+
 namespace Hive.IO
 {
     /// <summary>
@@ -17,6 +19,14 @@ namespace Hive.IO
     /// </summary>
     public class Results
     {
+        #region constants
+
+        private const int months = 12;
+        private const int hours = 8760;
+
+        #endregion
+
+
         #region General
         public double InterestRate { get; private set; }
         #endregion
@@ -38,8 +48,8 @@ namespace Hive.IO
 
 
         #region Zone-wise loads
-        public double[][] ZoneElecMonthly { get; private set; }
-        public double[][] ZoneElecHourly { get; private set; }
+        public double[][] ZoneElectricityMonthly { get; private set; }
+        public double[][] ZoneElectricityHourly { get; private set; }
         public double[][] ZoneCoolingMonthly { get; private set; }
         public double[][] ZoneCoolingHourly { get; private set; }
         public double[][] ZoneHeatingMonthly { get; private set; }
@@ -99,11 +109,10 @@ namespace Hive.IO
         #endregion
 
 
-        #region constants
-
-        private const int months = 12;
-        private const int hours = 8760;
-
+        #region Geometry
+        public rg.Mesh SkyViewFactors { get; private set; }
+        public rg.Curve[] SkySunPath { get; private set; }
+        public rg.Mesh[] IrradiationSurfaces { get; private set; }
         #endregion
 
 
@@ -124,6 +133,40 @@ namespace Hive.IO
             this.SupplyTypes = null;
             this.SupplyCapacities = null;
             this.SupplyCapUnits = null;
+
+            this.SkyViewFactors = null;
+            this.SkySunPath = null;
+            this.IrradiationSurfaces = null;
+        }
+
+
+        /// <summary>
+        /// Sets the 3D sky dome around the building
+        /// </summary>
+        /// <param name="viewfactors"></param>
+        /// <param name="sunPath"></param>
+        public void SetSkyDome(rg.Mesh viewfactors, rg.Curve [] sunPath)
+        {
+            if (viewfactors != null) this.SkyViewFactors = viewfactors.DuplicateMesh();
+            
+            if (sunPath.Length > 0 && sunPath != null)
+            {
+                this.SkySunPath = new rg.Curve[sunPath.Length];
+                sunPath.CopyTo(this.SkySunPath, 0);
+            }
+        }
+
+
+        /// <summary>
+        /// Sets meshes with coloured vertices representing irradiation
+        /// </summary>
+        /// <param name="irradiationMesh"></param>
+        public void SetIrradiationMesh(rg.Mesh [] irradiationMesh)
+        {
+            if (irradiationMesh.Length <= 0 || irradiationMesh == null) return;
+
+            this.IrradiationSurfaces = new rg.Mesh[irradiationMesh.Length];
+            irradiationMesh.CopyTo(this.IrradiationSurfaces, 0);
         }
 
 
