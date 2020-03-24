@@ -46,6 +46,12 @@ namespace Hive.IO
             pManager.AddBooleanParameter("Supply System Suitability", "SupSysSuit", "Suitability of supply sytem for electricity, heating and cooling generation.", GH_ParamAccess.tree);
             pManager.AddTextParameter("Supply System Units", "SupSysUnits", "Unit of the supply system capacity / operation.", GH_ParamAccess.list);
 
+            // 14, 15
+            pManager.AddMeshParameter("Solar Irradiated Surfaces", "SolSrfs", "Mesh surfaces whose vertices are coloured accordint to their solar exposure in [kWh/year]", GH_ParamAccess.list);
+            pManager.AddMeshParameter("Sky View Factor", "ViewFactor", "Sky dome showing view factors.", GH_ParamAccess.item);
+            pManager.AddCurveParameter("Sunpath Diagram", "SunPath", "Sunpath diagram for the geographic location of the building.", GH_ParamAccess.list);
+
+
             for (int i = 0; i < pManager.ParamCount; i++)
                 pManager[i].Optional = true;
         }
@@ -90,6 +96,14 @@ namespace Hive.IO
 
             List<string> supplyUnits = new List<string>();
             DA.GetDataList(13, supplyUnits);
+
+
+            List<Mesh> irradMesh = new List<Mesh>();
+            Mesh viewFactor = null;
+            List<Curve> sunPathCrvs = new List<Curve>();
+            DA.GetDataList(14, irradMesh);
+            DA.GetData(15, ref viewFactor);
+            DA.GetDataList(16, sunPathCrvs);
 
 
             // tech types need to be read from the input. how?
@@ -154,14 +168,15 @@ namespace Hive.IO
 
             // writing data into results object
             Results results = new Results();
-
+            
             // these methods should handle nulls or wrong list lengths themselves
             results.SetTotalDemandMonthly(coolingMonthly.ToArray(), heatingMonthly.ToArray(), electricityMonthly.ToArray(), domesticHotWaterMonthly.ToArray());
             results.SetTotalDemandHourly(coolingHourly.ToArray(), heatingHourly.ToArray(), electricityHourly.ToArray(), domesticHotWaterHourly.ToArray());
             results.SetSupplySystemsCapacity(supplyNames.ToArray(), supplyTypes, supplyCap.ToArray(), supplyUnits.ToArray());
             results.SetSupplySystemsGenerationMonthly(operationMonthly);
             results.SetSupplySystemsGenerationHourly(operationHourly);
-
+            results.SetIrradiationMesh(irradMesh.ToArray());
+            results.SetSkyDome(viewFactor, sunPathCrvs.ToArray());
 
             DA.SetData(0, results);
         }
