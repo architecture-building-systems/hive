@@ -14,6 +14,7 @@ using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using OxyPlot.WindowsForms;
+using Rhino;
 
 namespace Hive.IO
 {
@@ -59,7 +60,6 @@ namespace Hive.IO
         /// </summary>
         protected override void OnVolatileDataCollected()
         {
-            Rhino.RhinoApp.WriteLine("GHVisualizer.OnVolatileDataCollected");
             if (m_data.IsEmpty)
             {
                 Results = new Results();
@@ -67,6 +67,7 @@ namespace Hive.IO
             }
 
             Results = m_data.First().Value as Results;
+            ((GHVisualizerAttributes) m_attributes).ClearBitmapCache();
         }
 
 
@@ -176,7 +177,6 @@ namespace Hive.IO
 
         public override GH_ObjectResponse RespondToMouseDown(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
-            Rhino.RhinoApp.WriteLine($"GHVisualizer: RespondToMouseDown");
             if (e.Button != MouseButtons.Left)
             {
                 return base.RespondToMouseDown(sender, e);
@@ -184,16 +184,12 @@ namespace Hive.IO
 
             if (LeftArrowBox.Contains(e.CanvasLocation))
             {
-                Rhino.RhinoApp.WriteLine($"GHVisualizer: RespondToMouseDown - inside LeftArrowBox");
                 this.PreviousPlot();
-                Rhino.RhinoApp.WriteLine($"GHVisualizer: RespondToMouseDown - after this.Owner.PreviousPlot()");
             }
 
             if (RightArrowBox.Contains(e.CanvasLocation))
             {
-                Rhino.RhinoApp.WriteLine($"GHVisualizer: RespondToMouseDown - inside RightArrowBox");
                 this.NextPlot();
-                Rhino.RhinoApp.WriteLine($"GHVisualizer: RespondToMouseDown - after this.Owner.PreviousPlot()");
             }
             
             return base.RespondToMouseDown(sender, e);
@@ -250,11 +246,10 @@ namespace Hive.IO
 
         private void RenderPlot(Graphics graphics)
         {
-            
             var plotWidth = (int) this.PlotBounds.Width;
             var plotHeight = (int) this.PlotBounds.Height;
 
-            if (plotWidth == lastPlotWidth && plotHeight == lastPlotHeight && currentPlot == lastPlot)
+            if (!(lastBitmap is null) && plotWidth == lastPlotWidth && plotHeight == lastPlotHeight && currentPlot == lastPlot)
             {
                 graphics.DrawImage(lastBitmap, this.PlotLocation.X, this.PlotLocation.Y, this.PlotBounds.Width, this.PlotBounds.Height);
             }
@@ -374,6 +369,11 @@ namespace Hive.IO
             };
             model.Series.Add(demandCooling);
             return model;
+        }
+
+        public void ClearBitmapCache()
+        {
+            this.lastBitmap = null;
         }
     }
 }
