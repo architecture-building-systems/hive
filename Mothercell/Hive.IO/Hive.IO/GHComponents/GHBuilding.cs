@@ -176,6 +176,10 @@ namespace Hive.IO
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, zone.ErrorText);
                 return;
             }
+            if (!zone.IsValidEPlus)
+            {
+                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, zone.ErrorText);
+            }
 
             Building building = new Building(new Zone [1]{ zone }, bldg_type);
             building.SetSIA2024((Dictionary<string, object>)sia2024, building.Zones);   // can be changed in the future via Windows Form: FormBuilding.cs
