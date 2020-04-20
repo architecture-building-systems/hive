@@ -249,7 +249,7 @@ namespace Hive.IO
             var plotWidth = (int) this.PlotBounds.Width;
             var plotHeight = (int) this.PlotBounds.Height;
 
-            if (!(lastBitmap is null) && plotWidth == lastPlotWidth && plotHeight == lastPlotHeight && currentPlot == lastPlot)
+            if (IsBitmapCacheStillValid(plotWidth, plotHeight))
             {
                 graphics.DrawImage(lastBitmap, this.PlotLocation.X, this.PlotLocation.Y, this.PlotBounds.Width, this.PlotBounds.Height);
             }
@@ -281,6 +281,11 @@ namespace Hive.IO
                 lastPlot = currentPlot;
                 lastBitmap = bitmap;
             }
+        }
+
+        private bool IsBitmapCacheStillValid(int plotWidth, int plotHeight)
+        {
+            return !(lastBitmap is null) && plotWidth == lastPlotWidth && plotHeight == lastPlotHeight && currentPlot == lastPlot;
         }
 
         private void RenderCapsule(GH_Canvas canvas, Graphics graphics)
