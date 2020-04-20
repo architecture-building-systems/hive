@@ -133,6 +133,10 @@ namespace Hive.IO
         /// </summary>
         public bool IsValid { get; private set; }
         /// <summary>
+        /// Stricter validity check for EnergyPlus. Can still perform SIA and RC simulations
+        /// </summary>
+        public bool IsValidEPlus { get; private set; }
+        /// <summary>
         /// Checking whether window surfaces (if any exist) are lying on the zone geometry. 
         /// Window surfaces associated to a zone cannot just lie somewhere else.
         /// </summary>
@@ -166,9 +170,8 @@ namespace Hive.IO
             this.IsWindowsSelfIntersect = true;
 
             this.IsLinear = CheckLinearity(this.ZoneGeometry);
-            if (this.IsLinear)
-            {
-                this.IsClosed = CheckClosedness(this.ZoneGeometry);
+            this.IsClosed = CheckClosedness(this.ZoneGeometry);
+
                 if (this.IsClosed)
                 {
                     this.IsPlanar = CheckPlanarity(this.ZoneGeometry);
@@ -177,13 +180,17 @@ namespace Hive.IO
                         this.IsConvex = CheckConvexity(this.ZoneGeometry, this.Tolerance);
                     }
                 }
-            }
+
             if (opening_srfs.Length > 0)
             {
                 this.IsWindowsOnZone = CheckWindowsOnZone(this.ZoneGeometry, opening_srfs, this.Tolerance);
                 this.IsWindowsSelfIntersect = CheckWindowsSelfIntersect(opening_srfs, this.Tolerance);
             }
-            this.IsValid = CheckValidity(this.IsClosed, this.IsConvex, this.IsLinear, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsSelfIntersect);
+            this.IsValidEPlus = CheckValidity(this.IsClosed, this.IsConvex, this.IsLinear, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsSelfIntersect);
+            this.IsValid = (this.IsClosed && this.IsWindowsOnZone && this.IsWindowsSelfIntersect) ? true : false;
+            this.ErrorText = String.Format("IsLinear: {0} \n " + "IsConvex: {1} \n " + "IsClosed: {2} \n " + "IsPlanar: {3} \n "
+    + "IsWindowsOnZone: {4} \n " + "IsWindowsSelfIntersect: {5}",
+    this.IsLinear, this.IsConvex, this.IsClosed, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsSelfIntersect);
 
 
             if (this.IsValid)
@@ -197,15 +204,9 @@ namespace Hive.IO
                 this.ShadingDevices = tuple.Item6;
 
                 this.Volume = zone_geometry.GetVolume();
-
-                this.ErrorText = null;
             }
             else
             {
-                this.ErrorText = String.Format("IsLinear: {0} \n " + "IsConvex: {1} \n " + "IsClosed: {2} \n " + "IsPlanar: {3} \n "
-                    + "IsWindowsOnZone: {4} \n " + "IsWindowsSelfIntersect: {5}",
-                    this.IsLinear, this.IsConvex, this.IsClosed, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsSelfIntersect);
-
                 return;
             }
 
