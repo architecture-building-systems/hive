@@ -21,7 +21,7 @@ namespace Hive.IO
 
         public rg.Mesh[] Geometry { get; private set; }
 
-        public Environment(string epwFilePath, rg.Mesh [] geometry)
+        public Environment(string epwFilePath, rg.Mesh [] geometry = null)
         {
             this.Geometry = geometry;
             this.EpwPath = epwFilePath;
