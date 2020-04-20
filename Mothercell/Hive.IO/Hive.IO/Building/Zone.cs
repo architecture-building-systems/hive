@@ -152,7 +152,7 @@ namespace Hive.IO
         /// <param name="zone_geometry">Brep geometry. Must be closed, linear and convex.</param>
         /// <param name="index">Unique identifier</param>
         /// <param name="name">Zone name, e.g. kitchen 1</param>
-        public Zone(rg.Brep zone_geometry, int index, double tolerance, string name, rg.Surface[] opening_srfs = null, rg.Surface[] shading_srfs = null)
+        public Zone(rg.Brep zone_geometry, int index, double tolerance, string name, rg.BrepFace[] opening_srfs = null, rg.Surface[] shading_srfs = null)
         {
             this.ZoneGeometry = zone_geometry;
             this.Index = index;
@@ -328,7 +328,7 @@ namespace Hive.IO
         /// <param name="brep"></param>
         /// <param name="windows"></param>
         /// <returns></returns>
-        private bool CheckWindowsOnZone(rg.Brep brep, rg.Surface[] windows, double tolerance)
+        private bool CheckWindowsOnZone(rg.Brep brep, rg.BrepFace[] windows, double tolerance)
         {
             int roundingDecimals = tolerance.ToString().Split('.')[1].Length;
 
@@ -336,10 +336,12 @@ namespace Hive.IO
             bool[] equalAreas = new bool[windows.Length];
             for (int i = 0; i < windows.Length; i++)
             {
-                rg.Surface srf = windows[i];
+                rg.BrepFace srf = windows[i];
+                rg.Brep srfbrep = rg.Brep.CreateTrimmedSurface(srf, srf.UnderlyingSurface(), tolerance);
                 rg.Curve[] intersectionCrvs;
                 rg.Point3d[] intersectionPts;
-                rg.Intersect.Intersection.BrepSurface(brep, srf, tolerance, out intersectionCrvs, out intersectionPts);
+                //rg.Intersect.Intersection.BrepSurface(brep, srf, tolerance, out intersectionCrvs, out intersectionPts);
+                rg.Intersect.Intersection.BrepBrep(brep, srfbrep, tolerance, out intersectionCrvs, out intersectionPts);
                 if (intersectionCrvs.Length > 1)
                 {
                     return false;
@@ -467,13 +469,13 @@ namespace Hive.IO
             Floor[] floors = new Floor[floor_indices.Count()];
 
             for (int i = 0; i < walls.Length; i++)
-                walls[i] = new Wall(zone_geometry.Surfaces[wall_indices[i]]);
+                walls[i] = new Wall(zone_geometry.Faces[wall_indices[i]]);
             for (int i = 0; i < ceilings.Length; i++)
-                ceilings[i] = new Ceiling(zone_geometry.Surfaces[ceiling_indices[i]]);
+                ceilings[i] = new Ceiling(zone_geometry.Faces[ceiling_indices[i]]);
             for (int i = 0; i < roofs.Length; i++)
-                roofs[i] = new Roof(zone_geometry.Surfaces[roof_indices[i]]);
+                roofs[i] = new Roof(zone_geometry.Faces[roof_indices[i]]);
             for (int i = 0; i < floors.Length; i++)
-                floors[i] = new Floor(zone_geometry.Surfaces[floor_indices[i]]);
+                floors[i] = new Floor(zone_geometry.Faces[floor_indices[i]]);
 
 
             return new Tuple<Wall[], Ceiling[], Roof[], Floor[], Opening[], Shading[]>(walls, ceilings, roofs, floors, openings, shadings);

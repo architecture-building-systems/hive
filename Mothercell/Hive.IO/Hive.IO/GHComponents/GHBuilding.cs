@@ -128,7 +128,7 @@ namespace Hive.IO
             rg.Brep zoneBrep = new rg.Brep();
             if (!DA.GetData(0, ref zoneBrep)) return;
 
-            List<rg.Surface> windows = new List<rg.Surface>();
+            List<rg.BrepFace> windows = new List<rg.BrepFace>();
             DA.GetDataList(1, windows);
 
             string json = null;
