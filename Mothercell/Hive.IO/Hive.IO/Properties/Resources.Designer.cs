@@ -105,6 +105,16 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap IO_Building {
+            get {
+                object obj = ResourceManager.GetObject("IO_Building", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap monocristalline {
             get {
                 object obj = ResourceManager.GetObject("monocristalline", resourceCulture);
@@ -124,7 +134,7 @@ namespace Hive.IO.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to PV tech,electric efficiency,thermal efficiency,cost per m2,life cycle GHG factor kgCO2eq per m2
-        ///polycristalline,0.160,0,400.0.0,35.96
+        ///polycristalline,0.160,0.0,400.0,35.96
         ///polycristalline_high,0.206,0.0,400.0,35.96
         ///monocristalline,0.184,0.0,400.0,35.96
         ///monocristalline_high,0.228,0.0,400.0,35.96
