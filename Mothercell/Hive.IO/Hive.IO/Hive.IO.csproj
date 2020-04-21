@@ -150,6 +150,24 @@
   <ItemGroup>
     <None Include="Resources\polycristalline.jpg" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IO_Building.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IO_Environment_.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IO_Solartech_.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IO_Visualizer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IO_Environment.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IO_Solartech.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

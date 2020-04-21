@@ -48,7 +48,7 @@ namespace Hive.IO
         {
             get
             {
-                return null;
+                return Hive.IO.Properties.Resources.IO_Environment;
             }
         }
 

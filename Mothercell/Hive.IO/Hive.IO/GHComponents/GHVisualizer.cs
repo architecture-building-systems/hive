@@ -84,6 +84,15 @@ namespace Hive.IO
             }
         }
 
+        protected override System.Drawing.Bitmap Icon
+        {
+            get
+            {
+                //You can add image files to your project resources and access them like this:
+                // return Resources.IconForThisComponent;
+                return Hive.IO.Properties.Resources.IO_Visualizer;
+            }
+        }
 
     }
 
