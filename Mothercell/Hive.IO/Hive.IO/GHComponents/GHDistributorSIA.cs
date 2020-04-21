@@ -29,7 +29,6 @@ namespace Hive.IO
             pManager.AddNumberParameter("Windows Areas", "WinAreas", "All window areas in [m²] of the building.", GH_ParamAccess.list);
             pManager.AddNumberParameter("External Surfaces Areas", "ExtSrfAreas", "ExtSrfAreas", GH_ParamAccess.list);
             pManager.AddTextParameter("SIA 2024 Room", "SiaRoom", "SIA 2024 room definitions for each zone.", GH_ParamAccess.item);
-
         }
 
 
