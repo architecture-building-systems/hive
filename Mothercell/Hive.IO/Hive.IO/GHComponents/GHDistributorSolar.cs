@@ -34,6 +34,8 @@ namespace Hive.IO
             pManager.AddMeshParameter("PV Mesh", "PVMesh", "Mesh geometries of the Photovoltaic (PV) objects.", GH_ParamAccess.list);                               // 3
             pManager.AddMeshParameter("PVT Mesh", "PVTMesh", "Mesh geometries of the hybrid PVT objects.", GH_ParamAccess.list);                            // 4
             pManager.AddMeshParameter("ST Mesh", "STMesh", "Mesh geometries of the Solar Thermal (ST) objects.", GH_ParamAccess.list);                               // 5
+
+            pManager.AddBrepParameter("Window Geometries", "WinBreps", "All window Brep geometries of the building.", GH_ParamAccess.list);
         }
 
 
@@ -61,6 +63,7 @@ namespace Hive.IO
 
             int zoneCount = building.Zones.Length;
             List<Brep> extSrfs = new List<Brep>();
+            List<Brep> windows = new List<Brep>();
 
             for (int i = 0; i < zoneCount; i++)
             {
@@ -75,6 +78,11 @@ namespace Hive.IO
                 {
                     //TO DO: check if external. VERY IMPORTANT
                     extSrfs.Add(roof.BrepGeometry);
+                }
+
+                foreach(BuildingComponents.Opening opening in zone.Openings)
+                {
+                    windows.Add(opening.BrepGeometry);
                 }
             }
 
@@ -108,6 +116,8 @@ namespace Hive.IO
             DA.SetDataList(3, pvSurfaces);
             DA.SetDataList(4, pvtSurfaces);
             DA.SetDataList(5, stSurfaces);
+
+            DA.SetDataList(6, windows);
 
         }
 
