@@ -130,6 +130,18 @@
   <data name="HIT" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\HIT.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="IO_Building" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IO_Building.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IO_Environment" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IO_Environment.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IO_Solartech" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IO_Solartech.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IO_Visualizer" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IO_Visualizer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="monocristalline" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\monocristalline.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
