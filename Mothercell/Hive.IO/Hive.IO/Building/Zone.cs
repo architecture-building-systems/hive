@@ -156,7 +156,7 @@ namespace Hive.IO
         /// <param name="zone_geometry">Brep geometry. Must be closed, linear and convex.</param>
         /// <param name="index">Unique identifier</param>
         /// <param name="name">Zone name, e.g. kitchen 1</param>
-        public Zone(rg.Brep zone_geometry, int index, double tolerance, string name, rg.BrepFace[] opening_srfs = null, rg.Surface[] shading_srfs = null)
+        public Zone(rg.Brep zone_geometry, int index, double tolerance, string name, rg.BrepFace[] opening_srfs = null, rg.BrepFace[] shading_srfs = null)
         {
             this.ZoneGeometry = zone_geometry;
             this.Index = index;
@@ -413,7 +413,7 @@ namespace Hive.IO
         /// <param name="shading_geometry"></param>
         /// <returns></returns>
         private Tuple<Wall[], Ceiling[], Roof[], Floor[], Opening[], Shading[]>
-            IdentifyComponents(rg.Brep zone_geometry, rg.Surface[] openings_geometry, rg.Surface[] shading_geometry)
+            IdentifyComponents(rg.Brep zone_geometry, rg.BrepFace[] openings_geometry, rg.BrepFace[] shading_geometry)
         {
             Opening[] openings = new Opening[0];
             Shading[] shadings = new Shading[0];
