@@ -12,7 +12,8 @@ namespace Hive.IO
             /// <summary>
             /// Rhino BrepFace of this component
             /// </summary>
-            public rg.Surface SurfaceGeometry { get; private set; }
+            public rg.Brep BrepGeometry { get; private set; }
+
             /// <summary>
             /// Unique identifier
             /// </summary>
@@ -64,13 +65,7 @@ namespace Hive.IO
 
             public Component(rg.BrepFace surface_geometry)
             {
-                this.SurfaceGeometry = surface_geometry;
-                this.Area = rg.AreaMassProperties.Compute(surface_geometry).Area;
-            }
-
-            public Component(rg.Surface surface_geometry)
-            {
-                this.SurfaceGeometry = surface_geometry;
+                this.BrepGeometry = surface_geometry.DuplicateFace(false);
                 this.Area = rg.AreaMassProperties.Compute(surface_geometry).Area;
             }
 
@@ -86,7 +81,7 @@ namespace Hive.IO
         {
             // Should also contain information for dynamic shading
             // static shading is defined as static shading object
-            public Opening(rg.Surface surface_geometry) : base(surface_geometry)
+            public Opening(rg.BrepFace surface_geometry) : base(surface_geometry)
             {
 
             }
@@ -145,7 +140,7 @@ namespace Hive.IO
 
         public class Shading : Component
         {
-            public Shading(rg.Surface surface_geometry) : base(surface_geometry)
+            public Shading(rg.BrepFace surface_geometry) : base(surface_geometry)
             {
 
             }
