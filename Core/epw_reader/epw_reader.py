@@ -36,6 +36,7 @@ import csv
 # indexes into .epw data rows:
 DRYBULB_INDEX = 6
 DEWPOINT_INDEX = 7
+GHI_INDEX = 13
 DNI_INDEX = 14
 DHI_INDEX = 15
 RH_INDEX = 8
@@ -49,6 +50,7 @@ def main(path):
 def epw_reader(path):
     drybulb = []
     dewpoint = []
+    ghi = []
     dni = []
     dhi = []
     rh = []
@@ -69,6 +71,7 @@ def epw_reader(path):
             else:
                 drybulb.append(float(row[DRYBULB_INDEX]))
                 dewpoint.append(float(row[DEWPOINT_INDEX]))
+                ghi.append(float(row[GHI_INDEX]))
                 dni.append(float(row[DNI_INDEX]))
                 dhi.append(float(row[DHI_INDEX]))
                 rh.append(float(row[RH_INDEX]))
@@ -77,7 +80,7 @@ def epw_reader(path):
     assert latitude is not None
     assert longitude is not None
 
-    return latitude, longitude, city_country, dni, dhi, drybulb, dewpoint, rh
+    return latitude, longitude, city_country, ghi, dni, dhi, drybulb, dewpoint, rh
 
 
 if __name__ == '__main__':

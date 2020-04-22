@@ -30,10 +30,12 @@ namespace Hive.IO
         {
             pManager.AddMeshParameter("Environment Mesh", "EnvMesh", "Mesh geometries of the environment (adjacent buildings, trees, obstacles, etc.).", GH_ParamAccess.list);    // 0
             pManager.AddPointParameter("Building Centroid", "BldCentroid", "Centroid of the building bounding box.", GH_ParamAccess.item);               // 1
-            pManager.AddSurfaceParameter("External Surfaces", "ExtSrfs", "External Surfaces of the building that have access to the outside (i.e. are not internal walls).", GH_ParamAccess.list);                         // 2
+            pManager.AddBrepParameter("External Surfaces", "ExtSrfs", "External Surfaces of the building that have access to the outside (i.e. are not internal walls).", GH_ParamAccess.list);                         // 2
             pManager.AddMeshParameter("PV Mesh", "PVMesh", "Mesh geometries of the Photovoltaic (PV) objects.", GH_ParamAccess.list);                               // 3
             pManager.AddMeshParameter("PVT Mesh", "PVTMesh", "Mesh geometries of the hybrid PVT objects.", GH_ParamAccess.list);                            // 4
             pManager.AddMeshParameter("ST Mesh", "STMesh", "Mesh geometries of the Solar Thermal (ST) objects.", GH_ParamAccess.list);                               // 5
+
+            pManager.AddBrepParameter("Window Geometries", "WinBreps", "All window Brep geometries of the building.", GH_ParamAccess.list);
         }
 
 
@@ -60,7 +62,8 @@ namespace Hive.IO
 
 
             int zoneCount = building.Zones.Length;
-            List<Surface> extSrfs = new List<Surface>();
+            List<Brep> extSrfs = new List<Brep>();
+            List<Brep> windows = new List<Brep>();
 
             for (int i = 0; i < zoneCount; i++)
             {
@@ -69,17 +72,22 @@ namespace Hive.IO
                 foreach (BuildingComponents.Wall wall in zone.Walls)
                 {
                     // TO DO: check, if external. VERY IMPORTANT
-                    extSrfs.Add(wall.SurfaceGeometry);
+                    extSrfs.Add(wall.BrepGeometry);
                 }
                 foreach (BuildingComponents.Roof roof in zone.Roofs)
                 {
                     //TO DO: check if external. VERY IMPORTANT
-                    extSrfs.Add(roof.SurfaceGeometry);
+                    extSrfs.Add(roof.BrepGeometry);
+                }
+
+                foreach(BuildingComponents.Opening opening in zone.Openings)
+                {
+                    windows.Add(opening.BrepGeometry);
                 }
             }
 
             // get centroid of building. just use a floor for now. TO DO for Hive 0.2: Come up with better idea
-            Point3d centroid = AreaMassProperties.Compute(building.Zones[0].Floors[0].SurfaceGeometry).Centroid;
+            Point3d centroid = AreaMassProperties.Compute(building.Zones[0].Floors[0].BrepGeometry).Centroid;
 
             List<Mesh> environmentList = new List<Mesh>();
             if (environment != null)
@@ -108,6 +116,8 @@ namespace Hive.IO
             DA.SetDataList(3, pvSurfaces);
             DA.SetDataList(4, pvtSurfaces);
             DA.SetDataList(5, stSurfaces);
+
+            DA.SetDataList(6, windows);
 
         }
 

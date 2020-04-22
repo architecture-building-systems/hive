@@ -23,11 +23,12 @@
         {"type": "float", "name": "Latitude", "nick-name": "Latitude", "description": "Latitude in deg"},
         {"type": "float", "name": "Longitude", "nick-name": "Longitude", "description": "Longitude in deg"},
         {"type": "string","name": "City, Country", "nick-name": "City-Country", "description": "City and Country"},
-        {"type": "float", "name": "DNI", "nick-name": "DNI", "description": "Direct Normal Irradiance, in [Wh/m2]."},
-        {"type": "float", "name": "DHI", "nick-name": "DHI", "description": "Diffuse Horizontal Irradiance, in [Wh/m2]."},
-        {"type": "float", "name": "DryBulb", "nick-name": "DryBulb", "description": "Dry Bulb Temperature, in [°C]."},
-        {"type": "float", "name": "DewPoint", "nick-name": "DewPoint", "description": "Dew Point Temperature, in [°C]."},
-        {"type": "float", "name": "RH", "nick-name": "RH", "description": "Relative Humidity, in [%]."}
+        {"type": "string","name": "GHI", "nick-name": "GHI", "description": "GlobalHorizontal Irradiance, in Wh/m2."},
+        {"type": "float", "name": "DNI", "nick-name": "DNI", "description": "Direct Normal Irradiance, in Wh/m2."},
+        {"type": "float", "name": "DHI", "nick-name": "DHI", "description": "Diffuse Horizontal Irradiance, in Wh/m2."},
+        {"type": "float", "name": "DryBulb", "nick-name": "DryBulb", "description": "Dry Bulb Temperature, in °C."},
+        {"type": "float", "name": "DewPoint", "nick-name": "DewPoint", "description": "Dew Point Temperature, in °C."},
+        {"type": "float", "name": "RH", "nick-name": "RH", "description": "Relative Humidity, in %."}
       ]
     }
   ]

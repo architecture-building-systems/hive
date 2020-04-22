@@ -21,6 +21,7 @@ namespace Hive.IO
         {
             pManager.AddTextParameter("EPW Path", "epwPath", "epwPath", GH_ParamAccess.item);
             pManager.AddMeshParameter("Obstacles Geometry", "ObstMesh", "Mesh geometries of any adjacent obstacles, such as buildings, trees, etc.", GH_ParamAccess.list);
+            pManager[1].Optional = true;
         }
 
 
@@ -37,7 +38,8 @@ namespace Hive.IO
             List<Mesh> geometry = new List<Mesh>();
             DA.GetDataList(1, geometry);
 
-            Environment environment = new Environment(path, geometry.ToArray());
+            Mesh[] geometryArray = geometry.Count > 0 ? geometry.ToArray() : null;
+            Environment environment = new Environment(path, geometryArray);
             DA.SetData(0, environment);
         }
 
@@ -46,7 +48,7 @@ namespace Hive.IO
         {
             get
             {
-                return null;
+                return Hive.IO.Properties.Resources.IO_Environment;
             }
         }
 
