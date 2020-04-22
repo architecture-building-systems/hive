@@ -394,6 +394,7 @@ namespace Hive.IO
 
         public void ClearBitmapCache()
         {
+            RhinoApp.WriteLine("Clearing bitmap cache");
             this.lastBitmap = null;
         }
     }
