@@ -128,7 +128,7 @@ namespace Hive.IO
             rg.Brep zoneBrep = new rg.Brep();
             if (!DA.GetData(0, ref zoneBrep)) return;
 
-            List<rg.Surface> windows = new List<rg.Surface>();
+            List<rg.BrepFace> windows = new List<rg.BrepFace>();
             DA.GetDataList(1, windows);
 
             string json = null;
@@ -176,6 +176,10 @@ namespace Hive.IO
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, zone.ErrorText);
                 return;
             }
+            if (!zone.IsValidEPlus)
+            {
+                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, zone.ErrorText);
+            }
 
             Building building = new Building(new Zone [1]{ zone }, bldg_type);
             building.SetSIA2024((Dictionary<string, object>)sia2024, building.Zones);   // can be changed in the future via Windows Form: FormBuilding.cs
@@ -190,7 +194,7 @@ namespace Hive.IO
         {
             get
             {
-                return null;
+                return Hive.IO.Properties.Resources.IO_Building;
             }
         }
 

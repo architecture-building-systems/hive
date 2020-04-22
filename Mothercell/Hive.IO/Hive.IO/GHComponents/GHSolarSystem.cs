@@ -125,7 +125,7 @@ namespace Hive.IO
                 }
             }
             Form_Update_Display();
-            Form_Update();
+            //Form_Update();
         }
 
         private void ComboBox1_ItemChanged(object sender, EventArgs e)
@@ -139,11 +139,11 @@ namespace Hive.IO
             _form.textBox4.Text = _form.ThermalEfficiency[i].ToString();
             _form.helpProvider1.SetHelpString(_form.pictureBox1, _form.HelperText[i]);
 
-            Form_Update();
+            //Form_Update();
         }
         private void TextBox_TextChanged(object sender, EventArgs e)
         {
-            Form_Update();
+            //Form_Update();
         }
 
         private void Form_Update()
@@ -162,6 +162,7 @@ namespace Hive.IO
 
         private void OnFormClosed(object sender, FormClosedEventArgs formClosedEventArgs)
         {
+            Form_Update();
             _form = null;
         }
 
@@ -200,7 +201,7 @@ namespace Hive.IO
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return null;
+                return Hive.IO.Properties.Resources.IO_Solartech;
             }
         }
 
