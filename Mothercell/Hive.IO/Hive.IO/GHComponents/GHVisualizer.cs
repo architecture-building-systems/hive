@@ -303,11 +303,13 @@ namespace Hive.IO
 
         private PlotModel DemandMonthlyPlotModel()
         {
+            const int months = 12;
             var model = new PlotModel {Title = "Demand (Monthly)"};
 
+            var resultsTotalHeatingMonthly = Owner.Results.TotalHeatingMonthly ?? new double[months];
             var demandHeating = new ColumnSeries
             {
-                ItemsSource = Owner.Results.TotalHeatingMonthly.Select(demand => new ColumnItem {Value = demand}),
+                ItemsSource = resultsTotalHeatingMonthly.Select(demand => new ColumnItem {Value = demand}),
 
                 LabelPlacement = LabelPlacement.Inside,
                 LabelFormatString = "{0:.00}",
@@ -315,9 +317,10 @@ namespace Hive.IO
             };
             model.Series.Add(demandHeating);
 
+            var resultsTotalCoolingMonthly = Owner.Results.TotalCoolingMonthly ?? new double[months];
             var demandCooling = new ColumnSeries
             {
-                ItemsSource = Owner.Results.TotalCoolingMonthly.Select(demand => new ColumnItem {Value = demand}),
+                ItemsSource = resultsTotalCoolingMonthly.Select(demand => new ColumnItem {Value = demand}),
 
                 LabelPlacement = LabelPlacement.Inside,
                 LabelFormatString = "{0:.00}",
@@ -325,9 +328,10 @@ namespace Hive.IO
             };
             model.Series.Add(demandCooling);
 
+            var resultsTotalElectricityMonthly = Owner.Results.TotalElectricityMonthly ?? new double[months];
             var demandElectricity = new ColumnSeries
             {
-                ItemsSource = Owner.Results.TotalElectricityMonthly.Select(demand => new ColumnItem {Value = demand}),
+                ItemsSource = resultsTotalElectricityMonthly.Select(demand => new ColumnItem {Value = demand}),
                 LabelPlacement = LabelPlacement.Inside,
                 LabelFormatString = "{0:.00}",
                 Title = " Electricity Demand"
@@ -358,18 +362,21 @@ namespace Hive.IO
 
         private PlotModel DemandHourlyPlotModel()
         {
+            const int hours = 8760;
             var model = new PlotModel { Title = "Demand (Hourly)" };
 
+            var resultsTotalHeatingHourly = Owner.Results.TotalHeatingHourly ?? new double[hours];
             var demandHeating = new ColumnSeries
             {
-                ItemsSource = Owner.Results.TotalHeatingHourly.Select(demand => new ColumnItem { Value = demand }),
+                ItemsSource = resultsTotalHeatingHourly.Select(demand => new ColumnItem { Value = demand }),
                 Title = " Heating Demand"
             };
             model.Series.Add(demandHeating);
 
+            var resultsTotalCoolingHourly = Owner.Results.TotalCoolingHourly ?? new double[hours];
             var demandCooling = new ColumnSeries
             {
-                ItemsSource = Owner.Results.TotalCoolingHourly.Select(demand => new ColumnItem { Value = demand }),
+                ItemsSource = resultsTotalCoolingHourly.Select(demand => new ColumnItem { Value = demand }),
                 Title = " Cooling Demand"
             };
             model.Series.Add(demandCooling);
