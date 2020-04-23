@@ -361,6 +361,7 @@ namespace Hive.IO
                     "J",
                     "J",
                     "A",
+                    "S",
                     "O",
                     "N",
                     "D"
