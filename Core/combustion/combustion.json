@@ -14,6 +14,7 @@
       "category": "[hive]",
       "subcategory": "combustion",
       "id": "5d47ce6e-44ed-4ac6-9890-93dc91fb8529",
+      "icon": "boiler.png",
       "main-module": "boiler",
       "main-function": "main",
       "inputs": [
@@ -35,6 +36,7 @@
       "category": "[hive]",
       "subcategory": "combustion",
       "id": "a74557e1-e382-44fd-b4a9-7c315e670b51",
+      "icon": "boiler_timeresolved.png",
       "main-module": "boiler_timeresolved",
       "main-function": "main",
       "inputs": [
@@ -56,6 +58,7 @@
       "category": "[hive]",
       "subcategory": "combustion",
       "id": "85ea9737-e422-4e02-bec8-44fdf1531568",
+      "icon": "chp.png",
       "main-module": "chp",
       "main-function": "main",
       "inputs": [
@@ -81,6 +84,7 @@
       "category": "[hive]",
       "subcategory": "combustion",
       "id": "bf18d842-73cc-4f64-baeb-02eb8f77ce55",
+      "icon": "chp_timeresolved.png",
       "main-module": "chp_timeresolved",
       "main-function": "main",
       "inputs": [
