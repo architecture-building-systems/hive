@@ -14,6 +14,7 @@
       "category": "[hive]",
       "subcategory": "heatpumps",
       "id": "844f55ec-acf3-4f26-bc4a-dda72ae6a5ea",
+      "icon": "simple_hp-cop.png",
       "main-module": "simple_hp_cop",
       "main-function": "main",
       "inputs": [
@@ -33,6 +34,7 @@
       "category": "[hive]",
       "subcategory": "heatpumps",
       "id": "b41bbc9d-1b0f-4b8c-8485-5f666ae7be5f",
+      "icon": "ashp_timeresolved.png",
       "main-module": "ashp_timeresolved",
       "main-function": "main",
       "inputs": [
@@ -57,6 +59,7 @@
       "category": "[hive]",
       "subcategory": "heatpumps",
       "id": "1a1f54f6-9955-4168-9c4a-da5d669022f2",
+      "icon": "simple_hp.png",
       "main-module": "simple_hp",
       "main-function": "main",
       "inputs": [

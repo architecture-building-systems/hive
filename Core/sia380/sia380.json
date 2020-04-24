@@ -14,7 +14,8 @@
       "category": "[hive]",
       "subcategory": "demand",
       "id": "6bbb1401-7fb5-4219-ab56-e806b4ec3113",
-      "main-module": "sia380_1",
+      "icon": "sia380_1.png",
+      "main-module": "sia380_1",      
       "main-function": "monthly",
       "inputs": [
         {"type": "float", "name": "tau", "nick-name": "τ", "description": "Zeitkonstante des Gebäudes [h]"},
@@ -54,6 +55,7 @@
       "category": "[hive]",
       "subcategory": "demand",
       "id": "6138ccc3-89dd-4ff5-9685-aac29b8f9c11",
+      "icon": "sia2028.png",
       "main-module": "sia2028",
       "main-function": "default_values",
       "inputs": [
@@ -76,6 +78,7 @@
       "category": "[hive]",
       "subcategory": "demand",
       "id": "99dd97f1-b633-44e9-866c-6b6dc3bb8ae0",
+      "icon": "sia2024.png",
       "main-module": "sia2024",
       "main-function": "default_values",
       "inputs": [
@@ -112,6 +115,7 @@
       "category": "[hive]",
       "subcategory": "demand",
       "id": "80230b7e-cae1-4998-9483-f7ac1279d1be",
+      "icon": "sia380_4.png",
       "main-module": "sia380_4",
       "main-function": "sia380_4",
       "inputs": [
