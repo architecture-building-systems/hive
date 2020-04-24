@@ -32,6 +32,7 @@
       "category": "[hive]",
       "subcategory": "solartech",
       "id": "b1ddb905-855d-4997-b22b-e33aa58e7ab8",
+      "icon": "simple_solar_thermal.png",
       "main-module": "simple_solar_thermal",
       "main-function": "simple_solar_thermal",
       "inputs": [
@@ -76,6 +77,7 @@
       "category": "[hive]",
       "subcategory": "solartech",
       "id": "05dca691-8d6b-455c-a8d4-3cf0c98eaf7e",
+      "icon": "noct_pv.png",
       "main-module": "noct_pv",
       "main-function": "main",
       "inputs": [
@@ -101,6 +103,7 @@
       "category": "[hive]",
       "subcategory": "solartech",
       "id": "49efa3bc-c59f-4b77-9adb-761e45f67aea",
+      "icon": "simple_pv.png",
       "main-module": "simple_pv",
       "main-function": "simple_pv",
       "inputs": [
