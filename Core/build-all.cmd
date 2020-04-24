@@ -11,4 +11,6 @@ SET HB=%USERPROFILE%\Documents\GitHub\honey-badger\honey-badger.py
 "%IPY%" "%HB%" -i heatpumps\heatpumps.json
 "%IPY%" "%HB%" -i sia380\sia380.json
 "%IPY%" "%HB%" -i solar\solar.json
-"%IPY%" "%HB%" -i solar_tech\solar_tech.json
+"%IPY%" "%HB%" -i solar_tech\solar_technologies.json
+
+pause
