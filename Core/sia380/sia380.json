@@ -115,6 +115,7 @@
       "category": "[hive]",
       "subcategory": "demand",
       "id": "80230b7e-cae1-4998-9483-f7ac1279d1be",
+      "icon": "sia380_4.png",
       "main-module": "sia380_4",
       "main-function": "sia380_4",
       "inputs": [
