@@ -14,6 +14,7 @@
       "category": "[hive]",
       "subcategory": "Solar",
       "id": "880708bb-5f9d-4dbc-8fb9-db44e90f0290",
+      "icon": "simple_panel.png",
       "main-module": "simple_panel",
       "inputs": [
         {"name": "tilt", "nick-name": "tilt", "type": "float", "description": "Panel tilt in degree"},
@@ -37,6 +38,7 @@
       "category": "[hive]",
       "subcategory": "Solar",
       "id": "c8215941-ca5f-4d47-8e4f-032f41eccc4f",
+      "icon": "obstructed_panel.png",
       "main-module": "obstructed_panel",
       "main-function": "simulate_obstructed_panel",
       "inputs": [
@@ -64,6 +66,7 @@
       "category": "[hive]",
       "subcategory": "solar",
       "id": "dfde3d64-e63d-4715-a6b9-b045920d8c97",
+      "icon": "orientation_factor.png",
       "main-module": "orientation_factor",
       "inputs": [
         {"name": "G_flat", "nick-name": "G_flat", "type": "float", "description": "Global irradiation, i.e. on the flat, in [kWh/m2]"},
@@ -81,6 +84,7 @@
       "category": "[hive]",
       "subcategory": "solar",
       "id": "6ff9899d-64a9-46ef-817c-f1521fa605e1",
+      "icon": "performance_ratio.png",
       "main-module": "performance_ratio",
       "main-function": "get_performance_ratio",
       "inputs": [

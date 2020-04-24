@@ -14,6 +14,7 @@
       "category": "[hive]",
       "subcategory": "solartech",
       "id": "9d0764bf-ebc8-4d61-92a7-8c6e7297def9",
+      "icon": "sum_over_timeperiod.png",
       "main-module": "sum_over_timeperiod",
       "main-function": "main",
       "inputs": [
@@ -54,6 +55,7 @@
       "category": "[hive]",
       "subcategory": "solartech",
       "id": "694bc052-0bc9-44ca-82a9-dfdf591665b4",
+      "icon": "solar_thermal_timeresolved.png",
       "main-module": "solar_thermal_timeresolved",
       "main-function": "main",
       "inputs": [
@@ -125,6 +127,7 @@
       "category": "[hive]",
       "subcategory": "solartech",
       "id": "6a08088d-a79c-4360-860e-d1d0bf22d2b5",
+      "icon": "pv_efficiency.png",
       "main-module": "pv_efficiency",
       "main-function": "get_pv_efficiency",
       "inputs": [
@@ -142,6 +145,7 @@
       "category": "[hive]",
       "subcategory": "solartech",
       "id": "87abaa57-0797-4f86-854f-4797ad4d677b",
+      "icon": "st_efficiency.png",
       "main-module": "st_efficiency",
       "main-function": "get_st_efficiency",
       "inputs": [
