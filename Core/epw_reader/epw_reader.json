@@ -1,7 +1,7 @@
 {
   "name": "epw-reader",
   "description": "Import and read epw weather files",
-  "version": "0.1",
+  "version": "0.2",
   "author": "christophwaibel",
   "id": "b9d96a8a-5f26-4fc3-8cf2-27530d6578af",
   "include-files": ["epw_reader.py"],
@@ -29,7 +29,10 @@
         {"type": "float", "name": "DHI", "nick-name": "DHI", "description": "Diffuse Horizontal Irradiance, in Wh/m2."},
         {"type": "float", "name": "DryBulb", "nick-name": "DryBulb", "description": "Dry Bulb Temperature, in °C."},
         {"type": "float", "name": "DewPoint", "nick-name": "DewPoint", "description": "Dew Point Temperature, in °C."},
-        {"type": "float", "name": "RH", "nick-name": "RH", "description": "Relative Humidity, in %."}
+        {"type": "float", "name": "RH", "nick-name": "RH", "description": "Relative Humidity, in %."},
+        {"type": "float", "name": "GHIMonthly", "nick-name": "GHIM", "description": "Global Horizontal Irradiance (monthly total), in kWh/m2."},
+        {"type": "float", "name": "DryBulbMonthly", "nick-name": "DryBulbM", "description": "Dry Bulb Temperature (monthly average), in °C."},
+        {"type": "float", "name": "RHMonthly", "nick-name": "RHM", "description": "Relative Humidity (monthly average), in %."}
       ]
     }
   ]
