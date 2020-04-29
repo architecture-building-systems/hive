@@ -54,6 +54,9 @@ def epw_reader(path):
     dni = []
     dhi = []
     rh = []
+    ghi_monthly = []
+    drybulb_monthly = []
+    rh_monthly = []
 
     latitude = None
     longitude = None
@@ -80,16 +83,31 @@ def epw_reader(path):
     assert latitude is not None
     assert longitude is not None
 
-    return latitude, longitude, city_country, ghi, dni, dhi, drybulb, dewpoint, rh
+    # monthly data
+    dayspermonth = [31.0, 28.0, 31.0, 30.0, 31.0, 30.0, 31.0, 31.0, 30.0, 31.0, 30.0, 31.0]
+    hours_per_day = 24
+    total_months = 12
+    for month in range(total_months):
+        start_hour = int(hours_per_day * sum(dayspermonth[0:month]))
+        end_hour = int(hours_per_day * sum(dayspermonth[0:month + 1]))
+        hours_per_month = dayspermonth[month] * hours_per_day
+        ghi_monthly.append(sum(ghi[start_hour:end_hour]) / 1000)
+        drybulb_monthly.append(sum(drybulb[start_hour:end_hour]) / hours_per_month)
+        rh_monthly.append(sum(rh[start_hour:end_hour]) / hours_per_month)
+
+    return latitude, longitude, city_country, ghi, dni, dhi, drybulb, dewpoint, rh, \
+           ghi_monthly, drybulb_monthly, rh_monthly
 
 
 if __name__ == '__main__':
     def mean(lst):
         return sum(lst) / len(lst)
 
+
     def test():
         path = 'USA_CA_San.Francisco.Intl.AP.724940_TMY3.epw'
         latitude, longitude, city_country, dni, dhi, drybulb, dewpoint, rh = main(path)
         print(latitude, longitude, city_country, mean(dni), mean(dhi), mean(drybulb), mean(dewpoint), mean(rh))
+
 
     test()
