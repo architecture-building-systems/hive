@@ -99,14 +99,16 @@ def epw_reader(path):
            ghi_monthly, drybulb_monthly, rh_monthly
 
 
-if __name__ == '__main__':
+if __name__ == "__main__":
     def mean(lst):
         return sum(lst) / len(lst)
 
 
     def test():
-        path = 'USA_CA_San.Francisco.Intl.AP.724940_TMY3.epw'
-        latitude, longitude, city_country, dni, dhi, drybulb, dewpoint, rh = main(path)
+        import os
+        path = os.path.join(os.path.dirname(__file__), "USA_CA_San.Francisco.Intl.AP.724940_TMY3.epw")
+        (latitude, longitude, city_country, ghi, dni, dhi, drybulb, dewpoint, rh,
+         ghi_monthly, drybulb_monthly, rh_monthly) = main(path)
         print(latitude, longitude, city_country, mean(dni), mean(dhi), mean(drybulb), mean(dewpoint), mean(rh))
 
 
