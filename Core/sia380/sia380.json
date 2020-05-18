@@ -4,7 +4,7 @@
   "version": "0.2",
   "author": "daren-thomas,christophwaibel",
   "id": "4b5ec46e-cafa-4a72-ac7b-fb839ce3c618",
-  "include-files": ["sia380.py","sia380_1.py", "sia2024.py", "sia2028.py","sia380_4.py"],
+  "include-files": ["sia380.py","sia380_1.py", "sia2024.py", "sia2028.py","sia380_4.py","adaptive_comfort.py"],
   "components": [
     {
       "class-name": "Sia380",
