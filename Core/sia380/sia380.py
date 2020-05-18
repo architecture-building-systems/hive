@@ -7,7 +7,7 @@ heating and cooling demand: SIA 380.1
 thermal balance depends on individual surfaces, i.e. each building surface (both transparent and opaque) can have
 individual proporties (U-value, g-value, infiltration, etc.)
 
-temperature set-point determined according to adaptive thermal comfort ... (i.e. function of ambient air temperature)
+temperature set-point must be an input, e.g. from an adaptive thermal comfort module
 
 electricity demand: currently simply by using sqm and internal loads for lighting and equipment
 """
@@ -16,14 +16,18 @@ from __future__ import division
 import math
 
 
-def main(room_properties, ambient_temperature, solar_irradiation, surface_areas, surface_is_transparent):
+def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surface_areas, surface_type, Q_s_per_surface):
     '''
     Computes monthly heating, cooling and electricity demand for a thermal zone, based on SIA 380.1
     :param room_properties: room properties in json format
-    :param ambient_temperature: monthly average ambient air temperature in degree Celsius
-    :param solar_irradiation: monthly solar irradiation in W/m2 per building surface. must be in correct order with the next 2 parameters 'surface_areas' and 'surface_is_transparent'
+    :param floor_area: Floor area of the room in m2
+    :param T_e: monthly average ambient air temperature in degree Celsius
+    :param T_i: Temperature setpoints
+    :param setpoints_ub: Upper bound for temperature setpoints
+    :param setpoints_lb: Lower bound for temperature setpoints
     :param surface_areas: building surface areas that are used for fabric gains/losses computation
-    :param surface_is_transparent: indicator if this surface is transparent or not. if yes, it will be assigned the transparent construction from room properties
+    :param surface_type: indicator if this surface is transparent or not. if yes, it will be assigned the transparent construction from room properties. 'opaque' for opaque or 'transp' for transparent
+    :param Q_s_per_surface: monthly solar irradiation in W/m2 per building surface. Jagged array [months_per_year][num_srfs]. Must be in correct order with the next 2 parameters 'surface_areas' and 'surface_is_transparent'
     :return: Monthly cooling, heating and electricity loads for a thermal zone
     '''
 
@@ -33,40 +37,45 @@ def main(room_properties, ambient_temperature, solar_irradiation, surface_areas,
     months_per_year = 12
     days_per_year = 365
     days_per_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-    t = [(hours_per_day * i) for i in days_per_month]
+    t = [(hours_per_day * i) for i in days_per_month]   # length of calculation period (hours per month) [h]
 
-    # READ INPUTS
-    # needs to read in zone class from Hive.IO
-    # because it contains building elements with properties
-    surface_type = ["op", "op", "transp", "transp"]
-    surface_area = [44.0, 62.3, 4.0, 5.2]
+    # read room properties
+    [tau, theta_i_summer, theta_i_winter, \
+           U_op, U_w, \
+           Vdot_e_spec, Vdot_inf_spec, eta_rec, \
+           Phi_P, Phi_L, Phi_A, \
+           t_P, t_L, t_A, \
+           g, f_sh] =\
+        read_building_json(room_properties, floor_area, days_per_month)
+
+    # assign room properties to individual surfaces
+    #    surface_type = ["opaque", "opaque", "transp", "transp"]
+    #    surface_areas = [44.0, 62.3, 4.0, 5.2]
     num_surfaces = len(surface_type)
-    U_values = [0.4, 0.4, 1.2, 1.2]
-    g_values = [0.0, 0.0, 0.5, 0.5]
-    A = 200                 # floor area (GEOMETRY)
-    Vdot_e_spec = 0.6       # Aussenluftvolumenstrom in m^3/h per m^2 (SIA 2024)
-    Vdot_inf_spec = 0.15    # Infiltration in m^3/h per m^2 (SIA 2024)
-    eta_rec = 0             # Wärmerückgewinnung (SIA 2024)
-    t_P = 100.0             # Volllaststunden Personen entire year (SIA 2024)
-    t_L = 100.0             # Volllaststunden Beleuchtung entire year (SIA 2024)
-    t_A = 100.0             # Volllaststunden Geräte entire year (SIA 2024)
-
-    # Compute adaptive temperature set point and average ambient temperature
-    T_i = adaptive_comfort(ambient_temperature, days_per_month)
-    T_e = average_temperature(ambient_temperature, days_per_month)
 
     # calculations from Illias Excel sheet:
-    # preAllocate arrays. its a bit faster than append (https://levelup.gitconnected.com/faster-lists-in-python-4c4287502f0a)
+    # preAllocate arrays. its a bit faster than .append (https://levelup.gitconnected.com/faster-lists-in-python-4c4287502f0a)
     Q_i = [0.0] * months_per_year
     Q_s = [0.0] * months_per_year
     Q_V = [0.0] * months_per_year
     Q_T = [0.0] * months_per_year
+    # Q_s_per_surface = [0.0] * months_per_year
+    Q_T_per_surface = [0.0] * months_per_year
+
+    Q_Heat = [0.0] * months_per_year
+    Q_Cool = [0.0] * months_per_year
+    Q_Elec = [0.0] * months_per_year
+
+
+    Phi_P_tot = Phi_P * floor_area
+    Phi_L_tot = Phi_L * floor_area
+    Phi_A_tot = Phi_A * floor_area
 
     # For each month, compute:
     for month in range(months_per_year):
         # pre-allocate jagged arrays
-        Q_s[month] = [0.0] * num_surfaces
-        Q_T[month] = [0.0] * num_surfaces
+        # Q_s_per_surface[month] = [0.0] * num_surfaces   # solar gains per surface for this month. input for now
+        Q_T_per_surface[month] = [0.0] * num_surfaces   # transmission losses per surface for this month
 
         """ 
         External air flowrate (thermisch wirksamer Aussenluftvolumenstrom)
@@ -76,8 +85,8 @@ def main(room_properties, ambient_temperature, solar_irradiation, surface_areas,
         # [Vdot_inf] = m^3/h (Aussenluftvolumenstrom durch Infiltration)
         # [eta_rec] = - (Nutzungsgrad der Wärmerückgewinnung)
         """
-        Vdot_e = Vdot_e_spec * A
-        Vdot_inf = Vdot_inf_spec * A
+        Vdot_e = Vdot_e_spec * floor_area
+        Vdot_inf = Vdot_inf_spec * floor_area
         Vdot_th = Vdot_e * (1 - eta_rec) * Vdot_inf
 
         """
@@ -112,13 +121,10 @@ def main(room_properties, ambient_temperature, solar_irradiation, surface_areas,
         # [t_L] = h (Volllaststunden Beleuchtung)
         # [t_A] = h (Volllaststunden Geräte)
         """
-        Phi_P = Phi_P_spec * A
-        Phi_L = Phi_L_spec * A
-        Phi_A = Phi_A_spec * A
         t_P_month = t_P * days_per_month[month] / days_per_year
         t_L_month = t_L * days_per_month[month] / days_per_year
         t_A_month = t_A * days_per_month[month] / days_per_year
-        Q_i[month] = Phi_P * t_P_month + Phi_L * t_L_month + Phi_A * t_A_month
+        Q_i[month] = Phi_P_tot * t_P_month + Phi_L_tot * t_L_month + Phi_A_tot * t_A_month
 
         for surface in range(num_surfaces):
             # solar gains (solare Wärmeeinträge), Q_s, (PER SURFACE)
@@ -133,6 +139,10 @@ def main(room_properties, ambient_temperature, solar_irradiation, surface_areas,
             [U_op] in W/(m^2K) (U-value opaque surface)
             [U_w] in W/(m^2K) (U-value window surface)
             """
+            if(surface_type[surface] == "opaque"):
+                H_T = surface_areas[surface] * U_op
+            else:
+                H_T = surface_areas[surface] * U_w
 
             """
             Transmission losses (Transmissionswärmeverluste), Q_T, (PER SURFACE, because function of H_T)
@@ -143,20 +153,132 @@ def main(room_properties, ambient_temperature, solar_irradiation, surface_areas,
             [T_e] in K or °C
             [t] in h
             """
+            Q_T_per_surface[month][surface] = H_T * (T_i[month] + T_e[month]) * t[month]
+
+        Q_T[month] = sum(Q_T_per_surface[month])
+        Q_s[month] = sum(Q_s_per_surface[month])
+
+        """ 
+        Heatgains/-losses ratio (Wärmeeintrag/-verlust Verhältnis), gamma
+        gamma = (Q_i + Q_s) / (Q_T + Q_V)
+        [gamma] = -
+        [Q_T] = Wh
+        [Q_V] = Wh
+        [Q_i] = Wh
+        [Q_s] = Wh
+        """
+        gamma = (Q_i[month] + Q_s[month]) / (Q_T[month] + Q_V[month])
+
+        """
+        usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
+        eta_g = (1 - gamma^a) / (1 - gamma^(a+1))
+        a = 1 + tau / 15
+        [eta_g] = -
+        [gamma] = -
+        [tau] = h
+        """
+        a = 1.0 + tau / 15.0
+        eta_g = (1 - pow(gamma, a)) / (1 - pow(gamma, (a+1)))
+
+        """
+        heating demand (Heizwärmebedarf), Q_H
+        Q_H = Q_T + Q_V - eta_g * (Q_i + Q_s)
+        [Q_H] = Wh (script errechnet kWh!)
+        [Q_T] = Wh
+        [Q_V] = Wh
+        [Q_i] = Wh
+        [Q_s] = Wh (script erfordert kWh!)
+        [eta_g] = -
+        """
+        demand = Q_T[month] + Q_V[month] - eta_g * (Q_i[month] + Q_s[month])
+        if(demand > 0):
+            Q_Heat[month] = demand
+        else:
+            Q_Cool[month] = demand
+
+        Q_Elec[month] = Phi_L_tot * t_L_month + Phi_A_tot * t_A_month   # lighting and utility loads. simplification, because utility and lighting have efficiencies (inefficiencies are heat loads). I would need to know that to get full electricity loads
+
+    return Q_Heat, Q_Cool, Q_Elec
 
 
+def read_building_json(room, dayspermonth):
+    """
 
+    :param room: Room description as json
+    :return: room properties
+    """
 
-        # Heatgains/-losses ratio (Wärmeeintrag/-verlust Verhältnis), gamma
+    """
+        tau     Zeitkonstante des Gebäudes [h]
+        theta_e Aussenlufttemperatur
+        theta_i Raumlufttemperatur
+        t       Länge der Berechnungsperiode [h]
+        A_th    Thermische Gebäudehüllfläche [m2] 
+        A_w     Fensterfläche [m2]                      !!!!!! f_g in sia2024 - Glasanteil in [%]
+        U_op    Wärmedurchgangskoeffizient Aussenwand [W/m2K]
+        U_w     Wärmedurchgangskoeffizient Fenster [W/m2K]
+        Vdot_e_spec  Aussenluft-Volumenstrom [m3/m2h]
+        Vdot_inf_spec Aussenluft-Volumenstrom durch Infiltration [m3/m2h]
+        eta_rec Nutzungsgrad der Wärmerückgewinnung [-]
+        phi_P   Wärmeabgabe Personen [W/m2]
+        phi_L   Wärmeabgabe Beleuchtung [W/m2]
+        phi_A   Wärmeabgabe Geräte [W/m2]
+        t_P     Vollaststunden Personen [h]
+        t_L     Vollaststunden Beleuchtung [h]
+        t_A     Vollaststunden Geräte [h]
+        g       g-Wert [-]
+        f_sh    Reduktionsfaktor solare Wärmeeinträge [-]
+        I       description": "Solare Strahlung [Wh/m2]
+    """
 
-        # usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
+    """
+    cases according to SIA 2024:2015.
+    The norm defines following ROOM and/or BUILDING types (p.7-8):
+        _____________________________________________________________________________________
+              | abbr.     | description                                    |    code SIA 380
+        ______|___________|________________________________________________|_________________
+        - 1.1   mfh:        multi-family house (Mehrfamilienhaus)                   HNF1
+        - 1.2   efh:        single family house (Einfamilienhaus)                   HNF1
+        - 2.1   ...:        Hotelroom                                               HNF1
+        - 2.2   ...:        Hotel lobby                                             HNF1
+        - ...   ...:
+        - 3.1   office:     small office space (Einzel,- Gruppenbüro)               HNF2
+        - ...   ...:
+        - 4.1   school:     school room (Schulzimmer)                               HNF5
+        - ...   ...:
+        _____________________________________________________________________________________
+    """
 
-        # heating demand (Heizwärmebedarf), Q_H
-        # if negative, assign Q_H = 0 and set value to Q_K (Kühlenergiebedarf)
+    f_sh = 0.9  # sia2024, p.12, 1.3.1.9 Reduktion solare Wärmeeinträge
 
-        # Strombedarf, Q_E
+    tau = room["Zeitkonstante"]
+    theta_i_summer = room["Raumlufttemperatur Auslegung Kuehlung (Sommer)"]
+    theta_i_winter = room["Raumlufttemperatur Auslegung Heizen (Winter)"]
 
-    return 0.0
+    U_op = room["U-Wert opake Bauteile"]
+    U_w = room["U-Wert Fenster"]
+    Vdot_e_spec = room["Aussenluft-Volumenstrom (pro NGF)"]
+    Vdot_inf_spec = room["Aussenluft-Volumenstrom durch Infiltration"]
+    eta_rec = room["Temperatur-Aenderungsgrad der Waermerueckgewinnung"]
+    phi_P = room["Waermeeintragsleistung Personen (bei 24.0 deg C, bzw. 70 W)"]
+    phi_L = room["Waermeeintragsleistung der Raumbeleuchtung"]
+    phi_A = room["Waermeeintragsleistung der Geraete"]
+    t_P = [room["Vollaststunden pro Jahr (Personen)"]] * 12
+    t_L = [room["Jaehrliche Vollaststunden der Raumbeleuchtung"]] * 12
+    t_A = [room["Jaehrliche Vollaststunden der Geraete"]] * 12
+    g = room["Gesamtenergiedurchlassgrad Verglasung"]
 
+    # transforming daily sia2024 data to monthly
+    for i in range(len(dayspermonth)):
+        t_P[i] *= dayspermonth[i] / 365.0
+        t_L[i] *= dayspermonth[i] / 365.0
+        t_A[i] *= dayspermonth[i] / 365.0
+
+    return tau, theta_i_summer, theta_i_winter, \
+           U_op, U_w, \
+           Vdot_e_spec, Vdot_inf_spec, eta_rec, \
+           phi_P, phi_L, phi_A, \
+           t_P, t_L, t_A, \
+           g, f_sh
 
 
