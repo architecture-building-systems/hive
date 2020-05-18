@@ -46,7 +46,7 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
            Phi_P, Phi_L, Phi_A, \
            t_P, t_L, t_A, \
            g, f_sh] =\
-        read_building_json(room_properties, floor_area, days_per_month)
+        read_building_json(room_properties, days_per_month)
 
     # assign room properties to individual surfaces
     #    surface_type = ["opaque", "opaque", "transp", "transp"]
@@ -121,9 +121,9 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
         # [t_L] = h (Volllaststunden Beleuchtung)
         # [t_A] = h (Volllaststunden Geräte)
         """
-        t_P_month = t_P * days_per_month[month] / days_per_year
-        t_L_month = t_L * days_per_month[month] / days_per_year
-        t_A_month = t_A * days_per_month[month] / days_per_year
+        t_P_month = t_P[month] * days_per_month[month] / days_per_year
+        t_L_month = t_L[month] * days_per_month[month] / days_per_year
+        t_A_month = t_A[month] * days_per_month[month] / days_per_year
         Q_i[month] = Phi_P_tot * t_P_month + Phi_L_tot * t_L_month + Phi_A_tot * t_A_month
 
         for surface in range(num_surfaces):
@@ -282,3 +282,43 @@ def read_building_json(room, dayspermonth):
            g, f_sh
 
 
+if __name__ == "__main__":
+    def test():
+        room_properties = {
+            "description": "1.2 Wohnen Einfamilienhaus",
+            "Raumlufttemperatur Auslegung Heizen (Winter)": 21.0,
+            "Nettogeschossflaeche": 20.0,
+            "Thermische Gebaeudehuellflaeche": 38.0,
+            "U-Wert Fenster": 1.2,
+            "Waermeeintragsleistung Personen (bei 24.0 deg C, bzw. 70 W)": 1.4,
+            "Jaehrliche Vollaststunden der Geraete": 1780.0,
+            "U-Wert opake Bauteile": 0.2,
+            "Jaehrliche Vollaststunden der Raumbeleuchtung": 1450.0,
+            "Vollaststunden pro Jahr (Personen)": 4090.0,
+            "Abminderungsfaktor fuer Fensterrahmen": 0.75,
+            "Aussenluft-Volumenstrom durch Infiltration": 0.15,
+            "Raumlufttemperatur Auslegung Kuehlung (Sommer)": 26.0,
+            "Glasanteil": 30.0,
+            "Zeitkonstante": 164.0,
+            "Waermeeintragsleistung der Raumbeleuchtung": 2.7,
+            "Waermeeintragsleistung der Geraete": 8.0,
+            "Gesamtenergiedurchlassgrad Verglasung": 0.5,
+            "Temperatur-Aenderungsgrad der Waermerueckgewinnung": 0.7,
+            "Aussenluft-Volumenstrom (pro NGF)": 0.6
+        }
+
+        floor_area = 50.0
+        T_e = [-4.0, 0.0, 1.0, 2.0, 4.0, 10.0, 20.0, 13.0, 9.0, 5.0, 2.0, -2.0]
+        T_i = [21.0] * 12
+        setpoints_ub = [25] * 12
+        setpoints_lb = [18] * 12
+        surface_areas = [4.0, 51.0, 12.0, 21.0]
+        surface_type = ["opaque", "opaque", "transp", "transp"]
+        Q_s_per_surface = [0.0] * 12
+        for i in range(len(Q_s_per_surface)):
+            Q_s_per_surface[i] = [100.0] * len(surface_type)
+        [Q_Heat, Q_Cool, Q_Elec] = main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surface_areas, surface_type, Q_s_per_surface)
+        print(Q_Heat, Q_Cool, Q_Elec)
+
+
+    test()
