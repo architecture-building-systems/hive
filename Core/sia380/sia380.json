@@ -1,11 +1,51 @@
 {
   "name": "sia380",
-  "description": "A simplistic implementation of SIA 380.1",
-  "version": "0.1",
+  "description": "A simplistic implementation of SIA 380",
+  "version": "0.2",
   "author": "daren-thomas,christophwaibel",
   "id": "4b5ec46e-cafa-4a72-ac7b-fb839ce3c618",
-  "include-files": ["sia380_1.py", "sia2024.py", "sia2028.py","sia380_4.py"],
+  "include-files": ["sia380.py","sia380_1.py", "sia2024.py", "sia2028.py","sia380_4.py"],
   "components": [
+    {
+      "class-name": "Sia380",
+      "name": "SIA 380",
+      "abbreviation": "sia380",
+      "description": "Monthly heating, cooling and electricity demand calculation according to SIA 380",
+      "category": "[hive]",
+      "subcategory": "demand",
+      "id": "01457f8e-80d7-4186-856d-ddaf1d896218",
+      "icon": "sia380_1.png",
+      "main-module": "sia380",
+      "main-function": "main",
+      "inputs": [
+        {"type": "float", "name": "T_m", "nick-name": "T_m", "description": "Average monthly ambient air temperature in °C.", "access": "list"}
+      ],
+      "outputs": [
+        {"type": "float", "name": "T_n", "nick-name": "T_n", "description": "Monthly adaptive thermal comfort temperature in °C.", "access": "list"}
+      ]
+    },
+    {
+      "class-name": "AdaptiveComfort",
+      "name": "Adaptive Comfort",
+      "abbreviation": "AdaptComf",
+      "description": "Monthly adaptive thermal comfort temperature as a function of ambient air temperature. From PLEA Notes 3 - Thermal Comfort. Auliciems and Szokolay 2007.",
+      "category": "[hive]",
+      "subcategory": "demand",
+      "id": "83d5d815-a306-4555-81f8-887132d0711f",
+      "icon": "sia380_1.png",
+      "main-module": "adaptive_comfort",
+      "main-function": "adaptive_comfort",
+      "inputs": [
+        {"type": "float", "name": "T_m", "nick-name": "T_m", "description": "Average monthly ambient air temperature in °C.", "access": "list"}
+      ],
+      "outputs": [
+        {"type": "float", "name": "T_n", "nick-name": "T_n", "description": "Monthly adaptive thermal comfort temperature in °C.", "access": "list"},
+        {"type": "float", "name": "T_n80ub", "nick-name": "T_n80ub", "description": "Monthly adaptive thermal comfort temperature in °C (upper bound of 80% acceptance).", "access": "list"},
+        {"type": "float", "name": "T_n80lb", "nick-name": "T_n80lb", "description": "Monthly adaptive thermal comfort temperature in °C (lower bound of 80% acceptance).", "access": "list"},
+        {"type": "float", "name": "T_n90ub", "nick-name": "T_n90ub", "description": "Monthly adaptive thermal comfort temperature in °C (upper bound of 90% acceptance).", "access": "list"},
+        {"type": "float", "name": "T_n90lb", "nick-name": "T_n90lb", "description": "Monthly adaptive thermal comfort temperature in °C (lower bound of 90% acceptance).", "access": "list"}
+      ]
+    },
     {
       "class-name": "Sia380_1",
       "name": "SIA 380.1 htg",
