@@ -81,7 +81,7 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
 
         """ 
         External air flowrate (thermisch wirksamer Aussenluftvolumenstrom)
-        # Vdot_th = Vdot_e * (1 - eta_rec) * Vdot_inf
+        # Vdot_th = Vdot_e * (1 - eta_rec) + Vdot_inf
         # [Vdot_th] = m^3/h
         # [Vdot_e] = m^3/h (Aussenluftvolumenstrom durch Lüftung)
         # [Vdot_inf] = m^3/h (Aussenluftvolumenstrom durch Infiltration)
@@ -89,7 +89,7 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
         """
         Vdot_e = Vdot_e_spec * floor_area
         Vdot_inf = Vdot_inf_spec * floor_area
-        Vdot_th = Vdot_e * (1 - eta_rec) * Vdot_inf
+        Vdot_th = Vdot_e * (1 - eta_rec) + Vdot_inf
 
         """
         Ventilation heat loss coefficient (Lüftungs-Wärmetransferkoeffizient), H_V
@@ -99,7 +99,7 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
         [rho] = kg/m^3
         [c_p] = J/(kgK)
         """
-        H_V = Vdot_th * rho * c_p
+        H_V = Vdot_th/3600 * rho * c_p
 
         """ 
         Ventilation losses (Lüftungswärmeverluste), Q_V
@@ -176,8 +176,13 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
         [gamma] = -
         [tau] = h
         """
-        a = 1.0 + tau / 15.0
-        eta_g = (1 - pow(gamma, a)) / (1 - pow(gamma, (a+1)))
+        if Q_T[month] + Q_V[month] < 0:
+            eta_g = 0
+        elif gamma == 1:
+            eta_g = (1 + tau / 5) / (2 + tau / 15)
+        else:
+            a = 1 + tau / 15
+            eta_g = (1 - gamma ** a) / (1 - gamma ** (a + 1))
 
         """
         heating demand (Heizwärmebedarf), Q_H
