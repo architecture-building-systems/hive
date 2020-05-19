@@ -25,7 +25,7 @@
         {"type": "float", "name": "setpoints_ub", "nick-name": "setpoints_ub", "description": "Monthly room temperature setpoint in °C (upper bound).", "access": "list"},
         {"type": "float", "name": "setpoints_lb", "nick-name": "setpoints_lb", "description": "Monthly room temperature setpoint in °C (lower bound).", "access": "list"},
         {"type": "float", "name": "surface_areas", "nick-name": "surface_areas", "description": "Surface areas of all external room surfaces in m2.", "access": "list"},
-        {"type": "string", "name": "surface_type", "nick-name": "surface_type", "description": "Surface types of all external room surfaces. Either 'opaque' or 'transparent'.", "access": "list"},
+        {"type": "string", "name": "surface_type", "nick-name": "surface_type", "description": "Surface types of all external room surfaces. Either 'opaque' or 'transp'.", "access": "list"},
         {"type": "generic", "name": "Q_s_per_surface", "nick-name": "Q_s_per_surface", "description": "Monethly surface irradiation in Wh per surace. Jagged array [months_per_year][num_surfaces]", "access": "item"}
       ],
       "outputs": [

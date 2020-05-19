@@ -145,14 +145,14 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
 
             """
             Transmission losses (Transmissionswärmeverluste), Q_T, (PER SURFACE, because function of H_T)
-            Q_T = H_T * (T_i + T_e) * t
+            Q_T = H_T * (T_i - T_e) * t
             [Q_T] in Wh
             [H_T] in W/K
             [T_i] in K or °C
             [T_e] in K or °C
             [t] in h
             """
-            Q_T_per_surface[month][surface] = H_T * (T_i[month] + T_e[month]) * t[month]
+            Q_T_per_surface[month][surface] = H_T * (T_i[month] - T_e[month]) * t[month]
 
         Q_T[month] = sum(Q_T_per_surface[month])
         Q_s[month] = sum(Q_s_per_surface[month])
