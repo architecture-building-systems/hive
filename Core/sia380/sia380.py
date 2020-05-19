@@ -16,7 +16,7 @@ from __future__ import division
 import math
 
 
-def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surface_areas, surface_type, Q_s_per_surface):
+def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surface_areas, surface_type, surface_irradiance):
     '''
     Computes monthly heating, cooling and electricity demand for a thermal zone, based on SIA 380.1
     :param room_properties: room properties in json format
@@ -27,7 +27,7 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
     :param setpoints_lb: Lower bound for temperature setpoints
     :param surface_areas: building surface areas that are used for fabric gains/losses computation
     :param surface_type: indicator if this surface is transparent or not. if yes, it will be assigned the transparent construction from room properties. 'opaque' for opaque or 'transp' for transparent
-    :param Q_s_per_surface: monthly solar irradiation in W/m2 per building surface. Jagged array [months_per_year][num_srfs]. Must be in correct order with the next 2 parameters 'surface_areas' and 'surface_is_transparent'
+    :param surface_irradiance: monthly solar irradiation in W/m2 per building surface. Jagged array [months_per_year][num_srfs]. Must be in correct order with the next 2 parameters 'surface_areas' and 'surface_is_transparent'
     :return: Monthly cooling, heating and electricity loads for a thermal zone
     '''
 
@@ -47,6 +47,8 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
            t_P, t_L, t_A, \
            g, f_sh] =\
         read_building_json(room_properties, days_per_month)
+
+    Q_s_per_surface = surface_irradiance.data   # workaround, because grasshopper components can't read jagged arrays - they are converted into separate lists
 
     # assign room properties to individual surfaces
     #    surface_type = ["opaque", "opaque", "transp", "transp"]
@@ -198,7 +200,8 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
 
         Q_Elec[month] = Phi_L_tot * t_L_month + Phi_A_tot * t_A_month   # lighting and utility loads. simplification, because utility and lighting have efficiencies (inefficiencies are heat loads). I would need to know that to get full electricity loads
 
-    return Q_Heat, Q_Cool, Q_Elec
+    tokWh = 1000.0
+    return [x / tokWh for x in Q_Heat], [x / tokWh for x in Q_Cool], [x / tokWh for x in Q_Elec], Q_T, Q_V, Q_i, Q_s
 
 
 def read_building_json(room, dayspermonth):
@@ -283,6 +286,10 @@ def read_building_json(room, dayspermonth):
 
 
 if __name__ == "__main__":
+    class Jagged:
+        def __init__(self, data):
+            self.data = data
+
     def test():
         room_properties = {
             "description": "1.2 Wohnen Einfamilienhaus",
@@ -307,18 +314,33 @@ if __name__ == "__main__":
             "Aussenluft-Volumenstrom (pro NGF)": 0.6
         }
 
-        floor_area = 50.0
-        T_e = [-4.0, 0.0, 1.0, 2.0, 4.0, 10.0, 20.0, 13.0, 9.0, 5.0, 2.0, -2.0]
+        floor_area = 200.0
+        T_e = [0.416398, 1.714286, 6.138038, 8.964167, 14.281048, 17.462361, 18.399328, 18.784946, 13.954167, 9.874059, 3.974583, 1.593683]
         T_i = [21.0] * 12
         setpoints_ub = [25] * 12
         setpoints_lb = [18] * 12
-        surface_areas = [4.0, 51.0, 12.0, 21.0]
-        surface_type = ["opaque", "opaque", "transp", "transp"]
-        Q_s_per_surface = [0.0] * 12
+        surface_areas = [30, 30, 3.0, 3.0, 3.0, 536.124969 - 69]
+        surface_type = ["transp", "transp", "transp", "transp", "transp", "opaque"]
+        Q_s_per_surface = [0.0] * len(surface_type)
+        Q_s_per_surface[0] = [15.93572, 28.137958, 52.534591, 70.864124, 97.429731, 100.659248, 110.715495, 89.630934, 64.212227, 38.79425, 19.025089, 11.624501]
+        Q_s_per_surface[1] = [23.174573, 39.025397, 68.999793, 88.159866, 101.53745, 109.179217, 119.64447, 98.66428, 77.103732, 44.753735, 21.723197, 17.185115]
+        Q_s_per_surface[2] = [11.164155, 18.686334, 29.798874, 45.721346, 57.51364, 65.652511, 66.630836, 51.430892, 35.616327, 23.692149, 12.46553, 9.476936]
+        Q_s_per_surface[3] = [46.316597, 61.478404, 90.694507, 87.846535, 91.278904, 83.993872, 93.773866, 97.520832, 92.037561, 70.833123, 42.180446, 29.584221]
+        Q_s_per_surface[4] = [22.257355, 38.413927, 72.508876, 100.603912, 138.930607, 144.043764, 155.043357, 126.633178, 88.618052, 52.984679, 25.594113, 16.571932]
+        Q_s_per_surface[5] = [0.0] * 12
         for i in range(len(Q_s_per_surface)):
-            Q_s_per_surface[i] = [100.0] * len(surface_type)
-        [Q_Heat, Q_Cool, Q_Elec] = main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surface_areas, surface_type, Q_s_per_surface)
-        print(Q_Heat, Q_Cool, Q_Elec)
+            Q_s_per_surface[i] = [x * 1000 for x in Q_s_per_surface[i]]  # converting from kWh/m2 into Wh/m2
+        Q_s_per_surface = list(map(list, zip(*Q_s_per_surface)))  # transposing
+        jaggeddata = Jagged(Q_s_per_surface)
+
+        [Q_Heat, Q_Cool, Q_Elec, Q_T, Q_V, Q_i, Q_s] = main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surface_areas, surface_type, jaggeddata)
+        print(Q_Heat)
+        print(Q_Cool)
+        print(Q_Elec)
+        print(Q_T)
+        print(Q_V)
+        print(Q_i)
+        print(Q_s)
 
 
     test()
