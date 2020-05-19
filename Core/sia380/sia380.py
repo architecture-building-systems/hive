@@ -195,7 +195,7 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
         else:
             Q_Cool[month] = demand
 
-        Q_Elec[month] = Phi_L_tot * t_L_month + Phi_A_tot * t_A_month   # lighting and utility loads. simplification, because utility and lighting have efficiencies (inefficiencies are heat loads). I would need to know that to get full electricity loads
+        Q_Elec[month] = Phi_L_tot * t_L[month] + Phi_A_tot * t_A[month]   # lighting and utility loads. simplification, because utility and lighting have efficiencies (inefficiencies are heat loads). I would need to know that to get full electricity loads
 
     tokWh = 1000.0
     return [x / tokWh for x in Q_Heat], [x / tokWh for x in Q_Cool], [x / tokWh for x in Q_Elec], Q_T, Q_V, Q_i, Q_s
