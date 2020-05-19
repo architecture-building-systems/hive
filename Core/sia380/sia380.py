@@ -123,10 +123,7 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
         # [t_L] = h (Volllaststunden Beleuchtung)
         # [t_A] = h (Volllaststunden Geräte)
         """
-        t_P_month = t_P[month] * days_per_month[month] / days_per_year
-        t_L_month = t_L[month] * days_per_month[month] / days_per_year
-        t_A_month = t_A[month] * days_per_month[month] / days_per_year
-        Q_i[month] = Phi_P_tot * t_P_month + Phi_L_tot * t_L_month + Phi_A_tot * t_A_month
+        Q_i[month] = Phi_P_tot * t_P[month] + Phi_L_tot * t_L[month] + Phi_A_tot * t_A[month]
 
         for surface in range(num_surfaces):
             # solar gains (solare Wärmeeinträge), Q_s, (PER SURFACE)
