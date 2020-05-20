@@ -37,7 +37,7 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
     months_per_year = 12
     days_per_year = 365
     days_per_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-    t = [(hours_per_day * i) for i in days_per_month]   # length of calculation period (hours per month) [h]
+    t = [(hours_per_day * days) for days in days_per_month]   # length of calculation period (hours per month) [h]
 
     # read room properties
     [tau, theta_i_summer, theta_i_winter, \

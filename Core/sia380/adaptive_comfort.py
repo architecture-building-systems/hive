@@ -33,4 +33,3 @@ if __name__ == "__main__":
     print(lb80)
     print (ub90)
     print (lb90)
-    
