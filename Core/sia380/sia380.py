@@ -105,22 +105,80 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
     [U_w] = W/(m^2K) (U-value window surface)  
     """
 
+    """
+    SIA 2024 variables:
+
+    tau     Zeitkonstante des Gebäudes [h]
+    theta_e Aussenlufttemperatur
+    theta_i Raumlufttemperatur
+    t       Länge der Berechnungsperiode [h]
+    A_th    Thermische Gebäudehüllfläche [m2] 
+    A_w     Fensterfläche [m2]                      !!!!!! f_g in sia2024 - Glasanteil in [%]
+    U_op    Wärmedurchgangskoeffizient Aussenwand [W/m2K]
+    U_w     Wärmedurchgangskoeffizient Fenster [W/m2K]
+    Vdot_e_spec  Aussenluft-Volumenstrom [m3/m2h]
+    Vdot_inf_spec Aussenluft-Volumenstrom durch Infiltration [m3/m2h]
+    eta_rec Nutzungsgrad der Wärmerückgewinnung [-]
+    phi_P   Wärmeabgabe Personen [W/m2]
+    phi_L   Wärmeabgabe Beleuchtung [W/m2]
+    phi_A   Wärmeabgabe Geräte [W/m2]
+    t_P     Vollaststunden Personen [h]
+    t_L     Vollaststunden Beleuchtung [h]
+    t_A     Vollaststunden Geräte [h]
+    g       g-Wert [-]
+    f_sh    Reduktionsfaktor solare Wärmeeinträge [-]
+    I       description": "Solare Strahlung [Wh/m2]
+    """
+
+    """
+    cases according to SIA 2024:2015.
+    The norm defines following ROOM and/or BUILDING types (p.7-8):
+        _____________________________________________________________________________________
+              | abbr.     | description                                    |    code SIA 380
+        ______|___________|________________________________________________|_________________
+        - 1.1   mfh:        multi-family house (Mehrfamilienhaus)                   HNF1
+        - 1.2   efh:        single family house (Einfamilienhaus)                   HNF1
+        - 2.1   ...:        Hotelroom                                               HNF1
+        - 2.2   ...:        Hotel lobby                                             HNF1
+        - ...   ...:
+        - 3.1   office:     small office space (Einzel,- Gruppenbüro)               HNF2
+        - ...   ...:
+        - 4.1   school:     school room (Schulzimmer)                               HNF5
+        - ...   ...:
+        _____________________________________________________________________________________
+    """
+
     rho = 1.2       # Luftdichte in kg/m^3
     c_p = 1005      # Spez. Wärmekapazität Luft in J/(kgK)
     hours_per_day = 24
     months_per_year = 12
-    days_per_year = 365
     days_per_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
     t = [(hours_per_day * days) for days in days_per_month]   # length of calculation period (hours per month) [h]
 
-    # read room properties
-    [tau, theta_i_summer, theta_i_winter, \
-           U_op, U_w, \
-           Vdot_e_spec, Vdot_inf_spec, eta_rec, \
-           Phi_P, Phi_L, Phi_A, \
-           t_P, t_L, t_A, \
-           g, f_sh] =\
-        read_building_json(room_properties, days_per_month)
+    # read room properties from sia2024
+    # f_sh = 0.9  # sia2024, p.12, 1.3.1.9 Reduktion solare Wärmeeinträge
+    # theta_i_summer = room_properties["Raumlufttemperatur Auslegung Kuehlung (Sommer)"]
+    # theta_i_winter = room_properties["Raumlufttemperatur Auslegung Heizen (Winter)"]
+    # g = room_properties["Gesamtenergiedurchlassgrad Verglasung"]
+    tau = room_properties["Zeitkonstante"]
+    U_op = room_properties["U-Wert opake Bauteile"]
+    U_w = room_properties["U-Wert Fenster"]
+    Vdot_e_spec = room_properties["Aussenluft-Volumenstrom (pro NGF)"]
+    Vdot_inf_spec = room_properties["Aussenluft-Volumenstrom durch Infiltration"]
+    eta_rec = room_properties["Temperatur-Aenderungsgrad der Waermerueckgewinnung"]
+    Phi_P = room_properties["Waermeeintragsleistung Personen (bei 24.0 deg C, bzw. 70 W)"]
+    Phi_L = room_properties["Waermeeintragsleistung der Raumbeleuchtung"]
+    Phi_A = room_properties["Waermeeintragsleistung der Geraete"]
+    t_P = [room_properties["Vollaststunden pro Jahr (Personen)"]] * 12
+    t_L = [room_properties["Jaehrliche Vollaststunden der Raumbeleuchtung"]] * 12
+    t_A = [room_properties["Jaehrliche Vollaststunden der Geraete"]] * 12
+
+    # transforming daily sia2024 data to monthly
+    for i in range(len(days_per_month)):
+        t_P[i] *= days_per_month[i] / 365.0
+        t_L[i] *= days_per_month[i] / 365.0
+        t_A[i] *= days_per_month[i] / 365.0
+
 
     Q_s_per_surface = surface_irradiance.data   # workaround, because grasshopper components can't read jagged arrays - they are converted into separate lists
 
@@ -207,86 +265,6 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
     tokWh = 1000.0
     return [x / tokWh for x in Q_Heat], [x / tokWh for x in Q_Cool], [x / tokWh for x in Q_Elec], Q_T, Q_V, Q_i, Q_s
 
-
-def read_building_json(room, dayspermonth):
-    """
-
-    :param room: Room description as json
-    :return: room properties
-    """
-
-    """
-        tau     Zeitkonstante des Gebäudes [h]
-        theta_e Aussenlufttemperatur
-        theta_i Raumlufttemperatur
-        t       Länge der Berechnungsperiode [h]
-        A_th    Thermische Gebäudehüllfläche [m2] 
-        A_w     Fensterfläche [m2]                      !!!!!! f_g in sia2024 - Glasanteil in [%]
-        U_op    Wärmedurchgangskoeffizient Aussenwand [W/m2K]
-        U_w     Wärmedurchgangskoeffizient Fenster [W/m2K]
-        Vdot_e_spec  Aussenluft-Volumenstrom [m3/m2h]
-        Vdot_inf_spec Aussenluft-Volumenstrom durch Infiltration [m3/m2h]
-        eta_rec Nutzungsgrad der Wärmerückgewinnung [-]
-        phi_P   Wärmeabgabe Personen [W/m2]
-        phi_L   Wärmeabgabe Beleuchtung [W/m2]
-        phi_A   Wärmeabgabe Geräte [W/m2]
-        t_P     Vollaststunden Personen [h]
-        t_L     Vollaststunden Beleuchtung [h]
-        t_A     Vollaststunden Geräte [h]
-        g       g-Wert [-]
-        f_sh    Reduktionsfaktor solare Wärmeeinträge [-]
-        I       description": "Solare Strahlung [Wh/m2]
-    """
-
-    """
-    cases according to SIA 2024:2015.
-    The norm defines following ROOM and/or BUILDING types (p.7-8):
-        _____________________________________________________________________________________
-              | abbr.     | description                                    |    code SIA 380
-        ______|___________|________________________________________________|_________________
-        - 1.1   mfh:        multi-family house (Mehrfamilienhaus)                   HNF1
-        - 1.2   efh:        single family house (Einfamilienhaus)                   HNF1
-        - 2.1   ...:        Hotelroom                                               HNF1
-        - 2.2   ...:        Hotel lobby                                             HNF1
-        - ...   ...:
-        - 3.1   office:     small office space (Einzel,- Gruppenbüro)               HNF2
-        - ...   ...:
-        - 4.1   school:     school room (Schulzimmer)                               HNF5
-        - ...   ...:
-        _____________________________________________________________________________________
-    """
-
-    f_sh = 0.9  # sia2024, p.12, 1.3.1.9 Reduktion solare Wärmeeinträge
-
-    tau = room["Zeitkonstante"]
-    theta_i_summer = room["Raumlufttemperatur Auslegung Kuehlung (Sommer)"]
-    theta_i_winter = room["Raumlufttemperatur Auslegung Heizen (Winter)"]
-
-    U_op = room["U-Wert opake Bauteile"]
-    U_w = room["U-Wert Fenster"]
-    Vdot_e_spec = room["Aussenluft-Volumenstrom (pro NGF)"]
-    Vdot_inf_spec = room["Aussenluft-Volumenstrom durch Infiltration"]
-    eta_rec = room["Temperatur-Aenderungsgrad der Waermerueckgewinnung"]
-    phi_P = room["Waermeeintragsleistung Personen (bei 24.0 deg C, bzw. 70 W)"]
-    phi_L = room["Waermeeintragsleistung der Raumbeleuchtung"]
-    phi_A = room["Waermeeintragsleistung der Geraete"]
-    t_P = [room["Vollaststunden pro Jahr (Personen)"]] * 12
-    t_L = [room["Jaehrliche Vollaststunden der Raumbeleuchtung"]] * 12
-    t_A = [room["Jaehrliche Vollaststunden der Geraete"]] * 12
-    g = room["Gesamtenergiedurchlassgrad Verglasung"]
-
-    # transforming daily sia2024 data to monthly
-    for i in range(len(dayspermonth)):
-        t_P[i] *= dayspermonth[i] / 365.0
-        t_L[i] *= dayspermonth[i] / 365.0
-        t_A[i] *= dayspermonth[i] / 365.0
-
-    return tau, theta_i_summer, theta_i_winter, \
-           U_op, U_w, \
-           Vdot_e_spec, Vdot_inf_spec, eta_rec, \
-           phi_P, phi_L, phi_A, \
-           t_P, t_L, t_A, \
-           g, f_sh
 
 
 if __name__ == "__main__":
