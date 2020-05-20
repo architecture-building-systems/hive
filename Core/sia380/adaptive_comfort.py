@@ -16,15 +16,21 @@ def adaptive_comfort(T_m):
     # where T_n is adaptive thermal comfort temperature and T_m is mean monthly ambient temp
     # for 90% acceptability limits, T_n +/- 2.5 K, for 80 % T_n +/- 3.5 K
 
-    setpoints = [i for i in range(len(T_m))]
-    setpoints_ub_80 = [i for i in range(len(T_m))]
-    setpoints_ub_90 = [i for i in range(len(T_m))]
-    setpoints_lb_80 = [i for i in range(len(T_m))]
-    setpoints_lb_90 = [i for i in range(len(T_m))]
-    for i in range(len(T_m)):
-        setpoints[i] = 21.5 + 0.11 * T_m[i]
-        setpoints_ub_80[i] = setpoints[i] + 3.5
-        setpoints_lb_80[i] = setpoints[i] - 3.5
-        setpoints_ub_90[i] = setpoints[i] + 2.5
-        setpoints_lb_90[i] = setpoints[i] - 2.5
+    setpoints = [21.5 + 0.11 * t for t in T_m]
+    setpoints_ub_80 = [sp + 3.5 for sp in setpoints]
+    setpoints_lb_80 = [sp - 3.5 for sp in setpoints]
+    setpoints_ub_90 = [sp + 2.5 for sp in setpoints]
+    setpoints_lb_90 = [sp - 2.5 for sp in setpoints]
+
     return setpoints, setpoints_ub_80, setpoints_lb_80, setpoints_ub_90, setpoints_lb_90
+
+
+if __name__ == "__main__":
+    T_m = [-4.0, 1.0, 4.4, 6.6, 14.0, 25.0, 18.0, 10.0, 5.0, 1.0, 0.0, -0.4]
+    [sp, ub80, lb80, ub90, lb90] = adaptive_comfort(T_m)
+    print(sp)
+    print(ub80)
+    print(lb80)
+    print (ub90)
+    print (lb90)
+    
