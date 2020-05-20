@@ -31,6 +31,80 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
     :return: Monthly cooling, heating and electricity loads for a thermal zone
     '''
 
+    """
+    List of equations
+    
+    Heizwärmebedarf (in Wh):
+    Q_H = Q_T + Q_V - eta_g * (Q_i + Q_s)
+        
+    Ausnutzungsgrad für Wärmegewinne (in -):
+    eta_g = (1 - gamma^a) / (1 - gamma^(a+1))
+    a = 1 + tau / 15
+    
+    Wärmeeintrag/-verlust-Verhältnis (in -):
+    gamma = (Q_i + Q_s) / (Q_T + Q_V)
+    
+    Transmissionswärmeverluste (in Wh):
+    Q_T = H_T * (T_i - T_e) * t
+    
+    Transmissions-Wärmetransferkoeffizient (in W/K):
+    H_T = A_op * U_op + A_w * U_w
+    
+    Interne Wärmeeinträge (in Wh):
+    Q_i = Phi_P * t_P + Phi_L * t_L + Phi_A * t_A
+    
+    Lüftungswärmeverluste (in Wh):
+    Q_V = H_V * (T_i - T_e) * t
+    
+    Lüftungs-Wärmetransferkoefizient (in W/K):
+    H_V = Vdot_th * rho * c_p
+    
+    Thermisch wirksamer Aussenluftvolumenstrom (in m^3/h):
+    Vdot_th = Vdot_e * (1 - eta_rec) + Vdot_inf
+    """
+
+    """
+    Nomenclature:
+    
+    [Q_H] = Wh (Heizwärmebedarf)
+    [Q_T] = Wh (Transmissionswärmeverluste)
+    [Q_V] = Wh (Lüftungswärmeverluste)
+    [Q_i] = Wh (interne Wärmeeinträge)
+    [Q_s] = Wh (solare Wärmeeinträge)
+    
+    [H_V] = W/K (Lüftungs-Wärmetransferkoefizient) 
+    [H_T] = W/K (Transmissions-Wärmetransferkoeffizient)
+    
+    [Phi_P] = W (Wärmeabgabe der Personen)
+    [Phi_L] = W (Wärmeabgabe der Beleuchtung)
+    [Phi_A] = W (Wärmeabgabe der Geräte)
+    [t_P] = h (Volllaststunden Personen)
+    [t_L] = h (Volllaststunden Beleuchtung)
+    [t_A] = h (Volllaststunden Geräte)    
+    
+    [gamma] = - (Wärmeeintrag/-verlust-Verhältnis)
+    [tau] = h (Zeitkonstante des Gebäudes)
+    [t] = h (Länge der Berechnungsperiode)
+        
+    [Vdot_th] = m^3/h (Thermisch wirksamer Aussenluftvolumenstrom)
+    [Vdot_e] = m^3/h (Aussenluftvolumenstrom durch Lüftung)
+    [Vdot_inf] = m^3/h (Aussenluftvolumenstrom durch Infiltration)
+    
+    [eta_rec] = - (Nutzungsgrad der Wärmerückgewinnung) 
+    [eta_g] = - (Ausnutzungsgrad für Wärmegewinne)      
+
+    [rho] = kg/m^3 (Luftdichte)
+    [c_p] = J/(kgK) (Spez. Wärmekapazität von Luft)
+    
+    [T_i] = K oder °C (Raumlufttemperatur)
+    [T_e] = K oder °C (Aussenlufttemperatur)
+
+    [A_op] = m^2 (opaque surface area) 
+    [A_w] = m^2 (windows surface area)
+    [U_op] = W/(m^2K) (U-value opaque surface)
+    [U_w] = W/(m^2K) (U-value window surface)  
+    """
+
     rho = 1.2       # Luftdichte in kg/m^3
     c_p = 1005      # Spez. Wärmekapazität Luft in J/(kgK)
     hours_per_day = 24
@@ -79,103 +153,40 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
         # Q_s_per_surface[month] = [0.0] * num_surfaces   # solar gains per surface for this month. input for now
         Q_T_per_surface[month] = [0.0] * num_surfaces   # transmission losses per surface for this month
 
-        """ 
-        External air flowrate (thermisch wirksamer Aussenluftvolumenstrom)
-        # Vdot_th = Vdot_e * (1 - eta_rec) + Vdot_inf
-        # [Vdot_th] = m^3/h
-        # [Vdot_e] = m^3/h (Aussenluftvolumenstrom durch Lüftung)
-        # [Vdot_inf] = m^3/h (Aussenluftvolumenstrom durch Infiltration)
-        # [eta_rec] = - (Nutzungsgrad der Wärmerückgewinnung)
-        """
+        # External air flowrate (thermisch wirksamer Aussenluftvolumenstrom)
         Vdot_e = Vdot_e_spec * floor_area
         Vdot_inf = Vdot_inf_spec * floor_area
         Vdot_th = Vdot_e * (1 - eta_rec) + Vdot_inf
 
-        """
-        Ventilation heat loss coefficient (Lüftungs-Wärmetransferkoeffizient), H_V
-        H_V = Vdot_th * rho * c_p
-        [H_V] = W/K
-        [Vdot_th] = m^3/s
-        [rho] = kg/m^3
-        [c_p] = J/(kgK)
-        """
+        # Ventilation heat loss coefficient (Lüftungs-Wärmetransferkoeffizient), H_V
         H_V = Vdot_th/3600 * rho * c_p
 
-        """ 
-        Ventilation losses (Lüftungswärmeverluste), Q_V
-        Q_V = H_V * (T_i - T_e) * t
-        [Q_V] = Wh
-        [H_V] = W/K
-        [T_i] = K oder °C
-        [T_e] = K oder °C
-        [t] = h (Länge der Berechnungsperiode)
-        """
+        # Ventilation losses (Lüftungswärmeverluste), Q_V
         Q_V[month] = H_V * (T_i[month] - T_e[month]) * t[month]
 
-        """ 
-        Internal loads (interne Wärmeeinträge)
-        # Q_i = Phi_P * t_P + Phi_L * t_L + Phi_A * t_A
-        # [Q_i] in Wh
-        # [Phi_P] = W (Wärmeabgabe der Personen)
-        # [Phi_L] = W (Wärmeabgabe der Beleuchtung)
-        # [Phi_A] = W (Wärmeabgabe der Geräte)
-        # [t_P] = h (Volllaststunden Personen)
-        # [t_L] = h (Volllaststunden Beleuchtung)
-        # [t_A] = h (Volllaststunden Geräte)
-        """
+        # Internal loads (interne Wärmeeinträge)
         Q_i[month] = Phi_P_tot * t_P[month] + Phi_L_tot * t_L[month] + Phi_A_tot * t_A[month]
 
         for surface in range(num_surfaces):
             # solar gains (solare Wärmeeinträge), Q_s, (PER SURFACE)
             # unobstructed or obstructed, both using SolarModel.dll and GHSolar.gha
 
-            """ 
-            Transmission heat transfer coefficient (Transmissions-Wärmetransferkoeffizient), H_T, (PER SURFACE)
-            H_T = A_op * U_op + A_w * U_w
-            [H_T] in W/K
-            [A_op] in m^2 (opaque surface area) 
-            [A_w] in m^2 (windows surface area)
-            [U_op] in W/(m^2K) (U-value opaque surface)
-            [U_w] in W/(m^2K) (U-value window surface)
-            """
+            # Transmission heat transfer coefficient (Transmissions-Wärmetransferkoeffizient), H_T, (PER SURFACE)
             if(surface_type[surface] == "opaque"):
                 H_T = surface_areas[surface] * U_op
             else:
                 H_T = surface_areas[surface] * U_w
 
-            """
-            Transmission losses (Transmissionswärmeverluste), Q_T, (PER SURFACE, because function of H_T)
-            Q_T = H_T * (T_i - T_e) * t
-            [Q_T] in Wh
-            [H_T] in W/K
-            [T_i] in K or °C
-            [T_e] in K or °C
-            [t] in h
-            """
+            # Transmission losses (Transmissionswärmeverluste), Q_T, (PER SURFACE, because function of H_T)
             Q_T_per_surface[month][surface] = H_T * (T_i[month] - T_e[month]) * t[month]
 
         Q_T[month] = sum(Q_T_per_surface[month])
         Q_s[month] = sum(Q_s_per_surface[month])
 
-        """ 
-        Heatgains/-losses ratio (Wärmeeintrag/-verlust Verhältnis), gamma
-        gamma = (Q_i + Q_s) / (Q_T + Q_V)
-        [gamma] = -
-        [Q_T] = Wh
-        [Q_V] = Wh
-        [Q_i] = Wh
-        [Q_s] = Wh
-        """
+        # Heatgains/-losses ratio (Wärmeeintrag/-verlust Verhältnis), gamma
         gamma = (Q_i[month] + Q_s[month]) / (Q_T[month] + Q_V[month])
 
-        """
-        usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
-        eta_g = (1 - gamma^a) / (1 - gamma^(a+1))
-        a = 1 + tau / 15
-        [eta_g] = -
-        [gamma] = -
-        [tau] = h
-        """
+        # usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
         if Q_T[month] + Q_V[month] < 0:
             eta_g = 0
         elif gamma == 1:
@@ -184,16 +195,7 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
             a = 1 + tau / 15
             eta_g = (1 - gamma ** a) / (1 - gamma ** (a + 1))
 
-        """
-        heating demand (Heizwärmebedarf), Q_H
-        Q_H = Q_T + Q_V - eta_g * (Q_i + Q_s)
-        [Q_H] = Wh (script errechnet kWh!)
-        [Q_T] = Wh
-        [Q_V] = Wh
-        [Q_i] = Wh
-        [Q_s] = Wh (script erfordert kWh!)
-        [eta_g] = -
-        """
+        # heating demand (Heizwärmebedarf), Q_H
         demand = Q_T[month] + Q_V[month] - eta_g * (Q_i[month] + Q_s[month])
         if(demand > 0):
             Q_Heat[month] = demand
