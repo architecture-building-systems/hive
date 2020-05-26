@@ -5,53 +5,62 @@ using Grasshopper.Kernel;
 namespace Hive.IO
 {
     public class HiveIOInfo : GH_AssemblyInfo
-  {
-    public override string Name
     {
-        get
+        public override string Name
         {
-            return "HiveIO";
+            get
+            {
+                return "HiveIO";
+            }
         }
-    }
-    public override Bitmap Icon
-    {
-        get
+        public override Bitmap Icon
         {
-            //Return a 24x24 pixel bitmap to represent this GHA library.
-            return null;
+            get
+            {
+                //Return a 24x24 pixel bitmap to represent this GHA library.
+                return null;
+            }
         }
-    }
-    public override string Description
-    {
-        get
+        public override string Description
         {
-            //Return a short string describing the purpose of this GHA library.
-            return "";
+            get
+            {
+                //Return a short string describing the purpose of this GHA library.
+                return "";
+            }
         }
-    }
-    public override Guid Id
-    {
-        get
+        public override Guid Id
         {
-            return new Guid("1da9c6d0-f813-4e78-8c56-fc2672430613");
+            get
+            {
+                return new Guid("1da9c6d0-f813-4e78-8c56-fc2672430613");
+            }
         }
-    }
 
-    public override string AuthorName
-    {
-        get
+        public override string AuthorName
         {
-            //Return a string identifying you or your company.
-            return "ETH Zurich";
+            get
+            {
+                //Return a string identifying you or your company.
+                return "ETH Zurich";
+            }
         }
-    }
-    public override string AuthorContact
-    {
-        get
+        public override string AuthorContact
         {
-            //Return a string representing your preferred contact details.
-            return "";
+            get
+            {
+                //Return a string representing your preferred contact details.
+                return "";
+            }
         }
     }
 }
+public class HiveCategoryIcon : GH_AssemblyPriority
+{
+    public override GH_LoadingInstruction PriorityLoad()
+    {
+        Grasshopper.Instances.ComponentServer.AddCategoryIcon("[hive]", Hive.IO.Properties.Resources.Hive_Logo);
+        Grasshopper.Instances.ComponentServer.AddCategorySymbolName("[hive]", 'H');
+        return GH_LoadingInstruction.Proceed;
+    }
 }
