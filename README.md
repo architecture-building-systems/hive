@@ -1,3 +1,5 @@
+![Hive Architecture](https://github.com/architecture-building-systems/hive/blob/master/repository_files/Hive_Logo_medium.jpg)
+
 # HIVE
 
 HIVE is a collection of Grasshopper components and workflow templates designed to facilitate flexibility in informed decision making during the early stages of building design.
