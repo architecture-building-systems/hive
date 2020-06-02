@@ -11,7 +11,7 @@ Hive is still under development, but early testers are welcome! Installation ins
 
 ## Folder Description
 * **auxiliary**: weather files and occupancy schedules
-* **clipper**: clipper.dll file necessary for shading calculations
+* **libraries**: Find here the clipper.dll file necessary for shading calculations
 * **examples**: All the grasshopper files being used for development. These will be streamlined into simple examples.
 * **src**: python source code for all the HIVE user objects
 * **userObjects**: Hive user objects which need to be copied in the grasshopper userObjects folder
