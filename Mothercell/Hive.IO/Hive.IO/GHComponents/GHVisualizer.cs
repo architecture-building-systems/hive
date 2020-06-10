@@ -108,7 +108,7 @@ namespace Hive.IO.GHComponents
         {
             var values = (VisualizerPlot[])Enum.GetValues(typeof(VisualizerPlot));
             var currentIndex = Array.FindIndex(values, t => t == this._currentPlot);
-            this._currentPlot = values[(currentIndex - 1) % values.Length];
+            this._currentPlot = values[(currentIndex - 1 + values.Length) % values.Length];
         }
 
         // FIXME: what goes here?
