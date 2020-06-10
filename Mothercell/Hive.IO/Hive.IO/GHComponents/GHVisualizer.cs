@@ -83,6 +83,12 @@ namespace Hive.IO.GHComponents
 
         private VisualizerPlot _currentPlot;
 
+        // colors for plots
+        private static readonly OxyColor SpaceHeatingColor = OxyColor.FromRgb(255, 0, 0);
+        private static readonly OxyColor SpaceCoolingColor = OxyColor.FromRgb(0, 176, 240);
+        private static readonly OxyColor ElectricityColor = OxyColor.FromRgb(255, 217, 102);
+        private static readonly OxyColor DhwColor = OxyColor.FromRgb(192, 0, 0);
+
         public GHVisualizerAttributes(GHVisualizer owner) : base(owner)
         {
             this._currentPlot = VisualizerPlot.DemandMonthly;
@@ -272,16 +278,14 @@ namespace Hive.IO.GHComponents
         private PlotModel DemandMonthlyPlotModel()
         {
             const int months = 12;
-            var model = new PlotModel {Title = "Demand (Monthly)"};
+            var model = new PlotModel {Title = "Energy demand (Total Monthly)"};
 
             var resultsTotalHeatingMonthly = Owner.Results.TotalHeatingMonthly ?? new double[months];
             var demandHeating = new ColumnSeries
             {
                 ItemsSource = resultsTotalHeatingMonthly.Select(demand => new ColumnItem {Value = demand}),
-
-                LabelPlacement = LabelPlacement.Inside,
-                LabelFormatString = "{0:.00}",
-                Title = " Heating Demand"
+                Title = " Space Heating",
+                FillColor = SpaceHeatingColor
             };
             model.Series.Add(demandHeating);
 
@@ -289,10 +293,8 @@ namespace Hive.IO.GHComponents
             var demandCooling = new ColumnSeries
             {
                 ItemsSource = resultsTotalCoolingMonthly.Select(demand => new ColumnItem {Value = demand}),
-
-                LabelPlacement = LabelPlacement.Inside,
-                LabelFormatString = "{0:.00}",
-                Title = " Cooling Demand"
+                Title = " Space Cooling",
+                FillColor = SpaceCoolingColor
             };
             model.Series.Add(demandCooling);
 
@@ -300,11 +302,19 @@ namespace Hive.IO.GHComponents
             var demandElectricity = new ColumnSeries
             {
                 ItemsSource = resultsTotalElectricityMonthly.Select(demand => new ColumnItem {Value = demand}),
-                LabelPlacement = LabelPlacement.Inside,
-                LabelFormatString = "{0:.00}",
-                Title = " Electricity Demand"
+                Title = " Electricity",
+                FillColor = ElectricityColor
             };
             model.Series.Add(demandElectricity);
+
+            var resultsTotalDwhMonthly = Owner.Results.TotalDHWMonthly ?? new double[months];
+            var demandDhw = new ColumnSeries
+            {
+                ItemsSource = resultsTotalDwhMonthly.Select(demand => new ColumnItem {Value = demand}),
+                Title = " DWH",
+                FillColor = DhwColor
+            };
+            model.Series.Add(demandDhw);
 
             model.Axes.Add(new CategoryAxis
             {
@@ -312,18 +322,18 @@ namespace Hive.IO.GHComponents
                 Key = "Months",
                 ItemsSource = new[]
                 {
-                    "J",
-                    "F",
-                    "M",
-                    "A",
-                    "M",
-                    "J",
-                    "J",
-                    "A",
-                    "S",
-                    "O",
-                    "N",
-                    "D"
+                    "Jan",
+                    "Feb",
+                    "Mar",
+                    "Apr",
+                    "May",
+                    "Jun",
+                    "Jul",
+                    "Aug",
+                    "Sep",
+                    "Oct",
+                    "Nov",
+                    "Dec"
                 }
             });
             return model;
