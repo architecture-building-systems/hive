@@ -100,7 +100,7 @@ namespace Hive.IO
     {
         private const float ArrowBoxSide = 10f;
         private const float ArrowBoxPadding = 10f;
-        private int m_padding = 6;
+        private readonly int m_padding = 6;
 
         // keep track of the last exported bitmap to avoid re-exporting unnecessarily...
         private int lastPlotWidth = 0;
@@ -211,7 +211,7 @@ namespace Hive.IO
             if (channel != GH_CanvasChannel.Objects)
                 return;
 
-            RenderCapsule(canvas, graphics);
+            RenderCapsule(graphics);
             RenderPlot(graphics);
             RenderArrows(graphics);
         }
@@ -239,13 +239,13 @@ namespace Hive.IO
             graphics.DrawPolygon(pen, rightArrow);
 
             // fill out the polygon
-            LinearGradientBrush leftBrush = new LinearGradientBrush(LeftArrowBox, color, GH_GraphicsUtil.OffsetColour(color, 50), LinearGradientMode.Vertical);
-            leftBrush.WrapMode = WrapMode.TileFlipXY;
+            LinearGradientBrush leftBrush = new LinearGradientBrush(LeftArrowBox, color,
+                GH_GraphicsUtil.OffsetColour(color, 50), LinearGradientMode.Vertical) {WrapMode = WrapMode.TileFlipXY};
             graphics.FillPolygon((Brush)leftBrush, leftArrow);
             leftBrush.Dispose();
 
-            LinearGradientBrush rightBrush = new LinearGradientBrush(RightArrowBox, color, GH_GraphicsUtil.OffsetColour(color, 50), LinearGradientMode.Vertical);
-            rightBrush.WrapMode = WrapMode.TileFlipXY;
+            LinearGradientBrush rightBrush = new LinearGradientBrush(RightArrowBox, color,
+                GH_GraphicsUtil.OffsetColour(color, 50), LinearGradientMode.Vertical) {WrapMode = WrapMode.TileFlipXY};
             graphics.FillPolygon((Brush)rightBrush, rightArrow);
             rightBrush.Dispose();
         }
@@ -297,10 +297,8 @@ namespace Hive.IO
             return !(lastBitmap is null) && plotWidth == lastPlotWidth && plotHeight == lastPlotHeight && currentPlot == lastPlot;
         }
 
-        private void RenderCapsule(GH_Canvas canvas, Graphics graphics)
+        private void RenderCapsule(Graphics graphics)
         {
-            GH_Viewport viewport = canvas.Viewport;
-            RectangleF bounds = this.Bounds;
             GH_Capsule capsule = this.Owner.RuntimeMessageLevel != GH_RuntimeMessageLevel.Error
                 ? GH_Capsule.CreateCapsule(this.Bounds, GH_Palette.Hidden, 5, 30)
                 : GH_Capsule.CreateCapsule(this.Bounds, GH_Palette.Error, 5, 30);
