@@ -19,7 +19,7 @@ namespace Hive.IO.GHComponents
     public enum VisualizerPlot
     {
         DemandMonthly,
-        DemandHourly,
+        DemandMonthlyNormalized,
     }
 
     public class GHVisualizer : GH_Param<GH_ObjectWrapper>
@@ -88,6 +88,7 @@ namespace Hive.IO.GHComponents
         private static readonly OxyColor SpaceCoolingColor = OxyColor.FromRgb(0, 176, 240);
         private static readonly OxyColor ElectricityColor = OxyColor.FromRgb(255, 217, 102);
         private static readonly OxyColor DhwColor = OxyColor.FromRgb(192, 0, 0);
+        private static readonly OxyColor BackgroundColor = OxyColor.FromArgb(0, 0, 0, 0);
 
         public GHVisualizerAttributes(GHVisualizer owner) : base(owner)
         {
@@ -237,8 +238,8 @@ namespace Hive.IO.GHComponents
                     case VisualizerPlot.DemandMonthly:
                         model = DemandMonthlyPlotModel();
                         break;
-                    case VisualizerPlot.DemandHourly:
-                        model = DemandHourlyPlotModel();
+                    case VisualizerPlot.DemandMonthlyNormalized:
+                        model = DemandMonthlyNormalizedPlotModel();
                         break;
                     default:
                         model = DemandMonthlyPlotModel();
@@ -346,28 +347,87 @@ namespace Hive.IO.GHComponents
             return model;
         }
 
-        private PlotModel DemandHourlyPlotModel()
+        private PlotModel DemandMonthlyNormalizedPlotModel()
         {
-            const int hours = 8760;
-            var model = new PlotModel { Title = "Demand (Hourly)" };
+            const int months = 12;
+            var model = new PlotModel { Title = "Energy demand (Normalized Monthly)" };
+            var totalFloorArea = Owner.Results.TotalFloorArea;
 
-            var resultsTotalHeatingHourly = Owner.Results.TotalHeatingHourly ?? new double[hours];
+            var resultsTotalHeatingMonthly = Owner.Results.TotalHeatingMonthly ?? new double[months];
             var demandHeating = new ColumnSeries
             {
-                ItemsSource = resultsTotalHeatingHourly.Select(demand => new ColumnItem { Value = demand }),
-                Title = " Heating Demand"
+                ItemsSource = resultsTotalHeatingMonthly.Select(demand => new ColumnItem { Value = demand / totalFloorArea }),
+                Title = " Space Heating",
+                FillColor = BackgroundColor,
+                StrokeThickness = 2.0,
+                StrokeColor = SpaceHeatingColor
             };
             model.Series.Add(demandHeating);
 
-            var resultsTotalCoolingHourly = Owner.Results.TotalCoolingHourly ?? new double[hours];
+            var resultsTotalCoolingMonthly = Owner.Results.TotalCoolingMonthly ?? new double[months];
             var demandCooling = new ColumnSeries
             {
-                ItemsSource = resultsTotalCoolingHourly.Select(demand => new ColumnItem { Value = demand }),
-                Title = " Cooling Demand"
+                ItemsSource = resultsTotalCoolingMonthly.Select(demand => new ColumnItem { Value = demand / totalFloorArea }),
+                Title = " Space Cooling",
+                FillColor = BackgroundColor,
+                StrokeThickness = 2.0,
+                StrokeColor = SpaceCoolingColor
             };
             model.Series.Add(demandCooling);
+
+            var resultsTotalElectricityMonthly = Owner.Results.TotalElectricityMonthly ?? new double[months];
+            var demandElectricity = new ColumnSeries
+            {
+                ItemsSource = resultsTotalElectricityMonthly.Select(
+                    demand => new ColumnItem { Value = demand / totalFloorArea }),
+                Title = " Electricity",
+                FillColor = BackgroundColor,
+                StrokeThickness = 2.0,
+                StrokeColor = ElectricityColor
+            };
+            model.Series.Add(demandElectricity);
+
+            var resultsTotalDwhMonthly = Owner.Results.TotalDHWMonthly ?? new double[months];
+            var demandDhw = new ColumnSeries
+            {
+                ItemsSource = resultsTotalDwhMonthly.Select(demand => new ColumnItem { Value = demand / totalFloorArea }),
+                Title = " DWH",
+                FillColor = BackgroundColor,
+                StrokeThickness = 2.0,
+                StrokeColor = DhwColor,
+            };
+            model.Series.Add(demandDhw);
+
+            model.Axes.Add(new LinearAxis
+            {
+                Position = AxisPosition.Left,
+                Key = "Demand",
+                Title = "kWh/m^2"
+            });
+
+            model.Axes.Add(new CategoryAxis
+            {
+                Position = AxisPosition.Bottom,
+                Key = "Months",
+                ItemsSource = new[]
+                {
+                    "Jan",
+                    "Feb",
+                    "Mar",
+                    "Apr",
+                    "May",
+                    "Jun",
+                    "Jul",
+                    "Aug",
+                    "Sep",
+                    "Oct",
+                    "Nov",
+                    "Dec"
+                }
+            });
             return model;
         }
+
 
         public void ClearBitmapCache()
         {
