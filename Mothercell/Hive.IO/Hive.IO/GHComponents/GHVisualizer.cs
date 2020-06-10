@@ -312,10 +312,17 @@ namespace Hive.IO.GHComponents
             {
                 ItemsSource = resultsTotalDwhMonthly.Select(demand => new ColumnItem {Value = demand}),
                 Title = " DWH",
-                FillColor = DhwColor
+                FillColor = DhwColor,
             };
             model.Series.Add(demandDhw);
 
+            model.Axes.Add(new LinearAxis
+            {
+                Position = AxisPosition.Left,
+                Key = "Demand",
+                Title = "kWh"
+            });
+            
             model.Axes.Add(new CategoryAxis
             {
                 Position = AxisPosition.Bottom,
