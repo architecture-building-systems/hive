@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Drawing;
-using System.Collections.Generic;
 using System.Drawing.Drawing2D;
 using System.Linq;
-
+using System.Windows.Forms;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel.Attributes;
-using System.Windows.Forms;
+using Grasshopper.Kernel.Types;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
 using OxyPlot.WindowsForms;
 using Rhino;
 
-namespace Hive.IO
+namespace Hive.IO.GHComponents
 {
     public enum VisualizerPlot
     {
@@ -84,13 +82,13 @@ namespace Hive.IO
             }
         }
 
-        protected override System.Drawing.Bitmap Icon
+        protected override Bitmap Icon
         {
             get
             {
                 //You can add image files to your project resources and access them like this:
                 // return Resources.IconForThisComponent;
-                return Hive.IO.Properties.Resources.IO_Visualizer;
+                return Properties.Resources.IO_Visualizer;
             }
         }
 
@@ -103,16 +101,16 @@ namespace Hive.IO
         private readonly int m_padding = 6;
 
         // keep track of the last exported bitmap to avoid re-exporting unnecessarily...
-        private int lastPlotWidth = 0;
-        private int lastPlotHeight = 0;
-        private VisualizerPlot lastPlot = VisualizerPlot.DemandMonthly;
-        private Bitmap lastBitmap = null;
+        private int _lastPlotWidth;
+        private int _lastPlotHeight;
+        private VisualizerPlot _lastPlot = VisualizerPlot.DemandMonthly;
+        private Bitmap _lastBitmap;
 
-        private VisualizerPlot currentPlot;
+        private VisualizerPlot _currentPlot;
 
         public GHVisualizerAttributes(GHVisualizer owner) : base(owner)
         {
-            this.currentPlot = VisualizerPlot.DemandMonthly;
+            this._currentPlot = VisualizerPlot.DemandMonthly;
         }
 
 
@@ -120,15 +118,15 @@ namespace Hive.IO
         {
 
             var values = (VisualizerPlot[])Enum.GetValues(typeof(VisualizerPlot));
-            var currentIndex = Array.FindIndex(values, t => t == this.currentPlot);
-            this.currentPlot = values[(currentIndex + 1) % values.Length];
+            var currentIndex = Array.FindIndex(values, t => t == this._currentPlot);
+            this._currentPlot = values[(currentIndex + 1) % values.Length];
         }
 
         private void PreviousPlot()
         {
             var values = (VisualizerPlot[])Enum.GetValues(typeof(VisualizerPlot));
-            var currentIndex = Array.FindIndex(values, t => t == this.currentPlot);
-            this.currentPlot = values[(currentIndex - 1) % values.Length];
+            var currentIndex = Array.FindIndex(values, t => t == this._currentPlot);
+            this._currentPlot = values[(currentIndex - 1) % values.Length];
         }
 
         public override string PathName
@@ -207,7 +205,7 @@ namespace Hive.IO
         protected override void Render(GH_Canvas canvas, Graphics graphics, GH_CanvasChannel channel)
         {
             if (channel == GH_CanvasChannel.Wires && this.Owner.SourceCount > 0)
-                this.RenderIncomingWires(canvas.Painter, (IEnumerable<IGH_Param>)this.Owner.Sources, this.Owner.WireDisplay);
+                this.RenderIncomingWires(canvas.Painter, this.Owner.Sources, this.Owner.WireDisplay);
             if (channel != GH_CanvasChannel.Objects)
                 return;
 
@@ -223,13 +221,13 @@ namespace Hive.IO
         private void RenderArrows(Graphics graphics)
         {
             // the style to draw the arrows with
-            GH_PaletteStyle impliedStyle = GH_CapsuleRenderEngine.GetImpliedStyle(GH_Palette.Normal, (IGH_Attributes)this);
+            GH_PaletteStyle impliedStyle = GH_CapsuleRenderEngine.GetImpliedStyle(GH_Palette.Normal, this);
             Color color = impliedStyle.Text;
             var pen = new Pen(color, 1f) { LineJoin = System.Drawing.Drawing2D.LineJoin.Round };
 
             // the base arrow polygons
-            var leftArrow = new PointF[] { new PointF(ArrowBoxSide, 0), new PointF(0, ArrowBoxSide / 2), new PointF(ArrowBoxSide, ArrowBoxSide) };
-            var rightArrow = new PointF[] { new PointF(0, 0), new PointF(ArrowBoxSide, ArrowBoxSide / 2), new PointF(0, ArrowBoxSide) };
+            var leftArrow = new[] { new PointF(ArrowBoxSide, 0), new PointF(0, ArrowBoxSide / 2), new PointF(ArrowBoxSide, ArrowBoxSide) };
+            var rightArrow = new[] { new PointF(0, 0), new PointF(ArrowBoxSide, ArrowBoxSide / 2), new PointF(0, ArrowBoxSide) };
             
             // shift the polygons to their positions
             leftArrow = leftArrow.Select(p => new PointF(p.X + LeftArrowBox.Left, p.Y + LeftArrowBox.Top)).ToArray();
@@ -241,12 +239,12 @@ namespace Hive.IO
             // fill out the polygon
             LinearGradientBrush leftBrush = new LinearGradientBrush(LeftArrowBox, color,
                 GH_GraphicsUtil.OffsetColour(color, 50), LinearGradientMode.Vertical) {WrapMode = WrapMode.TileFlipXY};
-            graphics.FillPolygon((Brush)leftBrush, leftArrow);
+            graphics.FillPolygon(leftBrush, leftArrow);
             leftBrush.Dispose();
 
             LinearGradientBrush rightBrush = new LinearGradientBrush(RightArrowBox, color,
                 GH_GraphicsUtil.OffsetColour(color, 50), LinearGradientMode.Vertical) {WrapMode = WrapMode.TileFlipXY};
-            graphics.FillPolygon((Brush)rightBrush, rightArrow);
+            graphics.FillPolygon(rightBrush, rightArrow);
             rightBrush.Dispose();
         }
 
@@ -260,12 +258,12 @@ namespace Hive.IO
 
             if (IsBitmapCacheStillValid(plotWidth, plotHeight))
             {
-                graphics.DrawImage(lastBitmap, this.PlotLocation.X, this.PlotLocation.Y, this.PlotBounds.Width, this.PlotBounds.Height);
+                graphics.DrawImage(_lastBitmap, this.PlotLocation.X, this.PlotLocation.Y, this.PlotBounds.Width, this.PlotBounds.Height);
             }
             else
             {
                 PlotModel model;
-                switch (this.currentPlot)
+                switch (this._currentPlot)
                 {
                     case VisualizerPlot.DemandMonthly:
                         model = DemandMonthlyPlotModel();
@@ -278,23 +276,23 @@ namespace Hive.IO
                         break;
                 }
 
-                Rhino.RhinoApp.WriteLine("RenderPlot: Before exporting Bitmap");
+                RhinoApp.WriteLine("RenderPlot: Before exporting Bitmap");
                 var pngExporter = new PngExporter
                     { Width = plotWidth, Height = plotHeight, Background = OxyColors.White };
                 var bitmap = pngExporter.ExportToBitmap(model);
-                Rhino.RhinoApp.WriteLine("RenderPlot: After exporting Bitmap");
+                RhinoApp.WriteLine("RenderPlot: After exporting Bitmap");
                 graphics.DrawImage(bitmap, this.PlotLocation.X, this.PlotLocation.Y, this.PlotBounds.Width, this.PlotBounds.Height);
 
-                lastPlotWidth = plotWidth;
-                lastPlotHeight = plotHeight;
-                lastPlot = currentPlot;
-                lastBitmap = bitmap;
+                _lastPlotWidth = plotWidth;
+                _lastPlotHeight = plotHeight;
+                _lastPlot = _currentPlot;
+                _lastBitmap = bitmap;
             }
         }
 
         private bool IsBitmapCacheStillValid(int plotWidth, int plotHeight)
         {
-            return !(lastBitmap is null) && plotWidth == lastPlotWidth && plotHeight == lastPlotHeight && currentPlot == lastPlot;
+            return !(_lastBitmap is null) && plotWidth == _lastPlotWidth && plotHeight == _lastPlotHeight && _currentPlot == _lastPlot;
         }
 
         private void RenderCapsule(Graphics graphics)
@@ -394,7 +392,7 @@ namespace Hive.IO
         public void ClearBitmapCache()
         {
             RhinoApp.WriteLine("Clearing bitmap cache");
-            this.lastBitmap = null;
+            this._lastBitmap = null;
         }
     }
 }
