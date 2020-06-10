@@ -71,9 +71,9 @@ namespace Hive.IO.GHComponents
 
     public class GHVisualizerAttributes : GH_ResizableAttributes<GHVisualizer>
     {
-        private const float ArrowBoxSide = 10f;
+        private const float ArrowBoxSide = 20f;
         private const float ArrowBoxPadding = 10f;
-        private readonly int m_padding = 6;
+        private const int Padding = 6;
 
         // keep track of the last exported bitmap to avoid re-exporting unnecessarily...
         private int _lastPlotWidth;
@@ -116,7 +116,7 @@ namespace Hive.IO.GHComponents
 
         protected override Size MinimumSize => new Size(50, 50);
 
-        protected override Padding SizingBorders => new Padding(this.m_padding);
+        protected override Padding SizingBorders => new Padding(Padding);
 
         protected override void Layout()
         {
@@ -136,7 +136,7 @@ namespace Hive.IO.GHComponents
             get
             {
                 var plotBounds = this.Bounds;
-                plotBounds.Inflate(-m_padding, -m_padding);
+                plotBounds.Inflate(-Padding, -Padding);
                 return plotBounds;
             }
         }
@@ -146,8 +146,8 @@ namespace Hive.IO.GHComponents
             get
             {
                 var plotLocation = this.Bounds.Location;
-                plotLocation.X += m_padding;
-                plotLocation.Y += m_padding;
+                plotLocation.X += Padding;
+                plotLocation.Y += Padding;
                 return plotLocation;
             }
         }
@@ -354,12 +354,14 @@ namespace Hive.IO.GHComponents
             var totalFloorArea = Owner.Results.TotalFloorArea;
 
             var resultsTotalHeatingMonthly = Owner.Results.TotalHeatingMonthly ?? new double[months];
+            var strokeThickness = 4.0;
+
             var demandHeating = new ColumnSeries
             {
                 ItemsSource = resultsTotalHeatingMonthly.Select(demand => new ColumnItem { Value = demand / totalFloorArea }),
                 Title = " Space Heating",
                 FillColor = BackgroundColor,
-                StrokeThickness = 2.0,
+                StrokeThickness = strokeThickness,
                 StrokeColor = SpaceHeatingColor
             };
             model.Series.Add(demandHeating);
@@ -370,7 +372,7 @@ namespace Hive.IO.GHComponents
                 ItemsSource = resultsTotalCoolingMonthly.Select(demand => new ColumnItem { Value = demand / totalFloorArea }),
                 Title = " Space Cooling",
                 FillColor = BackgroundColor,
-                StrokeThickness = 2.0,
+                StrokeThickness = strokeThickness,
                 StrokeColor = SpaceCoolingColor
             };
             model.Series.Add(demandCooling);
@@ -382,7 +384,7 @@ namespace Hive.IO.GHComponents
                     demand => new ColumnItem { Value = demand / totalFloorArea }),
                 Title = " Electricity",
                 FillColor = BackgroundColor,
-                StrokeThickness = 2.0,
+                StrokeThickness = strokeThickness,
                 StrokeColor = ElectricityColor
             };
             model.Series.Add(demandElectricity);
@@ -393,7 +395,7 @@ namespace Hive.IO.GHComponents
                 ItemsSource = resultsTotalDwhMonthly.Select(demand => new ColumnItem { Value = demand / totalFloorArea }),
                 Title = " DWH",
                 FillColor = BackgroundColor,
-                StrokeThickness = 2.0,
+                StrokeThickness = strokeThickness,
                 StrokeColor = DhwColor,
             };
             model.Series.Add(demandDhw);
