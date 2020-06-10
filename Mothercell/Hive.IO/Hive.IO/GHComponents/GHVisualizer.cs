@@ -34,21 +34,9 @@ namespace Hive.IO.GHComponents
         public Results Results { get; private set; }
 
 
-        public override GH_ParamKind Kind
-        {
-            get
-            {
-                return GH_ParamKind.floating;
-            }
-        }
+        public override GH_ParamKind Kind => GH_ParamKind.floating;
 
-        public override string TypeName
-        {
-            get
-            {
-                return "HiveResults";
-            }
-        }
+        public override string TypeName => "HiveResults";
 
         public override GH_Exposure Exposure => GH_Exposure.secondary;
 
@@ -74,24 +62,11 @@ namespace Hive.IO.GHComponents
             m_attributes = new GHVisualizerAttributes(this);
         }
 
-        public override Guid ComponentGuid
-        {
-            get
-            {
-                return new Guid("7b4ece55-07a0-4e87-815a-e3724a1317b1");
-            }
-        }
+        public override Guid ComponentGuid => new Guid("7b4ece55-07a0-4e87-815a-e3724a1317b1");
 
-        protected override Bitmap Icon
-        {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return Properties.Resources.IO_Visualizer;
-            }
-        }
-
+        //You can add image files to your project resources and access them like this:
+        // return Resources.IconForThisComponent;
+        protected override Bitmap Icon => Properties.Resources.IO_Visualizer;
     }
 
     public class GHVisualizerAttributes : GH_ResizableAttributes<GHVisualizer>
@@ -129,22 +104,10 @@ namespace Hive.IO.GHComponents
             this._currentPlot = values[(currentIndex - 1) % values.Length];
         }
 
-        public override string PathName
-        {
-            get
-            {
-                // FIXME: what goes here?
-                return "PathName_GHVisualizer";
-            }
-        }
+        // FIXME: what goes here?
+        public override string PathName => "PathName_GHVisualizer";
 
-        protected override Size MinimumSize
-        {
-            get
-            {
-                return new Size(50, 50);
-            }
-        }
+        protected override Size MinimumSize => new Size(50, 50);
 
         protected override Padding SizingBorders => new Padding(this.m_padding);
 
@@ -215,7 +178,7 @@ namespace Hive.IO.GHComponents
         }
 
         /// <summary>
-        /// Render the arrows next to the title - we'll be making these clickable to cycle through the plots
+        /// Render the arrows next to the title - we'll be making these click-able to cycle through the plots
         /// </summary>
         /// <param name="graphics"></param>
         private void RenderArrows(Graphics graphics)
