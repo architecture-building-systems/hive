@@ -29,6 +29,7 @@ namespace Hive.IO
 
         #region General
         public double InterestRate { get; private set; }
+        public double TotalFloorArea { get; private set; }
         #endregion
 
 
@@ -118,6 +119,8 @@ namespace Hive.IO
 
         public Results()
         {
+            // FIXME: make sure this is set to a real value...
+            this.TotalFloorArea = 100.0;
 
             this.TotalCoolingMonthly = new double[Results.months];
             this.TotalElectricityMonthly = new double[Results.months];
@@ -183,7 +186,7 @@ namespace Hive.IO
             if (supplyTechNames == null || supplyTypes == null || supplyCapacities == null || supplyCapUnits == null)
                 return;
 
-            int shortestLength = int.MaxValue;
+            var shortestLength = int.MaxValue;
             if (supplyTechNames.Length < shortestLength) shortestLength = supplyTechNames.Length;
             if (supplyCapacities.Length < shortestLength) shortestLength = supplyCapacities.Length;
             if (supplyCapUnits.Length < shortestLength) shortestLength = supplyCapUnits.Length;
