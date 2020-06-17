@@ -29,7 +29,7 @@ namespace Hive.IO
 
         #region General
         public double InterestRate { get; private set; }
-        public double TotalFloorArea { get; set; }
+        public double TotalFloorArea { get; private set; }
         #endregion
 
 

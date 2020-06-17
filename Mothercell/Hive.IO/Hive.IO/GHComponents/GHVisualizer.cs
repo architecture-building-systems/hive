@@ -404,7 +404,7 @@ namespace Hive.IO.GHComponents
             {
                 Position = AxisPosition.Left,
                 Key = "Demand",
-                Title = "kWh/m^2"
+                Title = "kWh/m²"
             });
 
             model.Axes.Add(new CategoryAxis
