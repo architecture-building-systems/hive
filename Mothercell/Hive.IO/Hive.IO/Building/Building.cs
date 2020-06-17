@@ -49,17 +49,21 @@ namespace Hive.IO
 
 
         /// <summary>
-        /// Sets SIA2024 construtions. Optional.
+        /// Sets SIA2024 constructions. Optional.
         /// </summary>
         /// <param name="sia2024"></param>
         public void SetSIA2024(Dictionary<string, object> sia2024, Zone[] zones)
         {
             this.SIA2024 = sia2024;
-            
-            BuildingConstruction.Opaque sia2024_opaque = new BuildingConstruction.Opaque("SIA2024_Opaque");
-            sia2024_opaque.UValue = Convert.ToDouble(sia2024["U-Wert opake Bauteile"]);
-            BuildingConstruction.Transparent sia2024_window = new BuildingConstruction.Transparent("SIA2024_Window");
-            sia2024_window.UValue = Convert.ToDouble(sia2024["U-Wert Fenster"]);
+
+            BuildingConstruction.Opaque sia2024_opaque = new BuildingConstruction.Opaque("SIA2024_Opaque")
+            {
+                UValue = Convert.ToDouble(sia2024["U-Wert opake Bauteile"])
+            };
+            BuildingConstruction.Transparent sia2024_window = new BuildingConstruction.Transparent("SIA2024_Window")
+            {
+                UValue = Convert.ToDouble(sia2024["U-Wert Fenster"])
+            };
 
             foreach(Zone zone in zones)
             {
