@@ -5,6 +5,7 @@ using Grasshopper.Kernel;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel.Attributes;
 using Rhino.Geometry;
+using System.Collections.Generic;
 
 namespace Hive.IO
 {
@@ -16,24 +17,26 @@ namespace Hive.IO
         public double Form_pv_cost { get; set; }
         public double Form_pv_co2 { get; set; }
         public string Form_pv_name { get; set; }
-        private int Indexnow { get; set; }
+        private int indexNow { get; set; }
 
 
         public GHSolarSystem()
           : base("Hive.IO.SolarTech", "HiveIOSolar", "Hive.IO Solar Energy Systems Technologies." +
                 "\nThe component opens a Form upon double click, where details of the solar energy system can be specified." +
-                "\nPossible technologies are Photovoltaic (PV), Solar Thermal (ST), hybrid PVT, or Ground Collector (GC).", "[hive]", "IO") { Indexnow = 0; }
+                "\nPossible technologies are Photovoltaic (PV), Solar Thermal (ST), hybrid PVT, or Ground Collector (GC).", "[hive]", "IO") { indexNow = 0; }
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddMeshParameter("Mesh", "Mesh", "Mesh geometries of the solar energy systems (Photovolatic, Solar Thermal, or hybrid PVT)", GH_ParamAccess.item);
+            pManager.AddMeshParameter("Mesh", "Mesh", "Mesh geometries of the solar energy systems (Photovolatic, Solar Thermal, or hybrid PVT)", GH_ParamAccess.list);
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Hive.IO.EnergySystem.SurfaceSystem", "HiveIOEnSysSolar", "Surface based Solar Energy System, such as PV, ST, PVT or GC.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.EnergySystem.SurfaceSystem", "HiveIOEnSysSolar", "Surface based Solar Energy System, such as PV, ST, PVT or GC.", GH_ParamAccess.list);
         }
 
+
+        #region WindowsForm
         public override void CreateAttributes()
         {
             m_attributes = new MySpecialComponentAttributes(this);
@@ -58,13 +61,13 @@ namespace Hive.IO
                 return;
 
             _form = new FormEnSysSolar();
-            _form.comboBox1.SelectedIndex = Indexnow;
-            _form.textBox1.Text = _form.ElectricEfficiency[Indexnow].ToString();// Convert.ToString(Form_pv_eff);
-            _form.textBox2.Text = _form.Cost[Indexnow].ToString();
-            _form.textBox3.Text = _form.CO2[Indexnow].ToString();
-            _form.textBox4.Text = _form.ThermalEfficiency[Indexnow].ToString();
-            _form.pictureBox1.Image = _form.Image[Indexnow];
-            _form.helpProvider1.SetHelpString(_form.pictureBox1, _form.HelperText[Indexnow]);
+            _form.comboBox1.SelectedIndex = indexNow;
+            _form.textBox1.Text = _form.ElectricEfficiency[indexNow].ToString();// Convert.ToString(Form_pv_eff);
+            _form.textBox2.Text = _form.Cost[indexNow].ToString();
+            _form.textBox3.Text = _form.CO2[indexNow].ToString();
+            _form.textBox4.Text = _form.ThermalEfficiency[indexNow].ToString();
+            _form.pictureBox1.Image = _form.Image[indexNow];
+            _form.helpProvider1.SetHelpString(_form.pictureBox1, _form.HelperText[indexNow]);
 
             _form.FormClosed += OnFormClosed;
 
@@ -84,19 +87,17 @@ namespace Hive.IO
             _form.Location = Cursor.Position;
         }
 
-
-
         private void Form_Update_Display()
         {
             // when radio buttons change, text on the form needs to change
-            Indexnow = 0;
-            _form.comboBox1.SelectedIndex = Indexnow;
-            _form.textBox1.Text = _form.ElectricEfficiency[Indexnow].ToString();// Convert.ToString(Form_pv_eff);
-            _form.textBox2.Text = _form.Cost[Indexnow].ToString();
-            _form.textBox3.Text = _form.CO2[Indexnow].ToString();
-            _form.textBox4.Text = _form.ThermalEfficiency[Indexnow].ToString();
-            _form.pictureBox1.Image = _form.Image[Indexnow];
-            _form.helpProvider1.SetHelpString(_form.pictureBox1, _form.HelperText[Indexnow]);
+            indexNow = 0;
+            _form.comboBox1.SelectedIndex = indexNow;
+            _form.textBox1.Text = _form.ElectricEfficiency[indexNow].ToString();// Convert.ToString(Form_pv_eff);
+            _form.textBox2.Text = _form.Cost[indexNow].ToString();
+            _form.textBox3.Text = _form.CO2[indexNow].ToString();
+            _form.textBox4.Text = _form.ThermalEfficiency[indexNow].ToString();
+            _form.pictureBox1.Image = _form.Image[indexNow];
+            _form.helpProvider1.SetHelpString(_form.pictureBox1, _form.HelperText[indexNow]);
         }
 
         private void RadioButton_Changed(object sender, EventArgs e)
@@ -141,6 +142,7 @@ namespace Hive.IO
 
             //Form_Update();
         }
+        
         private void TextBox_TextChanged(object sender, EventArgs e)
         {
             //Form_Update();
@@ -155,7 +157,7 @@ namespace Hive.IO
             Form_pv_name = _form.comboBox1.SelectedItem.ToString();
             Form_SystemType = _form.SystemType;
 
-            Indexnow = _form.comboBox1.SelectedIndex;
+            indexNow = _form.comboBox1.SelectedIndex;
 
             ExpireSolution(true);
         }
@@ -174,11 +176,13 @@ namespace Hive.IO
         {
             DisplayForm();
         }
+        #endregion 
+
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            Mesh mesh = new Mesh();
-            if (!DA.GetData(0, ref mesh)) { return; }
+            List<Mesh> meshList = new List<Mesh>();
+            if (!DA.GetDataList(0, meshList)) { return; }
             
             double refEff = Form_pv_eff;
             
@@ -186,12 +190,16 @@ namespace Hive.IO
             double pvcost = Form_pv_cost;
             double pvghg = Form_pv_co2;
 
-            EnergySystem.SurfaceBased solartech = new EnergySystem.PV(mesh, refEff, pvcost, pvghg, pvname);
-            if (Form_SystemType == "pvt") solartech = new EnergySystem.PVT(mesh, Form_thermal_eff, Form_pv_eff, Form_pv_cost, Form_pv_co2, Form_pv_name);
-            else if (Form_SystemType == "st") solartech = new EnergySystem.ST(mesh, Form_thermal_eff, Form_pv_cost, Form_pv_co2, Form_pv_name);
-            else if (Form_SystemType == "gc") solartech = new EnergySystem.GroundCollector(mesh, Form_thermal_eff, Form_pv_cost, Form_pv_co2, Form_pv_name);
+            List<EnergySystem.SurfaceBased> solartech = new List<EnergySystem.SurfaceBased>();
+            foreach (Mesh mesh in meshList)
+            {
+                if(Form_SystemType == "pv") solartech.Add(new EnergySystem.PV(mesh, refEff, pvcost, pvghg, pvname));
+                else if (Form_SystemType=="pvt") solartech.Add(new EnergySystem.PVT(mesh, Form_thermal_eff, Form_pv_eff, Form_pv_cost, Form_pv_co2, Form_pv_name));
+                else if (Form_SystemType=="st") solartech.Add(new EnergySystem.ST(mesh, Form_thermal_eff, Form_pv_cost, Form_pv_co2, Form_pv_name));
+                else solartech.Add(new EnergySystem.GroundCollector(mesh, Form_thermal_eff, Form_pv_cost, Form_pv_co2, Form_pv_name));
+            }
 
-            DA.SetData(0, solartech);
+            DA.SetDataList(0, solartech);
         }
 
 
@@ -199,8 +207,6 @@ namespace Hive.IO
         {
             get
             {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
                 return Hive.IO.Properties.Resources.IO_Solartech;
             }
         }
