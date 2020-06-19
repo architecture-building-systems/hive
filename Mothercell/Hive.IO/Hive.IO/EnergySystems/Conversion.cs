@@ -11,7 +11,7 @@ namespace Hive.IO
         /// <summary>
         /// Surface based energy technologies, such as PV, solar thermal, PVT, ground collectors, etc.
         /// </summary>
-        public abstract class SurfaceBased : Generation
+        public abstract class SurfaceBased : Conversion
         {
             /// <summary>
             /// Rhino mesh geometry object representing the energy system. Can be quad or triangles.
@@ -85,7 +85,7 @@ namespace Hive.IO
 
 
         #region Combustion technology
-        public abstract class Combustion : Generation
+        public abstract class Combustion : Conversion
         {
             public Combustion(double refEfficiencyThermal, double refEfficiencyElectric, double cost, double ghg, bool isElectric, bool isHeating)
                 : base(refEfficiencyThermal, refEfficiencyElectric, cost, ghg, isElectric, isHeating, false){ }
@@ -117,7 +117,7 @@ namespace Hive.IO
         /// Heating, Cooling, Electricity generation systems (no solar tech though)
         /// E.g. CHP, boiler, heat pump, chiller, ...
         /// </summary>
-        public abstract class Generation
+        public abstract class Conversion
         {
             /// <summary>
             /// Name of the technology
@@ -173,7 +173,7 @@ namespace Hive.IO
             /// </summary>
             public bool IsCooling { get; protected set; }
 
-            protected Generation(double refEfficiencyThermal, double refEfficiencyElectric, double cost, double ghg, bool isElectric, bool isHeating, bool isCooling)
+            protected Conversion(double refEfficiencyThermal, double refEfficiencyElectric, double cost, double ghg, bool isElectric, bool isHeating, bool isCooling)
             {
                 this.RefEfficiencyThermal = refEfficiencyThermal;
                 this.RefEfficiencyElectric = refEfficiencyElectric;

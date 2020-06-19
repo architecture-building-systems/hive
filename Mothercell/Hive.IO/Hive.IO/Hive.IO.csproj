@@ -97,7 +97,7 @@
     <Compile Include="GHComponents\HiveIOInfo.cs" />
     <Compile Include="GHComponents\GHSolarSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="EnergySystems\Generation.cs" />
+    <Compile Include="EnergySystems\Conversion.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

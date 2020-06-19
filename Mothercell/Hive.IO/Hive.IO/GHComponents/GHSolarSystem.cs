@@ -184,8 +184,20 @@ namespace Hive.IO
             List<Mesh> meshList = new List<Mesh>();
             if (!DA.GetDataList(0, meshList)) { return; }
             
-            double refEff = Form_pv_eff;
+
+            // feed the list into the listbox on the windows form
+
+
+            // by default, its all PV
+
+
+
+            // To do Daren: coding
+            // To do Amr: UI/UX design
+            // when opening the form, the user can select certain surfaces and change them to ST, GC, PVT, or PV individually
             
+
+            double refEff = Form_pv_eff;
             string pvname = Form_pv_name;
             double pvcost = Form_pv_cost;
             double pvghg = Form_pv_co2;
