@@ -67,6 +67,7 @@
     <Compile Include="Building\BuildingComponents.cs" />
     <Compile Include="Building\BuildingConstruction.cs" />
     <Compile Include="Building\BuildingMaterial.cs" />
+    <Compile Include="EnergySystems\Carrier.cs" />
     <Compile Include="EnergySystems\Distribution.cs" />
     <Compile Include="EnergySystems\DomesticHotWater.cs" />
     <Compile Include="EnergySystems\Lighting.cs" />

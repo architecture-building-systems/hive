@@ -1,4 +1,7 @@
-﻿using Rhino.Geometry;
+﻿using System.Collections.Generic;
+using System.Drawing;
+using Hive.IO.EnergySystems;
+using Rhino.Geometry;
 
 namespace Hive.IO
 {
@@ -19,8 +22,8 @@ namespace Hive.IO
             public Mesh SurfaceGeometry { get; private set; }
 
 
-            protected SurfaceBased(Mesh surfaceGeometry, double refEfficiencyThermal, double refEfficiencyElectric, double cost, double ghg, bool isElectric, bool isHeating, bool isCooling) 
-                : base(refEfficiencyThermal, refEfficiencyElectric, cost, ghg, isElectric, isHeating, isCooling)
+            protected SurfaceBased(Mesh surfaceGeometry, double refEfficiencyThermal, double refEfficiencyElectric, double cost, double ghg) 
+                : base(refEfficiencyThermal, refEfficiencyElectric, cost, ghg)
             {
                 SurfaceGeometry = surfaceGeometry;
             }
@@ -33,7 +36,7 @@ namespace Hive.IO
         public class PV : SurfaceBased
         {
             public PV(Mesh surfaceGeometry, double refEfficiencyElectric, double cost, double ghg, string detailedName) 
-                : base(surfaceGeometry, 0.0, refEfficiencyElectric, cost, ghg, true, false, false)
+                : base(surfaceGeometry, 0.0, refEfficiencyElectric, cost, ghg)
             {
                 base.DetailedName = detailedName;
                 base.Name = TechnologyNames.Photovoltaic;
@@ -47,7 +50,7 @@ namespace Hive.IO
         public class ST : SurfaceBased
         {
             public ST(Mesh surfaceGeometry, double refEfficiencyThermal, double cost, double ghg, string detailedName)
-                : base(surfaceGeometry, refEfficiencyThermal, 0.0, cost, ghg, false, true, false) 
+                : base(surfaceGeometry, refEfficiencyThermal, 0.0, cost, ghg) 
             {
                 base.DetailedName = detailedName;
                 base.Name = TechnologyNames.SolarCollector;
@@ -61,7 +64,7 @@ namespace Hive.IO
         public class PVT : SurfaceBased
         {
             public PVT(Mesh surfaceGeometry, double refEfficiencyThermal, double refEfficiencyElectric, double cost, double ghg, string detailedName)
-                : base(surfaceGeometry, refEfficiencyThermal, refEfficiencyElectric, cost, ghg, true, true, false)
+                : base(surfaceGeometry, refEfficiencyThermal, refEfficiencyElectric, cost, ghg)
             {
                 base.Name = TechnologyNames.HybridPhotovoltaicThermal;
                 base.DetailedName = detailedName;
@@ -75,7 +78,7 @@ namespace Hive.IO
         public class GroundCollector : SurfaceBased
         {
             public GroundCollector(Mesh surfaceGeometry, double refEfficiencyThermal, double cost, double ghg, string detailedName)
-                : base(surfaceGeometry, refEfficiencyThermal, 0.0, cost, ghg, false, true, false) 
+                : base(surfaceGeometry, refEfficiencyThermal, 0.0, cost, ghg) 
             {
                 base.Name = TechnologyNames.GroundCollector;
                 base.DetailedName = detailedName;
@@ -87,15 +90,15 @@ namespace Hive.IO
         #region Combustion technology
         public abstract class Combustion : Conversion
         {
-            public Combustion(double refEfficiencyThermal, double refEfficiencyElectric, double cost, double ghg, bool isElectric, bool isHeating)
-                : base(refEfficiencyThermal, refEfficiencyElectric, cost, ghg, isElectric, isHeating, false){ }
+            public Combustion(double refEfficiencyThermal, double refEfficiencyElectric, double cost, double ghg)
+                : base(refEfficiencyThermal, refEfficiencyElectric, cost, ghg){ }
         }
 
 
         public class Boiler : Combustion
         {
             public Boiler (double refEfficiencyThermal, double cost, double ghg)
-                : base(refEfficiencyThermal, 0.0, cost, ghg, false, true) 
+                : base(refEfficiencyThermal, 0.0, cost, ghg) 
             {
                 base.Name = TechnologyNames.Boiler;
             }
@@ -105,7 +108,7 @@ namespace Hive.IO
         public class CombinedHeatPower : Combustion
         {
             public CombinedHeatPower(double refEfficiencyThermal, double refEfficiencyElectric, double cost, double ghg)
-                :base(refEfficiencyThermal, refEfficiencyElectric, cost, ghg, true, true)
+                :base(refEfficiencyThermal, refEfficiencyElectric, cost, ghg)
             { 
                 base.Name = TechnologyNames.CombinedHeatPower; 
             }
@@ -127,16 +130,11 @@ namespace Hive.IO
             {
                 Boiler,
                 CombinedHeatPower,
-                MicroCHP,
-                AirSourceHeatPump,
-                GroundSourceHeatPump,
+                HeatPump,
                 Photovoltaic,
                 HybridPhotovoltaicThermal,
                 SolarCollector,
                 GroundCollector,
-                DistrictHeating,
-                DistrictCooling,
-                Grid
             }
             /// <summary>
             /// Specification of the technology, e.g. "Mono-cristalline PV"
@@ -144,44 +142,51 @@ namespace Hive.IO
             public string DetailedName { get; protected set; }
 
             /// <summary>
-            /// Reference thermal efficiency. Functional efficiencies (e.g. time-resolved and/or based on irradiance) are computed in Hive.CORE components.
-            /// </summary>
-            public double RefEfficiencyThermal { get; protected set; }
-            /// <summary>
-            /// Reference electric efficiency. Functional efficiencies (e.g. time-resolved and/or based on irradiance) are computed in Hive.CORE components.
-            /// </summary>
-            public double RefEfficiencyElectric { get; protected set; }
-            /// <summary>
             /// Investment cost per m2
             /// </summary>
-            public double Cost { get; protected set; }
+            public double InvestmentCost { get; protected set; }
             /// <summary>
             /// Life cycle GHG emissions, in kgCO2eq./m2
             /// </summary>
-            public double GHG { get; protected set; }
+            public double EmbodiedGhg { get; protected set; }
+
 
             /// <summary>
-            /// Indicating whether this technology produces electricity
+            /// Input streams. e.g. for a CHP this could be 'NaturalGas'
             /// </summary>
-            public bool IsElectric { get; protected set; }
+            public List<Carrier> InputCarriers { get; protected set; }
             /// <summary>
-            /// Indicating whether this technology produces heat
+            /// Output streams. e.g. for a CHP this could be 'Water' and 'Electricity'
             /// </summary>
-            public bool IsHeating { get; protected set; }
+            public List<Carrier> OutputCarriers { get; protected set; }
             /// <summary>
-            /// Indicating whether this technology produces cooling
+            /// Conversion matrix of size this.InputCarriers x this.OutputCarriers.
+            /// e.g. [input1 input2 input2] x [eta1 eta2; eta3 eta4; eta5 eta6] = [output1 output2]
             /// </summary>
-            public bool IsCooling { get; protected set; }
+            public double [,] ConversionMatrix { get; protected set; }
 
-            protected Conversion(double refEfficiencyThermal, double refEfficiencyElectric, double cost, double ghg, bool isElectric, bool isHeating, bool isCooling)
+            /// <summary>
+            /// Capacity of technology. Unit is defined in 'CapacityUnit'
+            /// </summary>
+            public double Capacity { get; private set; }
+            /// <summary>
+            /// Unit of technology capacity (e.g. "kW", or "sqm", etc.)
+            /// </summary>
+            public string CapacityUnit { get; private set; }
+        
+
+            // Operation and Maintenance cost? How to deal with conversionMatrix. Is the production always resulting in the same output ratio? I guess, because it is only one conversionMatrix
+            // also, how to arrange conversionMatrix, which eff term corresponds to what
+            // for now, 
+
+
+            protected Conversion(double investmentCost, double embodiedGhg, List<Carrier> inputCarriers, List<Carrier> outputCarriers, double [,] conversionMatrix)
             {
-                this.RefEfficiencyThermal = refEfficiencyThermal;
-                this.RefEfficiencyElectric = refEfficiencyElectric;
-                this.Cost = cost;
-                this.GHG = ghg;
-                this.IsElectric = isElectric;
-                this.IsHeating = isHeating;
-                this.IsCooling = isCooling;
+                this.InvestmentCost = investmentCost;
+                this.EmbodiedGhg = embodiedGhg;
+                this.InputCarriers = new List<Carrier>(inputCarriers);
+                this.OutputCarriers = new List<Carrier>(outputCarriers);
+
             }
         }
     }
