@@ -1,10 +1,13 @@
 ﻿using System.Runtime.InteropServices;
+using Grasshopper.GUI;
 
 namespace Hive.IO.EnergySystems
 {
     #region implemented Energy Carriers
     /// <summary>
-    /// Air energy carrier, e.g. for air source heat pump
+    /// Air energy carrier
+    /// e.g. input for air source heat pump (in which case zero cost and emissions)
+    /// or output from AirCon (in which case it has cost and emissions)
     /// </summary>
     public class Air : EnergyCarrier
     {
@@ -25,41 +28,28 @@ namespace Hive.IO.EnergySystems
 
     /// <summary>
     /// Water as energy carrier, e.g. the output of a boiler, heat pump, or solar thermal collector
+    /// Could also be used for district heating/cooling
     /// </summary>
     public class Water : EnergyCarrier
     {
-        public Water(int horizon, double[] waterTemperature) 
-            : base(horizon, EnergyCarrier.EnergyUnit.DegreeCelsius, waterTemperature, null, null) { }
+        public double[] SupplyTemperature { get; private set; }
+        public Water(int horizon, double[] availableEnergy, double[] energyCost, double[] ghgEmissions,
+            double[] supplyTemperature)
+            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, availableEnergy, energyCost, ghgEmissions)
+        {
+            this.SupplyTemperature = new double[supplyTemperature.Length];
+            supplyTemperature.CopyTo(this.SupplyTemperature, 0);
+        }
     }
 
 
     /// <summary>
-    /// Electricity grid provides electricity
+    /// Electricity. Could be from the grid or from a conversion technology
     /// </summary>
-    public class ElectricityGrid : EnergyCarrier
+    public class Electricity : EnergyCarrier
     {
-        public ElectricityGrid(int horizon, double[] energyCost, double[] ghgEmissions) 
-            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, null, energyCost, ghgEmissions) { }
-    }
-
-
-    /// <summary>
-    /// District Heating provides hot water
-    /// </summary>
-    public class DistrictHeating : EnergyCarrier
-    {
-        public DistrictHeating(int horizon, double[] availableHeating, double[] energyCost, double[] ghgEmissions) 
-            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, availableHeating, energyCost, ghgEmissions) { }
-    }
-
-
-    /// <summary>
-    /// District cooling provides cool water
-    /// </summary>
-    public class DistrictCooling : EnergyCarrier
-    {
-        public DistrictCooling(int horizon, double[] availableCooling, double[] energyCost, double[] ghgEmissions) 
-            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, availableCooling, energyCost, ghgEmissions) { }
+        public Electricity(int horizon, double [] availableElectricity, double[] energyCost, double[] ghgEmissions) 
+            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, availableElectricity, energyCost, ghgEmissions) { }
     }
 
 
