@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Grasshopper.Kernel;
+using Hive.IO.EnergySystems;
 using Rhino.Geometry;
 
-namespace Hive.IO
+namespace Hive.IO.GHComponents
 {
-    public class GHDistributorSupplySystem : GH_Component
+    public class GhcDistributorSupplySystem : GH_Component
     {
 
-        public GHDistributorSupplySystem()
+        public GhcDistributorSupplySystem()
           : base("Hive.IO.DistributorSupplySystem", "HiveIODistrSupSys",
               "Distributor for the Energy Supply Systems models." +
                 "\nOutputs relevant parameters for Energy Supply Systems calculations.",
@@ -48,9 +48,9 @@ namespace Hive.IO
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<EnergySystem.PV> pv = new List<EnergySystem.PV>();
-            List<EnergySystem.PVT> pvt = new List<EnergySystem.PVT>();
-            List<EnergySystem.ST> st = new List<EnergySystem.ST>();
+            List<Photovoltaic> pv = new List<Photovoltaic>();
+            List<PVT> pvt = new List<PVT>();
+            List<SolarThermal> st = new List<SolarThermal>();
 
             DA.GetDataList(0, pv);
             DA.GetDataList(1, st);
@@ -65,22 +65,22 @@ namespace Hive.IO
             List<double> A_ST = new List<double>();
             List<double> A_PVT = new List<double>();
 
-            foreach(EnergySystem.PV _pv in pv)
+            foreach(Photovoltaic _pv in pv)
             {
                 etas_PV.Add(_pv.RefEfficiencyElectric);
                 A_PV.Add(AreaMassProperties.Compute(_pv.SurfaceGeometry).Area);
             }
 
-            foreach (EnergySystem.ST _st in st)
+            foreach (SolarThermal _st in st)
             {
-                etas_ST.Add(_st.RefEfficiencyThermal);
+                etas_ST.Add(_st.RefEfficiencyHeating);
                 A_ST.Add(AreaMassProperties.Compute(_st.SurfaceGeometry).Area);
             }
 
-            foreach (EnergySystem.PVT _pvt in pvt)
+            foreach (PVT _pvt in pvt)
             {
                 etas_PVT_el.Add(_pvt.RefEfficiencyElectric);
-                etas_PVT_therm.Add(_pvt.RefEfficiencyThermal);
+                etas_PVT_therm.Add(_pvt.RefEfficiencyHeating);
                 A_PVT.Add(AreaMassProperties.Compute(_pvt.SurfaceGeometry).Area);
             }
 

@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Web.Script.Serialization;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-using Rhino.Geometry;
+using Hive.IO.EnergySystems;
 
-namespace Hive.IO
+namespace Hive.IO.GHComponents
 {
-    public class GHDistributor : GH_Component
+    public class GhcDistributor : GH_Component
     {
-        public GHDistributor()
+        public GhcDistributor()
           : base("Hive.IO.Distributor", "HiveIODistr",
               "The Hive.IO.Distributor collects all Hive Inputs from outside the Mothercell (the simulation core) and outputs them individually according to their class type, ready for deployment.",
               "[hive]", "Mothercell")
@@ -43,33 +42,33 @@ namespace Hive.IO
         /// <param name="DA"></param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<GH_ObjectWrapper> input_objects = new List<GH_ObjectWrapper>();
-            if (!DA.GetDataList(0, input_objects)) return;
+            List<GH_ObjectWrapper> inputObjects = new List<GH_ObjectWrapper>();
+            if (!DA.GetDataList(0, inputObjects)) return;
             
-            List<EnergySystem.PV> pv = new List<EnergySystem.PV>();
-            List<EnergySystem.PVT> pvt = new List<EnergySystem.PVT>();
-            List<EnergySystem.ST> st = new List<EnergySystem.ST>();
+            List<Photovoltaic> pv = new List<Photovoltaic>();
+            List<PVT> pvt = new List<PVT>();
+            List<SolarThermal> st = new List<SolarThermal>();
             Building building = null;
             Environment environment = null;
 
-            foreach (GH_ObjectWrapper hive_input in input_objects)
+            foreach (GH_ObjectWrapper hiveInput in inputObjects)
             {
-                switch (hive_input.Value.ToString())
+                switch (hiveInput.Value.ToString())
                 {
                     case "Hive.IO.EnergySystem.PV":
-                        pv.Add(hive_input.Value as EnergySystem.PV);
+                        pv.Add(hiveInput.Value as Photovoltaic);
                         break;
                     case "Hive.IO.EnergySystem.ST":
-                        st.Add(hive_input.Value as EnergySystem.ST);
+                        st.Add(hiveInput.Value as SolarThermal);
                         break;
                     case "Hive.IO.EnergySystem.PVT":
-                        pvt.Add(hive_input.Value as EnergySystem.PVT);
+                        pvt.Add(hiveInput.Value as PVT);
                         break;
                     case "Hive.IO.Building":
-                        building = hive_input.Value as Building;
+                        building = hiveInput.Value as Building;
                         break;
                     case "Hive.IO.Environment":
-                        environment = hive_input.Value as Environment;
+                        environment = hiveInput.Value as Environment;
                         break;
                 }
             }

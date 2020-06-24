@@ -1,15 +1,16 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Forms;
 using Grasshopper.GUI;
-using Grasshopper.Kernel;
 using Grasshopper.GUI.Canvas;
+using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
 using Rhino.Geometry;
-using System.Collections.Generic;
+using Hive.IO.EnergySystems;
 
-namespace Hive.IO
+namespace Hive.IO.GHComponents
 {
-    public class GHSolarSystem : GH_Component
+    public class GhcSolarSystem : GH_Component
     {
         public string Form_SystemType { get; set; }
         public double Form_pv_eff { get; set; }
@@ -20,7 +21,7 @@ namespace Hive.IO
         private int indexNow { get; set; }
 
 
-        public GHSolarSystem()
+        public GhcSolarSystem()
           : base("Hive.IO.SolarTech", "HiveIOSolar", "Hive.IO Solar Energy Systems Technologies." +
                 "\nThe component opens a Form upon double click, where details of the solar energy system can be specified." +
                 "\nPossible technologies are Photovoltaic (PV), Solar Thermal (ST), hybrid PVT, or Ground Collector (GC).", "[hive]", "IO") { indexNow = 0; }
@@ -49,7 +50,7 @@ namespace Hive.IO
 
             public override GH_ObjectResponse RespondToMouseDoubleClick(GH_Canvas sender, GH_CanvasMouseEvent e)
             {
-                (Owner as GHSolarSystem)?.DisplayForm();
+                (Owner as GhcSolarSystem)?.DisplayForm();
                 return GH_ObjectResponse.Handled;
             }
         }
@@ -197,18 +198,14 @@ namespace Hive.IO
             // when opening the form, the user can select certain surfaces and change them to ST, GC, PVT, or PV individually
             
 
-            double refEff = Form_pv_eff;
-            string pvname = Form_pv_name;
-            double pvcost = Form_pv_cost;
-            double pvghg = Form_pv_co2;
 
-            List<EnergySystem.SurfaceBased> solartech = new List<EnergySystem.SurfaceBased>();
+            List<SurfaceBased> solartech = new List<SurfaceBased>();
             foreach (Mesh mesh in meshList)
             {
-                if(Form_SystemType == "pv") solartech.Add(new EnergySystem.PV(mesh, refEff, pvcost, pvghg, pvname));
-                else if (Form_SystemType=="pvt") solartech.Add(new EnergySystem.PVT(mesh, Form_thermal_eff, Form_pv_eff, Form_pv_cost, Form_pv_co2, Form_pv_name));
-                else if (Form_SystemType=="st") solartech.Add(new EnergySystem.ST(mesh, Form_thermal_eff, Form_pv_cost, Form_pv_co2, Form_pv_name));
-                else solartech.Add(new EnergySystem.GroundCollector(mesh, Form_thermal_eff, Form_pv_cost, Form_pv_co2, Form_pv_name));
+                if(Form_SystemType == "pv") solartech.Add(new Photovoltaic(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_pv_eff)); 
+                else if (Form_SystemType=="pvt") solartech.Add(new PVT(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_pv_eff, Form_thermal_eff)); 
+                else if (Form_SystemType=="st") solartech.Add(new SolarThermal(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_thermal_eff));  
+                else solartech.Add(new GroundCollector(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name)); // Form_thermal_eff, 
             }
 
             DA.SetDataList(0, solartech);

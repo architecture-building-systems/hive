@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Grasshopper.Kernel;
 using Rhino.Geometry;
+using Hive.IO.EnergySystems;
 
-namespace Hive.IO
+namespace Hive.IO.GHComponents
 {
-    public class GHDistributorSolar : GH_Component
+    public class GhcDistributorSolar : GH_Component
     {
-        public GHDistributorSolar()
+        public GhcDistributorSolar()
           : base("Hive.IO.DistributorSolar", "HiveIODistrSolar",
               "Distributor for solar simulations. Reads in and outputs all relevant geometric, geographic and climatic information necessary for solar simulations.",
               "[hive]", "Mothercell")
@@ -47,13 +47,13 @@ namespace Hive.IO
             Environment environment = null;
             if (!DA.GetData(1, ref environment)) return;
 
-            List<EnergySystem.PV> pv = new List<EnergySystem.PV>();
+            List<Photovoltaic> pv = new List<Photovoltaic>();
             DA.GetDataList(2, pv);
 
-            List<EnergySystem.PVT> pvt = new List<EnergySystem.PVT>();
+            List<PVT> pvt = new List<PVT>();
             DA.GetDataList(3, pvt);
 
-            List<EnergySystem.ST> st = new List<EnergySystem.ST>();
+            List<SolarThermal> st = new List<SolarThermal>();
             DA.GetDataList(4, st);
 
 
@@ -100,11 +100,11 @@ namespace Hive.IO
             List<Mesh> pvSurfaces = new List<Mesh>();
             List<Mesh> pvtSurfaces = new List<Mesh>();
             List<Mesh> stSurfaces = new List<Mesh>();
-            foreach (EnergySystem.PV _pv in pv)
+            foreach (Photovoltaic _pv in pv)
                 pvSurfaces.Add(_pv.SurfaceGeometry);
-            foreach (EnergySystem.PVT _pvt in pvt)
+            foreach (PVT _pvt in pvt)
                 pvtSurfaces.Add(_pvt.SurfaceGeometry);
-            foreach (EnergySystem.ST _st in st)
+            foreach (SolarThermal _st in st)
                 stSurfaces.Add(_st.SurfaceGeometry);
 
 

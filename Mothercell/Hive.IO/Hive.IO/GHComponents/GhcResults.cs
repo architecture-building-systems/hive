@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 
-namespace Hive.IO
+namespace Hive.IO.GHComponents
 {
-    public class GHResults : GH_Component
+    public class GhcResults : GH_Component
     {
 
-        public GHResults()
+        public GhcResults()
           : base("Hive.IO.Results", "HiveIOResults",
               "Hive.IO.Results object, containing results of all simulations run within the Mothercell.",
               "[hive]", "Mothercell")

@@ -1,15 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-
-namespace Hive.IO
+namespace Hive.IO.GHComponents
 {
-    public class GHEnvironment : GH_Component
+    public class GhcEnvironment : GH_Component
     {
-        public GHEnvironment()
+        public GhcEnvironment()
           : base("Hive.IO.Environment", "Hive.IO.Env",
               "Creates an instance of the Hive.IO.Environment class, describing the environment of a building.",
               "[hive]", "IO")

@@ -1,22 +1,18 @@
 ﻿using System;
-using System.Windows.Forms;
 using System.Collections.Generic;
-
+using System.Web.Script.Serialization;
+using System.Windows.Forms;
 using Grasshopper.GUI;
-using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
-using Grasshopper.Kernel.Types;
-
 using rg = Rhino.Geometry;
 using ri = Rhino.Input.Custom;
-using System.Web.Script.Serialization;
 
-namespace Hive.IO
+namespace Hive.IO.GHComponents
 {
-    public class GHBuilding : GH_Component
+    public class GhcBuilding : GH_Component
     {
-        public GHBuilding()
+        public GhcBuilding()
           : base("Hive.IO.Building", "Hive.IO.Bldg",
               "Hive Building, representing the building geometry, as well as thermal and construction properties.",
               "[hive]", "IO")

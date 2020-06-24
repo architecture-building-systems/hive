@@ -1,14 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Web.Script.Serialization;
 using Grasshopper.Kernel;
-using Rhino.Geometry;
 
-namespace Hive.IO
+namespace Hive.IO.GHComponents
 {
-    public class GHDistributorSIA : GH_Component
+    public class GhcDistributorSIA : GH_Component
     {
-        public GHDistributorSIA()
+        public GhcDistributorSIA()
           : base("Hive.IO.DistributorSIA", "HiveIODistrSIA",
               "Sia 2024 distributor that reads in an Hive.IO.Building object and outputs its Sia 2024 room definition.",
               "[hive]", "Mothercell")
