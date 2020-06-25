@@ -128,12 +128,23 @@ namespace Hive.IO.EnergySystems
             return new double[] { };
         }
 
-        public override EnergyCarrier SetInputs()
+        public void SetInputs(Solar solarCarrier)
+        {
+            base.InputCarrier =  solarCarrier;
+        }
+
+        public void SetOutputs(Electricity electricityGenerated)
+        {
+            base.OutputCarriers = new EnergyCarrier[1];
+            base.OutputCarriers[0] = electricityGenerated;
+        }
+
+        public override void SetInputs(EnergyCarrier inputCarrier)
         {
             throw new System.NotImplementedException();
         }
 
-        public override EnergyCarrier[] SetOutputs()
+        public override void SetOutputs(EnergyCarrier[] outputCarriers)
         {
             throw new System.NotImplementedException();
         }
@@ -405,8 +416,8 @@ namespace Hive.IO.EnergySystems
             this.IsElectric = isElectric;
         }
 
-        public abstract EnergyCarrier SetInputs();
-        public abstract EnergyCarrier[] SetOutputs();
+        public abstract void SetInputs(EnergyCarrier inputCarrier);
+        public abstract void SetOutputs(EnergyCarrier [] outputCarriers);
     }
     #endregion
 }

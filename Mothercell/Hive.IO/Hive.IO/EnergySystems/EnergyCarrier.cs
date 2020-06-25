@@ -21,8 +21,17 @@ namespace Hive.IO.EnergySystems
     /// </summary>
     public class Solar : EnergyCarrier
     {
-        public Solar(int horizon, double[] irradiation) 
-            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHoursPerSquareMeters, irradiation, null, null) { }
+        /// <summary>
+        /// ID of the mesh vertex that this solar carrier corresponds to (solar panel). In case of Sun, ID can be ignored
+        /// </summary>
+        public int? MeshVertexId { get; private set; }
+
+        public Solar(int horizon, double[] irradiation, int? vertexId)
+            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHoursPerSquareMeters, irradiation, null, null)
+        {
+            if (vertexId.HasValue)
+                this.MeshVertexId = vertexId;
+        }
     }
 
 
