@@ -346,11 +346,11 @@ namespace Hive.IO.EnergySystems
         /// Capacity of technology. Unit is defined in 'CapacityUnit'
         /// </summary>
         public double Capacity { get; protected set; }
+
         /// <summary>
         /// Unit of technology capacity (e.g. "kW", or "sqm", etc.)
         /// </summary>
         public string CapacityUnit { get; protected set; }
-
 
         /// <summary>
         /// Investment cost per this.CapacityUnit

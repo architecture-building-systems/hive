@@ -58,8 +58,8 @@ namespace Hive.IO.EnergySystems
     /// </summary>
     public class BioGas : EnergyCarrier
     {
-        public BioGas(int horizon, double[] biogasAvailability, double[] energyCost, double[] ghgEmissions) 
-            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, biogasAvailability, energyCost, ghgEmissions)
+        public BioGas(int horizon, double[] availableBiogas, double[] energyCost, double[] ghgEmissions) 
+            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, availableBiogas, energyCost, ghgEmissions)
         {
         }
     }
@@ -70,8 +70,8 @@ namespace Hive.IO.EnergySystems
     /// </summary>
     public class Pellets : EnergyCarrier
     {
-        public Pellets(int horizon, double[] pelletsAvailability, double[] energyCost, double[] ghgEmissions) 
-            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, pelletsAvailability, energyCost, ghgEmissions)
+        public Pellets(int horizon, double[] availablePellets, double[] energyCost, double[] ghgEmissions) 
+            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, availablePellets, energyCost, ghgEmissions)
         {
         }
     }
@@ -93,41 +93,40 @@ namespace Hive.IO.EnergySystems
             KiloWattHoursPerSquareMeters,
             DegreeCelsius
         }
+        /// <summary>
+        /// Setting the energy unit from this.EnergyUnit
+        /// </summary>
+        public EnergyUnit Unit { get; protected set; }
 
         /// <summary>
         /// Horizon of time series data
         /// </summary>
         public int Horizon { get; protected set; }
         /// <summary>
-        /// Time series of available/provided energy of this carrier in kWh per time step
+        /// Time series of available/provided energy of this carrier in this.Unit per time step.
+        /// Could be the potentials (solar) or the operation from a conversion technology
         /// </summary>
-        public double [] Energy { get; protected set; }
-
+        public double [] AvailableEnergy { get; protected set; }
         /// <summary>
-        /// Setting the energy unit to kWh
-        /// </summary>
-        public EnergyUnit Unit { get; protected set; }
-
-        /// <summary>
-        /// Time series with cost coefficients per kWh
+        /// Time series with cost coefficients per this.Unit
         /// </summary>
         public double [] EnergyCost { get; protected set; }
         /// <summary>
-        /// Time series of Greenhouse gas emissions in kgCO2eq/kWh
+        /// Time series of Greenhouse gas emissions in kgCO2eq/this.Unit
         /// </summary>
         public double [] GhgEmissions { get; protected set; }
 
 
-        protected EnergyCarrier(int horizon, EnergyUnit unit, double [] energy, double [] energyCost, double [] ghgEmissions)
+        protected EnergyCarrier(int horizon, EnergyUnit unit, double [] availableEnergy, double [] energyCost, double [] ghgEmissions)
         {
             this.Horizon = horizon;
             this.Unit = unit;
 
             // energy could be unbound, e.g. electricity grid, in which case energy == null
-            if (energy != null && energy.Length != 0)
+            if (availableEnergy != null && availableEnergy.Length != 0)
             {
-                this.Energy = new double[energy.Length];
-                energy.CopyTo(this.Energy, 0);
+                this.AvailableEnergy = new double[availableEnergy.Length];
+                availableEnergy.CopyTo(this.AvailableEnergy, 0);
             }
 
             // energy could be free, e.g. air, in which case energyCost == null
