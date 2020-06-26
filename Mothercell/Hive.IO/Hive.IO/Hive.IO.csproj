@@ -94,8 +94,13 @@
     </Compile>
     <Compile Include="GHComponents\GHBuilding.cs" />
     <Compile Include="GHComponents\GHDistributor.cs" />
+    <Compile Include="GHComponents\GHVisualizerAttributes.cs" />
     <Compile Include="GHComponents\HiveIOInfo.cs" />
     <Compile Include="GHComponents\GHSolarSystem.cs" />
+    <Compile Include="Plots\DemandMonthlyNormalizedPlot.cs" />
+    <Compile Include="Plots\DemandMonthlyPlot.cs" />
+    <Compile Include="Plots\IVisualizerPlot.cs" />
+    <Compile Include="Plots\OxyPlotBase.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EnergySystems\Generation.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -171,6 +176,7 @@
   <ItemGroup>
     <None Include="Resources\Hive_Logo.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
