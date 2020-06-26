@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -9,22 +11,23 @@ using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
 using Hive.IO.Plots;
+using Rhino;
 
 namespace Hive.IO.GHComponents
 {
     public class GhVisualizerAttributes : GH_ResizableAttributes<GHVisualizer>
     {
         // make sure we have a minimum size
-        private const float MinWidth = 200f;
-        private const float MinHeight = 150f;
-
         private const float TitleBarHeight = 100f;
+        private const float MinWidth = 100f;
+        private const float MinHeight = TitleBarHeight + 150f;
 
         private const float ArrowBoxSide = 20f;
         private const float ArrowBoxPadding = 10f;
         private const int Padding = 6;
 
         private readonly IVisualizerPlot[] _plots;
+        private readonly IVisualizerPlot[] _titleBarPlots;
         private int _currentPlot;
 
         public GhVisualizerAttributes(GHVisualizer owner) : base(owner)
@@ -35,16 +38,24 @@ namespace Hive.IO.GHComponents
                 new DemandMonthlyPlot(),
                 new DemandMonthlyNormalizedPlot()
             };
+
+            _titleBarPlots = new IVisualizerPlot[]
+            {
+                new OperationalPerformancePlot(), 
+                new OperationalPerformancePlot(),
+                new OperationalPerformancePlot()
+            };
         }
 
         public void NewData(Results results)
         {
-            foreach (var plot in _plots)
+            foreach (var plot in AllPlots)
             {
                 plot.NewData(results);
             }
         }
 
+        private IEnumerable<IVisualizerPlot> AllPlots => _plots.AsEnumerable().Concat(_titleBarPlots);
 
         private void NextPlot()
         {
@@ -135,6 +146,15 @@ namespace Hive.IO.GHComponents
             dropDownArrow = dropDownArrow.Select(p => new PointF(p.X + DropDownArrowBox.Left, p.Y + DropDownArrowBox.Top)).ToArray();
 
             graphics.DrawPolygon(pen, dropDownArrow);
+
+            // render the three operational performance plots
+            var bounds = new RectangleF(0, 0, TitleBarHeight, TitleBarHeight);
+            foreach (var plot in _titleBarPlots)
+            {
+                RhinoApp.WriteLine("Rendering title plot...");
+                plot.Render(Owner.Results, graphics, bounds);
+                bounds.Offset(TitleBarHeight, 0);
+            }
         }
 
         private RectangleF DropDownArrowBox => new RectangleF(Bounds.Left + Padding, Bounds.Top + Padding, ArrowBoxSide, ArrowBoxSide);
