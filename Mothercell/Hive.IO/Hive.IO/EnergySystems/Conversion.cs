@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 using Rhino.Geometry;
+using Rhino.Input.Custom;
 
 namespace Hive.IO.EnergySystems
 {
@@ -12,15 +14,7 @@ namespace Hive.IO.EnergySystems
         {
         }
 
-        public override EnergyCarrier SetInputs()
-        {
-            throw new System.NotImplementedException();
-        }
 
-        public override EnergyCarrier[] SetOutputs()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 
     public class DistrictHeating : Conversion
@@ -29,15 +23,7 @@ namespace Hive.IO.EnergySystems
         {
         }
 
-        public override EnergyCarrier SetInputs()
-        {
-            throw new System.NotImplementedException();
-        }
 
-        public override EnergyCarrier[] SetOutputs()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 
 
@@ -48,15 +34,7 @@ namespace Hive.IO.EnergySystems
         {
         }
 
-        public override EnergyCarrier SetInputs()
-        {
-            throw new System.NotImplementedException();
-        }
 
-        public override EnergyCarrier[] SetOutputs()
-        {
-            throw new System.NotImplementedException();
-        }
 
     }
 
@@ -68,15 +46,7 @@ namespace Hive.IO.EnergySystems
         {
         }
 
-        public override EnergyCarrier SetInputs()
-        {
-            throw new System.NotImplementedException();
-        }
 
-        public override EnergyCarrier[] SetOutputs()
-        {
-            throw new System.NotImplementedException();
-        }
 
 
         public double[] SetConversionEfficiencyCooling()
@@ -114,72 +84,54 @@ namespace Hive.IO.EnergySystems
     /// </summary>
     public class Photovoltaic : SurfaceBased
     {
+        public double RefEfficiencyElectric { get; }
         public Photovoltaic(double investmentCost, double embodiedGhg, Mesh surfaceGeometry, string detailedName,
             double refEfficiencyElectric)
             : base(investmentCost, embodiedGhg, false, false, true, surfaceGeometry)
         {
             base.DetailedName = detailedName;
             base.Name = "Photovoltaic";
-            base.RefEfficiencyElectric = refEfficiencyElectric;
+            this.RefEfficiencyElectric = refEfficiencyElectric;
         }
 
-        public double[] SetConversionEfficiencyElectricity()
-        {
-            return new double[] { };
-        }
 
-        public void SetInputs(Solar solarCarrier)
+        /// <summary>
+        /// Compute outputs, based on inputs
+        /// </summary>
+        /// <param name="solarCarrier">input energy carrier, from weather file or solar model</param>
+        public void SetInputOutput(Solar solarCarrier)
         {
             base.InputCarrier =  solarCarrier;
-        }
 
-        public void SetOutputs(Electricity electricityGenerated)
-        {
+            int horizon = 12;
+            double[] availableElectricity = new double[horizon];
+            double[] energyCost = new double[horizon];
+            double[] ghgEmissions = new double[horizon];
+
             base.OutputCarriers = new EnergyCarrier[1];
-            base.OutputCarriers[0] = electricityGenerated;
+            base.OutputCarriers[0] = new Electricity(horizon, availableElectricity, energyCost, ghgEmissions);
         }
 
-        public override void SetInputs(EnergyCarrier inputCarrier)
-        {
-            throw new System.NotImplementedException();
-        }
 
-        public override void SetOutputs(EnergyCarrier[] outputCarriers)
-        {
-            throw new System.NotImplementedException();
-        }
+
     }
-
+    
 
     /// <summary>
     /// Solar Thermal
     /// </summary>
     public class SolarThermal : SurfaceBased
     {
+        public double RefEfficiencyHeating { get; }
         public SolarThermal(double investmentCost, double embodiedGhg, Mesh surfaceGeometry, string detailedName,
             double refEfficiencyHeating)
             : base(investmentCost, embodiedGhg, true, false, false, surfaceGeometry)
         {
             base.DetailedName = detailedName;
             base.Name = "SolarThermal";
-            base.RefEfficiencyHeating = refEfficiencyHeating;
+            this.RefEfficiencyHeating = refEfficiencyHeating;
         }
 
-
-        public double[] SetConversionEfficiencyHeating()
-        {
-            return new double[] { };
-        }
-
-        public override EnergyCarrier SetInputs()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override EnergyCarrier[] SetOutputs()
-        {
-            throw new System.NotImplementedException();
-        }
     }
 
 
@@ -188,25 +140,21 @@ namespace Hive.IO.EnergySystems
     /// </summary>
     public class PVT : SurfaceBased
     {
+        public double RefEfficiencyElectric { get; }
+        public double RefEfficiencyHeating { get; }
+
         public PVT(double investmentCost, double embodiedGhg, Mesh surfaceGeometry, string detailedName,
             double refEfficiencyElectric, double refEfficiencyHeating)
             : base(investmentCost, embodiedGhg, true, false, true, surfaceGeometry)
         {
             base.DetailedName = detailedName;
             base.Name = "PVT";
-            base.RefEfficiencyElectric = refEfficiencyElectric;
-            base.RefEfficiencyHeating = refEfficiencyHeating;
+
+            this.RefEfficiencyElectric = refEfficiencyElectric;
+            this.RefEfficiencyHeating = refEfficiencyHeating;
         }
 
-        public override EnergyCarrier SetInputs()
-        {
-            throw new System.NotImplementedException();
-        }
 
-        public override EnergyCarrier[] SetOutputs()
-        {
-            throw new System.NotImplementedException();
-        }
 
         public double[] SetConversionEfficiencyHeating()
         {
@@ -238,15 +186,7 @@ namespace Hive.IO.EnergySystems
             return new double[] { };
         }
 
-        public override EnergyCarrier SetInputs()
-        {
-            throw new System.NotImplementedException();
-        }
 
-        public override EnergyCarrier[] SetOutputs()
-        {
-            throw new System.NotImplementedException();
-        }
     }
     #endregion
 
@@ -271,15 +211,6 @@ namespace Hive.IO.EnergySystems
         {
         }
 
-        public override EnergyCarrier SetInputs()
-        {
-            throw new System.NotImplementedException();
-        }
-
-        public override EnergyCarrier[] SetOutputs()
-        {
-            throw new System.NotImplementedException();
-        }
 
         protected override double[] SetConversionEfficiencyHeating()
         {
@@ -308,15 +239,7 @@ namespace Hive.IO.EnergySystems
             return new double[]{};
         }
 
-        public override EnergyCarrier SetInputs()
-        {
-            throw new System.NotImplementedException();
-        }
 
-        public override EnergyCarrier[] SetOutputs()
-        {
-            throw new System.NotImplementedException();
-        }
     }
     #endregion
 
@@ -324,8 +247,8 @@ namespace Hive.IO.EnergySystems
 
     #region Base Conversion Class
     /// <summary>
-    /// Heating, Cooling, Electricity generation systems (no solar tech though)
-    /// E.g. CHP, boiler, heat pump, chiller, ...
+    /// Heating, Cooling, Electricity generation systems
+    /// E.g. CHP, boiler, heat pump, chiller, PV ...
     /// </summary>
     public abstract class Conversion
     {
@@ -383,28 +306,6 @@ namespace Hive.IO.EnergySystems
         public EnergyCarrier[] OutputCarriers { get; protected set; }
 
 
-        /// <summary>
-        /// Time series of thermal conversion efficiency
-        /// </summary>
-        public double[] ConversionEfficiencyHeating { get; protected set; }
-        /// <summary>
-        /// Time series of thermal conversion efficiency
-        /// </summary>
-        public double[] ConversionEfficiencyCooling { get; protected set; }
-        /// <summary>
-        /// Time series of thermal conversion efficiency
-        /// </summary>
-        public double[] ConversionEfficiencyElectric { get; protected set; }
-
-
-        public double RefEfficiencyElectric { get; protected set; }
-        public double RefEfficiencyHeating { get; protected set; }
-        public double RefEfficiencyCooling { get; protected set; }
-
-
-        // Operational emissions will be part of the outputCarriers
-        // so this class, Conversion, produces outputCarriers, that will carry along all emissions from the inputs as well
-
 
         protected Conversion(double investmentCost, double embodiedGhg,
             bool isHeating, bool isCooling, bool isElectric)
@@ -416,8 +317,22 @@ namespace Hive.IO.EnergySystems
             this.IsElectric = isElectric;
         }
 
-        public abstract void SetInputs(EnergyCarrier inputCarrier);
-        public abstract void SetOutputs(EnergyCarrier [] outputCarriers);
+
+        // how can I change parameters of methods in derived classes? the argument should still be an EnergyCarrier, but I wanna specifiy, e.g. restricting to Solar
+
+        ///// <summary>
+        ///// Not part of the constructor, because it can be set at a later stage of the program
+        ///// For example, for PV, solar potentials need to be calculated first, which might happen after a PV object has been instantiated
+        ///// </summary>
+        ///// <param name="inputCarrier"></param>
+        //public virtual void SetInput(EnergyCarrier inputCarrier) { }
+        ///// <summary>
+        ///// Same as with inputs, the outputs might be calculated later after a Conversion class has been instantiated
+        ///// </summary>
+        ///// <param name="outputCarriers"></param>
+        //public virtual void SetOutputs(EnergyCarrier[] outputCarriers) { }
     }
+
+
     #endregion
 }

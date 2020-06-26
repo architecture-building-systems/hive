@@ -196,8 +196,8 @@ namespace Hive.IO.GHComponents
             // To do Daren: coding
             // To do Amr: UI/UX design
             // when opening the form, the user can select certain surfaces and change them to ST, GC, PVT, or PV individually
-            
 
+            
 
             List<SurfaceBased> solartech = new List<SurfaceBased>();
             foreach (Mesh mesh in meshList)
