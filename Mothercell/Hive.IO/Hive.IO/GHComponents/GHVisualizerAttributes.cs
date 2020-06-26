@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Forms.VisualStyles;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
@@ -13,6 +14,12 @@ namespace Hive.IO.GHComponents
 {
     public class GhVisualizerAttributes : GH_ResizableAttributes<GHVisualizer>
     {
+        // make sure we have a minimum size
+        private const float MinWidth = 200f;
+        private const float MinHeight = 150f;
+
+        private const float TitleBarHeight = 100f;
+
         private const float ArrowBoxSide = 20f;
         private const float ArrowBoxPadding = 10f;
         private const int Padding = 6;
@@ -58,13 +65,9 @@ namespace Hive.IO.GHComponents
 
         protected override void Layout()
         {
-            // make sure we have a minimum size
-            var minWidth = 200;
-            var minHeight = 150;
-
             var bounds = this.Bounds;
-            bounds.Width = Math.Max(bounds.Width, minWidth);
-            bounds.Height = Math.Max(bounds.Height, minHeight);
+            bounds.Width = Math.Max(bounds.Width, MinWidth);
+            bounds.Height = Math.Max(bounds.Height, MinHeight);
 
             this.Bounds = new RectangleF(this.Pivot, bounds.Size);
         }
@@ -74,6 +77,9 @@ namespace Hive.IO.GHComponents
             get
             {
                 var plotBounds = this.Bounds;
+                plotBounds.Height -= TitleBarHeight;
+                plotBounds.Offset(0, TitleBarHeight);
+
                 plotBounds.Inflate(-Padding, -Padding);
                 return plotBounds;
             }
@@ -108,8 +114,30 @@ namespace Hive.IO.GHComponents
 
             RenderCapsule(graphics);
             RenderPlot(graphics);
+            RenderTitleBar(graphics);
             RenderArrows(graphics);
         }
+
+        /// <summary>
+        /// Render the title bar at the top with the dropdown for selecting the plot and the
+        /// operational performance metrics.
+        /// </summary>
+        /// <param name="graphics"></param>
+        private void RenderTitleBar(Graphics graphics)
+        {
+            // the style to draw the dropdown arrow with
+            var impliedStyle = GH_CapsuleRenderEngine.GetImpliedStyle(GH_Palette.Normal, this);
+            var color = impliedStyle.Text;
+            var pen = new Pen(color, 1f) { LineJoin = LineJoin.Round };
+
+            // draw the dropdown for the selecting the plots
+            var dropDownArrow = new[] {new PointF(0, 0), new PointF(ArrowBoxSide, 0), new PointF(ArrowBoxSide / 2, ArrowBoxSide)};
+            dropDownArrow = dropDownArrow.Select(p => new PointF(p.X + DropDownArrowBox.Left, p.Y + DropDownArrowBox.Top)).ToArray();
+
+            graphics.DrawPolygon(pen, dropDownArrow);
+        }
+
+        private RectangleF DropDownArrowBox => new RectangleF(Bounds.Left + Padding, Bounds.Top + Padding, ArrowBoxSide, ArrowBoxSide);
 
         /// <summary>
         /// Render the arrows next to the title - we'll be making these click-able to cycle through the plots
@@ -118,8 +146,8 @@ namespace Hive.IO.GHComponents
         private void RenderArrows(Graphics graphics)
         {
             // the style to draw the arrows with
-            GH_PaletteStyle impliedStyle = GH_CapsuleRenderEngine.GetImpliedStyle(GH_Palette.Normal, this);
-            Color color = impliedStyle.Text;
+            var impliedStyle = GH_CapsuleRenderEngine.GetImpliedStyle(GH_Palette.Normal, this);
+            var color = impliedStyle.Text;
             var pen = new Pen(color, 1f) { LineJoin = LineJoin.Round };
 
             // the base arrow polygons
@@ -134,12 +162,12 @@ namespace Hive.IO.GHComponents
             graphics.DrawPolygon(pen, rightArrow);
 
             // fill out the polygon
-            LinearGradientBrush leftBrush = new LinearGradientBrush(LeftArrowBox, color,
+            var leftBrush = new LinearGradientBrush(LeftArrowBox, color,
                 GH_GraphicsUtil.OffsetColour(color, 50), LinearGradientMode.Vertical) {WrapMode = WrapMode.TileFlipXY};
             graphics.FillPolygon(leftBrush, leftArrow);
             leftBrush.Dispose();
 
-            LinearGradientBrush rightBrush = new LinearGradientBrush(RightArrowBox, color,
+            var rightBrush = new LinearGradientBrush(RightArrowBox, color,
                 GH_GraphicsUtil.OffsetColour(color, 50), LinearGradientMode.Vertical) {WrapMode = WrapMode.TileFlipXY};
             graphics.FillPolygon(rightBrush, rightArrow);
             rightBrush.Dispose();
@@ -155,7 +183,7 @@ namespace Hive.IO.GHComponents
 
         private void RenderCapsule(Graphics graphics)
         {
-            GH_Capsule capsule = this.Owner.RuntimeMessageLevel != GH_RuntimeMessageLevel.Error
+            var capsule = this.Owner.RuntimeMessageLevel != GH_RuntimeMessageLevel.Error
                 ? GH_Capsule.CreateCapsule(this.Bounds, GH_Palette.Hidden, 5, 30)
                 : GH_Capsule.CreateCapsule(this.Bounds, GH_Palette.Error, 5, 30);
             capsule.SetJaggedEdges(false, true);
