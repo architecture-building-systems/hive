@@ -8,27 +8,22 @@ using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
 using Hive.IO.Plots;
-using OxyPlot;
-using OxyPlot.Axes;
-using OxyPlot.Series;
-using OxyPlot.WindowsForms;
-using Rhino;
 
 namespace Hive.IO.GHComponents
 {
-    public class GHVisualizerAttributes : GH_ResizableAttributes<GHVisualizer>
+    public class GhVisualizerAttributes : GH_ResizableAttributes<GHVisualizer>
     {
         private const float ArrowBoxSide = 20f;
         private const float ArrowBoxPadding = 10f;
         private const int Padding = 6;
 
-        private readonly IVisualizerPlot[] plots;
-        private int currentPlot;
+        private readonly IVisualizerPlot[] _plots;
+        private int _currentPlot;
 
-        public GHVisualizerAttributes(GHVisualizer owner) : base(owner)
+        public GhVisualizerAttributes(GHVisualizer owner) : base(owner)
         {
-            currentPlot = 0;
-            plots = new IVisualizerPlot[]
+            _currentPlot = 0;
+            _plots = new IVisualizerPlot[]
             {
                 new DemandMonthlyPlot(),
                 new DemandMonthlyNormalizedPlot()
@@ -37,7 +32,7 @@ namespace Hive.IO.GHComponents
 
         public void NewData(Results results)
         {
-            foreach (var plot in plots)
+            foreach (var plot in _plots)
             {
                 plot.NewData(results);
             }
@@ -46,12 +41,12 @@ namespace Hive.IO.GHComponents
 
         private void NextPlot()
         {
-            currentPlot = (currentPlot + 1) % plots.Length;
+            _currentPlot = (_currentPlot + 1) % _plots.Length;
         }
 
         private void PreviousPlot()
         {
-            currentPlot = (currentPlot - 1 + plots.Length) % plots.Length;
+            _currentPlot = (_currentPlot - 1 + _plots.Length) % _plots.Length;
         }
 
         // FIXME: what goes here?
@@ -125,7 +120,7 @@ namespace Hive.IO.GHComponents
             // the style to draw the arrows with
             GH_PaletteStyle impliedStyle = GH_CapsuleRenderEngine.GetImpliedStyle(GH_Palette.Normal, this);
             Color color = impliedStyle.Text;
-            var pen = new Pen(color, 1f) { LineJoin = System.Drawing.Drawing2D.LineJoin.Round };
+            var pen = new Pen(color, 1f) { LineJoin = LineJoin.Round };
 
             // the base arrow polygons
             var leftArrow = new[] { new PointF(ArrowBoxSide, 0), new PointF(0, ArrowBoxSide / 2), new PointF(ArrowBoxSide, ArrowBoxSide) };
@@ -155,10 +150,7 @@ namespace Hive.IO.GHComponents
 
         private void RenderPlot(Graphics graphics)
         {
-            var plotWidth = (int) this.PlotBounds.Width;
-            var plotHeight = (int) this.PlotBounds.Height;
-
-            plots[currentPlot].Render(Owner.Results, graphics, PlotBounds);
+            _plots[_currentPlot].Render(Owner.Results, graphics, PlotBounds);
         }
 
         private void RenderCapsule(Graphics graphics)

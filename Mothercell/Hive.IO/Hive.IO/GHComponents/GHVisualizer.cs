@@ -27,7 +27,7 @@ namespace Hive.IO.GHComponents
 
         public override GH_Exposure Exposure => GH_Exposure.secondary;
 
-        private GHVisualizerAttributes VisualizerAttributes => (GHVisualizerAttributes) m_attributes;
+        private GhVisualizerAttributes VisualizerAttributes => (GhVisualizerAttributes) m_attributes;
 
 
         /// <summary>
@@ -52,7 +52,7 @@ namespace Hive.IO.GHComponents
 
         public override void CreateAttributes()
         {
-            m_attributes = new GHVisualizerAttributes(this);
+            m_attributes = new GhVisualizerAttributes(this);
         }
 
         public override Guid ComponentGuid => new Guid("7b4ece55-07a0-4e87-815a-e3724a1317b1");

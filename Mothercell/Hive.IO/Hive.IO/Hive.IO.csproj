@@ -94,7 +94,7 @@
     </Compile>
     <Compile Include="GHComponents\GHBuilding.cs" />
     <Compile Include="GHComponents\GHDistributor.cs" />
-    <Compile Include="GHComponents\GHVisualizerAttributes.cs" />
+    <Compile Include="GHComponents\GhVisualizerAttributes.cs" />
     <Compile Include="GHComponents\HiveIOInfo.cs" />
     <Compile Include="GHComponents\GHSolarSystem.cs" />
     <Compile Include="Plots\DemandMonthlyNormalizedPlot.cs" />
