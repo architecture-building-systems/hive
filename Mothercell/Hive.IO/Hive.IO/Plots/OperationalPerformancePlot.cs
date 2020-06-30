@@ -1,31 +1,38 @@
-﻿using System;
-using System.Drawing;
-using System.Windows.Forms;
-using Grasshopper.GUI.Canvas;
+﻿using System.Drawing;
 using Grasshopper.Kernel;
-using OxyPlot;
 using Rhino;
 using LineJoin = System.Drawing.Drawing2D.LineJoin;
 
 namespace Hive.IO.Plots
 {
+    public struct EnergyPlotProperties
+    {
+        public Color Color;
+        public Color BenchmarkFailedColor;
+    }
+
     public class OperationalPerformancePlot: IVisualizerPlot
     {
         private readonly float _totalHeight;
+        private readonly Color _color;
         private readonly Font _standardFont;
         private readonly Font _boldFont;
         private readonly float _padding;
-        
+        private float _penWidth;
+
         /// <summary>
         /// Draw a square box with data inside and a unit string above.
         /// </summary>
         /// <param name="totalHeight">the total height available including unit string</param>
-        public OperationalPerformancePlot(float totalHeight)
+        /// <param name="color"></param>
+        public OperationalPerformancePlot(float totalHeight, EnergyPlotProperties properties)
         {
             _totalHeight = totalHeight;
+            _color = properties.Color;
             _standardFont = GH_FontServer.Standard;
             _boldFont = GH_FontServer.StandardBold;
             _padding = 6f;
+            _penWidth = 30f;
         }
 
         public float Width => _totalHeight - _standardFont.Height - _padding;
@@ -50,9 +57,10 @@ namespace Hive.IO.Plots
             var unit = "kWh";
             
             // draw box
-            var color = Color.Aqua;
-            var pen = new Pen(color, 1f) { LineJoin = LineJoin.Round };
-            graphics.DrawRectangle(pen, bounds.Left, boxTop, boxWidth, boxHeight);
+            var pen = new Pen(_color, _penWidth);
+            var box = new RectangleF(bounds.Left, boxTop, boxWidth, boxHeight);
+            box.Inflate(-_penWidth/2, -_penWidth/2); // make sure lines fit _inside_ box
+            graphics.DrawRectangle(pen, box.Left, box.Top, box.Width, box.Height);
 
             // center unit above box
             var brush = new SolidBrush(Color.Black);
@@ -66,10 +74,6 @@ namespace Hive.IO.Plots
             var dataTop = boxTop + boxHeight / 2 - (float)dataSize.Height / 2;
             graphics.DrawString(data, _boldFont, brush, dataStart, dataTop);
             RhinoApp.WriteLine($"Rendering {data} to {dataStart}, {dataTop}");
-
-            // draw a dummy rectangle of the bounds
-            pen = new Pen(Color.Red, 1f);
-            graphics.DrawRectangle(pen, bounds.Left, bounds.Top, bounds.Width, bounds.Height);
         }
 
         public void NewData(Results results)

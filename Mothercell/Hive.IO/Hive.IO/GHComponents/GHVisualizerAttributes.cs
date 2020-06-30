@@ -36,11 +36,28 @@ namespace Hive.IO.GHComponents
                 new DemandMonthlyNormalizedPlot()
             };
 
+
+            var energyPlotConfig = new EnergyPlotProperties()
+            {
+                Color = Color.FromArgb(144, 153, 40),
+                BenchmarkFailedColor = Color.FromArgb(166, 78, 2) 
+            };
+            var emissionsPlotConfig = new EnergyPlotProperties()
+            {
+                Color = Color.FromArgb(136, 219, 68),
+                BenchmarkFailedColor = Color.FromArgb(166, 78, 2)
+            };
+            var costsPlotConfig = new EnergyPlotProperties()
+            {
+                Color = Color.FromArgb(222, 180, 109),
+                BenchmarkFailedColor = Color.FromArgb(166, 78, 2)
+            };
+
             _titleBarPlots = new[]
             {
-                new OperationalPerformancePlot(TitleBarHeight),
-                new OperationalPerformancePlot(TitleBarHeight),
-                new OperationalPerformancePlot(TitleBarHeight)
+                new OperationalPerformancePlot(TitleBarHeight, energyPlotConfig),
+                new OperationalPerformancePlot(TitleBarHeight, emissionsPlotConfig),
+                new OperationalPerformancePlot(TitleBarHeight, costsPlotConfig)
             };
         }
 
