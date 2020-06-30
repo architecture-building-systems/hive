@@ -1,25 +1,22 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
 using Hive.IO.Plots;
-using Rhino;
 
 namespace Hive.IO.GHComponents
 {
     public class GhVisualizerAttributes : GH_ResizableAttributes<GHVisualizer>
     {
         // make sure we have a minimum size
-        private const float TitleBarHeight = 100f;
-        private const float MinWidth = 100f;
+        private const float TitleBarHeight = 200f;
+        private const float MinWidth = 200f;
         private const float MinHeight = TitleBarHeight + 150f;
 
         private const float ArrowBoxSide = 20f;
@@ -27,7 +24,7 @@ namespace Hive.IO.GHComponents
         private const int Padding = 6;
 
         private readonly IVisualizerPlot[] _plots;
-        private readonly IVisualizerPlot[] _titleBarPlots;
+        private readonly OperationalPerformancePlot[] _titleBarPlots;
         private int _currentPlot;
 
         public GhVisualizerAttributes(GHVisualizer owner) : base(owner)
@@ -39,11 +36,11 @@ namespace Hive.IO.GHComponents
                 new DemandMonthlyNormalizedPlot()
             };
 
-            _titleBarPlots = new IVisualizerPlot[]
+            _titleBarPlots = new[]
             {
-                new OperationalPerformancePlot(), 
-                new OperationalPerformancePlot(),
-                new OperationalPerformancePlot()
+                new OperationalPerformancePlot(TitleBarHeight),
+                new OperationalPerformancePlot(TitleBarHeight),
+                new OperationalPerformancePlot(TitleBarHeight)
             };
         }
 
@@ -112,7 +109,7 @@ namespace Hive.IO.GHComponents
             {
                 this.NextPlot();
             }
-            
+
             return base.RespondToMouseDown(sender, e);
         }
 
@@ -142,19 +139,18 @@ namespace Hive.IO.GHComponents
             var pen = new Pen(color, 1f) { LineJoin = LineJoin.Round };
 
             // draw the dropdown for the selecting the plots
-            var dropDownArrow = new[] {new PointF(0, 0), new PointF(ArrowBoxSide, 0), new PointF(ArrowBoxSide / 2, ArrowBoxSide)};
+            var dropDownArrow = new[] { new PointF(0, 0), new PointF(ArrowBoxSide, 0), new PointF(ArrowBoxSide / 2, ArrowBoxSide) };
             dropDownArrow = dropDownArrow.Select(p => new PointF(p.X + DropDownArrowBox.Left, p.Y + DropDownArrowBox.Top)).ToArray();
 
             graphics.DrawPolygon(pen, dropDownArrow);
 
             // render the three operational performance plots
-            var bounds = new RectangleF(0, 0, TitleBarHeight, TitleBarHeight);
-            bounds.Offset(Bounds.Location);
+            var plotWidth = _titleBarPlots[0].Width;
+            var bounds = new RectangleF(Bounds.Right - plotWidth - Padding, Bounds.Location.Y, plotWidth, TitleBarHeight);
             foreach (var plot in _titleBarPlots)
             {
-                RhinoApp.WriteLine("Rendering title plot...");
                 plot.Render(Owner.Results, graphics, bounds);
-                bounds.Offset(TitleBarHeight, 0);
+                bounds.Offset(-plotWidth, 0);
             }
         }
 
@@ -174,22 +170,24 @@ namespace Hive.IO.GHComponents
             // the base arrow polygons
             var leftArrow = new[] { new PointF(ArrowBoxSide, 0), new PointF(0, ArrowBoxSide / 2), new PointF(ArrowBoxSide, ArrowBoxSide) };
             var rightArrow = new[] { new PointF(0, 0), new PointF(ArrowBoxSide, ArrowBoxSide / 2), new PointF(0, ArrowBoxSide) };
-            
+
             // shift the polygons to their positions
             leftArrow = leftArrow.Select(p => new PointF(p.X + LeftArrowBox.Left, p.Y + LeftArrowBox.Top)).ToArray();
             rightArrow = rightArrow.Select(p => new PointF(p.X + RightArrowBox.Left, p.Y + RightArrowBox.Top)).ToArray();
-            
+
             graphics.DrawPolygon(pen, leftArrow);
             graphics.DrawPolygon(pen, rightArrow);
 
             // fill out the polygon
             var leftBrush = new LinearGradientBrush(LeftArrowBox, color,
-                GH_GraphicsUtil.OffsetColour(color, 50), LinearGradientMode.Vertical) {WrapMode = WrapMode.TileFlipXY};
+                GH_GraphicsUtil.OffsetColour(color, 50), LinearGradientMode.Vertical)
+            { WrapMode = WrapMode.TileFlipXY };
             graphics.FillPolygon(leftBrush, leftArrow);
             leftBrush.Dispose();
 
             var rightBrush = new LinearGradientBrush(RightArrowBox, color,
-                GH_GraphicsUtil.OffsetColour(color, 50), LinearGradientMode.Vertical) {WrapMode = WrapMode.TileFlipXY};
+                GH_GraphicsUtil.OffsetColour(color, 50), LinearGradientMode.Vertical)
+            { WrapMode = WrapMode.TileFlipXY };
             graphics.FillPolygon(rightBrush, rightArrow);
             rightBrush.Dispose();
         }
