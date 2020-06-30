@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using Rhino;
 
@@ -26,6 +27,7 @@ namespace Hive.IO.Plots
         private readonly float _penWidth;
         private bool _isSpecific = false;  // the state we start out in
         private readonly EnergyPlotProperties _properties;
+        private RectangleF _bounds = RectangleF.Empty;
 
         /// <summary>
         /// Draw a square box with data inside and a unit string above.
@@ -52,6 +54,14 @@ namespace Hive.IO.Plots
             return $"{value:F1}";
         }
 
+        public bool Contains(PointF location) => _bounds.Contains(location);
+
+        public void Clicked(GH_Canvas sender)
+        {
+            _isSpecific = !_isSpecific;
+            sender.Invalidate();
+        }
+
         /// <summary>
         /// Draw a box with some text
         ///
@@ -63,6 +73,9 @@ namespace Hive.IO.Plots
         /// <param name="bounds">expected height of bounds should be TotalHeight</param>
         public void Render(Results results, Graphics graphics, RectangleF bounds)
         {
+            // save bounds for Contains method - when user clicks on the plot
+            _bounds = bounds;
+
             var boxHeight = Width;
             var boxWidth = Width; // squares
             var boxTop = bounds.Bottom - boxHeight;

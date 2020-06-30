@@ -130,6 +130,14 @@ namespace Hive.IO.GHComponents
                 return base.RespondToMouseDown(sender, e);
             }
 
+            foreach (var plot in _titleBarPlots)
+            {
+                if (plot.Contains(e.CanvasLocation))
+                {
+                    plot.Clicked(sender);
+                }
+            }
+
             if (LeftArrowBox.Contains(e.CanvasLocation))
             {
                 PreviousPlot();
