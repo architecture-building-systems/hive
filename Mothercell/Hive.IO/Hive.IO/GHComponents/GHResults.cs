@@ -44,7 +44,7 @@ namespace Hive.IO
 
             // 12, 13
             pManager.AddBooleanParameter("Supply System Suitability", "SupSysSuit", "Suitability of supply sytem for electricity, heating and cooling generation.", GH_ParamAccess.tree);
-            pManager.AddTextParameter("Supply System Units", "SupSysUnits", "Unit of the supply system capacity / operation.", GH_ParamAccess.list);
+            pManager.AddTextParameter("Supply System Units", "SupSysUnits", "UnitText of the supply system capacity / operation.", GH_ParamAccess.list);
 
             // 14, 15
             pManager.AddMeshParameter("Solar Irradiated Surfaces", "SolSrfs", "Mesh surfaces whose vertices are coloured accordint to their solar exposure in [kWh/year]", GH_ParamAccess.list);

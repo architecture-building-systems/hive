@@ -23,41 +23,53 @@ namespace Hive.IO.GHComponents
         private const float ArrowBoxPadding = 10f;
         private const int Padding = 6;
 
-        private readonly IVisualizerPlot[] _plots;
+        private readonly IVisualizerPlot[] _plots = {
+            new DemandMonthlyPlot(),
+            new DemandMonthlyNormalizedPlot()
+        };
+
         private readonly OperationalPerformancePlot[] _titleBarPlots;
         private int _currentPlot;
 
         public GhVisualizerAttributes(GHVisualizer owner) : base(owner)
         {
             _currentPlot = 0;
-            _plots = new IVisualizerPlot[]
-            {
-                new DemandMonthlyPlot(),
-                new DemandMonthlyNormalizedPlot()
-            };
 
 
-            var energyPlotConfig = new EnergyPlotProperties()
+            var energyPlotConfig = new EnergyPlotProperties
             {
                 Color = Color.FromArgb(144, 153, 40),
-                BenchmarkFailedColor = Color.FromArgb(166, 78, 2) 
+                BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
+                UnitText = "kWh",
+                SpecificUnitText = "kWh/m²",
+                Data = results => 1530.0,
+                SpecificData = results => 153.0
             };
-            var emissionsPlotConfig = new EnergyPlotProperties()
+            var emissionsPlotConfig = new EnergyPlotProperties
             {
                 Color = Color.FromArgb(136, 219, 68),
-                BenchmarkFailedColor = Color.FromArgb(166, 78, 2)
+                BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
+                UnitText = "kgCO2",
+                SpecificUnitText = "kgCO2//m²",
+                Data = results => 790.0,
+                SpecificData = results => 79.0
             };
-            var costsPlotConfig = new EnergyPlotProperties()
+            var costsPlotConfig = new EnergyPlotProperties
             {
                 Color = Color.FromArgb(222, 180, 109),
-                BenchmarkFailedColor = Color.FromArgb(166, 78, 2)
+                BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
+                UnitText = "CHF",
+                SpecificUnitText = "CHF/m²",
+                Data = results => 1000.0,
+                SpecificData = results => 120.0
             };
 
             _titleBarPlots = new[]
             {
-                new OperationalPerformancePlot(TitleBarHeight, energyPlotConfig),
+                // from the right
+                new OperationalPerformancePlot(TitleBarHeight, costsPlotConfig),
                 new OperationalPerformancePlot(TitleBarHeight, emissionsPlotConfig),
-                new OperationalPerformancePlot(TitleBarHeight, costsPlotConfig)
+                new OperationalPerformancePlot(TitleBarHeight, energyPlotConfig)
             };
         }
 
@@ -69,7 +81,8 @@ namespace Hive.IO.GHComponents
             }
         }
 
-        private IEnumerable<IVisualizerPlot> AllPlots => _plots.AsEnumerable().Concat(_titleBarPlots);
+        private IEnumerable<IVisualizerPlot> AllPlots => _plots?.AsEnumerable().Concat(_titleBarPlots) 
+                                                         ?? new List<IVisualizerPlot>();
 
         private void NextPlot()
         {
@@ -90,18 +103,18 @@ namespace Hive.IO.GHComponents
 
         protected override void Layout()
         {
-            var bounds = this.Bounds;
+            var bounds = Bounds;
             bounds.Width = Math.Max(bounds.Width, MinWidth);
             bounds.Height = Math.Max(bounds.Height, MinHeight);
 
-            this.Bounds = new RectangleF(this.Pivot, bounds.Size);
+            Bounds = new RectangleF(Pivot, bounds.Size);
         }
 
         private RectangleF PlotBounds
         {
             get
             {
-                var plotBounds = this.Bounds;
+                var plotBounds = Bounds;
                 plotBounds.Height -= TitleBarHeight;
                 plotBounds.Offset(0, TitleBarHeight);
 
@@ -119,12 +132,12 @@ namespace Hive.IO.GHComponents
 
             if (LeftArrowBox.Contains(e.CanvasLocation))
             {
-                this.PreviousPlot();
+                PreviousPlot();
             }
 
             if (RightArrowBox.Contains(e.CanvasLocation))
             {
-                this.NextPlot();
+                NextPlot();
             }
 
             return base.RespondToMouseDown(sender, e);
@@ -132,8 +145,8 @@ namespace Hive.IO.GHComponents
 
         protected override void Render(GH_Canvas canvas, Graphics graphics, GH_CanvasChannel channel)
         {
-            if (channel == GH_CanvasChannel.Wires && this.Owner.SourceCount > 0)
-                this.RenderIncomingWires(canvas.Painter, this.Owner.Sources, this.Owner.WireDisplay);
+            if (channel == GH_CanvasChannel.Wires && Owner.SourceCount > 0)
+                RenderIncomingWires(canvas.Painter, Owner.Sources, Owner.WireDisplay);
             if (channel != GH_CanvasChannel.Objects)
                 return;
 
@@ -167,7 +180,7 @@ namespace Hive.IO.GHComponents
             foreach (var plot in _titleBarPlots)
             {
                 plot.Render(Owner.Results, graphics, bounds);
-                bounds.Offset(-plotWidth, 0);
+                bounds.Offset(-(plotWidth + Padding), 0);
             }
         }
 
@@ -219,12 +232,12 @@ namespace Hive.IO.GHComponents
 
         private void RenderCapsule(Graphics graphics)
         {
-            var capsule = this.Owner.RuntimeMessageLevel != GH_RuntimeMessageLevel.Error
-                ? GH_Capsule.CreateCapsule(this.Bounds, GH_Palette.Hidden, 5, 30)
-                : GH_Capsule.CreateCapsule(this.Bounds, GH_Palette.Error, 5, 30);
+            var capsule = Owner.RuntimeMessageLevel != GH_RuntimeMessageLevel.Error
+                ? GH_Capsule.CreateCapsule(Bounds, GH_Palette.Hidden, 5, 30)
+                : GH_Capsule.CreateCapsule(Bounds, GH_Palette.Error, 5, 30);
             capsule.SetJaggedEdges(false, true);
-            capsule.AddInputGrip(this.InputGrip);
-            capsule.Render(graphics, this.Selected, this.Owner.Locked, true);
+            capsule.AddInputGrip(InputGrip);
+            capsule.Render(graphics, Selected, Owner.Locked, true);
             capsule.Dispose();
         }
     }

@@ -72,7 +72,7 @@ namespace Hive.IO
         /// </summary>
         public bool[,] SupplyTypes { get; private set; }
         /// <summary>
-        /// Capacity per technology. Unit is defined in 'SupplyCapUnits
+        /// Capacity per technology. UnitText is defined in 'SupplyCapUnits
         /// </summary>
         public double[] SupplyCapacities { get; private set; }
         /// <summary>
@@ -96,11 +96,11 @@ namespace Hive.IO
         /// </summary>
         public double[][] SupplyOpexHourly { get; private set; }
         /// <summary>
-        /// Operation schedule per technology and hour. Unit defined in 'SupplyOperationUnit'
+        /// Operation schedule per technology and hour. UnitText defined in 'SupplyOperationUnit'
         /// </summary>
         public double[][] SupplyOperationHourly { get; private set; }
         /// <summary>
-        /// Operation schedule per technology and month. Unit defined in 'SupplyOperationUnit'
+        /// Operation schedule per technology and month. UnitText defined in 'SupplyOperationUnit'
         /// </summary>
         public double [][] SupplyOperationMonthly { get; private set; }
         /// <summary>
