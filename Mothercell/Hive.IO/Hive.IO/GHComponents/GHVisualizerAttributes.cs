@@ -149,6 +149,7 @@ namespace Hive.IO.GHComponents
 
             // render the three operational performance plots
             var bounds = new RectangleF(0, 0, TitleBarHeight, TitleBarHeight);
+            bounds.Offset(Bounds.Location);
             foreach (var plot in _titleBarPlots)
             {
                 RhinoApp.WriteLine("Rendering title plot...");

@@ -28,7 +28,7 @@ namespace Hive.IO.Plots
 
             var boxHeight = bounds.Height - standardFont.Height - padding;
             var boxWidth = boxHeight; // squares
-            var boxTop = bounds.Top - standardFont.Height - padding;
+            var boxTop = bounds.Top + standardFont.Height + padding;
 
             // DUMMY Values for the data:
             var data = 1540.ToString();
