@@ -13,9 +13,9 @@ namespace Hive.IO.Plots
         public Color Color;
         public Color BenchmarkFailedColor;
         public String UnitText;
-        public String SpecificUnitText;
+        public String NormalizedUnitText;
         public QueryResults Data;
-        public QueryResults SpecificData;
+        public QueryResults NormalizedData;
     }
 
     public class OperationalPerformancePlot: IVisualizerPlot
@@ -40,11 +40,11 @@ namespace Hive.IO.Plots
             _penWidth = 30f;
         }
 
-        private String UnitText => _normalized ? _properties.SpecificUnitText : _properties.UnitText;
+        private String UnitText => _normalized ? _properties.NormalizedUnitText : _properties.UnitText;
 
         private String Data(Results results)
         {
-            var value = _normalized ? _properties.SpecificData(results) : _properties.Data(results);
+            var value = _normalized ? _properties.NormalizedData(results) : _properties.Data(results);
             return $"{value:F1}";
         }
 

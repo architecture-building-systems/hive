@@ -49,8 +49,8 @@ namespace Hive.IO.GHComponents
             {
                 Color = Color.FromArgb(136, 219, 68),
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
-                UnitText = "kgCO2",
-                SpecificUnitText = "kgCO2//m²",
+                UnitText = "kgCO₂",
+                SpecificUnitText = "kgCO₂/m²",
                 Data = results => 790.0,
                 SpecificData = results => 79.0
             };
