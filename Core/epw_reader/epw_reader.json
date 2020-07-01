@@ -32,7 +32,8 @@
         {"type": "float", "name": "RH", "nick-name": "RH", "description": "Relative Humidity, in %."},
         {"type": "float", "name": "GHIMonthly", "nick-name": "GHIM", "description": "Global Horizontal Irradiance (monthly total), in kWh/m2."},
         {"type": "float", "name": "DryBulbMonthly", "nick-name": "DryBulbM", "description": "Dry Bulb Temperature (monthly average), in °C."},
-        {"type": "float", "name": "RHMonthly", "nick-name": "RHM", "description": "Relative Humidity (monthly average), in %."}
+        {"type": "float", "name": "RHMonthly", "nick-name": "RHM", "description": "Relative Humidity (monthly average), in %."},
+        {"type": "generic", "name": "AmbientTemperatureCarrier", "nick-name": "AmbTCar", "description": "Hive.IO.EnergySystems.Air containing time resolved (hourly, i.e. 8760 entries) ambient temperature in deg C."}
       ]
     }
   ]
