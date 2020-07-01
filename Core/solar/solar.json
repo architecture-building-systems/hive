@@ -55,7 +55,8 @@
       ],
       "outputs": [
         {"name": "annual potential", "nick-name": "annual", "type": "float", "description": "annual hourly solar irradiance [Wh] of surface"},
-        {"name": "mesh_visu", "nick-name": "mesh_visu", "type": "mesh", "description": "mesh_visu"}
+        {"name": "mesh_visu", "nick-name": "mesh_visu", "type": "mesh", "description": "mesh_visu"},
+        {"name": "SolarCarrier", "nick-name": "SolCar", "type": "generic", "description": "Hive.IO.EnergySystems.Solar object that contains the time resolved (hourly, i.e. 8760 entries) solar potentials in W/sqm"}
       ]
     },
     {

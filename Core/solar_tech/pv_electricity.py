@@ -3,21 +3,21 @@ reads in a Hive.IO.EnergySystems.Solar (Energy Carrier) and infuses Hive.IO.EnSy
 """
 
 from __future__ import division
-
+import System
 import Grasshopper as gh
 path = gh.Folders.AppDataFolder
 import clr
 import os
 clr.AddReferenceToFileAndPath(os.path.join(path, "Libraries\hive", "Hive.IO.gha"))
 import Hive.IO.EnergySystems as ensys
-
+import Rhino.RhinoApp as RhinoApp
 
 def pv_electricity(pv, solar_carrier, time_resolution, amb_T_carrier, beta, NOCT, NOCT_ref, NOCT_sol):
     electricity_generated = pv_yield(pv.SurfaceArea, pv.RefEfficiencyElectric, beta, NOCT, NOCT_ref, NOCT_sol, amb_T_carrier.AvailableEnergy, solar_carrier.AvailableEnergy)
     electricity_horizon = []
     if time_resolution == "hourly":
         horizon = 8760
-        electricity_horizon = electricity_generated
+        electricity_horizon = electricity_generated[0]
     else:   # monthly
         horizon = 12
         days_per_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
@@ -27,9 +27,9 @@ def pv_electricity(pv, solar_carrier, time_resolution, amb_T_carrier, beta, NOCT
             start_hour = int(hours_per_day * sum(days_per_month[0:month]))
             end_hour = int(hours_per_day * sum(days_per_month[0:month + 1]))
             # hours_per_month = days_per_month[month] * hours_per_day # could be used to compute average values
-            electricity_horizon.append(sum(electricity_generated[start_hour:end_hour]))
+            electricity_horizon.append(sum(electricity_generated[0][start_hour:end_hour]))
 
-    electricity_carrier = ensys.Electricity(horizon, electricity_horizon, [0.0] * horizon, [0.0] * horizon)
+    electricity_carrier = ensys.Electricity(horizon, System.Array[float](electricity_horizon), System.Array[float]([0.0] * horizon), System.Array[float]([0.0] * horizon))
     pv.SetInputOutput(solar_carrier, electricity_carrier)
     return pv
 

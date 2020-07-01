@@ -5,7 +5,6 @@ Using external libraries SolarModel.dll and GHSolar.gha
 import System
 import Rhino.Geometry as rg
 import Grasshopper as gh
-import Grasshopper.Kernel as ghk
 
 path = gh.Folders.AppDataFolder
 import clr
@@ -13,6 +12,9 @@ import os
 
 clr.AddReferenceToFileAndPath(os.path.join(path, "Libraries", "GHSolar.gha"))
 import GHSolar as ghs
+
+clr.AddReferenceToFileAndPath(os.path.join(path, "Libraries\hive", "Hive.IO.gha"))
+import Hive.IO.EnergySystems as ensys
 
 
 def simulate_obstructed_panel(mesh_analysis, mesh_obstructions,
@@ -87,7 +89,9 @@ def simulate_obstructed_panel(mesh_analysis, mesh_obstructions,
     # call visualize_as_mesh()
     mesh_visu = visualize_as_mesh(results, mesh_analysis, max_value, min_value)
 
-    return [irradiance, mesh_visu]
+    solar_carrier = ensys.Solar(horizon, System.Array[float](irradiance), None)
+
+    return [irradiance, mesh_visu, solar_carrier]
 
 
 def read_results(ghsolar_results, mshin):

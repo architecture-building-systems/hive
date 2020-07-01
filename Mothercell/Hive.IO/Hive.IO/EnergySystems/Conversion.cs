@@ -89,7 +89,7 @@ namespace Hive.IO.EnergySystems
     /// </summary>
     public class Photovoltaic : SurfaceBased
     {
-        public double RefEfficiencyElectric { get; }
+        public double RefEfficiencyElectric { get; private set; }
         public Photovoltaic(double investmentCost, double embodiedGhg, Mesh surfaceGeometry, string detailedName,
             double refEfficiencyElectric)
             : base(investmentCost, embodiedGhg, false, false, true, surfaceGeometry)
@@ -110,6 +110,17 @@ namespace Hive.IO.EnergySystems
             base.InputCarrier = solarCarrier;
             base.OutputCarriers = new EnergyCarrier[1];
             base.OutputCarriers[0] = electricityCarrier;
+        }
+
+
+        public void DoSth(double number)
+        {
+            this.RefEfficiencyElectric = number;
+        }
+
+        public void DoSthElse(Solar solarCarrier)
+        {
+            this.RefEfficiencyElectric = solarCarrier.AvailableEnergy[0];
         }
 
     }
