@@ -84,13 +84,13 @@ def epw_reader(path):
     assert longitude is not None
 
     # monthly data
-    dayspermonth = [31.0, 28.0, 31.0, 30.0, 31.0, 30.0, 31.0, 31.0, 30.0, 31.0, 30.0, 31.0]
+    days_per_month = [31.0, 28.0, 31.0, 30.0, 31.0, 30.0, 31.0, 31.0, 30.0, 31.0, 30.0, 31.0]
     hours_per_day = 24
     total_months = 12
     for month in range(total_months):
-        start_hour = int(hours_per_day * sum(dayspermonth[0:month]))
-        end_hour = int(hours_per_day * sum(dayspermonth[0:month + 1]))
-        hours_per_month = dayspermonth[month] * hours_per_day
+        start_hour = int(hours_per_day * sum(days_per_month[0:month]))
+        end_hour = int(hours_per_day * sum(days_per_month[0:month + 1]))
+        hours_per_month = days_per_month[month] * hours_per_day
         ghi_monthly.append(sum(ghi[start_hour:end_hour]) / 1000)
         drybulb_monthly.append(sum(drybulb[start_hour:end_hour]) / hours_per_month)
         rh_monthly.append(sum(rh[start_hour:end_hour]) / hours_per_month)

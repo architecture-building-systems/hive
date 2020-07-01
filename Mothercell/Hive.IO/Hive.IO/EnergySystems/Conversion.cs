@@ -70,11 +70,16 @@ namespace Hive.IO.EnergySystems
         /// </summary>
         public Mesh SurfaceGeometry { get; private set; }
 
+        /// <summary>
+        /// Surface Area, computed using Rhino.Geometry
+        /// </summary>
+        public double SurfaceArea { get; private set; }
 
         protected SurfaceBased(double investmentCost, double embodiedGhg, bool isHeating, bool isCooling, bool isElectric, Mesh surfaceGeometry) 
             : base(investmentCost, embodiedGhg, isHeating, isCooling, isElectric)
         {
             this.SurfaceGeometry = surfaceGeometry;
+            this.SurfaceArea = Rhino.Geometry.AreaMassProperties.Compute(this.SurfaceGeometry).Area;
         }
     }
 
@@ -96,26 +101,16 @@ namespace Hive.IO.EnergySystems
 
 
         /// <summary>
-        /// Compute outputs, based on inputs
-        /// conversion functions should be here. There is no point in using separate honey-badger components,
-        /// unless we wanna override outputs with simulations from other external non-Hive models (Honeybee, Archsim, etc.)
-        /// But for Hive computations, it would be much easier to have everything in the same VS solution
+        /// Setting input (solar potentials from a solar model) and output carrier (from a PV electricity model)
         /// </summary>
         /// <param name="solarCarrier">input energy carrier, from weather file or solar model</param>
-        public void SetInputOutput(Solar solarCarrier)
+        /// <param name="electricityCarrier">output electricity carrier from a PV electricity model.</param>
+        public void SetInputOutput(Solar solarCarrier, Electricity electricityCarrier)
         {
-            base.InputCarrier =  solarCarrier;
-
-            int horizon = 12;
-            double[] availableElectricity = new double[horizon];
-            double[] energyCost = new double[horizon];
-            double[] ghgEmissions = new double[horizon];
-
+            base.InputCarrier = solarCarrier;
             base.OutputCarriers = new EnergyCarrier[1];
-            base.OutputCarriers[0] = new Electricity(horizon, availableElectricity, energyCost, ghgEmissions);
+            base.OutputCarriers[0] = electricityCarrier;
         }
-
-
 
     }
     
