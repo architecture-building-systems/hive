@@ -19,7 +19,7 @@ namespace Hive.IO.Plots
         protected static readonly OxyColor SpaceCoolingColor = OxyColor.FromRgb(0, 176, 240);
         protected static readonly OxyColor ElectricityColor = OxyColor.FromRgb(255, 217, 102);
         protected static readonly OxyColor DhwColor = OxyColor.FromRgb(192, 0, 0);
-        protected static readonly OxyColor BackgroundColor = OxyColor.FromArgb(0, 0, 0, 0);
+        protected static readonly OxyColor BackgroundColor = OxyColor.FromArgb(255, 0, 0, 0);
 
         public void Render(Results results, Graphics graphics, RectangleF bounds)
         {
@@ -44,7 +44,7 @@ namespace Hive.IO.Plots
             {
                 Width = plotWidth,
                 Height = plotHeight,
-                Background = OxyColors.White
+                Background = OxyColors.Transparent
             };
             bitmap = pngExporter.ExportToBitmap(model);
             return bitmap;

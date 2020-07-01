@@ -241,7 +241,7 @@ namespace Hive.IO.GHComponents
         private void RenderCapsule(Graphics graphics)
         {
             var capsule = Owner.RuntimeMessageLevel != GH_RuntimeMessageLevel.Error
-                ? GH_Capsule.CreateCapsule(Bounds, GH_Palette.Hidden, 5, 30)
+                ? GH_Capsule.CreateCapsule(Bounds, GH_Palette.Normal, 5, 30)
                 : GH_Capsule.CreateCapsule(Bounds, GH_Palette.Error, 5, 30);
             capsule.SetJaggedEdges(false, true);
             capsule.AddInputGrip(InputGrip);
