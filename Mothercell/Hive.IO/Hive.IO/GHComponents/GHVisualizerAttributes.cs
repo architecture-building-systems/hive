@@ -173,9 +173,9 @@ namespace Hive.IO.GHComponents
             // draw the dropdown for the selecting the plots
             var dropDownArrow = new[] 
             { 
-                new PointF(ArrowBoxPadding, ArrowBoxPadding), 
-                new PointF(ArrowBoxSide - ArrowBoxPadding, ArrowBoxPadding), 
-                new PointF((ArrowBoxSide - 2 * ArrowBoxPadding) / 2, ArrowBoxSide - ArrowBoxPadding)
+                new PointF(ArrowBoxPadding, ArrowBoxPadding), // top left
+                new PointF(ArrowBoxSide - ArrowBoxPadding, ArrowBoxPadding), // top right
+                new PointF(ArrowBoxSide / 2, ArrowBoxSide - ArrowBoxPadding) // bottom middle
             };
             dropDownArrow = dropDownArrow.Select(p => new PointF(
                 p.X + DropDownArrowBox.Left, 
