@@ -41,27 +41,27 @@ namespace Hive.IO.GHComponents
                 Color = Color.FromArgb(225, 242, 31),
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
                 UnitText = "kWh",
-                SpecificUnitText = "kWh/m²",
+                NormalizedUnitText = "kWh/m²",
                 Data = results => 1530.0,
-                SpecificData = results => 153.0
+                NormalizedData = results => 153.0
             };
             var emissionsPlotConfig = new EnergyPlotProperties
             {
                 Color = Color.FromArgb(136, 219, 68),
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
                 UnitText = "kgCO₂",
-                SpecificUnitText = "kgCO₂/m²",
+                NormalizedUnitText = "kgCO₂/m²",
                 Data = results => 790.0,
-                SpecificData = results => 79.0
+                NormalizedData = results => 79.0
             };
             var costsPlotConfig = new EnergyPlotProperties
             {
                 Color = Color.FromArgb(222, 180, 109),
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
                 UnitText = "CHF",
-                SpecificUnitText = "CHF/m²",
+                NormalizedUnitText = "CHF/m²",
                 Data = results => 1000.0,
-                SpecificData = results => 120.0
+                NormalizedData = results => 120.0
             };
 
             _titleBarPlots = new[]
