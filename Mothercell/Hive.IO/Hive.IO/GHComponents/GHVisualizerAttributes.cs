@@ -19,8 +19,8 @@ namespace Hive.IO.GHComponents
         private const float MinWidth = 200f;
         private const float MinHeight = TitleBarHeight + 150f;
 
-        private const float ArrowBoxSide = 20f;
-        private const float ArrowBoxPadding = 10f;
+        private const float ArrowBoxSide = TitleBarHeight;
+        private const float ArrowBoxPadding = 50f;
         private const int Padding = 6;
 
         private readonly IVisualizerPlot[] _plots = {
@@ -138,12 +138,7 @@ namespace Hive.IO.GHComponents
                 }
             }
 
-            if (LeftArrowBox.Contains(e.CanvasLocation))
-            {
-                PreviousPlot();
-            }
-
-            if (RightArrowBox.Contains(e.CanvasLocation))
+            if (DropDownArrowBox.Contains(e.CanvasLocation))
             {
                 NextPlot();
             }
@@ -161,7 +156,6 @@ namespace Hive.IO.GHComponents
             RenderCapsule(graphics);
             RenderPlot(graphics);
             RenderTitleBar(graphics);
-            RenderArrows(graphics);
         }
 
         /// <summary>
@@ -174,13 +168,20 @@ namespace Hive.IO.GHComponents
             // the style to draw the dropdown arrow with
             var impliedStyle = GH_CapsuleRenderEngine.GetImpliedStyle(GH_Palette.Normal, this);
             var color = impliedStyle.Text;
-            var pen = new Pen(color, 1f) { LineJoin = LineJoin.Round };
+            var brush = new SolidBrush(color);
 
             // draw the dropdown for the selecting the plots
-            var dropDownArrow = new[] { new PointF(0, 0), new PointF(ArrowBoxSide, 0), new PointF(ArrowBoxSide / 2, ArrowBoxSide) };
-            dropDownArrow = dropDownArrow.Select(p => new PointF(p.X + DropDownArrowBox.Left, p.Y + DropDownArrowBox.Top)).ToArray();
+            var dropDownArrow = new[] 
+            { 
+                new PointF(ArrowBoxPadding, ArrowBoxPadding), 
+                new PointF(ArrowBoxSide - ArrowBoxPadding, ArrowBoxPadding), 
+                new PointF((ArrowBoxSide - 2 * ArrowBoxPadding) / 2, ArrowBoxSide - ArrowBoxPadding)
+            };
+            dropDownArrow = dropDownArrow.Select(p => new PointF(
+                p.X + DropDownArrowBox.Left, 
+                p.Y + DropDownArrowBox.Top)).ToArray();
 
-            graphics.DrawPolygon(pen, dropDownArrow);
+            graphics.FillPolygon(brush, dropDownArrow);
 
             // render the three operational performance plots
             var plotWidth = TitleBarHeight;  // squares
@@ -193,45 +194,6 @@ namespace Hive.IO.GHComponents
         }
 
         private RectangleF DropDownArrowBox => new RectangleF(Bounds.Left + Padding, Bounds.Top + Padding, ArrowBoxSide, ArrowBoxSide);
-
-        /// <summary>
-        /// Render the arrows next to the title - we'll be making these click-able to cycle through the plots
-        /// </summary>
-        /// <param name="graphics"></param>
-        private void RenderArrows(Graphics graphics)
-        {
-            // the style to draw the arrows with
-            var impliedStyle = GH_CapsuleRenderEngine.GetImpliedStyle(GH_Palette.Normal, this);
-            var color = impliedStyle.Text;
-            var pen = new Pen(color, 1f) { LineJoin = LineJoin.Round };
-
-            // the base arrow polygons
-            var leftArrow = new[] { new PointF(ArrowBoxSide, 0), new PointF(0, ArrowBoxSide / 2), new PointF(ArrowBoxSide, ArrowBoxSide) };
-            var rightArrow = new[] { new PointF(0, 0), new PointF(ArrowBoxSide, ArrowBoxSide / 2), new PointF(0, ArrowBoxSide) };
-
-            // shift the polygons to their positions
-            leftArrow = leftArrow.Select(p => new PointF(p.X + LeftArrowBox.Left, p.Y + LeftArrowBox.Top)).ToArray();
-            rightArrow = rightArrow.Select(p => new PointF(p.X + RightArrowBox.Left, p.Y + RightArrowBox.Top)).ToArray();
-
-            graphics.DrawPolygon(pen, leftArrow);
-            graphics.DrawPolygon(pen, rightArrow);
-
-            // fill out the polygon
-            var leftBrush = new LinearGradientBrush(LeftArrowBox, color,
-                GH_GraphicsUtil.OffsetColour(color, 50), LinearGradientMode.Vertical)
-            { WrapMode = WrapMode.TileFlipXY };
-            graphics.FillPolygon(leftBrush, leftArrow);
-            leftBrush.Dispose();
-
-            var rightBrush = new LinearGradientBrush(RightArrowBox, color,
-                GH_GraphicsUtil.OffsetColour(color, 50), LinearGradientMode.Vertical)
-            { WrapMode = WrapMode.TileFlipXY };
-            graphics.FillPolygon(rightBrush, rightArrow);
-            rightBrush.Dispose();
-        }
-
-        private RectangleF LeftArrowBox => new RectangleF(PlotBounds.Left + ArrowBoxPadding, PlotBounds.Top + ArrowBoxPadding, ArrowBoxSide, ArrowBoxSide);
-        private RectangleF RightArrowBox => new RectangleF(PlotBounds.Right - ArrowBoxSide - ArrowBoxPadding, PlotBounds.Top + ArrowBoxPadding, ArrowBoxSide, ArrowBoxSide);
 
         private void RenderPlot(Graphics graphics)
         {
