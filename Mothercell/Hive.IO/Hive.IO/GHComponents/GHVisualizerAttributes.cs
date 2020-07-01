@@ -67,9 +67,9 @@ namespace Hive.IO.GHComponents
             _titleBarPlots = new[]
             {
                 // from the right
-                new OperationalPerformancePlot(TitleBarHeight, costsPlotConfig),
-                new OperationalPerformancePlot(TitleBarHeight, emissionsPlotConfig),
-                new OperationalPerformancePlot(TitleBarHeight, energyPlotConfig)
+                new OperationalPerformancePlot(costsPlotConfig),
+                new OperationalPerformancePlot(emissionsPlotConfig),
+                new OperationalPerformancePlot(energyPlotConfig)
             };
         }
 
@@ -183,7 +183,7 @@ namespace Hive.IO.GHComponents
             graphics.DrawPolygon(pen, dropDownArrow);
 
             // render the three operational performance plots
-            var plotWidth = _titleBarPlots[0].Width;
+            var plotWidth = TitleBarHeight;  // squares
             var bounds = new RectangleF(Bounds.Right - plotWidth - Padding, Bounds.Location.Y, plotWidth, TitleBarHeight);
             foreach (var plot in _titleBarPlots)
             {
