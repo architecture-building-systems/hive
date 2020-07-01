@@ -97,6 +97,9 @@ namespace Hive.IO.EnergySystems
 
         /// <summary>
         /// Compute outputs, based on inputs
+        /// conversion functions should be here. There is no point in using separate honey-badger components,
+        /// unless we wanna override outputs with simulations from other external non-Hive models (Honeybee, Archsim, etc.)
+        /// But for Hive computations, it would be much easier to have everything in the same VS solution
         /// </summary>
         /// <param name="solarCarrier">input energy carrier, from weather file or solar model</param>
         public void SetInputOutput(Solar solarCarrier)
