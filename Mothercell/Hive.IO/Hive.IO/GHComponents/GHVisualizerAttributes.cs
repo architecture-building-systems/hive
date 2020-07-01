@@ -38,7 +38,7 @@ namespace Hive.IO.GHComponents
 
             var energyPlotConfig = new EnergyPlotProperties
             {
-                Color = Color.FromArgb(144, 153, 40),
+                Color = Color.FromArgb(225, 242, 31),
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
                 UnitText = "kWh",
                 SpecificUnitText = "kWh/m²",
