@@ -105,7 +105,7 @@ namespace Hive.IO.EnergySystems
         /// </summary>
         /// <param name="solarCarrier">input energy carrier, from weather file or solar model</param>
         /// <param name="electricityCarrier">output electricity carrier from a PV electricity model.</param>
-        public void SetInputOutput(Solar solarCarrier, Electricity electricityCarrier)
+        public void SetInputOutput(Radiation solarCarrier, Electricity electricityCarrier)
         {
             base.InputCarrier = solarCarrier;
             base.OutputCarriers = new EnergyCarrier[1];
@@ -118,7 +118,7 @@ namespace Hive.IO.EnergySystems
             this.RefEfficiencyElectric = number;
         }
 
-        public void DoSthElse(Solar solarCarrier)
+        public void DoSthElse(Radiation solarCarrier)
         {
             this.RefEfficiencyElectric = solarCarrier.AvailableEnergy[0];
         }
