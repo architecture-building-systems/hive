@@ -6,9 +6,9 @@ using Hive.IO.EnergySystems;
 
 namespace Hive.IO.GHComponents
 {
-    public class GhcDistributor : GH_Component
+    public class GhDistributor : GH_Component
     {
-        public GhcDistributor()
+        public GhDistributor()
           : base("Hive.IO.Distributor", "HiveIODistr",
               "The Hive.IO.Distributor collects all Hive Inputs from outside the Mothercell (the simulation core) and outputs them individually according to their class type, ready for deployment.",
               "[hive]", "Mothercell")

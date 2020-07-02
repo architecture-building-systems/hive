@@ -3,9 +3,9 @@ using Grasshopper.Kernel;
 
 namespace Hive.IO.GHComponents
 {
-    public class GhcDistributorEPW : GH_Component
+    public class GhDistributorEPW : GH_Component
     {
-        public GhcDistributorEPW()
+        public GhDistributorEPW()
           : base("Hive.IO.DistributorEPW", "HiveIODistrEPW",
               "Weather file (.epw) distributor. Reads in an Hive.IO.Environment object and outputs the filepath of the .epw",
               "[hive]", "Mothercell")

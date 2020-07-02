@@ -10,9 +10,9 @@ using ri = Rhino.Input.Custom;
 
 namespace Hive.IO.GHComponents
 {
-    public class GhcBuilding : GH_Component
+    public class GhBuilding : GH_Component
     {
-        public GhcBuilding()
+        public GhBuilding()
           : base("Hive.IO.Building", "Hive.IO.Bldg",
               "Hive Building, representing the building geometry, as well as thermal and construction properties.",
               "[hive]", "IO")

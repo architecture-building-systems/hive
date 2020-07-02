@@ -73,13 +73,13 @@
     <Compile Include="EnergySystems\Lighting.cs" />
     <Compile Include="EnergySystems\Storage.cs" />
     <Compile Include="EnergySystems\Ventilation.cs" />
-    <Compile Include="GHComponents\GhcDistributorEPW.cs" />
-    <Compile Include="GHComponents\GhcDistributorSIA.cs" />
-    <Compile Include="GHComponents\GhcDistributorSolar.cs" />
-    <Compile Include="GHComponents\GhcDistributorSupplySystem.cs" />
-    <Compile Include="GHComponents\GhcEnvironment.cs" />
-    <Compile Include="GHComponents\GhcResults.cs" />
-    <Compile Include="GHComponents\GhcVisualizer.cs" />
+    <Compile Include="GHComponents\GhDistributorEPW.cs" />
+    <Compile Include="GHComponents\GhDistributorSIA.cs" />
+    <Compile Include="GHComponents\GhDistributorSolar.cs" />
+    <Compile Include="GHComponents\GhDistributorSupplySystem.cs" />
+    <Compile Include="GHComponents\GhEnvironment.cs" />
+    <Compile Include="GHComponents\GhResults.cs" />
+    <Compile Include="GHComponents\GhVisualizer.cs" />
     <Compile Include="Environment.cs" />
     <Compile Include="GHComponents\FormBuilding.cs">
       <SubType>Form</SubType>
@@ -93,10 +93,10 @@
     <Compile Include="GHComponents\FormEnSysSolar.Designer.cs">
       <DependentUpon>FormEnSysSolar.cs</DependentUpon>
     </Compile>
-    <Compile Include="GHComponents\GhcBuilding.cs" />
-    <Compile Include="GHComponents\GhcDistributor.cs" />
+    <Compile Include="GHComponents\GhBuilding.cs" />
+    <Compile Include="GHComponents\GhDistributor.cs" />
     <Compile Include="GHComponents\HiveIOInfo.cs" />
-    <Compile Include="GHComponents\GhcSolarSystem.cs" />
+    <Compile Include="GHComponents\GhSolarSystem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EnergySystems\Conversion.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

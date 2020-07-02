@@ -6,9 +6,9 @@ using Hive.IO.EnergySystems;
 
 namespace Hive.IO.GHComponents
 {
-    public class GhcDistributorSolar : GH_Component
+    public class GhDistributorSolar : GH_Component
     {
-        public GhcDistributorSolar()
+        public GhDistributorSolar()
           : base("Hive.IO.DistributorSolar", "HiveIODistrSolar",
               "Distributor for solar simulations. Reads in and outputs all relevant geometric, geographic and climatic information necessary for solar simulations.",
               "[hive]", "Mothercell")

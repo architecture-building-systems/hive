@@ -5,9 +5,9 @@ using Rhino.Geometry;
 
 namespace Hive.IO.GHComponents
 {
-    public class GhcEnvironment : GH_Component
+    public class GhEnvironment : GH_Component
     {
-        public GhcEnvironment()
+        public GhEnvironment()
           : base("Hive.IO.Environment", "Hive.IO.Env",
               "Creates an instance of the Hive.IO.Environment class, describing the environment of a building.",
               "[hive]", "IO")

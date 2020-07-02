@@ -22,10 +22,10 @@ namespace Hive.IO.GHComponents
         DemandMonthlyNormalized,
     }
 
-    public class GhcVisualizer : GH_Param<GH_ObjectWrapper>
+    public class GhVisualizer : GH_Param<GH_ObjectWrapper>
     {
 
-        public GhcVisualizer() : base("Hive.IO.Visualizer", "Hive.IO.Visualizer",
+        public GhVisualizer() : base("Hive.IO.Visualizer", "Hive.IO.Visualizer",
               "Hive Visualizer for simulation results",
               "[hive]", "IO", GH_ParamAccess.item)
         {
@@ -69,7 +69,7 @@ namespace Hive.IO.GHComponents
         protected override Bitmap Icon => Properties.Resources.IO_Visualizer;
     }
 
-    public class GHVisualizerAttributes : GH_ResizableAttributes<GhcVisualizer>
+    public class GHVisualizerAttributes : GH_ResizableAttributes<GhVisualizer>
     {
         private const float ArrowBoxSide = 20f;
         private const float ArrowBoxPadding = 10f;
@@ -90,7 +90,7 @@ namespace Hive.IO.GHComponents
         private static readonly OxyColor DhwColor = OxyColor.FromRgb(192, 0, 0);
         private static readonly OxyColor BackgroundColor = OxyColor.FromArgb(0, 0, 0, 0);
 
-        public GHVisualizerAttributes(GhcVisualizer owner) : base(owner)
+        public GHVisualizerAttributes(GhVisualizer owner) : base(owner)
         {
             this._currentPlot = VisualizerPlot.DemandMonthly;
         }

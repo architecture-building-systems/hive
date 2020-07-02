@@ -4,9 +4,9 @@ using Grasshopper.Kernel;
 
 namespace Hive.IO.GHComponents
 {
-    public class GhcDistributorSIA : GH_Component
+    public class GhDistributorSIA : GH_Component
     {
-        public GhcDistributorSIA()
+        public GhDistributorSIA()
           : base("Hive.IO.DistributorSIA", "HiveIODistrSIA",
               "Sia 2024 distributor that reads in an Hive.IO.Building object and outputs its Sia 2024 room definition.",
               "[hive]", "Mothercell")

@@ -7,10 +7,10 @@ using Rhino.Geometry;
 
 namespace Hive.IO.GHComponents
 {
-    public class GhcResults : GH_Component
+    public class GhResults : GH_Component
     {
 
-        public GhcResults()
+        public GhResults()
           : base("Hive.IO.Results", "HiveIOResults",
               "Hive.IO.Results object, containing results of all simulations run within the Mothercell.",
               "[hive]", "Mothercell")
