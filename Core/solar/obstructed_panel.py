@@ -17,9 +17,7 @@ clr.AddReferenceToFileAndPath(os.path.join(path, "Libraries\hive", "Hive.IO.gha"
 import Hive.IO.EnergySystems as ensys
 
 
-def simulate_obstructed_panel(mesh_analysis, mesh_obstructions,
-                              dhi_in, dni_in, latitude, longitude, solarazi, solaralti,
-                              max_value, min_value):
+def simulate_obstructed_panel(mesh_analysis, mesh_obstructions, dhi_in, dni_in, latitude, longitude, solarazi, solaralti, max_value, min_value):
     horizon = 8760
 
     # Model parameters
@@ -39,10 +37,8 @@ def simulate_obstructed_panel(mesh_analysis, mesh_obstructions,
     dni = System.Collections.Generic.List[float]()  # 8760 time series for direct normal irradiance
     dhi = System.Collections.Generic.List[float]()  # 8760 time series for diffuse horizontal irradiance
     snow = System.Collections.Generic.List[float]()  # 8760 time series for snow coverage [0.0, 1.0]
-    ground_albedo = System.Collections.Generic.List[
-        float]()  # 8760 time series for surface albedo (e.g. in winter higher albedo because of snow)
-    solar_azimuth = System.Collections.Generic.List[
-        float]()  # optional. 8760 time series. If no data provided, azimuth will be computed according to algorithm by Blanco-Muriel et al. (2001)
+    ground_albedo = System.Collections.Generic.List[float]()  # 8760 time series for surface albedo (e.g. in winter higher albedo because of snow)
+    solar_azimuth = System.Collections.Generic.List[float]()  # optional. 8760 time series. If no data provided, azimuth will be computed according to algorithm by Blanco-Muriel et al. (2001)
     solar_altitude = System.Collections.Generic.List[float]()  # same as azimuth
 
     building_albedos = System.Collections.Generic.List[float]()  # 8760 albedos of the building surfaces
@@ -67,19 +63,14 @@ def simulate_obstructed_panel(mesh_analysis, mesh_obstructions,
     year = 2013  # ASSUMPTION
 
     tree_obj = System.Collections.Generic.List[ghs.CPermObject]()
-    mesh_obj = ghs.CObstacleObject(mesh_analysis, building_albedos, building_specular,
-                                   building_refltype, building_tolerance, building_name, building_mt)
+    mesh_obj = ghs.CObstacleObject(mesh_analysis, building_albedos, building_specular, building_refltype, building_tolerance, building_name, building_mt)
     obstacles_obj = System.Collections.Generic.List[ghs.CObstacleObject]()
     for i in range(len(mesh_obstructions)):
-        obstacles_obj.Add(ghs.CObstacleObject(mesh_obstructions[i], building_albedos, building_specular,
-                                              building_refltype, building_tolerance, "obstructions", building_mt))
+        obstacles_obj.Add(ghs.CObstacleObject(mesh_obstructions[i], building_albedos, building_specular, building_refltype, building_tolerance, "obstructions", building_mt))
 
-    calc_mesh = ghs.CCalculateSolarMesh(mesh_obj, obstacles_obj, tree_obj, latitude, longitude, dni, dhi, snow,
-                                        ground_albedo, snow_threshold, tilt_threshold, year, None, mt,
-                                        solar_azimuth, solar_altitude)
+    calc_mesh = ghs.CCalculateSolarMesh(mesh_obj, obstacles_obj, tree_obj, latitude, longitude, dni, dhi, snow, ground_albedo, snow_threshold, tilt_threshold, year, None, mt, solar_azimuth, solar_altitude)
 
-    calc_mesh.RunAnnualSimulation_MT(mesh_obj.tolerance, main_sky_res, main_interp_mode, spec_bounces,
-                                     spec_interp_mode, diff_sky_res, diff_2ndsky_res, diff_refl_mode)
+    calc_mesh.RunAnnualSimulation_MT(mesh_obj.tolerance, main_sky_res, main_interp_mode, spec_bounces, spec_interp_mode, diff_sky_res, diff_2ndsky_res, diff_refl_mode)
 
     results = calc_mesh.getResults()  # GHSolar.CResults
 
@@ -122,8 +113,7 @@ def read_results(ghsolar_results, mshin):
             valVertex3 = valin[mshin.Faces[i].C][t]
             if mshin.Faces[i].IsQuad:
                 valVertex4 = valin[mshin.Faces[i].D][t]
-                FaceVal = ((valVertex1 + valVertex2 + valVertex3 + valVertex4) / 4) * ghs.CMisc.getMeshFaceArea(i,
-                                                                                                                mshin)
+                FaceVal = ((valVertex1 + valVertex2 + valVertex3 + valVertex4) / 4) * ghs.CMisc.getMeshFaceArea(i, mshin)
             else:
                 FaceVal = ((valVertex1 + valVertex2 + valVertex3) / 3) * ghs.CMisc.getMeshFaceArea(i, mshin)
             totVal = totVal + FaceVal
