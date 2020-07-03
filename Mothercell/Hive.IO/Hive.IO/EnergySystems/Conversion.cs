@@ -112,17 +112,6 @@ namespace Hive.IO.EnergySystems
             base.OutputCarriers[0] = electricityCarrier;
         }
 
-
-        public void DoSth(double number)
-        {
-            this.RefEfficiencyElectric = number;
-        }
-
-        public void DoSthElse(Radiation solarCarrier)
-        {
-            this.RefEfficiencyElectric = solarCarrier.AvailableEnergy[0];
-        }
-
     }
     
 

@@ -24,11 +24,20 @@ namespace Hive.IO.EnergySystems
         /// <summary>
         /// ID of the mesh vertex that this solar carrier corresponds to (solar panel). In case of Sun, ID can be ignored
         /// </summary>
-        public int? MeshVertexId { get; private set; }
+        public int? MeshVertexId { get; }
 
-        public Radiation(int horizon, double[] irradiation, int? vertexId)
-            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHoursPerSquareMeters, irradiation, null, null)
+        /// <summary>
+        /// W/m2
+        /// </summary>
+        public double[] Irradiance { get; }
+
+        public Radiation(int horizon, double[] irradiation, double surfaceArea = 1, int? vertexId = null)
+            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, irradiation, null, null)
         {
+            this.Irradiance = new double[irradiation.Length];
+            for (int i = 0; i < Irradiance.Length; i++)
+                this.Irradiance[i] = irradiation[i] / surfaceArea;
+
             if (vertexId.HasValue)
                 this.MeshVertexId = vertexId;
         }
@@ -99,7 +108,6 @@ namespace Hive.IO.EnergySystems
         public enum EnergyUnit
         {
             KiloWattHours,
-            KiloWattHoursPerSquareMeters,
             DegreeCelsius
         }
         /// <summary>

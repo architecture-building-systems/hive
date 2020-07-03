@@ -80,7 +80,7 @@ def simulate_obstructed_panel(mesh_analysis, mesh_obstructions, dhi_in, dni_in, 
     # call visualize_as_mesh()
     mesh_visu = visualize_as_mesh(results, mesh_analysis, max_value, min_value)
 
-    solar_carrier = ensys.Radiation(horizon, System.Array[float](irradiance), None)
+    solar_carrier = ensys.Radiation(horizon, System.Array[float](irradiance), mesh_area, None)
 
     return [irradiance, mesh_visu, solar_carrier]
 

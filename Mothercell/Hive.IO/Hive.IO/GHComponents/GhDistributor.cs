@@ -29,9 +29,7 @@ namespace Hive.IO.GHComponents
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddGenericParameter("Hive.IO.Building", "HiveIOBldg", "Hive.IO.Building from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Hive.IO.EnergySystem.PV", "HiveIOEnSysPV", "Hive.IO.EnergySystem.PV from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Hive.IO.EnergySystem.ST", "HiveIOEnSysST", "Hive.IO.EnergySystem.ST from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Hive.IO.EnergySystem.PVT", "HiveIOEnSysPVT", "Hive.IO.EnergySystem.PVT from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Hive.IO.EnergySystem.SurfaceBased", "HiveIOEnSysSrf", "Hive.IO.EnergySystem. Photovoltaic; .SolarThermal; .PVT; .GroundCollector objects from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.list);
             pManager.AddGenericParameter("Hive.IO.Environment", "HiveIOEnv", "Hive.IO.Environment from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.item);
         }
 
@@ -45,9 +43,7 @@ namespace Hive.IO.GHComponents
             List<GH_ObjectWrapper> inputObjects = new List<GH_ObjectWrapper>();
             if (!DA.GetDataList(0, inputObjects)) return;
             
-            List<Photovoltaic> pv = new List<Photovoltaic>();
-            List<PVT> pvt = new List<PVT>();
-            List<SolarThermal> st = new List<SolarThermal>();
+            List<SurfaceBased> srfBasedTech = new List<SurfaceBased>();
             Building building = null;
             Environment environment = null;
 
@@ -55,14 +51,17 @@ namespace Hive.IO.GHComponents
             {
                 switch (hiveInput.Value.ToString())
                 {
-                    case "Hive.IO.EnergySystem.PV":
-                        pv.Add(hiveInput.Value as Photovoltaic);
+                    case "Hive.IO.EnergySystems.Photovoltaic":
+                        srfBasedTech.Add(hiveInput.Value as Photovoltaic);
                         break;
-                    case "Hive.IO.EnergySystem.ST":
-                        st.Add(hiveInput.Value as SolarThermal);
+                    case "Hive.IO.EnergySystems.SolarThermal":
+                        srfBasedTech.Add(hiveInput.Value as SolarThermal);
                         break;
-                    case "Hive.IO.EnergySystem.PVT":
-                        pvt.Add(hiveInput.Value as PVT);
+                    case "Hive.IO.EnergySystems.PVT":
+                        srfBasedTech.Add(hiveInput.Value as PVT);
+                        break;
+                    case "Hive.IO.EnergySystems.GroundCollector":
+                        srfBasedTech.Add(hiveInput.Value as GroundCollector);
                         break;
                     case "Hive.IO.Building":
                         building = hiveInput.Value as Building;
@@ -73,14 +72,12 @@ namespace Hive.IO.GHComponents
                 }
             }
 
-            if (building != null) Rhino.RhinoApp.WriteLine("Building '{0}' read successfully", building.Type.ToString());
-            Rhino.RhinoApp.WriteLine("Surface Energy Systems read in: \n PV: {0}; ST: {1}; PVT: {2}", pv.Count, st.Count, pvt.Count);
+            //if (building != null) Rhino.RhinoApp.WriteLine("Building '{0}' read successfully", building.Type.ToString());
+            //Rhino.RhinoApp.WriteLine("Surface Energy Systems read in: \n PV: {0}; ST: {1}; PVT: {2}", srfBasedTech.Count, st.Count, pvt.Count);
 
             DA.SetData(0, building);
-            DA.SetDataList(1, pv);
-            DA.SetDataList(2, st);
-            DA.SetDataList(3, pvt);
-            DA.SetData(4, environment);
+            DA.SetDataList(1, srfBasedTech);
+            DA.SetData(2, environment);
         }
 
         protected override System.Drawing.Bitmap Icon
