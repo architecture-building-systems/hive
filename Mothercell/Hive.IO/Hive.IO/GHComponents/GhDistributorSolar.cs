@@ -9,8 +9,8 @@ namespace Hive.IO.GHComponents
     public class GhDistributorSolar : GH_Component
     {
         public GhDistributorSolar()
-          : base("Hive.IO.DistributorSolar", "HiveIODistrSolar",
-              "Distributor for solar simulations. Reads in and outputs all relevant geometric, geographic and climatic information necessary for solar simulations.",
+          : base("Hive.IO.DistributorSolar", "DistrSolar",
+              "Distributor for 'GHSolar' solar simulations (github/christophwaibel/GH_Solar_V2). Reads in and outputs all relevant geometric, geographic and climatic information necessary for solar simulations.",
               "[hive]", "Mothercell")
         {
         }
@@ -89,8 +89,8 @@ namespace Hive.IO.GHComponents
 
             List<Mesh> srfBasedTechSurfaces = new List<Mesh>();
           
-            foreach (SurfaceBased tech in srfBasedTech)
-                srfBasedTechSurfaces.Add(tech.SurfaceGeometry);
+            foreach (SurfaceBased srfTech in srfBasedTech)
+                srfBasedTechSurfaces.Add(srfTech.SurfaceGeometry);
 
 
             DA.SetDataList(0, environmentList);
