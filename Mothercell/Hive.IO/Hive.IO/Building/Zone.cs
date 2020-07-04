@@ -51,7 +51,7 @@ namespace Hive.IO
         /// <summary>
         /// Internal loads.
         /// Values indicate full / maximal value.
-        /// UnitText in W/sqm
+        /// Unit in W/sqm
         /// </summary>
         public struct StructInternalLoads
         {
