@@ -89,6 +89,23 @@ namespace Hive.IO.EnergySystems
     /// </summary>
     public class Photovoltaic : SurfaceBased
     {
+        /// <summary>
+        /// Temperature coefficient (unitless). Default is 0.004
+        /// </summary>
+        public double Beta { get; private set; }
+        /// <summary>
+        /// Nominal Operating Cell Temperature (deg C). Defalt is 45.0
+        /// </summary>
+        public double NOCT { get; private set; }
+        /// <summary>
+        /// Reference temperature (deg C). Default is 20.0
+        /// </summary>
+        public double NOCT_ref { get; private set; }
+        /// <summary>
+        /// Reference irradiance (W/sqm). Default is 800.0
+        /// </summary>
+        public double NOCT_sol { get; private set; }
+
         public double RefEfficiencyElectric { get; private set; }
         public Photovoltaic(double investmentCost, double embodiedGhg, Mesh surfaceGeometry, string detailedName,
             double refEfficiencyElectric)
@@ -97,6 +114,11 @@ namespace Hive.IO.EnergySystems
             base.DetailedName = detailedName;
             base.Name = "Photovoltaic";
             this.RefEfficiencyElectric = refEfficiencyElectric;
+
+            this.Beta = 0.004;
+            this.NOCT = 45.0;
+            this.NOCT_ref = 20.0;
+            this.NOCT_sol = 800.0;
         }
 
 

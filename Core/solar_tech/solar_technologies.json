@@ -4,7 +4,7 @@
   "version": "0.1",
   "author": "christophwaibel",
   "id": "2a2178f1-08f7-4f68-afc9-0845516aba8e",
-  "include-files": ["simple_pv.py", "noct_pv.py", "simple_solar_thermal.py", "sum_over_timeperiod.py", "solar_thermal_timeresolved.py", "pv_electricity.py"],
+  "include-files": ["simple_pv.py", "noct_pv.py", "simple_solar_thermal.py", "sum_over_timeperiod.py", "solar_thermal_timeresolved.py", "solar_tech_compute_energy.py"],
   "components": [
     {
       "class-name": "SummarizeYield",
@@ -120,28 +120,24 @@
       ]
     },
     {
-      "class-name": "PVElectricity",
-      "name": "PVElectricity",
-      "abbreviation": "PVElectricity",
-      "description": "Calculates time-resolved PV electricity generation, using the Nominal Operating Cell Temperature method Eqt. A.10 in doi: 10.1016/j.apenergy.2019.03.177",
+      "class-name": "SolarTechComputeEnergy",
+      "name": "SolarTechComputeEnergy",
+      "abbreviation": "SolarTechComputeEnergy",
+      "description": "Calculates time-resolved output energy generation of surface based solar technologies (PV, PVT, ST, Ground collector). PV calculated according to Nominal Operating Cell Temperature method Eqt. A.10 in doi: 10.1016/j.apenergy.2019.03.177",
       "category": "[hive]",
       "subcategory": "solartech",
       "id": "ffc49e53-a3ea-4768-9854-5092dc8e9492",
-      "icon": "pv_electricity.png",
-      "main-module": "pv_electricity",
-      "main-function": "pv_electricity",
+      "icon": "solar_tech_compute_energy.png",
+      "main-module": "solar_tech_compute_energy",
+      "main-function": "solar_tech_compute_energy",
       "inputs": [
-        {"name": "Photovoltaic", "nick-name": "PV", "type": "generic", "description": "Hive.IO.EnergySystems.Photovoltaic object that still needs to be infused with input and output energy carriers (i.e. solar potentials and electricity generated)."},
-        {"name": "SolarCarrier", "nick-name": "SolCar", "type": "generic", "description": "Hive.IO.EnergySystems.Solar object that contains the time resolved solar potentials. Needs to be created from a solar model."},
-        {"name": "TimeResolution", "nick-name": "TR", "type": "string", "description": "Time resolution. Either 'hourly', or 'monthly'. Default is 'monthly'", "default": "monthly"},
-        {"name": "AmbientTemperatureCarrier", "nick-name": "AmbTCar", "type": "generic", "description": "Ambient temperature energy carrier. package into a Hive.IO.EnergySystems.EnergyCarrier for performance reasons"},
-        {"name": "beta", "nick-name": "beta", "type": "float", "description": "Temperature coefficient (unitless). Default is 0.004", "default": 0.004},
-        {"name": "NOCT", "nick-name": "NOCT", "type": "float", "description": "Nominal operating cell temperature (deg C). Default is 45.0", "default": 45.0},
-        {"name": "NOCT_ref", "nick-name": "NOCT_ref", "type": "float", "description": "Reference temperature (deg C). Default is 20.0", "default": 20.0},
-        {"name": "NOCT_sol", "nick-name": "NOCT_sol", "type": "float", "description": "Reference irradiance (W/sqm). Default is 800.0", "default": 800.0}
+        {"name": "GHSolar_CResults", "nick-name": "GHSolResults", "type": "generic", "access": "list", "description": "GHSolar.CResults (github/christophwaibel/GH_Solar_V2) that contain time resolved solar potentials of a mesh."},
+        {"name": "Hive_SurfaceBased", "nick-name": "SrfTech", "type": "generic", "access": "list", "description": "Hive.IO.EnergySystems.SurfaceBased objects (.Photovoltaic, .SolarThermal, .GroundCollector, .PVT) that still need to be infused with input and output energy carriers (i.e. solar potentials and output energy generated)."},
+        {"name": "amb_T_carrier", "nick-name": "ambT", "type": "generic", "description": "Air Energy Carrier, containing ambient air temperature"},
+        {"name": "TimeResolution", "nick-name": "TR", "type": "string", "description": "Time resolution. Either 'hourly', or 'monthly'. Default is 'monthly'", "default": "monthly"}
       ],
       "outputs": [
-        {"name": "Hive.Photovoltaic", "nick-name": "Hive.PV", "type": "generic", "description": "Hive.IO.EnergySystems.Photovoltaic object infused with input and output energy carriers (i.e. solar potentials and electricity generated)."}
+        {"name": "Hive.IO.EnergySystems.SurfaceBased", "nick-name": "SrfTech", "type": "generic", "description": "Hive.IO.EnergySystems.SurfaceBased objects (.Photovoltaic, .SolarThermal, .GroundCollector, .PVT) infused with input and output energy carriers (i.e. solar potentials and output energy generated)."}
       ]
     }
   ]

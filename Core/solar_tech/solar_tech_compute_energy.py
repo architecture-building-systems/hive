@@ -12,26 +12,46 @@ clr.AddReferenceToFileAndPath(os.path.join(path, "Libraries", "Hive.IO.gha"))
 import Hive.IO.EnergySystems as ensys
 import Rhino.RhinoApp as RhinoApp
 
-def pv_electricity(pv, solar_carrier, time_resolution, amb_T_carrier, beta, NOCT, NOCT_ref, NOCT_sol):
-    electricity_generated = pv_yield(pv.SurfaceArea, pv.RefEfficiencyElectric, beta, NOCT, NOCT_ref, NOCT_sol, amb_T_carrier.AvailableEnergy, solar_carrier.AvailableEnergy)
-    electricity_horizon = []
-    if time_resolution == "hourly":
-        horizon = 8760
-        electricity_horizon = electricity_generated[0]
-    else:   # monthly
-        horizon = 12
-        days_per_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-        hours_per_day = 24
-        total_months = 12
-        for month in range(total_months):
-            start_hour = int(hours_per_day * sum(days_per_month[0:month]))
-            end_hour = int(hours_per_day * sum(days_per_month[0:month + 1]))
-            # hours_per_month = days_per_month[month] * hours_per_day # could be used to compute average values
-            electricity_horizon.append(sum(electricity_generated[0][start_hour:end_hour]))
+def solar_tech_compute_energy(GHSolar_CResults, Hive_SurfaceBased, amb_T_carrier):
 
-    electricity_carrier = ensys.Electricity(horizon, System.Array[float](electricity_horizon), System.Array[float]([0.0] * horizon), System.Array[float]([0.0] * horizon))
-    pv.SetInputOutput(solar_carrier, electricity_carrier)
-    return pv
+    horizon = 8760
+    surface_based_tech_infused = []
+
+    i = 0
+    for solar_tech in Hive_SurfaceBased:
+        if solar_tech.ToString() == "Hive.IO.EnergySystems.Photovoltaic":
+            # irradiation = # get irradiation for all vertices_pv.SurfaceGeometry (mesh) and compute the face-area-averaged irradiation in W/sqm
+            # solar_carrier = ensys.Radiation(horizon, irradiation)
+            # electricity_generated = pv_yield(solar_tech.SurfaceArea, _pv.RefEfficiencyElectric, solar_tech.Beta, solar_tech.NOCT, solar_tech.NOCT_ref, solar_tech.NOCT_sol, amb_T_carrier.AvailableEnergy, solar_carrier.AvailableEnergy)
+            # solar_tech.SetInputOutput(solar_carrier, electricity_generated)
+            surface_based_tech_infused.append(solar_tech)
+        if solar_tech.ToString() == "Hive.IO.EnergySystems.SolarThermal":
+            surface_based_tech_infused.append(solar_tech)
+        if solar_tech.ToString() == "Hive.IO.EnergySystems.GroundCollector":
+            surface_based_tech_infused.append(solar_tech)
+        if solar_tech.ToString() == "Hive.IO.EnergySystems.PVT":
+            surface_based_tech_infused.append(solar_tech)
+        i = i+1
+
+
+    # electricity_horizon = []
+    # if time_resolution == "hourly":
+    #     horizon = 8760
+    #     electricity_horizon = electricity_generated[0]
+    # else:   # monthly
+    #     horizon = 12
+    #     days_per_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+    #     hours_per_day = 24
+    #     total_months = 12
+    #     for month in range(total_months):
+    #         start_hour = int(hours_per_day * sum(days_per_month[0:month]))
+    #         end_hour = int(hours_per_day * sum(days_per_month[0:month + 1]))
+    #         # hours_per_month = days_per_month[month] * hours_per_day # could be used to compute average values
+    #         electricity_horizon.append(sum(electricity_generated[0][start_hour:end_hour]))
+    #
+    # electricity_carrier = ensys.Electricity(horizon, System.Array[float](electricity_horizon), System.Array[float]([0.0] * horizon), System.Array[float]([0.0] * horizon))
+    # pv.SetInputOutput(solar_carrier, electricity_carrier)
+    return surface_based_tech_infused
 
 
 def pv_yield(A, eta_PVref, beta, NOCT, NOCT_ref, NOCT_sol, T_amb, I):
