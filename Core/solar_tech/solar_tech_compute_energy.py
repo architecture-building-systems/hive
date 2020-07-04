@@ -12,25 +12,39 @@ clr.AddReferenceToFileAndPath(os.path.join(path, "Libraries", "Hive.IO.gha"))
 import Hive.IO.EnergySystems as ensys
 import Rhino.RhinoApp as RhinoApp
 
-def solar_tech_compute_energy(GHSolar_CResults, Hive_SurfaceBased, amb_T_carrier):
+def solar_tech_compute_energy(GHSolar_CResults, Hive_SurfaceBased, amb_T_carrier, time_resolution):
 
-    horizon = 8760
+    if time_resolution == "hourly":
+        horizon = 8760
+    else:
+        horizon = 12
+
     surface_based_tech_infused = []
 
     i = 0
     for solar_tech in Hive_SurfaceBased:
+        mesh = solar_tech.SurfaceGeometry
+        irradiation = GHSolar_CResults[i].I_total # get I_hourly (Rhino.Geometry.Matrix) instead and compute...
+        # irradiation = # get irradiation for all vertices_pv.SurfaceGeometry (mesh) and compute the face-area-averaged irradiation in W/sqm
+        # solar_carrier = ensys.Radiation(horizon, irradiation)
         if solar_tech.ToString() == "Hive.IO.EnergySystems.Photovoltaic":
-            # irradiation = # get irradiation for all vertices_pv.SurfaceGeometry (mesh) and compute the face-area-averaged irradiation in W/sqm
-            # solar_carrier = ensys.Radiation(horizon, irradiation)
+            print("test")
             # electricity_generated = pv_yield(solar_tech.SurfaceArea, _pv.RefEfficiencyElectric, solar_tech.Beta, solar_tech.NOCT, solar_tech.NOCT_ref, solar_tech.NOCT_sol, amb_T_carrier.AvailableEnergy, solar_carrier.AvailableEnergy)
             # solar_tech.SetInputOutput(solar_carrier, electricity_generated)
-            surface_based_tech_infused.append(solar_tech)
         if solar_tech.ToString() == "Hive.IO.EnergySystems.SolarThermal":
-            surface_based_tech_infused.append(solar_tech)
+            print("test")
+            # hot_water_generated =
+            # solar_tech.SetInputOutput(solar_carrier, hot_water_generated)
         if solar_tech.ToString() == "Hive.IO.EnergySystems.GroundCollector":
-            surface_based_tech_infused.append(solar_tech)
+            print("test")
+            # hot_water_generated =
+            # solar_tech.SetInputOutput(solar_carrier, hot_water_generated)
         if solar_tech.ToString() == "Hive.IO.EnergySystems.PVT":
-            surface_based_tech_infused.append(solar_tech)
+            print("test")
+            # electricity_generated =
+            # hot_water_generated =
+            # solar_tech.SetInputOutput(solar_carrier, electricity_generated, hot_water_generated)
+        surface_based_tech_infused.append(solar_tech)
         i = i+1
 
 

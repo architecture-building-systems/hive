@@ -86,7 +86,6 @@ namespace Hive.IO.GHComponents
                     environmentList.Add(msh);
             }
 
-
             List<Mesh> srfBasedTechSurfaces = new List<Mesh>();
           
             foreach (SurfaceBased srfTech in srfBasedTech)
