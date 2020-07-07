@@ -28,9 +28,7 @@ def solar_tech_set_outputs(GHSolar_CResults, Hive_SurfaceBased, amb_T_carrier, t
         if solar_tech.ToString() == "Hive.IO.EnergySystems.Photovoltaic":
             solar_tech.SetInputComputeOutput(GHSolar_CResults[i].I_hourly, amb_T_carrier)
         if solar_tech.ToString() == "Hive.IO.EnergySystems.SolarThermal":
-            print("test")
-            # hot_water_generated =
-            # solar_tech.SetInputOutput(solar_carrier, hot_water_generated)
+            solar_tech.SetInputComputeOutputSimple(GHSolar_CResults[i].I_hourly)
         if solar_tech.ToString() == "Hive.IO.EnergySystems.GroundCollector":
             print("test")
             # hot_water_generated =

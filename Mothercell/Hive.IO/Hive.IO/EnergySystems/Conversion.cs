@@ -240,7 +240,8 @@ namespace Hive.IO.EnergySystems
         /// <summary>
         /// computes pv electricity yield according to NOCT method
         /// </summary>
-        /// <param name="solarCarrier"></param>
+        /// <param name="irradiance">Irradiance matrix from e.g. GHSolar.CResults.I_hourly in W/sqm</param>
+        /// <param name="ambientTemperatureCarrier"></param>
         public void SetInputComputeOutput(Matrix irradiance, Air ambientTemperatureCarrier)
         {
 
@@ -259,7 +260,7 @@ namespace Hive.IO.EnergySystems
             {
                 double tempPV = ambientTemp[t] + ((this.NOCT - this.NOCT_ref) / NOCT_sol) * meanIrradiance[t];
                 double eta = this.RefEfficiencyElectric * (1 - this.Beta * (tempPV - refTemp));
-                electricityGenerated[t] = this.SurfaceArea * eta * meanIrradiance[t];
+                electricityGenerated[t] = this.SurfaceArea * eta * meanIrradiance[t] / 1000.0; // in kWh/m^2
             }
 
 
@@ -288,7 +289,15 @@ namespace Hive.IO.EnergySystems
         /// </summary>
         public double FRUL { get; private set; }
 
-        public double RefEfficiencyHeating { get; }
+        /// <summary>
+        /// Distribution loss coefficient [0.0, 1.0]
+        /// </summary>
+        public double R_V { get; private set; }
+        /// <summary>
+        /// Thermal efficiency of collector [0.0, 1.0]
+        /// </summary>
+        public double RefEfficiencyHeating { get; private set; }
+
         public SolarThermal(double investmentCost, double embodiedGhg, Mesh surfaceGeometry, string detailedName,
             double refEfficiencyHeating)
             : base(investmentCost, embodiedGhg, true, false, false, surfaceGeometry)
@@ -299,19 +308,32 @@ namespace Hive.IO.EnergySystems
 
             this.FRtauAlpha = 0.68;
             this.FRUL = 4.9;
+
+            this.R_V = 1.0;
         }
 
 
         /// <summary>
-        /// Setting technology parameters (see: https://doi.org/10.1016/j.apenergy.2016.07.055)
+        /// Setting technology parameters for inflow water temperature dependant method (see: https://doi.org/10.1016/j.apenergy.2016.07.055)
         /// <remarks>To be set by a grasshopper component (e.g. via windows form)</remarks>
         /// </summary>
-        /// <param name="frul">F_R U_L. Heat loss coefficient [W/(m^2 K)]</param>
-        /// <param name="frTauAlpha">F_R(tau alpha). Optical efficiency [-]</param>
-        public void SetTechnologyParameters(double frul, double frTauAlpha)
+        /// <param name="_FRUL">F_R U_L. Heat loss coefficient [W/(m^2 K)]</param>
+        /// <param name="_FRtauAlpha">F_R(tau alpha). Optical efficiency [-]</param>
+        public void SetTechnologyParameters(double _FRUL, double _FRtauAlpha)
         {
-            this.FRUL = frul;
-            this.FRtauAlpha = frTauAlpha;
+            this.FRUL = _FRUL;
+            this.FRtauAlpha = _FRtauAlpha;
+        }
+
+        /// <summary>
+        /// Setting technology parameters for simple heating energy calculation
+        /// </summary>
+        /// <param name="_eta_K"></param>
+        /// <param name="_R_V"></param>
+        public void setTechnologyParametersSimple(double _eta_K, double _R_V)
+        {
+            this.RefEfficiencyHeating = _eta_K;
+            this.R_V = _R_V;
         }
 
 
@@ -319,8 +341,57 @@ namespace Hive.IO.EnergySystems
         {
             this.InletWater = inletWaterCarrier;
             base.InputCarrier = solarCarrier;
-            base.OutputCarriers = new EnergyCarrier[0];
+            base.OutputCarriers = new EnergyCarrier[1];
             base.OutputCarriers[0] = supplyWaterCarrier;
+        }
+
+        public void SetInputComputeOutputSimple(Matrix irradiance)
+        {
+            int horizon = 8760;
+            double[] meanIrradiance = SurfaceBased.ComputeMeanHourlyEnergy(irradiance, this);
+            Radiation solarCarrier = new Radiation(horizon, meanIrradiance);
+            base.InputCarrier = solarCarrier;
+
+            base.OutputCarriers = new EnergyCarrier[1];
+            double[] availableEnergy = new double[8760];
+            for (int t=0; t<horizon; t++)
+                availableEnergy[t] = solarCarrier.AvailableEnergy[t] * this.SurfaceArea * this.RefEfficiencyHeating * this.R_V / 1000.0; // in kWh/m^2
+
+            // all zero, because renewable energy
+            double[] energyCost = new double[8760];
+            double[] ghgEmissions = new double[8760];
+
+            // not included in this equation...
+            double[] supplyTemperature = new double[8760];
+
+
+            Water supplyWaterCarrier = new Water(horizon, availableEnergy, energyCost, ghgEmissions, supplyTemperature);
+            base.OutputCarriers[0] = supplyWaterCarrier;
+        }
+
+
+        public void SetInputComputeOutput(Matrix irradiance, Water inletWaterCarrier, Air ambientAirCarrier)
+        {
+            int horizon = 8760;
+            this.InletWater = inletWaterCarrier;
+
+            double[] meanIrradiance = SurfaceBased.ComputeMeanHourlyEnergy(irradiance, this);
+            Radiation solarCarrier = new Radiation(horizon, meanIrradiance);
+            base.InputCarrier = solarCarrier;
+
+            base.OutputCarriers = new EnergyCarrier[0];
+            double[] availableEnergy = new double[8760];
+            for(int t=0; t<horizon; t++)
+            {
+                double etaTemp = Math.Max(0, this.FRtauAlpha - ((this.FRUL * (inletWaterCarrier.SupplyTemperature[t] - ambientAirCarrier.AvailableEnergy[t])) / meanIrradiance[t]));
+                availableEnergy[t] = meanIrradiance[t] * etaTemp * this.SurfaceArea / 1000.0;
+            }
+
+            // zeros, because renewable energy and because equation doesnt calc output temperature
+            double[] energyCost = new double[horizon];
+            double[] ghgEmissions = new double[horizon];
+            double[] supplyTemperature = new double[horizon];
+            base.OutputCarriers[0] = new Water(horizon, availableEnergy, energyCost, ghgEmissions, supplyTemperature);
         }
 
     }

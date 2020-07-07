@@ -28,22 +28,23 @@ def solar_tech_compute_energy(GHSolar_CResults, Hive_SurfaceBased, amb_T_carrier
         # will be in the correct order, because List<Hive(...).SurfaceBased> is processed in the Hive(...).Distributor and fed into the solarmodel, returning List<GHSolar.CResults> in the same order
         mesh = solar_tech.SurfaceGeometry
         irradiation = get_mean_hourly_irradiation(GHSolar_CResults[i].I_hourly, mesh, solar_tech.SurfaceArea)
-        solar_carrier = ensys.Radiation(horizon, Array[float](irradiation))
         if solar_tech.ToString() == "Hive.IO.EnergySystems.Photovoltaic":
-            print("test")
-            electricity_generated = pv_yield(solar_tech.SurfaceArea, solar_tech.RefEfficiencyElectric, solar_tech.Beta,
+            # print("test")
+            solar_carrier = ensys.Radiation(horizon, Array[float](irradiation))
+            electricity_generated, _ = pv_yield(solar_tech.SurfaceArea, solar_tech.RefEfficiencyElectric, solar_tech.Beta,
                                              solar_tech.NOCT, solar_tech.NOCT_ref, solar_tech.NOCT_sol,
                                              amb_T_carrier.AvailableEnergy, solar_carrier.AvailableEnergy)
-            zero_array = [0.0] * horizon
-            electricity_carrier = ensys.Electricity(horizon, Array[float](electricity_generated[0]),
-                                                    Array[float](zero_array), Array[float](zero_array))
+            electricity_carrier = ensys.Electricity(horizon, Array[float](electricity_generated),
+                                                    Array.CreateInstance(float, horizon),
+                                                    Array.CreateInstance(float, horizon))
             solar_tech.SetInputOutput(solar_carrier, electricity_carrier)
         if solar_tech.ToString() == "Hive.IO.EnergySystems.SolarThermal":
             print("test")
             # hot_water_generated =
             # solar_tech.SetInputOutput(solar_carrier, hot_water_generated)
         if solar_tech.ToString() == "Hive.IO.EnergySystems.GroundCollector":
-            print("test")
+            pass
+            #  print("test")
             # hot_water_generated =
             # solar_tech.SetInputOutput(solar_carrier, hot_water_generated)
         if solar_tech.ToString() == "Hive.IO.EnergySystems.PVT":
@@ -86,18 +87,15 @@ def get_mean_hourly_irradiation(I_hourly_matrix, mesh, total_mesh_area):
     :param total_mesh_area: total mesh area
     :return: Time series of type List<Double> with mesh average solar potentials in W/sqm
     """
-
+    import time
+    t0 = time.time()
     mesh_faces_count = mesh.Faces.Count
     vertex_count = I_hourly_matrix.RowCount
     horizon = I_hourly_matrix.ColumnCount
-    all_irradiances = []  # list of 8760 arrays. so all timeseries for each vertex put into a list
+    # all_irradiances = []  # list of 8760 arrays. so all timeseries for each vertex put into a list
     mean_irradiance = [0.0] * horizon
 
-    for i in range(vertex_count):
-        val_t = [0.0] * horizon
-        for t in range(horizon):
-            val_t[t] = I_hourly_matrix[i, t]
-        all_irradiances.append(val_t)
+    # all_irradiances = [[I_hourly_matrix[i, t] for t in range(horizon)] for i in range(vertex_count)]
 
     mesh_face_areas = [0.0] * mesh.Faces.Count
     for t in range(horizon):
@@ -105,11 +103,11 @@ def get_mean_hourly_irradiation(I_hourly_matrix, mesh, total_mesh_area):
         for i in range(mesh_faces_count):
             mesh_face_areas[i] = get_mesh_face_area(i, mesh)
             face_value = 0.0
-            value_vertex_1 = all_irradiances[mesh.Faces[i].A][t]
-            value_vertex_2 = all_irradiances[mesh.Faces[i].B][t]
-            value_vertex_3 = all_irradiances[mesh.Faces[i].B][t]
+            value_vertex_1 = I_hourly_matrix[mesh.Faces[i].A, t]
+            value_vertex_2 = I_hourly_matrix[mesh.Faces[i].B, t]
+            value_vertex_3 = I_hourly_matrix[mesh.Faces[i].B, t]
             if mesh.Faces[i].IsQuad:
-                value_vertex_4 = all_irradiances[mesh.Faces[i].D][t]
+                value_vertex_4 = I_hourly_matrix[mesh.Faces[i].D, t]
                 face_value = ((value_vertex_1 + value_vertex_2 + value_vertex_3 + value_vertex_4) / 4) * \
                              mesh_face_areas[i]
             else:
@@ -117,7 +115,8 @@ def get_mean_hourly_irradiation(I_hourly_matrix, mesh, total_mesh_area):
 
             total_value = total_value + face_value
         mean_irradiance[t] = total_value / total_mesh_area
-
+    t1 = time.time()
+    RhinoApp.WriteLine("get_mean_hourly_irradiation={}".format(t1 - t0))
     return mean_irradiance
 
 
@@ -125,26 +124,24 @@ def get_mesh_face_area(mesh_face_index, mesh):
     # source: http://james-ramsden.com/area-of-a-mesh-face-in-c-in-grasshopper/
 
     # get points into a nice, concise format
-    pts = []
-    pts.append(mesh.Vertices[mesh.Faces[mesh_face_index].A])
-    pts.append(mesh.Vertices[mesh.Faces[mesh_face_index].B])
-    pts.append(mesh.Vertices[mesh.Faces[mesh_face_index].C])
-    if mesh.Faces[mesh_face_index].IsQuad:
-        pts.append(mesh.Vertices[mesh.Faces[mesh_face_index].D])
+    pts_0 = mesh.Vertices[mesh.Faces[mesh_face_index].A]
+    pts_1 = mesh.Vertices[mesh.Faces[mesh_face_index].B]
+    pts_2 = mesh.Vertices[mesh.Faces[mesh_face_index].C]
 
     # calculate areas of triangles
-    pt_a = pts[0].DistanceTo(pts[1])
-    pt_b = pts[1].DistanceTo(pts[2])
-    pt_c = pts[2].DistanceTo(pts[0])
+    pt_a = pts_0.DistanceTo(pts_1)
+    pt_b = pts_1.DistanceTo(pts_2)
+    pt_c = pts_2.DistanceTo(pts_0)
     pt_p = 0.5 * (pt_a + pt_b + pt_c)
     area1 = math.sqrt(pt_p * (pt_p - pt_a) * (pt_p - pt_b) * (pt_p - pt_c))
 
     # if quad, calc area of second triangle
     area2 = 0.0
     if mesh.Faces[mesh_face_index].IsQuad:
-        pt_a = pts[0].DistanceTo(pts[2])
-        pt_b = pts[2].DistanceTo(pts[3])
-        pt_c = pts[3].DistanceTo(pts[0])
+        pts_3 = mesh.Vertices[mesh.Faces[mesh_face_index].D]
+        pt_a = pts_0.DistanceTo(pts_2)
+        pt_b = pts_2.DistanceTo(pts_3)
+        pt_c = pts_3.DistanceTo(pts_0)
         pt_p = 0.5 * (pt_a + pt_b + pt_c)
         area2 = math.sqrt(pt_p * (pt_p - pt_a) * (pt_p - pt_b) * (pt_p - pt_c))
 
@@ -165,9 +162,7 @@ def pv_yield(A, eta_PVref, beta, NOCT, NOCT_ref, NOCT_sol, T_amb, I):
     :return:
     """
     eta_pv = pv_efficiency(eta_PVref, beta, NOCT, NOCT_ref, NOCT_sol, T_amb, I)
-    pvyield = [0.0] * len(eta_pv)
-    for i in range(0, len(eta_pv)):
-        pvyield[i] = A * eta_pv[i] * I[i]
+    pvyield = [A * eta_pv[i] * I[i] / 1000.0 for i in range(len(eta_pv))]  # in kWh/m^2
     return pvyield, eta_pv
 
 
@@ -184,11 +179,12 @@ def pv_efficiency(eta_PVref, beta, NOCT, NOCT_ref, NOCT_sol, T_amb, I):
     :return: Time resolved PV efficiency [-], 8760 entries
     """
     horizon = len(T_amb)
-    etapv = [0.0] * horizon
-    for i in range(0, horizon):
-        Tpv = T_amb[i] + ((NOCT - NOCT_ref) / NOCT_sol) * I[i]
-        etapv[i] = eta_PVref * (1 - beta * (Tpv - 25))
+    etapv = []
+    for T_amb_i, I_i in zip(T_amb, I):
+        Tpv = T_amb_i + ((NOCT - NOCT_ref) / NOCT_sol) * I_i
+        etapv.append(eta_PVref * (1 - beta * (Tpv - 25)))
     return etapv
+
 
 
 # def solar_thermal_yield(inlet_temp, ambient_temp, FRtaualpha, FRUL, irradiance, surface_area):
