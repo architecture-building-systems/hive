@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Threading;
 using System.Windows.Forms;
 using Rhino.Geometry;
 using Rhino.Input.Custom;
@@ -81,6 +83,89 @@ namespace Hive.IO.EnergySystems
             this.SurfaceGeometry = surfaceGeometry;
             this.SurfaceArea = Rhino.Geometry.AreaMassProperties.Compute(this.SurfaceGeometry).Area;
         }
+
+
+        protected static double[] ComputeMeanHourlyEnergy(Matrix hourlyIrradiance, SurfaceBased surfaceTech)
+        {
+            Mesh mesh = surfaceTech.SurfaceGeometry;
+            double surfaceArea = surfaceTech.SurfaceArea;
+
+            int meshFacesCount = mesh.Faces.Count;
+            int vertexCount = hourlyIrradiance.RowCount;
+            int horizon = hourlyIrradiance.ColumnCount;
+            List<double []> allIrradiances = new List<double[]>();
+            double[] meanIrradiance = new double[horizon];
+
+            for (int i = 0; i < vertexCount; i++)
+            {
+                double [] irradiancePerVertex = new double[horizon];
+                for (int t = 0; t < horizon; t++)
+                {
+                    irradiancePerVertex[t] = hourlyIrradiance[i, t];
+                }
+                allIrradiances.Add(irradiancePerVertex);
+            }
+
+            double [] meshFaceAreas = new double[meshFacesCount];
+            for (int t = 0; t < horizon; t++)
+            {
+                double totalIrradiance = 0.0;
+                for (int i = 0; i < meshFacesCount; i++)
+                {
+                    meshFaceAreas[i] = GetMeshFaceArea(i, mesh);
+                    double faceIrradiance = 0.0;
+                    double irradianceVertex1 = allIrradiances[mesh.Faces[i].A][t];
+                    double irradianceVertex2 = allIrradiances[mesh.Faces[i].B][t];
+                    double irradianceVertex3 = allIrradiances[mesh.Faces[i].C][t];
+                    if (mesh.Faces[i].IsQuad)
+                    {
+                        double irradianceVertex4 = allIrradiances[mesh.Faces[i].D][t];
+                        faceIrradiance = ((irradianceVertex1 + irradianceVertex2 + irradianceVertex3 + irradianceVertex4) / 4) * meshFaceAreas[i];
+                    }
+                    else
+                    {
+                        faceIrradiance = ((irradianceVertex1 + irradianceVertex2 + irradianceVertex3) / 3) * meshFaceAreas[i];
+                    }
+
+                    totalIrradiance += faceIrradiance;
+                }
+                meanIrradiance[t] = totalIrradiance / surfaceArea;
+            }
+
+            // source: http://james-ramsden.com/area-of-a-mesh-face-in-c-in-grasshopper/
+            double GetMeshFaceArea(int _meshFaceIndex, Mesh _mesh)
+            {
+                // get points into a nice, concise format
+                List<Point3d> pts = new List<Point3d>();
+                pts.Add(_mesh.Vertices[_mesh.Faces[_meshFaceIndex].A]);
+                pts.Add(_mesh.Vertices[_mesh.Faces[_meshFaceIndex].B]);
+                pts.Add(_mesh.Vertices[_mesh.Faces[_meshFaceIndex].C]);
+                if(_mesh.Faces[_meshFaceIndex].IsQuad)
+                    pts.Add(_mesh.Vertices[_mesh.Faces[_meshFaceIndex].D]);
+
+                // calculate areas of triangles
+                double a = pts[0].DistanceTo(pts[1]);
+                double b = pts[1].DistanceTo(pts[2]);
+                double c = pts[2].DistanceTo(pts[0]);
+                double p = 0.5 * (a + b + c);
+                double area1 = Math.Sqrt(p * (p - a) * (p - b) * (p - c));
+
+                // if quad, calc area of second triangle
+                double area2 = 0.0;
+                if(_mesh.Faces[_meshFaceIndex].IsQuad)
+                {
+                    a = pts[0].DistanceTo(pts[2]);
+                    b = pts[2].DistanceTo(pts[3]);
+                    c = pts[3].DistanceTo(pts[0]);
+                    p = 0.5 * (a + b + c);
+                    area2 = Math.Sqrt(p * (p - a) * (p - b) * (p - c));
+                }
+
+                return area1 + area2;
+            }
+
+            return meanIrradiance;
+        }
     }
 
 
@@ -123,6 +208,23 @@ namespace Hive.IO.EnergySystems
 
 
         /// <summary>
+        /// Set technology parameters (see: 10.1016/j.apenergy.2019.03.177)
+        /// <remarks>To be set by a grasshopper component (e.g. via windows form)</remarks>
+        /// </summary>
+        /// <param name="beta"></param>
+        /// <param name="noct"></param>
+        /// <param name="noct_ref"></param>
+        /// <param name="noct_sol"></param>
+        public void SetNOCTParameters(double beta, double noct, double noct_ref, double noct_sol)
+        {
+            this.Beta = beta;
+            this.NOCT = noct;
+            this.NOCT_ref = noct_ref;
+            this.NOCT_sol = noct_sol;
+        }
+
+
+        /// <summary>
         /// Setting input (solar potentials from a solar model) and output carrier (from a PV electricity model)
         /// </summary>
         /// <param name="solarCarrier">input energy carrier, from weather file or solar model</param>
@@ -134,6 +236,37 @@ namespace Hive.IO.EnergySystems
             base.OutputCarriers[0] = electricityCarrier;
         }
 
+
+        /// <summary>
+        /// computes pv electricity yield according to NOCT method
+        /// </summary>
+        /// <param name="solarCarrier"></param>
+        public void SetInputOutput(Matrix irradiance, Air ambientTemperatureCarrier)
+        {
+
+            int horizon = 8760;
+            double refTemp = 25.0;
+
+            double [] ambientTemp = ambientTemperatureCarrier.AvailableEnergy;
+            double [] electricityGenerated = new double[horizon];
+            double [] energyCost = new double[horizon];
+            double [] ghgEmissions = new double[horizon];
+            double [] meanIrradiance = SurfaceBased.ComputeMeanHourlyEnergy(irradiance, this);
+            base.InputCarrier = new Radiation(horizon, meanIrradiance);
+
+            // compute pv electricity yield
+            for (int t=0; t<horizon; t++)
+            {
+                double tempPV = ambientTemp[t] + ((this.NOCT - this.NOCT_ref) / NOCT_sol) * meanIrradiance[t];
+                double eta = this.RefEfficiencyElectric * (1 - this.Beta * (tempPV - refTemp));
+                electricityGenerated[t] = this.SurfaceArea * eta * meanIrradiance[t];
+            }
+
+
+            base.OutputCarriers = new EnergyCarrier[1];
+            Electricity electricityCarrier = new Electricity(horizon, electricityGenerated, energyCost, ghgEmissions);
+            base.OutputCarriers[0] = electricityCarrier;
+        }
     }
     
 
@@ -142,6 +275,19 @@ namespace Hive.IO.EnergySystems
     /// </summary>
     public class SolarThermal : SurfaceBased
     {
+        /// <summary>
+        /// Inlet Water into the collector
+        /// </summary>
+        public Water InletWater { get; private set; }
+        /// <summary>
+        /// Optical efficiency [-]
+        /// </summary>
+        public double FRtauAlpha { get; private set; }
+        /// <summary>
+        /// Heat lost coefficient [W/(m^2 K)]
+        /// </summary>
+        public double FRUL { get; private set; }
+
         public double RefEfficiencyHeating { get; }
         public SolarThermal(double investmentCost, double embodiedGhg, Mesh surfaceGeometry, string detailedName,
             double refEfficiencyHeating)
@@ -150,6 +296,31 @@ namespace Hive.IO.EnergySystems
             base.DetailedName = detailedName;
             base.Name = "SolarThermal";
             this.RefEfficiencyHeating = refEfficiencyHeating;
+
+            this.FRtauAlpha = 0.68;
+            this.FRUL = 4.9;
+        }
+
+
+        /// <summary>
+        /// Setting technology parameters (see: https://doi.org/10.1016/j.apenergy.2016.07.055)
+        /// <remarks>To be set by a grasshopper component (e.g. via windows form)</remarks>
+        /// </summary>
+        /// <param name="frul">F_R U_L. Heat loss coefficient [W/(m^2 K)]</param>
+        /// <param name="frTauAlpha">F_R(tau alpha). Optical efficiency [-]</param>
+        public void SetTechnologyParameters(double frul, double frTauAlpha)
+        {
+            this.FRUL = frul;
+            this.FRtauAlpha = frTauAlpha;
+        }
+
+
+        public void SetInputOutput(Radiation solarCarrier, Water inletWaterCarrier, Water supplyWaterCarrier)
+        {
+            this.InletWater = inletWaterCarrier;
+            base.InputCarrier = solarCarrier;
+            base.OutputCarriers = new EnergyCarrier[0];
+            base.OutputCarriers[0] = supplyWaterCarrier;
         }
 
     }
