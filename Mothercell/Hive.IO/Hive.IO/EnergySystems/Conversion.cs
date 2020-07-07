@@ -191,7 +191,16 @@ namespace Hive.IO.EnergySystems
         /// </summary>
         public double NOCT_sol { get; private set; }
 
+        /// <summary>
+        /// Performance Ratio [0.0, 1.0]
+        /// </summary>
+        public double PR { get; private set; }
+
+        /// <summary>
+        /// PV module efficiency [0.0, 1.0]
+        /// </summary>
         public double RefEfficiencyElectric { get; private set; }
+
         public Photovoltaic(double investmentCost, double embodiedGhg, Mesh surfaceGeometry, string detailedName,
             double refEfficiencyElectric)
             : base(investmentCost, embodiedGhg, false, false, true, surfaceGeometry)
@@ -204,6 +213,8 @@ namespace Hive.IO.EnergySystems
             this.NOCT = 45.0;
             this.NOCT_ref = 20.0;
             this.NOCT_sol = 800.0;
+
+            this.PR = 1.0;
         }
 
 
@@ -225,26 +236,12 @@ namespace Hive.IO.EnergySystems
 
 
         /// <summary>
-        /// Setting input (solar potentials from a solar model) and output carrier (from a PV electricity model)
-        /// </summary>
-        /// <param name="solarCarrier">input energy carrier, from weather file or solar model</param>
-        /// <param name="electricityCarrier">output electricity carrier from a PV electricity model.</param>
-        public void SetInputOutput(Radiation solarCarrier, Electricity electricityCarrier)
-        {
-            base.InputCarrier = solarCarrier;
-            base.OutputCarriers = new EnergyCarrier[1];
-            base.OutputCarriers[0] = electricityCarrier;
-        }
-
-
-        /// <summary>
         /// computes pv electricity yield according to NOCT method
         /// </summary>
         /// <param name="irradiance">Irradiance matrix from e.g. GHSolar.CResults.I_hourly in W/sqm</param>
-        /// <param name="ambientTemperatureCarrier"></param>
+        /// <param name="ambientTemperatureCarrier">Ambient air temperature energy carrier</param>
         public void SetInputComputeOutput(Matrix irradiance, Air ambientTemperatureCarrier)
         {
-
             int horizon = 8760;
             double refTemp = 25.0;
 
@@ -263,10 +260,35 @@ namespace Hive.IO.EnergySystems
                 electricityGenerated[t] = this.SurfaceArea * eta * meanIrradiance[t] / 1000.0; // in kWh/m^2
             }
 
+            base.OutputCarriers = new EnergyCarrier[1];
+            base.OutputCarriers[0] = new Electricity(horizon, electricityGenerated, energyCost, ghgEmissions);
+        }
+
+
+        /// <summary>
+        /// Computes PV electricity yield according to Energie und Klimasysteme lecture FS2019
+        /// E_PV = G * F_F * A * eta_PV * PR
+        /// </summary>
+        /// <param name="irradiance">Irradiance matrix from e.g. GHSolar.CResults.I_hourly in W/sqm</param>
+        public void SetInputComputeOutputSimple(Matrix irradiance)
+        {
+            int horizon = 8760;
+            double[] meanIrradiance = SurfaceBased.ComputeMeanHourlyEnergy(irradiance, this);
+            base.InputCarrier = new Radiation(horizon, meanIrradiance);
+
+            // compute pv electricity yield
+            double[] electricityGenerated = new double[horizon];
+            for (int t=0; t<horizon; t++)
+            {
+                electricityGenerated[t] = meanIrradiance[t] * this.SurfaceArea * this.RefEfficiencyElectric * this.PR;
+            }
+
+            // empty, because renewable energy
+            double[] energyCost = new double[horizon];
+            double[] ghgEmissions = new double[horizon];
 
             base.OutputCarriers = new EnergyCarrier[1];
-            Electricity electricityCarrier = new Electricity(horizon, electricityGenerated, energyCost, ghgEmissions);
-            base.OutputCarriers[0] = electricityCarrier;
+            base.OutputCarriers[0] = new Electricity(horizon, electricityGenerated, energyCost, ghgEmissions);
         }
     }
     
@@ -330,21 +352,18 @@ namespace Hive.IO.EnergySystems
         /// </summary>
         /// <param name="_eta_K"></param>
         /// <param name="_R_V"></param>
-        public void setTechnologyParametersSimple(double _eta_K, double _R_V)
+        public void SetTechnologyParametersSimple(double _eta_K, double _R_V)
         {
             this.RefEfficiencyHeating = _eta_K;
             this.R_V = _R_V;
         }
 
 
-        public void SetInputOutput(Radiation solarCarrier, Water inletWaterCarrier, Water supplyWaterCarrier)
-        {
-            this.InletWater = inletWaterCarrier;
-            base.InputCarrier = solarCarrier;
-            base.OutputCarriers = new EnergyCarrier[1];
-            base.OutputCarriers[0] = supplyWaterCarrier;
-        }
-
+        /// <summary>
+        /// Computing heating energy according to Energy und Klimasysteme Lectures FS 2019
+        /// Q_th = G * F_F * A * eta_K * R_V
+        /// </summary>
+        /// <param name="irradiance">Matrix with annual hourly time resolved irradiance values for each mesh vertex in W/m^2</param>
         public void SetInputComputeOutputSimple(Matrix irradiance)
         {
             int horizon = 8760;
@@ -364,12 +383,18 @@ namespace Hive.IO.EnergySystems
             // not included in this equation...
             double[] supplyTemperature = new double[8760];
 
-
             Water supplyWaterCarrier = new Water(horizon, availableEnergy, energyCost, ghgEmissions, supplyTemperature);
             base.OutputCarriers[0] = supplyWaterCarrier;
         }
 
 
+        /// <summary>
+        /// Computing heating energy as a function of ambient air temperature and inlet water temperature.
+        /// </summary>
+        /// <remarks>Source: https:// doi.org/10.1016/j.enpol.2013.05.009</remarks>
+        /// <param name="irradiance">Rhino.Geometry.Matrix containing annual hourly time series of solar irradiance for each mesh vertex in W/m^2</param>
+        /// <param name="inletWaterCarrier">Water carrier flowing into the solar thermal collector</param>
+        /// <param name="ambientAirCarrier">Ambient Air carrier around the solar thermal collector</param>
         public void SetInputComputeOutput(Matrix irradiance, Water inletWaterCarrier, Air ambientAirCarrier)
         {
             int horizon = 8760;
@@ -393,7 +418,6 @@ namespace Hive.IO.EnergySystems
             double[] supplyTemperature = new double[horizon];
             base.OutputCarriers[0] = new Water(horizon, availableEnergy, energyCost, ghgEmissions, supplyTemperature);
         }
-
     }
 
 
@@ -415,7 +439,6 @@ namespace Hive.IO.EnergySystems
             this.RefEfficiencyElectric = refEfficiencyElectric;
             this.RefEfficiencyHeating = refEfficiencyHeating;
         }
-
 
 
         public double[] SetConversionEfficiencyHeating()

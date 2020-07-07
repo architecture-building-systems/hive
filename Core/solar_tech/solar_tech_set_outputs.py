@@ -25,22 +25,21 @@ def solar_tech_set_outputs(GHSolar_CResults, Hive_SurfaceBased, amb_T_carrier, t
     surface_based_tech_infused = []
     i = 0
     for solar_tech in Hive_SurfaceBased:
-        if solar_tech.ToString() == "Hive.IO.EnergySystems.Photovoltaic":
+        if isinstance(solar_tech, ensys.Photovoltaic):
             solar_tech.SetInputComputeOutput(GHSolar_CResults[i].I_hourly, amb_T_carrier)
-        if solar_tech.ToString() == "Hive.IO.EnergySystems.SolarThermal":
+        if isinstance(solar_tech, ensys.SolarThermal):
             solar_tech.SetInputComputeOutputSimple(GHSolar_CResults[i].I_hourly)
-        if solar_tech.ToString() == "Hive.IO.EnergySystems.GroundCollector":
-            print("test")
+        if isinstance(solar_tech, ensys.GroundCollector):
+            pass
             # hot_water_generated =
             # solar_tech.SetInputOutput(solar_carrier, hot_water_generated)
-        if solar_tech.ToString() == "Hive.IO.EnergySystems.PVT":
-            print("test")
+        if isinstance(solar_tech, ensys.PVT):
+            pass
             # electricity_generated =
             # hot_water_generated =
             # solar_tech.SetInputOutput(solar_carrier, electricity_generated, hot_water_generated)
         surface_based_tech_infused.append(solar_tech)
         i = i + 1
-
 
     return surface_based_tech_infused
 
