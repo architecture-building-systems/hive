@@ -1,3 +1,4 @@
+# coding=utf-8
 """
 reads in a Hive.IO.EnergySystems.Solar (Energy Carrier) and infuses Hive.IO.EnSys.Photovoltaic with output electricity
 """
@@ -74,28 +75,28 @@ def solar_tech_compute_energy(GHSolar_CResults, Hive_SurfaceBased, amb_T_carrier
     return surface_based_tech_infused
 
 
-def get_mean_hourly_irradiation(ghsolar_cresults, mesh, total_mesh_area):
+def get_mean_hourly_irradiation(I_hourly_matrix, mesh, total_mesh_area):
     """
     computes mean hourly irradiation of a mesh, given a GHSolar.CResults object.
     CResults has hourly irradiance time series for each vertex of a mesh,
     so this function weights each of the time series with the area of
     each mesh face of the mesh.
-    :param ghsolar_cresults: GHSolar.CResults object containing 8760 time series of solar potentials in W/sqm
+    :param I_hourly_matrix: GHSolar.CResults.I_hourly matrix containing 8760 time series of solar potentials in W/sqm for each mesh vertex
     :param mesh: Rhino.Geometry.Mesh associated to CResults
     :param total_mesh_area: total mesh area
     :return: Time series of type List<Double> with mesh average solar potentials in W/sqm
     """
 
     mesh_faces_count = mesh.Faces.Count
-    vertex_count = ghsolar_cresults.RowCount
-    horizon = ghsolar_cresults.ColumnCount
+    vertex_count = I_hourly_matrix.RowCount
+    horizon = I_hourly_matrix.ColumnCount
     all_irradiances = []  # list of 8760 arrays. so all timeseries for each vertex put into a list
     mean_irradiance = [0.0] * horizon
 
     for i in range(vertex_count):
         val_t = [0.0] * horizon
         for t in range(horizon):
-            val_t[t] = ghsolar_cresults[i, t]
+            val_t[t] = I_hourly_matrix[i, t]
         all_irradiances.append(val_t)
 
     mesh_face_areas = [0.0] * mesh.Faces.Count

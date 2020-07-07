@@ -4,7 +4,7 @@
   "version": "0.1",
   "author": "christophwaibel",
   "id": "2a2178f1-08f7-4f68-afc9-0845516aba8e",
-  "include-files": ["simple_pv.py", "noct_pv.py", "simple_solar_thermal.py", "sum_over_timeperiod.py", "solar_thermal_timeresolved.py", "solar_tech_compute_energy.py"],
+  "include-files": ["simple_pv.py", "noct_pv.py", "simple_solar_thermal.py", "sum_over_timeperiod.py", "solar_thermal_timeresolved.py", "solar_tech_compute_energy.py", "solar_tech_set_outputs.py"],
   "components": [
     {
       "class-name": "SummarizeYield",
@@ -130,6 +130,27 @@
       "icon": "solar_tech_compute_energy.png",
       "main-module": "solar_tech_compute_energy",
       "main-function": "solar_tech_compute_energy",
+      "inputs": [
+        {"name": "GHSolar_CResults", "nick-name": "GHSolResults", "type": "generic", "access": "list", "description": "GHSolar.CResults (github/christophwaibel/GH_Solar_V2) that contain time resolved solar potentials of a mesh."},
+        {"name": "Hive_SurfaceBased", "nick-name": "SrfTech", "type": "generic", "access": "list", "description": "Hive.IO.EnergySystems.SurfaceBased objects (.Photovoltaic, .SolarThermal, .GroundCollector, .PVT) that still need to be infused with input and output energy carriers (i.e. solar potentials and output energy generated)."},
+        {"name": "amb_T_carrier", "nick-name": "ambT", "type": "generic", "description": "Air Energy Carrier, containing ambient air temperature"},
+        {"name": "TimeResolution", "nick-name": "TR", "type": "string", "description": "Time resolution. Either 'hourly', or 'monthly'. Default is 'monthly'", "default": "monthly"}
+      ],
+      "outputs": [
+        {"name": "Hive.IO.EnergySystems.SurfaceBased", "nick-name": "SrfTech", "type": "generic", "description": "Hive.IO.EnergySystems.SurfaceBased objects (.Photovoltaic, .SolarThermal, .GroundCollector, .PVT) infused with input and output energy carriers (i.e. solar potentials and output energy generated)."}
+      ]
+    },
+    {
+      "class-name": "SolarTechSetOutputs",
+      "name": "SolarTechSetOutputs",
+      "abbreviation": "SolarTechSetOutputs",
+      "description": "Sets time-resolved output energy generation of surface based solar technologies (PV, PVT, ST, Ground collector). PV calculated according to Nominal Operating Cell Temperature method Eqt. A.10 in doi: 10.1016/j.apenergy.2019.03.177",
+      "category": "[hive]",
+      "subcategory": "solartech",
+      "id": "ff10e3a1-9a9c-434c-9ccd-ad7816eb0466",
+      "icon": "solar_tech_set_outputs.png",
+      "main-module": "solar_tech_set_outputs",
+      "main-function": "solar_tech_set_outputs",
       "inputs": [
         {"name": "GHSolar_CResults", "nick-name": "GHSolResults", "type": "generic", "access": "list", "description": "GHSolar.CResults (github/christophwaibel/GH_Solar_V2) that contain time resolved solar potentials of a mesh."},
         {"name": "Hive_SurfaceBased", "nick-name": "SrfTech", "type": "generic", "access": "list", "description": "Hive.IO.EnergySystems.SurfaceBased objects (.Photovoltaic, .SolarThermal, .GroundCollector, .PVT) that still need to be infused with input and output energy carriers (i.e. solar potentials and output energy generated)."},

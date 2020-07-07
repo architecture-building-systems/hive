@@ -211,10 +211,10 @@ namespace Hive.IO.EnergySystems
         /// Set technology parameters (see: 10.1016/j.apenergy.2019.03.177)
         /// <remarks>To be set by a grasshopper component (e.g. via windows form)</remarks>
         /// </summary>
-        /// <param name="beta"></param>
-        /// <param name="noct"></param>
-        /// <param name="noct_ref"></param>
-        /// <param name="noct_sol"></param>
+        /// <param name="beta">Temperature coefficient [-]</param>
+        /// <param name="noct">Nominal operating cell temperature [deg C]</param>
+        /// <param name="noct_ref">Reference temperature in [deg C]</param>
+        /// <param name="noct_sol">Reference irradiance in [W/m^2]</param>
         public void SetNOCTParameters(double beta, double noct, double noct_ref, double noct_sol)
         {
             this.Beta = beta;
@@ -241,7 +241,7 @@ namespace Hive.IO.EnergySystems
         /// computes pv electricity yield according to NOCT method
         /// </summary>
         /// <param name="solarCarrier"></param>
-        public void SetInputOutput(Matrix irradiance, Air ambientTemperatureCarrier)
+        public void SetInputComputeOutput(Matrix irradiance, Air ambientTemperatureCarrier)
         {
 
             int horizon = 8760;
