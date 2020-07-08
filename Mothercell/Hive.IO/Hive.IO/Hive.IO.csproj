@@ -71,7 +71,7 @@
     <Compile Include="Building\BuildingConstruction.cs" />
     <Compile Include="Building\BuildingMaterial.cs" />
     <Compile Include="EnergySystems\EnergyCarrier.cs" />
-    <Compile Include="EnergySystems\Distribution.cs" />
+    <Compile Include="EnergySystems\Emitter.cs" />
     <Compile Include="EnergySystems\Lighting.cs" />
     <Compile Include="EnergySystems\Storage.cs" />
     <Compile Include="EnergySystems\Ventilation.cs" />

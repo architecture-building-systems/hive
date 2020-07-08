@@ -16,7 +16,7 @@ import Hive.IO.EnergySystems as ensys
 import Rhino.RhinoApp as RhinoApp
 
 
-def solar_tech_set_outputs(GHSolar_CResults, Hive_SurfaceBased, amb_T_carrier, time_resolution):
+def solar_tech_set_outputs(GHSolar_CResults, Hive_SurfaceBased, amb_T_carrier, water_carrier, time_resolution):
     if time_resolution == "hourly":
         horizon = 8760
     else:
@@ -28,7 +28,7 @@ def solar_tech_set_outputs(GHSolar_CResults, Hive_SurfaceBased, amb_T_carrier, t
         if isinstance(solar_tech, ensys.Photovoltaic):
             solar_tech.SetInputComputeOutput(GHSolar_CResults[i].I_hourly, amb_T_carrier)
         if isinstance(solar_tech, ensys.SolarThermal):
-            solar_tech.SetInputComputeOutputSimple(GHSolar_CResults[i].I_hourly)
+            solar_tech.SetInputComputeOutput(GHSolar_CResults[i].I_hourly, water_carrier, amb_T_carrier)
         if isinstance(solar_tech, ensys.GroundCollector):
             pass
             # hot_water_generated =

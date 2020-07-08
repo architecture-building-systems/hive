@@ -91,20 +91,9 @@ namespace Hive.IO.EnergySystems
             double surfaceArea = surfaceTech.SurfaceArea;
 
             int meshFacesCount = mesh.Faces.Count;
-            int vertexCount = hourlyIrradiance.RowCount;
             int horizon = hourlyIrradiance.ColumnCount;
-            List<double []> allIrradiances = new List<double[]>();
             double[] meanIrradiance = new double[horizon];
 
-            for (int i = 0; i < vertexCount; i++)
-            {
-                double [] irradiancePerVertex = new double[horizon];
-                for (int t = 0; t < horizon; t++)
-                {
-                    irradiancePerVertex[t] = hourlyIrradiance[i, t];
-                }
-                allIrradiances.Add(irradiancePerVertex);
-            }
 
             double [] meshFaceAreas = new double[meshFacesCount];
             for (int t = 0; t < horizon; t++)
@@ -114,12 +103,12 @@ namespace Hive.IO.EnergySystems
                 {
                     meshFaceAreas[i] = GetMeshFaceArea(i, mesh);
                     double faceIrradiance = 0.0;
-                    double irradianceVertex1 = allIrradiances[mesh.Faces[i].A][t];
-                    double irradianceVertex2 = allIrradiances[mesh.Faces[i].B][t];
-                    double irradianceVertex3 = allIrradiances[mesh.Faces[i].C][t];
+                    double irradianceVertex1 = hourlyIrradiance[mesh.Faces[i].A, t];
+                    double irradianceVertex2 = hourlyIrradiance[mesh.Faces[i].B, t];
+                    double irradianceVertex3 = hourlyIrradiance[mesh.Faces[i].C, t];
                     if (mesh.Faces[i].IsQuad)
                     {
-                        double irradianceVertex4 = allIrradiances[mesh.Faces[i].D][t];
+                        double irradianceVertex4 = hourlyIrradiance[mesh.Faces[i].D, t];
                         faceIrradiance = ((irradianceVertex1 + irradianceVertex2 + irradianceVertex3 + irradianceVertex4) / 4) * meshFaceAreas[i];
                     }
                     else
@@ -136,17 +125,14 @@ namespace Hive.IO.EnergySystems
             double GetMeshFaceArea(int _meshFaceIndex, Mesh _mesh)
             {
                 // get points into a nice, concise format
-                List<Point3d> pts = new List<Point3d>();
-                pts.Add(_mesh.Vertices[_mesh.Faces[_meshFaceIndex].A]);
-                pts.Add(_mesh.Vertices[_mesh.Faces[_meshFaceIndex].B]);
-                pts.Add(_mesh.Vertices[_mesh.Faces[_meshFaceIndex].C]);
-                if(_mesh.Faces[_meshFaceIndex].IsQuad)
-                    pts.Add(_mesh.Vertices[_mesh.Faces[_meshFaceIndex].D]);
+                Point3d pt0 = _mesh.Vertices[_mesh.Faces[_meshFaceIndex].A];
+                Point3d pt1 = _mesh.Vertices[_mesh.Faces[_meshFaceIndex].B];
+                Point3d pt2 = _mesh.Vertices[_mesh.Faces[_meshFaceIndex].C];
 
                 // calculate areas of triangles
-                double a = pts[0].DistanceTo(pts[1]);
-                double b = pts[1].DistanceTo(pts[2]);
-                double c = pts[2].DistanceTo(pts[0]);
+                double a = pt0.DistanceTo(pt1);
+                double b = pt1.DistanceTo(pt2);
+                double c = pt2.DistanceTo(pt0);
                 double p = 0.5 * (a + b + c);
                 double area1 = Math.Sqrt(p * (p - a) * (p - b) * (p - c));
 
@@ -154,9 +140,10 @@ namespace Hive.IO.EnergySystems
                 double area2 = 0.0;
                 if(_mesh.Faces[_meshFaceIndex].IsQuad)
                 {
-                    a = pts[0].DistanceTo(pts[2]);
-                    b = pts[2].DistanceTo(pts[3]);
-                    c = pts[3].DistanceTo(pts[0]);
+                    Point3d pt3 = _mesh.Vertices[_mesh.Faces[_meshFaceIndex].D];
+                    a = pt0.DistanceTo(pt2);
+                    b = pt2.DistanceTo(pt3);
+                    c = pt3.DistanceTo(pt0);
                     p = 0.5 * (a + b + c);
                     area2 = Math.Sqrt(p * (p - a) * (p - b) * (p - c));
                 }
@@ -299,7 +286,7 @@ namespace Hive.IO.EnergySystems
     public class SolarThermal : SurfaceBased
     {
         /// <summary>
-        /// Inlet Water into the collector
+        /// Inlet Water into the collector. Assume it is the return temperature from the heat emitter (e.g. radiator or floor heating)
         /// </summary>
         public Water InletWater { get; private set; }
         /// <summary>
@@ -331,7 +318,7 @@ namespace Hive.IO.EnergySystems
             this.FRtauAlpha = 0.68;
             this.FRUL = 4.9;
 
-            this.R_V = 1.0;
+            this.R_V = 0.95;
         }
 
 

@@ -134,6 +134,7 @@
         {"name": "GHSolar_CResults", "nick-name": "GHSolResults", "type": "generic", "access": "list", "description": "GHSolar.CResults (github/christophwaibel/GH_Solar_V2) that contain time resolved solar potentials of a mesh."},
         {"name": "Hive_SurfaceBased", "nick-name": "SrfTech", "type": "generic", "access": "list", "description": "Hive.IO.EnergySystems.SurfaceBased objects (.Photovoltaic, .SolarThermal, .GroundCollector, .PVT) that still need to be infused with input and output energy carriers (i.e. solar potentials and output energy generated)."},
         {"name": "amb_T_carrier", "nick-name": "ambT", "type": "generic", "description": "Air Energy Carrier, containing ambient air temperature"},
+        {"name": "return_water_carrier", "nick-name": "water", "type": "generic", "description": "Water Energy Carrier, containing return water temperature from heat emitters (e.g. radiator, floor heating, etc.)"},
         {"name": "TimeResolution", "nick-name": "TR", "type": "string", "description": "Time resolution. Either 'hourly', or 'monthly'. Default is 'monthly'", "default": "monthly"}
       ],
       "outputs": [
