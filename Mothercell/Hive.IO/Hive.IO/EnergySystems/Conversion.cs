@@ -391,8 +391,8 @@ namespace Hive.IO.EnergySystems
             Radiation solarCarrier = new Radiation(horizon, meanIrradiance);
             base.InputCarrier = solarCarrier;
 
-            base.OutputCarriers = new EnergyCarrier[0];
-            double[] availableEnergy = new double[8760];
+            base.OutputCarriers = new EnergyCarrier[1];
+            double[] availableEnergy = new double[horizon];
             for(int t=0; t<horizon; t++)
             {
                 double etaTemp = Math.Max(0, this.FRtauAlpha - ((this.FRUL * (inletWaterCarrier.SupplyTemperature[t] - ambientAirCarrier.AvailableEnergy[t])) / meanIrradiance[t]));

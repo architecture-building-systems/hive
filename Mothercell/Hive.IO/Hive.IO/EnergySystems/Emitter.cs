@@ -9,8 +9,8 @@ namespace Hive.IO.EnergySystems
 {
     public class Radiator : Emitter
     {
-        public Radiator(double investmentCost, double embodiedGhg, bool isHeating, bool isCooling, bool isElectric, double inletTemperature, double returnTemperature) 
-            : base(investmentCost, embodiedGhg, isHeating, isCooling, isElectric)
+        public Radiator(double investmentCost, double embodiedGhg, bool isHeating, bool isCooling, double inletTemperature, double returnTemperature) 
+            : base(investmentCost, embodiedGhg, isHeating, isCooling)
         {
 
             double [] inletTempArray = new double[Horizon];
@@ -31,8 +31,6 @@ namespace Hive.IO.EnergySystems
         {
             base.Name = name;
         }
-
-
     }
 
 
@@ -56,10 +54,6 @@ namespace Hive.IO.EnergySystems
         public string Name { get; protected set; }
 
 
-        /// <summary>
-        /// Indicating whether this technology produces electricity
-        /// </summary>
-        public bool IsElectric { get; protected set; }
         /// <summary>
         /// Indicating whether this technology produces heat
         /// </summary>
@@ -102,13 +96,12 @@ namespace Hive.IO.EnergySystems
 
 
         protected Emitter(double investmentCost, double embodiedGhg,
-            bool isHeating, bool isCooling, bool isElectric)
+            bool isHeating, bool isCooling)
         {
             this.SpecificInvestmentCost = investmentCost;
             this.SpecificEmbodiedGhg = embodiedGhg;
             this.IsHeating = isHeating;
             this.IsCooling = isCooling;
-            this.IsElectric = isElectric;
         }
     }
 }

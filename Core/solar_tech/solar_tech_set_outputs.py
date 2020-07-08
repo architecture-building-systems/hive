@@ -16,7 +16,8 @@ import Hive.IO.EnergySystems as ensys
 import Rhino.RhinoApp as RhinoApp
 
 
-def solar_tech_set_outputs(GHSolar_CResults, Hive_SurfaceBased, amb_T_carrier, water_carrier, time_resolution):
+# WHERE TO MAKE A GH COMPONENT FOR RADIATOR?? PROLLY IN HIVE.IO.INPUTS, IN THE ENERGYSYSTEMS FORM
+def solar_tech_set_outputs(GHSolar_CResults, Hive_SurfaceBased, amb_T_carrier, emitter, time_resolution):
     if time_resolution == "hourly":
         horizon = 8760
     else:
@@ -28,7 +29,7 @@ def solar_tech_set_outputs(GHSolar_CResults, Hive_SurfaceBased, amb_T_carrier, w
         if isinstance(solar_tech, ensys.Photovoltaic):
             solar_tech.SetInputComputeOutput(GHSolar_CResults[i].I_hourly, amb_T_carrier)
         if isinstance(solar_tech, ensys.SolarThermal):
-            solar_tech.SetInputComputeOutput(GHSolar_CResults[i].I_hourly, water_carrier, amb_T_carrier)
+            solar_tech.SetInputComputeOutput(GHSolar_CResults[i].I_hourly, emitter.ReturnCarrier, amb_T_carrier)
         if isinstance(solar_tech, ensys.GroundCollector):
             pass
             # hot_water_generated =

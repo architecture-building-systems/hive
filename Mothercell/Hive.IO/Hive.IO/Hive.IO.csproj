@@ -79,6 +79,7 @@
     <Compile Include="GHComponents\GhDistributorSIA.cs" />
     <Compile Include="GHComponents\GhDistributorSolar.cs" />
     <Compile Include="GHComponents\GhDistributorSupplySystem.cs" />
+    <Compile Include="GHComponents\GhEmitter.cs" />
     <Compile Include="GHComponents\GhEnvironment.cs" />
     <Compile Include="GHComponents\GhResults.cs" />
     <Compile Include="GHComponents\GhVisualizer.cs" />
