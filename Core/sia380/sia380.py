@@ -220,11 +220,15 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
         H_V = Vdot_th/3600 * rho * c_p
 
         # Ventilation losses (Lüftungswärmeverluste), Q_V
-        Q_V[month] = H_V * (T_i[month] - T_e[month]) * t[month]
+        Q_V_ub = H_V * (setpoints_ub[month] - T_e[month]) * t[month]
+        Q_V_lb = H_V * (setpoints_lb[month] - T_e[month]) * t[month]
+        # Q_V[month] = H_V * (T_i[month] - T_e[month]) * t[month]
 
         # Internal loads (interne Wärmeeinträge)
         Q_i[month] = Phi_P_tot * t_P[month] + Phi_L_tot * t_L[month] + Phi_A_tot * t_A[month]
 
+        Q_T_per_surfaces_this_month_ub = [0.0] * num_surfaces
+        Q_T_per_surfaces_this_month_lb = [0.0] * num_surfaces
         for surface in range(num_surfaces):
             # solar gains (solare Wärmeeinträge), Q_s, (PER SURFACE)
             # unobstructed or obstructed, both using SolarModel.dll and GHSolar.gha
@@ -236,7 +240,16 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
                 H_T = surface_areas[surface] * U_w
 
             # Transmission losses (Transmissionswärmeverluste), Q_T, (PER SURFACE, because function of H_T)
-            Q_T_per_surface[month][surface] = H_T * (T_i[month] - T_e[month]) * t[month]
+            Q_T_per_surfaces_this_month_ub[surface] = H_T * (setpoints_ub[month] - T_e[month]) * t[month]
+            Q_T_per_surfaces_this_month_lb[surface] = H_T * (setpoints_lb[month] - T_e[month]) * t[month]
+            # Q_T_per_surface[month][surface] = H_T * (T_i[month] - T_e[month]) * t[month]
+
+        if Q_V_ub + sum(Q_T_per_surfaces_this_month_ub) < Q_V_lb + sum(Q_T_per_surfaces_this_month_lb):
+            Q_V[month] = Q_V_ub
+            Q_T_per_surface[month] = Q_T_per_surfaces_this_month_ub
+        else:
+            Q_V[month] = Q_V_lb
+            Q_T_per_surface[month] = Q_T_per_surfaces_this_month_lb
 
         Q_T[month] = sum(Q_T_per_surface[month])
         Q_s[month] = sum(Q_s_per_surface[month])
