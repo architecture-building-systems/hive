@@ -4,7 +4,7 @@
   "version": "0.2",
   "author": "daren-thomas,christophwaibel",
   "id": "4b5ec46e-cafa-4a72-ac7b-fb839ce3c618",
-  "include-files": ["sia380.py","sia380_1.py", "sia2024.py", "sia2028.py","sia380_4.py","adaptive_comfort.py"],
+  "include-files": ["sia380.py", "sia2024.py", "adaptive_comfort.py"],
   "components": [
     {
       "class-name": "Sia380",
@@ -14,7 +14,7 @@
       "category": "[hive]",
       "subcategory": "demand",
       "id": "01457f8e-80d7-4186-856d-ddaf1d896218",
-      "icon": "sia380_1.png",
+      "icon": "sia380.png",
       "main-module": "sia380",
       "main-function": "main",
       "inputs": [
@@ -46,7 +46,7 @@
       "category": "[hive]",
       "subcategory": "demand",
       "id": "83d5d815-a306-4555-81f8-887132d0711f",
-      "icon": "sia380_1.png",
+      "icon": "adaptive_comfort.png",
       "main-module": "adaptive_comfort",
       "main-function": "adaptive_comfort",
       "inputs": [
@@ -59,70 +59,6 @@
         {"type": "float", "name": "T_n90ub", "nick-name": "T_n90ub", "description": "Monthly adaptive thermal comfort temperature in °C (upper bound of 90% acceptance).", "access": "list"},
         {"type": "float", "name": "T_n90lb", "nick-name": "T_n90lb", "description": "Monthly adaptive thermal comfort temperature in °C (lower bound of 90% acceptance).", "access": "list"}
       ]
-    },
-    {
-      "class-name": "Sia380_1",
-      "name": "SIA 380.1 htg",
-      "abbreviation": "sia380_1",
-      "description": "SIA 380.1 heating demand calculation for a month",
-      "category": "[hive]",
-      "subcategory": "demand",
-      "id": "6bbb1401-7fb5-4219-ab56-e806b4ec3113",
-      "icon": "sia380_1.png",
-      "main-module": "sia380_1",      
-      "main-function": "monthly",
-      "inputs": [
-        {"type": "float", "name": "tau", "nick-name": "τ", "description": "Zeitkonstante des Gebäudes [h]"},
-        {"type": "float", "name": "theta_e", "nick-name": "θ_e", "description": "Aussenlufttemperatur [°C]"},
-        {"type": "float", "name": "theta_i", "nick-name": "θ_i", "description": "Raumlufttemperatur [°C]"},
-        {"type": "float", "name": "t", "nick-name": "t", "description": "Länge der Berechnungsperiode [h]"},
-        {"type": "float", "name": "A_op", "nick-name": "A_op", "description": "Aussenwandfläche (opak) [m2]"},
-        {"type": "float", "name": "A_w", "nick-name": "A_w", "description": "Fensterfläche [m2]"},
-        {"type": "float", "name": "U_op", "nick-name": "U_op", "description": "Wärmedurchgangskoeffizient Aussenwand [W/m2K]"},
-        {"type": "float", "name": "U_w", "nick-name": "U_w", "description": "Wärmedurchgangskoeffizient Fenster [W/m2K]"},
-        {"type": "float", "name": "Vdot_e", "nick-name": "V\u0307_e", "description": "Aussenluft-Volumenstrom [m3/h]"},
-        {"type": "float", "name": "Vdot_inf", "nick-name": "V\u0307_inf", "description": "Aussenluft-Volumenstrom durch Infiltration [m3/h]"},
-        {"type": "float", "name": "eta_rec", "nick-name": "η_rec", "description": "Nutzungsgrad der Wärmerückgewinnung [-]"},
-        {"type": "float", "name": "phi_P", "nick-name": "φ_P", "description": "Wärmeabgabe Personen [W]"},
-        {"type": "float", "name": "phi_B", "nick-name": "φ_B", "description": "Wärmeabgabe Beleuchtung [W]"},
-        {"type": "float", "name": "phi_G", "nick-name": "φ_G", "description": "Wärmeabgabe Geräte [W]"},
-        {"type": "float", "name": "t_P", "nick-name": "t_P", "description": "Vollaststunden Personen [h]"},
-        {"type": "float", "name": "t_B", "nick-name": "t_B", "description": "Vollaststunden Beleuchtung [h]"},
-        {"type": "float", "name": "t_G", "nick-name": "t_G", "description": "Vollaststunden Geräter [h]"},
-        {"type": "float", "name": "g", "nick-name": "g", "description": "g-Wert [-]"},
-        {"type": "float", "name": "f_sh", "nick-name": "f_sh", "description": "Reduktionsfaktor solare Wärmeeinträge [-]"},
-        {"type": "float", "name": "I", "nick-name": "I", "description": "Solare Strahlung [Wh/m2]"}
-      ],
-      "outputs": [
-        {"type": "float", "name": "Q_H", "nick-name": "Q_H", "description": "Heizwärmebedarf [Wh]"},
-        {"type": "float", "name": "Q_T", "nick-name": "Q_T", "description": "Transmissionswärmeverluste [Wh]"},
-        {"type": "float", "name": "Q_V", "nick-name": "Q_V", "description": "Lüftungswäremeverluste [Wh]"},
-        {"type": "float", "name": "eta_g", "nick-name": "η_g", "description": "Ausnutzungsgrad für Wärmegewinne [-]"},
-        {"type": "float", "name": "Q_i", "nick-name": "Q_i", "description": "Interne Wärmeeinträge [Wh]"},
-        {"type": "float", "name": "Q_s", "nick-name": "Q_s", "description": "Solare Wärmeeinträge [Wh]"}]
-    },
-    {
-      "class-name": "Sia2028",
-      "name": "SIA 2028 climate",
-      "abbreviation": "sia2028",
-      "description": "Climate data for SIA 380 demand calculation",
-      "category": "[hive]",
-      "subcategory": "demand",
-      "id": "6138ccc3-89dd-4ff5-9685-aac29b8f9c11",
-      "icon": "sia2028.png",
-      "main-module": "sia2028",
-      "main-function": "default_values",
-      "inputs": [
-        {"type": "string", "name": "station", "nick-name": "station", "default": "Zurich-Kloten", "description": "Weather station according to SIA 2028:2010 Klimadaten. Default is Zurich-Kloten"},
-        {"type": "integer", "name": "month", "nick-name": "month", "default": 1, "description": "Month of the year, [1, 12]."}
-      ],
-      "outputs": [
-        {"type": "float", "name": "I-hor", "nick-name": "I-hor [Wh/m2]", "description": "Monthly horizontal global irradiation in [Wh/m2]"},
-        {"type": "float", "name": "I-E", "nick-name": "I-E [Wh/m2]", "description": "Monthly global irradiation, East facade, in [Wh/m2]"},
-        {"type": "float", "name": "I-S", "nick-name": "I-S [Wh/m2]", "description": "Monthly global irradiation, South facade, in [Wh/m2]"},
-        {"type": "float", "name": "I-W", "nick-name": "I-W [Wh/m2]", "description": "Monthly global irradiation, West facade, in [Wh/m2]"},
-        {"type": "float", "name": "I-N", "nick-name": "I-N [Wh/m2]", "description": "Monthly global irradiation, North facade, in [Wh/m2]"},
-        {"type": "float", "name": "theta_e", "nick-name": "θ_e [°C]", "description": "Average monthly ambient air temperature - Aussenlufttemperatur, in [°C]"}]
     },
     {
       "class-name": "Sia2024",
@@ -160,29 +96,6 @@
         {"type": "float", "name": "t_A", "nick-name": "t_A [h]", "description": "Vollaststunden Geräte [h] - full load hours Appliances"},
         {"type": "float", "name": "g", "nick-name": "g [-]", "description": "g-Wert [-] - g-Value windows"},
         {"type": "float", "name": "f_sh", "nick-name": "f_sh [-]", "description": "Reduktionsfaktor solare Wärmeeinträge [-]"}]
-    },
-    {
-      "class-name": "sia380_4",
-      "name": "SIA 380.4 elec",
-      "abbreviation": "sia380_4",
-      "description": "Electricity demand according to SIA 380.4",
-      "category": "[hive]",
-      "subcategory": "demand",
-      "id": "80230b7e-cae1-4998-9483-f7ac1279d1be",
-      "icon": "sia380_4.png",
-      "main-module": "sia380_4",
-      "main-function": "sia380_4",
-      "inputs": [
-        {"type": "float", "name": "NFA total", "nick-name": "NFA total", "description": "NFA total (m^2)"},
-        {"type": "float", "name": "Usage hours Lighting [h]", "nick-name": "t_L", "description": "Usage hours Lighting [h]"},
-        {"type": "float", "name": "Usage hours Equipment [h]", "nick-name": "t_A", "description": "Usage hours Equipment [h]"},
-        {"type": "float", "name": "Usage hours Ventilation [h]", "nick-name": "t_V", "description": "Usage hours Ventilation [h]"},
-        {"type": "float", "name": "Lighting elec demand [W/m2]", "nick-name": "L", "description": "Specific lighting electricity demand in [W/m2]."},
-        {"type": "float", "name": "Lighting elec demand [W/m2]", "nick-name": "E", "description": "Specific equipment electricity demand in [W/m2]."},
-        {"type": "float", "name": "Ventilation elec demand [W/m2]", "nick-name": "V", "description": "Specific ventilation electricity demand in [W/m2]."}
-      ],
-      "outputs": [
-        {"type": "float", "name": "Total Electricity Demand", "nick-name": "Total electricity demand (kWh)", "description": "Total Electricity Demand (kWh)"}]
     }
   ],
   "parameters": [
