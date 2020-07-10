@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-
+using Hive.IO.EnergySystems;
 using rg = Rhino.Geometry;
 
 namespace Hive.IO
@@ -114,6 +114,32 @@ namespace Hive.IO
         public rg.Mesh SkyViewFactors { get; private set; }
         public rg.Curve[] SkySunPath { get; private set; }
         public rg.Mesh[] IrradiationSurfaces { get; private set; }
+        #endregion
+
+
+        #region Hive Core Objects
+
+        /// <summary>
+        /// Building object that contains geometric, construction, energy demand, cost (not operational), and LCA (not operational) information 
+        /// </summary>
+        public Building building { get; private set; }
+        /// <summary>
+        /// Energy conversion technologies (e.g. boiler, PV, heatpump, etc.). Include operation schedules, operational LCA, embodied LCA of technologies, and operational and investment cost of technologies
+        /// </summary>
+        public List<ConversionTech> conversionTechnologies { get; private set; }
+        /// <summary>
+        /// Heat and Cooling emitters of the building
+        /// </summary>
+        public List<Emitter> emitters { get; private set; }
+        /// <summary>
+        /// Final output energy streams to meet building energy demands
+        /// </summary>
+        public List<EnergyCarrier> outputEnergyStreams { get; private set; }
+        /// <summary>
+        /// Initial input energy streams into the system. That might include Grid Electricity, Solar Potentials, District Heating, ...
+        /// </summary>
+        public List<EnergyCarrier> inputEnergyStreams { get; private set; }
+
         #endregion
 
 
