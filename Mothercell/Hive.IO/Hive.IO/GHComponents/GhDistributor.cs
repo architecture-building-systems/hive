@@ -1,4 +1,5 @@
 ﻿using System;
+using System.CodeDom;
 using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
@@ -51,7 +52,7 @@ namespace Hive.IO.GHComponents
             {
                 switch (hiveInput.Value.ToString())
                 {
-                    case "Hive.IO.EnergySystems.Photovoltaic":
+                    case  "Hive.IO.EnergySystems.Photovoltaic":
                         srfBasedTech.Add(hiveInput.Value as Photovoltaic);
                         break;
                     case "Hive.IO.EnergySystems.SolarThermal":

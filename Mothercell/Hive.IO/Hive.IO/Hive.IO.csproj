@@ -96,8 +96,8 @@
     <Compile Include="GHComponents\FormEnSysSolar.Designer.cs">
       <DependentUpon>FormEnSysSolar.cs</DependentUpon>
     </Compile>
-    <Compile Include="GHComponents\GHBuilding.cs" />
-    <Compile Include="GHComponents\GHDistributor.cs" />
+    <Compile Include="GHComponents\GhBuilding.cs" />
+    <Compile Include="GHComponents\GhDistributor.cs" />
     <Compile Include="GHComponents\GhVisualizerAttributes.cs" />
     <Compile Include="GHComponents\HiveIOInfo.cs" />
     <Compile Include="GHComponents\GHSolarSystem.cs" />
