@@ -12,7 +12,7 @@ using Hive.IO.Plots;
 
 namespace Hive.IO.GHComponents
 {
-    public class GhVisualizerAttributes : GH_ResizableAttributes<GHVisualizer>
+    public class GhVisualizerAttributes : GH_ResizableAttributes<GhVisualizer>
     {
         // make sure we have a minimum size
         private const float TitleBarHeight = 200f;
@@ -31,7 +31,7 @@ namespace Hive.IO.GHComponents
         private readonly OperationalPerformancePlot[] _titleBarPlots;
         private int _currentPlot;
 
-        public GhVisualizerAttributes(GHVisualizer owner) : base(owner)
+        public GhVisualizerAttributes(GhVisualizer owner) : base(owner)
         {
             _currentPlot = 0;
 

@@ -30,8 +30,16 @@ to do:
 Default is 'hourly'. Alternatives: 'monthly', 'daily', 'quarter-hourly', 'five-minutes', 'minutes'. !!!NOT IMPLEMENTED"}
 - GROUNDTEMPERATURE
 """
-
+from __future__ import division
+import System
 import csv
+import Grasshopper as gh
+path = gh.Folders.AppDataFolder
+import clr
+import os
+clr.AddReferenceToFileAndPath(os.path.join(path, "Libraries", "Hive.IO.gha"))
+import Hive.IO.EnergySystems as ensys
+
 
 # indexes into .epw data rows:
 DRYBULB_INDEX = 6
@@ -84,19 +92,22 @@ def epw_reader(path):
     assert longitude is not None
 
     # monthly data
-    dayspermonth = [31.0, 28.0, 31.0, 30.0, 31.0, 30.0, 31.0, 31.0, 30.0, 31.0, 30.0, 31.0]
+    days_per_month = [31.0, 28.0, 31.0, 30.0, 31.0, 30.0, 31.0, 31.0, 30.0, 31.0, 30.0, 31.0]
     hours_per_day = 24
     total_months = 12
+    hours_per_year = 8760
     for month in range(total_months):
-        start_hour = int(hours_per_day * sum(dayspermonth[0:month]))
-        end_hour = int(hours_per_day * sum(dayspermonth[0:month + 1]))
-        hours_per_month = dayspermonth[month] * hours_per_day
+        start_hour = int(hours_per_day * sum(days_per_month[0:month]))
+        end_hour = int(hours_per_day * sum(days_per_month[0:month + 1]))
+        hours_per_month = days_per_month[month] * hours_per_day
         ghi_monthly.append(sum(ghi[start_hour:end_hour]) / 1000)
         drybulb_monthly.append(sum(drybulb[start_hour:end_hour]) / hours_per_month)
         rh_monthly.append(sum(rh[start_hour:end_hour]) / hours_per_month)
 
+    ambient_temp_carrier = ensys.Air(hours_per_year, System.Array[float](drybulb))
+
     return latitude, longitude, city_country, ghi, dni, dhi, drybulb, dewpoint, rh, \
-           ghi_monthly, drybulb_monthly, rh_monthly
+           ghi_monthly, drybulb_monthly, rh_monthly, ambient_temp_carrier
 
 
 if __name__ == "__main__":

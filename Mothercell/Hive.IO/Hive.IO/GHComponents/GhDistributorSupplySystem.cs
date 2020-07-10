@@ -1,15 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
-
 using Grasshopper.Kernel;
+using Hive.IO.EnergySystems;
 using Rhino.Geometry;
 
-namespace Hive.IO
+namespace Hive.IO.GHComponents
 {
-    public class GHDistributorSupplySystem : GH_Component
+    public class GhDistributorSupplySystem : GH_Component
     {
 
-        public GHDistributorSupplySystem()
+        public GhDistributorSupplySystem()
           : base("Hive.IO.DistributorSupplySystem", "HiveIODistrSupSys",
               "Distributor for the Energy Supply Systems models." +
                 "\nOutputs relevant parameters for Energy Supply Systems calculations.",
@@ -20,9 +20,7 @@ namespace Hive.IO
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Hive.IO.EnergySystem.PV", "HiveIOEnSysPV", "Reads in Hive.IO.EnergySystem.PV objects.", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Hive.IO.EnergySystem.ST", "HiveIOEnSysST", "Reads in Hive.IO.EnergySystem.PVT objects.", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Hive.IO.EnergySystem.PVT", "HiveIOEnSysPVT", "Reads in Hive.IO.EnergySystem.ST objects.", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Hive.IO.EnergySystems.SurfaceBased", "HiveIOEnSysSrf", "Reads in Hive.IO.EnergySystems.SurfaceBased objects (Photovoltaic, GroundCollector, SolarThermal, PVT).", GH_ParamAccess.list);
 
             for (int i=0; i<pManager.ParamCount; i++)
                 pManager[i].Optional = true;
@@ -48,13 +46,12 @@ namespace Hive.IO
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<EnergySystem.PV> pv = new List<EnergySystem.PV>();
-            List<EnergySystem.PVT> pvt = new List<EnergySystem.PVT>();
-            List<EnergySystem.ST> st = new List<EnergySystem.ST>();
+            List<SurfaceBasedTech> srfTech = new List<SurfaceBasedTech>();
+            DA.GetDataList(0, srfTech);
 
-            DA.GetDataList(0, pv);
-            DA.GetDataList(1, st);
-            DA.GetDataList(2, pvt);
+            //List<Photovoltaic> pv = new List<Photovoltaic>();
+            //List<PVT> pvt = new List<PVT>();
+            //List<SolarThermal> st = new List<SolarThermal>();
 
             List<double> etas_PV = new List<double>();
             List<double> etas_ST = new List<double>();
@@ -65,23 +62,30 @@ namespace Hive.IO
             List<double> A_ST = new List<double>();
             List<double> A_PVT = new List<double>();
 
-            foreach(EnergySystem.PV _pv in pv)
+            foreach (SurfaceBasedTech tech in srfTech)
             {
-                etas_PV.Add(_pv.RefEfficiencyElectric);
-                A_PV.Add(AreaMassProperties.Compute(_pv.SurfaceGeometry).Area);
-            }
-
-            foreach (EnergySystem.ST _st in st)
-            {
-                etas_ST.Add(_st.RefEfficiencyThermal);
-                A_ST.Add(AreaMassProperties.Compute(_st.SurfaceGeometry).Area);
-            }
-
-            foreach (EnergySystem.PVT _pvt in pvt)
-            {
-                etas_PVT_el.Add(_pvt.RefEfficiencyElectric);
-                etas_PVT_therm.Add(_pvt.RefEfficiencyThermal);
-                A_PVT.Add(AreaMassProperties.Compute(_pvt.SurfaceGeometry).Area);
+                switch (tech.ToString())
+                {
+                    case "Hive.IO.EnergySystems.Photovoltaic":
+                        Photovoltaic _pv = (Photovoltaic)tech;
+                        etas_PV.Add(_pv.RefEfficiencyElectric);
+                        A_PV.Add(AreaMassProperties.Compute(_pv.SurfaceGeometry).Area);
+                        break;
+                    case "Hive.IO.EnergySystems.SolarThermal":
+                        SolarThermal _st = (SolarThermal) tech;
+                        etas_ST.Add(_st.RefEfficiencyHeating);
+                        A_ST.Add(AreaMassProperties.Compute(_st.SurfaceGeometry).Area);
+                        break;
+                    case "Hive.IO.EnergySystems.PVT":
+                        PVT _pvt = (PVT) tech;
+                        etas_PVT_el.Add(_pvt.RefEfficiencyElectric);
+                        etas_PVT_therm.Add(_pvt.RefEfficiencyHeating);
+                        A_PVT.Add(AreaMassProperties.Compute(_pvt.SurfaceGeometry).Area);
+                        break;
+                    case "Hive.IO.EnergySystems.GroundCollector":
+                        
+                        break;
+                }
             }
 
 
