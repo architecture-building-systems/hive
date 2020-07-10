@@ -4,7 +4,7 @@
   "version": "0.2",
   "author": "daren-thomas,christophwaibel",
   "id": "4b5ec46e-cafa-4a72-ac7b-fb839ce3c618",
-  "include-files": ["sia380.py", "sia2024.py", "adaptive_comfort.py"],
+  "include-files": ["sia380.py", "sia2024_room_reader.py", "adaptive_comfort.py"],
   "components": [
     {
       "class-name": "Sia380",
@@ -61,16 +61,16 @@
       ]
     },
     {
-      "class-name": "Sia2024",
-      "name": "SIA 2024 rooms",
-      "abbreviation": "sia2024",
-      "description": "Room values and properties for SIA 380 demand calculation",
+      "class-name": "Sia2024RoomReader",
+      "name": "SIA 2024 room reader",
+      "abbreviation": "sia2024room",
+      "description": "Reads room values and properties from a SIA 2024 Json",
       "category": "[hive]",
       "subcategory": "demand",
       "id": "99dd97f1-b633-44e9-866c-6b6dc3bb8ae0",
-      "icon": "sia2024.png",
-      "main-module": "sia2024",
-      "main-function": "default_values",
+      "icon": "sia2024_room_reader.png",
+      "main-module": "sia2024_room_reader",
+      "main-function": "read_room",
       "inputs": [
         {"type": "json", "name": "room", "nick-name": "room", "description": "Room type according to sia2024. should be a dictionary containing all properties."},
         {"type": "float", "name": "area", "nick-name": "area", "description": "Area in m². If no input given, default values as from SIA2024:2015 are used."},

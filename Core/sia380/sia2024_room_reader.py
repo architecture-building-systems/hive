@@ -5,7 +5,7 @@ Implements predefined default values from SIA 2024:2015 for SIA 380.1 calculatio
 """
 
 
-def default_values(room, area, month, season):
+def read_room(room, area, month, season):
     """
 
     :param room: sia2024 room type. dictionary with all the properties
@@ -109,6 +109,6 @@ def default_values(room, area, month, season):
 
 
 if __name__ == '__main__':
-    values = default_values("mfh", "standard", None, 1, "winter")
+    values = read_room("mfh", "standard", None, 1, "winter")
     for i in range(len(values)):
         print(values[i])
