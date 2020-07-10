@@ -16,7 +16,7 @@ from __future__ import division
 import math
 
 
-def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surface_areas, surface_type, surface_irradiance):
+def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_areas, surface_type, surface_irradiance):
     '''
     Computes monthly heating, cooling and electricity demand for a thermal zone, based on SIA 380.1
     :param room_properties: room properties in json format
