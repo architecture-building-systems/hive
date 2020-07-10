@@ -8,10 +8,10 @@ using Hive.IO.Plots;
 namespace Hive.IO.GHComponents
 {
 
-    public class GHVisualizer : GH_Param<GH_ObjectWrapper>
+    public class GhVisualizer : GH_Param<GH_ObjectWrapper>
     {
 
-        public GHVisualizer() : base("Hive.IO.Visualizer", "Hive.IO.Visualizer",
+        public GhVisualizer() : base("Hive.IO.Visualizer", "Hive.IO.Visualizer",
             "Hive Visualizer for simulation results",
             "[hive]", "IO", GH_ParamAccess.item)
         {

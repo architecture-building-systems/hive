@@ -4,7 +4,7 @@
   "version": "0.1",
   "author": "christophwaibel",
   "id": "2a2178f1-08f7-4f68-afc9-0845516aba8e",
-  "include-files": ["simple_pv.py", "pv_efficiency.py", "noct_pv.py", "simple_solar_thermal.py", "sum_over_timeperiod.py", "st_efficiency.py", "solar_thermal_timeresolved.py"],
+  "include-files": ["simple_pv.py", "noct_pv.py", "simple_solar_thermal.py", "sum_over_timeperiod.py", "solar_thermal_timeresolved.py", "solar_tech_set_outputs.py"],
   "components": [
     {
       "class-name": "SummarizeYield",
@@ -120,64 +120,26 @@
       ]
     },
     {
-      "class-name": "PVEfficiency",
-      "name": "PVEfficiency",
-      "abbreviation": "pveff",
-      "description": "Some options for PV technologies",
+      "class-name": "SolarTechSetOutputs",
+      "name": "SolarTechSetOutputs",
+      "abbreviation": "SolarTechSetOutputs",
+      "description": "Sets time-resolved output energy generation of surface based solar technologies (PV, PVT, ST, Ground collector). PV calculated according to Nominal Operating Cell Temperature method Eqt. A.10 in doi: 10.1016/j.apenergy.2019.03.177",
       "category": "[hive]",
       "subcategory": "solartech",
-      "id": "6a08088d-a79c-4360-860e-d1d0bf22d2b5",
-      "icon": "pv_efficiency.png",
-      "main-module": "pv_efficiency",
-      "main-function": "get_pv_efficiency",
+      "id": "ff10e3a1-9a9c-434c-9ccd-ad7816eb0466",
+      "icon": "solar_tech_set_outputs.png",
+      "main-module": "solar_tech_set_outputs",
+      "main-function": "solar_tech_set_outputs",
       "inputs": [
-        {"type": "json", "name": "PV_tech", "nick-name": "PV_tech", "default": "<add scenario>", "description": "Choose PV technology"}
+        {"name": "GHSolar_CResults", "nick-name": "GHSolResults", "type": "generic", "access": "list", "description": "GHSolar.CResults (github/christophwaibel/GH_Solar_V2) that contain time resolved solar potentials of a mesh."},
+        {"name": "Hive_SurfaceBased", "nick-name": "SrfTech", "type": "generic", "access": "list", "description": "Hive.IO.EnergySystems.SurfaceBased objects (.Photovoltaic, .SolarThermal, .GroundCollector, .PVT) that still need to be infused with input and output energy carriers (i.e. solar potentials and output energy generated)."},
+        {"name": "amb_T_carrier", "nick-name": "ambT", "type": "generic", "description": "Air Energy Carrier, containing ambient air temperature"},
+        {"name": "emitter", "nick-name": "emitter", "type": "generic", "description": "Heat emitter (e.g. radiator), containing return water temperature"},
+        {"name": "TimeResolution", "nick-name": "TR", "type": "string", "description": "Time resolution. Either 'hourly', or 'monthly'. Default is 'monthly'", "default": "monthly"}
       ],
       "outputs": [
-        {"type": "string", "name": "output", "nick-name": "o", "description": "PV technology efficiency"}
+        {"name": "Hive.IO.EnergySystems.SurfaceBased", "nick-name": "SrfTech", "type": "generic", "description": "Hive.IO.EnergySystems.SurfaceBased objects (.Photovoltaic, .SolarThermal, .GroundCollector, .PVT) infused with input and output energy carriers (i.e. solar potentials and output energy generated)."}
       ]
-    },
-    {
-      "class-name": "STEfficiency",
-      "name": "STEfficiency",
-      "abbreviation": "steff",
-      "description": "Some options for ST technologies",
-      "category": "[hive]",
-      "subcategory": "solartech",
-      "id": "87abaa57-0797-4f86-854f-4797ad4d677b",
-      "icon": "st_efficiency.png",
-      "main-module": "st_efficiency",
-      "main-function": "get_st_efficiency",
-      "inputs": [
-        {"type": "json", "name": "ST_tech", "nick-name": "ST_tech", "default": "<add scenario>", "description": "Choose ST technology"}
-      ],
-      "outputs": [
-        {"type": "string", "name": "output", "nick-name": "o", "description": "ST technology efficiency"}
-      ]
-    }
-  ],
-  "parameters": [
-    {
-      "class-name": "PVEfficiencyList",
-      "name": "PVEfficiency",
-      "abbreviation": "pveffl",
-      "description": "A list of PV technologies",
-      "category": "[hive]",
-      "subcategory": "solartech",
-      "id": "0605fc15-6405-4da5-9cf9-75737374f19f",
-      "parameter-type": "ValueList",
-      "csv": "pv_efficiency.csv"
-    },
-    {
-      "class-name": "STEfficiencyList",
-      "name": "STEfficiency",
-      "abbreviation": "steffl",
-      "description": "A list of ST technologies",
-      "category": "[hive]",
-      "subcategory": "solartech",
-      "id": "99cd8c9d-d63c-4e30-9c67-7de8d46e20bf",
-      "parameter-type": "ValueList",
-      "csv": "st_efficiency.csv"
     }
   ]
 }

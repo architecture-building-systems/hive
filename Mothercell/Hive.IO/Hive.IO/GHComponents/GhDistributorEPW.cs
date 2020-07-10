@@ -1,14 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
-
 using Grasshopper.Kernel;
-using Rhino.Geometry;
 
-namespace Hive.IO
+namespace Hive.IO.GHComponents
 {
-    public class GHDistributorEPW : GH_Component
+    public class GhDistributorEPW : GH_Component
     {
-        public GHDistributorEPW()
+        public GhDistributorEPW()
           : base("Hive.IO.DistributorEPW", "HiveIODistrEPW",
               "Weather file (.epw) distributor. Reads in an Hive.IO.Environment object and outputs the filepath of the .epw",
               "[hive]", "Mothercell")
