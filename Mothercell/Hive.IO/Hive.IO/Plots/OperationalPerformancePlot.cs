@@ -86,13 +86,10 @@ namespace Hive.IO.Plots
             var dataX = bounds.Left + (bounds.Width - dataSize.Width) / 2;
             var dataY = bounds.Top + bounds.Height / 2 - (float)dataSize.Height / 2;
             graphics.DrawString(data, _boldFont, brush, dataX, dataY);
-            RhinoApp.WriteLine($"Rendering {data} to {dataX}, {dataY}");
-
             // center unit below data
             var unitX = bounds.Left + (bounds.Width - GH_FontServer.StringWidth(UnitText, _standardFont)) / 2;
             var unitY = dataY + dataSize.Height;
             graphics.DrawString(UnitText, _standardFont, brush, unitX, unitY);
-            RhinoApp.WriteLine($"Rendering {UnitText} to {unitX}, {unitY}");
         }
 
         public void NewData(Results results)
