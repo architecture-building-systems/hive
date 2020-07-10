@@ -13,16 +13,16 @@ namespace Hive.IO.EnergySystems
             : base(investmentCost, embodiedGhg, isHeating, isCooling)
         {
 
-            double [] inletTempArray = new double[Horizon];
-            double [] returnTempArray = new double[Horizon];
+            double [] inletTemperatures = new double[Horizon];
+            double [] returnTemperatures = new double[Horizon];
             for (int t = 0; t < Horizon; t++)
             {
-                inletTempArray[t] = inletTemperature;
-                returnTempArray[t] = returnTemperature;
+                inletTemperatures[t] = inletTemperature;
+                returnTemperatures[t] = returnTemperature;
             }
 
-            Water waterIn = new Water(Horizon, new double[Horizon], new double[Horizon], new double[Horizon], inletTempArray);
-            Water waterOut = new Water(Horizon, new double[Horizon], new double[Horizon], new double[Horizon], returnTempArray);
+            Water waterIn = new Water(Horizon, new double[Horizon], new double[Horizon], new double[Horizon], inletTemperatures);
+            Water waterOut = new Water(Horizon, new double[Horizon], new double[Horizon], new double[Horizon], returnTemperatures);
             base.InletCarrier = waterIn;
             base.ReturnCarrier = waterOut;
         }

@@ -46,7 +46,7 @@ namespace Hive.IO.GHComponents
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<SurfaceBased> srfTech = new List<SurfaceBased>();
+            List<SurfaceBasedTech> srfTech = new List<SurfaceBasedTech>();
             DA.GetDataList(0, srfTech);
 
             //List<Photovoltaic> pv = new List<Photovoltaic>();
@@ -62,7 +62,7 @@ namespace Hive.IO.GHComponents
             List<double> A_ST = new List<double>();
             List<double> A_PVT = new List<double>();
 
-            foreach (SurfaceBased tech in srfTech)
+            foreach (SurfaceBasedTech tech in srfTech)
             {
                 switch (tech.ToString())
                 {

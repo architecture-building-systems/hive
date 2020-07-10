@@ -43,7 +43,7 @@ namespace Hive.IO.GHComponents
             List<GH_ObjectWrapper> inputObjects = new List<GH_ObjectWrapper>();
             if (!DA.GetDataList(0, inputObjects)) return;
             
-            List<SurfaceBased> srfBasedTech = new List<SurfaceBased>();
+            List<SurfaceBasedTech> srfBasedTech = new List<SurfaceBasedTech>();
             Building building = null;
             Environment environment = null;
 

@@ -199,7 +199,7 @@ namespace Hive.IO.GHComponents
 
             
 
-            List<SurfaceBased> solartech = new List<SurfaceBased>();
+            List<SurfaceBasedTech> solartech = new List<SurfaceBasedTech>();
             foreach (Mesh mesh in meshList)
             {
                 if(Form_SystemType == "pv") solartech.Add(new Photovoltaic(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_pv_eff)); 

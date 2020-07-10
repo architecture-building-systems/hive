@@ -10,7 +10,7 @@ namespace Hive.IO.EnergySystems
 {
     #region MiscSupply
 
-    public class ElectricityGrid : Conversion
+    public class ElectricityGrid : ConversionTech
     {
         public ElectricityGrid(double investmentCost, double embodiedGhg, bool isHeating, bool isCooling, bool isElectric) : base(investmentCost, embodiedGhg, isHeating, isCooling, isElectric)
         {
@@ -19,7 +19,7 @@ namespace Hive.IO.EnergySystems
 
     }
 
-    public class DistrictHeating : Conversion
+    public class DistrictHeating : ConversionTech
     {
         public DistrictHeating(double investmentCost, double embodiedGhg, bool isHeating, bool isCooling, bool isElectric) : base(investmentCost, embodiedGhg, isHeating, isCooling, isElectric)
         {
@@ -29,7 +29,7 @@ namespace Hive.IO.EnergySystems
     }
 
 
-    public class DistrictCooling : Conversion
+    public class DistrictCooling : ConversionTech
     {
         public DistrictCooling(double investmentCost, double embodiedGhg, bool isHeating, bool isCooling, bool isElectric) 
             : base(investmentCost, embodiedGhg, isHeating, isCooling, isElectric)
@@ -41,7 +41,7 @@ namespace Hive.IO.EnergySystems
     }
 
 
-    public class Chiller : Conversion
+    public class Chiller : ConversionTech
     {
         public Chiller(double investmentCost, double embodiedGhg, bool isHeating, bool isCooling, bool isElectric) 
             : base(investmentCost, embodiedGhg, isHeating, isCooling, isElectric)
@@ -65,7 +65,7 @@ namespace Hive.IO.EnergySystems
     /// <summary>
     /// Surface based energy technologies, such as PV, solar thermal, PVT, ground collectors, etc.
     /// </summary>
-    public abstract class SurfaceBased : Conversion
+    public abstract class SurfaceBasedTech : ConversionTech
     {
         /// <summary>
         /// Rhino mesh geometry object representing the energy system. Can be quad or triangles.
@@ -77,7 +77,7 @@ namespace Hive.IO.EnergySystems
         /// </summary>
         public double SurfaceArea { get; private set; }
 
-        protected SurfaceBased(double investmentCost, double embodiedGhg, bool isHeating, bool isCooling, bool isElectric, Mesh surfaceGeometry) 
+        protected SurfaceBasedTech(double investmentCost, double embodiedGhg, bool isHeating, bool isCooling, bool isElectric, Mesh surfaceGeometry) 
             : base(investmentCost, embodiedGhg, isHeating, isCooling, isElectric)
         {
             this.SurfaceGeometry = surfaceGeometry;
@@ -85,7 +85,7 @@ namespace Hive.IO.EnergySystems
         }
 
 
-        protected static double[] ComputeMeanHourlyEnergy(Matrix hourlyIrradiance, SurfaceBased surfaceTech)
+        protected static double[] ComputeMeanHourlyEnergy(Matrix hourlyIrradiance, SurfaceBasedTech surfaceTech)
         {
             Mesh mesh = surfaceTech.SurfaceGeometry;
             double surfaceArea = surfaceTech.SurfaceArea;
@@ -159,7 +159,7 @@ namespace Hive.IO.EnergySystems
     /// <summary>
     /// Photovoltaic
     /// </summary>
-    public class Photovoltaic : SurfaceBased
+    public class Photovoltaic : SurfaceBasedTech
     {
         /// <summary>
         /// Temperature coefficient (unitless). Default is 0.004
@@ -236,7 +236,7 @@ namespace Hive.IO.EnergySystems
             double [] electricityGenerated = new double[horizon];
             double [] energyCost = new double[horizon];
             double [] ghgEmissions = new double[horizon];
-            double [] meanIrradiance = SurfaceBased.ComputeMeanHourlyEnergy(irradiance, this);
+            double [] meanIrradiance = SurfaceBasedTech.ComputeMeanHourlyEnergy(irradiance, this);
             base.InputCarrier = new Radiation(horizon, meanIrradiance);
 
             // compute pv electricity yield
@@ -260,7 +260,7 @@ namespace Hive.IO.EnergySystems
         public void SetInputComputeOutputSimple(Matrix irradiance)
         {
             int horizon = 8760;
-            double[] meanIrradiance = SurfaceBased.ComputeMeanHourlyEnergy(irradiance, this);
+            double[] meanIrradiance = SurfaceBasedTech.ComputeMeanHourlyEnergy(irradiance, this);
             base.InputCarrier = new Radiation(horizon, meanIrradiance);
 
             // compute pv electricity yield
@@ -283,7 +283,7 @@ namespace Hive.IO.EnergySystems
     /// <summary>
     /// Solar Thermal
     /// </summary>
-    public class SolarThermal : SurfaceBased
+    public class SolarThermal : SurfaceBasedTech
     {
         /// <summary>
         /// Inlet Water into the collector. Assume it is the return temperature from the heat emitter (e.g. radiator or floor heating)
@@ -354,7 +354,7 @@ namespace Hive.IO.EnergySystems
         public void SetInputComputeOutputSimple(Matrix irradiance)
         {
             int horizon = 8760;
-            double[] meanIrradiance = SurfaceBased.ComputeMeanHourlyEnergy(irradiance, this);
+            double[] meanIrradiance = SurfaceBasedTech.ComputeMeanHourlyEnergy(irradiance, this);
             Radiation solarCarrier = new Radiation(horizon, meanIrradiance);
             base.InputCarrier = solarCarrier;
 
@@ -387,7 +387,7 @@ namespace Hive.IO.EnergySystems
             int horizon = 8760;
             this.InletWater = inletWaterCarrier;
 
-            double[] meanIrradiance = SurfaceBased.ComputeMeanHourlyEnergy(irradiance, this);
+            double[] meanIrradiance = SurfaceBasedTech.ComputeMeanHourlyEnergy(irradiance, this);
             Radiation solarCarrier = new Radiation(horizon, meanIrradiance);
             base.InputCarrier = solarCarrier;
 
@@ -411,7 +411,7 @@ namespace Hive.IO.EnergySystems
     /// <summary>
     /// Hybrid Solar Photovolatic Thermal
     /// </summary>
-    public class PVT : SurfaceBased
+    public class PVT : SurfaceBasedTech
     {
         public double RefEfficiencyElectric { get; }
         public double RefEfficiencyHeating { get; }
@@ -443,7 +443,7 @@ namespace Hive.IO.EnergySystems
     /// <summary>
     /// Horizontal Ground Solar Collector
     /// </summary>
-    public class GroundCollector : SurfaceBased
+    public class GroundCollector : SurfaceBasedTech
     {
         public GroundCollector(double investmentCost, double embodiedGhg, Mesh surfaceGeometry, string detailedName)
             : base(investmentCost, embodiedGhg, true, false, false, surfaceGeometry)
@@ -465,9 +465,9 @@ namespace Hive.IO.EnergySystems
 
 
     #region Combustion technology
-    public abstract class Combustion : Conversion
+    public abstract class CombustionTech : ConversionTech
     {
-        protected Combustion(double investmentCost, double embodiedGhg, bool isHeating, bool isElectric) 
+        protected CombustionTech(double investmentCost, double embodiedGhg, bool isHeating, bool isElectric) 
             : base(investmentCost, embodiedGhg, isHeating, false, isElectric)
         {
         }
@@ -476,7 +476,7 @@ namespace Hive.IO.EnergySystems
     }
 
 
-    public class GasBoiler : Combustion
+    public class GasBoiler : CombustionTech
     {
         public GasBoiler(double investmentCost, double embodiedGhg, bool isHeating, bool isElectric) 
             : base(investmentCost, embodiedGhg, isHeating, isElectric)
@@ -493,7 +493,7 @@ namespace Hive.IO.EnergySystems
     }
 
 
-    public class CombinedHeatPower : Combustion
+    public class CombinedHeatPower : CombustionTech
     {
         public CombinedHeatPower(double investmentCost, double embodiedGhg, bool isHeating, bool isElectric) 
             : base(investmentCost, embodiedGhg, isHeating, isElectric)
@@ -522,7 +522,7 @@ namespace Hive.IO.EnergySystems
     /// Heating, Cooling, Electricity generation systems
     /// E.g. CHP, boiler, heat pump, chiller, PV ...
     /// </summary>
-    public abstract class Conversion
+    public abstract class ConversionTech
     {
         /// <summary>
         /// Technology name
@@ -579,7 +579,7 @@ namespace Hive.IO.EnergySystems
 
 
 
-        protected Conversion(double investmentCost, double embodiedGhg,
+        protected ConversionTech(double investmentCost, double embodiedGhg,
             bool isHeating, bool isCooling, bool isElectric)
         {
             this.SpecificInvestmentCost = investmentCost;

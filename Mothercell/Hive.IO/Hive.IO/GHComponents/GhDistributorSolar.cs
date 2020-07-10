@@ -40,7 +40,7 @@ namespace Hive.IO.GHComponents
             Building building = null;
             if (!DA.GetData(0, ref building)) return;
 
-            List<SurfaceBased> srfBasedTech = new List<SurfaceBased>();
+            List<SurfaceBasedTech> srfBasedTech = new List<SurfaceBasedTech>();
             DA.GetDataList(1, srfBasedTech);
 
             Environment environment = null;
@@ -88,7 +88,7 @@ namespace Hive.IO.GHComponents
 
             List<Mesh> srfBasedTechSurfaces = new List<Mesh>();
           
-            foreach (SurfaceBased srfTech in srfBasedTech)
+            foreach (SurfaceBasedTech srfTech in srfBasedTech)
                 srfBasedTechSurfaces.Add(srfTech.SurfaceGeometry);
 
 
