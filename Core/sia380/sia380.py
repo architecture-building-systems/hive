@@ -16,7 +16,7 @@ from __future__ import division
 import math
 
 
-def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surface_areas, surface_type, surface_irradiance):
+def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_areas, surface_type, surface_irradiance):
     '''
     Computes monthly heating, cooling and electricity demand for a thermal zone, based on SIA 380.1
     :param room_properties: room properties in json format
@@ -220,11 +220,15 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
         H_V = Vdot_th/3600 * rho * c_p
 
         # Ventilation losses (Lüftungswärmeverluste), Q_V
-        Q_V[month] = H_V * (T_i[month] - T_e[month]) * t[month]
+        Q_V_ub = H_V * (setpoints_ub[month] - T_e[month]) * t[month]
+        Q_V_lb = H_V * (setpoints_lb[month] - T_e[month]) * t[month]
+        # Q_V[month] = H_V * (T_i[month] - T_e[month]) * t[month]
 
         # Internal loads (interne Wärmeeinträge)
         Q_i[month] = Phi_P_tot * t_P[month] + Phi_L_tot * t_L[month] + Phi_A_tot * t_A[month]
 
+        Q_T_per_surfaces_this_month_ub = [0.0] * num_surfaces
+        Q_T_per_surfaces_this_month_lb = [0.0] * num_surfaces
         for surface in range(num_surfaces):
             # solar gains (solare Wärmeeinträge), Q_s, (PER SURFACE)
             # unobstructed or obstructed, both using SolarModel.dll and GHSolar.gha
@@ -236,26 +240,46 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
                 H_T = surface_areas[surface] * U_w
 
             # Transmission losses (Transmissionswärmeverluste), Q_T, (PER SURFACE, because function of H_T)
-            Q_T_per_surface[month][surface] = H_T * (T_i[month] - T_e[month]) * t[month]
+            Q_T_per_surfaces_this_month_ub[surface] = H_T * (setpoints_ub[month] - T_e[month]) * t[month]
+            Q_T_per_surfaces_this_month_lb[surface] = H_T * (setpoints_lb[month] - T_e[month]) * t[month]
+            # Q_T_per_surface[month][surface] = H_T * (T_i[month] - T_e[month]) * t[month]
 
-        Q_T[month] = sum(Q_T_per_surface[month])
+        Q_T_ub = sum(Q_T_per_surfaces_this_month_ub)
+        Q_T_lb = sum(Q_T_per_surfaces_this_month_lb)
+        # Q_T[month] = sum(Q_T_per_surface[month])
+
         Q_s[month] = sum(Q_s_per_surface[month])
 
         # Heatgains/-losses ratio (Wärmeeintrag/-verlust Verhältnis), gamma
-        gamma = (Q_i[month] + Q_s[month]) / (Q_T[month] + Q_V[month])
+        gamma_ub = (Q_i[month] + Q_s[month]) / (Q_T_ub + Q_V_ub)
+        gamma_lb = (Q_i[month] + Q_s[month]) / (Q_T_lb + Q_V_lb)
+        # gamma = (Q_i[month] + Q_s[month]) / (Q_T[month] + Q_V[month])
 
         # usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
-        if Q_T[month] + Q_V[month] < 0:
-            eta_g = 0
-        elif gamma == 1:
-            eta_g = (1 + tau / 5) / (2 + tau / 15)
-        else:
-            a = 1 + tau / 15
-            eta_g = (1 - gamma ** a) / (1 - gamma ** (a + 1))
+        # if Q_T[month] + Q_V[month] < 0:
+        #     eta_g = 0
+        # elif gamma == 1:
+        #     eta_g = (1 + tau / 5) / (2 + tau / 15)
+        # else:
+        #     a = 1 + tau / 15
+        #     eta_g = (1 - gamma ** a) / (1 - gamma ** (a + 1))
+        eta_g_lb = calc_eta_g(Q_T_lb, Q_V_lb, gamma_lb, tau)
+        eta_g_ub = calc_eta_g(Q_T_ub, Q_V_ub, gamma_ub, tau)
 
         # heating demand (Heizwärmebedarf), Q_H
+        demand_ub = Q_T_ub + Q_V_ub - eta_g_ub * (Q_i[month] + Q_s[month])
+        demand_lb = Q_T_lb + Q_V_lb - eta_g_lb * (Q_i[month] + Q_s[month])
+        eta_g = 0.0
+        if abs(demand_lb) < abs(demand_ub):
+            Q_T[month] = Q_T_lb
+            Q_V[month] = Q_V_lb
+            eta_g = eta_g_lb
+        else:
+            Q_T[month] = Q_T_ub
+            Q_V[month] = Q_V_ub
+            eta_g = eta_g_ub
         demand = Q_T[month] + Q_V[month] - eta_g * (Q_i[month] + Q_s[month])
-        if(demand > 0):
+        if demand > 0:
             Q_Heat[month] = demand
         else:
             Q_Cool[month] = demand
@@ -265,6 +289,17 @@ def main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surf
     tokWh = 1000.0
     return [x / tokWh for x in Q_Heat], [x / tokWh for x in Q_Cool], [x / tokWh for x in Q_Elec], Q_T, Q_V, Q_i, Q_s
 
+
+def calc_eta_g(Q_T_month, Q_V_month, gamma, tau):
+    # usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
+    if Q_T_month + Q_V_month < 0:
+        eta_g = 0
+    elif gamma == 1:
+        eta_g = (1 + tau / 5) / (2 + tau / 15)
+    else:
+        a = 1 + tau / 15
+        eta_g = (1 - gamma ** a) / (1 - gamma ** (a + 1))
+    return eta_g
 
 
 if __name__ == "__main__":
