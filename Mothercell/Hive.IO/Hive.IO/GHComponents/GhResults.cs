@@ -46,21 +46,21 @@ namespace Hive.IO.GHComponents
             pManager.AddBooleanParameter("Supply System Suitability", "SupSysSuit", "Suitability of supply sytem for electricity, heating and cooling generation.", GH_ParamAccess.tree);
             pManager.AddTextParameter("Supply System Units", "SupSysUnits", "Unit of the supply system capacity / operation.", GH_ParamAccess.list);
 
-            // 14, 15
+            // 14, 15, 16
             pManager.AddMeshParameter("Solar Irradiated Surfaces", "SolSrfs", "Mesh surfaces whose vertices are coloured accordint to their solar exposure in [kWh/year]", GH_ParamAccess.list);
             pManager.AddMeshParameter("Sky View Factor", "ViewFactor", "Sky dome showing view factors.", GH_ParamAccess.item);
             pManager.AddCurveParameter("Sunpath Diagram", "SunPath", "Sunpath diagram for the geographic location of the building.", GH_ParamAccess.list);
 
 
-            // 16
-            pManager.AddGenericParameter("Hive.Building", "Hive.Building", "Hive.Building", GH_ParamAccess.item);
             // 17
-            pManager.AddGenericParameter("Hive.ConversionTech", "Hive.ConversionTech", "Hive.ConversionTech", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Hive.Building", "Hive.Building", "Hive.Building", GH_ParamAccess.item);
             // 18
-            pManager.AddGenericParameter("Hive.Emitters", "Hive.Emitters", "Hive.Emitters", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Hive.ConversionTech", "Hive.ConversionTech", "Hive.ConversionTech", GH_ParamAccess.list);
             // 19
-            pManager.AddGenericParameter("OutputEnergy", "OutputEnergy", "OutputEnergy", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Hive.Emitters", "Hive.Emitters", "Hive.Emitters", GH_ParamAccess.list);
             // 20
+            pManager.AddGenericParameter("OutputEnergy", "OutputEnergy", "OutputEnergy", GH_ParamAccess.list);
+            // 21
             pManager.AddGenericParameter("InputEnergy", "InputEnergy", "InputEnergy", GH_ParamAccess.list);
 
             for (int i = 0; i < pManager.ParamCount; i++)
@@ -176,27 +176,16 @@ namespace Hive.IO.GHComponents
 
             //DA.SetDataTree(0, oCircles);
 
-
-            //// 16
-            //pManager.AddGenericParameter("Hive.Building", "Hive.Building", "Hive.Building", GH_ParamAccess.item);
-            //// 17
-            //pManager.AddGenericParameter("Hive.ConversionTech", "Hive.ConversionTech", "Hive.ConversionTech", GH_ParamAccess.list);
-            //// 18
-            //pManager.AddGenericParameter("Hive.Emitters", "Hive.Emitters", "Hive.Emitters", GH_ParamAccess.list);
-            //// 19
-            //pManager.AddGenericParameter("OutputEnergy", "OutputEnergy", "OutputEnergy", GH_ParamAccess.list);
-            //// 20
-            //pManager.AddGenericParameter("InputEnergy", "InputEnergy", "InputEnergy", GH_ParamAccess.list);
             Building building = null;
             var conversionTechs = new List<ConversionTech>();
             var emitters = new List<Emitter>();
             var outputEnergies = new List<EnergyCarrier>();
             var inputEnergies = new List<EnergyCarrier>();
-            DA.GetData(16, ref building);
-            DA.GetDataList(17, conversionTechs);
-            DA.GetDataList(18, emitters);
-            DA.GetDataList(19, outputEnergies);
-            DA.GetDataList(20, inputEnergies);
+            DA.GetData(17, ref building);
+            DA.GetDataList(18, conversionTechs);
+            DA.GetDataList(19, emitters);
+            DA.GetDataList(20, outputEnergies);
+            DA.GetDataList(21, inputEnergies);
 
 
             // writing data into results object
