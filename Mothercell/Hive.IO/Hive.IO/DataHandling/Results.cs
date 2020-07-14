@@ -122,31 +122,32 @@ namespace Hive.IO
         /// <summary>
         /// Building object that contains geometric, construction, energy demand, cost (not operational), and LCA (not operational) information 
         /// </summary>
-        public Building building { get; private set; }
+        public Building Building { get; private set; }
         /// <summary>
         /// Energy conversion technologies (e.g. boiler, PV, heatpump, etc.). Include operation schedules, operational LCA, embodied LCA of technologies, and operational and investment cost of technologies
         /// </summary>
-        public List<ConversionTech> conversionTechnologies { get; private set; }
+        public List<ConversionTech> ConversionTechnologies { get; private set; }
         /// <summary>
         /// Heat and Cooling emitters of the building
         /// </summary>
-        public List<Emitter> emitters { get; private set; }
+        public List<Emitter> Emitters { get; private set; }
         /// <summary>
         /// Final output energy streams to meet building energy demands
         /// </summary>
-        public List<EnergyCarrier> outputEnergyStreams { get; private set; }
+        public List<EnergyCarrier> OutputEnergyStreams { get; private set; }
         /// <summary>
         /// Initial input energy streams into the system. That might include Grid Electricity, Solar Potentials, District Heating, ...
         /// </summary>
-        public List<EnergyCarrier> inputEnergyStreams { get; private set; }
+        public List<EnergyCarrier> InputEnergyStreams { get; private set; }
 
         #endregion
 
 
-        public Results()
+        public Results(Building building, List<ConversionTech> conversionTech, List<Emitter> emitters, List<EnergyCarrier> outputEnergy, List<EnergyCarrier> inputEnergy)
         {
-            // FIXME: make sure this is set to a real value...
-            this.TotalFloorArea = 100.0;
+            this.TotalFloorArea = GetTotalFloorArea(building);
+
+
 
             this.TotalCoolingMonthly = new double[Results.months];
             this.TotalElectricityMonthly = new double[Results.months];
@@ -169,6 +170,7 @@ namespace Hive.IO
         }
 
 
+        #region Setters
         /// <summary>
         /// Sets the 3D sky dome around the building
         /// </summary>
@@ -340,6 +342,21 @@ namespace Hive.IO
             else
                 this.TotalDHWHourly = null;
         }
+        #endregion
+
+
+        #region Getters
+
+        public static double GetTotalFloorArea(Building building)
+        {
+            double totalFloorArea = 0.0;
+            foreach (var zone in building.Zones)
+                foreach (var floor in zone.Floors)
+                    totalFloorArea += floor.Area;
+            return totalFloorArea;
+        }
+
+        #endregion
 
     }
 }

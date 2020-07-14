@@ -37,7 +37,7 @@ namespace Hive.IO.GHComponents
         {
             if (m_data.IsEmpty)
             {
-                Results = new Results();
+                Results = null;
             }
             else
             {

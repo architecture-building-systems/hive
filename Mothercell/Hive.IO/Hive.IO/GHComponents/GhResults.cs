@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
+using Hive.IO.EnergySystems;
 using Rhino.Geometry;
 
 namespace Hive.IO.GHComponents
@@ -50,6 +51,17 @@ namespace Hive.IO.GHComponents
             pManager.AddMeshParameter("Sky View Factor", "ViewFactor", "Sky dome showing view factors.", GH_ParamAccess.item);
             pManager.AddCurveParameter("Sunpath Diagram", "SunPath", "Sunpath diagram for the geographic location of the building.", GH_ParamAccess.list);
 
+
+            // 16
+            pManager.AddGenericParameter("Hive.Building", "Hive.Building", "Hive.Building", GH_ParamAccess.item);
+            // 17
+            pManager.AddGenericParameter("Hive.ConversionTech", "Hive.ConversionTech", "Hive.ConversionTech", GH_ParamAccess.list);
+            // 18
+            pManager.AddGenericParameter("Hive.Emitters", "Hive.Emitters", "Hive.Emitters", GH_ParamAccess.list);
+            // 19
+            pManager.AddGenericParameter("OutputEnergy", "OutputEnergy", "OutputEnergy", GH_ParamAccess.list);
+            // 20
+            pManager.AddGenericParameter("InputEnergy", "InputEnergy", "InputEnergy", GH_ParamAccess.list);
 
             for (int i = 0; i < pManager.ParamCount; i++)
                 pManager[i].Optional = true;
@@ -165,8 +177,30 @@ namespace Hive.IO.GHComponents
             //DA.SetDataTree(0, oCircles);
 
 
+            //// 16
+            //pManager.AddGenericParameter("Hive.Building", "Hive.Building", "Hive.Building", GH_ParamAccess.item);
+            //// 17
+            //pManager.AddGenericParameter("Hive.ConversionTech", "Hive.ConversionTech", "Hive.ConversionTech", GH_ParamAccess.list);
+            //// 18
+            //pManager.AddGenericParameter("Hive.Emitters", "Hive.Emitters", "Hive.Emitters", GH_ParamAccess.list);
+            //// 19
+            //pManager.AddGenericParameter("OutputEnergy", "OutputEnergy", "OutputEnergy", GH_ParamAccess.list);
+            //// 20
+            //pManager.AddGenericParameter("InputEnergy", "InputEnergy", "InputEnergy", GH_ParamAccess.list);
+            Building building = null;
+            var conversionTechs = new List<ConversionTech>();
+            var emitters = new List<Emitter>();
+            var outputEnergies = new List<EnergyCarrier>();
+            var inputEnergies = new List<EnergyCarrier>();
+            DA.GetData(16, ref building);
+            DA.GetDataList(17, conversionTechs);
+            DA.GetDataList(18, emitters);
+            DA.GetDataList(19, outputEnergies);
+            DA.GetDataList(20, inputEnergies);
+
+
             // writing data into results object
-            Results results = new Results();
+            Results results = new Results(building, conversionTechs, emitters, outputEnergies, inputEnergies);
             
             // these methods should handle nulls or wrong list lengths themselves
             results.SetTotalDemandMonthly(coolingMonthly.ToArray(), heatingMonthly.ToArray(), electricityMonthly.ToArray(), domesticHotWaterMonthly.ToArray());
