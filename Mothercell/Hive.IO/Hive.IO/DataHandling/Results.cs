@@ -149,7 +149,8 @@ namespace Hive.IO
 
 
 
-            this.TotalCoolingMonthly = new double[Results.months];
+            this.TotalCoolingMonthly = GetTotalCoolingMonthly();
+
             this.TotalElectricityMonthly = new double[Results.months];
             this.TotalHeatingMonthly = new double[Results.months];
             this.TotalDHWMonthly = new double[Results.months];
@@ -354,6 +355,14 @@ namespace Hive.IO
                 foreach (var floor in zone.Floors)
                     totalFloorArea += floor.Area;
             return totalFloorArea;
+        }
+
+        public static double [] GetTotalCoolingMonthly()
+        {
+            // demand is in OutputEnergyCarriers
+
+
+            return new double[1]{0.0};
         }
 
         #endregion
