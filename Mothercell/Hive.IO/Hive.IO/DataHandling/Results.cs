@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Windows.Forms;
 using Hive.IO.EnergySystems;
 using rg = Rhino.Geometry;
 
@@ -143,17 +144,52 @@ namespace Hive.IO
         #endregion
 
 
+        /// <summary>
+        /// empty constructor
+        /// </summary>
+        public Results()
+        {
+            this.TotalFloorArea = 0.0;
+
+            this.TotalHeatingMonthly = new double[Results.months];
+            this.TotalDHWMonthly = new double[Results.months];
+            this.TotalCoolingMonthly = new double[Results.months];
+            this.TotalElectricityMonthly = new double[Results.months];
+
+            this.TotalCoolingHourly = new double[Results.hours];
+            this.TotalHeatingHourly = new double[Results.hours];
+            this.TotalElectricityHourly = new double[Results.hours];
+            this.TotalDHWHourly = new double[Results.hours];
+
+            this.SupplyNames = null;
+            this.SupplyTypes = null;
+            this.SupplyCapacities = null;
+            this.SupplyCapUnits = null;
+
+            this.SkyViewFactors = null;
+            this.SkySunPath = null;
+            this.IrradiationSurfaces = null;
+        }
+
+
+        /// <summary>
+        /// proper constructor
+        /// </summary>
+        /// <param name="building"></param>
+        /// <param name="conversionTech"></param>
+        /// <param name="emitters"></param>
+        /// <param name="outputEnergy"></param>
+        /// <param name="inputEnergy"></param>
         public Results(Building building, List<ConversionTech> conversionTech, List<Emitter> emitters, List<EnergyCarrier> outputEnergy, List<EnergyCarrier> inputEnergy)
         {
             this.TotalFloorArea = GetTotalFloorArea(building);
 
+            this.TotalHeatingMonthly = GetTotalMonthlyLoads(building, "heating");
+            this.TotalDHWMonthly = GetTotalMonthlyLoads(building, "dhw");
+            this.TotalCoolingMonthly = GetTotalMonthlyLoads(building, "cooling");
+            this.TotalElectricityMonthly = GetTotalMonthlyLoads(building, "electricity");
 
 
-            this.TotalCoolingMonthly = GetTotalCoolingMonthly();
-
-            this.TotalElectricityMonthly = new double[Results.months];
-            this.TotalHeatingMonthly = new double[Results.months];
-            this.TotalDHWMonthly = new double[Results.months];
 
             this.TotalCoolingHourly = new double[Results.hours];
             this.TotalHeatingHourly = new double[Results.hours];
@@ -357,12 +393,34 @@ namespace Hive.IO
             return totalFloorArea;
         }
 
-        public static double [] GetTotalCoolingMonthly()
+        public static double [] GetTotalMonthlyLoads(Building building, string loadType)
         {
-            // demand is in OutputEnergyCarriers
+            const int months = 12;
+            double [] totalLoads = new double[months];
 
+            foreach (var zone in building.Zones)
+            {
+                for (int m = 0; m < months; m++)
+                {
+                    switch (loadType)
+                    {
+                        case "cooling":
+                            totalLoads[m] += zone.CoolingLoadsMonthly[m];
+                            break;
+                        case "heating":
+                            totalLoads[m] += zone.HeatingLoadsMonthly[m];
+                            break;
+                        case "dhw":
+                            totalLoads[m] += zone.DHWLoadsMonthly[m];
+                            break;
+                        case "electricity":
+                            totalLoads[m] += zone.ElectricityLoadsMonthly[m];
+                            break;
+                    }
+                }
+            }
 
-            return new double[1]{0.0};
+            return totalLoads;
         }
 
         #endregion

@@ -111,6 +111,26 @@ namespace Hive.IO
         #endregion
 
 
+        #region Energy Demand
+        /// <summary>
+        /// in kWh per month
+        /// </summary>
+        public double [] HeatingLoadsMonthly { get; private set; }
+        /// <summary>
+        /// in kWh per month
+        /// </summary>
+        public double[] DHWLoadsMonthly { get; private set; }
+        /// <summary>
+        /// in kWh per month
+        /// </summary>
+        public double[] CoolingLoadsMonthly { get; private set; }
+        /// <summary>
+        /// in kWh per month
+        /// </summary>
+        public double[] ElectricityLoadsMonthly { get; private set; }
+        #endregion
+
+
         #region Error handling
         /// <summary>
         /// For simplicity of thermal calculations, avoid curves etc., only accept linear floorplans and geometries
@@ -233,6 +253,33 @@ namespace Hive.IO
 
         }
         #endregion
+
+
+        #region Setters
+
+        /// <summary>
+        /// Setting monthly energy demands of this zone. Loads have to be computed externally, e.g. with Hive.Core SIA380
+        /// </summary>
+        /// <param name="heatingLoads"></param>
+        /// <param name="dhwLoads"></param>
+        /// <param name="coolingLoads"></param>
+        /// <param name="electricityLoads"></param>
+        public void SetEnergyDemandsMonthly(double [] heatingLoads, double [] dhwLoads, double[] coolingLoads, double [] electricityLoads)
+        {
+            const int months = 12;
+            this.HeatingLoadsMonthly = new double[months];
+            this.DHWLoadsMonthly = new double[months];
+            this.CoolingLoadsMonthly = new double[months];
+            this.ElectricityLoadsMonthly = new double[months];
+
+            heatingLoads.CopyTo(this.HeatingLoadsMonthly, 0);
+            dhwLoads.CopyTo(this.DHWLoadsMonthly, 0);
+            coolingLoads.CopyTo(this.CoolingLoadsMonthly, 0);
+            electricityLoads.CopyTo(this.ElectricityLoadsMonthly, 0);
+        }
+
+        #endregion
+
 
 
         #region internalMethods

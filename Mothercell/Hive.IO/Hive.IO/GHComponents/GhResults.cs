@@ -188,11 +188,13 @@ namespace Hive.IO.GHComponents
             DA.GetDataList(21, inputEnergies);
 
 
+            building.Zones[0].SetEnergyDemandsMonthly(heatingMonthly.ToArray(), domesticHotWaterMonthly.ToArray(), coolingMonthly.ToArray(), electricityMonthly.ToArray());
+
             // writing data into results object
             Results results = new Results(building, conversionTechs, emitters, outputEnergies, inputEnergies);
             
             // these methods should handle nulls or wrong list lengths themselves
-            results.SetTotalDemandMonthly(coolingMonthly.ToArray(), heatingMonthly.ToArray(), electricityMonthly.ToArray(), domesticHotWaterMonthly.ToArray());
+            //results.SetTotalDemandMonthly(coolingMonthly.ToArray(), heatingMonthly.ToArray(), electricityMonthly.ToArray(), domesticHotWaterMonthly.ToArray());
             results.SetTotalDemandHourly(coolingHourly.ToArray(), heatingHourly.ToArray(), electricityHourly.ToArray(), domesticHotWaterHourly.ToArray());
             results.SetSupplySystemsCapacity(supplyNames.ToArray(), supplyTypes, supplyCap.ToArray(), supplyUnits.ToArray());
             results.SetSupplySystemsGenerationMonthly(operationMonthly);
