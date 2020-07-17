@@ -11,6 +11,8 @@ namespace Hive.IO.Plots
     /// </summary>
     public class AmrPlotBase: IVisualizerPlot
     {
+        private float textBoxPadding = 50;
+
         protected RectangleF Bounds { get; private set; }
         protected string Title => "AmrPlot";
 
@@ -18,13 +20,15 @@ namespace Hive.IO.Plots
         protected Font BoldFont => GH_FontServer.StandardBold;
         protected Font NormalFont => GH_FontServer.Standard;
 
+        protected Brush TextBrush => new SolidBrush(Color.Black);
+
         // calculate row heights and column widths of the grid
-        private float RightAxisWidth => GH_FontServer.MeasureString("1000", BoldFont).Width;
+        private float RightAxisWidth => GH_FontServer.MeasureString("10000", BoldFont).Width + textBoxPadding;
         private float LeftAxisWidth => RightAxisWidth;
         private float EmbodiedColumnWidth => (Bounds.Width - RightAxisWidth - LeftAxisWidth) / 2;
         private float OperationColumnWidth => EmbodiedColumnWidth;
 
-        private float TitleHeight => GH_FontServer.MeasureString("Title", TitleFont).Height;
+        private float TitleHeight => GH_FontServer.MeasureString("Title", TitleFont).Height + textBoxPadding;
         private float ColumnTitleHeight => GH_FontServer.MeasureString("Embodied / Operation", BoldFont).Height;
         private float ColumnLegendHeight => GH_FontServer.MeasureString("legend", NormalFont).Height;
 
@@ -86,8 +90,32 @@ namespace Hive.IO.Plots
         public void Render(Results results, Graphics graphics, RectangleF bounds)
         {
             Bounds = bounds;
+            RenderGrid(graphics);
+            RenderTitle(graphics);
+            RenderLeftAxis(graphics);
+        }
 
-            // draw the grid
+        private void RenderTitle(Graphics graphics)
+        {
+            var format = StringFormat.GenericTypographic;
+            format.Alignment = StringAlignment.Center;
+
+            graphics.DrawString(Title, TitleFont, TextBrush, TitleBounds, format);
+        }
+
+        private void RenderLeftAxis(Graphics graphics)
+        {
+            var format = StringFormat.GenericTypographic;
+            format.Alignment = StringAlignment.Center;
+
+            graphics.RotateTransform(-90);
+            graphics.DrawString("Buildings", BoldFont, TextBrush, BuildingsLeftAxisBounds, format);
+            graphics.DrawString("Systems", BoldFont, TextBrush, SystemsLeftAxisBounds, format);
+            graphics.RotateTransform(+90);
+        }
+
+        private void RenderGrid(Graphics graphics)
+        {
             var borderPen = new Pen(Color.Black);
             graphics.DrawRectangleF(borderPen, LeftTopBounds);
             graphics.DrawRectangleF(borderPen, EmbodiedTitleBounds);
@@ -95,7 +123,7 @@ namespace Hive.IO.Plots
             graphics.DrawRectangleF(borderPen, EmbodiedBuildingsLegendBounds);
             graphics.DrawRectangleF(borderPen, OperationBuildingsLegendBounds);
             graphics.DrawRectangleF(borderPen, RightTopBounds);
-            
+
             graphics.DrawRectangleF(borderPen, BuildingsLeftAxisBounds);
             graphics.DrawRectangleF(borderPen, EmbodiedBuildingsPlotBounds);
             graphics.DrawRectangleF(borderPen, OperationBuildingsPlotBounds);
