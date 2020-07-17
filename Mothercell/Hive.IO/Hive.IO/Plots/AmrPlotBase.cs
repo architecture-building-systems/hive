@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Net.Mime;
 using Grasshopper.Kernel;
 
 namespace Hive.IO.Plots
@@ -105,13 +106,8 @@ namespace Hive.IO.Plots
 
         private void RenderLeftAxis(Graphics graphics)
         {
-            var format = StringFormat.GenericTypographic;
-            format.Alignment = StringAlignment.Center;
-
-            graphics.RotateTransform(-90);
-            graphics.DrawString("Buildings", BoldFont, TextBrush, BuildingsLeftAxisBounds, format);
-            graphics.DrawString("Systems", BoldFont, TextBrush, SystemsLeftAxisBounds, format);
-            graphics.RotateTransform(+90);
+            graphics.DrawStringVertical("Buildings", BoldFont, TextBrush, BuildingsLeftAxisBounds);
+            graphics.DrawStringVertical("Systems", BoldFont, TextBrush, SystemsLeftAxisBounds);
         }
 
         private void RenderGrid(Graphics graphics)
@@ -191,6 +187,30 @@ namespace Hive.IO.Plots
         public static void DrawRectangleF(this Graphics self, Pen pen, RectangleF rectangle)
         {
             self.DrawRectangle(pen, rectangle.X, rectangle.Y, rectangle.Width, rectangle.Height);
+        }
+
+        /// <summary>
+        /// DrawString, except text is drawn from bottom to top, centered vertically and horizontally.
+        /// </summary>
+        /// <param name="graphics"></param>
+        /// <param name="text"></param>
+        /// <param name="font"></param>
+        /// <param name="brush"></param>
+        /// <param name="bounds"></param>
+        public static void DrawStringVertical(this Graphics graphics, string text, Font font, Brush brush, RectangleF bounds)
+        {
+            var format = StringFormat.GenericTypographic;
+            format.Alignment = StringAlignment.Center;
+            format.LineAlignment = StringAlignment.Center;
+
+            var rotatedBounds = new RectangleF(bounds.Left, bounds.Bottom, bounds.Height, bounds.Width);
+            var translatedBounds = rotatedBounds.CloneWithOffset(-rotatedBounds.X, -rotatedBounds.Y);
+
+            graphics.TranslateTransform(bounds.X, bounds.Y + bounds.Height);
+            graphics.RotateTransform(-90);
+            graphics.DrawString(text, font, brush, translatedBounds, format);
+            graphics.RotateTransform(+90);
+            graphics.TranslateTransform(-bounds.X, -bounds.Y - bounds.Height);
         }
     }
 }
