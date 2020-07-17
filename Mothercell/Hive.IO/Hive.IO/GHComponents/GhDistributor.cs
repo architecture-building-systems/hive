@@ -50,27 +50,18 @@ namespace Hive.IO.GHComponents
 
             foreach (GH_ObjectWrapper hiveInput in inputObjects)
             {
-                switch (hiveInput.Value.ToString())
-                {
-                    case  "Hive.IO.EnergySystems.Photovoltaic":
-                        srfBasedTech.Add(hiveInput.Value as Photovoltaic);
-                        break;
-                    case "Hive.IO.EnergySystems.SolarThermal":
-                        srfBasedTech.Add(hiveInput.Value as SolarThermal);
-                        break;
-                    case "Hive.IO.EnergySystems.PVT":
-                        srfBasedTech.Add(hiveInput.Value as PVT);
-                        break;
-                    case "Hive.IO.EnergySystems.GroundCollector":
-                        srfBasedTech.Add(hiveInput.Value as GroundCollector);
-                        break;
-                    case "Hive.IO.Building":
-                        building = hiveInput.Value as Building;
-                        break;
-                    case "Hive.IO.Environment":
-                        environment = hiveInput.Value as Environment;
-                        break;
-                }
+                if (hiveInput.Value is Photovoltaic)
+                    srfBasedTech.Add(hiveInput.Value as Photovoltaic);
+                else if(hiveInput.Value is SolarThermal)
+                    srfBasedTech.Add(hiveInput.Value as SolarThermal);
+                else if(hiveInput.Value is PVT)
+                    srfBasedTech.Add(hiveInput.Value as PVT);
+                else if(hiveInput.Value is GroundCollector)
+                    srfBasedTech.Add(hiveInput.Value as GroundCollector);
+                else if (hiveInput.Value is Building)
+                    building = hiveInput.Value as Building;
+                else if(hiveInput.Value is Environment)
+                    environment = hiveInput.Value as Environment;
             }
 
             //if (building != null) Rhino.RhinoApp.WriteLine("Building '{0}' read successfully", building.Type.ToString());

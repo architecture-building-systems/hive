@@ -12,7 +12,8 @@ namespace Hive.IO.EnergySystems
 
     public class ElectricityGrid : ConversionTech
     {
-        public ElectricityGrid(double investmentCost, double embodiedGhg, bool isHeating, bool isCooling, bool isElectric) : base(investmentCost, embodiedGhg, isHeating, isCooling, isElectric)
+        public ElectricityGrid(double investmentCost, double embodiedGhg) 
+            : base(investmentCost, embodiedGhg, double.MaxValue, "kW", false, false, true)
         {
         }
 
@@ -21,7 +22,8 @@ namespace Hive.IO.EnergySystems
 
     public class DistrictHeating : ConversionTech
     {
-        public DistrictHeating(double investmentCost, double embodiedGhg, bool isHeating, bool isCooling, bool isElectric) : base(investmentCost, embodiedGhg, isHeating, isCooling, isElectric)
+        public DistrictHeating(double investmentCost, double embodiedGhg) 
+            : base(investmentCost, embodiedGhg, Double.MaxValue, "kW", true, false, false)
         {
         }
 
@@ -31,8 +33,8 @@ namespace Hive.IO.EnergySystems
 
     public class DistrictCooling : ConversionTech
     {
-        public DistrictCooling(double investmentCost, double embodiedGhg, bool isHeating, bool isCooling, bool isElectric) 
-            : base(investmentCost, embodiedGhg, isHeating, isCooling, isElectric)
+        public DistrictCooling(double investmentCost, double embodiedGhg) 
+            : base(investmentCost, embodiedGhg, double.MaxValue, "kW", false, true, false)
         {
         }
 
@@ -43,8 +45,8 @@ namespace Hive.IO.EnergySystems
 
     public class Chiller : ConversionTech
     {
-        public Chiller(double investmentCost, double embodiedGhg, bool isHeating, bool isCooling, bool isElectric) 
-            : base(investmentCost, embodiedGhg, isHeating, isCooling, isElectric)
+        public Chiller(double investmentCost, double embodiedGhg, double capacity) 
+            : base(investmentCost, embodiedGhg, capacity, "kW", false, true, false)
         {
         }
 
@@ -78,7 +80,7 @@ namespace Hive.IO.EnergySystems
         public double SurfaceArea { get; private set; }
 
         protected SurfaceBasedTech(double investmentCost, double embodiedGhg, bool isHeating, bool isCooling, bool isElectric, Mesh surfaceGeometry) 
-            : base(investmentCost, embodiedGhg, isHeating, isCooling, isElectric)
+            : base(investmentCost, embodiedGhg, 0.0, "undefined", isHeating, isCooling, isElectric)
         {
             this.SurfaceGeometry = surfaceGeometry;
             this.SurfaceArea = Rhino.Geometry.AreaMassProperties.Compute(this.SurfaceGeometry).Area;
@@ -202,6 +204,9 @@ namespace Hive.IO.EnergySystems
             this.NOCT_sol = 800.0;
 
             this.PR = 1.0;
+
+            base.CapacityUnit = "kW_peak";
+            base.Capacity = refEfficiencyElectric * base.SurfaceArea; // kW_peak, assuming 1kW per m^2 solar irradiance
         }
 
 
@@ -319,6 +324,9 @@ namespace Hive.IO.EnergySystems
             this.FRUL = 4.9;
 
             this.R_V = 0.95;
+
+            base.CapacityUnit = "kW_peak";
+            base.Capacity = base.SurfaceArea * refEfficiencyHeating; // kW_peak, assuming 1 kW/m^2 solar irradiance
         }
 
 
@@ -467,8 +475,8 @@ namespace Hive.IO.EnergySystems
     #region Combustion technology
     public abstract class CombustionTech : ConversionTech
     {
-        protected CombustionTech(double investmentCost, double embodiedGhg, bool isHeating, bool isElectric) 
-            : base(investmentCost, embodiedGhg, isHeating, false, isElectric)
+        protected CombustionTech(double investmentCost, double embodiedGhg, double capacity, bool isHeating, bool isElectric) 
+            : base(investmentCost, embodiedGhg, capacity, "kW", isHeating, false, isElectric)
         {
         }
 
@@ -478,8 +486,8 @@ namespace Hive.IO.EnergySystems
 
     public class GasBoiler : CombustionTech
     {
-        public GasBoiler(double investmentCost, double embodiedGhg, bool isHeating, bool isElectric) 
-            : base(investmentCost, embodiedGhg, isHeating, isElectric)
+        public GasBoiler(double investmentCost, double embodiedGhg, double capacity) 
+            : base(investmentCost, embodiedGhg, capacity, true, false)
         {
         }
 
@@ -495,8 +503,8 @@ namespace Hive.IO.EnergySystems
 
     public class CombinedHeatPower : CombustionTech
     {
-        public CombinedHeatPower(double investmentCost, double embodiedGhg, bool isHeating, bool isElectric) 
-            : base(investmentCost, embodiedGhg, isHeating, isElectric)
+        public CombinedHeatPower(double investmentCost, double embodiedGhg, double capacityElectric, double powerToHeatRatio) 
+            : base(investmentCost, embodiedGhg, capacityElectric, true, true)
         {
             base.Name = "CombinedHeatPower";
         }
@@ -554,7 +562,7 @@ namespace Hive.IO.EnergySystems
         public double Capacity { get; protected set; }
 
         /// <summary>
-        /// Unit of technology capacity (e.g. "kW", or "sqm", etc.)
+        /// Capacity unit of technology capacity (e.g. "kW", "kWh", "kW_peak", etc.)
         /// </summary>
         public string CapacityUnit { get; protected set; }
 
@@ -580,10 +588,13 @@ namespace Hive.IO.EnergySystems
 
 
         protected ConversionTech(double investmentCost, double embodiedGhg,
+            double capacity, string capacityUnity,
             bool isHeating, bool isCooling, bool isElectric)
         {
             this.SpecificInvestmentCost = investmentCost;
             this.SpecificEmbodiedGhg = embodiedGhg;
+            this.Capacity = capacity;
+            this.CapacityUnit = capacityUnity;
             this.IsHeating = isHeating;
             this.IsCooling = isCooling;
             this.IsElectric = isElectric;
