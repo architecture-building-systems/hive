@@ -101,6 +101,7 @@
     <Compile Include="GHComponents\GhVisualizerAttributes.cs" />
     <Compile Include="GHComponents\HiveIOInfo.cs" />
     <Compile Include="GHComponents\GHSolarSystem.cs" />
+    <Compile Include="Plots\AmrPlotBase.cs" />
     <Compile Include="Plots\DemandMonthlyNormalizedPlot.cs" />
     <Compile Include="Plots\DemandMonthlyPlot.cs" />
     <Compile Include="Plots\IVisualizerPlot.cs" />

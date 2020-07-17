@@ -24,16 +24,17 @@ namespace Hive.IO.GHComponents
         private const int Padding = 6;
 
         private readonly IVisualizerPlot[] _plots = {
+            new AmrPlotBase(), 
             new DemandMonthlyPlot(),
             new DemandMonthlyNormalizedPlot()
         };
 
         private readonly OperationalPerformancePlot[] _titleBarPlots;
-        private int _currentPlot;
+        private int _currentPlotIndex;
 
         public GhVisualizerAttributes(GhVisualizer owner) : base(owner)
         {
-            _currentPlot = 0;
+            _currentPlotIndex = 0;
 
 
             var energyPlotConfig = new EnergyPlotProperties
@@ -86,12 +87,12 @@ namespace Hive.IO.GHComponents
 
         private void NextPlot()
         {
-            _currentPlot = (_currentPlot + 1) % _plots.Length;
+            _currentPlotIndex = (_currentPlotIndex + 1) % _plots.Length;
         }
 
         private void PreviousPlot()
         {
-            _currentPlot = (_currentPlot - 1 + _plots.Length) % _plots.Length;
+            _currentPlotIndex = (_currentPlotIndex - 1 + _plots.Length) % _plots.Length;
         }
 
         // FIXME: what goes here?
@@ -197,7 +198,7 @@ namespace Hive.IO.GHComponents
 
         private void RenderPlot(Graphics graphics)
         {
-            _plots[_currentPlot].Render(Owner.Results, graphics, PlotBounds);
+            _plots[_currentPlotIndex].Render(Owner.Results, graphics, PlotBounds);
         }
 
         private void RenderCapsule(Graphics graphics)
