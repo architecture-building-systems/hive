@@ -283,6 +283,10 @@ namespace Hive.IO
 
 
         #region internalMethods
+
+        // !!!!!!!!! TO DO
+        // Why??? Only matter for EPlus, which I don't use.
+
         /// <summary>
         /// Check the linearity of the brep zone geometry. No curves allowed for simplicity.
         /// </summary>
@@ -301,6 +305,10 @@ namespace Hive.IO
             }
             return isLinear;
         }
+
+
+        // !!!!!!!!!!!!!! TO DO
+        // why?? convexity in EPlus only necessary for surfaces. but not for floorplan
 
         /// <summary>
         /// Check the convexity of the zone. Hive only allows convex spaces, for simplicity.
@@ -355,6 +363,10 @@ namespace Hive.IO
             return brep.IsSolid;
         }
 
+
+        // !!!!!!!!!!!!!!!!!! TO DO
+        // WHY??? Again, only really necessary for EPlus
+
         /// <summary>
         /// Check for planarity of surfaces
         /// </summary>
@@ -369,6 +381,10 @@ namespace Hive.IO
             }
             return true;
         }
+
+
+        // !!!!!!!!!!! TO DO
+        // ADAPT to work for non-planar and non-linear geometry
 
         /// <summary>
         /// Check whether window surfaces lie on the zone geometry.
@@ -410,6 +426,10 @@ namespace Hive.IO
 
             return true;
         }
+
+
+        // !!!!!!!!!!! TO DO
+        // ADAPT to work for non-planar and non-linear geometry
 
         /// <summary>
         /// Check for self-intersection of windows
