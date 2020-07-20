@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using Rhino;
@@ -12,13 +13,13 @@ namespace Hive.IO.Plots
     {
         public Color Color;
         public Color BenchmarkFailedColor;
-        public String UnitText;
-        public String NormalizedUnitText;
+        public string UnitText;
+        public string NormalizedUnitText;
         public QueryResults Data;
         public QueryResults NormalizedData;
     }
 
-    public class OperationalPerformancePlot: IVisualizerPlot
+    public class OperationalPerformancePlot: IVisualizerControl
     {
         private readonly Font _standardFont;
         private readonly Font _boldFont;
@@ -50,7 +51,7 @@ namespace Hive.IO.Plots
 
         public bool Contains(PointF location) => _bounds.Contains(location);
 
-        public void Clicked(GH_Canvas sender)
+        public void Clicked(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
             _normalized = !_normalized;
             sender.Invalidate();

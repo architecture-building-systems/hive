@@ -1,4 +1,6 @@
 ﻿using System.Drawing;
+using Grasshopper.GUI;
+using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 
 namespace Hive.IO.Plots
@@ -103,6 +105,15 @@ namespace Hive.IO.Plots
             RenderTitle(graphics);
             RenderColumnTitles(results, graphics);
             RenderLeftAxis(graphics);
+        }
+
+        public bool Contains(PointF location)
+        {
+            return Bounds.Contains(location);
+        }
+
+        public void Clicked(GH_Canvas sender, GH_CanvasMouseEvent e)
+        {
         }
 
         private void RenderTitle(Graphics graphics)

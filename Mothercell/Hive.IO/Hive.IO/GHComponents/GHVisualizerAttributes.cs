@@ -29,6 +29,7 @@ namespace Hive.IO.GHComponents
             new DemandMonthlyNormalizedPlot()
         };
 
+        private PlotSelector _plotSelector = new PlotSelector();
         private readonly OperationalPerformancePlot[] _titleBarPlots;
         private int _currentPlotIndex;
 
@@ -82,8 +83,7 @@ namespace Hive.IO.GHComponents
             }
         }
 
-        private IEnumerable<IVisualizerPlot> AllPlots => _plots?.AsEnumerable().Concat(_titleBarPlots) 
-                                                         ?? new List<IVisualizerPlot>();
+        private IEnumerable<IVisualizerPlot> AllPlots => _plots?.AsEnumerable() ?? new List<IVisualizerPlot>();
 
         private void NextPlot()
         {
@@ -131,17 +131,19 @@ namespace Hive.IO.GHComponents
                 return base.RespondToMouseDown(sender, e);
             }
 
+            if (_plotSelector.CurrentPanel.Contains(e.CanvasLocation))
+            {
+                _plotSelector.CurrentPanel.Clicked(sender, e);
+                return base.RespondToMouseDown(sender, e);
+            }
+
             foreach (var plot in _titleBarPlots)
             {
                 if (plot.Contains(e.CanvasLocation))
                 {
-                    plot.Clicked(sender);
+                    plot.Clicked(sender, e);
+                    return base.RespondToMouseDown(sender, e);
                 }
-            }
-
-            if (DropDownArrowBox.Contains(e.CanvasLocation))
-            {
-                NextPlot();
             }
 
             return base.RespondToMouseDown(sender, e);
@@ -159,6 +161,8 @@ namespace Hive.IO.GHComponents
             RenderTitleBar(graphics);
         }
 
+        private RectangleF MenuPanelBounds => new RectangleF(Bounds.X + Padding, Bounds.Y, Bounds.Width - 2* Padding, TitleBarHeight);
+
         /// <summary>
         /// Render the title bar at the top with the dropdown for selecting the plot and the
         /// operational performance metrics.
@@ -166,23 +170,7 @@ namespace Hive.IO.GHComponents
         /// <param name="graphics"></param>
         private void RenderTitleBar(Graphics graphics)
         {
-            // the style to draw the dropdown arrow with
-            var impliedStyle = GH_CapsuleRenderEngine.GetImpliedStyle(GH_Palette.Normal, this);
-            var color = impliedStyle.Text;
-            var brush = new SolidBrush(color);
-
-            // draw the dropdown for the selecting the plots
-            var dropDownArrow = new[] 
-            { 
-                new PointF(ArrowBoxPadding, ArrowBoxPadding), // top left
-                new PointF(ArrowBoxSide - ArrowBoxPadding, ArrowBoxPadding), // top right
-                new PointF(ArrowBoxSide / 2, ArrowBoxSide - ArrowBoxPadding) // bottom middle
-            };
-            dropDownArrow = dropDownArrow.Select(p => new PointF(
-                p.X + DropDownArrowBox.Left, 
-                p.Y + DropDownArrowBox.Top)).ToArray();
-
-            graphics.FillPolygon(brush, dropDownArrow);
+            _plotSelector.CurrentPanel.Render(Owner.Results, graphics, MenuPanelBounds);
 
             // render the three operational performance plots
             var plotWidth = TitleBarHeight;  // squares

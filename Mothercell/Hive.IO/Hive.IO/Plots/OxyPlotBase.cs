@@ -1,4 +1,6 @@
 ﻿using System.Drawing;
+using Grasshopper.GUI;
+using Grasshopper.GUI.Canvas;
 using OxyPlot;
 using OxyPlot.WindowsForms;
 
@@ -13,6 +15,7 @@ namespace Hive.IO.Plots
         private Bitmap _bitmapCache;
         private int _lastPlotWidth;
         private int _lastPlotHeight;
+        private RectangleF _bounds;
 
         // colors for plots
         protected static readonly OxyColor SpaceHeatingColor = OxyColor.FromRgb(255, 0, 0);
@@ -23,6 +26,8 @@ namespace Hive.IO.Plots
 
         public void Render(Results results, Graphics graphics, RectangleF bounds)
         {
+            _bounds = bounds; // store for Contains check
+
             var plotWidth = (int)bounds.Width;
             var plotHeight = (int)bounds.Height;
 
@@ -34,6 +39,15 @@ namespace Hive.IO.Plots
             _lastPlotWidth = plotWidth;
             _lastPlotHeight = plotHeight;
             _bitmapCache = bitmap;
+        }
+
+        public bool Contains(PointF location)
+        {
+            return _bounds.Contains(location);
+        }
+
+        public void Clicked(GH_Canvas sender, GH_CanvasMouseEvent e)
+        {
         }
 
         private Bitmap RenderToBitmap(Results results, int plotWidth, int plotHeight)
