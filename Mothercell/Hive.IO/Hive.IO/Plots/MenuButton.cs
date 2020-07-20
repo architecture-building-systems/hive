@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
+using Rhino;
 
 namespace Hive.IO.Plots
 {
@@ -21,6 +22,7 @@ namespace Hive.IO.Plots
         private string _text;
         private Font _font;
         private Brush _textBrush = new SolidBrush(Color.Black);
+        private RectangleF _bounds = RectangleF.Empty;
 
         public MenuButton(string text): this(text, GH_FontServer.Standard)
         {
@@ -34,6 +36,8 @@ namespace Hive.IO.Plots
 
         public void Render(Results results, Graphics graphics, RectangleF bounds)
         {
+            _bounds = bounds;
+
             var format = StringFormat.GenericTypographic;
             format.Alignment = StringAlignment.Center;
             format.LineAlignment = StringAlignment.Center;
@@ -44,12 +48,12 @@ namespace Hive.IO.Plots
 
         public bool Contains(PointF location)
         {
-            throw new NotImplementedException();
+            return _bounds.Contains(location);
         }
 
         public void Clicked(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
-            throw new NotImplementedException();
+            RhinoApp.WriteLine($"MenuButton({_text}) clicked!");
         }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using System.Drawing;
+using System.Linq;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Rhino;
@@ -33,13 +34,13 @@ namespace Hive.IO.Plots
 
         public bool Contains(PointF location)
         {
-            return false;
+            return _menuButtons.Any(mb => mb.Contains(location));
         }
 
         public void Clicked(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
             // figure out which menu button got clicked and pass it on
-            RhinoApp.WriteLine("MenuButtonPanel.Clicked()");
+            _menuButtons.First(mb => mb.Contains(e.CanvasLocation)).Clicked(sender, e);
         }
     }
 }
