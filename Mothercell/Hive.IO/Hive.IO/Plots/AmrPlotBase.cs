@@ -1,5 +1,4 @@
 ﻿using System.Drawing;
-using System.Net.Mime;
 using Grasshopper.Kernel;
 
 namespace Hive.IO.Plots
@@ -88,11 +87,21 @@ namespace Hive.IO.Plots
 
         protected RectangleF RightBottomBounds => OperationSystemsLegendBounds.CloneRight(RightAxisWidth);
 
+        // Column titles (subclasses should override these to provide the calculated values)
+        protected string Unit(Results results) => "kgCO2";
+
+        protected int EmbodiedAbsoluteValue(Results results) => 850;
+        protected int EmbodiedRelativeValue(Results results) => 85;
+
+        protected int OperationAbsoluteValue(Results results) => 150;
+        protected int OperationRelativeValue(Results results) => 15;
+
         public void Render(Results results, Graphics graphics, RectangleF bounds)
         {
             Bounds = bounds;
             RenderGrid(graphics);
             RenderTitle(graphics);
+            RenderColumnTitles(results, graphics);
             RenderLeftAxis(graphics);
         }
 
@@ -102,6 +111,18 @@ namespace Hive.IO.Plots
             format.Alignment = StringAlignment.Center;
 
             graphics.DrawString(Title, TitleFont, TextBrush, TitleBounds, format);
+        }
+
+        private void RenderColumnTitles(Results results, Graphics graphics)
+        {
+            // we need to do some calculations, since we're mixing bold and standard fonts and have to do alignment ourselves...
+            string ColumnText(int absoluteValue, string unit, int relativeValue) => $" = {absoluteValue} {unit} ({relativeValue}%)";
+
+            graphics.DrawStringTwoFonts("Embodied", BoldFont, ColumnText(EmbodiedAbsoluteValue(results), Unit(results), EmbodiedRelativeValue(results)), NormalFont, TextBrush, EmbodiedTitleBounds);
+
+            graphics.DrawStringTwoFonts("Operation", BoldFont,
+                ColumnText(OperationAbsoluteValue(results), Unit(results), OperationRelativeValue(results)), NormalFont,
+                TextBrush, OperationTitleBounds);
         }
 
         private void RenderLeftAxis(Graphics graphics)
@@ -144,7 +165,7 @@ namespace Hive.IO.Plots
 
     public static class RectangleFExtensions
     {
-        private static RectangleF Clone(this RectangleF self)
+        public static RectangleF Clone(this RectangleF self)
         {
             return new RectangleF(self.Location, self.Size);
         }
@@ -211,6 +232,35 @@ namespace Hive.IO.Plots
             graphics.DrawString(text, font, brush, translatedBounds, format);
             graphics.RotateTransform(+90);
             graphics.TranslateTransform(-bounds.X, -bounds.Y - bounds.Height);
+        }
+
+        /// <summary>
+        /// Draw two strings inside the same bounds, adjacent, with two separate fonts, e.g. bold and standard.
+        /// </summary>
+        /// <param name="graphics"></param>
+        /// <param name="textA"></param>
+        /// <param name="fontA"></param>
+        /// <param name="textB"></param>
+        /// <param name="fontB"></param>
+        /// <param name="brush"></param>
+        /// <param name="bounds"></param>
+        public static void DrawStringTwoFonts(this Graphics graphics, string textA, Font fontA, string textB, Font fontB, Brush brush, RectangleF bounds)
+        {
+            var format = StringFormat.GenericTypographic;
+            format.Alignment = StringAlignment.Near;
+            format.Trimming = StringTrimming.None;
+
+            var boldTextSize = GH_FontServer.MeasureString(textA, fontA);
+            var standardTextSize = GH_FontServer.MeasureString(textB, fontB);
+
+            var leftPaddingWidth = (bounds.Width - boldTextSize.Width - standardTextSize.Width) / 2;
+            var leftPaddingBounds = bounds.Clone();
+            leftPaddingBounds.Width = leftPaddingWidth;
+            var boldTextBounds = leftPaddingBounds.CloneRight(boldTextSize.Width);
+            graphics.DrawString(textA, fontA, brush, boldTextBounds, format);
+
+            var standardTextBounds = boldTextBounds.CloneRight(standardTextSize.Width);
+            graphics.DrawString(textB, fontB, brush, standardTextBounds, format);
         }
     }
 }
