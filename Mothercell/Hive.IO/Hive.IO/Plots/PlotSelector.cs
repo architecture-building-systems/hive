@@ -3,8 +3,10 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Runtime.Remoting.Channels;
+using System.Xml;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
+using Grasshopper.Kernel;
 using Rhino;
 
 namespace Hive.IO.Plots
@@ -29,21 +31,35 @@ namespace Hive.IO.Plots
         private PanelFactory _panelFactory;
         private MenuButtonPanel _currentPanel;
 
+        private readonly SolidBrush _blackBrush = new SolidBrush(Color.Black);
+        private readonly SolidBrush _greyBrush = new SolidBrush(Color.FromArgb(217, 217, 217));
 
-        // starting panels (cycle through these when clicking on first MenuButton)
+
         public MenuButtonPanel CreatePerformancePanel()
         {
-            var mbCategory = new MenuButton("P");
+            var mbCategory = new CategoryMenuButton("P");
             mbCategory.OnClicked += (sender, e) => _panelFactory = CreateSystemsPanel;
             mbCategory.OnClicked += (sender, args) => RhinoApp.Write("P was clicked!");
 
-            var mbResolution = new MenuButton(_performanceResolution.ToString().Substring(0, 1));
+            MenuButton mbResolution;
+            switch (_performanceResolution)
+            {
+                case PerformanceResolution.Monthly:
+                    mbResolution = new BlackMenuButton("M");
+                    break;
+                case PerformanceResolution.Hourly:
+                    mbResolution = new BlackMenuButton("D");
+                    break;
+                default:
+                    mbResolution = new MenuButton("Y");
+                    break;
+            };
             mbResolution.OnClicked += CycleResolution;
 
-            var mbNormalize = _normalized ? new MenuButton("/m²") : new MenuButton("TOT");
+            var mbNormalize = _normalized ? new BlackMenuButton("/m²") : new MenuButton("TOT"); 
             mbNormalize.OnClicked += (sender, e) => _normalized = !_normalized;
 
-            var mbBreakdown = _breakdown ? new MenuButton("+BRK") : new MenuButton("-BRK");
+            var mbBreakdown = _breakdown ? new BlackMenuButton("BRK") : new MenuButton("BRK");
             mbBreakdown.OnClicked += (sender, e) => _breakdown = !_breakdown;
 
             return new MenuButtonPanel(new MenuButton[]
@@ -57,7 +73,7 @@ namespace Hive.IO.Plots
 
         private MenuButtonPanel CreateSystemsPanel()
         {
-            var mbCategory = new MenuButton("S");
+            var mbCategory = new CategoryMenuButton("S");
             mbCategory.OnClicked += (sender, e) => _panelFactory = CreateOtherPanel;
 
             return new MenuButtonPanel(new MenuButton[]
@@ -70,7 +86,7 @@ namespace Hive.IO.Plots
 
         private MenuButtonPanel CreateOtherPanel()
         {
-            var mbCategory = new MenuButton("O");
+            var mbCategory = new CategoryMenuButton("O");
             mbCategory.OnClicked += (sender, e) => _panelFactory = CreatePerformancePanel;
 
             return new MenuButtonPanel(new MenuButton[]
