@@ -19,25 +19,13 @@ namespace Hive.IO.GHComponents
         private const float MinWidth = 200f;
         private const float MinHeight = TitleBarHeight + 150f;
 
-        private const float ArrowBoxSide = TitleBarHeight;
-        private const float ArrowBoxPadding = 50f;
         private const int Padding = 6;
-
-        private readonly IVisualizerPlot[] _plots = {
-            new AmrPlotBase(), 
-            new DemandMonthlyPlot(),
-            new DemandMonthlyNormalizedPlot()
-        };
 
         private PlotSelector _plotSelector = new PlotSelector();
         private readonly OperationalPerformancePlot[] _titleBarPlots;
-        private int _currentPlotIndex;
 
         public GhVisualizerAttributes(GhVisualizer owner) : base(owner)
         {
-            _currentPlotIndex = 0;
-
-
             var energyPlotConfig = new EnergyPlotProperties
             {
                 Color = Color.FromArgb(225, 242, 31),
@@ -77,22 +65,7 @@ namespace Hive.IO.GHComponents
 
         public void NewData(Results results)
         {
-            foreach (var plot in AllPlots)
-            {
-                plot.NewData(results);
-            }
-        }
-
-        private IEnumerable<IVisualizerPlot> AllPlots => _plots?.AsEnumerable() ?? new List<IVisualizerPlot>();
-
-        private void NextPlot()
-        {
-            _currentPlotIndex = (_currentPlotIndex + 1) % _plots.Length;
-        }
-
-        private void PreviousPlot()
-        {
-            _currentPlotIndex = (_currentPlotIndex - 1 + _plots.Length) % _plots.Length;
+            _plotSelector.CurrentPlot.NewData(results);
         }
 
         // FIXME: what goes here?
@@ -182,11 +155,9 @@ namespace Hive.IO.GHComponents
             }
         }
 
-        private RectangleF DropDownArrowBox => new RectangleF(Bounds.Left + Padding, Bounds.Top + Padding, ArrowBoxSide, ArrowBoxSide);
-
         private void RenderPlot(Graphics graphics)
         {
-            _plots[_currentPlotIndex].Render(Owner.Results, graphics, PlotBounds);
+            _plotSelector.CurrentPlot.Render(Owner.Results, graphics, PlotBounds);
         }
 
         private void RenderCapsule(Graphics graphics)
