@@ -12,7 +12,7 @@ namespace Hive.IO.Plots
     public class MenuButtonPanel : IVisualizerControl
     {
         private const float sideLength = 100;
-        private const float spacer = 50; // space between menu buttons
+        private const float spacer = 25; // space between menu buttons
         private MenuButton[] _menuButtons;
 
         public MenuButtonPanel(MenuButton[] menuButtons)
@@ -22,7 +22,7 @@ namespace Hive.IO.Plots
 
         public void Render(Results results, Graphics graphics, RectangleF bounds)
         {
-            var x = bounds.X;
+            var x = bounds.X + spacer;
             var y = bounds.Y + bounds.Height / 2 - sideLength / 2;
 
             foreach (var mb in _menuButtons)

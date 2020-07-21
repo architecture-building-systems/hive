@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
 using System.Windows.Forms;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
@@ -21,45 +18,57 @@ namespace Hive.IO.GHComponents
 
         private const int Padding = 6;
 
-        private PlotSelector _plotSelector = new PlotSelector();
-        private readonly OperationalPerformancePlot[] _titleBarPlots;
+        private readonly PlotSelector _plotSelector = new PlotSelector();
+        private readonly OperationalPerformancePlot[] _kpiPlots;
 
         public GhVisualizerAttributes(GhVisualizer owner) : base(owner)
         {
-            var energyPlotConfig = new EnergyPlotProperties
+            var energyKpiConfig = new KpiPlotProperties
             {
                 Color = Color.FromArgb(225, 242, 31),
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
                 UnitText = "kWh",
                 NormalizedUnitText = "kWh/m²",
                 Data = results => 1530.0,
-                NormalizedData = results => 153.0
+                NormalizedData = results => 153.0,
+                Kpi = Kpi.Energy
             };
-            var emissionsPlotConfig = new EnergyPlotProperties
+            var emissionsKpiConfig = new KpiPlotProperties
             {
                 Color = Color.FromArgb(136, 219, 68),
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
                 UnitText = "kgCO₂",
                 NormalizedUnitText = "kgCO₂/m²",
                 Data = results => 790.0,
-                NormalizedData = results => 79.0
+                NormalizedData = results => 79.0,
+                Kpi = Kpi.Emissions
             };
-            var costsPlotConfig = new EnergyPlotProperties
+            var costsKpiConfig = new KpiPlotProperties
             {
                 Color = Color.FromArgb(222, 180, 109),
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
                 UnitText = "CHF",
                 NormalizedUnitText = "CHF/m²",
                 Data = results => 1000.0,
-                NormalizedData = results => 120.0
+                NormalizedData = results => 120.0,
+                Kpi = Kpi.Costs
             };
 
-            _titleBarPlots = new[]
+            var costsKpi = new OperationalPerformancePlot(costsKpiConfig);
+            costsKpi.OnClicked += _plotSelector.CostsKpiClicked;
+
+            var emissionsKpi = new OperationalPerformancePlot(emissionsKpiConfig);
+            emissionsKpi.OnClicked += _plotSelector.EmissionsKpiClicked;
+
+            var energyKpi = new OperationalPerformancePlot(energyKpiConfig);
+            energyKpi.OnClicked += _plotSelector.EnergyKpiClicked;
+
+            _kpiPlots = new[]
             {
                 // from the right
-                new OperationalPerformancePlot(costsPlotConfig),
-                new OperationalPerformancePlot(emissionsPlotConfig),
-                new OperationalPerformancePlot(energyPlotConfig)
+                costsKpi,
+                emissionsKpi,
+                energyKpi
             };
         }
 
@@ -110,11 +119,11 @@ namespace Hive.IO.GHComponents
                 return base.RespondToMouseDown(sender, e);
             }
 
-            foreach (var plot in _titleBarPlots)
+            foreach (var kpi in _kpiPlots)
             {
-                if (plot.Contains(e.CanvasLocation))
+                if (kpi.Contains(e.CanvasLocation))
                 {
-                    plot.Clicked(sender, e);
+                    kpi.Clicked(sender, e);
                     return base.RespondToMouseDown(sender, e);
                 }
             }
@@ -149,9 +158,10 @@ namespace Hive.IO.GHComponents
             // render the three operational performance plots
             var plotWidth = TitleBarHeight;  // squares
             var bounds = new RectangleF(InnerBounds.Right - plotWidth, InnerBounds.Location.Y, plotWidth, TitleBarHeight);
-            foreach (var plot in _titleBarPlots)
+            foreach (var kpi in _kpiPlots)
             {
-                plot.Render(Owner.Results, graphics, bounds);
+                kpi.Normalized = _plotSelector.Normalized;
+                kpi.Render(Owner.Results, graphics, bounds, _plotSelector.CurrentKpi == kpi.Kpi);
                 bounds.Offset(-(plotWidth + Padding), 0);
             }
         }

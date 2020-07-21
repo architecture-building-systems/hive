@@ -1,12 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Linq;
-using System.Runtime.Remoting.Channels;
-using System.Xml;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
-using Grasshopper.Kernel;
 using Rhino;
 
 namespace Hive.IO.Plots
@@ -14,7 +9,7 @@ namespace Hive.IO.Plots
     public delegate MenuButtonPanel PanelFactory();
 
     public enum PerformanceResolution { Yearly, Monthly, Hourly }
-    public enum KPI { Energy, Emissions, Costs }
+    public enum Kpi { Energy, Emissions, Costs, None } // None is used for when we're not showing performance plots
 
 
     /// <summary>
@@ -25,20 +20,21 @@ namespace Hive.IO.Plots
     {
         // Performance panel state
         private PerformanceResolution _performanceResolution = PerformanceResolution.Yearly;
-        private KPI _currentKPI = KPI.Energy;
-        private bool _normalized = false;
-        private bool _breakdown = false;
+        private Kpi _currentKpi = Kpi.Energy;
+        private bool _normalized;
+        private bool _breakdown;
         private PanelFactory _panelFactory;
         private MenuButtonPanel _currentPanel;
-
-        private readonly SolidBrush _blackBrush = new SolidBrush(Color.Black);
-        private readonly SolidBrush _greyBrush = new SolidBrush(Color.FromArgb(217, 217, 217));
 
 
         public MenuButtonPanel CreatePerformancePanel()
         {
             var mbCategory = new CategoryMenuButton("P");
-            mbCategory.OnClicked += (sender, e) => _panelFactory = CreateSystemsPanel;
+            mbCategory.OnClicked += (sender, e) =>
+            {
+                _panelFactory = CreateSystemsPanel;
+                _currentKpi = Kpi.None;
+            };
             mbCategory.OnClicked += (sender, args) => RhinoApp.Write("P was clicked!");
 
             MenuButton mbResolution;
@@ -53,16 +49,16 @@ namespace Hive.IO.Plots
                 default:
                     mbResolution = new MenuButton("Y");
                     break;
-            };
+            }
             mbResolution.OnClicked += CycleResolution;
 
-            var mbNormalize = _normalized ? new BlackMenuButton("/m²") : new MenuButton("TOT"); 
-            mbNormalize.OnClicked += (sender, e) => _normalized = !_normalized;
+            var mbNormalize = Normalized ? new BlackMenuButton("/m²") : new MenuButton("TOT");
+            mbNormalize.OnClicked += (sender, e) => Normalized = !Normalized;
 
             var mbBreakdown = _breakdown ? new BlackMenuButton("BRK") : new MenuButton("BRK");
             mbBreakdown.OnClicked += (sender, e) => _breakdown = !_breakdown;
 
-            return new MenuButtonPanel(new MenuButton[]
+            return new MenuButtonPanel(new[]
             {
                 mbCategory,
                 mbResolution,
@@ -74,9 +70,12 @@ namespace Hive.IO.Plots
         private MenuButtonPanel CreateSystemsPanel()
         {
             var mbCategory = new CategoryMenuButton("S");
-            mbCategory.OnClicked += (sender, e) => _panelFactory = CreateOtherPanel;
+            mbCategory.OnClicked += (sender, e) =>
+            {
+                _panelFactory = CreateOtherPanel;
+            };
 
-            return new MenuButtonPanel(new MenuButton[]
+            return new MenuButtonPanel(new[]
             {
                 mbCategory,
                 new MenuButton("SIZ"),
@@ -87,9 +86,13 @@ namespace Hive.IO.Plots
         private MenuButtonPanel CreateOtherPanel()
         {
             var mbCategory = new CategoryMenuButton("O");
-            mbCategory.OnClicked += (sender, e) => _panelFactory = CreatePerformancePanel;
+            mbCategory.OnClicked += (sender, e) =>
+            {
+                _panelFactory = CreatePerformancePanel;
+                _currentKpi = Kpi.Energy;
+            };
 
-            return new MenuButtonPanel(new MenuButton[]
+            return new MenuButtonPanel(new[]
             {
                 mbCategory,
                 new MenuButton("SvD"),
@@ -99,6 +102,14 @@ namespace Hive.IO.Plots
         }
 
         public IVisualizerPlot CurrentPlot { get; }
+
+        public bool Normalized
+        {
+            get => CurrentKpi != Kpi.None && _normalized;
+            set => _normalized = value;
+        }
+
+        public Kpi CurrentKpi => _currentKpi;
 
         public PlotSelector()
         {
@@ -143,6 +154,34 @@ namespace Hive.IO.Plots
             }
 
             _performanceResolution = nextResolution;
+        }
+
+        public void CostsKpiClicked(object sender, EventArgs e)
+        {
+            if (CurrentKpi != Kpi.None)
+            {
+                _currentKpi = Kpi.Costs;
+
+            }
+        }
+
+        public void EmissionsKpiClicked(object sender, EventArgs e)
+        {
+
+            if (CurrentKpi != Kpi.None)
+            {
+                _currentKpi = Kpi.Emissions;
+
+            }
+        }
+
+        public void EnergyKpiClicked(object sender, EventArgs e)
+        {
+            if (CurrentKpi != Kpi.None)
+            {
+                _currentKpi = Kpi.Energy;
+
+            }
         }
     }
 }
