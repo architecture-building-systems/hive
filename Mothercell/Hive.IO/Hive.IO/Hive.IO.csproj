@@ -110,6 +110,7 @@
     <Compile Include="Plots\OperationalPerformancePlot.cs" />
     <Compile Include="Plots\OxyPlotBase.cs" />
     <Compile Include="Plots\PlotSelector.cs" />
+    <Compile Include="Plots\RectangleFExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EnergySystems\ConversionTech.cs" />
     <Compile Include="Properties\Resources.Designer.cs">

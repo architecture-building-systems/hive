@@ -84,15 +84,15 @@ namespace Hive.IO.GHComponents
             Bounds = new RectangleF(Pivot, bounds.Size);
         }
 
+        private RectangleF InnerBounds => Bounds.CloneInflate(-Padding, -Padding);
+
         private RectangleF PlotBounds
         {
             get
             {
-                var plotBounds = Bounds;
+                var plotBounds = InnerBounds;
                 plotBounds.Height -= TitleBarHeight;
                 plotBounds.Offset(0, TitleBarHeight);
-
-                plotBounds.Inflate(-Padding, -Padding);
                 return plotBounds;
             }
         }
@@ -130,11 +130,12 @@ namespace Hive.IO.GHComponents
                 return;
 
             RenderCapsule(graphics);
+            graphics.FillRectangle(new SolidBrush(Color.White), InnerBounds);
             RenderPlot(graphics);
             RenderTitleBar(graphics);
         }
 
-        private RectangleF MenuPanelBounds => new RectangleF(Bounds.X + Padding, Bounds.Y, Bounds.Width - 2* Padding, TitleBarHeight);
+        private RectangleF MenuPanelBounds => new RectangleF(InnerBounds.X, InnerBounds.Y, InnerBounds.Width, TitleBarHeight);
 
         /// <summary>
         /// Render the title bar at the top with the dropdown for selecting the plot and the
@@ -147,7 +148,7 @@ namespace Hive.IO.GHComponents
 
             // render the three operational performance plots
             var plotWidth = TitleBarHeight;  // squares
-            var bounds = new RectangleF(Bounds.Right - plotWidth - Padding, Bounds.Location.Y, plotWidth, TitleBarHeight);
+            var bounds = new RectangleF(InnerBounds.Right - plotWidth, InnerBounds.Location.Y, plotWidth, TitleBarHeight);
             foreach (var plot in _titleBarPlots)
             {
                 plot.Render(Owner.Results, graphics, bounds);
