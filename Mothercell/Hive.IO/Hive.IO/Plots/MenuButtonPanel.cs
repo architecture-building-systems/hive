@@ -42,5 +42,17 @@ namespace Hive.IO.Plots
             // figure out which menu button got clicked and pass it on
             _menuButtons.First(mb => mb.Contains(e.CanvasLocation)).Clicked(sender, e);
         }
+
+        /// <summary>
+        /// Return a new MenuButtonPanel, with a (single) menu button replaced with a new one.
+        /// </summary>
+        /// <param name="select">the text of the menu button to replace</param>
+        /// <param name="replacement"></param>
+        /// <returns></returns>
+        public MenuButtonPanel Replace(string select, MenuButton replacement)
+        {
+            var menuButtons = _menuButtons.Select(mb => mb.Text == select ? replacement : mb);
+            return new MenuButtonPanel(menuButtons.ToArray());
+        }
     }
 }

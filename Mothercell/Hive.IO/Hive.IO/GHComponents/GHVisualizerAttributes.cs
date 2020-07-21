@@ -104,9 +104,9 @@ namespace Hive.IO.GHComponents
                 return base.RespondToMouseDown(sender, e);
             }
 
-            if (_plotSelector.CurrentPanel.Contains(e.CanvasLocation))
+            if (_plotSelector.Contains(e.CanvasLocation))
             {
-                _plotSelector.CurrentPanel.Clicked(sender, e);
+                _plotSelector.Clicked(sender, e);
                 return base.RespondToMouseDown(sender, e);
             }
 
@@ -144,7 +144,7 @@ namespace Hive.IO.GHComponents
         /// <param name="graphics"></param>
         private void RenderTitleBar(Graphics graphics)
         {
-            _plotSelector.CurrentPanel.Render(Owner.Results, graphics, MenuPanelBounds);
+            _plotSelector.Render(Owner.Results, graphics, MenuPanelBounds);
 
             // render the three operational performance plots
             var plotWidth = TitleBarHeight;  // squares

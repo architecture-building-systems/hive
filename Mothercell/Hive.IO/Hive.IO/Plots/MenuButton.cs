@@ -21,22 +21,22 @@ namespace Hive.IO.Plots
     {
         public event EventHandler OnClicked;
 
-        private Pen _borderPen = new Pen(Color.FromArgb(217, 217, 217));
-        private string _text;
-        private Font _font;
-        private Brush _textBrush = new SolidBrush(Color.Black);
+        private readonly Pen _borderPen = new Pen(Color.FromArgb(217, 217, 217));
+        private readonly Font _font;
+        private readonly Brush _textBrush = new SolidBrush(Color.Black);
         private RectangleF _bounds = RectangleF.Empty;
 
-        public MenuButton(string text, EventHandler onClicked): this(text, GH_FontServer.Standard, onClicked)
+        public MenuButton(string text): this(text, GH_FontServer.Standard)
         {
         }
 
-        public MenuButton(string text, Font font, EventHandler onClicked)
+        public MenuButton(string text, Font font)
         {
-            _text = text;
+            Text = text;
             _font = font;
-            OnClicked += onClicked;
         }
+
+        public string Text { get; }
 
         public void Render(Results results, Graphics graphics, RectangleF bounds)
         {
@@ -46,7 +46,7 @@ namespace Hive.IO.Plots
             format.Alignment = StringAlignment.Center;
             format.LineAlignment = StringAlignment.Center;
 
-            graphics.DrawString(_text, _font, _textBrush, bounds, format);
+            graphics.DrawString(Text, _font, _textBrush, bounds, format);
             graphics.DrawRectangleF(_borderPen, bounds);
         }
 
@@ -57,7 +57,7 @@ namespace Hive.IO.Plots
 
         public void Clicked(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
-            RhinoApp.WriteLine($"MenuButton({_text}) clicked!");
+            RhinoApp.WriteLine($"MenuButton({Text}) clicked!");
             if (OnClicked != null)
             {
                 OnClicked(this, e);
