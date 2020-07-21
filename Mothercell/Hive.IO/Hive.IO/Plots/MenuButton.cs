@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Drawing;
 using System.Drawing.Drawing2D;
 using System.Linq;
@@ -18,20 +19,23 @@ namespace Hive.IO.Plots
     /// </summary>
     public class MenuButton: IVisualizerControl
     {
+        public event EventHandler OnClicked;
+
         private Pen _borderPen = new Pen(Color.FromArgb(217, 217, 217));
         private string _text;
         private Font _font;
         private Brush _textBrush = new SolidBrush(Color.Black);
         private RectangleF _bounds = RectangleF.Empty;
 
-        public MenuButton(string text): this(text, GH_FontServer.Standard)
+        public MenuButton(string text, EventHandler onClicked): this(text, GH_FontServer.Standard, onClicked)
         {
         }
 
-        public MenuButton(string text, Font font)
+        public MenuButton(string text, Font font, EventHandler onClicked)
         {
             _text = text;
             _font = font;
+            OnClicked += onClicked;
         }
 
         public void Render(Results results, Graphics graphics, RectangleF bounds)
@@ -54,6 +58,10 @@ namespace Hive.IO.Plots
         public void Clicked(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
             RhinoApp.WriteLine($"MenuButton({_text}) clicked!");
+            if (OnClicked != null)
+            {
+                OnClicked(this, e);
+            }
         }
     }
 }
