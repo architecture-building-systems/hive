@@ -1,12 +1,19 @@
-﻿namespace Hive.IO.Plots
+﻿using System;
+using System.Drawing;
+
+namespace Hive.IO.Plots
 {
-    public class YearlyEnergyPlot: AmrPlotBase
+    public class YearlyEnergyPlot: YearlyPlotBase
     {
+        protected override SolidBrush BuildingsBrush => new SolidBrush(Color.FromArgb(221, 229, 124));
+        protected override SolidBrush SystemsBrush => new SolidBrush(Color.FromArgb(145, 153, 48));
+
         protected override string Title => "Energy";
         protected override string Unit => "kWh";
-        protected override double EmbodiedSystems => Results.EmbodiedEnergySystems;
-        protected override double EmbodiedBuildings => Results.EmbodiedEnergyBuildings;
-        protected override double OperationSystems => Results.OperationEnergySystems;
-        protected override double OperationBuildings => Results.OperationEnergyBuildings;
+        protected override float EmbodiedSystems => (float)Results.EmbodiedEnergySystems;
+        protected override float EmbodiedBuildings => (float)Results.EmbodiedEnergyBuildings;
+        protected override float OperationSystems => (float) Results.OperationEnergySystems;
+        protected override float OperationBuildings => (float) Results.OperationEnergyBuildings;
     }
 }
+

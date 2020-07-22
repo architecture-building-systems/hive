@@ -11,7 +11,7 @@ namespace Hive.IO.Plots
     ///
     /// To be derived.
     /// </summary>
-    public class AmrPlotBase: IVisualizerPlot
+    public class AmrPlotBase : IVisualizerPlot
     {
         protected ResultsPlotting Results { get; private set; }
 
@@ -94,6 +94,8 @@ namespace Hive.IO.Plots
         // Column titles (subclasses should override these to provide the calculated values)
         protected virtual string Unit => "kgCO2";
 
+        protected double AxisMax => 1000;
+
         public void Render(Results results, Graphics graphics, RectangleF bounds)
         {
             if (Results == null)
@@ -106,6 +108,12 @@ namespace Hive.IO.Plots
             RenderTitle(graphics);
             RenderColumnTitles(graphics);
             RenderLeftAxis(graphics);
+
+            RenderPlot(graphics);
+        }
+
+        protected virtual void RenderPlot(Graphics graphics)
+        {
         }
 
         public bool Contains(PointF location)
@@ -125,10 +133,10 @@ namespace Hive.IO.Plots
             graphics.DrawString(Title, TitleFont, TextBrush, TitleBounds, format);
         }
 
-        protected virtual double EmbodiedBuildings => Results.EmbodiedEmissionsBuildings;
-        protected virtual double EmbodiedSystems => Results.EmbodiedEmissionsSystems;
-        protected virtual double OperationBuildings => Results.OperationEmissionsBuildings;
-        protected virtual double OperationSystems => Results.OperationEmissionsSystems;
+        protected virtual float EmbodiedBuildings => (float)Results.EmbodiedEmissionsBuildings;
+        protected virtual float EmbodiedSystems => (float)Results.EmbodiedEmissionsSystems;
+        protected virtual float OperationBuildings => (float)Results.OperationEmissionsBuildings;
+        protected virtual float OperationSystems => (float)Results.OperationEmissionsSystems;
 
         private void RenderColumnTitles(Graphics graphics)
         {
