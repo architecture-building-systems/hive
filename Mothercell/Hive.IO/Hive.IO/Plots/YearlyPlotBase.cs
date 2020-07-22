@@ -1,18 +1,22 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
+using System.Windows.Forms;
+using Grasshopper.GUI.Base;
+using Rhino;
 
 namespace Hive.IO.Plots
 {
     public abstract class YearlyPlotBase : AmrPlotBase
     {
         protected abstract SolidBrush BuildingsBrush { get; }
-        protected abstract SolidBrush SystemsBrush { get;  }
+        protected abstract SolidBrush SystemsBrush { get; }
 
         protected RectangleF RenderEmbodiedBuildings(Graphics graphics, Brush brush, float value, RectangleF bounds)
         {
             var plotBounds = bounds.Clone();
             plotBounds.Width /= 2;
             plotBounds.X += plotBounds.Width;
-            plotBounds.Height *= (value / bounds.Height);
+            plotBounds.Height = Scale(value, AxisMax, bounds.Height);
             plotBounds.Y += (bounds.Height - plotBounds.Height);
             plotBounds.Offset(-1, -1);
             graphics.FillRectangle(brush, plotBounds);
@@ -24,7 +28,7 @@ namespace Hive.IO.Plots
             var plotBounds = bounds.Clone();
             plotBounds.Width /= 2;
             plotBounds.X += plotBounds.Width;
-            plotBounds.Height *= value / bounds.Height;
+            plotBounds.Height = Scale(value, AxisMax, bounds.Height);
             plotBounds.Offset(-1, 1);
             graphics.FillRectangle(brush, plotBounds);
             return plotBounds;
@@ -34,7 +38,7 @@ namespace Hive.IO.Plots
         {
             var plotBounds = bounds.Clone();
             plotBounds.Width /= 2;
-            plotBounds.Height *= (value / bounds.Height);
+            plotBounds.Height = Scale(value, AxisMax, bounds.Height);
             plotBounds.Y += (bounds.Height - plotBounds.Height);
             plotBounds.Offset(1, 1);
             graphics.FillRectangle(brush, plotBounds);
@@ -45,18 +49,41 @@ namespace Hive.IO.Plots
         {
             var plotBounds = bounds.Clone();
             plotBounds.Width /= 2;
-            plotBounds.Height *= value / bounds.Height;
+            plotBounds.Height = Scale(value, AxisMax, bounds.Height);
             plotBounds.Offset(1, 1);
             graphics.FillRectangle(brush, plotBounds);
             return plotBounds;
         }
 
+        private float Scale(float value, float maxValue, float newMaxValue)
+        {
+            RhinoApp.WriteLine($"Scale({value}, {maxValue}, {newMaxValue}) => {value/maxValue*newMaxValue}");
+            if (value >= maxValue)
+            {
+                return newMaxValue;
+            }
+
+            return value / maxValue * newMaxValue;
+        }
+
         protected override void RenderPlot(Graphics graphics)
         {
-            RenderEmbodiedBuildings(graphics, BuildingsBrush, EmbodiedBuildings, EmbodiedBuildingsPlotBounds);
-            RenderEmbodiedSystems(graphics, SystemsBrush, EmbodiedSystems, EmbodiedSystemsPlotBounds);
-            RenderOperationBuildings(graphics, BuildingsBrush, OperationBuildings, OperationBuildingsPlotBounds);
-            RenderOperationSystems(graphics, SystemsBrush, OperationSystems, OperationSystemsPlotBounds);
+            var ebBounds = RenderEmbodiedBuildings(graphics, BuildingsBrush, EmbodiedBuildings, EmbodiedBuildingsPlotBounds);
+            var esBounds = RenderEmbodiedSystems(graphics, SystemsBrush, EmbodiedSystems, EmbodiedSystemsPlotBounds);
+            var obBounds = RenderOperationBuildings(graphics, BuildingsBrush, OperationBuildings, OperationBuildingsPlotBounds);
+            var osBounds = RenderOperationSystems(graphics, SystemsBrush, OperationSystems, OperationSystemsPlotBounds);
+
+            RhinoApp.WriteLine($"RenderPlot bounds: {ebBounds}, {esBounds}, {obBounds}, {osBounds}");
+
+            graphics.DrawRectangleF(new Pen(Color.Crimson), OperationBuildingsPlotBounds);
+            graphics.DrawRectangleF(new Pen(Color.Green), OperationSystemsPlotBounds);
+
+            var total = EmbodiedBuildings + EmbodiedSystems + OperationBuildings + OperationSystems;
+            Func<float, string> Caption = (value) => $"{value:0} ({value / total * 100:0}%)";
+            graphics.DrawString(Caption(EmbodiedBuildings), NormalFont, TextBrush, ebBounds);
+            graphics.DrawString(Caption(EmbodiedSystems), NormalFont, TextBrush, esBounds);
+            graphics.DrawString(Caption(OperationBuildings), NormalFont, TextBrush, obBounds);
+            graphics.DrawString(Caption(OperationSystems), NormalFont, TextBrush, osBounds);
         }
     }
 }

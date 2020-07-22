@@ -94,7 +94,7 @@ namespace Hive.IO.Plots
         // Column titles (subclasses should override these to provide the calculated values)
         protected virtual string Unit => "kgCO2";
 
-        protected double AxisMax => 1000;
+        protected float AxisMax => 1000;
 
         public void Render(Results results, Graphics graphics, RectangleF bounds)
         {
