@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
@@ -13,6 +14,11 @@ namespace Hive.IO.Plots
     /// </summary>
     public class AmrPlotBase : IVisualizerPlot
     {
+        public AmrPlotBase(bool normalized)
+        {
+            Normalized = normalized;
+        }
+
         protected ResultsPlotting Results { get; private set; }
 
         private float textBoxPadding = 50;
@@ -94,7 +100,9 @@ namespace Hive.IO.Plots
         // Column titles (subclasses should override these to provide the calculated values)
         protected virtual string Unit => "kgCO2";
 
-        protected float AxisMax => 1000;
+        protected float AxisMax => (float)(Normalized 
+            ? (EmbodiedBuildings + EmbodiedSystems + OperationBuildings + OperationSystems) / Results.TotalFloorArea
+            : EmbodiedBuildings + EmbodiedSystems + OperationBuildings + OperationSystems);
 
         public void Render(Results results, Graphics graphics, RectangleF bounds)
         {
@@ -108,6 +116,7 @@ namespace Hive.IO.Plots
             RenderTitle(graphics);
             RenderColumnTitles(graphics);
             RenderLeftAxis(graphics);
+            RenderRightAxis(graphics);
 
             RenderPlot(graphics);
         }
@@ -133,10 +142,11 @@ namespace Hive.IO.Plots
             graphics.DrawString(Title, TitleFont, TextBrush, TitleBounds, format);
         }
 
-        protected virtual float EmbodiedBuildings => (float)Results.EmbodiedEmissionsBuildings;
-        protected virtual float EmbodiedSystems => (float)Results.EmbodiedEmissionsSystems;
-        protected virtual float OperationBuildings => (float)Results.OperationEmissionsBuildings;
-        protected virtual float OperationSystems => (float)Results.OperationEmissionsSystems;
+        protected virtual float EmbodiedBuildings => (float)Results.EmbodiedEmissionsBuildings(Normalized);
+        protected virtual float EmbodiedSystems => (float)Results.EmbodiedEmissionsSystems(Normalized);
+        protected virtual float OperationBuildings => (float)Results.OperationEmissionsBuildings(Normalized);
+        protected virtual float OperationSystems => (float)Results.OperationEmissionsSystems(Normalized);
+        protected bool Normalized { get; }
 
         private void RenderColumnTitles(Graphics graphics)
         {
@@ -160,6 +170,16 @@ namespace Hive.IO.Plots
         {
             graphics.DrawStringVertical("Buildings", BoldFont, TextBrush, BuildingsLeftAxisBounds);
             graphics.DrawStringVertical("Systems", BoldFont, TextBrush, SystemsLeftAxisBounds);
+        }
+
+        private void RenderRightAxis(Graphics graphics)
+        {
+            var format = StringFormat.GenericTypographic;
+            format.LineAlignment = StringAlignment.Near;
+            graphics.DrawString($"{AxisMax:0}", BoldFont, TextBrush, BuildingsRightAxisBounds);
+
+            format.LineAlignment = StringAlignment.Far;
+            graphics.DrawString($"{AxisMax:0}", BoldFont, TextBrush, SystemsRightAxisBounds);
         }
 
         private void RenderGrid(Graphics graphics)

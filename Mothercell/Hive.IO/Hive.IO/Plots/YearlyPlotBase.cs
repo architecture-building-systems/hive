@@ -8,6 +8,10 @@ namespace Hive.IO.Plots
 {
     public abstract class YearlyPlotBase : AmrPlotBase
     {
+        protected YearlyPlotBase(bool normalized): base(normalized)
+        {
+        }
+
         protected abstract SolidBrush BuildingsBrush { get; }
         protected abstract SolidBrush SystemsBrush { get; }
 

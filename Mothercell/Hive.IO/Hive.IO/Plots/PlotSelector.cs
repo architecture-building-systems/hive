@@ -117,12 +117,12 @@ namespace Hive.IO.Plots
                 }
                 else if (_performanceResolution == PerformanceResolution.Monthly)
                 {
-                    return new AmrPlotBase();
+                    return new AmrPlotBase(_normalized);
                 }
                 else
                 {
                     // _performanceResolution == PerformanceResolution.Daily
-                    return new AmrPlotBase();
+                    return new AmrPlotBase(_normalized);
                 }
             }
             else
@@ -137,17 +137,17 @@ namespace Hive.IO.Plots
             switch (currentKpi)
             {
                 case Kpi.Energy:
-                    plot = new YearlyEnergyPlot();
+                    plot = new YearlyEnergyPlot(normalized);
                     break;
                 case Kpi.Emissions:
-                    plot = new YearlyEmissionsPlot();
+                    plot = new YearlyEmissionsPlot(normalized);
                     break;
                 case Kpi.Costs:
-                    plot = new YearlyCostsPlot();
+                    plot = new YearlyCostsPlot(normalized);
                     break;
                 default:
                     // this shouldn't happen...
-                    plot = new AmrPlotBase();
+                    plot = new AmrPlotBase(normalized);
                     break;
             }
             return plot;
