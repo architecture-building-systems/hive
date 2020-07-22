@@ -20,6 +20,8 @@ namespace Hive.IO.Plots
             _menuButtons = menuButtons;
         }
 
+        public string Category => _menuButtons.First().Text.Substring(0, 1);
+
         public void Render(Results results, Graphics graphics, RectangleF bounds)
         {
             var x = bounds.X + spacer;

@@ -3,6 +3,7 @@ using System.Drawing;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Rhino;
+using Rhino.PlugIns;
 
 namespace Hive.IO.Plots
 {
@@ -101,7 +102,56 @@ namespace Hive.IO.Plots
             });
         }
 
-        public IVisualizerPlot CurrentPlot { get; }
+        /// <summary>
+        /// This is where the plot selection logic comes from. Let's just brute-force it.
+        /// </summary>
+        public IVisualizerPlot CurrentPlot
+        {
+            get
+            {
+                if (Category == "P")
+                {
+                    if (_performanceResolution == PerformanceResolution.Yearly)
+                    {
+                        return YearlyPerformancePlot(CurrentKpi, _normalized, _breakdown);
+                    }
+                    else if (_performanceResolution == PerformanceResolution.Monthly)
+                    {
+                        return new AmrPlotBase();
+                    }
+                    else
+                    {
+                        // _performanceResolution == PerformanceResolution.Daily
+                        return new AmrPlotBase();
+                    }
+                }
+                else
+                {
+                    return new DemandMonthlyPlot();
+                }
+            }
+        }
+
+        private IVisualizerPlot YearlyPerformancePlot(Kpi currentKpi, bool normalized, bool breakdown)
+        {
+            IVisualizerPlot plot;
+            switch (currentKpi)
+            {
+                case Kpi.Energy:
+                    plot = new YearlyEnergyPlot();
+                    break;
+                case Kpi.Emissions:
+                    plot = new YearlyEmissionsPlot();
+                    break;
+                case Kpi.Costs:
+                    plot = new AmrPlotBase();
+                    break;
+                default:
+                    plot = new AmrPlotBase();
+                    break;
+            }
+            return plot;
+        }
 
         public bool Normalized
         {
@@ -111,11 +161,12 @@ namespace Hive.IO.Plots
 
         public Kpi CurrentKpi => _currentKpi;
 
+        private string Category => _currentPanel.Category;
+
         public PlotSelector()
         {
             _panelFactory = CreatePerformancePanel;
             _currentPanel = _panelFactory();
-            CurrentPlot = new AmrPlotBase();
         }
 
         public bool Contains(PointF location)
