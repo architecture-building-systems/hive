@@ -73,7 +73,7 @@ namespace Hive.IO.Plots
             var osBounds = RenderOperationSystems(graphics, SystemsBrush, OperationSystems, OperationSystemsPlotBounds);
 
             var total = EmbodiedBuildings + EmbodiedSystems + OperationBuildings + OperationSystems;
-            Func<float, string> Caption = (value) => $"{value:0} ({value / total * 100:0}%)";
+            string Caption(float value) => $"{value:0} ({value / total * 100:0}%)";
 
             var format = StringFormat.GenericTypographic;
             format.Alignment = StringAlignment.Center;

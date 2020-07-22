@@ -148,11 +148,11 @@ namespace Hive.IO.Plots
             var total = embodiedTotal + operationTotal;
 
             graphics.DrawStringTwoFonts("Embodied", BoldFont,
-                ColumnText(embodiedTotal, Unit, embodiedTotal / total), NormalFont, TextBrush,
+                ColumnText(embodiedTotal, Unit, embodiedTotal / total * 100), NormalFont, TextBrush,
                 EmbodiedTitleBounds);
 
             graphics.DrawStringTwoFonts("Operation", BoldFont,
-                ColumnText(operationTotal, Unit, operationTotal / total), NormalFont,
+                ColumnText(operationTotal, Unit, operationTotal / total * 100), NormalFont,
                 TextBrush, OperationTitleBounds);
         }
 

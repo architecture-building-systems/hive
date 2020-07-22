@@ -105,30 +105,29 @@ namespace Hive.IO.Plots
         /// <summary>
         /// This is where the plot selection logic comes from. Let's just brute-force it.
         /// </summary>
-        public IVisualizerPlot CurrentPlot
+        public IVisualizerPlot CurrentPlot { get; private set; }
+
+        private IVisualizerPlot SelectCurrentPlot()
         {
-            get
+            if (Category == "P")
             {
-                if (Category == "P")
+                if (_performanceResolution == PerformanceResolution.Yearly)
                 {
-                    if (_performanceResolution == PerformanceResolution.Yearly)
-                    {
-                        return YearlyPerformancePlot(CurrentKpi, _normalized, _breakdown);
-                    }
-                    else if (_performanceResolution == PerformanceResolution.Monthly)
-                    {
-                        return new AmrPlotBase();
-                    }
-                    else
-                    {
-                        // _performanceResolution == PerformanceResolution.Daily
-                        return new AmrPlotBase();
-                    }
+                    return YearlyPerformancePlot(CurrentKpi, _normalized, _breakdown);
+                }
+                else if (_performanceResolution == PerformanceResolution.Monthly)
+                {
+                    return new AmrPlotBase();
                 }
                 else
                 {
-                    return new DemandMonthlyPlot();
+                    // _performanceResolution == PerformanceResolution.Daily
+                    return new AmrPlotBase();
                 }
+            }
+            else
+            {
+                return new DemandMonthlyPlot();
             }
         }
 
@@ -167,6 +166,7 @@ namespace Hive.IO.Plots
         {
             _panelFactory = CreatePerformancePanel;
             _currentPanel = _panelFactory();
+            CurrentPlot = SelectCurrentPlot();
         }
 
         public bool Contains(PointF location)
@@ -178,6 +178,7 @@ namespace Hive.IO.Plots
         {
             _currentPanel.Clicked(sender, e);
             _currentPanel = _panelFactory();
+            CurrentPlot = SelectCurrentPlot();
         }
 
         public void Render(Results results, Graphics graphics, RectangleF bounds)
@@ -212,8 +213,9 @@ namespace Hive.IO.Plots
             if (CurrentKpi != Kpi.None)
             {
                 _currentKpi = Kpi.Costs;
-
             }
+
+            CurrentPlot = SelectCurrentPlot();
         }
 
         public void EmissionsKpiClicked(object sender, EventArgs e)
@@ -224,6 +226,8 @@ namespace Hive.IO.Plots
                 _currentKpi = Kpi.Emissions;
 
             }
+
+            CurrentPlot = SelectCurrentPlot();
         }
 
         public void EnergyKpiClicked(object sender, EventArgs e)
@@ -231,8 +235,9 @@ namespace Hive.IO.Plots
             if (CurrentKpi != Kpi.None)
             {
                 _currentKpi = Kpi.Energy;
-
             }
+
+            CurrentPlot = SelectCurrentPlot();
         }
     }
 }
