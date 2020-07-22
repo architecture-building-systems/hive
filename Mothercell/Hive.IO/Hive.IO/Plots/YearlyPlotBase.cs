@@ -57,7 +57,6 @@ namespace Hive.IO.Plots
 
         private float Scale(float value, float maxValue, float newMaxValue)
         {
-            RhinoApp.WriteLine($"Scale({value}, {maxValue}, {newMaxValue}) => {value/maxValue*newMaxValue}");
             if (value >= maxValue)
             {
                 return newMaxValue;
@@ -73,17 +72,17 @@ namespace Hive.IO.Plots
             var obBounds = RenderOperationBuildings(graphics, BuildingsBrush, OperationBuildings, OperationBuildingsPlotBounds);
             var osBounds = RenderOperationSystems(graphics, SystemsBrush, OperationSystems, OperationSystemsPlotBounds);
 
-            RhinoApp.WriteLine($"RenderPlot bounds: {ebBounds}, {esBounds}, {obBounds}, {osBounds}");
-
-            graphics.DrawRectangleF(new Pen(Color.Crimson), OperationBuildingsPlotBounds);
-            graphics.DrawRectangleF(new Pen(Color.Green), OperationSystemsPlotBounds);
-
             var total = EmbodiedBuildings + EmbodiedSystems + OperationBuildings + OperationSystems;
             Func<float, string> Caption = (value) => $"{value:0} ({value / total * 100:0}%)";
-            graphics.DrawString(Caption(EmbodiedBuildings), NormalFont, TextBrush, ebBounds);
-            graphics.DrawString(Caption(EmbodiedSystems), NormalFont, TextBrush, esBounds);
-            graphics.DrawString(Caption(OperationBuildings), NormalFont, TextBrush, obBounds);
-            graphics.DrawString(Caption(OperationSystems), NormalFont, TextBrush, osBounds);
+
+            var format = StringFormat.GenericTypographic;
+            format.Alignment = StringAlignment.Center;
+            format.LineAlignment = StringAlignment.Center;
+
+            graphics.DrawString(Caption(EmbodiedBuildings), NormalFont, TextBrush, ebBounds, format);
+            graphics.DrawString(Caption(EmbodiedSystems), NormalFont, TextBrush, esBounds, format);
+            graphics.DrawString(Caption(OperationBuildings), NormalFont, TextBrush, obBounds, format);
+            graphics.DrawString(Caption(OperationSystems), NormalFont, TextBrush, osBounds, format);
         }
     }
 }

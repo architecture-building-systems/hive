@@ -61,11 +61,7 @@ namespace Hive.IO.Plots
 
         public void Clicked(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
-            RhinoApp.WriteLine($"MenuButton({Text}) clicked!");
-            if (OnClicked != null)
-            {
-                OnClicked(this, e);
-            }
+            OnClicked?.Invoke(this, e);
         }
     }
 
