@@ -143,9 +143,10 @@ namespace Hive.IO.Plots
                     plot = new YearlyEmissionsPlot();
                     break;
                 case Kpi.Costs:
-                    plot = new AmrPlotBase();
+                    plot = new YearlyCostsPlot();
                     break;
                 default:
+                    // this shouldn't happen...
                     plot = new AmrPlotBase();
                     break;
             }

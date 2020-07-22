@@ -40,7 +40,7 @@ namespace Hive.IO.Plots
             plotBounds.Width /= 2;
             plotBounds.Height = Scale(value, AxisMax, bounds.Height);
             plotBounds.Y += (bounds.Height - plotBounds.Height);
-            plotBounds.Offset(1, 1);
+            plotBounds.Offset(1, -1);
             graphics.FillRectangle(brush, plotBounds);
             return plotBounds;
         }

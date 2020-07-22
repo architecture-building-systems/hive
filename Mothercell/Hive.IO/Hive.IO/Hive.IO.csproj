@@ -104,6 +104,7 @@
     <Compile Include="Plots\AmrPlotBase.cs" />
     <Compile Include="Plots\DemandMonthlyNormalizedPlot.cs" />
     <Compile Include="Plots\DemandMonthlyPlot.cs" />
+    <Compile Include="Plots\YearlyCostsPlot.cs" />
     <Compile Include="Plots\YearlyPlotBase.cs" />
     <Compile Include="ResultsPlotting.cs" />
     <Compile Include="Plots\YearlyEmissionsPlot.cs" />

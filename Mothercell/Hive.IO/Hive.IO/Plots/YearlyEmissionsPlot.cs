@@ -4,8 +4,8 @@ namespace Hive.IO.Plots
 {
     public class YearlyEmissionsPlot : YearlyPlotBase
     {
-        protected override SolidBrush BuildingsBrush => new SolidBrush(Color.FromArgb(221, 229, 124));
-        protected override SolidBrush SystemsBrush => new SolidBrush(Color.FromArgb(145, 153, 48));
+        protected override SolidBrush BuildingsBrush => new SolidBrush(Color.FromArgb(177, 218, 143));
+        protected override SolidBrush SystemsBrush => new SolidBrush(Color.FromArgb(100, 141, 66));
 
         protected override string Title => "CO₂ Emissions";
         protected override string Unit => "kgCO₂";
