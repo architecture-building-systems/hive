@@ -100,9 +100,7 @@ namespace Hive.IO.Plots
         // Column titles (subclasses should override these to provide the calculated values)
         protected virtual string Unit => "kgCO2";
 
-        protected float AxisMax => (float)(Normalized 
-            ? (EmbodiedBuildings + EmbodiedSystems + OperationBuildings + OperationSystems) / Results.TotalFloorArea
-            : EmbodiedBuildings + EmbodiedSystems + OperationBuildings + OperationSystems);
+        protected float AxisMax => EmbodiedBuildings + EmbodiedSystems + OperationBuildings + OperationSystems;
 
         public void Render(Results results, Graphics graphics, RectangleF bounds)
         {
@@ -177,10 +175,10 @@ namespace Hive.IO.Plots
             var format = StringFormat.GenericTypographic;
             format.Alignment = StringAlignment.Near;
             format.LineAlignment = StringAlignment.Near;
-            graphics.DrawString($"{AxisMax:0}", BoldFont, TextBrush, BuildingsRightAxisBounds, format);
+            graphics.DrawString($"{AxisMax:0}", BoldFont, TextBrush, BuildingsRightAxisBounds.CloneWithOffset(0, 2), format);
 
             format.LineAlignment = StringAlignment.Far;
-            graphics.DrawString($"{AxisMax:0}", BoldFont, TextBrush, SystemsRightAxisBounds, format);
+            graphics.DrawString($"{AxisMax:0}", BoldFont, TextBrush, SystemsRightAxisBounds.CloneWithOffset(0, 2), format);
         }
 
         private void RenderGrid(Graphics graphics)
