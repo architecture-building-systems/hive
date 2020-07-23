@@ -175,11 +175,12 @@ namespace Hive.IO.Plots
         private void RenderRightAxis(Graphics graphics)
         {
             var format = StringFormat.GenericTypographic;
+            format.Alignment = StringAlignment.Near;
             format.LineAlignment = StringAlignment.Near;
-            graphics.DrawString($"{AxisMax:0}", BoldFont, TextBrush, BuildingsRightAxisBounds);
+            graphics.DrawString($"{AxisMax:0}", BoldFont, TextBrush, BuildingsRightAxisBounds, format);
 
             format.LineAlignment = StringAlignment.Far;
-            graphics.DrawString($"{AxisMax:0}", BoldFont, TextBrush, SystemsRightAxisBounds);
+            graphics.DrawString($"{AxisMax:0}", BoldFont, TextBrush, SystemsRightAxisBounds, format);
         }
 
         private void RenderGrid(Graphics graphics)
