@@ -182,7 +182,7 @@ namespace Hive.IO.Plots
             CurrentPlot = SelectCurrentPlot();
         }
 
-        public void Render(Results results, Graphics graphics, RectangleF bounds)
+        public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
         {
             _currentPanel.Render(results, graphics, bounds);
         }

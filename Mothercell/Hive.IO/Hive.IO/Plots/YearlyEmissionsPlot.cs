@@ -14,6 +14,9 @@ namespace Hive.IO.Plots
         protected override float EmbodiedBuildings => (float)Results.EmbodiedEmissionsBuildings(Normalized);
         protected override float OperationSystems => (float)Results.OperationEmissionsSystems(Normalized);
         protected override float OperationBuildings => (float)Results.OperationEmissionsBuildings(Normalized);
+        protected override float TotalEmbodied => (float) Results.TotalEmbodiedEmissions(Normalized);
+        protected override float TotalOperation => (float) Results.TotalOperationEmissions(Normalized);
+        protected override float Total => (float) Results.TotalEmissions(Normalized);
 
         public YearlyEmissionsPlot(bool normalized) : base(normalized)
         {

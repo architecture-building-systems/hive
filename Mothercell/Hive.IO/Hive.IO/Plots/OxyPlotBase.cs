@@ -24,7 +24,7 @@ namespace Hive.IO.Plots
         protected static readonly OxyColor DhwColor = OxyColor.FromRgb(192, 0, 0);
         protected static readonly OxyColor BackgroundColor = OxyColors.Transparent;
 
-        public void Render(Results results, Graphics graphics, RectangleF bounds)
+        public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
         {
             _bounds = bounds; // store for Contains check
 
@@ -50,7 +50,7 @@ namespace Hive.IO.Plots
         {
         }
 
-        private Bitmap RenderToBitmap(Results results, int plotWidth, int plotHeight)
+        private Bitmap RenderToBitmap(ResultsPlotting results, int plotWidth, int plotHeight)
         {
             Bitmap bitmap;
             var model = CreatePlotModel(results);
@@ -64,12 +64,12 @@ namespace Hive.IO.Plots
             return bitmap;
         }
 
-        public void NewData(Results results)
+        public void NewData(ResultsPlotting results)
         {
             _bitmapCache = null;
         }
 
-        protected abstract PlotModel CreatePlotModel(Results results);
+        protected abstract PlotModel CreatePlotModel(ResultsPlotting results);
 
         private bool IsBitmapCacheStillValid(int plotWidth, int plotHeight)
         {

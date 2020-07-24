@@ -15,10 +15,10 @@ namespace Hive.IO.GHComponents
             "Hive Visualizer for simulation results",
             "[hive]", "IO", GH_ParamAccess.item)
         {
-            
+            Results = new ResultsPlotting(new Results());
         }
 
-        public Results Results { get; private set; }
+        public ResultsPlotting Results { get; private set; }
 
 
         public override GH_ParamKind Kind => GH_ParamKind.floating;
@@ -37,11 +37,11 @@ namespace Hive.IO.GHComponents
         {
             if (m_data.IsEmpty)
             {
-                Results = new Results();
+                Results = new ResultsPlotting(new Results());
             }
             else
             {
-                Results = m_data.First().Value as Results;
+                Results = new ResultsPlotting(m_data.First().Value as Results);
             }
 
 

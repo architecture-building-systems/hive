@@ -18,7 +18,7 @@ namespace Hive.IO.Plots
         /// <param name="results"></param>
         /// <param name="graphics"></param>
         /// <param name="bounds"></param>
-        void Render(Results results, Graphics graphics, RectangleF bounds);
+        void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds);
 
         bool Contains(PointF location);
 
@@ -35,6 +35,6 @@ namespace Hive.IO.Plots
         /// are caching their render output can use this to invalidate the cache.
         /// </summary>
         /// <param name="results"></param>
-        void NewData(Results results);
+        void NewData(ResultsPlotting results);
     }
 }

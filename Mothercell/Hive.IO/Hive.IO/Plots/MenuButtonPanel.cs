@@ -22,7 +22,7 @@ namespace Hive.IO.Plots
 
         public string Category => _menuButtons.First().Text.Substring(0, 1);
 
-        public void Render(Results results, Graphics graphics, RectangleF bounds)
+        public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
         {
             var x = bounds.X + spacer;
             var y = bounds.Y + bounds.Height / 2 - sideLength / 2;

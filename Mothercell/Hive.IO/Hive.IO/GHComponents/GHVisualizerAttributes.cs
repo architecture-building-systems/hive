@@ -29,8 +29,7 @@ namespace Hive.IO.GHComponents
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
                 UnitText = "kWh",
                 NormalizedUnitText = "kWh/m²",
-                Data = results => 1530.0,
-                NormalizedData = results => 153.0,
+                Data = (results, normalized) => results.TotalEnergy(normalized),
                 Kpi = Kpi.Energy
             };
             var emissionsKpiConfig = new KpiPlotProperties
@@ -39,8 +38,7 @@ namespace Hive.IO.GHComponents
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
                 UnitText = "kgCO₂",
                 NormalizedUnitText = "kgCO₂/m²",
-                Data = results => 790.0,
-                NormalizedData = results => 79.0,
+                Data = (results, normalized) => results.TotalEmissions(normalized),
                 Kpi = Kpi.Emissions
             };
             var costsKpiConfig = new KpiPlotProperties
@@ -49,8 +47,7 @@ namespace Hive.IO.GHComponents
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
                 UnitText = "CHF",
                 NormalizedUnitText = "CHF/m²",
-                Data = results => 1000.0,
-                NormalizedData = results => 120.0,
+                Data = (results, normalized) => results.TotalCosts(normalized),
                 Kpi = Kpi.Costs
             };
 
@@ -72,7 +69,7 @@ namespace Hive.IO.GHComponents
             };
         }
 
-        public void NewData(Results results)
+        public void NewData(ResultsPlotting results)
         {
             _plotSelector.CurrentPlot.NewData(results);
         }

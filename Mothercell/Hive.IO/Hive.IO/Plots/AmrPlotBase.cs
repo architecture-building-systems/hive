@@ -102,11 +102,11 @@ namespace Hive.IO.Plots
 
         protected float AxisMax => EmbodiedBuildings + EmbodiedSystems + OperationBuildings + OperationSystems;
 
-        public void Render(Results results, Graphics graphics, RectangleF bounds)
+        public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
         {
             if (Results == null)
             {
-                Results = new ResultsPlotting(results);
+                Results = results;
             }
 
             Bounds = bounds;
@@ -144,6 +144,10 @@ namespace Hive.IO.Plots
         protected virtual float EmbodiedSystems => (float)Results.EmbodiedEmissionsSystems(Normalized);
         protected virtual float OperationBuildings => (float)Results.OperationEmissionsBuildings(Normalized);
         protected virtual float OperationSystems => (float)Results.OperationEmissionsSystems(Normalized);
+        protected virtual float TotalEmbodied => (float) Results.TotalEmbodiedEmissions(Normalized);
+        protected virtual float TotalOperation => (float) Results.TotalOperationEmissions(Normalized);
+        protected virtual float Total => (float) Results.TotalEmissions(Normalized);
+
         protected bool Normalized { get; }
 
         private void RenderColumnTitles(Graphics graphics)
@@ -151,16 +155,12 @@ namespace Hive.IO.Plots
             // we need to do some calculations, since we're mixing bold and standard fonts and have to do alignment ourselves...
             string ColumnText(double absoluteValue, string unit, double relativeValue) => $" = {absoluteValue:0} {unit} ({relativeValue:0}%)";
 
-            var embodiedTotal = EmbodiedBuildings + EmbodiedSystems;
-            var operationTotal = OperationBuildings + OperationSystems;
-            var total = embodiedTotal + operationTotal;
-
             graphics.DrawStringTwoFonts("Embodied", BoldFont,
-                ColumnText(embodiedTotal, Unit, embodiedTotal / total * 100), NormalFont, TextBrush,
+                ColumnText(TotalEmbodied, Unit, TotalEmbodied / Total * 100), NormalFont, TextBrush,
                 EmbodiedTitleBounds);
 
             graphics.DrawStringTwoFonts("Operation", BoldFont,
-                ColumnText(operationTotal, Unit, operationTotal / total * 100), NormalFont,
+                ColumnText(TotalOperation, Unit, TotalOperation / Total * 100), NormalFont,
                 TextBrush, OperationTitleBounds);
         }
 
@@ -207,9 +207,9 @@ namespace Hive.IO.Plots
             graphics.DrawRectangleF(borderPen, RightBottomBounds);
         }
 
-        public void NewData(Results results)
+        public void NewData(ResultsPlotting results)
         {
-            Results = new ResultsPlotting(results);
+            Results = results;
         }
     }
 }

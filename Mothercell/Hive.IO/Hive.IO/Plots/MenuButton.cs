@@ -41,7 +41,7 @@ namespace Hive.IO.Plots
 
         public string Text { get; }
 
-        public void Render(Results results, Graphics graphics, RectangleF bounds)
+        public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
         {
             _bounds = bounds;
 

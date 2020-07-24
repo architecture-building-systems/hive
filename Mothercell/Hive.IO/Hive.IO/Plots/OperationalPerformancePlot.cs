@@ -6,7 +6,7 @@ using Grasshopper.Kernel;
 
 namespace Hive.IO.Plots
 {
-    public delegate double QueryResults(Results results);
+    public delegate double QueryResults(ResultsPlotting results, bool normalized);
 
     public struct KpiPlotProperties
     {
@@ -15,7 +15,6 @@ namespace Hive.IO.Plots
         public string UnitText;
         public string NormalizedUnitText;
         public QueryResults Data;
-        public QueryResults NormalizedData;
         public Kpi Kpi;
     }
 
@@ -47,13 +46,13 @@ namespace Hive.IO.Plots
 
         public bool Normalized { get; set; }
 
-        private String Data(Results results)
+        private String Data(ResultsPlotting results)
         {
-            var value = Normalized ? _properties.NormalizedData(results) : _properties.Data(results);
+            var value = _properties.Data(results, Normalized);
             return $"{value:F1}";
         }
 
-        public void Render(Results results, Graphics graphics, RectangleF bounds)
+        public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
         {
             Render(results, graphics, bounds, false);
         }
@@ -75,7 +74,7 @@ namespace Hive.IO.Plots
         /// <param name="graphics"></param>
         /// <param name="bounds">expected height of bounds should be TotalHeight</param>
         /// <param name="selected">draw a black bar at top if selected</param>
-        public void Render(Results results, Graphics graphics, RectangleF bounds, bool selected)
+        public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds, bool selected)
         {
             // save bounds for Contains method - when user clicks on the plot
             _bounds = bounds;
