@@ -1,4 +1,4 @@
-﻿namespace Hive.IO
+﻿namespace Hive.IO.DataHandling
 {
     // An adaptor for extracting aggregated hive results.
     public class ResultsPlotting

@@ -106,7 +106,7 @@
     <Compile Include="Plots\DemandMonthlyPlot.cs" />
     <Compile Include="Plots\YearlyCostsPlot.cs" />
     <Compile Include="Plots\YearlyPlotBase.cs" />
-    <Compile Include="ResultsPlotting.cs" />
+    <Compile Include="DataHandling\ResultsPlotting.cs" />
     <Compile Include="Plots\YearlyEmissionsPlot.cs" />
     <Compile Include="Plots\IVisualizerPlot.cs" />
     <Compile Include="Plots\MenuButton.cs" />

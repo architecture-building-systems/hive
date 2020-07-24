@@ -5,6 +5,7 @@ using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
+using Hive.IO.DataHandling;
 using Hive.IO.Plots;
 
 namespace Hive.IO.GHComponents

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
+using Hive.IO.DataHandling;
 using Hive.IO.Plots;
 
 namespace Hive.IO.GHComponents

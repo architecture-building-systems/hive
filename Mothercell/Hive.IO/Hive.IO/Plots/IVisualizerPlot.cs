@@ -6,6 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
+using Hive.IO.DataHandling;
 using Rhino.Render;
 
 namespace Hive.IO.Plots
