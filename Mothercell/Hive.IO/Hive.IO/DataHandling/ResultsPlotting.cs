@@ -1,4 +1,9 @@
-﻿namespace Hive.IO.DataHandling
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Web.UI.WebControls;
+
+namespace Hive.IO.DataHandling
 {
     // An adaptor for extracting aggregated hive results.
     public class ResultsPlotting
@@ -13,10 +18,42 @@
         public double TotalFloorArea => 180;
 
         #region Emissions
-        public double EmbodiedEmissionsBuildings(bool normalized) => normalized ? EmbodiedEmissionsBuildings(false) / TotalFloorArea : 1000;
-        public double EmbodiedEmissionsSystems(bool normalized) => normalized ? EmbodiedEmissionsSystems(false) / TotalFloorArea : 2000;
-        public double OperationEmissionsBuildings(bool normalized) => normalized ? OperationEmissionsBuildings(false) / TotalFloorArea : 3000;
-        public double OperationEmissionsSystems(bool normalized) => normalized ? OperationEmissionsSystems(false) / TotalFloorArea : 4000;
+
+        public double[] EmbodiedEmissionsBuildingsMonthly(bool normalized)
+        {
+            // FIXME: plug in real values here...
+            double dummy = 100.0;
+            double[] result = new double[12].Select(r => dummy).ToArray();
+            return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
+        }
+        public double EmbodiedEmissionsBuildings(bool normalized) => EmbodiedEmissionsBuildingsMonthly(normalized).Sum();
+        public double[] EmbodiedEmissionsSystemsMonthly(bool normalized)
+        {
+            // FIXME: plug in real values here...
+            double dummy = 200.0;
+            double[] result = new double[12].Select(r => dummy).ToArray();
+            return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
+        }
+        public double EmbodiedEmissionsSystems(bool normalized) => EmbodiedEmissionsSystemsMonthly(normalized).Sum();
+
+        public double[] OperationEmissionsBuildingsMonthly(bool normalized)
+        {
+            // FIXME: plug in real values here...
+            double dummy = 300.0;
+            double[] result = new double[12].Select(r => dummy).ToArray();
+            return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
+
+        }
+        public double OperationEmissionsBuildings(bool normalized) => OperationEmissionsBuildingsMonthly(normalized).Sum();
+
+        public double[] OperationEmissionsSystemsMonthly(bool normalized)
+        {
+            // FIXME: plug in real values here...
+            double dummy = 400.0;
+            double[] result = new double[12].Select(r => dummy).ToArray();
+            return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
+        }
+        public double OperationEmissionsSystems(bool normalized) => OperationEmissionsSystemsMonthly(normalized).Sum();
 
         public double TotalEmbodiedEmissions(bool normalized) =>
             EmbodiedEmissionsBuildings(normalized) + EmbodiedEmissionsSystems(normalized);
