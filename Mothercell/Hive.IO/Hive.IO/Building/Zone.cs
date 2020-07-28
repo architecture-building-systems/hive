@@ -115,7 +115,7 @@ namespace Hive.IO
         /// <summary>
         /// in kWh per month
         /// </summary>
-        public double [] HeatingLoadsMonthly { get; private set; }
+        public double[] HeatingLoadsMonthly { get; private set; }
         /// <summary>
         /// in kWh per month
         /// </summary>
@@ -182,24 +182,20 @@ namespace Hive.IO
             this.Index = index;
             this.Tolerance = tolerance;
 
-            // these might still be true, but let's set to false to save unnecessary computation
+            // only IsClosed needs to strictly guaranteed in all cases
+            this.IsClosed = false; 
             this.IsConvex = false;
-            this.IsClosed = false;
             this.IsPlanar = false;
             this.IsWindowsOnZone = true; // zone might have no windows. so default is true
             this.IsWindowsSelfIntersect = true;
 
-            this.IsLinear = CheckLinearity(this.ZoneGeometry);
             this.IsClosed = CheckClosedness(this.ZoneGeometry);
-
-                if (this.IsClosed)
-                {
-                    this.IsPlanar = CheckPlanarity(this.ZoneGeometry);
-                    if (this.IsPlanar)
-                    {
-                        this.IsConvex = CheckConvexity(this.ZoneGeometry, this.Tolerance);
-                    }
-                }
+            if (this.IsClosed)
+            {
+                this.IsLinear = CheckLinearity(this.ZoneGeometry);
+                this.IsPlanar = CheckPlanarity(this.ZoneGeometry);
+                this.IsConvex = CheckConvexity(this.ZoneGeometry, this.Tolerance);
+            }
 
             if (opening_srfs.Length > 0)
             {
@@ -264,7 +260,7 @@ namespace Hive.IO
         /// <param name="dhwLoads"></param>
         /// <param name="coolingLoads"></param>
         /// <param name="electricityLoads"></param>
-        public void SetEnergyDemandsMonthly(double [] heatingLoads, double [] dhwLoads, double[] coolingLoads, double [] electricityLoads)
+        public void SetEnergyDemandsMonthly(double[] heatingLoads, double[] dhwLoads, double[] coolingLoads, double[] electricityLoads)
         {
             const int months = 12;
             this.HeatingLoadsMonthly = new double[months];
@@ -284,9 +280,6 @@ namespace Hive.IO
 
         #region internalMethods
 
-        // !!!!!!!!! TO DO
-        // Why??? Only matter for EPlus, which I don't use.
-
         /// <summary>
         /// Check the linearity of the brep zone geometry. No curves allowed for simplicity.
         /// </summary>
@@ -305,10 +298,6 @@ namespace Hive.IO
             }
             return isLinear;
         }
-
-
-        // !!!!!!!!!!!!!! TO DO
-        // why?? convexity in EPlus only necessary for surfaces. but not for floorplan
 
         /// <summary>
         /// Check the convexity of the zone. Hive only allows convex spaces, for simplicity.
@@ -362,10 +351,6 @@ namespace Hive.IO
         {
             return brep.IsSolid;
         }
-
-
-        // !!!!!!!!!!!!!!!!!! TO DO
-        // WHY??? Again, only really necessary for EPlus
 
         /// <summary>
         /// Check for planarity of surfaces
