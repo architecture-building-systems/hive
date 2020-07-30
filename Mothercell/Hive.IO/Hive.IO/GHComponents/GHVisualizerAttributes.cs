@@ -70,11 +70,6 @@ namespace Hive.IO.GHComponents
             };
         }
 
-        public void NewData(ResultsPlotting results)
-        {
-            _plotSelector.CurrentPlot.NewData(results);
-        }
-
         // FIXME: what goes here?
         public override string PathName => "PathName_GHVisualizer";
 
@@ -151,7 +146,7 @@ namespace Hive.IO.GHComponents
         /// <param name="graphics"></param>
         private void RenderTitleBar(Graphics graphics)
         {
-            _plotSelector.Render(Owner.Results, graphics, MenuPanelBounds);
+            _plotSelector.RenderMenuPanel(Owner.Results, graphics, MenuPanelBounds);
 
             // render the three operational performance plots
             var plotWidth = TitleBarHeight;  // squares
@@ -166,7 +161,7 @@ namespace Hive.IO.GHComponents
 
         private void RenderPlot(Graphics graphics)
         {
-            _plotSelector.CurrentPlot.Render(Owner.Results, graphics, PlotBounds);
+            _plotSelector.RenderCurrentPlot(Owner.Results, graphics, PlotBounds);
         }
 
         private void RenderCapsule(Graphics graphics)
@@ -178,6 +173,11 @@ namespace Hive.IO.GHComponents
             capsule.AddInputGrip(InputGrip);
             capsule.Render(graphics, Selected, Owner.Locked, true);
             capsule.Dispose();
+        }
+
+        public void NewData(ResultsPlotting results)
+        {
+            // this is where we would implement caching..
         }
     }
 }

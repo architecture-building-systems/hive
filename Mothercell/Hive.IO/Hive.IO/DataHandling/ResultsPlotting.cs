@@ -106,7 +106,7 @@ namespace Hive.IO.DataHandling
             EmbodiedCostsBuildings(normalized) + EmbodiedCostsSystems(normalized);
 
         public double TotalOperationCosts(bool normalized) =>
-            EmbodiedCostsBuildings(normalized) + EmbodiedCostsSystems(normalized);
+            OperationCostsBuildings(normalized) + OperationCostsSystems(normalized);
 
         public double TotalCosts(bool normalized) => TotalEmbodiedCosts(normalized) + TotalOperationCosts(normalized);
         #endregion Costs

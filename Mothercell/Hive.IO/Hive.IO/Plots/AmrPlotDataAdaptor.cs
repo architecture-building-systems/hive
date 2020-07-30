@@ -35,6 +35,11 @@ namespace Hive.IO.Plots
         public abstract float TotalEmbodied { get; }
         public abstract float TotalOperation { get; }
         public abstract float Total { get; }
+
+        public abstract float[] EmbodiedSystemsMonthly { get; }
+        public abstract float[] EmbodiedBuildingsMonthly { get; }
+        public abstract float[] OperationSystemsMonthly { get; }
+        public abstract float[] OperationBuildingsMontholy { get; }
     }
 
     public class CostsDataAdaptor : AmrPlotDataAdaptor
@@ -51,6 +56,18 @@ namespace Hive.IO.Plots
         public override float TotalEmbodied => (float)Results.TotalEmbodiedCosts(Normalized);
         public override float TotalOperation => (float)Results.TotalOperationCosts(Normalized);
         public override float Total => (float)Results.TotalCosts(Normalized);
+
+        public override float[] EmbodiedSystemsMonthly =>
+            Results.EmbodiedCostsSystemsMonthly(Normalized).ToFloatArray();
+
+        public override float[] EmbodiedBuildingsMonthly =>
+            Results.EmbodiedCostsBuildingsMonthly(Normalized).ToFloatArray();
+
+        public override float[] OperationSystemsMonthly =>
+            Results.OperationCostsSystemsMonthly(Normalized).ToFloatArray();
+
+        public override float[] OperationBuildingsMontholy =>
+            Results.OperationCostsBuildingsMonthly(Normalized).ToFloatArray();
     }
 
     public class EmissionsDataAdaptor : AmrPlotDataAdaptor
@@ -67,6 +84,18 @@ namespace Hive.IO.Plots
         public override float TotalEmbodied => (float)Results.TotalEmbodiedEmissions(Normalized);
         public override float TotalOperation => (float)Results.TotalOperationEmissions(Normalized);
         public override float Total => (float)Results.TotalEmissions(Normalized);
+
+        public override float[] EmbodiedSystemsMonthly =>
+            Results.EmbodiedEmissionsSystemsMonthly(Normalized).ToFloatArray();
+
+        public override float[] EmbodiedBuildingsMonthly =>
+            Results.EmbodiedEmissionsBuildingsMonthly(Normalized).ToFloatArray();
+
+        public override float[] OperationSystemsMonthly =>
+            Results.OperationEmissionsSystemsMonthly(Normalized).ToFloatArray();
+
+        public override float[] OperationBuildingsMontholy =>
+            Results.OperationEmissionsBuildingsMonthly(Normalized).ToFloatArray();
     }
 
     public class EnergyDataAdaptor : AmrPlotDataAdaptor
@@ -80,9 +109,21 @@ namespace Hive.IO.Plots
         public override float EmbodiedBuildings => (float)Results.EmbodiedEnergyBuildings(Normalized);
         public override float OperationSystems => (float)Results.OperationEnergySystems(Normalized);
         public override float OperationBuildings => (float)Results.OperationEnergyBuildings(Normalized);
-        public override float TotalEmbodied => (float)Results.TotalOperationEnergy(Normalized);
-        public override float TotalOperation => (float)Results.TotalEmbodiedEnergy(Normalized);
+        public override float TotalEmbodied => (float)Results.TotalEmbodiedEnergy(Normalized);
+        public override float TotalOperation => (float)Results.TotalOperationEnergy(Normalized);
         public override float Total => (float)Results.TotalEnergy(Normalized);
+
+        public override float[] EmbodiedSystemsMonthly =>
+            Results.EmbodiedEnergySystemsMonthly(Normalized).ToFloatArray();
+
+        public override float[] EmbodiedBuildingsMonthly =>
+            Results.EmbodiedEnergyBuildingsMonthly(Normalized).ToFloatArray();
+
+        public override float[] OperationSystemsMonthly =>
+            Results.OperationEnergySystemsMonthly(Normalized).ToFloatArray();
+
+        public override float[] OperationBuildingsMontholy =>
+            Results.OperationEnergyBuildingsMonthly(Normalized).ToFloatArray();
     }
 
 }

@@ -24,7 +24,7 @@ namespace Hive.IO.Plots
         protected AmrPlotDataAdaptor Data { get; }
         protected AmrPlotStyle Style { get; }
 
-        private float textBoxPadding = 50;
+        private readonly float textBoxPadding = 50;
         
 
         protected RectangleF Bounds { get; private set; }
@@ -101,9 +101,6 @@ namespace Hive.IO.Plots
 
         protected RectangleF RightBottomBounds => OperationSystemsLegendBounds.CloneRight(RightAxisWidth);
 
-        // Column titles (subclasses should override these to provide the calculated values)
-        protected virtual string Unit => "kgCO2";
-
         protected float AxisMax => Data.EmbodiedBuildings + Data.EmbodiedSystems + Data.OperationBuildings + Data.OperationSystems;
 
         public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
@@ -145,11 +142,11 @@ namespace Hive.IO.Plots
             string ColumnText(double absoluteValue, string unit, double relativeValue) => $" = {absoluteValue:0} {unit} ({relativeValue:0}%)";
 
             graphics.DrawStringTwoFonts("Embodied", BoldFont,
-                ColumnText(Data.TotalEmbodied, Unit, Data.TotalEmbodied / Data.Total * 100), NormalFont, TextBrush,
+                ColumnText(Data.TotalEmbodied, Data.Unit, Data.TotalEmbodied / Data.Total * 100), NormalFont, TextBrush,
                 EmbodiedTitleBounds);
 
             graphics.DrawStringTwoFonts("Operation", BoldFont,
-                ColumnText(Data.TotalOperation, Unit, Data.TotalOperation / Data.Total * 100), NormalFont,
+                ColumnText(Data.TotalOperation, Data.Unit, Data.TotalOperation / Data.Total * 100), NormalFont,
                 TextBrush, OperationTitleBounds);
         }
 

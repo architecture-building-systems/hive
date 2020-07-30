@@ -102,29 +102,28 @@ namespace Hive.IO.Plots
             });
         }
 
+        
         /// <summary>
         /// This is where the plot selection logic comes from. Let's just brute-force it.
         /// </summary>
-        public IVisualizerPlot CurrentPlot { get; private set; }
-
-        private IVisualizerPlot SelectCurrentPlot()
+        private IVisualizerPlot SelectCurrentPlot(ResultsPlotting results)
         {
             if (Category == "P")
             {
                 if (_performanceResolution == PerformanceResolution.Yearly)
                 {
-                    return YearlyPerformancePlot(CurrentKpi, _normalized, _breakdown);
+                    return YearlyPerformancePlot(CurrentKpi, results, _normalized, _breakdown);
                 }
                 else if (_performanceResolution == PerformanceResolution.Monthly)
                 {
-                    return MonthlyPerformancePlot(CurrentKpi, _normalized, _breakdown);
+                    return MonthlyPerformancePlot(CurrentKpi, results, _normalized, _breakdown);
                 }
                 else
                 {
                     // _performanceResolution == PerformanceResolution.Daily
                     return new AmrPlotBase(
                         "TODO: Implement this plot!",
-                        new EnergyDataAdaptor(null, _normalized),
+                        new EnergyDataAdaptor(results, _normalized),
                         new EnergyPlotStyle());
                 }
             }
@@ -134,32 +133,32 @@ namespace Hive.IO.Plots
             }
         }
 
-        private IVisualizerPlot YearlyPerformancePlot(Kpi currentKpi, bool normalized, bool breakdown)
+        private IVisualizerPlot YearlyPerformancePlot(Kpi currentKpi, ResultsPlotting results, bool normalized, bool breakdown)
         {
             IVisualizerPlot plot;
             switch (currentKpi)
             {
                 case Kpi.Energy:
-                    plot = new YearlyAmrPlot("Energy", new EnergyDataAdaptor(null, normalized), new EnergyPlotStyle());
+                    plot = new YearlyAmrPlot("Energy", new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle());
                     break;
                 case Kpi.Emissions:
-                    plot = new YearlyAmrPlot("CO₂ Emissions", new EmissionsDataAdaptor(null, normalized), new EmissionsPlotStyle());
+                    plot = new YearlyAmrPlot("CO₂ Emissions", new EmissionsDataAdaptor(results, normalized), new EmissionsPlotStyle());
                     break;
                 case Kpi.Costs:
-                    plot = new YearlyAmrPlot("Cost", new CostsDataAdaptor(null, normalized), new CostsPlotStyle());
+                    plot = new YearlyAmrPlot("Cost", new CostsDataAdaptor(results, normalized), new CostsPlotStyle());
                     break;
                 default:
                     // this shouldn't happen...
                     plot = new AmrPlotBase(
                         "TODO: Implement this plot!", 
-                        new EnergyDataAdaptor(null, normalized), 
+                        new EnergyDataAdaptor(results, normalized), 
                         new EnergyPlotStyle());
                     break;
             }
             return plot;
         }
 
-        private IVisualizerPlot MonthlyPerformancePlot(Kpi currentKpi, bool normalized, bool breakdown)
+        private IVisualizerPlot MonthlyPerformancePlot(Kpi currentKpi, ResultsPlotting results, bool normalized, bool breakdown)
         {
             IVisualizerPlot plot;
             switch (currentKpi)
@@ -167,26 +166,26 @@ namespace Hive.IO.Plots
                 case Kpi.Energy:
                     plot = new AmrPlotBase(
                         "TODO: Implement this plot!",
-                        new EnergyDataAdaptor(null, normalized),
+                        new EnergyDataAdaptor(results, normalized),
                         new EnergyPlotStyle());
                     break;
                 case Kpi.Emissions:
                     plot = new AmrPlotBase(
                         "TODO: Implement this plot!",
-                        new EnergyDataAdaptor(null, normalized),
+                        new EnergyDataAdaptor(results, normalized),
                         new EnergyPlotStyle());
                     break;
                 case Kpi.Costs:
                     plot = new AmrPlotBase(
                         "TODO: Implement this plot!",
-                        new EnergyDataAdaptor(null, normalized),
+                        new EnergyDataAdaptor(results, normalized),
                         new EnergyPlotStyle());
                     break;
                 default:
                     // this shouldn't happen...
                     plot = new AmrPlotBase(
                         "TODO: Implement this plot!",
-                        new EnergyDataAdaptor(null, normalized),
+                        new EnergyDataAdaptor(results, normalized),
                         new EnergyPlotStyle());
                     break;
             }
@@ -207,7 +206,6 @@ namespace Hive.IO.Plots
         {
             _panelFactory = CreatePerformancePanel;
             _currentPanel = _panelFactory();
-            CurrentPlot = SelectCurrentPlot();
         }
 
         public bool Contains(PointF location)
@@ -219,12 +217,17 @@ namespace Hive.IO.Plots
         {
             _currentPanel.Clicked(sender, e);
             _currentPanel = _panelFactory();
-            CurrentPlot = SelectCurrentPlot();
         }
 
-        public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
+        public void RenderMenuPanel(ResultsPlotting results, Graphics graphics, RectangleF bounds)
         {
             _currentPanel.Render(results, graphics, bounds);
+        }
+
+        public void RenderCurrentPlot(ResultsPlotting results, Graphics graphics, RectangleF bounds)
+        {
+            var plot = SelectCurrentPlot(results);
+            plot.Render(results, graphics, bounds);
         }
 
         private void CycleResolution(object sender, EventArgs e)
@@ -255,8 +258,6 @@ namespace Hive.IO.Plots
             {
                 _currentKpi = Kpi.Costs;
             }
-
-            CurrentPlot = SelectCurrentPlot();
         }
 
         public void EmissionsKpiClicked(object sender, EventArgs e)
@@ -267,8 +268,6 @@ namespace Hive.IO.Plots
                 _currentKpi = Kpi.Emissions;
 
             }
-
-            CurrentPlot = SelectCurrentPlot();
         }
 
         public void EnergyKpiClicked(object sender, EventArgs e)
@@ -277,8 +276,6 @@ namespace Hive.IO.Plots
             {
                 _currentKpi = Kpi.Energy;
             }
-
-            CurrentPlot = SelectCurrentPlot();
         }
     }
 }
