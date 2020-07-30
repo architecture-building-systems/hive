@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
 using System.Windows.Forms;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
+using Hive.IO.DataHandling;
 using Hive.IO.Plots;
 
 namespace Hive.IO.GHComponents
@@ -19,79 +17,57 @@ namespace Hive.IO.GHComponents
         private const float MinWidth = 200f;
         private const float MinHeight = TitleBarHeight + 150f;
 
-        private const float ArrowBoxSide = TitleBarHeight;
-        private const float ArrowBoxPadding = 50f;
         private const int Padding = 6;
 
-        private readonly IVisualizerPlot[] _plots = {
-            new DemandMonthlyPlot(),
-            new DemandMonthlyNormalizedPlot()
-        };
-
-        private readonly OperationalPerformancePlot[] _titleBarPlots;
-        private int _currentPlot;
+        private readonly PlotSelector _plotSelector = new PlotSelector();
+        private readonly OperationalPerformancePlot[] _kpiPlots;
 
         public GhVisualizerAttributes(GhVisualizer owner) : base(owner)
         {
-            _currentPlot = 0;
-
-
-            var energyPlotConfig = new EnergyPlotProperties
+            var energyKpiConfig = new KpiPlotProperties
             {
                 Color = Color.FromArgb(225, 242, 31),
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
                 UnitText = "kWh",
                 NormalizedUnitText = "kWh/m²",
-                Data = results => 1530.0,
-                NormalizedData = results => 153.0
+                Data = (results, normalized) => results.TotalEnergy(normalized),
+                Kpi = Kpi.Energy
             };
-            var emissionsPlotConfig = new EnergyPlotProperties
+            var emissionsKpiConfig = new KpiPlotProperties
             {
                 Color = Color.FromArgb(136, 219, 68),
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
                 UnitText = "kgCO₂",
                 NormalizedUnitText = "kgCO₂/m²",
-                Data = results => 790.0,
-                NormalizedData = results => 79.0
+                Data = (results, normalized) => results.TotalEmissions(normalized),
+                Kpi = Kpi.Emissions
             };
-            var costsPlotConfig = new EnergyPlotProperties
+            var costsKpiConfig = new KpiPlotProperties
             {
                 Color = Color.FromArgb(222, 180, 109),
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
                 UnitText = "CHF",
                 NormalizedUnitText = "CHF/m²",
-                Data = results => 1000.0,
-                NormalizedData = results => 120.0
+                Data = (results, normalized) => results.TotalCosts(normalized),
+                Kpi = Kpi.Costs
             };
 
-            _titleBarPlots = new[]
+            var costsKpi = new OperationalPerformancePlot(costsKpiConfig);
+            costsKpi.OnClicked += _plotSelector.CostsKpiClicked;
+
+            var emissionsKpi = new OperationalPerformancePlot(emissionsKpiConfig);
+            emissionsKpi.OnClicked += _plotSelector.EmissionsKpiClicked;
+
+            var energyKpi = new OperationalPerformancePlot(energyKpiConfig);
+            energyKpi.OnClicked += _plotSelector.EnergyKpiClicked;
+
+            _kpiPlots = new[]
             {
                 // from the right
-                new OperationalPerformancePlot(costsPlotConfig),
-                new OperationalPerformancePlot(emissionsPlotConfig),
-                new OperationalPerformancePlot(energyPlotConfig)
+                costsKpi,
+                emissionsKpi,
+                energyKpi
             };
-        }
-
-        public void NewData(Results results)
-        {
-            foreach (var plot in AllPlots)
-            {
-                plot.NewData(results);
-            }
-        }
-
-        private IEnumerable<IVisualizerPlot> AllPlots => _plots?.AsEnumerable().Concat(_titleBarPlots) 
-                                                         ?? new List<IVisualizerPlot>();
-
-        private void NextPlot()
-        {
-            _currentPlot = (_currentPlot + 1) % _plots.Length;
-        }
-
-        private void PreviousPlot()
-        {
-            _currentPlot = (_currentPlot - 1 + _plots.Length) % _plots.Length;
         }
 
         // FIXME: what goes here?
@@ -110,15 +86,15 @@ namespace Hive.IO.GHComponents
             Bounds = new RectangleF(Pivot, bounds.Size);
         }
 
+        private RectangleF InnerBounds => Bounds.CloneInflate(-Padding, -Padding);
+
         private RectangleF PlotBounds
         {
             get
             {
-                var plotBounds = Bounds;
+                var plotBounds = InnerBounds;
                 plotBounds.Height -= TitleBarHeight;
                 plotBounds.Offset(0, TitleBarHeight);
-
-                plotBounds.Inflate(-Padding, -Padding);
                 return plotBounds;
             }
         }
@@ -130,17 +106,19 @@ namespace Hive.IO.GHComponents
                 return base.RespondToMouseDown(sender, e);
             }
 
-            foreach (var plot in _titleBarPlots)
+            if (_plotSelector.Contains(e.CanvasLocation))
             {
-                if (plot.Contains(e.CanvasLocation))
-                {
-                    plot.Clicked(sender);
-                }
+                _plotSelector.Clicked(sender, e);
+                return base.RespondToMouseDown(sender, e);
             }
 
-            if (DropDownArrowBox.Contains(e.CanvasLocation))
+            foreach (var kpi in _kpiPlots)
             {
-                NextPlot();
+                if (kpi.Contains(e.CanvasLocation))
+                {
+                    kpi.Clicked(sender, e);
+                    return base.RespondToMouseDown(sender, e);
+                }
             }
 
             return base.RespondToMouseDown(sender, e);
@@ -154,9 +132,12 @@ namespace Hive.IO.GHComponents
                 return;
 
             RenderCapsule(graphics);
+            graphics.FillRectangle(new SolidBrush(Color.White), InnerBounds);
             RenderPlot(graphics);
             RenderTitleBar(graphics);
         }
+
+        private RectangleF MenuPanelBounds => new RectangleF(InnerBounds.X, InnerBounds.Y, InnerBounds.Width, TitleBarHeight);
 
         /// <summary>
         /// Render the title bar at the top with the dropdown for selecting the plot and the
@@ -165,39 +146,22 @@ namespace Hive.IO.GHComponents
         /// <param name="graphics"></param>
         private void RenderTitleBar(Graphics graphics)
         {
-            // the style to draw the dropdown arrow with
-            var impliedStyle = GH_CapsuleRenderEngine.GetImpliedStyle(GH_Palette.Normal, this);
-            var color = impliedStyle.Text;
-            var brush = new SolidBrush(color);
-
-            // draw the dropdown for the selecting the plots
-            var dropDownArrow = new[] 
-            { 
-                new PointF(ArrowBoxPadding, ArrowBoxPadding), // top left
-                new PointF(ArrowBoxSide - ArrowBoxPadding, ArrowBoxPadding), // top right
-                new PointF(ArrowBoxSide / 2, ArrowBoxSide - ArrowBoxPadding) // bottom middle
-            };
-            dropDownArrow = dropDownArrow.Select(p => new PointF(
-                p.X + DropDownArrowBox.Left, 
-                p.Y + DropDownArrowBox.Top)).ToArray();
-
-            graphics.FillPolygon(brush, dropDownArrow);
+            _plotSelector.RenderMenuPanel(Owner.Results, graphics, MenuPanelBounds);
 
             // render the three operational performance plots
             var plotWidth = TitleBarHeight;  // squares
-            var bounds = new RectangleF(Bounds.Right - plotWidth - Padding, Bounds.Location.Y, plotWidth, TitleBarHeight);
-            foreach (var plot in _titleBarPlots)
+            var bounds = new RectangleF(InnerBounds.Right - plotWidth, InnerBounds.Location.Y, plotWidth, TitleBarHeight);
+            foreach (var kpi in _kpiPlots)
             {
-                plot.Render(Owner.Results, graphics, bounds);
+                kpi.Normalized = _plotSelector.Normalized;
+                kpi.Render(Owner.Results, graphics, bounds, _plotSelector.CurrentKpi == kpi.Kpi);
                 bounds.Offset(-(plotWidth + Padding), 0);
             }
         }
 
-        private RectangleF DropDownArrowBox => new RectangleF(Bounds.Left + Padding, Bounds.Top + Padding, ArrowBoxSide, ArrowBoxSide);
-
         private void RenderPlot(Graphics graphics)
         {
-            _plots[_currentPlot].Render(Owner.Results, graphics, PlotBounds);
+            _plotSelector.RenderCurrentPlot(Owner.Results, graphics, PlotBounds);
         }
 
         private void RenderCapsule(Graphics graphics)
@@ -209,6 +173,11 @@ namespace Hive.IO.GHComponents
             capsule.AddInputGrip(InputGrip);
             capsule.Render(graphics, Selected, Owner.Locked, true);
             capsule.Dispose();
+        }
+
+        public void NewData(ResultsPlotting results)
+        {
+            // this is where we would implement caching..
         }
     }
 }
