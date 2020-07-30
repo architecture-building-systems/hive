@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
@@ -15,17 +14,21 @@ namespace Hive.IO.Plots
     /// </summary>
     public class AmrPlotBase : IVisualizerPlot
     {
-        public AmrPlotBase(bool normalized)
+        public AmrPlotBase(string title, AmrPlotDataAdaptor data, AmrPlotStyle style)
         {
-            Normalized = normalized;
+            Title = title;
+            Data = data;
+            Style = style;
         }
 
-        protected ResultsPlotting Results { get; private set; }
+        protected AmrPlotDataAdaptor Data { get; }
+        protected AmrPlotStyle Style { get; }
 
         private float textBoxPadding = 50;
+        
 
         protected RectangleF Bounds { get; private set; }
-        protected virtual string Title => "AmrPlot";
+        protected string Title {get; }
 
         protected Font TitleFont => GH_FontServer.Large;
         protected Font BoldFont => GH_FontServer.StandardBold;
@@ -101,15 +104,10 @@ namespace Hive.IO.Plots
         // Column titles (subclasses should override these to provide the calculated values)
         protected virtual string Unit => "kgCO2";
 
-        protected float AxisMax => EmbodiedBuildings + EmbodiedSystems + OperationBuildings + OperationSystems;
+        protected float AxisMax => Data.EmbodiedBuildings + Data.EmbodiedSystems + Data.OperationBuildings + Data.OperationSystems;
 
         public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
         {
-            if (Results == null)
-            {
-                Results = results;
-            }
-
             Bounds = bounds;
             RenderGrid(graphics);
             RenderTitle(graphics);
@@ -141,27 +139,17 @@ namespace Hive.IO.Plots
             graphics.DrawString(Title, TitleFont, TextBrush, TitleBounds, format);
         }
 
-        protected virtual float EmbodiedBuildings => (float)Results.EmbodiedEmissionsBuildings(Normalized);
-        protected virtual float EmbodiedSystems => (float)Results.EmbodiedEmissionsSystems(Normalized);
-        protected virtual float OperationBuildings => (float)Results.OperationEmissionsBuildings(Normalized);
-        protected virtual float OperationSystems => (float)Results.OperationEmissionsSystems(Normalized);
-        protected virtual float TotalEmbodied => (float) Results.TotalEmbodiedEmissions(Normalized);
-        protected virtual float TotalOperation => (float) Results.TotalOperationEmissions(Normalized);
-        protected virtual float Total => (float) Results.TotalEmissions(Normalized);
-
-        protected bool Normalized { get; }
-
         private void RenderColumnTitles(Graphics graphics)
         {
             // we need to do some calculations, since we're mixing bold and standard fonts and have to do alignment ourselves...
             string ColumnText(double absoluteValue, string unit, double relativeValue) => $" = {absoluteValue:0} {unit} ({relativeValue:0}%)";
 
             graphics.DrawStringTwoFonts("Embodied", BoldFont,
-                ColumnText(TotalEmbodied, Unit, TotalEmbodied / Total * 100), NormalFont, TextBrush,
+                ColumnText(Data.TotalEmbodied, Unit, Data.TotalEmbodied / Data.Total * 100), NormalFont, TextBrush,
                 EmbodiedTitleBounds);
 
             graphics.DrawStringTwoFonts("Operation", BoldFont,
-                ColumnText(TotalOperation, Unit, TotalOperation / Total * 100), NormalFont,
+                ColumnText(Data.TotalOperation, Unit, Data.TotalOperation / Data.Total * 100), NormalFont,
                 TextBrush, OperationTitleBounds);
         }
 
@@ -210,7 +198,7 @@ namespace Hive.IO.Plots
 
         public void NewData(ResultsPlotting results)
         {
-            Results = results;
+            Data.NewData(results);
         }
     }
 }

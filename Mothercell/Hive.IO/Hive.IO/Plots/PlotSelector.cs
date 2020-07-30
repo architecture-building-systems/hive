@@ -4,7 +4,6 @@ using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Hive.IO.DataHandling;
 using Rhino;
-using Rhino.PlugIns;
 
 namespace Hive.IO.Plots
 {
@@ -118,12 +117,15 @@ namespace Hive.IO.Plots
                 }
                 else if (_performanceResolution == PerformanceResolution.Monthly)
                 {
-                    return new AmrPlotBase(_normalized);
+                    return MonthlyPerformancePlot(CurrentKpi, _normalized, _breakdown);
                 }
                 else
                 {
                     // _performanceResolution == PerformanceResolution.Daily
-                    return new AmrPlotBase(_normalized);
+                    return new AmrPlotBase(
+                        "TODO: Implement this plot!",
+                        new EnergyDataAdaptor(null, _normalized),
+                        new EnergyPlotStyle());
                 }
             }
             else
@@ -138,17 +140,54 @@ namespace Hive.IO.Plots
             switch (currentKpi)
             {
                 case Kpi.Energy:
-                    plot = new YearlyEnergyPlot(normalized);
+                    plot = new YearlyAmrPlot("Energy", new EnergyDataAdaptor(null, normalized), new EnergyPlotStyle());
                     break;
                 case Kpi.Emissions:
-                    plot = new YearlyEmissionsPlot(normalized);
+                    plot = new YearlyAmrPlot("CO₂ Emissions", new EmissionsDataAdaptor(null, normalized), new EmissionsPlotStyle());
                     break;
                 case Kpi.Costs:
-                    plot = new YearlyCostsPlot(normalized);
+                    plot = new YearlyAmrPlot("Cost", new CostsDataAdaptor(null, normalized), new CostsPlotStyle());
                     break;
                 default:
                     // this shouldn't happen...
-                    plot = new AmrPlotBase(normalized);
+                    plot = new AmrPlotBase(
+                        "TODO: Implement this plot!", 
+                        new EnergyDataAdaptor(null, normalized), 
+                        new EnergyPlotStyle());
+                    break;
+            }
+            return plot;
+        }
+
+        private IVisualizerPlot MonthlyPerformancePlot(Kpi currentKpi, bool normalized, bool breakdown)
+        {
+            IVisualizerPlot plot;
+            switch (currentKpi)
+            {
+                case Kpi.Energy:
+                    plot = new AmrPlotBase(
+                        "TODO: Implement this plot!",
+                        new EnergyDataAdaptor(null, normalized),
+                        new EnergyPlotStyle());
+                    break;
+                case Kpi.Emissions:
+                    plot = new AmrPlotBase(
+                        "TODO: Implement this plot!",
+                        new EnergyDataAdaptor(null, normalized),
+                        new EnergyPlotStyle());
+                    break;
+                case Kpi.Costs:
+                    plot = new AmrPlotBase(
+                        "TODO: Implement this plot!",
+                        new EnergyDataAdaptor(null, normalized),
+                        new EnergyPlotStyle());
+                    break;
+                default:
+                    // this shouldn't happen...
+                    plot = new AmrPlotBase(
+                        "TODO: Implement this plot!",
+                        new EnergyDataAdaptor(null, normalized),
+                        new EnergyPlotStyle());
                     break;
             }
             return plot;

@@ -1,4 +1,7 @@
-﻿using System.Drawing;
+﻿using System.Collections;
+using System.Collections.Generic;
+using System.Drawing;
+using System.Linq;
 using Grasshopper.Kernel;
 
 namespace Hive.IO.Plots
@@ -38,6 +41,7 @@ namespace Hive.IO.Plots
             {
                 result.Width = newWidth.Value;
             }
+
             return result;
         }
 
@@ -66,7 +70,8 @@ namespace Hive.IO.Plots
         /// <param name="font"></param>
         /// <param name="brush"></param>
         /// <param name="bounds"></param>
-        public static void DrawStringVertical(this Graphics graphics, string text, Font font, Brush brush, RectangleF bounds)
+        public static void DrawStringVertical(this Graphics graphics, string text, Font font, Brush brush,
+            RectangleF bounds)
         {
             var format = StringFormat.GenericTypographic;
             format.Alignment = StringAlignment.Center;
@@ -92,7 +97,8 @@ namespace Hive.IO.Plots
         /// <param name="fontB"></param>
         /// <param name="brush"></param>
         /// <param name="bounds"></param>
-        public static void DrawStringTwoFonts(this Graphics graphics, string textA, Font fontA, string textB, Font fontB, Brush brush, RectangleF bounds)
+        public static void DrawStringTwoFonts(this Graphics graphics, string textA, Font fontA, string textB,
+            Font fontB, Brush brush, RectangleF bounds)
         {
             var format = StringFormat.GenericTypographic;
             format.Alignment = StringAlignment.Near;
@@ -109,6 +115,21 @@ namespace Hive.IO.Plots
 
             var standardTextBounds = boldTextBounds.CloneRight(standardTextSize.Width);
             graphics.DrawString(textB, fontB, brush, standardTextBounds, format);
+        }
+
+        public static float Scale(this float value, float maxValue, float newMaxValue)
+        {
+            if (value >= maxValue)
+            {
+                return newMaxValue;
+            }
+
+            return value / maxValue * newMaxValue;
+        }
+
+        public static float[] ToFloatArray(this IEnumerable<double> self)
+        {
+            return self.Select(d => (float)d).ToArray();
         }
     }
 }
