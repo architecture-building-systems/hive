@@ -101,7 +101,7 @@ namespace Hive.IO.Plots
 
         protected RectangleF RightBottomBounds => OperationSystemsLegendBounds.CloneRight(RightAxisWidth);
 
-        protected float AxisMax => Data.EmbodiedBuildings + Data.EmbodiedSystems + Data.OperationBuildings + Data.OperationSystems;
+        protected virtual float AxisMax => Data.EmbodiedBuildings + Data.EmbodiedSystems + Data.OperationBuildings + Data.OperationSystems;
 
         public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
         {

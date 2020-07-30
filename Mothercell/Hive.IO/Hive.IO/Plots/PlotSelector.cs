@@ -164,22 +164,13 @@ namespace Hive.IO.Plots
             switch (currentKpi)
             {
                 case Kpi.Energy:
-                    plot = new AmrPlotBase(
-                        "TODO: Implement this plot!",
-                        new EnergyDataAdaptor(results, normalized),
-                        new EnergyPlotStyle());
+                    plot = new MonthlyAmrPlot("Energy", new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle());
                     break;
                 case Kpi.Emissions:
-                    plot = new AmrPlotBase(
-                        "TODO: Implement this plot!",
-                        new EnergyDataAdaptor(results, normalized),
-                        new EnergyPlotStyle());
+                    plot = new MonthlyAmrPlot("CO₂ Emissions", new EmissionsDataAdaptor(results, normalized), new EmissionsPlotStyle());
                     break;
                 case Kpi.Costs:
-                    plot = new AmrPlotBase(
-                        "TODO: Implement this plot!",
-                        new EnergyDataAdaptor(results, normalized),
-                        new EnergyPlotStyle());
+                    plot = new MonthlyAmrPlot("Cost", new CostsDataAdaptor(results, normalized), new CostsPlotStyle());
                     break;
                 default:
                     // this shouldn't happen...
