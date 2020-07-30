@@ -202,6 +202,19 @@ namespace Hive.IO
                 this.IsWindowsOnZone = CheckWindowsOnZone(this.ZoneGeometry, openingSrfs, this.Tolerance);
                 this.IsWindowsNoSelfIntersect = CheckWindowsSelfIntersect(openingSrfs, this.Tolerance);
             }
+
+            var floorList = new List<rg.BrepFace>();
+            if (floorSrfs.Length > 0)
+            {
+                foreach (var floor in floorSrfs)
+                {
+                    if (CheckFloorInZone(zone_geometry, floor))
+                        floorList.Add(floor);
+                    else
+                        this.IsFloorInZone = false;
+                }
+            }
+
             this.IsValidEPlus = CheckValidity(this.IsClosed, this.IsConvex, this.IsLinear, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsNoSelfIntersect);
             this.IsValid = (this.IsClosed && this.IsWindowsOnZone && this.IsWindowsNoSelfIntersect) ? true : false;
             this.ErrorText = String.Format("IsLinear: {0} \n " + "IsConvex: {1} \n " + "IsClosed: {2} \n " + "IsPlanar: {3} \n "
@@ -214,7 +227,15 @@ namespace Hive.IO
                 this.Walls = tuple.Item1;
                 this.Ceilings = tuple.Item2;
                 this.Roofs = tuple.Item3;
-                this.Floors = tuple.Item4;
+
+                this.Floors = new Floor[floorList.Count + tuple.Item4.Length];
+                int mainFloors = tuple.Item4.Length;
+                int additionalFloors = floorList.Count;
+                for(int i=0; i<mainFloors; i++)
+                    this.Floors[i] = tuple.Item4[i];
+                for (int i=mainFloors; i<mainFloors+additionalFloors; i++)
+                    this.Floors[i] = new Floor(floorList[i - mainFloors]);
+
                 this.Openings = tuple.Item5;
                 this.ShadingDevices = tuple.Item6;
 
@@ -225,23 +246,6 @@ namespace Hive.IO
                 return;
             }
 
-
-            if (floorSrfs.Length > 0)
-            {
-                var floorList = new List<rg.BrepFace>();
-                foreach(var floor in floorSrfs)
-                {
-                    if (CheckFloorInZone(zone_geometry, floor))
-                        floorList.Add(floor);
-                    else
-                        this.IsFloorInZone = false;
-                }
-                foreach (var floorOld in this.Floors)
-                    floorList.Add(floorOld.BrepGeometry.Faces[0]);
-                this.Floors = new Floor[floorList.Count];
-                for (int i = 0; i < floorList.Count; i++)
-                    this.Floors[i] = new Floor(floorList[i]);
-            }
 
             // define standard building physical properties upon inizialization. 
             // Can be changed later via Windows Form
