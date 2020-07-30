@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 using rg = Rhino.Geometry;
 using Hive.IO.BuildingComponents;
@@ -164,7 +162,8 @@ namespace Hive.IO
         /// <summary>
         /// Windows self intersection
         /// </summary>
-        public bool IsWindowsSelfIntersect { get; private set; }
+        public bool IsWindowsNoSelfIntersect { get; private set; }
+        public bool IsFloorInZone { get; private set; }
         public string ErrorText { get; private set; }
         #endregion
 
@@ -176,7 +175,7 @@ namespace Hive.IO
         /// <param name="zone_geometry">Brep geometry. Must be closed, linear and convex.</param>
         /// <param name="index">Unique identifier</param>
         /// <param name="name">Zone name, e.g. kitchen 1</param>
-        public Zone(rg.Brep zone_geometry, int index, double tolerance, string name, rg.BrepFace[] opening_srfs = null, rg.BrepFace[] shading_srfs = null)
+        public Zone(rg.Brep zone_geometry, int index, double tolerance, string name, rg.BrepFace[] openingSrfs = null, rg.BrepFace[] floorSrfs = null, rg.BrepFace[] shadingSrfs = null)
         {
             this.ZoneGeometry = zone_geometry;
             this.Index = index;
@@ -187,7 +186,8 @@ namespace Hive.IO
             this.IsConvex = false;
             this.IsPlanar = false;
             this.IsWindowsOnZone = true; // zone might have no windows. so default is true
-            this.IsWindowsSelfIntersect = true;
+            this.IsWindowsNoSelfIntersect = true;
+            this.IsFloorInZone = true;
 
             this.IsClosed = CheckClosedness(this.ZoneGeometry);
             if (this.IsClosed)
@@ -197,21 +197,20 @@ namespace Hive.IO
                 this.IsConvex = CheckConvexity(this.ZoneGeometry, this.Tolerance);
             }
 
-            if (opening_srfs.Length > 0)
+            if (openingSrfs.Length > 0)
             {
-                this.IsWindowsOnZone = CheckWindowsOnZone(this.ZoneGeometry, opening_srfs, this.Tolerance);
-                this.IsWindowsSelfIntersect = CheckWindowsSelfIntersect(opening_srfs, this.Tolerance);
+                this.IsWindowsOnZone = CheckWindowsOnZone(this.ZoneGeometry, openingSrfs, this.Tolerance);
+                this.IsWindowsNoSelfIntersect = CheckWindowsSelfIntersect(openingSrfs, this.Tolerance);
             }
-            this.IsValidEPlus = CheckValidity(this.IsClosed, this.IsConvex, this.IsLinear, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsSelfIntersect);
-            this.IsValid = (this.IsClosed && this.IsWindowsOnZone && this.IsWindowsSelfIntersect) ? true : false;
+            this.IsValidEPlus = CheckValidity(this.IsClosed, this.IsConvex, this.IsLinear, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsNoSelfIntersect);
+            this.IsValid = (this.IsClosed && this.IsWindowsOnZone && this.IsWindowsNoSelfIntersect) ? true : false;
             this.ErrorText = String.Format("IsLinear: {0} \n " + "IsConvex: {1} \n " + "IsClosed: {2} \n " + "IsPlanar: {3} \n "
-    + "IsWindowsOnZone: {4} \n " + "IsWindowsSelfIntersect: {5}",
-    this.IsLinear, this.IsConvex, this.IsClosed, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsSelfIntersect);
-
+    + "IsWindowsOnZone: {4} \n " + "IsWindowsSelfIntersect: {5} \n" + "IsFloorInZone: {6}",
+    this.IsLinear, this.IsConvex, this.IsClosed, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsNoSelfIntersect, this.IsFloorInZone);
 
             if (this.IsValid)
             {
-                Tuple<Wall[], Ceiling[], Roof[], Floor[], Opening[], Shading[]> tuple = IdentifyComponents(zone_geometry, opening_srfs, shading_srfs);
+                Tuple<Wall[], Ceiling[], Roof[], Floor[], Opening[], Shading[]> tuple = IdentifyComponents(zone_geometry, openingSrfs, shadingSrfs);
                 this.Walls = tuple.Item1;
                 this.Ceilings = tuple.Item2;
                 this.Roofs = tuple.Item3;
@@ -226,6 +225,23 @@ namespace Hive.IO
                 return;
             }
 
+
+            if (floorSrfs.Length > 0)
+            {
+                var floorList = new List<rg.BrepFace>();
+                foreach(var floor in floorSrfs)
+                {
+                    if (CheckFloorInZone(zone_geometry, floor))
+                        floorList.Add(floor);
+                    else
+                        this.IsFloorInZone = false;
+                }
+                foreach (var floorOld in this.Floors)
+                    floorList.Add(floorOld.BrepGeometry.Faces[0]);
+                this.Floors = new Floor[floorList.Count];
+                for (int i = 0; i < floorList.Count; i++)
+                    this.Floors[i] = new Floor(floorList[i]);
+            }
 
             // define standard building physical properties upon inizialization. 
             // Can be changed later via Windows Form
@@ -280,12 +296,30 @@ namespace Hive.IO
 
         #region internalMethods
 
+        private static bool CheckFloorInZone(rg.Brep zone, rg.BrepFace floor)
+        {
+            //check if all points of middle floor are inside brep or on face.
+            //but not all points are on face, otherwise it would be redundant(same as wall or base floor)
+
+            double tol = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
+            var pts = new List<rg.Point3d>();
+
+            foreach (rg.BrepVertex vertex in floor.Brep.Vertices)
+            {
+                rg.Point3d pt = vertex.Location;
+                if (!zone.IsPointInside(pt, tol, false))
+                    return false;
+            }
+            return true;
+        }
+
+
         /// <summary>
         /// Check the linearity of the brep zone geometry. No curves allowed for simplicity.
         /// </summary>
         /// <param name="brep"></param>
         /// <returns>True if all is linear</returns>
-        private bool CheckLinearity(rg.Brep brep)
+        private static bool CheckLinearity(rg.Brep brep)
         {
             bool isLinear = true;
             foreach (rg.BrepEdge edge in brep.Edges)
@@ -305,7 +339,7 @@ namespace Hive.IO
         /// <param name="brep">geometry that is checked for convexity</param>
         /// <param name="tolerance">model tolerance, for intersection checks</param>
         /// <returns>True, if convex</returns>
-        private bool CheckConvexity(rg.Brep brep, double tolerance)
+        private static bool CheckConvexity(rg.Brep brep, double tolerance)
         {
             int vertexCount = brep.Vertices.Count;
 
@@ -347,7 +381,7 @@ namespace Hive.IO
         /// </summary>
         /// <param name="brep"></param>
         /// <returns>True, if it is closed</returns>
-        private bool CheckClosedness(rg.Brep brep)
+        private static bool CheckClosedness(rg.Brep brep)
         {
             return brep.IsSolid;
         }
@@ -357,7 +391,7 @@ namespace Hive.IO
         /// </summary>
         /// <param name="brep"></param>
         /// <returns></returns>
-        private bool CheckPlanarity(rg.Brep brep)
+        private static bool CheckPlanarity(rg.Brep brep)
         {
             rg.Collections.BrepSurfaceList srfs = brep.Surfaces;
             foreach (rg.Surface srf in srfs)
@@ -377,7 +411,7 @@ namespace Hive.IO
         /// <param name="brep"></param>
         /// <param name="windows"></param>
         /// <returns></returns>
-        private bool CheckWindowsOnZone(rg.Brep brep, rg.BrepFace[] windows, double tolerance)
+        private static bool CheckWindowsOnZone(rg.Brep brep, rg.BrepFace[] windows, double tolerance)
         {
             int roundingDecimals = tolerance.ToString().Split('.')[1].Length;
 
@@ -391,19 +425,21 @@ namespace Hive.IO
                 rg.Point3d[] intersectionPts;
                 //rg.Intersect.Intersection.BrepSurface(brep, srf, tolerance, out intersectionCrvs, out intersectionPts);
                 rg.Intersect.Intersection.BrepBrep(brep, srfbrep, tolerance, out intersectionCrvs, out intersectionPts);
+                rg.Curve curve = intersectionCrvs[0];
                 if (intersectionCrvs.Length > 1)
                 {
-                    return false;
-                }
-                else if (intersectionCrvs.Length == 1)
-                {
-                    double curveArea = rg.AreaMassProperties.Compute(intersectionCrvs[0]).Area;
-                    double srfArea = rg.AreaMassProperties.Compute(srf).Area;
-                    if (Math.Round(curveArea, roundingDecimals) != Math.Round(srfArea, roundingDecimals))
+                    rg.Curve [] crv = rg.Curve.JoinCurves(intersectionCrvs);
+                    if (crv.Length > 1 && !crv[0].IsClosed)
                         return false;
-                    else
-                        equalAreas[i] = true;
+                    else 
+                        curve = crv[0];
                 }
+                double curveArea = rg.AreaMassProperties.Compute(curve).Area;
+                double srfArea = rg.AreaMassProperties.Compute(srf).Area;
+                if (Math.Round(curveArea, roundingDecimals) != Math.Round(srfArea, roundingDecimals))
+                    return false;
+                else
+                    equalAreas[i] = true;
             }
             foreach (bool equalArea in equalAreas)
                 if (!equalArea)
@@ -422,9 +458,8 @@ namespace Hive.IO
         /// <param name="windows"></param>
         /// <param name="tolerance"></param>
         /// <returns></returns>
-        private bool CheckWindowsSelfIntersect(rg.Surface[] windows, double tolerance)
+        private static bool CheckWindowsSelfIntersect(rg.Surface[] windows, double tolerance)
         {
-
             for (int i = 0; i < windows.Length - 1; i++)
             {
                 rg.Brep w1 = windows[i].ToBrep();
@@ -448,7 +483,7 @@ namespace Hive.IO
         /// Check if all conditions are fulffilled.
         /// </summary>
         /// <returns>True, if zone geometry is valid</returns>
-        private bool CheckValidity(bool closed, bool convex, bool linear, bool planar, bool windowsOnZone, bool windowsSelfIntersect)
+        private static bool CheckValidity(bool closed, bool convex, bool linear, bool planar, bool windowsOnZone, bool windowsSelfIntersect)
         {
             if (convex && closed && linear && planar && windowsOnZone && windowsSelfIntersect)
                 return true;
@@ -464,7 +499,7 @@ namespace Hive.IO
         /// <param name="openings_geometry"></param>
         /// <param name="shading_geometry"></param>
         /// <returns></returns>
-        private Tuple<Wall[], Ceiling[], Roof[], Floor[], Opening[], Shading[]>
+        private static Tuple<Wall[], Ceiling[], Roof[], Floor[], Opening[], Shading[]>
             IdentifyComponents(rg.Brep zone_geometry, rg.BrepFace[] openings_geometry, rg.BrepFace[] shading_geometry)
         {
             Opening[] openings = new Opening[0];
