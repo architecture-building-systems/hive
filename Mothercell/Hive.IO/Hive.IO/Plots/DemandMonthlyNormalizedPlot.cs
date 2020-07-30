@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using Hive.IO.DataHandling;
 using OxyPlot;
 using OxyPlot.Axes;
 using OxyPlot.Series;
@@ -7,13 +8,13 @@ namespace Hive.IO.Plots
 {
     public class DemandMonthlyNormalizedPlot: OxyPlotBase
     {
-        protected override PlotModel CreatePlotModel(Results results)
+        protected override PlotModel CreatePlotModel(ResultsPlotting results)
         {
             const int months = 12;
             var model = new PlotModel { Title = "Energy demand (Normalized Monthly)" };
             var totalFloorArea = results.TotalFloorArea;
 
-            var resultsTotalHeatingMonthly = results.TotalHeatingMonthly ?? new double[months];
+            var resultsTotalHeatingMonthly = results.Results.TotalHeatingMonthly ?? new double[months];
             var strokeThickness = 4.0;
 
             var demandHeating = new ColumnSeries
@@ -26,7 +27,7 @@ namespace Hive.IO.Plots
             };
             model.Series.Add(demandHeating);
 
-            var resultsTotalCoolingMonthly = results.TotalCoolingMonthly ?? new double[months];
+            var resultsTotalCoolingMonthly = results.Results.TotalCoolingMonthly ?? new double[months];
             var demandCooling = new ColumnSeries
             {
                 ItemsSource = resultsTotalCoolingMonthly.Select(demand => new ColumnItem { Value = demand / totalFloorArea }),
@@ -37,7 +38,7 @@ namespace Hive.IO.Plots
             };
             model.Series.Add(demandCooling);
 
-            var resultsTotalElectricityMonthly = results.TotalElectricityMonthly ?? new double[months];
+            var resultsTotalElectricityMonthly = results.Results.TotalElectricityMonthly ?? new double[months];
             var demandElectricity = new ColumnSeries
             {
                 ItemsSource = resultsTotalElectricityMonthly.Select(
@@ -49,7 +50,7 @@ namespace Hive.IO.Plots
             };
             model.Series.Add(demandElectricity);
 
-            var resultsTotalDwhMonthly = results.TotalDHWMonthly ?? new double[months];
+            var resultsTotalDwhMonthly = results.Results.TotalDHWMonthly ?? new double[months];
             var demandDhw = new ColumnSeries
             {
                 ItemsSource = resultsTotalDwhMonthly.Select(demand => new ColumnItem { Value = demand / totalFloorArea }),
