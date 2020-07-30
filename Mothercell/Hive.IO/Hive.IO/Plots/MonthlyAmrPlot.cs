@@ -40,12 +40,35 @@ namespace Hive.IO.Plots
 
         private void RenderOperationSystems(Graphics graphics)
         {
-            
+            var plotBounds = OperationSystemsPlotBounds.CloneInflate(-1, -1); // allow a bit of whitespace
+            var columnWidth = plotBounds.Width / 12;
+            var x = plotBounds.Left;
+            foreach (var value in Data.OperationSystemsMonthly)
+            {
+                var height = value.Scale(AxisMax, plotBounds.Height);
+                var y = plotBounds.Y;
+                var columnBounds = new RectangleF(x, y, columnWidth, height);
+                graphics.FillRectangle(Style.SystemsBrush, columnBounds);
+                graphics.DrawRectangleF(new Pen(Color.White), columnBounds);
+                x += columnWidth;
+            }
+
         }
 
         private void RenderEmbodiedSystems(Graphics graphics)
         {
-            
+            var plotBounds = EmbodiedSystemsPlotBounds.CloneInflate(-1, -1); // allow a bit of whitespace
+            var columnWidth = plotBounds.Width / 12;
+            var x = plotBounds.Left;
+            foreach (var value in Data.EmbodiedSystemsMonthly)
+            {
+                var height = value.Scale(AxisMax, plotBounds.Height);
+                var y = plotBounds.Y;
+                var columnBounds = new RectangleF(x, y, columnWidth, height);
+                graphics.FillRectangle(Style.SystemsBrush, columnBounds);
+                graphics.DrawRectangleF(new Pen(Color.White), columnBounds);
+                x += columnWidth;
+            }
         }
 
         private void RenderEmbodiedBuildings(Graphics graphics)
