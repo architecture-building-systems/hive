@@ -39,7 +39,7 @@ namespace Hive.IO.Plots
         public abstract float[] EmbodiedSystemsMonthly { get; }
         public abstract float[] EmbodiedBuildingsMonthly { get; }
         public abstract float[] OperationSystemsMonthly { get; }
-        public abstract float[] OperationBuildingsMontholy { get; }
+        public abstract float[] OperationBuildingsMonthly { get; }
     }
 
     public class CostsDataAdaptor : AmrPlotDataAdaptor
@@ -66,7 +66,7 @@ namespace Hive.IO.Plots
         public override float[] OperationSystemsMonthly =>
             Results.OperationCostsSystemsMonthly(Normalized).ToFloatArray();
 
-        public override float[] OperationBuildingsMontholy =>
+        public override float[] OperationBuildingsMonthly =>
             Results.OperationCostsBuildingsMonthly(Normalized).ToFloatArray();
     }
 
@@ -94,7 +94,7 @@ namespace Hive.IO.Plots
         public override float[] OperationSystemsMonthly =>
             Results.OperationEmissionsSystemsMonthly(Normalized).ToFloatArray();
 
-        public override float[] OperationBuildingsMontholy =>
+        public override float[] OperationBuildingsMonthly =>
             Results.OperationEmissionsBuildingsMonthly(Normalized).ToFloatArray();
     }
 
@@ -122,7 +122,7 @@ namespace Hive.IO.Plots
         public override float[] OperationSystemsMonthly =>
             Results.OperationEnergySystemsMonthly(Normalized).ToFloatArray();
 
-        public override float[] OperationBuildingsMontholy =>
+        public override float[] OperationBuildingsMonthly =>
             Results.OperationEnergyBuildingsMonthly(Normalized).ToFloatArray();
     }
 

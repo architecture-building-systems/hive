@@ -11,7 +11,7 @@ namespace Hive.IO.Plots
         }
 
         protected override float AxisMax => Data.EmbodiedBuildingsMonthly.Max() + Data.EmbodiedSystemsMonthly.Max() +
-                                            Data.OperationBuildingsMontholy.Max() + Data.OperationSystemsMonthly.Max();
+                                            Data.OperationBuildingsMonthly.Max() + Data.OperationSystemsMonthly.Max();
 
         protected override void RenderPlot(Graphics graphics)
         {
@@ -23,6 +23,19 @@ namespace Hive.IO.Plots
 
         private void RenderOperationBuildings(Graphics graphics)
         {
+            var plotBounds = OperationBuildingsPlotBounds.CloneInflate(-1, -1); // allow a bit of whitespace
+            var columnWidth = plotBounds.Width / 12;
+            var x = plotBounds.Left;
+            foreach (var value in Data.OperationBuildingsMonthly)
+            {
+                var height = value.Scale(AxisMax, plotBounds.Height);
+                var y = plotBounds.Y + (plotBounds.Height - height);
+                var columnBounds = new RectangleF(x, y, columnWidth, height);
+                graphics.FillRectangle(Style.BuildingsBrush, columnBounds);
+                graphics.DrawRectangleF(new Pen(Color.White), columnBounds);
+                x += columnWidth;
+            }
+
         }
 
         private void RenderOperationSystems(Graphics graphics)
