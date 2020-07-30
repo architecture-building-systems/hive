@@ -1,11 +1,15 @@
 ﻿using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Windows.Forms;
+using Grasshopper.Kernel;
 
 namespace Hive.IO.Plots
 {
-    public class MonthlyAmrPlot: AmrPlotBase
+    public class MonthlyAmrPlot : AmrPlotBase
     {
+        private const string months = "JFMAMJJASOND";
+
         public MonthlyAmrPlot(string title, AmrPlotDataAdaptor data, AmrPlotStyle style) : base(title, data, style)
         {
         }
@@ -36,6 +40,45 @@ namespace Hive.IO.Plots
                 x += columnWidth;
             }
 
+            RenderMonthLabelsBuildingsRow(graphics, plotBounds);
+        }
+
+        private void RenderMonthLabelsBuildingsRow(Graphics graphics, RectangleF bounds)
+        {
+            var format = StringFormat.GenericTypographic;
+            format.Alignment = StringAlignment.Center;
+            format.LineAlignment = StringAlignment.Center;
+
+            var textHeight = GH_FontServer.MeasureString(months, BoldFont).Height;
+            var x = bounds.Left;
+            var columnWidth = bounds.Width / 12;
+            foreach (var m in months)
+            {
+                var monthBounds = new RectangleF(x, bounds.Y, columnWidth, textHeight);
+                var xBounds = monthBounds.CloneDown();
+                graphics.DrawString(m.ToString(), BoldFont, TextBrush, monthBounds, format);
+                graphics.DrawString("x", NormalFont, TextBrush, xBounds, format);
+                x += columnWidth;
+            }
+        }
+
+        private void RenderMonthLabelsSystemsRow(Graphics graphics, RectangleF bounds)
+        {
+            var format = StringFormat.GenericTypographic;
+            format.Alignment = StringAlignment.Center;
+            format.LineAlignment = StringAlignment.Center;
+
+            var textHeight = GH_FontServer.MeasureString(months, BoldFont).Height;
+            var x = bounds.Left;
+            var columnWidth = bounds.Width / 12;
+            foreach (var m in months)
+            {
+                var xBounds = new RectangleF(x, bounds.Bottom - 2 * textHeight, columnWidth, textHeight);
+                var monthBounds = xBounds.CloneDown();
+                graphics.DrawString(m.ToString(), BoldFont, TextBrush, monthBounds, format);
+                graphics.DrawString("x", NormalFont, TextBrush, xBounds, format);
+                x += columnWidth;
+            }
         }
 
         private void RenderOperationSystems(Graphics graphics)
@@ -52,7 +95,7 @@ namespace Hive.IO.Plots
                 graphics.DrawRectangleF(new Pen(Color.White), columnBounds);
                 x += columnWidth;
             }
-
+            RenderMonthLabelsSystemsRow(graphics, plotBounds);
         }
 
         private void RenderEmbodiedSystems(Graphics graphics)
@@ -69,6 +112,7 @@ namespace Hive.IO.Plots
                 graphics.DrawRectangleF(new Pen(Color.White), columnBounds);
                 x += columnWidth;
             }
+            RenderMonthLabelsSystemsRow(graphics, plotBounds);
         }
 
         private void RenderEmbodiedBuildings(Graphics graphics)
@@ -85,6 +129,7 @@ namespace Hive.IO.Plots
                 graphics.DrawRectangleF(new Pen(Color.White), columnBounds);
                 x += columnWidth;
             }
+            RenderMonthLabelsBuildingsRow(graphics, plotBounds);
         }
     }
 }
