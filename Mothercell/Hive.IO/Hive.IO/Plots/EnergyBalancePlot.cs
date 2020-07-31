@@ -29,6 +29,17 @@ namespace Hive.IO.Plots
 
         private void RenderHouse(Graphics graphics, RectangleF bounds)
         {
+            var house = HousePolygon(bounds);
+            graphics.FillPolygon(new SolidBrush(Color.LightSlateGray), house);
+            graphics.DrawPolygon(new Pen(Color.Black), house);
+
+            var innerHouse = HousePolygon(bounds.CloneInflate(-50, -50));
+            graphics.FillPolygon(new SolidBrush(Color.White), innerHouse);
+            graphics.DrawPolygon(new Pen(Color.Black), innerHouse);
+        }
+
+        private static PointF[] HousePolygon(RectangleF bounds)
+        {
             var xLeft = bounds.Left;
             var xRight = bounds.Right;
             var xMiddle = xLeft + bounds.Width / 2;
@@ -38,13 +49,13 @@ namespace Hive.IO.Plots
             var house = new PointF[]
             {
                 // start at bottom left, clockwise
-                new PointF(xLeft, yBottom), 
+                new PointF(xLeft, yBottom),
                 new PointF(xLeft, yRoof),
                 new PointF(xMiddle, yTop),
                 new PointF(xRight, yRoof),
                 new PointF(xRight, yBottom),
             };
-            graphics.FillPolygon(new HatchBrush(HatchStyle.DarkHorizontal, Color.Aqua), house);
+            return house;
         }
 
         public bool Contains(PointF location)
