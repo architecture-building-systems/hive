@@ -9,6 +9,7 @@ using System.Windows.Forms;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Hive.IO.DataHandling;
+using Rhino;
 
 namespace Hive.IO.Plots
 {
@@ -19,7 +20,11 @@ namespace Hive.IO.Plots
         public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
         {
             _bounds = bounds;
-            RenderHouse(graphics, bounds);
+            var houseBounds = bounds.CloneInflate(-bounds.Width / 3, -bounds.Height / 4);
+            RhinoApp.WriteLine($"bounds: {bounds}");
+            RhinoApp.WriteLine($"houseBounds: {houseBounds}");
+
+            RenderHouse(graphics, houseBounds);
         }
 
         private void RenderHouse(Graphics graphics, RectangleF bounds)
@@ -29,7 +34,7 @@ namespace Hive.IO.Plots
             var xMiddle = xLeft + bounds.Width / 2;
             var yBottom = bounds.Y + bounds.Height;
             var yTop = bounds.Top;
-            var yRoof = bounds.Y + bounds.Height * 0.66f;
+            var yRoof = bounds.Y + bounds.Height * 0.33f;
             var house = new PointF[]
             {
                 // start at bottom left, clockwise
