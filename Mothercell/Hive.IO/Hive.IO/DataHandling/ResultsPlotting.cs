@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System.Security.Permissions;
 
 namespace Hive.IO.DataHandling
 {
@@ -159,5 +160,22 @@ namespace Hive.IO.DataHandling
             TotalEmbodiedEnergy(normalized) + TotalOperationEnergy(normalized);
 
         #endregion Energy
+
+        #region EnergyBalance
+
+        public double SolarGains => 100.0;
+        public double InternalGains => 100.0;
+        public double PrimaryEnergy => 100.0;
+        public double RenewableEnergy => 100.0;
+        public double Electricity => 100.0;
+        public double VentilationLosses => 100.0;
+        public double EnvelopeLosses => 100.0;
+        public double WindowsLosses => 100.0;
+        public double SystemLosses => 100.0;
+        public double PrimaryTransferLosses => 100.0;
+
+
+
+        #endregion EnergyBalance
     }
 }
