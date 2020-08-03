@@ -30,11 +30,13 @@ namespace Hive.IO.GHComponents
                 "\nStrict conditions: (i) Windows must not intersect and (ii) Windows must lie entirely on a Brep face." +
                 "\nOptional input.", GH_ParamAccess.list);
             pManager[1].Optional = true;
+            pManager.AddSurfaceParameter("Additional floor surfaces", "FloorSrfs", "Additional floor surface that must lie within the zone Brep", GH_ParamAccess.list);
+            pManager[2].Optional = true;
             pManager.AddTextParameter("SIA2024 Room", "SiaRoom", "SIA 2024 Room definition." +
                 "\nMust be a string containing information about the zone (internal loads, construction, etc)." +
                 "\nMust be in the correct format as defined in the Hive SIA 2024 Rooms list component." +
                 "\nOptional input.", GH_ParamAccess.item);
-            pManager[2].Optional = true;
+            pManager[3].Optional = true;
         }
 
 
@@ -121,14 +123,17 @@ namespace Hive.IO.GHComponents
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            rg.Brep zoneBrep = new rg.Brep();
+            var zoneBrep = new rg.Brep();
             if (!DA.GetData(0, ref zoneBrep)) return;
 
-            List<rg.BrepFace> windows = new List<rg.BrepFace>();
+            var windows = new List<rg.BrepFace>();
             DA.GetDataList(1, windows);
 
+            var floors = new List<rg.BrepFace>();
+            DA.GetDataList(2, floors);
+
             string json = null;
-            if (!DA.GetData(2, ref json)) return;
+            if (!DA.GetData(3, ref json)) return;
             var jss = new JavaScriptSerializer();
             var sia2024 = (IDictionary<string, object>)jss.DeserializeObject(json);
             
@@ -166,13 +171,13 @@ namespace Hive.IO.GHComponents
             }
 
             double tolerance = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
-            Zone zone = new Zone(zoneBrep, 0, tolerance, zone_description, windows.ToArray());
+            Zone zone = new Zone(zoneBrep, 0, tolerance, zone_description, windows.ToArray(), floors.ToArray());
             if (!zone.IsValid)
             {
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, zone.ErrorText);
                 return;
             }
-            if (!zone.IsValidEPlus)
+            if (!zone.IsValidEPlus || !zone.IsFloorInZone)
             {
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, zone.ErrorText);
             }
