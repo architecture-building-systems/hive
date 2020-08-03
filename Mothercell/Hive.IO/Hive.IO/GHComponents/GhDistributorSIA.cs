@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Web.Script.Serialization;
 using Grasshopper.Kernel;
+using Hive.IO.Building;
 
 namespace Hive.IO.GHComponents
 {
@@ -32,7 +33,7 @@ namespace Hive.IO.GHComponents
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            Building building = null;
+            Building.Building building = null;
             if (!DA.GetData(0, ref building)) return;
 
             int zoneCount = building.Zones.Length;
@@ -45,20 +46,20 @@ namespace Hive.IO.GHComponents
                 Zone zone = building.Zones[i];
 
                 zoneAreas[i] = 0.0;
-                foreach (BuildingComponents.Floor floor in zone.Floors)
+                foreach (Floor floor in zone.Floors)
                 {
                     // TO DO: make check that it's not a void
                     zoneAreas[i] += floor.Area;
                 }
 
                 windowAreas[i] = 0.0;
-                foreach (BuildingComponents.Opening opening in zone.Openings)
+                foreach (Opening opening in zone.Openings)
                 {
                     windowAreas[i] += opening.Area;
                 }
 
                 extSrfAreas[i] = 0.0;
-                foreach (BuildingComponents.Wall wall in zone.Walls)
+                foreach (Wall wall in zone.Walls)
                 {
                     // TO DO: for Hive 0.2
                     //if (wall.IsExternal)
@@ -68,7 +69,7 @@ namespace Hive.IO.GHComponents
                     extSrfAreas[i] += wall.Area;
                     // TO DO: check, if external. VERY IMPORTANT
                 }
-                foreach (BuildingComponents.Roof roof in zone.Roofs)
+                foreach (Roof roof in zone.Roofs)
                 {
                     extSrfAreas[i] += roof.Area;
                     //TO DO: check if external. VERY IMPORTANT

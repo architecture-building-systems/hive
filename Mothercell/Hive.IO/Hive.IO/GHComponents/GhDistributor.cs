@@ -45,8 +45,8 @@ namespace Hive.IO.GHComponents
             if (!DA.GetDataList(0, inputObjects)) return;
             
             List<SurfaceBasedTech> srfBasedTech = new List<SurfaceBasedTech>();
-            Building building = null;
-            Environment environment = null;
+            Building.Building building = null;
+            Environment.Environment environment = null;
 
             foreach (GH_ObjectWrapper hiveInput in inputObjects)
             {
@@ -58,10 +58,10 @@ namespace Hive.IO.GHComponents
                     srfBasedTech.Add(hiveInput.Value as PVT);
                 else if(hiveInput.Value is GroundCollector)
                     srfBasedTech.Add(hiveInput.Value as GroundCollector);
-                else if (hiveInput.Value is Building)
-                    building = hiveInput.Value as Building;
-                else if(hiveInput.Value is Environment)
-                    environment = hiveInput.Value as Environment;
+                else if (hiveInput.Value is Building.Building)
+                    building = hiveInput.Value as Building.Building;
+                else if(hiveInput.Value is Environment.Environment)
+                    environment = hiveInput.Value as Environment.Environment;
             }
 
             //if (building != null) Rhino.RhinoApp.WriteLine("Building '{0}' read successfully", building.Type.ToString());

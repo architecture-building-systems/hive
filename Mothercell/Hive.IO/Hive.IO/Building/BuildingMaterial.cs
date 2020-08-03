@@ -1,9 +1,8 @@
 ﻿
 
-namespace Hive.IO
+namespace Hive.IO.Building
 {
-    namespace BuildingMaterial
-    {
+
         public abstract class Material
         {
             /// <summary>
@@ -51,5 +50,4 @@ namespace Hive.IO
 
         }
 
-    }
 }

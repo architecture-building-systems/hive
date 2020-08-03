@@ -7,7 +7,7 @@ using System.Windows.Forms;
 using Hive.IO.EnergySystems;
 using rg = Rhino.Geometry;
 
-namespace Hive.IO
+namespace Hive.IO.DataHandling
 {
     /// <summary>
     /// Results class that contains all kinds of building simulation results
@@ -123,7 +123,7 @@ namespace Hive.IO
         /// <summary>
         /// Building object that contains geometric, construction, energy demand, cost (not operational), and LCA (not operational) information 
         /// </summary>
-        public Building Building { get; private set; }
+        public Building.Building Building { get; private set; }
         /// <summary>
         /// Energy conversion technologies (e.g. boiler, PV, heatpump, etc.). Include operation schedules, operational LCA, embodied LCA of technologies, and operational and investment cost of technologies
         /// </summary>
@@ -180,7 +180,7 @@ namespace Hive.IO
         /// <param name="emitters"></param>
         /// <param name="outputEnergy"></param>
         /// <param name="inputEnergy"></param>
-        public Results(Building building, List<ConversionTech> conversionTech, List<Emitter> emitters, List<EnergyCarrier> outputEnergy, List<EnergyCarrier> inputEnergy)
+        public Results(Building.Building building, List<ConversionTech> conversionTech, List<Emitter> emitters, List<EnergyCarrier> outputEnergy, List<EnergyCarrier> inputEnergy)
         {
             this.TotalFloorArea = GetTotalFloorArea(building);
 
@@ -384,7 +384,7 @@ namespace Hive.IO
 
         #region Getters
 
-        public static double GetTotalFloorArea(Building building)
+        public static double GetTotalFloorArea(Building.Building building)
         {
             double totalFloorArea = 0.0;
             foreach (var zone in building.Zones)
@@ -393,7 +393,7 @@ namespace Hive.IO
             return totalFloorArea;
         }
 
-        public static double [] GetTotalMonthlyLoads(Building building, string loadType)
+        public static double [] GetTotalMonthlyLoads(Building.Building building, string loadType)
         {
             const int months = 12;
             double [] totalLoads = new double[months];

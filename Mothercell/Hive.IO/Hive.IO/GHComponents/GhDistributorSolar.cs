@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 using Hive.IO.EnergySystems;
+using Hive.IO.Building;
 
 namespace Hive.IO.GHComponents
 {
@@ -37,13 +38,13 @@ namespace Hive.IO.GHComponents
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            Building building = null;
+            Building.Building building = null;
             if (!DA.GetData(0, ref building)) return;
 
             List<SurfaceBasedTech> srfBasedTech = new List<SurfaceBasedTech>();
             DA.GetDataList(1, srfBasedTech);
 
-            Environment environment = null;
+            Environment.Environment environment = null;
             if (!DA.GetData(2, ref environment)) return;
 
 
@@ -59,18 +60,18 @@ namespace Hive.IO.GHComponents
             {
                 Zone zone = building.Zones[i];
 
-                foreach (BuildingComponents.Wall wall in zone.Walls)
+                foreach (Wall wall in zone.Walls)
                 {
                     // TO DO: check, if external. VERY IMPORTANT
                     extSrfs.Add(wall.BrepGeometry);
                 }
-                foreach (BuildingComponents.Roof roof in zone.Roofs)
+                foreach (Roof roof in zone.Roofs)
                 {
                     //TO DO: check if external. VERY IMPORTANT
                     extSrfs.Add(roof.BrepGeometry);
                 }
 
-                foreach(BuildingComponents.Opening opening in zone.Openings)
+                foreach(Opening opening in zone.Openings)
                 {
                     windows.Add(opening.BrepGeometry);
                 }

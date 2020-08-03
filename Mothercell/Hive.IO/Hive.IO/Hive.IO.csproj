@@ -80,7 +80,7 @@
     <Compile Include="GHComponents\GhEnvironment.cs" />
     <Compile Include="GHComponents\GhResults.cs" />
     <Compile Include="GHComponents\GhVisualizer.cs" />
-    <Compile Include="Environment.cs" />
+    <Compile Include="Environment\Environment.cs" />
     <Compile Include="GHComponents\FormBuilding.cs">
       <SubType>Form</SubType>
     </Compile>

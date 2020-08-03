@@ -4,6 +4,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using Hive.IO.EnergySystems;
+using Hive.IO.DataHandling;
 using Rhino.Geometry;
 
 namespace Hive.IO.GHComponents
@@ -176,7 +177,7 @@ namespace Hive.IO.GHComponents
 
             //DA.SetDataTree(0, oCircles);
 
-            Building building = null;
+            Building.Building building = null;
             var conversionTechs = new List<ConversionTech>();
             var emitters = new List<Emitter>();
             var outputEnergies = new List<EnergyCarrier>();

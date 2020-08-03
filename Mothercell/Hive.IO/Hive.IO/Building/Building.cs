@@ -1,9 +1,7 @@
 ﻿using System.Collections.Generic;
-using rg = Rhino.Geometry;
-using Hive.IO.BuildingComponents;
 using System;
 
-namespace Hive.IO
+namespace Hive.IO.Building
 {
     /// <summary>
     /// Namespace for Building geometry and construction properties.
@@ -56,11 +54,11 @@ namespace Hive.IO
         {
             this.SIA2024 = sia2024;
 
-            BuildingConstruction.Opaque sia2024_opaque = new BuildingConstruction.Opaque("SIA2024_Opaque")
+            OpaqueConstruction sia2024_opaque = new OpaqueConstruction("SIA2024_Opaque")
             {
                 UValue = Convert.ToDouble(sia2024["U-Wert opake Bauteile"])
             };
-            BuildingConstruction.Transparent sia2024_window = new BuildingConstruction.Transparent("SIA2024_Window")
+            TransparentConstruction sia2024_window = new TransparentConstruction("SIA2024_Window")
             {
                 UValue = Convert.ToDouble(sia2024["U-Wert Fenster"])
             };

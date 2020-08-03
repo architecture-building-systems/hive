@@ -1,12 +1,10 @@
 ﻿using rg = Rhino.Geometry;
 
-namespace Hive.IO
+namespace Hive.IO.Building
 {
     /// <summary>
     /// Building components indicate adjacencies to other components, surface areas, flags like external or internal, cost and emissions
     /// </summary>
-    namespace BuildingComponents
-    {
         public abstract class Component
         {
             /// <summary>
@@ -61,7 +59,7 @@ namespace Hive.IO
             /// <summary>
             /// Building construction of this component
             /// </summary>
-            public Hive.IO.BuildingConstruction.Construction Construction { get; set; }
+            public Construction Construction { get; set; }
 
             public Component(rg.BrepFace surface_geometry)
             {
@@ -202,8 +200,4 @@ namespace Hive.IO
         }
 
 
-
-
-
-    }
 }

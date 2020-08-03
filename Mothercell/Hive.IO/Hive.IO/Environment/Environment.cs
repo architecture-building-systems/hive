@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using rg = Rhino.Geometry;
 
-namespace Hive.IO
+namespace Hive.IO.Environment
 {
     /// <summary>
     /// Environment class, defining the environment the building is embedded in. 

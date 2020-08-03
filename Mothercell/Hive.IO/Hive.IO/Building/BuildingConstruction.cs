@@ -1,9 +1,8 @@
 ﻿
 
-namespace Hive.IO
+namespace Hive.IO.Building
 {
-    namespace BuildingConstruction
-    {
+
         public abstract class Construction
         {
             /// <summary>
@@ -13,7 +12,7 @@ namespace Hive.IO
             /// <summary>
             /// Layers of various materials, e.g. 'concrete', 'insulation', 'render'. From outside to inside
             /// </summary>
-            public BuildingMaterial.Material [] Layers { get; set; }
+            public Material [] Layers { get; set; }
             /// <summary>
             /// Thickness of each material layer in [mm]
             /// </summary>
@@ -43,9 +42,9 @@ namespace Hive.IO
         /// <summary>
         /// Opaque construction element
         /// </summary>
-        public class Opaque : Construction
+        public class OpaqueConstruction : Construction
         {
-          public Opaque(string name)
+          public OpaqueConstruction(string name)
             {
                 this.Name = name;
             }
@@ -53,12 +52,12 @@ namespace Hive.IO
             
         }
 
-        public class Transparent : Construction
+        public class TransparentConstruction : Construction
         {
-            public Transparent(string name)
+            public TransparentConstruction(string name)
             {
                 this.Name = name;
             }
         }
-    }
+    
 }

@@ -3,10 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 
 using rg = Rhino.Geometry;
-using Hive.IO.BuildingComponents;
 
-
-namespace Hive.IO
+namespace Hive.IO.Building
 {
 
     /// <summary>

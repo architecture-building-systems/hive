@@ -27,7 +27,7 @@ namespace Hive.IO.GHComponents
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            Environment environment = null;
+            Environment.Environment environment = null;
             if (!DA.GetData(0, ref environment)) return;
 
             if (environment != null)

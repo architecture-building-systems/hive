@@ -37,7 +37,7 @@ namespace Hive.IO.GHComponents
             DA.GetDataList(1, geometry);
 
             Mesh[] geometryArray = geometry.Count > 0 ? geometry.ToArray() : null;
-            Environment environment = new Environment(path, geometryArray);
+            Environment.Environment environment = new Environment.Environment(path, geometryArray);
             DA.SetData(0, environment);
         }
 
