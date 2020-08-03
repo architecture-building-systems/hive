@@ -1,4 +1,14 @@
-# MOTHERCELL
+# Code Architecture
+
+The HIVE project consists of two main folders: a) `Hive.IO` and b) `Hive.CORE`.
+`Hive.IO` is a Visual Studio project and contains most of the input-output codes for the Hive grasshopper workflow. This includes grasshopper components for inputs into the used simulators, and grasshopper components to visualize results.
+
+`Hive.Core` contains all (well, most) HIVE simulators (e.g. demand, solar, etc.) written in python with Honey-Badger (a compiler for ironpython to build grasshopper components).
+
+Some old prosa below that needs to be updated...
+
+
+## MOTHERCELL
 
 The Mothercell is the main Grasshopper component of Hive. 
 
