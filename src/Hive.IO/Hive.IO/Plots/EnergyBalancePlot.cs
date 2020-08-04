@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Linq;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
+using Grasshopper.Kernel;
 using Hive.IO.DataHandling;
 
 namespace Hive.IO.Plots
@@ -57,19 +58,56 @@ namespace Hive.IO.Plots
             };
             var totalGains = gains.Sum();
             var newMax = rightBounds.Height - ArrowPadding * gains.GetUpperBound(0);
-            var y = rightBounds.Y;
+            var leftArrowPadding = (leftBounds.Height - newMax) / gains.GetUpperBound(0);
+            var rightY = rightBounds.Y;
+            var leftY = leftBounds.Y;
+            var blackPen = new Pen(Color.Black);
+            var blackBrush = new SolidBrush(Color.Black);
+            var format = StringFormat.GenericTypographic;
+            format.Alignment = StringAlignment.Center;
+            format.LineAlignment = StringAlignment.Center;
             using (var color = GainsColors.Select(c => c).GetEnumerator())
             {
                 color.MoveNext();
                 foreach (var gain in gains)
                 {
-                    var arrowBounds = new RectangleF(rightBounds.Left, y, rightBounds.Width, gain.Scale(totalGains, newMax));
-                    graphics.FillRectangle(new SolidBrush(color.Current), arrowBounds);
+                    var arrowHeight = gain.Scale(totalGains, newMax);
+                    var rightArrowBounds = new RectangleF(rightBounds.Left, rightY, rightBounds.Width, arrowHeight);
+                    var leftArrowBounds = new RectangleF(leftBounds.Left, leftY, leftBounds.Width, arrowHeight);
 
-                    y += arrowBounds.Height + ArrowPadding;
+                    var arrowPolygon = CreateGainsArrowPolygon(leftArrowBounds, rightArrowBounds);
+                    graphics.FillPolygon(new SolidBrush(color.Current), arrowPolygon);
+                    graphics.DrawPolygon(blackPen, arrowPolygon);
+
+                    // write the percentages
+                    var gainPercent = gain / totalGains * 100;
+                    graphics.DrawString($"{gainPercent:F0}%", GH_FontServer.Standard, blackBrush, rightArrowBounds, format);
+
+                    rightY += rightArrowBounds.Height + ArrowPadding;
+                    leftY += rightArrowBounds.Height + leftArrowPadding;
                     color.MoveNext();
                 }
             }
+        }
+
+        private PointF[] CreateGainsArrowPolygon(RectangleF leftBounds, RectangleF rightBounds)
+        {
+            var arrowIndent = 10f;
+            var rightMiddleY = rightBounds.Y + 0.5f * rightBounds.Height;
+            var leftMiddleY = leftBounds.Y + 0.5f * leftBounds.Height;
+            return new[]
+            {
+                new PointF(leftBounds.Left, leftBounds.Top), // 0
+                new PointF(leftBounds.Right, leftBounds.Top), // 1
+                new PointF(rightBounds.Left, rightBounds.Top), // 2
+                new PointF(rightBounds.Right - arrowIndent, rightBounds.Top), // 3
+                new PointF(rightBounds.Right, rightMiddleY), // 4
+                new PointF(rightBounds.Right - arrowIndent, rightBounds.Bottom), // 5
+                new PointF(rightBounds.Left, rightBounds.Bottom), // 6
+                new PointF(leftBounds.Right, leftBounds.Bottom), // 7
+                new PointF(leftBounds.Left, leftBounds.Bottom), // 8
+                new PointF(leftBounds.Left + arrowIndent, leftMiddleY), // 9 
+            };
         }
 
         private PointF[] RenderHouse(Graphics graphics, RectangleF bounds)
