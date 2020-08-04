@@ -98,6 +98,8 @@ ENV/
 Python data_from_sensors/plot_data.py
 *.xml
 
+src/Hive.IO/.vs/
+
 # ignore visual studio stuff according to https://stackoverflow.com/a/2144077/2260
 [Oo]bj
 [Bb]in
