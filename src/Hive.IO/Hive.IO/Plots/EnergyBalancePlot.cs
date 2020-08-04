@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
@@ -13,6 +14,8 @@ namespace Hive.IO.Plots
         private RectangleF _bounds;
         private const float ArrowPadding = 5f;
         private const float ArrowIndent = 10f;
+        private const float IconPadding = 5f;
+        private const float IconWidth = 20f;
 
         private static readonly Color[] GainsColors = {
             Color.FromArgb(255, 216, 0), // solar gains
@@ -30,6 +33,24 @@ namespace Hive.IO.Plots
             Color.FromArgb(255, 255, 255), // Primary transfer losses
         };
 
+        private static readonly string[] EnergyInStrings = new[]
+        {
+            "Solar gains",
+            "Internal gains",
+            "Primary energy",
+            "Renewable energy"
+        };
+
+        private static readonly string[] EnergyOutStrings = new[]
+        {
+            "Electricity (Light + Equipment)",
+            "Ventilation losses",
+            "Envelope losses",
+            "Windows losses",
+            "System losses",
+            "Primary transfer losses"
+        };
+
         public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
         {
             _bounds = bounds;
@@ -38,7 +59,56 @@ namespace Hive.IO.Plots
 
             RenderGainsArrows(results, graphics, innerHousePolygon, houseBounds, bounds);
             RenderLossesArrows(results, graphics, innerHousePolygon, houseBounds, bounds);
+            RenderLegend(graphics, houseBounds, bounds);
         }
+
+        private void RenderLegend(Graphics graphics, RectangleF houseBounds, RectangleF bounds)
+        {
+            var legendLeft = (bounds.Left + houseBounds.Left) / 2f;
+            var legendRight = (bounds.Right + houseBounds.Right) / 2f;
+
+            // the space to draw the legend is between the bottom of the house bounds and the bottom of the bounds
+            var legendBounds = new RectangleF(
+                legendLeft, houseBounds.Bottom, legendRight - legendLeft, bounds.Bottom - houseBounds.Bottom).CloneInflate(-20, -20);
+
+            var leftTitle = "ENERGY IN";
+            var rightTitle = "ENERGY OUT";
+            var leftLegendWidth =
+                EnergyInStrings.Concat(new []{leftTitle}).Select(
+                    s => GH_FontServer.MeasureString($"{s}xxx", GH_FontServer.Standard).Width).Max() + IconWidth + IconPadding;
+            var rightLegendWidth = EnergyOutStrings.Concat(new []{rightTitle}).Select(
+                s => GH_FontServer.MeasureString($"{s}xxx", GH_FontServer.Standard).Width).Max() + IconWidth + IconPadding;
+
+            var leftLegendBounds = new RectangleF(legendBounds.X, legendBounds.Y, leftLegendWidth, legendBounds.Height);
+            RenderLegendColumn(graphics, leftTitle, leftLegendBounds, EnergyInStrings, GainsColors);
+
+            var rightLegendBounds = new RectangleF(legendBounds.Right - rightLegendWidth, legendBounds.Y, rightLegendWidth, legendBounds.Height);
+            RenderLegendColumn(graphics, rightTitle, rightLegendBounds, EnergyOutStrings, LossesColors);
+        }
+
+        private static void RenderLegendColumn(Graphics graphics, string title, RectangleF legendBounds, string[] names, Color[] colors)
+        {
+            graphics.DrawString(title, GH_FontServer.StandardBold, Brushes.Black, legendBounds);
+            var titleHeight = GH_FontServer.MeasureString(title, GH_FontServer.StandardBold).Height;
+            var y = legendBounds.Y + titleHeight;
+            using (var color = colors.Select(s => s).GetEnumerator())
+            {
+                color.MoveNext();
+                foreach (var s in names)
+                {
+                    var size = GH_FontServer.MeasureString(s, GH_FontServer.Standard);
+                    var iconBounds = new RectangleF(legendBounds.X, y, IconWidth, size.Height);
+                    graphics.FillRectangle(new SolidBrush(color.Current), iconBounds);
+                    graphics.DrawRectangleF(Pens.Black, iconBounds);
+                    var textBounds = iconBounds.CloneRight(legendBounds.Width - IconWidth - IconPadding)
+                        .CloneWithOffset(IconPadding, 0);
+                    graphics.DrawString(s, GH_FontServer.Standard, Brushes.Black, textBounds);
+                    y += size.Height + IconPadding;
+                    color.MoveNext();
+                }
+            }
+        }
+
 
         private void RenderGainsArrows(ResultsPlotting results, Graphics graphics,
             PointF[] innerHousePolygon, RectangleF houseBounds, RectangleF bounds)
