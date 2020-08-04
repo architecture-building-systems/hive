@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Linq;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Hive.IO.DataHandling;
@@ -9,6 +10,15 @@ namespace Hive.IO.Plots
     public class EnergyBalancePlot: IVisualizerPlot
     {
         private RectangleF _bounds;
+        private const float ArrowPadding = 5f;
+
+        private static readonly Color[] GainsColors = new []
+        {
+            Color.FromArgb(255, 216, 0), // solar gains
+            Color.FromArgb(181, 43, 40), // internal gains
+            Color.FromArgb(204, 128, 28), // primary energy
+            Color.FromArgb(242, 153, 35), // renewable energy
+        };
 
         public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
         {
@@ -20,13 +30,34 @@ namespace Hive.IO.Plots
             var middleAxis = innerHouseBounds.CloneInflate(-innerHouseBounds.Width / 4f, -10);
             graphics.DrawRectangleF(new Pen(Color.Aqua), middleAxis);
 
-            RenderGainsArrows(results, graphics, middleAxis);
+            var gainsArrowStart = (bounds.Left + houseBounds.Left) / 2f;
+
+            RenderGainsArrows(results, graphics, gainsArrowStart, middleAxis);
         }
 
-        private void RenderGainsArrows(ResultsPlotting results, Graphics graphics, RectangleF middleAxis)
+        private void RenderGainsArrows(ResultsPlotting results, Graphics graphics, float left, RectangleF middleAxis)
         {
-            var totalGains = results.SolarGains + results.InternalGains + results.PrimaryEnergy + results.RenewableEnergy;
+            var gains = new[]
+            {
+                results.SolarGains, 
+                results.InternalGains, 
+                results.PrimaryEnergy, 
+                results.RenewableEnergy
+            };
+            var totalGains = gains.Sum();
+            var newMax = middleAxis.Height - ArrowPadding * gains.GetUpperBound(0);
+            var y = middleAxis.Y;
+            var width = middleAxis.Left - left;
+            var color = GainsColors.Select(c => c).GetEnumerator();
+            color.MoveNext();
+            foreach (var gain in gains)
+            {
+                var arrowBounds = new RectangleF(left, y, width, gain.Scale(totalGains, newMax));
+                graphics.FillRectangle(new SolidBrush(color.Current), arrowBounds);
 
+                y += arrowBounds.Height + ArrowPadding;
+                color.MoveNext();
+            }
         }
 
         private RectangleF RenderHouse(Graphics graphics, RectangleF bounds)
