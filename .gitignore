@@ -117,7 +117,7 @@ _ReSharper.*
 *.resharper
 Ankh.NoLoad
 src/Hive.IO/Hive.IO/bin/Hive.IO.dll
-src/Hive.IO/.vs/Hive.IO/v16/.suo
+src/Hive.IO/.vs/
 src/Hive.IO/Hive.IO/bin/Hive.IO.dll
 src/Hive.IO/Hive.IO/bin/Hive.IO.pdb
 src/Hive.IO/Hive.IO/obj/Debug/Hive.IO.csproj.FileListAbsolute.txt
