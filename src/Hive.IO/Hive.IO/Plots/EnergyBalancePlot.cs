@@ -55,6 +55,7 @@ namespace Hive.IO.Plots
         {
             _bounds = bounds;
             var houseBounds = bounds.CloneInflate(-bounds.Width / 3, -bounds.Height / 4);
+            houseBounds.Offset(0, -(houseBounds.Top - bounds.Top));
             var innerHousePolygon = RenderHouse(graphics, houseBounds);
 
             RenderGainsArrows(results, graphics, innerHousePolygon, houseBounds, bounds);
