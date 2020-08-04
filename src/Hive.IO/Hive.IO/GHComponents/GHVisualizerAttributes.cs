@@ -13,9 +13,9 @@ namespace Hive.IO.GHComponents
     public class GhVisualizerAttributes : GH_ResizableAttributes<GhVisualizer>
     {
         // make sure we have a minimum size
-        private const float TitleBarHeight = 200f;
-        private const float MinWidth = 200f;
-        private const float MinHeight = TitleBarHeight + 150f;
+        public static float TitleBarHeight = 200f;
+        private static readonly float MinWidth = 200f;
+        private static readonly float MinHeight = TitleBarHeight + 150f;
 
         private const int Padding = 6;
 
@@ -132,6 +132,11 @@ namespace Hive.IO.GHComponents
                 return;
 
             RenderCapsule(graphics);
+            Render(graphics);
+        }
+
+        public void Render(Graphics graphics)
+        {
             graphics.FillRectangle(new SolidBrush(Color.White), InnerBounds);
             RenderPlot(graphics);
             RenderTitleBar(graphics);
@@ -159,7 +164,7 @@ namespace Hive.IO.GHComponents
             }
         }
 
-        private void RenderPlot(Graphics graphics)
+        public void RenderPlot(Graphics graphics)
         {
             _plotSelector.RenderCurrentPlot(Owner.Results, graphics, PlotBounds);
         }

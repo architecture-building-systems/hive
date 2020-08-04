@@ -21,8 +21,6 @@ namespace Hive.IO.Plots
         {
             _bounds = bounds;
             var houseBounds = bounds.CloneInflate(-bounds.Width / 3, -bounds.Height / 4);
-            RhinoApp.WriteLine($"bounds: {bounds}");
-            RhinoApp.WriteLine($"houseBounds: {houseBounds}");
 
             RenderHouse(graphics, houseBounds);
         }
