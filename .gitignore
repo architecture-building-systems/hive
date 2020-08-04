@@ -98,24 +98,19 @@ ENV/
 Python data_from_sensors/plot_data.py
 *.xml
 
-.DS_Store
-.idea/
-/src/Hive.GUI/.vs/Hive.GUI/v16/Server/sqlite3
-/src/Hive.GUI/.vs/Hive.GUI/v16
-/.vs/Hive/v16
-/.vs
-\src\Hive.GUI\Hive.GUI\bin
-/src/Hive.GUI/Hive.GUI/bin
-/src/Hive.GUI/Hive.GUI/obj/Debug
-*.ide-shm
-/src/Hive.IO/Hive.IO/bin
-/src/Hive.IO/Hive.IO/obj
-/src/Hive.IO/.vs/Hive.IO/v16
-/src/Hive.IO/.vs/Hive.IO/v16/sqlite3
-/src/Hive.IO/ConsoleTester/obj
-/src/Hive.IO/ConsoleTester/bin
-/src/Hive.IO/.vs/ConsoleTester/v16
-/src/Hive.IO/.vs/ConsoleTester/v16/sqlite3
-src/Hive.IO/.vs/Hive.IO/DesignTimeBuild/.dtbcache
+# ignore visual studio stuff according to https://stackoverflow.com/a/2144077/2260
+[Oo]bj
+[Bb]in
+Debug/
+Release/
+*.user
+*.suo
+*.[Cc]ache
 *.bak
-*.orig
+*.ncb
+*.log 
+*.DS_Store
+[Tt]humbs.db 
+_ReSharper.*
+*.resharper
+Ankh.NoLoad
