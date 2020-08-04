@@ -199,7 +199,7 @@ namespace Hive.IO.Plots
 
         public PlotSelector()
         {
-            _panelFactory = CreatePerformancePanel;
+            _panelFactory = CreateOtherPanel;
             _currentPanel = _panelFactory();
         }
 

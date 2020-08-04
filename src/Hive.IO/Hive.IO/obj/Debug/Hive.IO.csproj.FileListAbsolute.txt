@@ -25,3 +25,14 @@ C:\Users\Chris\Documents\GitHub\hive\src\Hive.IO\Hive.IO\obj\Debug\Hive.IO.cspro
 C:\Users\Chris\Documents\GitHub\hive\src\Hive.IO\Hive.IO\obj\Debug\Hive.IO.csproj.CopyComplete
 C:\Users\Chris\Documents\GitHub\hive\src\Hive.IO\Hive.IO\obj\Debug\Hive.IO.dll
 C:\Users\Chris\Documents\GitHub\hive\src\Hive.IO\Hive.IO\obj\Debug\Hive.IO.pdb
+C:\Users\darthoma\Documents\GitHub\hive\src\Hive.IO\Hive.IO\bin\Hive.IO.dll
+C:\Users\darthoma\Documents\GitHub\hive\src\Hive.IO\Hive.IO\bin\Hive.IO.pdb
+C:\Users\darthoma\Documents\GitHub\hive\src\Hive.IO\Hive.IO\obj\Debug\Hive.IO.csprojAssemblyReference.cache
+C:\Users\darthoma\Documents\GitHub\hive\src\Hive.IO\Hive.IO\obj\Debug\Hive.IO.FormBuilding.resources
+C:\Users\darthoma\Documents\GitHub\hive\src\Hive.IO\Hive.IO\obj\Debug\Hive.IO.FormEnSysSolar.resources
+C:\Users\darthoma\Documents\GitHub\hive\src\Hive.IO\Hive.IO\obj\Debug\Hive.IO.Properties.Resources.resources
+C:\Users\darthoma\Documents\GitHub\hive\src\Hive.IO\Hive.IO\obj\Debug\Hive.IO.csproj.GenerateResource.cache
+C:\Users\darthoma\Documents\GitHub\hive\src\Hive.IO\Hive.IO\obj\Debug\Hive.IO.csproj.CoreCompileInputs.cache
+C:\Users\darthoma\Documents\GitHub\hive\src\Hive.IO\Hive.IO\obj\Debug\Hive.IO.csproj.CopyComplete
+C:\Users\darthoma\Documents\GitHub\hive\src\Hive.IO\Hive.IO\obj\Debug\Hive.IO.dll
+C:\Users\darthoma\Documents\GitHub\hive\src\Hive.IO\Hive.IO\obj\Debug\Hive.IO.pdb
