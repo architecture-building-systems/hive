@@ -1,15 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Hive.IO.DataHandling;
-using Rhino;
 
 namespace Hive.IO.Plots
 {
@@ -50,7 +43,7 @@ namespace Hive.IO.Plots
             var yBottom = bounds.Y + bounds.Height;
             var yTop = bounds.Top;
             var yRoof = bounds.Y + bounds.Height * 0.33f;
-            var house = new PointF[]
+            var house = new[]
             {
                 // start at bottom left, clockwise
                 new PointF(xLeft, yBottom),  // 0
