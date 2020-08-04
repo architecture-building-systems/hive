@@ -104,6 +104,7 @@ Python data_from_sensors/plot_data.py
 /src/Hive.GUI/.vs/Hive.GUI/v16
 /.vs/Hive/v16
 /.vs
+\src\Hive.GUI\Hive.GUI\bin
 /src/Hive.GUI/Hive.GUI/bin
 /src/Hive.GUI/Hive.GUI/obj/Debug
 *.ide-shm
