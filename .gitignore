@@ -98,7 +98,7 @@ ENV/
 Python data_from_sensors/plot_data.py
 *.xml
 
-src/Hive.IO/.vs/
+/.vs
 
 # ignore visual studio stuff according to https://stackoverflow.com/a/2144077/2260
 [Oo]bj
@@ -116,3 +116,12 @@ Release/
 _ReSharper.*
 *.resharper
 Ankh.NoLoad
+src/Hive.IO/Hive.IO/bin/Hive.IO.dll
+src/Hive.IO/.vs/Hive.IO/v16/.suo
+src/Hive.IO/Hive.IO/bin/Hive.IO.dll
+src/Hive.IO/Hive.IO/bin/Hive.IO.pdb
+src/Hive.IO/Hive.IO/obj/Debug/Hive.IO.csproj.FileListAbsolute.txt
+src/Hive.IO/Hive.IO/obj/Debug/Hive.IO.csproj.GenerateResource.cache
+src/Hive.IO/Hive.IO/obj/Debug/Hive.IO.csprojAssemblyReference.cache
+src/Hive.IO/Hive.IO/obj/Debug/Hive.IO.dll
+src/Hive.IO/Hive.IO/obj/Debug/Hive.IO.pdb
