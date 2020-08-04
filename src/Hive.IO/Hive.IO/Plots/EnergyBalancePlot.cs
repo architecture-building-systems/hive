@@ -24,19 +24,30 @@ namespace Hive.IO.Plots
         {
             _bounds = bounds;
             var houseBounds = bounds.CloneInflate(-bounds.Width / 3, -bounds.Height / 4);
-            var innerHouseBounds = RenderHouse(graphics, houseBounds);
+            var innerHousePolygon = RenderHouse(graphics, houseBounds);
 
-            // inner axis, centered inside the house, left is end point of gains, right is starting point of losses
-            var middleAxis = innerHouseBounds.CloneInflate(-innerHouseBounds.Width / 4f, -10);
-            graphics.DrawRectangleF(new Pen(Color.Aqua), middleAxis);
-
-            var gainsArrowStart = (bounds.Left + houseBounds.Left) / 2f;
-
-            RenderGainsArrows(results, graphics, gainsArrowStart, middleAxis);
+            RenderGainsArrows(results, graphics, innerHousePolygon, houseBounds, bounds);
         }
 
-        private void RenderGainsArrows(ResultsPlotting results, Graphics graphics, float left, RectangleF middleAxis)
+        private void RenderGainsArrows(ResultsPlotting results, Graphics graphics, 
+            PointF[] innerHousePolygon, RectangleF houseBounds, RectangleF bounds)
         {
+            // inner axis, centered inside the house, left is end point of gains, right is starting point of losses
+            var innerHouseBounds = HousePolygonToInnerRectangleF(innerHousePolygon);
+            var houseCenterBounds = innerHouseBounds.CloneInflate(-innerHouseBounds.Width / 4f, -10);
+            graphics.DrawRectangleF(new Pen(Color.Aqua), houseCenterBounds);
+
+            var inflectionPointRight = innerHouseBounds.X + 10f;
+            var rightBounds = new RectangleF(
+                inflectionPointRight, houseCenterBounds.Y, 
+                houseCenterBounds.Left - inflectionPointRight, houseCenterBounds.Height);
+            graphics.DrawRectangleF(new Pen(Color.Magenta), rightBounds);
+
+            var gainsArrowLeft = (bounds.Left + houseBounds.Left) / 2f;
+            var innerHouseTop = innerHousePolygon[2].Y;
+            var leftBounds = new RectangleF(gainsArrowLeft, innerHouseTop, rightBounds.Width, houseBounds.Bottom - innerHouseTop);
+
+            graphics.DrawRectangleF(new Pen(Color.Coral), leftBounds);
             var gains = new[]
             {
                 results.SolarGains, 
@@ -45,22 +56,23 @@ namespace Hive.IO.Plots
                 results.RenewableEnergy
             };
             var totalGains = gains.Sum();
-            var newMax = middleAxis.Height - ArrowPadding * gains.GetUpperBound(0);
-            var y = middleAxis.Y;
-            var width = middleAxis.Left - left;
-            var color = GainsColors.Select(c => c).GetEnumerator();
-            color.MoveNext();
-            foreach (var gain in gains)
+            var newMax = rightBounds.Height - ArrowPadding * gains.GetUpperBound(0);
+            var y = rightBounds.Y;
+            using (var color = GainsColors.Select(c => c).GetEnumerator())
             {
-                var arrowBounds = new RectangleF(left, y, width, gain.Scale(totalGains, newMax));
-                graphics.FillRectangle(new SolidBrush(color.Current), arrowBounds);
-
-                y += arrowBounds.Height + ArrowPadding;
                 color.MoveNext();
+                foreach (var gain in gains)
+                {
+                    var arrowBounds = new RectangleF(rightBounds.Left, y, rightBounds.Width, gain.Scale(totalGains, newMax));
+                    graphics.FillRectangle(new SolidBrush(color.Current), arrowBounds);
+
+                    y += arrowBounds.Height + ArrowPadding;
+                    color.MoveNext();
+                }
             }
         }
 
-        private RectangleF RenderHouse(Graphics graphics, RectangleF bounds)
+        private PointF[] RenderHouse(Graphics graphics, RectangleF bounds)
         {
             var house = HousePolygon(bounds);
             graphics.FillPolygon(new SolidBrush(Color.LightSlateGray), house);
@@ -70,8 +82,13 @@ namespace Hive.IO.Plots
             graphics.FillPolygon(new SolidBrush(Color.White), innerHouse);
             graphics.DrawPolygon(new Pen(Color.Black), innerHouse);
 
-            return new RectangleF(innerHouse[0].X, innerHouse[1].Y, innerHouse[3].X - innerHouse[0].X,
-                innerHouse[0].Y - innerHouse[1].Y);
+            return innerHouse;
+        }
+
+        private static RectangleF HousePolygonToInnerRectangleF(PointF[] housePolygon)
+        {
+            return new RectangleF(housePolygon[0].X, housePolygon[1].Y, housePolygon[3].X - housePolygon[0].X,
+                housePolygon[0].Y - housePolygon[1].Y);
         }
 
         private static PointF[] HousePolygon(RectangleF bounds)
