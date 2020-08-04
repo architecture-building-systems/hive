@@ -118,3 +118,19 @@ Python data_from_sensors/plot_data.py
 Mothercell/Hive.IO/.vs/Hive.IO/DesignTimeBuild/.dtbcache
 *.bak
 *.orig
+
+
+# ignore visual studio stuff according to https://stackoverflow.com/a/2144077/2260
+[Oo]bj
+[Bb]in
+*.user
+*.suo
+*.[Cc]ache
+*.bak
+*.ncb
+*.log 
+*.DS_Store
+[Tt]humbs.db 
+_ReSharper.*
+*.resharper
+Ankh.NoLoad
