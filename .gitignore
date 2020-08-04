@@ -123,6 +123,8 @@ Mothercell/Hive.IO/.vs/Hive.IO/DesignTimeBuild/.dtbcache
 # ignore visual studio stuff according to https://stackoverflow.com/a/2144077/2260
 [Oo]bj
 [Bb]in
+Debug/
+Release/
 *.user
 *.suo
 *.[Cc]ache
