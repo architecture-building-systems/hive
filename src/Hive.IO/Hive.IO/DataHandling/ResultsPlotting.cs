@@ -163,16 +163,16 @@ namespace Hive.IO.DataHandling
 
         #region EnergyBalance
 
-        public double SolarGains => 100.0;
-        public double InternalGains => 200;
-        public double PrimaryEnergy => 300.0;
-        public double RenewableEnergy => 400.0;
-        public double Electricity => 110.0;
-        public double VentilationLosses => 120.0;
-        public double EnvelopeLosses => 50.0;
-        public double WindowsLosses => 200;
-        public double SystemLosses => 300;
-        public double PrimaryTransferLosses => 123.0;
+        public float SolarGains => 100.0f;
+        public float InternalGains => 200f;
+        public float PrimaryEnergy => 300.0f;
+        public float RenewableEnergy => 400.0f;
+        public float Electricity => 110.0f;
+        public float VentilationLosses => 120.0f;
+        public float EnvelopeLosses => 50.0f;
+        public float WindowsLosses => 200f;
+        public float SystemLosses => 300f;
+        public float PrimaryTransferLosses => 123.0f;
 
 
         #endregion EnergyBalance

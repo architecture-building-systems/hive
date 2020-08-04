@@ -19,6 +19,14 @@ namespace Hive.IO.Plots
             // inner axis, centered inside the house, left is end point of gains, right is starting point of losses
             var middleAxis = innerHouseBounds.CloneInflate(-innerHouseBounds.Width / 4f, -10);
             graphics.DrawRectangleF(new Pen(Color.Aqua), middleAxis);
+
+            RenderGainsArrows(results, graphics, middleAxis);
+        }
+
+        private void RenderGainsArrows(ResultsPlotting results, Graphics graphics, RectangleF middleAxis)
+        {
+            var totalGains = results.SolarGains + results.InternalGains + results.PrimaryEnergy + results.RenewableEnergy;
+
         }
 
         private RectangleF RenderHouse(Graphics graphics, RectangleF bounds)
