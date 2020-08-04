@@ -8,17 +8,26 @@ using Hive.IO.DataHandling;
 
 namespace Hive.IO.Plots
 {
-    public class EnergyBalancePlot: IVisualizerPlot
+    public class EnergyBalancePlot : IVisualizerPlot
     {
         private RectangleF _bounds;
         private const float ArrowPadding = 5f;
+        private const float ArrowIndent = 10f;
 
-        private static readonly Color[] GainsColors = new []
-        {
+        private static readonly Color[] GainsColors = {
             Color.FromArgb(255, 216, 0), // solar gains
             Color.FromArgb(181, 43, 40), // internal gains
             Color.FromArgb(204, 128, 28), // primary energy
             Color.FromArgb(242, 153, 35), // renewable energy
+        };
+
+        private static readonly Color[] LossesColors = {
+            Color.FromArgb(62, 124, 47), // Electricity (Light + Equipment)
+            Color.FromArgb(59, 88, 166), // Ventilation losses
+            Color.FromArgb(120,138, 163), // Envelope losses
+            Color.FromArgb(153, 179, 214), // Windows losses
+            Color.FromArgb(133, 101, 99), // System losses
+            Color.FromArgb(255, 255, 255), // Primary transfer losses
         };
 
         public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
@@ -28,32 +37,30 @@ namespace Hive.IO.Plots
             var innerHousePolygon = RenderHouse(graphics, houseBounds);
 
             RenderGainsArrows(results, graphics, innerHousePolygon, houseBounds, bounds);
+            RenderLossesArrows(results, graphics, innerHousePolygon, houseBounds, bounds);
         }
 
-        private void RenderGainsArrows(ResultsPlotting results, Graphics graphics, 
+        private void RenderGainsArrows(ResultsPlotting results, Graphics graphics,
             PointF[] innerHousePolygon, RectangleF houseBounds, RectangleF bounds)
         {
             // inner axis, centered inside the house, left is end point of gains, right is starting point of losses
             var innerHouseBounds = HousePolygonToInnerRectangleF(innerHousePolygon);
             var houseCenterBounds = innerHouseBounds.CloneInflate(-innerHouseBounds.Width / 4f, -10);
-            graphics.DrawRectangleF(new Pen(Color.Aqua), houseCenterBounds);
 
             var inflectionPointRight = innerHouseBounds.X + 10f;
             var rightBounds = new RectangleF(
-                inflectionPointRight, houseCenterBounds.Y, 
+                inflectionPointRight, houseCenterBounds.Y,
                 houseCenterBounds.Left - inflectionPointRight, houseCenterBounds.Height);
-            graphics.DrawRectangleF(new Pen(Color.Magenta), rightBounds);
 
             var gainsArrowLeft = (bounds.Left + houseBounds.Left) / 2f;
             var innerHouseTop = innerHousePolygon[2].Y;
             var leftBounds = new RectangleF(gainsArrowLeft, innerHouseTop, rightBounds.Width, houseBounds.Bottom - innerHouseTop);
 
-            graphics.DrawRectangleF(new Pen(Color.Coral), leftBounds);
             var gains = new[]
             {
-                results.SolarGains, 
-                results.InternalGains, 
-                results.PrimaryEnergy, 
+                results.SolarGains,
+                results.InternalGains,
+                results.PrimaryEnergy,
                 results.RenewableEnergy
             };
             var totalGains = gains.Sum();
@@ -90,9 +97,68 @@ namespace Hive.IO.Plots
             }
         }
 
+        private void RenderLossesArrows(ResultsPlotting results, Graphics graphics,
+            PointF[] innerHousePolygon, RectangleF houseBounds, RectangleF bounds)
+        {
+            // inner axis, centered inside the house, left is end point of gains, right is starting point of losses
+            var innerHouseBounds = HousePolygonToInnerRectangleF(innerHousePolygon);
+
+            var houseCenterBounds = innerHouseBounds.CloneInflate(-innerHouseBounds.Width / 4f, -10);
+
+            var inflectionPointLeft = innerHouseBounds.Right - 10f;
+            var leftBounds = new RectangleF(
+                houseCenterBounds.Right, houseCenterBounds.Y,
+                inflectionPointLeft - houseCenterBounds.Right, houseCenterBounds.Height);
+
+            var lossesArrowRight = (bounds.Right + houseBounds.Right) / 2f;
+            var innerHouseTop = innerHousePolygon[2].Y;
+            var rightBounds = new RectangleF(lossesArrowRight - leftBounds.Width, innerHouseTop, leftBounds.Width, houseBounds.Bottom - innerHouseTop);
+
+            var losses = new[]
+            {
+                results.Electricity,
+                results.VentilationLosses,
+                results.EnvelopeLosses,
+                results.WindowsLosses,
+                results.SystemLosses,
+                results.PrimaryTransferLosses,
+            };
+            var totalLosses = losses.Sum();
+            var newMax = leftBounds.Height - ArrowPadding * losses.GetUpperBound(0);
+            var rightArrowPadding = (rightBounds.Height - newMax) / losses.GetUpperBound(0);
+            var leftY = leftBounds.Y;
+            var rightY = rightBounds.Y;
+            var blackPen = new Pen(Color.Black);
+            var blackBrush = new SolidBrush(Color.Black);
+            var format = StringFormat.GenericTypographic;
+            format.Alignment = StringAlignment.Center;
+            format.LineAlignment = StringAlignment.Center;
+            using (var color = LossesColors.Select(c => c).GetEnumerator())
+            {
+                color.MoveNext();
+                foreach (var loss in losses)
+                {
+                    var arrowHeight = loss.Scale(totalLosses, newMax);
+                    var leftArrowBounds = new RectangleF(leftBounds.Left, leftY, leftBounds.Width, arrowHeight);
+                    var rightArrowBounds = new RectangleF(rightBounds.Left, rightY, rightBounds.Width, arrowHeight);
+
+                    var arrowPolygon = CreateLossesArrowPolygon(leftArrowBounds, rightArrowBounds);
+                    graphics.FillPolygon(new SolidBrush(color.Current), arrowPolygon);
+                    graphics.DrawPolygon(blackPen, arrowPolygon);
+
+                    // write the percentages
+                    var lossPercent = loss / totalLosses * 100;
+                    graphics.DrawString($"{lossPercent:F0}%", GH_FontServer.Standard, blackBrush, leftArrowBounds, format);
+
+                    leftY += leftArrowBounds.Height + ArrowPadding;
+                    rightY += rightArrowBounds.Height + rightArrowPadding;
+                    color.MoveNext();
+                }
+            }
+        }
+
         private PointF[] CreateGainsArrowPolygon(RectangleF leftBounds, RectangleF rightBounds)
         {
-            var arrowIndent = 10f;
             var rightMiddleY = rightBounds.Y + 0.5f * rightBounds.Height;
             var leftMiddleY = leftBounds.Y + 0.5f * leftBounds.Height;
             return new[]
@@ -100,13 +166,44 @@ namespace Hive.IO.Plots
                 new PointF(leftBounds.Left, leftBounds.Top), // 0
                 new PointF(leftBounds.Right, leftBounds.Top), // 1
                 new PointF(rightBounds.Left, rightBounds.Top), // 2
-                new PointF(rightBounds.Right - arrowIndent, rightBounds.Top), // 3
+                new PointF(rightBounds.Right - ArrowIndent, rightBounds.Top), // 3
                 new PointF(rightBounds.Right, rightMiddleY), // 4
-                new PointF(rightBounds.Right - arrowIndent, rightBounds.Bottom), // 5
+                new PointF(rightBounds.Right - ArrowIndent, rightBounds.Bottom), // 5
                 new PointF(rightBounds.Left, rightBounds.Bottom), // 6
                 new PointF(leftBounds.Right, leftBounds.Bottom), // 7
                 new PointF(leftBounds.Left, leftBounds.Bottom), // 8
-                new PointF(leftBounds.Left + arrowIndent, leftMiddleY), // 9 
+                new PointF(leftBounds.Left + ArrowIndent, leftMiddleY), // 9 
+            };
+        }
+        /// <summary>
+        ///
+        ///            2-------------3
+        ///  0        /               \
+        ///  ---------1                > 4
+        ///  \                        /
+        ///   > 9       6-------------5
+        ///  /          /
+        /// 8 ----------7
+        /// </summary>
+        /// <param name="leftBounds"></param>
+        /// <param name="rightBounds"></param>
+        /// <returns></returns>
+        private PointF[] CreateLossesArrowPolygon(RectangleF leftBounds, RectangleF rightBounds)
+        {
+            var leftMiddleY = leftBounds.Y + 0.5f * leftBounds.Height;
+            var rightMiddleY = rightBounds.Y + 0.5f * rightBounds.Height;
+            return new[]
+            {
+                new PointF(leftBounds.Left, leftBounds.Top), // 0
+                new PointF(leftBounds.Right, leftBounds.Top), // 1
+                new PointF(rightBounds.Left, rightBounds.Top), // 2
+                new PointF(rightBounds.Right - ArrowIndent, rightBounds.Top), // 3
+                new PointF(rightBounds.Right, rightMiddleY), // 4
+                new PointF(rightBounds.Right - ArrowIndent, rightBounds.Bottom), // 5
+                new PointF(rightBounds.Left, rightBounds.Bottom), // 6
+                new PointF(leftBounds.Right, leftBounds.Bottom), // 7
+                new PointF(leftBounds.Left, leftBounds.Bottom), // 8
+                new PointF(leftBounds.Left + ArrowIndent, leftMiddleY), // 9 
             };
         }
 
