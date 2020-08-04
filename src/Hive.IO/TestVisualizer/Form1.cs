@@ -19,7 +19,7 @@ namespace TestVisualizer
         public Form1()
         {
             InitializeComponent();
-            var visualizer = new GhVisualizerMockup();
+            var visualizer = new GhVisualizer();
             visualizer.CreateAttributes();
             _attributes = visualizer.Attributes as GhVisualizerAttributes;
             GhVisualizerAttributes.TitleBarHeight = 0;
