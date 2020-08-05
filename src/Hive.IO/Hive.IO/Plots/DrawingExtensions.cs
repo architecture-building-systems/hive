@@ -1,12 +1,11 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Grasshopper.Kernel;
 
 namespace Hive.IO.Plots
 {
-    public static class RectangleFExtensions
+    public static class DrawingExtensions
     {
         public static RectangleF Clone(this RectangleF self)
         {
@@ -33,6 +32,7 @@ namespace Hive.IO.Plots
             result.Inflate(x, y);
             return result;
         }
+
 
         public static RectangleF CloneRight(this RectangleF self, float? newWidth = null)
         {

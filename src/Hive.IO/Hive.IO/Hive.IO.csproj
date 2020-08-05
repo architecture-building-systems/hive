@@ -103,6 +103,7 @@
     <Compile Include="Plots\DemandMonthlyNormalizedPlot.cs" />
     <Compile Include="Plots\DemandMonthlyPlot.cs" />
     <Compile Include="Plots\AmrPlotDataAdaptor.cs" />
+    <Compile Include="Plots\EnergyBalancePlot.cs" />
     <Compile Include="Plots\MonthlyAmrPlot.cs" />
     <Compile Include="Plots\YearlyAmrPlot.cs" />
     <Compile Include="DataHandling\ResultsPlotting.cs" />
@@ -112,7 +113,7 @@
     <Compile Include="Plots\OperationalPerformancePlot.cs" />
     <Compile Include="Plots\OxyPlotBase.cs" />
     <Compile Include="Plots\PlotSelector.cs" />
-    <Compile Include="Plots\RectangleFExtensions.cs" />
+    <Compile Include="Plots\DrawingExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EnergySystems\ConversionTech.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
