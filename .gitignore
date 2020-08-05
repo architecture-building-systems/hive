@@ -98,13 +98,34 @@ ENV/
 Python data_from_sensors/plot_data.py
 *.xml
 
+.DS_Store
+.idea/
+/Mothercell/Hive.GUI/.vs/Hive.GUI/v16/Server/sqlite3
+/Mothercell/Hive.GUI/.vs/Hive.GUI/v16
+/.vs/Hive/v16
 /.vs
+/Mothercell/Hive.GUI/Hive.GUI/bin
+/Mothercell/Hive.GUI/Hive.GUI/obj/Debug
+*.ide-shm
+/Mothercell/Hive.IO/Hive.IO/bin
+/Mothercell/Hive.IO/Hive.IO/obj
+/Mothercell/Hive.IO/.vs/Hive.IO/v16
+/Mothercell/Hive.IO/.vs/Hive.IO/v16/sqlite3
+/Mothercell/Hive.IO/ConsoleTester/obj
+/Mothercell/Hive.IO/ConsoleTester/bin
+/Mothercell/Hive.IO/.vs/ConsoleTester/v16
+/Mothercell/Hive.IO/.vs/ConsoleTester/v16/sqlite3
+Mothercell/Hive.IO/.vs/Hive.IO/DesignTimeBuild/.dtbcache
+*.bak
+*.orig
+
 
 # ignore visual studio stuff according to https://stackoverflow.com/a/2144077/2260
 [Oo]bj
 [Bb]in
 Debug/
 Release/
+.vs/
 *.user
 *.suo
 *.[Cc]ache
@@ -116,7 +137,3 @@ Release/
 _ReSharper.*
 *.resharper
 Ankh.NoLoad
-src/Hive.IO/Hive.IO/bin/Hive.IO.dll
-src/Hive.IO/.vs/
-src/Hive.IO/Hive.IO/bin/
-src/Hive.IO/Hive.IO/obj/

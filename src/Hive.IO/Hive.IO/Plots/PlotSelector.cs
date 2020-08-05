@@ -127,6 +127,10 @@ namespace Hive.IO.Plots
                         new EnergyPlotStyle());
                 }
             }
+            else if (Category == "O")
+            {
+                return new EnergyBalancePlot();
+            }
             else
             {
                 return new DemandMonthlyPlot();
