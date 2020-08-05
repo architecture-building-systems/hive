@@ -1,10 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Types.Transforms;
 
 namespace Hive.IO.Plots
 {
