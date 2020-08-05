@@ -1,5 +1,6 @@
 ﻿using System.Runtime.InteropServices;
 using Grasshopper.GUI;
+using System.Linq;
 
 namespace Hive.IO.EnergySystems
 {
@@ -57,6 +58,27 @@ namespace Hive.IO.EnergySystems
         {
             this.SupplyTemperature = new double[supplyTemperature.Length];
             supplyTemperature.CopyTo(this.SupplyTemperature, 0);
+        }
+
+        private double[] MonthlySupplyTemperature = null;
+        public double [] GetAverageMonthlySupplyTemperature()
+        {
+            if (this.MonthlySupplyTemperature == null)
+            {
+                int months = 12;
+                this.MonthlySupplyTemperature = new double[months];
+                int sumOfDays = 0;
+                for (int t=0; t<months; t++)
+                {
+                    int startIndex = sumOfDays * Misc.HoursPerDay;
+                    int daysThisMonth = Misc.DaysPerMonth[t];
+                    sumOfDays += daysThisMonth;
+                    int endIndex = sumOfDays * Misc.HoursPerDay;
+                    double average = Enumerable.Range(startIndex, endIndex).Select(i => this.SupplyTemperature[i]).Average();
+                    this.MonthlySupplyTemperature[t] = average;
+                }
+            }
+            return this.MonthlySupplyTemperature;
         }
     }
 

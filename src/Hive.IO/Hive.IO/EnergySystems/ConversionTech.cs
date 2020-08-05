@@ -10,6 +10,8 @@ namespace Hive.IO.EnergySystems
 {
     #region MiscSupply
 
+    // these are all networks, containing input energy carriers. but not conversion tech
+    /*
     public class ElectricityGrid : ConversionTech
     {
         public ElectricityGrid(double investmentCost, double embodiedGhg) 
@@ -41,6 +43,7 @@ namespace Hive.IO.EnergySystems
 
 
     }
+    */
 
 
     public class Chiller : ConversionTech
@@ -51,11 +54,51 @@ namespace Hive.IO.EnergySystems
         }
 
 
-
-
         public double[] SetConversionEfficiencyCooling()
         {
             return new double[]{};
+        }
+    }
+
+
+    public class AirSourceHeatPump : ConversionTech
+    {
+
+        /// <summary>
+        /// Ambient air carrier. This will influence COP of the ASHP
+        /// </summary>
+        public Air AmbientAir { get; private set; }
+
+        public AirSourceHeatPump(double investmentCost, double embodiedGhg, double capacity) 
+            : base(investmentCost, embodiedGhg, capacity, "kW", true, false, false)
+        {
+        }
+
+
+        /// <summary>
+        /// inputs from Hive.IO.Environment. But electricity also needs information on quantity... form Core simulator? 
+        /// </summary>
+        /// <param name="ambientAir"></param>
+        /// <param name="electricity"></param>
+        public void SetInput(Air ambientAir, Electricity electricity)
+        {
+            this.AmbientAir = ambientAir;
+            base.InputCarrier = electricity;
+        }
+
+
+        /// <summary>
+        /// parameters from a simulator in Hive.IO.Core
+        /// </summary>
+        /// <param name="horizon"></param>
+        /// <param name="availableEnergy"></param>
+        /// <param name="energyCost"></param>
+        /// <param name="ghgEmissions"></param>
+        /// <param name="supplyTemperature"></param>
+        public void SetOutput(int horizon, double[] availableEnergy, double[] energyCost, double[] ghgEmissions, double[] supplyTemperature)
+        {
+            base.OutputCarriers = new EnergyCarrier[1];
+            base.OutputCarriers[0] = new Water(horizon, availableEnergy, energyCost, ghgEmissions, supplyTemperature);
         }
     }
 
@@ -501,17 +544,25 @@ namespace Hive.IO.EnergySystems
         //where is gas defined?? for solar, its clear, its from a weather file...
         // so all Input Carriers should be part of Hive.IO.Environment!
         // indicate, whether we have biogas, wood pellets, district heating, electricity grid, natural gas, oil, etc
-        public void SetGasCarrier(NaturalGas gasInput)
+        public void SetInput(NaturalGas gasInput)
         {
-
+            base.InputCarrier = gasInput;
         }
 
-        public void SetOutputWater()
-        {
-            base.OutputCarriers = new EnergyCarrier[0];
-            //base.OutputCarriers[0] = new Water(horizon, )
-        }
 
+        /// <summary>
+        /// all these parameters are computed externally, with some simulator within the Core
+        /// </summary>
+        /// <param name="horizon"></param>
+        /// <param name="availableEnergy"></param>
+        /// <param name="energyCost"></param>
+        /// <param name="ghgEmissions"></param>
+        /// <param name="supplyTemperature"></param>
+        public void SetOutput(int horizon, double [] availableEnergy, double [] energyCost, double [] ghgEmissions, double [] supplyTemperature)
+        {
+            base.OutputCarriers = new EnergyCarrier[1];
+            base.OutputCarriers[0] = new Water(horizon, availableEnergy, energyCost, ghgEmissions, supplyTemperature);
+        }
     }
 
 
