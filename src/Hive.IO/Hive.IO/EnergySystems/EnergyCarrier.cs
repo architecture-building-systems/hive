@@ -84,6 +84,19 @@ namespace Hive.IO.EnergySystems
 
 
     /// <summary>
+    /// 
+    /// </summary>
+    public class NaturalGas : EnergyCarrier
+    {
+        public NaturalGas(int horizon, double[] availableBiogas, double[] energyCost, double[] ghgEmissions)
+            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, availableBiogas, energyCost, ghgEmissions)
+        {
+        }
+    }
+}
+
+
+    /// <summary>
     /// Wood pellets. Availability might be limited
     /// </summary>
     public class Pellets : EnergyCarrier

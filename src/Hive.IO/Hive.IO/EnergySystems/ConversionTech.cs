@@ -498,6 +498,16 @@ namespace Hive.IO.EnergySystems
         }
 
 
+        public void SetGasCarrier(NaturalGas gasInput)
+        {
+
+        }
+
+        //protected override void SetInputCarriers()
+        //{
+            
+        //}
+
     }
 
 
@@ -600,6 +610,8 @@ namespace Hive.IO.EnergySystems
             this.IsElectric = isElectric;
         }
 
+        //protected abstract void SetInputCarriers();
+        //protected abstract void SetOutputCarriers();
 
         // how can I change parameters of methods in derived classes? the argument should still be an EnergyCarrier, but I wanna specifiy, e.g. restricting to Solar
 
