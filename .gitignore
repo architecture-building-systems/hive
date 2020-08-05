@@ -125,6 +125,7 @@ Mothercell/Hive.IO/.vs/Hive.IO/DesignTimeBuild/.dtbcache
 [Bb]in
 Debug/
 Release/
+.vs/
 *.user
 *.suo
 *.[Cc]ache
