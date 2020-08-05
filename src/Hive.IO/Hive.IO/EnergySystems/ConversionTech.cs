@@ -498,15 +498,19 @@ namespace Hive.IO.EnergySystems
         }
 
 
+        //where is gas defined?? for solar, its clear, its from a weather file...
+        // so all Input Carriers should be part of Hive.IO.Environment!
+        // indicate, whether we have biogas, wood pellets, district heating, electricity grid, natural gas, oil, etc
         public void SetGasCarrier(NaturalGas gasInput)
         {
 
         }
 
-        //protected override void SetInputCarriers()
-        //{
-            
-        //}
+        public void SetOutputWater()
+        {
+            base.OutputCarriers = new EnergyCarrier[0];
+            //base.OutputCarriers[0] = new Water(horizon, )
+        }
 
     }
 
@@ -610,8 +614,6 @@ namespace Hive.IO.EnergySystems
             this.IsElectric = isElectric;
         }
 
-        //protected abstract void SetInputCarriers();
-        //protected abstract void SetOutputCarriers();
 
         // how can I change parameters of methods in derived classes? the argument should still be an EnergyCarrier, but I wanna specifiy, e.g. restricting to Solar
 
