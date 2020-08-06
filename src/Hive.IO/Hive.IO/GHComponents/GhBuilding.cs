@@ -3,11 +3,13 @@ using System.Collections.Generic;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
 using Grasshopper.GUI;
+using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
 using rg = Rhino.Geometry;
 using ri = Rhino.Input.Custom;
 using Hive.IO.Building;
+using Hive.IO.Forms;
 
 namespace Hive.IO.GHComponents
 {
@@ -58,13 +60,13 @@ namespace Hive.IO.GHComponents
         private class BuildingComponentAttributes : GH_ComponentAttributes
         {
             public BuildingComponentAttributes(IGH_Component component) : base(component) { }
-
-            //// NOTE! activate for Hive 0.3
-            //public override GH_ObjectResponse RespondToMouseDoubleClick(GH_Canvas sender, GH_CanvasMouseEvent e)
-            //{
-            //    (Owner as GHBuilding)?.DisplayForm();
-            //    return GH_ObjectResponse.Handled;
-            //}
+            public override GH_ObjectResponse RespondToMouseDoubleClick(GH_Canvas sender, GH_CanvasMouseEvent e)
+            {
+                var form = new BuildingInput();
+                form.ShowDialog();
+                // (Owner as GhBuilding)?.DisplayForm();
+                return GH_ObjectResponse.Handled;
+            }
         }
 
         FormBuilding _form;
