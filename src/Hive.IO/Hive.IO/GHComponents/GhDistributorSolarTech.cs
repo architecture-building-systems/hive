@@ -6,11 +6,11 @@ using Rhino.Geometry;
 
 namespace Hive.IO.GHComponents
 {
-    public class GhDistributorSupplySystem : GH_Component
+    public class GhDistributorSolarTech : GH_Component
     {
 
-        public GhDistributorSupplySystem()
-          : base("Hive.IO.DistributorSupplySystem", "HiveIODistrSupSys",
+        public GhDistributorSolarTech()
+          : base("DistributorSolarTech", "DistributorSolarTech",
               "Distributor for the Energy Supply Systems models." +
                 "\nOutputs relevant parameters for Energy Supply Systems calculations.",
               "[hive]", "Mothercell")
