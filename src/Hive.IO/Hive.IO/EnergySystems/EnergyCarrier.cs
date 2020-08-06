@@ -12,7 +12,7 @@ namespace Hive.IO.EnergySystems
     /// </summary>
     public class Air : EnergyCarrier
     {
-        public Air(int horizon, double[] airTemperature) 
+        public Air(int horizon, double[] airTemperature)
             : base(horizon, EnergyCarrier.EnergyUnit.DegreeCelsius, airTemperature, null, null) { }
     }
 
@@ -51,7 +51,7 @@ namespace Hive.IO.EnergySystems
     /// </summary>
     public class Water : EnergyCarrier
     {
-        public double[] SupplyTemperature { get; private set; }
+        public double[] SupplyTemperature { get; private set; } //8760
         public Water(int horizon, double[] availableEnergy, double[] energyCost, double[] ghgEmissions,
             double[] supplyTemperature)
             : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, availableEnergy, energyCost, ghgEmissions)
@@ -60,26 +60,22 @@ namespace Hive.IO.EnergySystems
             supplyTemperature.CopyTo(this.SupplyTemperature, 0);
         }
 
-        private double[] MonthlySupplyTemperature = null;
-        public double [] GetAverageMonthlySupplyTemperature()
+
+        private double[] _monthlySupplyTemperature = null;
+        public double[] MonthlySupplyTemperature
         {
-            if (this.MonthlySupplyTemperature == null)
+            get
             {
-                int months = 12;
-                this.MonthlySupplyTemperature = new double[months];
-                int sumOfDays = 0;
-                for (int t=0; t<months; t++)
-                {
-                    int startIndex = sumOfDays * Misc.HoursPerDay;
-                    int daysThisMonth = Misc.DaysPerMonth[t];
-                    sumOfDays += daysThisMonth;
-                    int endIndex = sumOfDays * Misc.HoursPerDay;
-                    double average = Enumerable.Range(startIndex, endIndex).Select(i => this.SupplyTemperature[i]).Average();
-                    this.MonthlySupplyTemperature[t] = average;
-                }
+                if (_monthlySupplyTemperature == null)
+                    _monthlySupplyTemperature = GetAverageMonthlyValue(this.SupplyTemperature);
+                return _monthlySupplyTemperature;
             }
-            return this.MonthlySupplyTemperature;
+            private set
+            {
+                _monthlySupplyTemperature = GetAverageMonthlyValue(this.SupplyTemperature);
+            }
         }
+
     }
 
 
@@ -88,7 +84,7 @@ namespace Hive.IO.EnergySystems
     /// </summary>
     public class Electricity : EnergyCarrier
     {
-        public Electricity(int horizon, double [] availableElectricity, double[] energyCost, double[] ghgEmissions) 
+        public Electricity(int horizon, double[] availableElectricity, double[] energyCost, double[] ghgEmissions)
             : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, availableElectricity, energyCost, ghgEmissions) { }
     }
 
@@ -98,7 +94,7 @@ namespace Hive.IO.EnergySystems
     /// </summary>
     public class BioGas : EnergyCarrier
     {
-        public BioGas(int horizon, double[] availableBiogas, double[] energyCost, double[] ghgEmissions) 
+        public BioGas(int horizon, double[] availableBiogas, double[] energyCost, double[] ghgEmissions)
             : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, availableBiogas, energyCost, ghgEmissions)
         {
         }
@@ -123,12 +119,12 @@ namespace Hive.IO.EnergySystems
     /// </summary>
     public class Pellets : EnergyCarrier
     {
-        public Pellets(int horizon, double[] availablePellets, double[] energyCost, double[] ghgEmissions) 
+        public Pellets(int horizon, double[] availablePellets, double[] energyCost, double[] ghgEmissions)
             : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, availablePellets, energyCost, ghgEmissions)
         {
         }
     }
-#endregion
+    #endregion
 
 
 
@@ -158,18 +154,18 @@ namespace Hive.IO.EnergySystems
         /// Time series of available/provided energy of this carrier in this.Unit per time step.
         /// Could be the potentials (solar) or the operation from a conversion technology
         /// </summary>
-        public double [] AvailableEnergy { get; protected set; }
+        public double[] AvailableEnergy { get; protected set; }
         /// <summary>
         /// Time series with cost coefficients per this.Unit
         /// </summary>
-        public double [] EnergyCost { get; protected set; }
+        public double[] EnergyCost { get; protected set; }
         /// <summary>
         /// Time series of Greenhouse gas emissions in kgCO2eq/this.Unit
         /// </summary>
-        public double [] GhgEmissions { get; protected set; }
+        public double[] GhgEmissions { get; protected set; }
 
 
-        protected EnergyCarrier(int horizon, EnergyUnit unit, double [] availableEnergy, double [] energyCost, double [] ghgEmissions)
+        protected EnergyCarrier(int horizon, EnergyUnit unit, double[] availableEnergy, double[] energyCost, double[] ghgEmissions)
         {
             this.Horizon = horizon;
             this.Unit = unit;
@@ -194,6 +190,33 @@ namespace Hive.IO.EnergySystems
                 this.GhgEmissions = new double[ghgEmissions.Length];
                 ghgEmissions.CopyTo(this.GhgEmissions, 0);
             }
+        }
+
+
+        public static double[] GetAverageMonthlyValue(double[] annualTimeSeries)
+        {
+
+            int months = 12;
+            double[] monthlyTimeSeries = new double[months];
+            int sumOfDays = 0;
+            for (int t = 0; t < months; t++)
+            {
+                int startIndex = sumOfDays * Misc.HoursPerDay;
+                int daysThisMonth = Misc.DaysPerMonth[t];
+                sumOfDays += daysThisMonth;
+                int endIndex = sumOfDays * Misc.HoursPerDay;
+                double average = 0.0;
+                for (int i = startIndex; i < endIndex; i++)
+                {
+                    average += annualTimeSeries[i];
+                }
+
+                average /= (daysThisMonth * Misc.HoursPerDay);
+                //double average = Enumerable.Range(startIndex, endIndex).Select(i => annualTimeSeries[i]).Average();
+                monthlyTimeSeries[t] = average;
+            }
+
+            return monthlyTimeSeries;
         }
     }
 }

@@ -28,7 +28,7 @@ namespace Hive.IO.GHComponents
             pManager.AddGenericParameter("Air", "Air", "Air energy carrier from weather file", GH_ParamAccess.item);
             pManager.AddGenericParameter("Electricity", "Electricity", "Electricity", GH_ParamAccess.item);
             pManager.AddIntegerParameter("horizon", "horizon", "horizon", GH_ParamAccess.item);
-            pManager.AddNumberParameter("availableEnergy", "availableEnergy", "availableEnergy", GH_ParamAccess.list);
+            pManager.AddNumberParameter("heatGenerated", "heatGenerated", "heatGenerated (kWh)", GH_ParamAccess.list);
             pManager.AddNumberParameter("cost", "cost", "cost", GH_ParamAccess.list);
             pManager.AddNumberParameter("ghg", "ghg", "ghg", GH_ParamAccess.list);
             pManager.AddNumberParameter("suppTemp", "suppTemp", "suppTemp for water output. necessary to know for COP calculation (?) but only if the calculation would happen here in Hive.IO", GH_ParamAccess.list);
