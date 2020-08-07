@@ -4,49 +4,50 @@
     Title="hizard | Building"
     x:Class="Hive.IO.Forms.BuildingInput"
     Width="586.228" Height="287.924" WindowStyle="None">
-    <WindowChrome.WindowChrome>
-        <WindowChrome CaptionHeight="32" ResizeBorderThickness="{x:Static SystemParameters.WindowResizeBorderThickness}" />
-    </WindowChrome.WindowChrome>
     <Window.Resources>
-        <Style x:Key="TitleBarButtonStyle" TargetType="Button">
-            <Setter Property="Background" Value="White"></Setter>
-            <Setter Property="Height" Value="30"></Setter>
-            <Setter Property="Width" Value="30"></Setter>
-            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+        <Style x:Key="hizardPanel" TargetType="TabPanel">
+            <Setter Property="Background" Value="Black"></Setter>
+            <Setter Property="HorizontalAlignment" Value="Right"></Setter>
+            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True"></Setter>
+        </Style>
+        <Style x:Key="hizardTabControl" TargetType="TabControl">
+            <Setter Property="OverridesDefaultStyle" Value="True"></Setter>
+            <Setter Property="SnapsToDevicePixels" Value="True" />
+            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True"></Setter>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="{x:Type TabControl}">
+                        <Grid KeyboardNavigation.TabNavigation="Local">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="*" />
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"></ColumnDefinition>
+                                <ColumnDefinition Width="Auto"></ColumnDefinition>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Background="Black" Foreground="White" FontWeight="Bold" Margin="-4,-4,-4,-4">hizard | Building</TextBlock>
+                            <TabPanel Name="HeaderPanel"
+                                      Grid.Row="0"
+                                      Grid.Column="1"
+                                      Panel.ZIndex="1" 
+                                      Margin="1,0,4,-1" 
+                                      IsItemsHost="True"
+                                      KeyboardNavigation.TabIndex="1"
+                                      HorizontalAlignment="Right"/>
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
-    <StackPanel>
-    <Grid Background="Black">
-        <Grid.RowDefinitions>
-            <RowDefinition Height="32"></RowDefinition>
-        </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-            <ColumnDefinition Width="Auto"></ColumnDefinition>
-        </Grid.ColumnDefinitions>
-        <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,0,0,0" Foreground="White" FontWeight="Bold">hizard | Building</TextBlock>
-        <Button Grid.Column="1" Style="{StaticResource TitleBarButtonStyle}">SIA</Button>
-        <Button Grid.Column="2" Style="{StaticResource TitleBarButtonStyle}">ENV</Button>
-        <Button Grid.Column="3" Style="{StaticResource TitleBarButtonStyle}">IG</Button>
-        <Button Grid.Column="4" Style="{StaticResource TitleBarButtonStyle}">VEN</Button>
-        <Button Name="ButtonX" Grid.Column="5" Style="{StaticResource TitleBarButtonStyle}" Click="ButtonX_OnClick">X</Button>
-    </Grid>
-        <TabControl>
-            <TabPanel>
-                <TabItem Header="SIA">text</TabItem>
+    <TabControl Style="{StaticResource hizardTabControl}">
+            <TabItem Header="SIA">text</TabItem>
                 <TabItem Header="ENV">more text</TabItem>
                 <TabItem Header="IG">much more text</TabItem>
                 <TabItem Header="VEN">when is this ever going to stop?</TabItem>
-                <TabItem Header="X">
-                    <Button Name="button" Click="button_Click"></Button>
+                <TabItem Header="X" MouseUp="ButtonX_OnClick">
+                    you shouldn't be seeing this...
                 </TabItem>
-            </TabPanel>
-            
-    </TabControl>
-    </StackPanel>
+        </TabControl>
 </Window>
