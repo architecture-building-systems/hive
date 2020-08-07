@@ -30,5 +30,10 @@ namespace Hive.IO.Forms
             DialogResult = true;
             Close();
         }
+
+        private void ButtonX_OnClick(object sender, RoutedEventArgs e)
+        {
+            Close();
+        }
     }
 }

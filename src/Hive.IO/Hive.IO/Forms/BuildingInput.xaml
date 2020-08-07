@@ -8,7 +8,12 @@
         <WindowChrome CaptionHeight="32" ResizeBorderThickness="{x:Static SystemParameters.WindowResizeBorderThickness}" />
     </WindowChrome.WindowChrome>
     <Window.Resources>
-        <Style x:Key="TitleBarButtonStyle" TargetType="Button"></Style>
+        <Style x:Key="TitleBarButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="White"></Setter>
+            <Setter Property="Height" Value="30"></Setter>
+            <Setter Property="Width" Value="30"></Setter>
+            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True" />
+        </Style>
     </Window.Resources>
     <StackPanel>
     <Grid Background="Black">
@@ -25,18 +30,23 @@
             <ColumnDefinition Width="Auto"></ColumnDefinition>
         </Grid.ColumnDefinitions>
         <TextBlock Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Center" Margin="50,0,0,0" Foreground="White" FontWeight="Bold">hizard | Building</TextBlock>
-        <Button Grid.Column="1">SIA</Button>
-        <Button Grid.Column="2">ENV</Button>
-        <Button Grid.Column="3">IG</Button>
-        <Button Grid.Column="4">VEN</Button>
-        <Button Grid.Column="5" Style="{StaticResource TitleBarButtonStyle}">X</Button>
+        <Button Grid.Column="1" Style="{StaticResource TitleBarButtonStyle}">SIA</Button>
+        <Button Grid.Column="2" Style="{StaticResource TitleBarButtonStyle}">ENV</Button>
+        <Button Grid.Column="3" Style="{StaticResource TitleBarButtonStyle}">IG</Button>
+        <Button Grid.Column="4" Style="{StaticResource TitleBarButtonStyle}">VEN</Button>
+        <Button Name="ButtonX" Grid.Column="5" Style="{StaticResource TitleBarButtonStyle}" Click="ButtonX_OnClick">X</Button>
     </Grid>
         <TabControl>
-        <TabItem Header="SIA">text</TabItem>
-        <TabItem Header="ENV">more text</TabItem>
-        <TabItem Header="IG">much more text</TabItem>
-        <TabItem Header="VEN">when is this ever going to stop?</TabItem>
-        <TabItem Header="X"><Button Name="button" Click="button_Click"></Button></TabItem>
+            <TabPanel>
+                <TabItem Header="SIA">text</TabItem>
+                <TabItem Header="ENV">more text</TabItem>
+                <TabItem Header="IG">much more text</TabItem>
+                <TabItem Header="VEN">when is this ever going to stop?</TabItem>
+                <TabItem Header="X">
+                    <Button Name="button" Click="button_Click"></Button>
+                </TabItem>
+            </TabPanel>
+            
     </TabControl>
     </StackPanel>
 </Window>
