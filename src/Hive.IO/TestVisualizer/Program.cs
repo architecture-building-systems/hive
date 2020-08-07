@@ -5,6 +5,8 @@ using System.Linq;
 using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Hive.IO;
+using Hive.IO.Forms;
 
 namespace TestVisualizer
 {
@@ -19,9 +21,11 @@ namespace TestVisualizer
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.AssemblyResolve += new ResolveEventHandler(LoadRhinoDlls);
 
-            Application.EnableVisualStyles();
+            new BuildingInput().ShowDialog();
+
+            /*Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            Application.Run(new BuildingInput());*/
         }
         
 

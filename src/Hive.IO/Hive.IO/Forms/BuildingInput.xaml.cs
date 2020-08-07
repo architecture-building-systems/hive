@@ -27,8 +27,8 @@ namespace Hive.IO.Forms
 
         void button_Click(object sender, RoutedEventArgs e)
         {
-            // Show message box when button is clicked.
-            MessageBox.Show("Hello, Windows Presentation Foundation!");
+            DialogResult = true;
+            Close();
         }
     }
 }
