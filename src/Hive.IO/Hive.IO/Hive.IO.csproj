@@ -80,7 +80,8 @@
     <Compile Include="GHComponents\GhDistributorSIA.cs" />
     <Compile Include="GHComponents\GhDistributorSolar.cs" />
     <Compile Include="GHComponents\GhDistributorSolarTech.cs" />
-    <Compile Include="GHComponents\GhEmitter.cs" />
+    <Compile Include="GHComponents\GhDistributorSupplySystem.cs" />
+    <Compile Include="GHComponents\GhParametricInputEmitter.cs" />
     <Compile Include="GHComponents\GhEnvironment.cs" />
     <Compile Include="GHComponents\GhMergerHeatPump.cs" />
     <Compile Include="GHComponents\GhParametricInputEnergySystems.cs" />
@@ -105,8 +106,8 @@
     <Compile Include="GHComponents\GhDistributor.cs" />
     <Compile Include="GHComponents\GhVisualizerAttributes.cs" />
     <Compile Include="GHComponents\HiveIOInfo.cs" />
-    <Compile Include="GHComponents\GHSolarSystem.cs" />
     <Compile Include="Misc.cs" />
+    <Compile Include="GHComponents\GhEnergySystem.cs" />
     <Compile Include="Plots\AmrPlotBase.cs" />
     <Compile Include="Plots\AmrPlotStyle.cs" />
     <Compile Include="Plots\DemandMonthlyNormalizedPlot.cs" />
