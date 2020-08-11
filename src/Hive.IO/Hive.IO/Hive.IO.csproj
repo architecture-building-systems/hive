@@ -79,7 +79,6 @@
     <Compile Include="GHComponents\GhDistributorEPW.cs" />
     <Compile Include="GHComponents\GhDistributorSIA.cs" />
     <Compile Include="GHComponents\GhDistributorSolar.cs" />
-    <Compile Include="GHComponents\GhDistributorSolarTech.cs" />
     <Compile Include="GHComponents\GhDistributorSupplySystem.cs" />
     <Compile Include="GHComponents\GhParametricInputEmitter.cs" />
     <Compile Include="GHComponents\GhEnvironment.cs" />
