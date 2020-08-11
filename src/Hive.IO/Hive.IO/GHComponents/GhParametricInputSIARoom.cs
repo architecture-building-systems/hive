@@ -69,7 +69,7 @@ namespace Hive.IO.GHComponents
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            SiaRoom siaRoom = new SiaRoom();
+            SiaRoomProperties siaRoom = new SiaRoomProperties();
 
             DA.GetData(0, ref siaRoom.Description);
             DA.GetData(1, ref siaRoom.RoomConstant);
@@ -126,7 +126,7 @@ namespace Hive.IO.GHComponents
             DA.SetData(0, siaRoomJson);
         }
 
-        private class SiaRoom
+        private class SiaRoomProperties
         {
             public string Description;
             public int RoomConstant;
