@@ -65,7 +65,6 @@ namespace Hive.IO.GHComponents
                 emitter.EmbodiedEmissions = 100.0;
 
             DA.SetData(0, JsonConvert.SerializeObject(emitter));
-            //DA.SetData(0, new Radiator(100.0, 100.0, true, false, inTemp, returnTemp));
         }
 
         /// <summary>
