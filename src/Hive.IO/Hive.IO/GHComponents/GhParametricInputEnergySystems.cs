@@ -9,26 +9,6 @@ using Newtonsoft.Json;
 
 namespace Hive.IO.GHComponents
 {
-    internal class ConversionTechProperties
-    {
-        public double ASHPCapacity;
-        public double ASHPCost;
-        public double ASHPEmissions;
-        public double ASHPCOP;
-
-        public double GasBoilerCapacity;
-        public double GasBoilerCost;
-        public double GasBoilerEmissions;
-        public double GasBoilerEfficiency;
-
-        public double CHPCapacity;
-        public double CHPCost;
-        public double CHPEmissions;
-        public double CHPHTP;
-        public double CHPEffElec;
-    }
-
-
     public class GhParametricInputEnergySystems : GH_Component
     {
         /// <summary>
@@ -81,7 +61,7 @@ namespace Hive.IO.GHComponents
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            ConversionTechProperties energySystemProperties = new ConversionTechProperties();
+            EnergySystemProperties energySystemProperties = new EnergySystemProperties();
             energySystemProperties.ASHPCapacity = 0.0;
             energySystemProperties.GasBoilerCapacity = 0.0;
             energySystemProperties.CHPCapacity = 0.0;
@@ -105,7 +85,27 @@ namespace Hive.IO.GHComponents
             string conversionTechJson = JsonConvert.SerializeObject(energySystemProperties);
             DA.SetData(0, conversionTechJson);
         }
+        private class EnergySystemProperties
+        {
+            public double ASHPCapacity;
+            public double ASHPCost;
+            public double ASHPEmissions;
+            public double ASHPCOP;
 
+            public double GasBoilerCapacity;
+            public double GasBoilerCost;
+            public double GasBoilerEmissions;
+            public double GasBoilerEfficiency;
+
+            public double CHPCapacity;
+            public double CHPCost;
+            public double CHPEmissions;
+            public double CHPHTP;
+            public double CHPEffElec;
+
+
+
+        }
 
 
         /// <summary>
