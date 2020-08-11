@@ -8,6 +8,17 @@ using Newtonsoft.Json;
 
 namespace Hive.IO.GHComponents
 {
+    internal class SolarTechProperties
+    {
+        public string Type; //{'PV', 'PVT', 'ST', 'GC'}
+        public string Technology; // e.g. 'Monocrystalline. Not really necessary, just for information
+        public double ElectricEfficiency;
+        public double ThermalEfficiency;
+        public double InvestmentCost;
+        public double EmbodiedEmissions;
+    }
+
+
     public class GhParametricInputSolarSystems : GH_Component
     {
         /// <summary>
@@ -72,17 +83,6 @@ namespace Hive.IO.GHComponents
             DA.SetData(1, solarTechJson);
 
             DA.SetData(0, mesh);
-        }
-
-
-        private class SolarTechProperties
-        {
-            public string Type; //{'PV', 'PVT', 'ST', 'GC'}
-            public string Technology; // e.g. 'Monocrystalline. Not really necessary, just for information
-            public double ElectricEfficiency;
-            public double ThermalEfficiency;
-            public double InvestmentCost;
-            public double EmbodiedEmissions;
         }
 
 

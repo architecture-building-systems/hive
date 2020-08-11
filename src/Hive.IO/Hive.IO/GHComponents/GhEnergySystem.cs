@@ -7,6 +7,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
 using Rhino.Geometry;
 using Hive.IO.EnergySystems;
+using Newtonsoft.Json;
 
 namespace Hive.IO.GHComponents
 {
@@ -22,18 +23,23 @@ namespace Hive.IO.GHComponents
 
 
         public GhEnergySystem()
-          : base("Hive.IO.SolarTech", "HiveIOSolar", "Hive.IO Solar Energy Systems Technologies." +
+          : base("Hive.IO.EnergySystems", "EnergySystems", "Hive.IO.EnergySystems input component (solar energy systems, other conversion technologies, emitters)." +
                 "\nThe component opens a Form upon double click, where details of the solar energy system can be specified." +
                 "\nPossible technologies are Photovoltaic (PV), Solar Thermal (ST), hybrid PVT, or Ground Collector (GC).", "[hive]", "IO") { indexNow = 0; }
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddMeshParameter("Mesh", "Mesh", "Mesh geometries of the solar energy systems (Photovolatic, Solar Thermal, or hybrid PVT)", GH_ParamAccess.list);
+            pManager.AddGenericParameter("SolarTechJson", "SolarTechJson", "List of jsons describing solar technologies. One json per mesh", GH_ParamAccess.list);
+            pManager[1].Optional = true;
+            pManager.AddGenericParameter("ConversionTechJson", "ConversionTechJson", "Json describing all other used conversion technologies (ASHP, boiler, CHP, etc", GH_ParamAccess.item);
+            pManager[2].Optional = true;
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Hive.IO.EnergySystem.SurfaceSystem", "HiveIOEnSysSolar", "Surface based Solar Energy System, such as PV, ST, PVT or GC.", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Hive.IO.EnergySystems.ConversionTech", "ConversionTech", "Hive.IO.EnergySystems.ConversionTech, such as PV, ST, PVT or GC, ASHP, CHP, boiler, etc.", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Hive.IO.EnergySystems.Emitter", "Emitter", "Hive.IO.EnergySystems.Emitter (e.g. Radiator, floor heating, cooling panel, etc. Will be depricated for Hive 1.x and become part of the Building.Zone.", GH_ParamAccess.item);
         }
 
 
@@ -184,7 +190,10 @@ namespace Hive.IO.GHComponents
         {
             List<Mesh> meshList = new List<Mesh>();
             if (!DA.GetDataList(0, meshList)) { return; }
-            
+
+
+            List<string> solarTechJson = new List<string>();
+            DA.GetDataList(1, solarTechJson);
 
             // feed the list into the listbox on the windows form
 
@@ -200,13 +209,40 @@ namespace Hive.IO.GHComponents
             
 
             List<SurfaceBasedTech> solartech = new List<SurfaceBasedTech>();
-            foreach (Mesh mesh in meshList)
+
+
+            if (solarTechJson.Count == 0)
             {
-                if(Form_SystemType == "pv") solartech.Add(new Photovoltaic(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_pv_eff)); 
-                else if (Form_SystemType=="pvt") solartech.Add(new PVT(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_pv_eff, Form_thermal_eff)); 
-                else if (Form_SystemType=="st") solartech.Add(new SolarThermal(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_thermal_eff));  
-                else solartech.Add(new GroundCollector(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name)); // Form_thermal_eff, 
+                foreach (Mesh mesh in meshList)
+                {
+                    if (Form_SystemType == "pv") 
+                        solartech.Add(new Photovoltaic(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_pv_eff));
+                    else if (Form_SystemType == "pvt") 
+                        solartech.Add(new PVT(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_pv_eff, Form_thermal_eff));
+                    else if (Form_SystemType == "st") 
+                        solartech.Add(new SolarThermal(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_thermal_eff));
+                    else 
+                        solartech.Add(new GroundCollector(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name)); // Form_thermal_eff, 
+                }
             }
+            else
+            {
+                for (int i=0; i<solarTechJson.Count; i++)
+                {
+                    string json = solarTechJson[i];
+                    Mesh mesh = meshList[i];
+                    SolarTechProperties solarProperties = JsonConvert.DeserializeObject<SolarTechProperties>(json);
+                    if (solarProperties.Type == "PV")
+                        solartech.Add(new Photovoltaic(solarProperties.InvestmentCost, solarProperties.EmbodiedEmissions, mesh, solarProperties.Technology, solarProperties.ElectricEfficiency));
+                    else if (solarProperties.Type == "PVT")
+                        solartech.Add(new PVT(solarProperties.InvestmentCost, solarProperties.EmbodiedEmissions, mesh, solarProperties.Technology, solarProperties.ElectricEfficiency, solarProperties.ThermalEfficiency));
+                    else if (solarProperties.Type == "ST")
+                        solartech.Add(new SolarThermal(solarProperties.InvestmentCost, solarProperties.EmbodiedEmissions, mesh, solarProperties.Technology, solarProperties.ThermalEfficiency));
+                    else
+                        solartech.Add(new GroundCollector(solarProperties.InvestmentCost, solarProperties.EmbodiedEmissions, mesh, solarProperties.Technology));
+                }
+            }
+
 
             DA.SetDataList(0, solartech);
         }
