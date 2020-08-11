@@ -10,7 +10,7 @@ using Hive.IO.EnergySystems;
 
 namespace Hive.IO.GHComponents
 {
-    public class GhSolarSystem : GH_Component
+    public class GhEnergySystem : GH_Component
     {
         public string Form_SystemType { get; set; }
         public double Form_pv_eff { get; set; }
@@ -21,7 +21,7 @@ namespace Hive.IO.GHComponents
         private int indexNow { get; set; }
 
 
-        public GhSolarSystem()
+        public GhEnergySystem()
           : base("Hive.IO.SolarTech", "HiveIOSolar", "Hive.IO Solar Energy Systems Technologies." +
                 "\nThe component opens a Form upon double click, where details of the solar energy system can be specified." +
                 "\nPossible technologies are Photovoltaic (PV), Solar Thermal (ST), hybrid PVT, or Ground Collector (GC).", "[hive]", "IO") { indexNow = 0; }
@@ -50,7 +50,7 @@ namespace Hive.IO.GHComponents
 
             public override GH_ObjectResponse RespondToMouseDoubleClick(GH_Canvas sender, GH_CanvasMouseEvent e)
             {
-                (Owner as GhSolarSystem)?.DisplayForm();
+                (Owner as GhEnergySystem)?.DisplayForm();
                 return GH_ObjectResponse.Handled;
             }
         }
