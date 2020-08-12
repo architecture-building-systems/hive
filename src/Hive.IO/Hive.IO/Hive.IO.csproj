@@ -70,10 +70,12 @@
     <Compile Include="Building\BuildingComponents.cs" />
     <Compile Include="Building\BuildingConstruction.cs" />
     <Compile Include="Building\BuildingMaterial.cs" />
+    <Compile Include="EnergySystems\CombustionTech.cs" />
     <Compile Include="EnergySystems\EnergyCarrier.cs" />
     <Compile Include="EnergySystems\Emitter.cs" />
     <Compile Include="EnergySystems\Lighting.cs" />
     <Compile Include="EnergySystems\Storage.cs" />
+    <Compile Include="EnergySystems\SurfaceBasedTech.cs" />
     <Compile Include="EnergySystems\Ventilation.cs" />
     <Compile Include="GHComponents\GhDistributorConversionTech.cs" />
     <Compile Include="GHComponents\GhDistributorEPW.cs" />

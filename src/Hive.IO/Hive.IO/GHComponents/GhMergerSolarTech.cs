@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-
+using System.Reflection;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
@@ -28,10 +28,10 @@ namespace Hive.IO.GHComponents
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("GHSolarResults", "GHSolarResults", "Solar potential results from GHSolar (https://github.com/christophwaibel/GH_Solar_V2) yearly hourly simulations", GH_ParamAccess.list);
-            pManager.AddGenericParameter("SolarTech", "SolarTech", "Hive.IO.EnergySystems.SurfaceBasedTech, such as PV, PVT, Solar Thermal, Ground Collector", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Air", "Air", "Hive.IO.EnergySystems.Air carrier, containing ambient air temperature", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Emitter", "Emitter", "Hive.IO.EnergySystems.Emitter, containing information about return water temperature (for thermal technologies ST, PVT and GC)", GH_ParamAccess.item);
-            pManager.AddTextParameter("TimeResolution", "TimeResolution", "Time resolution, either 'hourly', or 'monthly'. Default is 'monthly'", GH_ParamAccess.item, "monthly");
+            //pManager.AddGenericParameter("SolarTech", "SolarTech", "Hive.IO.EnergySystems.SurfaceBasedTech, such as PV, PVT, Solar Thermal, Ground Collector", GH_ParamAccess.list);
+            //pManager.AddGenericParameter("Air", "Air", "Hive.IO.EnergySystems.Air carrier, containing ambient air temperature", GH_ParamAccess.item);
+            //pManager.AddGenericParameter("Emitter", "Emitter", "Hive.IO.EnergySystems.Emitter, containing information about return water temperature (for thermal technologies ST, PVT and GC)", GH_ParamAccess.item);
+            //pManager.AddTextParameter("TimeResolution", "TimeResolution", "Time resolution, either 'hourly', or 'monthly'. Default is 'monthly'", GH_ParamAccess.item, "monthly");
         }
 
         /// <summary>
@@ -48,6 +48,17 @@ namespace Hive.IO.GHComponents
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            string assemblyPath = @"C:\Users\chwaibel\AppData\Roaming\Grasshopper\Libraries\GHSolar.gha";
+            var asm = Assembly.LoadFrom(assemblyPath);
+            //Type [] types = asm.GetTypes();
+            Type type = asm.GetType("GHSolar.CResults");
+            //var instance = Activator.CreateInstance(type);
+
+            List<object> cResults = new List<object>();
+            DA.GetDataList(0, cResults);
+
+
+            //GHSolar.CResults result1 = (GHSolar.CResults)cResults[0];
 
         }
 
