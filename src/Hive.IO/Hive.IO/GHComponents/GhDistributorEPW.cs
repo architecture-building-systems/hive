@@ -6,12 +6,13 @@ namespace Hive.IO.GHComponents
     public class GhDistributorEPW : GH_Component
     {
         public GhDistributorEPW()
-          : base("Hive.IO.DistributorEPW", "HiveIODistrEPW",
+          : base("Distributor EPW Hive", "HiveDistEPW",
               "Weather file (.epw) distributor. Reads in an Hive.IO.Environment object and outputs the filepath of the .epw",
-              "[hive]", "Mothercell")
+              "[hive]", "IO")
         {
         }
 
+        public override GH_Exposure Exposure => GH_Exposure.quarternary;
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {

@@ -14,11 +14,15 @@ namespace Hive.IO.GHComponents
         /// Initializes a new instance of the GhMergerHeatPump class.
         /// </summary>
         public GhMergerHeatPump()
-          : base("GhMergerHeatPump", "Nickname",
+          : base("Merger AirSourceHeatPump Hive", "HiveMergerASHP",
               "Description",
-              "[hive]", "Core.Mergers")
+              "[hive]", "IO")
         {
         }
+
+
+        public override GH_Exposure Exposure => GH_Exposure.quinary;
+
 
         /// <summary>
         /// Registers all the input parameters for this component.

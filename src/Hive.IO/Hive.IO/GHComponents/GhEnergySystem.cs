@@ -23,7 +23,7 @@ namespace Hive.IO.GHComponents
 
 
         public GhEnergySystem()
-          : base("Hive.IO.EnergySystems", "EnergySystems", "Hive.IO.EnergySystems input component (solar energy systems, other conversion technologies, emitters)." +
+          : base("Input EnergySystems Hive", "HiveInputEnergySystems", "Hive.IO.EnergySystems input component (solar energy systems, other conversion technologies, emitters)." +
                 "\nThe component opens a Form upon double click, where details of the solar energy system can be specified." +
                 "\nPossible technologies are Photovoltaic (PV), Solar Thermal (ST), hybrid PVT, or Ground Collector (GC).", "[hive]", "IO") { indexNow = 0; }
 

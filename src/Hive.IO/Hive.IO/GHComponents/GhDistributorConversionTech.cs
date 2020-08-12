@@ -11,11 +11,15 @@ namespace Hive.IO.GHComponents
     public class GhDistributorConversionTech : GH_Component
     {
         public GhDistributorConversionTech()
-          : base("DistributorConversionTech", "Nickname",
-              "Description",
-              "[hive]", "Mothercell")
+          : base("Distributor ConversionTech Hive", "HiveDistConversionTech",
+              "Distributor for Hive.IO.EnergySystems.ConversionTech",
+              "[hive]", "IO")
         {
         }
+
+
+        public override GH_Exposure Exposure => GH_Exposure.quarternary;
+
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {

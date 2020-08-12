@@ -10,11 +10,14 @@ namespace Hive.IO.GHComponents
     public class GhDistributor : GH_Component
     {
         public GhDistributor()
-          : base("Hive.IO.Distributor", "HiveIODistr",
+          : base("Main Distributor Hive", "HiveDistributor",
               "The Hive.IO.Distributor collects all Hive Inputs from outside the Mothercell (the simulation core) and outputs them individually according to their class type, ready for deployment.",
-              "[hive]", "Mothercell")
+              "[hive]", "IO")
         {
         }
+
+        public override GH_Exposure Exposure => GH_Exposure.quarternary;
+
 
         /// <summary>
         /// Takes ALL Hive Input objects (e.g. Hive.IO.PV, Hive.IO.Building, etc.)

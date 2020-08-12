@@ -13,11 +13,13 @@ namespace Hive.IO.GHComponents
     {
 
         public GhResults()
-          : base("Hive.IO.Results", "HiveIOResults",
+          : base("Results Hive", "HiveResults",
               "Hive.IO.Results object, containing results of all simulations run within the Mothercell.",
-              "[hive]", "Mothercell")
+              "[hive]", "IO")
         {
         }
+
+        public override GH_Exposure Exposure => GH_Exposure.senary;
 
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
@@ -206,7 +208,7 @@ namespace Hive.IO.GHComponents
             DA.SetData(0, results);
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.secondary;
+
 
 
         protected override System.Drawing.Bitmap Icon

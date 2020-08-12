@@ -8,8 +8,8 @@ namespace Hive.IO.GHComponents
     public class GhEnvironment : GH_Component
     {
         public GhEnvironment()
-          : base("Hive.IO.Environment", "Hive.IO.Env",
-              "Creates an instance of the Hive.IO.Environment class, describing the environment of a building.",
+          : base("Input Environment Hive", "HiveInputEnvironment",
+              "Hive.IO.Environment input, describing the environment of a building.",
               "[hive]", "IO")
         {
         }

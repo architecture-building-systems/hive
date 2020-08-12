@@ -25,7 +25,7 @@ namespace Hive.IO.GHComponents
         /// Initializes a new instance of the GhParametricInputSolarSystems class.
         /// </summary>
         public GhParametricInputSolarSystems()
-          : base("GhParametricInputSolarSystems", "Nickname",
+          : base("Parametric Input SolarTech Hive", "HiveParaInSolarTech",
               "Description",
               "[hive]", "IO")
         {
