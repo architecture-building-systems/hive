@@ -42,15 +42,43 @@ namespace Hive.IO.EnergySystems
 
     public class Chiller : ConversionTech
     {
-        public Chiller(double investmentCost, double embodiedGhg, double capacity) 
+        /// <summary>
+        /// Ambient air carrier. This will influence COP of the Chiller
+        /// </summary>
+        public Air AmbientAir { get; private set; }
+        public double COP { get; private set; }
+        public Chiller(double investmentCost, double embodiedGhg, double capacity, double COP) 
             : base(investmentCost, embodiedGhg, capacity, "kW", false, true, false)
         {
+            this.COP = COP;
+            base.Name = "Chiller";
         }
 
 
-        public double[] SetConversionEfficiencyCooling()
+        /// <summary>
+        /// inputs from Hive.IO.Environment. But electricity also needs information on quantity... form Core simulator? 
+        /// </summary>
+        /// <param name="ambientAir"></param>
+        /// <param name="electricity"></param>
+        public void SetInput(Air ambientAir, Electricity electricity)
         {
-            return new double[]{};
+            this.AmbientAir = ambientAir;
+            base.InputCarrier = electricity;
+        }
+
+
+        /// <summary>
+        /// parameters from a simulator in Hive.IO.Core
+        /// </summary>
+        /// <param name="horizon"></param>
+        /// <param name="availableEnergy"></param>
+        /// <param name="energyCost"></param>
+        /// <param name="ghgEmissions"></param>
+        /// <param name="supplyTemperature"></param>
+        public void SetOutput(int horizon, double[] availableEnergy, double[] energyCost, double[] ghgEmissions, double[] supplyTemperature)
+        {
+            base.OutputCarriers = new EnergyCarrier[1];
+            base.OutputCarriers[0] = new Water(horizon, availableEnergy, energyCost, ghgEmissions, supplyTemperature);
         }
     }
 
