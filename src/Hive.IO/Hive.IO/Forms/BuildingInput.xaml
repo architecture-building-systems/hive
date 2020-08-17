@@ -32,8 +32,9 @@
                      VerticalAlignment="Bottom" BorderThickness="0" Margin="10,0,10,10">
                 Changing building quality and use types will impact the envelop, internal gains and ventilation parameters
             </TextBox>
-            <GroupBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Header="Envelope and set-points">
-                <Grid>
+                <Grid Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2">
+                <GroupBox Name="GeometryAndSetPoints" Header="">
+                    <Grid>
                     <Grid.RowDefinitions>
                         <RowDefinition Height="Auto"></RowDefinition>
                         <RowDefinition Height="Auto"></RowDefinition>
@@ -63,6 +64,17 @@
                     <TextBox Name="CoolingSetPoint" Grid.Row="2" Grid.Column="3">26</TextBox>
                 </Grid>
             </GroupBox>
+                    <!-- hide empty header space hack -->
+                    <GroupBox Header="" Focusable="False" Panel.ZIndex="-1" 
+                              Width="{Binding ActualWidth, ElementName=GeometryAndSetPoints}" 
+                              Height="{Binding ActualHeight, ElementName=GeometryAndSetPoints}" 
+                              IsEnabled="{Binding IsEnabled, ElementName=GeometryAndSetPoints}"
+                              RenderTransformOrigin="0.5,0.5">
+                        <GroupBox.RenderTransform>
+                            <ScaleTransform ScaleX="-1"/>
+                        </GroupBox.RenderTransform>
+                    </GroupBox>
+                </Grid>
             </Grid>
         </TabItem>
         <TabItem Header="ENV">more text</TabItem>
