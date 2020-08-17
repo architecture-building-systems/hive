@@ -70,10 +70,7 @@ namespace Hive.IO.EnergySystems
                     _monthlySupplyTemperature = GetAverageMonthlyValue(this.SupplyTemperature);
                 return _monthlySupplyTemperature;
             }
-            private set
-            {
-                _monthlySupplyTemperature = GetAverageMonthlyValue(this.SupplyTemperature);
-            }
+            private set { ; }
         }
 
     }
@@ -86,6 +83,7 @@ namespace Hive.IO.EnergySystems
     {
         public Electricity(int horizon, double[] availableElectricity, double[] energyCost, double[] ghgEmissions)
             : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, availableElectricity, energyCost, ghgEmissions) { }
+
     }
 
 
@@ -193,6 +191,31 @@ namespace Hive.IO.EnergySystems
         }
 
 
+        private double[] _monthlyCumulativeEnergy = null;
+        public double[] MonthlyCumulativeEnergy
+        {
+            get
+            {
+                if (_monthlyCumulativeEnergy == null)
+                    _monthlyCumulativeEnergy = GetCumulativeMonthlyValue(this.AvailableEnergy);
+                return _monthlyCumulativeEnergy;
+            }
+            private set { ; }
+        }
+
+        private double[] _monthlyAverageEnergy = null;
+        public double [] MonthlyAverageEnergy
+        {
+            get
+            {
+                if (_monthlyAverageEnergy == null)
+                    _monthlyAverageEnergy = GetAverageMonthlyValue(this.AvailableEnergy);
+                return _monthlyAverageEnergy;
+            }
+            private set { ; }
+        }
+
+
         public static double[] GetAverageMonthlyValue(double[] annualTimeSeries)
         {
 
@@ -214,6 +237,29 @@ namespace Hive.IO.EnergySystems
                 average /= (daysThisMonth * Misc.HoursPerDay);
                 //double average = Enumerable.Range(startIndex, endIndex).Select(i => annualTimeSeries[i]).Average();
                 monthlyTimeSeries[t] = average;
+            }
+
+            return monthlyTimeSeries;
+        }
+
+
+        public static double[] GetCumulativeMonthlyValue(double[] annualTimeSeries)
+        {
+            int months = 12;
+            double[] monthlyTimeSeries = new double[months];
+            int sumOfDays = 0;
+            for (int t = 0; t < months; t++)
+            {
+                int startIndex = sumOfDays * Misc.HoursPerDay;
+                int daysThisMonth = Misc.DaysPerMonth[t];
+                sumOfDays += daysThisMonth;
+                int endIndex = sumOfDays * Misc.HoursPerDay;
+                double sum = 0.0;
+                for (int i=startIndex; i<endIndex; i++)
+                {
+                    sum += annualTimeSeries[i];
+                }
+                monthlyTimeSeries[t] = sum;
             }
 
             return monthlyTimeSeries;

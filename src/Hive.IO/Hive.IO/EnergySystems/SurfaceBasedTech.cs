@@ -19,6 +19,12 @@ namespace Hive.IO.EnergySystems
         /// </summary>
         public double SurfaceArea { get; private set; }
 
+        /// <summary>
+        /// Ambient Air temperature, required for efficiency calculations
+        /// </summary>
+        public Air AmbientAir { get; protected set; }
+
+
         protected SurfaceBasedTech(double investmentCost, double embodiedGhg, bool isHeating, bool isCooling, bool isElectric, Mesh surfaceGeometry)
             : base(investmentCost, embodiedGhg, 0.0, "undefined", isHeating, isCooling, isElectric)
         {
@@ -27,6 +33,12 @@ namespace Hive.IO.EnergySystems
         }
 
 
+        /// <summary>
+        /// Computes the mean hourly irradiance per mesh face, taking values from the mesh face vertices
+        /// </summary>
+        /// <param name="hourlyIrradiance"></param>
+        /// <param name="surfaceTech"></param>
+        /// <returns></returns>
         protected static double[] ComputeMeanHourlyEnergy(Matrix hourlyIrradiance, SurfaceBasedTech surfaceTech)
         {
             Mesh mesh = surfaceTech.SurfaceGeometry;
@@ -61,6 +73,10 @@ namespace Hive.IO.EnergySystems
                     totalIrradiance += faceIrradiance;
                 }
                 meanIrradiance[t] = totalIrradiance / surfaceArea;
+                if(meanIrradiance[t] < 0.0)
+                {
+                    Console.Write("hey");
+                }
             }
 
             // source: http://james-ramsden.com/area-of-a-mesh-face-in-c-in-grasshopper/
@@ -183,6 +199,7 @@ namespace Hive.IO.EnergySystems
             double[] ghgEmissions = new double[horizon];
             double[] meanIrradiance = SurfaceBasedTech.ComputeMeanHourlyEnergy(irradiance, this);
             base.InputCarrier = new Radiation(horizon, meanIrradiance);
+            base.AmbientAir = new Air(horizon, ambientTemp);
 
             // compute pv electricity yield
             for (int t = 0; t < horizon; t++)
@@ -334,6 +351,8 @@ namespace Hive.IO.EnergySystems
         {
             int horizon = 8760;
             this.InletWater = inletWaterCarrier;
+
+            base.AmbientAir = ambientAirCarrier;
 
             double[] meanIrradiance = SurfaceBasedTech.ComputeMeanHourlyEnergy(irradiance, this);
             Radiation solarCarrier = new Radiation(horizon, meanIrradiance);
