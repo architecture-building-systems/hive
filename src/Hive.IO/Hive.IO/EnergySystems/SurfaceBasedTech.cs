@@ -73,10 +73,6 @@ namespace Hive.IO.EnergySystems
                     totalIrradiance += faceIrradiance;
                 }
                 meanIrradiance[t] = totalIrradiance / surfaceArea;
-                if(meanIrradiance[t] < 0.0)
-                {
-                    Console.Write("hey");
-                }
             }
 
             // source: http://james-ramsden.com/area-of-a-mesh-face-in-c-in-grasshopper/
