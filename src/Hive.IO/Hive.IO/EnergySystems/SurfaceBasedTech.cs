@@ -72,7 +72,11 @@ namespace Hive.IO.EnergySystems
 
                     totalIrradiance += faceIrradiance;
                 }
-                meanIrradiance[t] = totalIrradiance / surfaceArea;
+
+                double temp = totalIrradiance / surfaceArea;
+                if (double.IsNaN(temp))
+                    temp = 0.0;
+                meanIrradiance[t] = temp;
             }
 
             // source: http://james-ramsden.com/area-of-a-mesh-face-in-c-in-grasshopper/
@@ -322,7 +326,10 @@ namespace Hive.IO.EnergySystems
             base.OutputCarriers = new EnergyCarrier[1];
             double[] availableEnergy = new double[8760];
             for (int t = 0; t < horizon; t++)
-                availableEnergy[t] = solarCarrier.AvailableEnergy[t] * this.SurfaceArea * this.RefEfficiencyHeating * this.R_V / 1000.0; // in kWh/m^2
+            {
+                double temp = solarCarrier.AvailableEnergy[t] * this.SurfaceArea * this.RefEfficiencyHeating * this.R_V / 1000.0; // in kWh/m^2
+                availableEnergy[t] = double.IsNaN(temp) ? 0.0 : temp;
+            }
 
             // all zero, because renewable energy
             double[] energyCost = new double[8760];
@@ -359,7 +366,8 @@ namespace Hive.IO.EnergySystems
             for (int t = 0; t < horizon; t++)
             {
                 double etaTemp = Math.Max(0, this.FRtauAlpha - ((this.FRUL * (inletWaterCarrier.SupplyTemperature[t] - ambientAirCarrier.AvailableEnergy[t])) / meanIrradiance[t]));
-                availableEnergy[t] = meanIrradiance[t] * etaTemp * this.SurfaceArea / 1000.0;
+                double temp = meanIrradiance[t] * etaTemp * this.SurfaceArea / 1000.0;
+                availableEnergy[t] = double.IsNaN(temp) ? 0.0 : temp;
             }
 
             // zeros, because renewable energy and because equation doesnt calc output temperature

@@ -1,6 +1,7 @@
 ﻿using System.Runtime.InteropServices;
 using Grasshopper.GUI;
 using System.Linq;
+using Rhino.Render;
 
 namespace Hive.IO.EnergySystems
 {
@@ -231,7 +232,10 @@ namespace Hive.IO.EnergySystems
                 double average = 0.0;
                 for (int i = startIndex; i < endIndex; i++)
                 {
-                    average += annualTimeSeries[i];
+                    double temp = annualTimeSeries[i];
+                    if (double.IsNaN(temp))
+                        temp = 0.0;
+                    average += temp;
                 }
 
                 average /= (daysThisMonth * Misc.HoursPerDay);
@@ -257,7 +261,10 @@ namespace Hive.IO.EnergySystems
                 double sum = 0.0;
                 for (int i=startIndex; i<endIndex; i++)
                 {
-                    sum += annualTimeSeries[i];
+                    double temp = annualTimeSeries[i];
+                    if (double.IsNaN(temp))
+                        temp = 0.0;
+                    sum += temp;
                 }
                 monthlyTimeSeries[t] = sum;
             }
