@@ -3,51 +3,70 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="hizard | Building"
     x:Class="Hive.IO.Forms.BuildingInput"
-    Width="586.228" Height="287.924" WindowStyle="None">
-    <Window.Resources>
-        <Style x:Key="hizardPanel" TargetType="TabPanel">
-            <Setter Property="Background" Value="Black"></Setter>
-            <Setter Property="HorizontalAlignment" Value="Right"></Setter>
-            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True"></Setter>
-        </Style>
-        <Style x:Key="hizardTabControl" TargetType="TabControl">
-            <Setter Property="OverridesDefaultStyle" Value="True"></Setter>
-            <Setter Property="SnapsToDevicePixels" Value="True" />
-            <Setter Property="WindowChrome.IsHitTestVisibleInChrome" Value="True"></Setter>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="{x:Type TabControl}">
-                        <Grid KeyboardNavigation.TabNavigation="Local">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="*" />
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"></ColumnDefinition>
-                                <ColumnDefinition Width="Auto"></ColumnDefinition>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Background="Black" Foreground="White" FontWeight="Bold" Margin="-4,-4,-4,-4">hizard | Building</TextBlock>
-                            <TabPanel Name="HeaderPanel"
-                                      Grid.Row="0"
-                                      Grid.Column="1"
-                                      Panel.ZIndex="1" 
-                                      Margin="1,0,4,-1" 
-                                      IsItemsHost="True"
-                                      KeyboardNavigation.TabIndex="1"
-                                      HorizontalAlignment="Right"/>
-                        </Grid>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-    </Window.Resources>
-    <TabControl Style="{StaticResource hizardTabControl}">
-            <TabItem Header="SIA">text</TabItem>
-                <TabItem Header="ENV">more text</TabItem>
-                <TabItem Header="IG">much more text</TabItem>
-                <TabItem Header="VEN">when is this ever going to stop?</TabItem>
-                <TabItem Header="X" MouseUp="ButtonX_OnClick">
-                    you shouldn't be seeing this...
-                </TabItem>
-        </TabControl>
+    Width="448.628" Height="430.124" WindowStyle="ToolWindow">
+    <TabControl>
+        <TabItem Header="SIA">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition></ColumnDefinition>
+                    <ColumnDefinition></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+
+                <Label Grid.Row="0" Grid.Column="0" FontWeight="Bold">Building use type</Label>
+                <ComboBox Name="BuildingUseType" Grid.Row="1" Grid.Column="0"></ComboBox>
+                <Label Grid.Row="0" Grid.Column="1" FontWeight="Bold">Zone</Label>
+                <ComboBox Name="Zone" Grid.Row="1" Grid.Column="1"></ComboBox>
+                <Label Grid.Row="2" Grid.Column="0" FontWeight="Bold">Building quality</Label>
+                <ComboBox Name="BuildingQuality" Grid.Row="3" Grid.Column="0"></ComboBox>
+
+            <TextBox Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="WrapWithOverflow" 
+                     HorizontalAlignment="Center" Width="Auto" TextAlignment="Center" 
+                     VerticalAlignment="Bottom" BorderThickness="0" Margin="10,0,10,10">
+                Changing building quality and use types will impact the envelop, internal gains and ventilation parameters
+            </TextBox>
+            <GroupBox Grid.Row="5" Grid.Column="0" Grid.ColumnSpan="2" Header="Envelope and set-points">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        <RowDefinition></RowDefinition>
+                        </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" FontWeight="Bold">Geometry</Label>
+                    <Label Grid.Row="1" Grid.Column="0">Floor Area (m²)</Label>
+                    <TextBox Name="FloorArea" Grid.Row="1" Grid.Column="1">10.3</TextBox>
+                    <Label Grid.Row="2" Grid.Column="0">Wall Area (m²)</Label>
+                    <TextBox Name="WallArea" Grid.Row="2" Grid.Column="1">37.2</TextBox>
+                    <Label Grid.Row="3" Grid.Column="0">Win Area (m²)</Label>
+                    <TextBox Name="WindowArea" Grid.Row="3" Grid.Column="1">6.0</TextBox>
+                    <Label Grid.Row="4" Grid.Column="0">Roof Area (m²)</Label>
+                    <TextBox Name="RoofArea" Grid.Row="4" Grid.Column="1">10.3</TextBox>
+                    <Label Grid.Row="0" Grid.Column="2" FontWeight="Bold">Set-points</Label>
+                    <Label Grid.Row="1" Grid.Column="2">Heating</Label>
+                    <TextBox Name="HeatingSetPoint" Grid.Row="1" Grid.Column="3">20</TextBox>
+                    <Label Grid.Row="2" Grid.Column="2">Cooling</Label>
+                    <TextBox Name="CoolingSetPoint" Grid.Row="2" Grid.Column="3">26</TextBox>
+                </Grid>
+            </GroupBox>
+            </Grid>
+        </TabItem>
+        <TabItem Header="ENV">more text</TabItem>
+        <TabItem Header="IG">much more text</TabItem>
+        <TabItem Header="VEN">when is this ever going to stop?</TabItem>
+    </TabControl>
 </Window>
