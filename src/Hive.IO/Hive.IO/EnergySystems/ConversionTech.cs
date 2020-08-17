@@ -59,6 +59,18 @@ namespace Hive.IO.EnergySystems
         }
     }
 
+
+    public class AirSourceHeatPump : ConversionTech
+    {
+        public double COP { get; private set; }
+        public AirSourceHeatPump(double investmentCost, double embodiedGhg, double capacity, double COP)
+            : base(investmentCost, embodiedGhg, capacity, "kW", true, false, false) 
+        {
+            this.COP = COP;
+            base.Name = "AirSourceHeatPump";
+        }
+    }
+
     #endregion
 
 
@@ -486,9 +498,12 @@ namespace Hive.IO.EnergySystems
 
     public class GasBoiler : CombustionTech
     {
-        public GasBoiler(double investmentCost, double embodiedGhg, double capacity) 
+        public double Efficiency { get; private set; }
+        public GasBoiler(double investmentCost, double embodiedGhg, double capacity, double efficiency) 
             : base(investmentCost, embodiedGhg, capacity, true, false)
         {
+            this.Efficiency = efficiency;
+            base.Name = "GasBoiler";
         }
 
 
@@ -503,9 +518,13 @@ namespace Hive.IO.EnergySystems
 
     public class CombinedHeatPower : CombustionTech
     {
-        public CombinedHeatPower(double investmentCost, double embodiedGhg, double capacityElectric, double powerToHeatRatio) 
+        public double HeatToPowerRatio { get; private set; }
+        public double ElectricEfficiency { get; private set; }
+        public CombinedHeatPower(double investmentCost, double embodiedGhg, double capacityElectric, double heatToPowerRatio, double electricEfficiency) 
             : base(investmentCost, embodiedGhg, capacityElectric, true, true)
         {
+            this.HeatToPowerRatio = heatToPowerRatio;
+            this.ElectricEfficiency = electricEfficiency;
             base.Name = "CombinedHeatPower";
         }
 

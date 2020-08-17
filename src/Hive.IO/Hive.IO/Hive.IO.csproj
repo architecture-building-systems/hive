@@ -32,6 +32,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    </Reference>
     <Reference Include="OxyPlot, Version=2.0.0.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
       <HintPath>..\packages\OxyPlot.Core.2.0.0\lib\net45\OxyPlot.dll</HintPath>
     </Reference>
@@ -83,8 +86,11 @@
     <Compile Include="GHComponents\GhDistributorSIA.cs" />
     <Compile Include="GHComponents\GhDistributorSolar.cs" />
     <Compile Include="GHComponents\GhDistributorSupplySystem.cs" />
-    <Compile Include="GHComponents\GhEmitter.cs" />
+    <Compile Include="GHComponents\GhParametricInputEmitter.cs" />
     <Compile Include="GHComponents\GhEnvironment.cs" />
+    <Compile Include="GHComponents\GhParametricInputEnergySystems.cs" />
+    <Compile Include="GHComponents\GhParametricInputSIARoom.cs" />
+    <Compile Include="GHComponents\GhParametricInputSolarSystems.cs" />
     <Compile Include="GHComponents\GhResults.cs" />
     <Compile Include="GHComponents\GhVisualizer.cs" />
     <Compile Include="Environment\Environment.cs" />
@@ -104,7 +110,7 @@
     <Compile Include="GHComponents\GhDistributor.cs" />
     <Compile Include="GHComponents\GhVisualizerAttributes.cs" />
     <Compile Include="GHComponents\HiveIOInfo.cs" />
-    <Compile Include="GHComponents\GHSolarSystem.cs" />
+    <Compile Include="GHComponents\GhEnergySystem.cs" />
     <Compile Include="Plots\AmrPlotBase.cs" />
     <Compile Include="Plots\AmrPlotStyle.cs" />
     <Compile Include="Plots\DemandMonthlyNormalizedPlot.cs" />
