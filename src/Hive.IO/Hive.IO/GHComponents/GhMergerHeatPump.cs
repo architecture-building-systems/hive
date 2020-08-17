@@ -35,7 +35,7 @@ namespace Hive.IO.GHComponents
             pManager.AddNumberParameter("heatGenerated", "heatGenerated", "heatGenerated (kWh)", GH_ParamAccess.list);
             pManager.AddNumberParameter("cost", "cost", "cost", GH_ParamAccess.list);
             pManager.AddNumberParameter("ghg", "ghg", "ghg", GH_ParamAccess.list);
-            pManager.AddNumberParameter("suppTemp", "suppTemp", "suppTemp for water output. necessary to know for COP calculation (?) but only if the calculation would happen here in Hive.IO", GH_ParamAccess.list);
+            pManager.AddNumberParameter("suppTemp", "suppTemp", "suppTemp for water output. necessary to know for COP calculation", GH_ParamAccess.list);
 
             pManager.AddGenericParameter("ASHP", "ASHP", "ASHP", GH_ParamAccess.item);
         }

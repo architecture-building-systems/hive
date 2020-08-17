@@ -89,24 +89,12 @@ namespace Hive.IO.EnergySystems
 
 
     /// <summary>
-    /// BioGas. Availability might be limited
+    /// Gas (natural gas or biogas)
     /// </summary>
-    public class BioGas : EnergyCarrier
+    public class Gas : EnergyCarrier
     {
-        public BioGas(int horizon, double[] availableBiogas, double[] energyCost, double[] ghgEmissions)
-            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, availableBiogas, energyCost, ghgEmissions)
-        {
-        }
-    }
-
-
-    /// <summary>
-    /// 
-    /// </summary>
-    public class NaturalGas : EnergyCarrier
-    {
-        public NaturalGas(int horizon, double[] availableBiogas, double[] energyCost, double[] ghgEmissions)
-            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, availableBiogas, energyCost, ghgEmissions)
+        public Gas(int horizon, double[] availableGas, double[] energyCost, double[] ghgEmissions)
+            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, availableGas, energyCost, ghgEmissions)
         {
         }
     }
