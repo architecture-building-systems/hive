@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
+using Hive.IO.EnergySystems;
 
 namespace Hive.IO.GHComponents
 {
@@ -20,6 +21,8 @@ namespace Hive.IO.GHComponents
             pManager.AddTextParameter("EPW Path", "epwPath", "epwPath", GH_ParamAccess.item);
             pManager.AddMeshParameter("Obstacles Geometry", "ObstMesh", "Mesh geometries of any adjacent obstacles, such as buildings, trees, etc.", GH_ParamAccess.list);
             pManager[1].Optional = true;
+            pManager.AddGenericParameter("Potentials", "Potentials", "Energy potentials of the site, of type <EnergyPotentialsProperties>.", GH_ParamAccess.item);
+            pManager[2].Optional = true;
         }
 
 
@@ -38,6 +41,19 @@ namespace Hive.IO.GHComponents
 
             Mesh[] geometryArray = geometry.Count > 0 ? geometry.ToArray() : null;
             Environment.Environment environment = new Environment.Environment(path, geometryArray);
+
+            var maxAvailability = new double[Misc.HoursPerYear];
+            for (int i=0; i<maxAvailability.Length; i++)
+                maxAvailability[i] = double.MaxValue;
+
+            var gasCost = new double[Misc.HoursPerYear];
+            var gasEmissions = new double[Misc.HoursPerYear];
+
+            var gas = new Gas(Misc.HoursPerDay, maxAvailability, gasCost, gasEmissions);
+            var inputCarriers = new EnergyCarrier[1];
+
+            environment.SetEnergyPotentials(null);
+
             DA.SetData(0, environment);
         }
 

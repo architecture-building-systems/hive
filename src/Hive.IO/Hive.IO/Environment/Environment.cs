@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using rg = Rhino.Geometry;
+using Hive.IO.EnergySystems;
 
 namespace Hive.IO.Environment
 {
@@ -20,6 +21,12 @@ namespace Hive.IO.Environment
         public string EpwPath { get; private set; }
 
         public rg.Mesh[] Geometry { get; private set; }
+
+        /// <summary>
+        /// Irradiation, ambient air, etc.
+        /// </summary>
+        public EnergyCarrier [] EnergyPotentials { get; private set; }
+
 
         public Environment(string epwFilePath, rg.Mesh [] geometry = null)
         {
@@ -51,9 +58,10 @@ namespace Hive.IO.Environment
 
         // setting all inpuit energy carriers as part of Hive.IO.Environment
         // gas, oil, biogas, wood, district heating, electricity grid, etc.
-        private void SetGasGrid()
+        internal void SetEnergyPotentials(EnergyCarrier [] inputCarriers)
         {
-
+            this.EnergyPotentials = new EnergyCarrier[inputCarriers.Length];
+            inputCarriers.CopyTo(this.EnergyPotentials, 0);
         }
 
 

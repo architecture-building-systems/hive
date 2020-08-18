@@ -33,7 +33,17 @@ namespace Hive.IO.EnergySystems
         /// </summary>
         public double[] Irradiance { get; }
 
-        public Radiation(int horizon, double[] irradiation, double surfaceArea = 1, int? vertexId = null)
+        public enum RadiationType
+        {
+            GHI,
+            DNI,
+            DHI
+        }
+
+        public RadiationType Description { get; private set; }
+
+
+        public Radiation(int horizon, double[] irradiation, double surfaceArea = 1, int? vertexId = null, RadiationType radiationType = RadiationType.GHI)
             : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, irradiation, null, null)
         {
             this.Irradiance = new double[irradiation.Length];
@@ -42,6 +52,10 @@ namespace Hive.IO.EnergySystems
 
             if (vertexId.HasValue)
                 this.MeshVertexId = vertexId;
+
+            if (radiationType != RadiationType.GHI)
+                this.Description = radiationType;
+
         }
     }
 

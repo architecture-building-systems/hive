@@ -13,5 +13,6 @@ namespace Hive.IO
         /// </summary>
         public static readonly int[] DaysPerMonth = new int[12] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
         public const int HoursPerDay = 24;
+        public const int HoursPerYear = 8760;
     }
 }
