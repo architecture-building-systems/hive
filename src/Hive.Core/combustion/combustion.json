@@ -24,6 +24,7 @@
         {"type": "float", "name": "efficiency", "nick-name": "eta", "description": "Efficiency of boiler [-]"}
       ],
       "outputs": [
+        {"type": "float", "name": "gas_consumed", "nick-name": "gas", "description": "Total gas consumed [kWh eq.]"},
         {"type": "float", "name": "cost", "nick-name": "cost", "description": "Total operation cost [CHF]"},
         {"type": "float", "name": "carbon", "nick-name": "carbon", "description": "Total operation carbon emissions [kgCO2eq.]"}
       ]
@@ -46,6 +47,7 @@
         {"type": "float", "name": "efficiency", "nick-name": "eta", "description": "Efficiency of boiler, time resolved [-/h]. Could change depending on supply temp.", "access": "list"}
       ],
       "outputs": [
+        {"type": "float", "name": "gas_consumed", "nick-name": "gas", "description": "Total gas consumed [kWh eq.]"},
         {"type": "float", "name": "cost", "nick-name": "cost", "description": "Total operation cost [CHF/h]"},
         {"type": "float", "name": "carbon", "nick-name": "carbon", "description": "Total operation carbon emissions [kgCO2eq./h]"}
       ]

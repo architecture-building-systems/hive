@@ -24,7 +24,9 @@ def main(heating_loads, carrier_cost, carrier_emissions, eta):
 
     total_cost = [0] * horizon
     total_emissions = [0] * horizon
+    gas_consumed = [0] * horizon
     for t in range(horizon):
-        total_cost[t] = heating_loads[t] * eta[t] * carrier_cost[t]
-        total_emissions[t] = heating_loads[t] * eta[t] * carrier_emissions[t]
-    return total_cost, total_emissions
+        gas_consumed[t] = heating_loads[t] * eta[t]
+        total_cost[t] = gas_consumed[t] * carrier_cost[t]
+        total_emissions[t] = gas_consumed[t] * carrier_emissions[t]
+    return gas_consumed, total_cost, total_emissions
