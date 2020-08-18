@@ -194,7 +194,7 @@
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="Auto"></RowDefinition>
-                    <RowDefinition/>
+                    <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"></ColumnDefinition>
@@ -214,11 +214,38 @@
                 <TextBox Name="EquipmentLoadHours" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="10,0">1780</TextBox>
                 <TextBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="WrapWithOverflow" 
                          HorizontalAlignment="Center" Width="Auto" TextAlignment="Center" 
-                         VerticalAlignment="Bottom" BorderThickness="0" Margin="37,0,37.5,10">
+                         VerticalAlignment="Bottom" BorderThickness="0">
                     Explanatory text on what this tab contains
                 </TextBox>
             </Grid>
         </TabItem>
-        <TabItem Header="VEN">when is this ever going to stop?</TabItem>
+        <TabItem Header="VEN">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Label FontWeight="Bold">Volumetric air flow (m³/m²h)</Label>
+                <TextBox Name="VolumetricAirFlow" Grid.Row="1" Margin="10,0">3.6</TextBox>
+                <Label Grid.Row="2" FontWeight="Bold">Infiltration (m³/m²h)</Label>
+                <TextBox Name="Infiltration" Grid.Row="3" Margin="10,0">0.15</TextBox>
+                <Label Grid.Row="4" FontWeight="Bold">Heat recovery (-)</Label>
+                <TextBox Name="HeatRecovery" Grid.Row="5" Margin="10,0">0.8</TextBox>
+                <TextBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="WrapWithOverflow" 
+                         HorizontalAlignment="Center" Width="Auto" TextAlignment="Center" 
+                         VerticalAlignment="Bottom" BorderThickness="0">
+                    Explanatory text on what this tab contains
+                </TextBox>
+            </Grid>
+        </TabItem>
     </TabControl>
 </Window>
