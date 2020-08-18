@@ -39,15 +39,15 @@ def main(htg_or_elec, loads, eta, htp, fuel_cost, fuel_emissions):
     if htg_or_elec == "heating_in":
         htg_gen = loads
         for i in range(horizon):
-            elec_gen.append(htg_gen[i] * htp)
+            elec_gen.append(htg_gen[i] / htp)
     else:
         elec_gen = loads
         for i in range(horizon):
-            htg_gen.append(elec_gen[i] / htp)
+            htg_gen.append(elec_gen[i] * htp)
 
     for i in range(horizon):
         fuel.append(elec_gen[i] / eta)
         total_cost.append(fuel[i] * fuel_cost[i])
         total_carbon.append(fuel[i] * fuel_emissions[i])
 
-    return total_cost, total_carbon, htg_gen, elec_gen
+    return fuel, total_cost, total_carbon, htg_gen, elec_gen

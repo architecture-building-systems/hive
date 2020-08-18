@@ -66,12 +66,13 @@
       "inputs": [
         {"type": "string", "name": "htg_or_elec_in", "nick-name": "str", "description": "Heating or electricity in as loads? {'heating_in', 'elec_in'}. (default: 'heating_in')", "default": "heating_in"},
         {"type": "float", "name": "loads", "nick-name": "loads", "description": "Loads in [kWh]. Either heating or electricity loads that need to be supplied."},
-        {"type": "float", "name": "eta", "nick-name": "eta", "description": "Efficiency of CHP, i.e. from fuel into electricity [-]"},
-        {"type": "float", "name": "htp", "nick-name": "htp", "description": "Heat-to-power ratio, i.e. how much heat comes with generated electricity [-]"},
+        {"type": "float", "name": "eta", "nick-name": "eta", "description": "Electric efficiency of CHP, i.e. from fuel into electricity [-]"},
+        {"type": "float", "name": "htp", "nick-name": "htp", "description": "Heat-to-power ratio, i.e. how much heat comes with generated electricity [-]. E.g. htp=1.5 will yield in 1.5 kW heat for 1 kW elec"},
         {"type": "float", "name": "fuelcost", "nick-name": "cost", "description": "Fuel cost [CHF/kWh]"},
         {"type": "float", "name": "fuelemissions", "nick-name": "carbon", "description": "Fuel emissions [kgCO2/kWh]"}
       ],
       "outputs": [
+        {"type": "float", "name": "gas_consumed", "nick-name": "gas", "description": "Total gas consumed [kWh eq.]"},
         {"type": "float", "name": "total_cost", "nick-name": "cost", "description": "Total operation cost [CHF]"},
         {"type": "float", "name": "total_emissions", "nick-name": "carbon", "description": "Total carbon emissions from operation [kgCO2]"},
         {"type": "float", "name": "heating_gen", "nick-name": "htg_gen", "description": "Heating energy generated from CHP [kWh]"},
@@ -92,12 +93,13 @@
       "inputs": [
         {"type": "string", "name": "htg_or_elec_in", "nick-name": "str", "description": "Heating or electricity in as loads? {'heating_in', 'elec_in'}. (default: 'heating_in')", "default": "heating_in"},
         {"type": "float", "name": "loads", "nick-name": "loads", "description": "Loads in [kWh], time series. Either heating or electricity loads that need to be supplied.", "access": "list"},
-        {"type": "float", "name": "eta", "nick-name": "eta", "description": "Efficiency of CHP, i.e. from fuel into electricity [-]"},
-        {"type": "float", "name": "htp", "nick-name": "htp", "description": "Heat-to-power ratio, i.e. how much heat comes with generated electricity [-]"},
+        {"type": "float", "name": "eta", "nick-name": "eta", "description": "Electric efficiency of CHP, i.e. from fuel into electricity [-]"},
+        {"type": "float", "name": "htp", "nick-name": "htp", "description": "Heat-to-power ratio, i.e. how much heat comes with generated electricity [-]. E.g. htp=1.5 will yield in 1.5 kW heat for 1 kW elec"},
         {"type": "float", "name": "fuelcost", "nick-name": "cost", "description": "Fuel cost [CHF/kWh], time series", "access": "list"},
         {"type": "float", "name": "fuelemissions", "nick-name": "carbon", "description": "Fuel emissions [kgCO2/kWh], time series", "access": "list"}
       ],
       "outputs": [
+        {"type": "float", "name": "gas_consumed", "nick-name": "gas", "description": "Total gas consumed [kWh eq.]"},
         {"type": "float", "name": "total_cost", "nick-name": "cost", "description": "Time resolved operation cost [CHF]"},
         {"type": "float", "name": "total_emissions", "nick-name": "carbon", "description": "Time resolved carbon emissions from operation [kgCO2]"},
         {"type": "float", "name": "heating_gen", "nick-name": "htg_gen", "description": "Time resolved heating energy generated from CHP [kWh]"},

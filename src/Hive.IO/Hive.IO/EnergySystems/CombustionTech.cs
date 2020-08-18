@@ -43,14 +43,14 @@ namespace Hive.IO.EnergySystems
         /// all these parameters are computed externally, with some simulator within the Core
         /// </summary>
         /// <param name="horizon"></param>
-        /// <param name="availableEnergy"></param>
+        /// <param name="heatingGenerated"></param>
         /// <param name="energyCost"></param>
         /// <param name="ghgEmissions"></param>
         /// <param name="supplyTemperature"></param>
-        public void SetOutput(int horizon, double[] availableEnergy, double[] energyCost, double[] ghgEmissions, double[] supplyTemperature)
+        public void SetOutput(int horizon, double[] heatingGenerated, double[] energyCost, double[] ghgEmissions, double[] supplyTemperature)
         {
             base.OutputCarriers = new EnergyCarrier[1];
-            base.OutputCarriers[0] = new Water(horizon, availableEnergy, energyCost, ghgEmissions, supplyTemperature);
+            base.OutputCarriers[0] = new Water(horizon, heatingGenerated, energyCost, ghgEmissions, supplyTemperature);
         }
     }
 
@@ -77,6 +77,19 @@ namespace Hive.IO.EnergySystems
             return new double[] { };
         }
 
+
+        public void SetInput(Gas gasInput)
+        {
+            base.InputCarrier = gasInput;
+        }
+
+        public void SetOutput(int horizon, double [] heatingGenerated, double [] electricityGenerated, double [] energyCost, double [] ghgEmissions, double [] supplyTemperature)
+        {
+            base.OutputCarriers = new EnergyCarrier[2];
+            base.OutputCarriers[0] = new Water(horizon, heatingGenerated, energyCost, ghgEmissions, supplyTemperature);
+            base.OutputCarriers[1] = new Electricity(horizon, electricityGenerated, energyCost, ghgEmissions);
+
+        }
 
     }
 }
