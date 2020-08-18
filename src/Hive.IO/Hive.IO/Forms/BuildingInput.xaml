@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="hizard | Building"
     x:Class="Hive.IO.Forms.BuildingInput"
-    Width="448.628" Height="430.124" WindowStyle="ToolWindow">
+    Width="452.628" Height="589.124" WindowStyle="ToolWindow">
     <TabControl>
         <TabItem Header="SIA">
             <Grid Margin="10">
@@ -21,8 +21,8 @@
 
                 <Label Grid.Row="0" Grid.Column="0" FontWeight="Bold">Building use type</Label>
                 <ComboBox Name="BuildingUseType" Grid.Row="0" Grid.Column="1" Margin="0,0,-0.5,0" VerticalAlignment="Center"></ComboBox>
-                <Label Grid.Row="1" Grid.Column="0" FontWeight="Bold">Zone</Label>
-                <ComboBox Name="Zone" Grid.Row="1" Grid.Column="1" Margin="0,0,-0.5,0" VerticalAlignment="Center"></ComboBox>
+                <Label Grid.Row="1" Grid.Column="0" FontWeight="Bold" Content="Room type"/>
+                <ComboBox Name="RoomType" Grid.Row="1" Grid.Column="1" Margin="0,0,-0.5,0" VerticalAlignment="Center"></ComboBox>
                 <Label Grid.Row="2" Grid.Column="0" FontWeight="Bold">Building quality</Label>
                 <ComboBox Name="BuildingQuality" Grid.Row="2" Grid.Column="1" Margin="0,0,-0.5,0" VerticalAlignment="Center"></ComboBox>
 
@@ -77,8 +77,148 @@
                 </Grid>
             </Grid>
         </TabItem>
-        <TabItem Header="ENV">more text</TabItem>
-        <TabItem Header="IG">much more text</TabItem>
+        <TabItem Header="ENV">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"></RowDefinition>
+                    <RowDefinition Height="*"></RowDefinition>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="72*"></ColumnDefinition>
+                    <ColumnDefinition Width="150*"/>
+                    <ColumnDefinition Width="221*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Grid Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">Wall</Label>
+                    <ComboBox Name="WallTemplate" Grid.Row="1" Grid.ColumnSpan="2"></ComboBox>
+                    <Label Grid.Row="2">U-value (W/m²K)</Label>
+                    <TextBox Name="WallUValue" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right">0.5</TextBox>
+                    <Label Grid.Row="3">Emissions (kgCO2/m²)</Label>
+                    <TextBox Name="WallEmissions" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right">15</TextBox>
+                    <Label Grid.Row="4">Cost (CHF/m²)</Label>
+                    <TextBox Name="WallCost" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right">15</TextBox>
+                    <Image Name="WallImage" Grid.Row="5" Grid.ColumnSpan="2"></Image>
+                </Grid>
+                <Grid Grid.Row="0" Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">Floor</Label>
+                    <ComboBox Name="FloorTemplate" Grid.Row="1" Grid.ColumnSpan="2"></ComboBox>
+                    <Label Grid.Row="2">U-value (W/m²K)</Label>
+                    <TextBox Name="FloorUValue" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right">0.5</TextBox>
+                    <Label Grid.Row="3">Emissions (kgCO2/m²)</Label>
+                    <TextBox Name="FloorEmissions" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right">15</TextBox>
+                    <Label Grid.Row="4">Cost (CHF/m²)</Label>
+                    <TextBox Name="FloorCost" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right">15</TextBox>
+                    <Image Name="FloorImage" Grid.Row="5" Grid.ColumnSpan="2"></Image>
+                </Grid>
+                <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">Window</Label>
+                    <ComboBox Name="WindowTemplate" Grid.Row="1" Grid.ColumnSpan="2"></ComboBox>
+                    <Label Grid.Row="2">U-value (W/m²K)</Label>
+                    <TextBox Name="WindowUValue" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right">1.2</TextBox>
+                    <Label Grid.Row="3">g-value (-)</Label>
+                    <TextBox Name="WindowGValue" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right">0.5</TextBox>
+                    <Label Grid.Row="4">Emissions (kgCO2/m²)</Label>
+                    <TextBox Name="WindowEmissions" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right">15</TextBox>
+                    <Label Grid.Row="5">Cost (CHF/m²)</Label>
+                    <TextBox Name="WindowCost" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right">15</TextBox>
+                    <Image Name="WindowImage" Grid.Row="6" Grid.ColumnSpan="2"></Image>
+                </Grid>
+                <Grid Grid.Row="1" Grid.Column="2">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"></RowDefinition>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="3*"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">Roof</Label>
+                    <ComboBox Name="RoofTemplate" Grid.Row="1" Grid.ColumnSpan="2"></ComboBox>
+                    <Label Grid.Row="2">U-value (W/m²K)</Label>
+                    <TextBox Name="RoofUValue" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right">0.5</TextBox>
+                    <Label Grid.Row="3">Emissions (kgCO2/m²)</Label>
+                    <TextBox Name="RoofEmissions" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right">15</TextBox>
+                    <Label Grid.Row="4">Cost (CHF/m²)</Label>
+                    <TextBox Name="RoofCost" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right">15</TextBox>
+                    <Image Name="RoofImage" Grid.Row="5" Grid.ColumnSpan="2"></Image>
+                </Grid>
+            </Grid>
+        </TabItem>
+        <TabItem Header="IG">
+            <Grid Margin="10">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
+                    <RowDefinition/>
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                    <ColumnDefinition Width="*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <Label FontWeight="Bold">People heat (W/m²)</Label>
+                <TextBox Name="PeopleHeat" Grid.Row="1" VerticalAlignment="Center" Margin="10,0">2.3</TextBox>
+                <Label Grid.Column="1" FontWeight="Bold">People load hours (h)</Label>
+                <TextBox Name="PeopleLoadHours" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="10,0">4090</TextBox>
+                <Label Grid.Row="2" FontWeight="Bold">Light heat (W/m²)</Label>
+                <TextBox Name="LightHeat" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="10,0">2.7</TextBox>
+                <Label Grid.Row="2" Grid.Column="1" FontWeight="Bold">Light load hours (h)</Label>
+                <TextBox Name="LightLoadHours" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="10,0">1450</TextBox>
+                <Label Grid.Row="4" FontWeight="Bold">Equipment heat (W/m²)</Label>
+                <TextBox Name="EquipmentHeat" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="10,0">10</TextBox>
+                <Label Grid.Row="4" Grid.Column="1" FontWeight="Bold">Equipment load hours (h)</Label>
+                <TextBox Name="EquipmentLoadHours" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="10,0">1780</TextBox>
+                <TextBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="WrapWithOverflow" 
+                         HorizontalAlignment="Center" Width="Auto" TextAlignment="Center" 
+                         VerticalAlignment="Bottom" BorderThickness="0" Margin="37,0,37.5,10">
+                    Explanatory text on what this tab contains
+                </TextBox>
+            </Grid>
+        </TabItem>
         <TabItem Header="VEN">when is this ever going to stop?</TabItem>
     </TabControl>
 </Window>
