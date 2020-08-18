@@ -14,8 +14,8 @@ namespace Hive.IO.GHComponents
     public class GhBuilding : GH_Component
     {
         public GhBuilding()
-          : base("Hive.IO.Building", "Hive.IO.Bldg",
-              "Hive Building, representing the building geometry, as well as thermal and construction properties.",
+          : base("Input Building Hive", "HiveInputBuilding",
+              "Hive.IO.Building input, representing the building geometry, as well as thermal and construction properties.",
               "[hive]", "IO")
         {
         }

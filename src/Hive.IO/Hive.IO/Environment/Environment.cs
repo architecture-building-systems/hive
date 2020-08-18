@@ -49,6 +49,15 @@ namespace Hive.IO.Environment
         }
 
 
+        // setting all inpuit energy carriers as part of Hive.IO.Environment
+        // gas, oil, biogas, wood, district heating, electricity grid, etc.
+        private void SetGasGrid()
+        {
+
+        }
+
+
+
         /// <summary>
         /// Location properties
         /// </summary>

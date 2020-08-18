@@ -15,7 +15,7 @@ should return
 
 
 def main(heating_loads, carrier_cost, carrier_emissions, eta):
-    final_energy = heating_loads * eta
-    total_cost = final_energy * carrier_cost
-    total_emissions = final_energy * carrier_emissions
-    return total_cost, total_emissions
+    gas_consumed = heating_loads * eta
+    total_cost = gas_consumed * carrier_cost
+    total_emissions = gas_consumed * carrier_emissions
+    return gas_consumed, total_cost, total_emissions

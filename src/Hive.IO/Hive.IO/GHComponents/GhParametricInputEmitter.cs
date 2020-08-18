@@ -19,12 +19,16 @@ namespace Hive.IO.GHComponents
         /// Initializes a new instance of the GhEnergySystems class.
         /// </summary>
         public GhParametricInputEmitter()
-          : base("Hive.IO.EnergySystems.Emitter", "EmitterInputs",
+          : base("Parametric Input Emitter Hive", "HiveParaInEmitter",
               "Heat/Cold Emitter Design Inputs (radiator, floor heating, ...).",
               "[hive]", "IO")
         {
         }
 
+
+        public override GH_Exposure Exposure => GH_Exposure.tertiary;
+        
+        
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>

@@ -13,11 +13,13 @@ namespace Hive.IO.GHComponents
     {
 
         public GhResults()
-          : base("Hive.IO.Results", "HiveIOResults",
+          : base("Results Hive", "HiveResults",
               "Hive.IO.Results object, containing results of all simulations run within the Mothercell.",
-              "[hive]", "Mothercell")
+              "[hive]", "IO")
         {
         }
+
+        public override GH_Exposure Exposure => GH_Exposure.senary;
 
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
@@ -60,9 +62,9 @@ namespace Hive.IO.GHComponents
             // 19
             pManager.AddGenericParameter("Hive.Emitters", "Hive.Emitters", "Hive.Emitters", GH_ParamAccess.list);
             // 20
-            pManager.AddGenericParameter("OutputEnergy", "OutputEnergy", "OutputEnergy", GH_ParamAccess.list);
+            pManager.AddGenericParameter("OutputEnergy", "OutputEnergy", "Output energy (a.k.a. 'met demands') from the EnergyHub. Of type 'Hive.EnergySytems.EnergyCarrier'.", GH_ParamAccess.list);
             // 21
-            pManager.AddGenericParameter("InputEnergy", "InputEnergy", "InputEnergy", GH_ParamAccess.list);
+            pManager.AddGenericParameter("InputEnergy", "InputEnergy", "Input energy (also: 'potentials', or 'source') into the EnergyHub. Of type 'Hive.EnergySystems.EnergyCarrier'.", GH_ParamAccess.list);
 
             for (int i = 0; i < pManager.ParamCount; i++)
                 pManager[i].Optional = true;
@@ -206,7 +208,7 @@ namespace Hive.IO.GHComponents
             DA.SetData(0, results);
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.secondary;
+
 
 
         protected override System.Drawing.Bitmap Icon

@@ -35,7 +35,7 @@ namespace Hive.IO.GHComponents
         /// Initializes a new instance of the GhParametricInputEnergySystems class.
         /// </summary>
         public GhParametricInputEnergySystems()
-          : base("GhParametricInputEnergySystems", "Nickname",
+          : base("Parametric Input EnergySystems Hive", "HiveParaInEnSys",
               "Description",
               "[hive]", "IO")
         {

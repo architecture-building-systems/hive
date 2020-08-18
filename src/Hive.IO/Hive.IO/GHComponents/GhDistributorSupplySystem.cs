@@ -6,16 +6,19 @@ using Rhino.Geometry;
 
 namespace Hive.IO.GHComponents
 {
-    public class GhDistributorSupplySystem : GH_Component
+    public class GhDistributorSolarTech : GH_Component
     {
 
-        public GhDistributorSupplySystem()
-          : base("Hive.IO.DistributorSupplySystem", "HiveIODistrSupSys",
+        public GhDistributorSolarTech()
+          : base("Distributor SolarTech Hive", "HiveDistSolarTech",
               "Distributor for the Energy Supply Systems models." +
                 "\nOutputs relevant parameters for Energy Supply Systems calculations.",
-              "[hive]", "Mothercell")
+              "[hive]", "IO")
         {
         }
+
+
+        public override GH_Exposure Exposure => GH_Exposure.quarternary;
 
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)

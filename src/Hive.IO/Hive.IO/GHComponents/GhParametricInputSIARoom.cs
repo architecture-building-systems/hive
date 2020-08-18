@@ -14,7 +14,7 @@ namespace Hive.IO.GHComponents
         /// Initializes a new instance of the GhParametricInputSIARoom class.
         /// </summary>
         public GhParametricInputSIARoom()
-          : base("GhParametricInputSIARoom", "Nickname",
+          : base("Parametric Input SIARoom Hive", "HiveParaInRoom",
               "Description",
               "[hive]", "IO")
         {

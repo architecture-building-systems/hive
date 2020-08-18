@@ -10,11 +10,14 @@ namespace Hive.IO.GHComponents
     public class GhDistributor : GH_Component
     {
         public GhDistributor()
-          : base("Hive.IO.Distributor", "HiveIODistr",
+          : base("Main Distributor Hive", "HiveDistributor",
               "The Hive.IO.Distributor collects all Hive Inputs from outside the Mothercell (the simulation core) and outputs them individually according to their class type, ready for deployment.",
-              "[hive]", "Mothercell")
+              "[hive]", "IO")
         {
         }
+
+        public override GH_Exposure Exposure => GH_Exposure.quarternary;
+
 
         /// <summary>
         /// Takes ALL Hive Input objects (e.g. Hive.IO.PV, Hive.IO.Building, etc.)
@@ -29,9 +32,10 @@ namespace Hive.IO.GHComponents
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Hive.IO.Building", "HiveIOBldg", "Hive.IO.Building from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Hive.IO.EnergySystem.SurfaceBased", "HiveIOEnSysSrf", "Hive.IO.EnergySystem. Photovoltaic; .SolarThermal; .PVT; .GroundCollector objects from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Hive.IO.Environment", "HiveIOEnv", "Hive.IO.Environment from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.Building", "Building", "Hive.IO.Building from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.Environment", "Environment", "Hive.IO.Environment from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.EnergySystem.SurfaceBasedTech", "SurfaceBasedTech", "Hive.IO.EnergySystem. Photovoltaic; .SolarThermal; .PVT; .GroundCollector objects from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Hive.IO.EnergySystem.ConversionTech", "ConversionTech", "Hive.IO.EnergySystem.ConversionTech; AirSourceHeatPump, Chillers, CHP, Boilers, etc.", GH_ParamAccess.list);
         }
 
 
@@ -41,10 +45,11 @@ namespace Hive.IO.GHComponents
         /// <param name="DA"></param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<GH_ObjectWrapper> inputObjects = new List<GH_ObjectWrapper>();
+            var inputObjects = new List<GH_ObjectWrapper>();
             if (!DA.GetDataList(0, inputObjects)) return;
             
-            List<SurfaceBasedTech> srfBasedTech = new List<SurfaceBasedTech>();
+            var srfBasedTech = new List<SurfaceBasedTech>();
+            var conversionTech = new List<ConversionTech>();
             Building.Building building = null;
             Environment.Environment environment = null;
 
@@ -58,6 +63,12 @@ namespace Hive.IO.GHComponents
                     srfBasedTech.Add(hiveInput.Value as PVT);
                 else if(hiveInput.Value is GroundCollector)
                     srfBasedTech.Add(hiveInput.Value as GroundCollector);
+                else if(hiveInput.Value is AirSourceHeatPump)
+                    conversionTech.Add(hiveInput.Value as AirSourceHeatPump);
+                else if(hiveInput.Value is Chiller)
+                    conversionTech.Add(hiveInput.Value as Chiller);
+                else if (hiveInput.Value is GasBoiler)
+                    conversionTech.Add(hiveInput.Value as GasBoiler);
                 else if (hiveInput.Value is Building.Building)
                     building = hiveInput.Value as Building.Building;
                 else if(hiveInput.Value is Environment.Environment)
@@ -68,8 +79,9 @@ namespace Hive.IO.GHComponents
             //Rhino.RhinoApp.WriteLine("Surface Energy Systems read in: \n PV: {0}; ST: {1}; PVT: {2}", srfBasedTech.Count, st.Count, pvt.Count);
 
             DA.SetData(0, building);
-            DA.SetDataList(1, srfBasedTech);
-            DA.SetData(2, environment);
+            DA.SetData(1, environment); 
+            DA.SetDataList(2, srfBasedTech);
+            DA.SetDataList(3, conversionTech);
         }
 
         protected override System.Drawing.Bitmap Icon

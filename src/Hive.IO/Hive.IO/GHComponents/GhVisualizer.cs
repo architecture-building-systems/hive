@@ -12,7 +12,7 @@ namespace Hive.IO.GHComponents
     public class GhVisualizer : GH_Param<GH_ObjectWrapper>
     {
 
-        public GhVisualizer() : base("Hive.IO.Visualizer", "Hive.IO.Visualizer",
+        public GhVisualizer() : base("Results Visualizer Hive", "HiveResultsVisualizer",
             "Hive Visualizer for simulation results",
             "[hive]", "IO", GH_ParamAccess.item)
         {
