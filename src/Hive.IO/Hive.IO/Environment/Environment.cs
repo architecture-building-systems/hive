@@ -101,7 +101,7 @@ namespace Hive.IO.Environment
                         environment.LocationData.Latitude = Convert.ToDouble(values[5]);
                         environment.LocationData.Longitude = Convert.ToDouble(values[6]);
                         environment.LocationData.Elevation = Convert.ToDouble(values[9]);
-                        environment.LocationData.TimeZone = Convert.ToInt32(values[8]);
+                        environment.LocationData.TimeZone = Convert.ToDouble(values[8]);
                     }
                     else if (double.TryParse(values[0], out temp))
                     {
@@ -176,7 +176,7 @@ namespace Hive.IO.Environment
         {
             public string City;
             public string Country;
-            public int TimeZone;
+            public double TimeZone;
             public double Elevation;
             public double Longitude;
             public double Latitude;
