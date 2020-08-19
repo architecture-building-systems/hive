@@ -185,7 +185,7 @@ namespace Hive.IO.GHComponents
                 this.AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, zone.ErrorText);
             }
 
-            Building.Building building = new Building.Building(new Zone [1]{ zone }, bldg_type);
+            Building.Building building = new Building.Building(new[] { zone }, bldg_type);
             building.SetSIA2024((Dictionary<string, object>)sia2024, building.Zones);   // can be changed in the future via Windows Form: FormBuilding.cs
 
 

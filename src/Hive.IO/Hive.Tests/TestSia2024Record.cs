@@ -31,5 +31,12 @@ namespace Hive.Tests
         {
             Assert.AreEqual(Sia2024Record.Qualities().Count(), 3);
         }
+
+        [Test]
+        public void TestToString()
+        {
+            var record = Sia2024Record.ReadRecords().First();
+            Assert.IsInstanceOf(typeof(string), record.ToString());
+        }
     }
 }

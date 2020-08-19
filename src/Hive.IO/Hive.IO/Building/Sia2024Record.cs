@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -16,29 +15,39 @@ namespace Hive.IO.Building
         public string BuildingUseType;
         public string RoomType;
 
-        public double TemperaturAenderungsgradDerWaermerueckgewinnung;
-        public double KostenOpakeBauteile;
-        public double VollaststundenGeraete;
-        public double Nettogeschossflaeche;
-        public double Zeitkonstante;
-        public double ThermischeGebaeudehuellflaeche;
-        public double Glasanteil;
-        public double GesamtenergiedurchlasgradVerglasung;
-        public double RaumlufttemperaturAuslegungHeizen;
-        public double AussenluftVolumenstromDurchInfiltration;
-        public double VollaststundenPersonen;
-        public double KostenTransparenteBauteile;
-        public double VollaststundenRaumbeleuchtung;
-        public double UWertOpakeBauteile;
-        public double WaermeeintragsleistungGeraete;
-        public double RaumlufttemperaturAuslegungKuehlen;
-        public double AbminderungsfaktorFuerFensterrahmen;
-        public double WaermeeintragsleistungRaumbeleuchtung;
-        public double EmissionenTransparenteBauteile;
-        public double? AussenluftVolumenstrom;
-        public double WaermeeintragsleistungPersonen;
-        public double EmissionenOpakeBauteile;
-        public double UWertFenster;
+        public double RoomConstant; // Zeitkonstante
+        public double CoolingSetpoint; // Raumlufttemperatur Auslegung Kuehlung (Sommer)
+        public double HeatingSetpoint; // Raumlufttemperatur Auslegung Heizen (Winter)
+        public double FloorArea; // Nettogeschossflaeche
+        public double EnvelopeArea; // Thermische Gebaeudehuellflaeche
+        public double GlazingRatio; // Glasanteil
+        public double UValueOpaque; // U-Wert opake Bauteile
+        public double UValueTransparent; // U-Wert Fenster
+        public double GValue; // Gesamtenergiedurchlassgrad Verglasung
+        public double WindowFrameReduction; // Abminderungsfaktor fuer Fensterrahmen
+        public double AirChangeRate; // Aussenluft-Volumenstrom (pro NGF)
+        public double Infiltration; // Aussenluft-Volumenstrom durch Infiltration
+        public double HeatRecovery; // Temperatur-Aenderungsgrad der Waermerueckgewinnung
+        public double OccupantLoads; // Waermeeintragsleistung Personen (bei 24.0 deg C, bzw. 70 W)
+        public double LightingLoads; // Waermeeintragsleistung der Raumbeleuchtung
+        public double EquipmentLoads; // Waermeeintragsleistung der Geraete
+        public double OccupantYearlyHours; // Vollaststunden pro Jahr (Personen)
+        public double LightingYearlyHours; // Jaehrliche Vollaststunden der Raumbeleuchtung
+        public double EquipmentYearlyHours; // Jaehrliche Vollaststunden der Geraete
+        public double OpaqueCost; // Kosten opake Bauteile
+        public double TransparentCost; // Kosten transparente Bauteile
+        public double OpaqueEmissions; // Emissionen opake Bauteile
+        public double TransparentEmissions; // Emissionen transparente Bauteile
+
+
+        /// <summary>
+        /// Serialize to JSON - we might need that for debugging in the future.
+        /// </summary>
+        /// <returns></returns>
+        public override string ToString()
+        {
+            return JsonConvert.SerializeObject(this);
+        }
 
         private static Sia2024Record[]_records = null;
         public static Sia2024Record[] ReadRecords()
@@ -68,5 +77,9 @@ namespace Hive.IO.Building
 
         public static IEnumerable<string> RoomTypes(string useType) =>
             ReadRecords().Where(r => r.BuildingUseType == useType).Select(r => r.RoomType).Distinct();
+
+        public static Sia2024Record Lookup(string useType, string roomType, string quality) =>
+            ReadRecords()
+                .First(r => r.BuildingUseType == useType && r.RoomType == roomType && r.Quality == quality);
     }
 }

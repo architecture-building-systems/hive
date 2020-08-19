@@ -17,29 +17,29 @@ import json
 # map the csv header names to Sia2024Record names...
 # (try to keep them as similar as possible)
 header_map = {    
-    "Zeitkonstante": "Zeitkonstante",
-    "Raumlufttemperatur Auslegung Kuehlung (Sommer)": "RaumlufttemperaturAuslegungKuehlen",
-    "Raumlufttemperatur Auslegung Heizen (Winter)": "RaumlufttemperaturAuslegungHeizen",
-    "Nettogeschossflaeche": "Nettogeschossflaeche",
-    "Thermische Gebaeudehuellflaeche": "ThermischeGebaeudehuellflaeche",
-    "Glasanteil": "Glasanteil",
-    "U-Wert opake Bauteile": "UWertOpakeBauteile",
-    "U-Wert Fenster": "UWertFenster",
-    "Abminderungsfaktor fuer Fensterrahmen": "AbminderungsfaktorFuerFensterrahmen",
-    "Aussenluft-Volumenstrom (pro NGF)": "AussenluftVolumenstrom",
-    "Aussenluft-Volumenstrom durch Infiltration": "AussenluftVolumenstromDurchInfiltration",
-    "Temperatur-Aenderungsgrad der Waermerueckgewinnung": "TemperaturAenderungsgradDerWaermerueckgewinnung",
-    "Waermeeintragsleistung Personen (bei 24.0 deg C, bzw. 70 W)": "WaermeeintragsleistungPersonen",
-    "Waermeeintragsleistung der Raumbeleuchtung": "WaermeeintragsleistungRaumbeleuchtung",
-    "Waermeeintragsleistung der Geraete": "WaermeeintragsleistungGeraete",
-    "Vollaststunden pro Jahr (Personen)": "VollaststundenPersonen",
-    "Jaehrliche Vollaststunden der Raumbeleuchtung": "VollaststundenRaumbeleuchtung",
-    "Jaehrliche Vollaststunden der Geraete": "VollaststundenGeraete",
-    "Gesamtenergiedurchlassgrad Verglasung": "GesamtenergiedurchlasgradVerglasung",
-    "Kosten opake Bauteile": "KostenOpakeBauteile",
-    "Kosten transparente Bauteile": "KostenTransparenteBauteile",
-    "Emissionen opake Bauteile": "EmissionenOpakeBauteile",
-    "Emissionen transparente Bauteile": "EmissionenTransparenteBauteile"
+    "Zeitkonstante": "RoomConstant",
+    "Raumlufttemperatur Auslegung Kuehlung (Sommer)": "CoolingSetpoint",
+    "Raumlufttemperatur Auslegung Heizen (Winter)": "HeatingSetpoint",
+    "Nettogeschossflaeche": "FloorArea",
+    "Thermische Gebaeudehuellflaeche": "EnvelopeArea",
+    "Glasanteil": "GlazingRatio",
+    "U-Wert opake Bauteile": "UValueOpaque",
+    "U-Wert Fenster": "UValueTransparent",
+    "Gesamtenergiedurchlassgrad Verglasung": "GValue",
+    "Abminderungsfaktor fuer Fensterrahmen": "WindowFrameReduction",
+    "Aussenluft-Volumenstrom (pro NGF)": "AirChangeRate",
+    "Aussenluft-Volumenstrom durch Infiltration": "Infiltration",
+    "Temperatur-Aenderungsgrad der Waermerueckgewinnung": "HeatRecovery",
+    "Waermeeintragsleistung Personen (bei 24.0 deg C, bzw. 70 W)": "OccupantLoads",
+    "Waermeeintragsleistung der Raumbeleuchtung": "LightingLoads",
+    "Waermeeintragsleistung der Geraete": "EquipmentLoads",
+    "Vollaststunden pro Jahr (Personen)": "OccupantYearlyHours",
+    "Jaehrliche Vollaststunden der Raumbeleuchtung": "LightingYearlyHours",
+    "Jaehrliche Vollaststunden der Geraete": "EquipmentYearlyHours",
+    "Kosten opake Bauteile": "OpaqueCost",
+    "Kosten transparente Bauteile": "TransparentCost",
+    "Emissionen opake Bauteile": "OpaqueEmissions",
+    "Emissionen transparente Bauteile": "TransparentEmissions"
 }
 
 
@@ -78,7 +78,7 @@ def main():
                     try:
                         record[header_map[f]] = float(row[f])
                     except ValueError:
-                        record[header_map[f]] = None
+                        record[header_map[f]] = 0.0
                 records.append(record)
     out_file = os.path.join(os.path.dirname(__file__), "sia2024_room_data.json")
     with open(out_file, "w") as fp:
