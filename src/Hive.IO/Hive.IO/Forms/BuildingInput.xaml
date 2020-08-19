@@ -20,7 +20,7 @@
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Row="0" Grid.Column="0" FontWeight="Bold">Building use type</Label>
-                <ComboBox Name="BuildingUseType" Grid.Row="0" Grid.Column="1" Margin="0,0,-0.5,0" VerticalAlignment="Center"></ComboBox>
+                <ComboBox Name="BuildingUseType" Grid.Row="0" Grid.Column="1" Margin="0,0,-0.5,0" VerticalAlignment="Center" SelectionChanged="BuildingUseType_SelectionChanged"></ComboBox>
                 <Label Grid.Row="1" Grid.Column="0" FontWeight="Bold" Content="Room type"/>
                 <ComboBox Name="RoomType" Grid.Row="1" Grid.Column="1" Margin="0,0,-0.5,0" VerticalAlignment="Center"></ComboBox>
                 <Label Grid.Row="2" Grid.Column="0" FontWeight="Bold">Building quality</Label>

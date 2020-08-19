@@ -1,17 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
-using System.Windows.Data;
-using System.Windows.Documents;
-using System.Windows.Input;
-using System.Windows.Media;
-using System.Windows.Media.Imaging;
-using System.Windows.Navigation;
-using System.Windows.Shapes;
+﻿using System.Windows;
+using Hive.IO.Building;
 
 namespace Hive.IO.Forms
 {
@@ -23,17 +11,21 @@ namespace Hive.IO.Forms
         public BuildingInput()
         {
             InitializeComponent();
+
+            BuildingUseType.ItemsSource = Sia2024Record.BuildingUseTypes();
+            BuildingUseType.SelectedIndex = 0;
+
+            RoomType.ItemsSource = Sia2024Record.RoomTypes(BuildingUseType.SelectedItem as string);
+            RoomType.SelectedIndex = 0;
+
+            BuildingQuality.ItemsSource = Sia2024Record.Qualities();
+            BuildingQuality.SelectedIndex = 0;
         }
 
-        void button_Click(object sender, RoutedEventArgs e)
+        private void BuildingUseType_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            DialogResult = true;
-            Close();
-        }
-
-        private void ButtonX_OnClick(object sender, RoutedEventArgs e)
-        {
-            Close();
+            RoomType.ItemsSource = Sia2024Record.RoomTypes(BuildingUseType.SelectedItem as string);
+            RoomType.SelectedIndex = 0;
         }
     }
 }
