@@ -9,7 +9,7 @@ namespace Hive.IO.Building
     /// <summary>
     /// Stores data from the Sia2024.json resource and loads an array of that information.
     /// </summary>
-    public struct Sia2024Record
+    public class Sia2024Record
     {
         public string Quality;
         public string BuildingUseType;
