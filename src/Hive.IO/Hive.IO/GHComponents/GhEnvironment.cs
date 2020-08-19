@@ -39,20 +39,33 @@ namespace Hive.IO.GHComponents
             List<Mesh> geometry = new List<Mesh>();
             DA.GetDataList(1, geometry);
 
+            GhParametricInputEnergyPotentials.EnergyCarrierTimeseries potentials = null; // new GhParametricInputEnergyPotentials.EnergyPotentialsProperties();
+            DA.GetData(2, ref potentials);
+
+
             Mesh[] geometryArray = geometry.Count > 0 ? geometry.ToArray() : null;
             Environment.Environment environment = new Environment.Environment(path, geometryArray);
-
-            var maxAvailability = new double[Misc.HoursPerYear];
-            for (int i=0; i<maxAvailability.Length; i++)
-                maxAvailability[i] = double.MaxValue;
-
-            var gasCost = new double[Misc.HoursPerYear];
-            var gasEmissions = new double[Misc.HoursPerYear];
-
-            var gas = new Gas(Misc.HoursPerDay, maxAvailability, gasCost, gasEmissions);
-            var inputCarriers = new EnergyCarrier[1];
-
-            environment.SetEnergyPotentials(null);
+            if (potentials == null)
+            {
+                environment.SetDefaultEnergyPotentials();    // replace this with inputs from the windows form later
+            }
+            else
+            {
+                EnergyCarrier[] inputCarriers = new EnergyCarrier[6];
+                inputCarriers[0] = new Gas(Misc.HoursPerYear, potentials.NaturalGasAvailability, potentials.NaturalGasPrice, potentials.NaturalGasEmissions);
+                inputCarriers[0].Name = potentials.NaturalGasName;
+                inputCarriers[1] = new Gas(Misc.HoursPerYear, potentials.BioGasAvailability, potentials.BioGasPrice, potentials.BioGasEmissions);
+                inputCarriers[1].Name = potentials.BioGasName;
+                inputCarriers[2] = new Pellets(Misc.HoursPerYear, potentials.WoodPelletsAvailability, potentials.WoodPelletsPrice, potentials.WoodPelletsEmissions);
+                inputCarriers[2].Name = potentials.WoodPelletsName;
+                inputCarriers[3] = new Water(Misc.HoursPerYear, potentials.DistrictHeatingAvailability, potentials.DistrictHeatingPrice, potentials.DistrictHeatingEmissions, potentials.DistrictHeatingSupplyTemp);
+                inputCarriers[3].Name = potentials.DistrictHeatingName;
+                inputCarriers[4] = new Water(Misc.HoursPerYear, potentials.DistrictCoolingAvailability, potentials.DistrictCoolingPrice, potentials.DistrictCoolingEmissions, potentials.DistrictCoolingSupplyTemp);
+                inputCarriers[4].Name = potentials.DistrictCoolingName;
+                inputCarriers[5] = new Electricity(Misc.HoursPerYear, potentials.GridElectricityAvailability, potentials.GridElectricityPrice, potentials.GridElectricityEmissions);
+                inputCarriers[5].Name = potentials.GridElectricityName;
+                environment.SetEnergyPotentials(inputCarriers);
+            }
 
             DA.SetData(0, environment);
         }

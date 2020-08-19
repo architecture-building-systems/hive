@@ -134,6 +134,9 @@ namespace Hive.IO.EnergySystems
     /// </summary>
     public abstract class EnergyCarrier
     {
+        // specifying the carrier. e.g. for <Electricity>, name could be 'UTC-Grid', or for <Gas> it could be 'BioGasZurich' or 'NaturalGasRussia'
+        public string Name { get; internal set; }
+
         /// <summary>
         /// Pre-defined energy units
         /// </summary>
