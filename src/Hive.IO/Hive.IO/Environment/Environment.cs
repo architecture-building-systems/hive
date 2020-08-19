@@ -138,8 +138,8 @@ namespace Hive.IO.Environment
             this.EnergyPotentials[7].Name = "GHI"; // redundant, because <Radiation> has a enum for GHI
             this.EnergyPotentials[8] = new Radiation(this.Horizon, this.ClimateData.DNI, 1, null, Radiation.RadiationType.DNI);
             this.EnergyPotentials[8].Name = "DNI";
-            this.EnergyPotentials[8] = new Radiation(this.Horizon, this.ClimateData.DHI, 1, null, Radiation.RadiationType.DHI);
-            this.EnergyPotentials[8].Name = "DHI";
+            this.EnergyPotentials[9] = new Radiation(this.Horizon, this.ClimateData.DHI, 1, null, Radiation.RadiationType.DHI);
+            this.EnergyPotentials[9].Name = "DHI";
         }
 
 
@@ -164,8 +164,8 @@ namespace Hive.IO.Environment
             this.EnergyPotentials[7].Name = "GHI"; // redundant, because <Radiation> has a enum for GHI
             this.EnergyPotentials[8] = new Radiation(this.Horizon, this.ClimateData.DNI, 1, null, Radiation.RadiationType.DNI);
             this.EnergyPotentials[8].Name = "DNI";
-            this.EnergyPotentials[8] = new Radiation(this.Horizon, this.ClimateData.DHI, 1, null, Radiation.RadiationType.DHI);
-            this.EnergyPotentials[8].Name = "DHI";
+            this.EnergyPotentials[9] = new Radiation(this.Horizon, this.ClimateData.DHI, 1, null, Radiation.RadiationType.DHI);
+            this.EnergyPotentials[9].Name = "DHI";
         }
 
 

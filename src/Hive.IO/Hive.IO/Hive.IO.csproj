@@ -78,7 +78,7 @@
     <Compile Include="EnergySystems\SurfaceBasedTech.cs" />
     <Compile Include="EnergySystems\Ventilation.cs" />
     <Compile Include="GHComponents\GhDistributorConversionTech.cs" />
-    <Compile Include="GHComponents\GhDistributorEPW.cs" />
+    <Compile Include="GHComponents\GhDistributorEnvironment.cs" />
     <Compile Include="GHComponents\GhDistributorSIA.cs" />
     <Compile Include="GHComponents\GhDistributorSolar.cs" />
     <Compile Include="GHComponents\GhDistributorSupplySystem.cs" />

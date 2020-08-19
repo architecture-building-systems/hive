@@ -3,11 +3,11 @@ using Grasshopper.Kernel;
 
 namespace Hive.IO.GHComponents
 {
-    public class GhDistributorEPW : GH_Component
+    public class GhDistributorEnvironment : GH_Component
     {
-        public GhDistributorEPW()
-          : base("Distributor EPW Hive", "HiveDistEPW",
-              "Weather file (.epw) distributor. Reads in an Hive.IO.Environment object and outputs the filepath of the .epw",
+        public GhDistributorEnvironment()
+          : base("Distributor Environment Hive", "HiveDistEnvironment",
+              "Environment distributor. Reads in an Hive.IO.Environment object and outputs the filepath of the .epw, as well as energy potentials as list of EnergyCarriers",
               "[hive]", "IO")
         {
         }
@@ -23,6 +23,7 @@ namespace Hive.IO.GHComponents
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddTextParameter("Filepath", "Filepath", "Outputs the filepath of the .epw weather file belonging to Hive.IO.Environment. Can be used to e.g. open the weather file in another component.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("InputCarriers", "InputCarriers", "InputCarriers", GH_ParamAccess.list);
         }
 
 
@@ -32,7 +33,11 @@ namespace Hive.IO.GHComponents
             if (!DA.GetData(0, ref environment)) return;
 
             if (environment != null)
+            {
                 DA.SetData(0, environment.EpwPath);
+                DA.SetDataList(1, environment.EnergyPotentials);
+            }
+
         }
 
 
