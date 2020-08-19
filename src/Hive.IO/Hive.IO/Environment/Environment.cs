@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using rg = Rhino.Geometry;
 using Hive.IO.EnergySystems;
+using System.IO;
 
 namespace Hive.IO.Environment
 {
@@ -18,8 +19,8 @@ namespace Hive.IO.Environment
         public readonly int totalPotentials = 10; // gas, biogas, wood, dh, dc, grid, ambientair, ghi, dni, dhi
         public readonly int Horizon = Misc.HoursPerYear;
 
-        public Climate ClimateData { get; private set; }
-        public Location LocationData { get; private set; }
+        public Climate ClimateData; 
+        public Location LocationData;
 
 
         public string EpwPath { get; private set; }
@@ -84,8 +85,42 @@ namespace Hive.IO.Environment
             var dhi = new List<double>();
             var rh = new List<double>();
 
-            //SetLocation(environment);        // this.LocationData
-            //SetClimate(environment);         // this.ClimateData
+
+            using (var reader = new StreamReader(@environment.EpwPath))
+            {
+                int counter = 0;
+                while (!reader.EndOfStream)
+                {
+                    var line = reader.ReadLine();
+                    var values = line.Split(',');
+                    double temp;
+                    if (counter == 0 && String.Equals(values[0], "LOCATION"))
+                    {
+                        environment.LocationData.City = values[1];
+                        environment.LocationData.Country = values[3];
+                        environment.LocationData.Latitude = Convert.ToDouble(values[5]);
+                        environment.LocationData.Longitude = Convert.ToDouble(values[6]);
+                        environment.LocationData.Elevation = Convert.ToDouble(values[9]);
+                        environment.LocationData.TimeZone = Convert.ToInt32(values[8]);
+                    }
+                    else if (double.TryParse(values[0], out temp))
+                    {
+                        dryBulb.Add(Convert.ToDouble(values[DryBulbIndex]));
+                        ghi.Add(Convert.ToDouble(values[GhiIndex]));
+                        dni.Add(Convert.ToDouble(values[DniIndex]));
+                        dhi.Add(Convert.ToDouble(values[DhiIndex]));
+                        rh.Add(Convert.ToDouble(values[RhIndex]));
+                    }
+
+                    counter++;
+                }
+            }
+
+            environment.ClimateData.DryBulbTemperature = dryBulb.ToArray();
+            environment.ClimateData.GHI = ghi.ToArray();
+            environment.ClimateData.DHI = dhi.ToArray();
+            environment.ClimateData.DNI = dni.ToArray();
+            environment.ClimateData.RelativeHumidity = rh.ToArray();
         }
 
 
@@ -139,8 +174,10 @@ namespace Hive.IO.Environment
         /// </summary>
         public struct Location
         {
+            public string City;
+            public string Country;
             public int TimeZone;
-            public double Altitude;
+            public double Elevation;
             public double Longitude;
             public double Latitude;
         }
@@ -155,10 +192,10 @@ namespace Hive.IO.Environment
             public double[] DHI;
             public double[] DryBulbTemperature;
             public double[] RelativeHumidity;
-            public double[] WindSpeed;
-            public double[] WindDirection;
-            public double[] Precipitation;
-            public double[] Snowfall;
+            //public double[] WindSpeed;
+            //public double[] WindDirection;
+            //public double[] Precipitation;
+            //public double[] Snowfall;
         }
 
     }
