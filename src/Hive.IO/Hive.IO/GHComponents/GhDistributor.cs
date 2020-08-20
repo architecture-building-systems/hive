@@ -71,6 +71,8 @@ namespace Hive.IO.GHComponents
                     conversionTech.Add(hiveInput.Value as Chiller);
                 else if (hiveInput.Value is GasBoiler)
                     conversionTech.Add(hiveInput.Value as GasBoiler);
+                else if (hiveInput.Value is CombinedHeatPower)
+                    conversionTech.Add(hiveInput.Value as CombinedHeatPower);
                 else if (hiveInput.Value is Building.Building)
                     building = hiveInput.Value as Building.Building;
                 else if (hiveInput.Value is Environment.Environment)

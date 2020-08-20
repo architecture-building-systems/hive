@@ -28,8 +28,10 @@ namespace Hive.IO.GHComponents
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Hive.IO.EnergySystem.AirSourceHeatPump", "AirSourceHeatPump", "Hive.IO.EnergySystem.AirSourceHeatPump", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Hive.IO.EnergySystem.Chiller", "Chiller", "Hive.IO.EnergySystem.Chiller", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Hive.IO.EnergySystem.AirSourceHeatPump", "AirSourceHeatPump", "Hive.IO.EnergySystem.AirSourceHeatPump", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.EnergySystem.Chiller", "Chiller", "Hive.IO.EnergySystem.Chiller", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.EnergySystems.Boiler", "Boiler", "Hive.IO.EnergySystemc.Boiler", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.EnergySystems.CombinedHeatPowert", "CHP", "Hive.IO.EnergySystemc.CombinedHeatPower", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -37,19 +39,33 @@ namespace Hive.IO.GHComponents
             var inputObjects = new List<GH_ObjectWrapper>();
             if (!DA.GetDataList(0, inputObjects)) return;
 
-            var ashp = new List<AirSourceHeatPump>();
-            var chiller = new List<Chiller>();
+            AirSourceHeatPump ashp = null;
+            Chiller chiller = null;
+            CombinedHeatPower chp = null;
+            GasBoiler boiler = null;
 
             foreach (GH_ObjectWrapper convTech in inputObjects)
             {
-                if(convTech.Value is AirSourceHeatPump)
-                    ashp.Add(convTech.Value as AirSourceHeatPump);
-                else if(convTech.Value is Chiller)
-                    chiller.Add(convTech.Value as Chiller);
+                if (convTech.Value is AirSourceHeatPump)
+                {
+                    //ashp.Add(convTech.Value as AirSourceHeatPump); 
+                    ashp = convTech.Value as AirSourceHeatPump;
+                }
+                else if (convTech.Value is Chiller)
+                {
+                    //chiller.Add(convTech.Value as Chiller);
+                    chiller = convTech.Value as Chiller;
+                }
+                else if (convTech.Value is CombinedHeatPower)
+                    chp = convTech.Value as CombinedHeatPower;
+                else if (convTech.Value is GasBoiler)
+                    boiler = convTech.Value as GasBoiler;
             }
 
-            DA.SetDataList(0, ashp);
-            DA.SetDataList(1, chiller);
+            DA.SetData(0, ashp);
+            DA.SetData(1, chiller);
+            DA.SetData(2, boiler);
+            DA.SetData(3, chp);
         }
 
         protected override System.Drawing.Bitmap Icon

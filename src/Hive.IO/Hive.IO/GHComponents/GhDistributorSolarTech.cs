@@ -11,8 +11,8 @@ namespace Hive.IO.GHComponents
 
         public GhDistributorSolarTech()
           : base("Distributor SolarTech Hive", "HiveDistSolarTech",
-              "Distributor for the Energy Supply Systems models." +
-                "\nOutputs relevant parameters for Energy Supply Systems calculations.",
+              "Distributor for Solar technologies." +
+                "\nOutputs relevant parameters for Solar Energy Generation calculations (PV, ST, PVT, GC).",
               "[hive]", "IO")
         {
         }

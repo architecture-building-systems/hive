@@ -265,6 +265,8 @@ namespace Hive.IO.GHComponents
                     conversionTech.Add(new GasBoiler(conversionTechProperties.GasBoilerCost, conversionTechProperties.GasBoilerEmissions, conversionTechProperties.GasBoilerCapacity, conversionTechProperties.GasBoilerEfficiency));
                 if (conversionTechProperties.CHPCapacity > 0.0)
                     conversionTech.Add(new CombinedHeatPower(conversionTechProperties.CHPCost, conversionTechProperties.CHPEmissions, conversionTechProperties.CHPCapacity, conversionTechProperties.CHPHTP, conversionTechProperties.CHPEffElec));
+                if (conversionTechProperties.ChillerCapacity > 0.0)
+                    conversionTech.Add(new Chiller(conversionTechProperties.ChillerCost, conversionTechProperties.ChillerEmissions, conversionTechProperties.ChillerCapacity, conversionTechProperties.ChillerCOP));
             }
 
             Radiator radiator = null;

@@ -7,7 +7,7 @@ using Rhino.Geometry;
 
 namespace Hive.IO.GHComponents
 {
-    internal class ConversionTechProperties
+    public class ConversionTechProperties
     {
         public double ASHPCapacity;
         public double ASHPCost;

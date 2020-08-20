@@ -81,7 +81,7 @@
     <Compile Include="GHComponents\GhDistributorEnvironment.cs" />
     <Compile Include="GHComponents\GhDistributorSIA.cs" />
     <Compile Include="GHComponents\GhDistributorSolarSimulation.cs" />
-    <Compile Include="GHComponents\GhDistributorSupplySystem.cs" />
+    <Compile Include="GHComponents\GhDistributorSolarTech.cs" />
     <Compile Include="GHComponents\GhMergerChiller.cs" />
     <Compile Include="GHComponents\GhMergerCHP.cs" />
     <Compile Include="GHComponents\GhMergerGasBoiler.cs" />
