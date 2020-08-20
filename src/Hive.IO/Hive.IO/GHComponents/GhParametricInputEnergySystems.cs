@@ -4,8 +4,6 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-//using Newtonsoft.Json;
-
 
 namespace Hive.IO.GHComponents
 {
@@ -26,6 +24,11 @@ namespace Hive.IO.GHComponents
         public double CHPEmissions;
         public double CHPHTP;
         public double CHPEffElec;
+
+        public double ChillerCapacity;
+        public double ChillerCost;
+        public double ChillerEmissions;
+        public double ChillerCOP;
     }
 
 
@@ -65,6 +68,11 @@ namespace Hive.IO.GHComponents
             pManager.AddNumberParameter("CHPEmissions", "CHPEmissions", "Combined heat and power embodied green house gas emissions, in kgCO2/kW (electric)", GH_ParamAccess.item);
             pManager.AddNumberParameter("CHPHTP", "CHPHTP", "Combined heat and power heat-to-power ratio, i.e. if htp=1.5, then 1 kW of electric power will generate 1.5 kW of heat", GH_ParamAccess.item);
             pManager.AddNumberParameter("CHPEffElec", "CHPEffElec", "Combined heat and power electric efficiency [0.0, 1.0]", GH_ParamAccess.item);
+
+            pManager.AddNumberParameter("ChillerCapacity", "ChillerCapacity", "Chiller capacity, in kW", GH_ParamAccess.item);
+            pManager.AddNumberParameter("ChillerCost", "ChillerCost", "Chiller cost, in CHF/kW", GH_ParamAccess.item);
+            pManager.AddNumberParameter("ChillerEmissions", "ChillerEmissions", "Chiller embodied green house gas emissions, in kgCO2/kW", GH_ParamAccess.item);
+            pManager.AddNumberParameter("ChillerCOP", "ChillerCOP", "Chiller coefficient of performance", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -85,6 +93,7 @@ namespace Hive.IO.GHComponents
             energySystemProperties.ASHPCapacity = 0.0;
             energySystemProperties.GasBoilerCapacity = 0.0;
             energySystemProperties.CHPCapacity = 0.0;
+            energySystemProperties.ChillerCapacity = 0.0;
 
             DA.GetData(0, ref energySystemProperties.ASHPCapacity);
             DA.GetData(1, ref energySystemProperties.ASHPCost);
@@ -102,7 +111,11 @@ namespace Hive.IO.GHComponents
             DA.GetData(11, ref energySystemProperties.CHPHTP);
             DA.GetData(12, ref energySystemProperties.CHPEffElec);
 
-            //string conversionTechJson = JsonConvert.SerializeObject(energySystemProperties);
+            DA.GetData(13, ref energySystemProperties.ChillerCapacity);
+            DA.GetData(14, ref energySystemProperties.ChillerCost);
+            DA.GetData(15, ref energySystemProperties.ChillerEmissions);
+            DA.GetData(16, ref energySystemProperties.ChillerCOP);
+
             DA.SetData(0, energySystemProperties);
         }
 

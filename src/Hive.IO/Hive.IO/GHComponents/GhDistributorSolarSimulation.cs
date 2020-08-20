@@ -136,17 +136,12 @@ namespace Hive.IO.GHComponents
             double azimuth, tilt;
 
             mesh.FaceNormals.ComputeFaceNormals();
-
             Vector3d normal = mesh.Normals[0];
-
             Point3d cen = mesh.Faces.GetFaceCenter(0);
-
             Vector3d vnormal = new Vector3d(0, 0, 1);
             Vector3d tiltZ0 = new Vector3d(0, 0, 1);
-
             double tiltValue = Vector3d.VectorAngle(normal, tiltZ0, vnormal);
-            tiltValue *= (180.0 / Math.PI);
-
+            tilt = tiltValue * (180.0 / Math.PI);
 
             if (tiltValue == 0)
             {
@@ -157,10 +152,6 @@ namespace Hive.IO.GHComponents
                 double azimuthValue = Vector3d.VectorAngle(new Vector3d(normal.X, normal.Y, 0), new Vector3d(0, 1, 0), vnormal);
                 azimuth = azimuthValue * (180 / Math.PI);
             }
-
-
-            tilt = tiltValue;
-
 
             //Line normalLine = new Line(cen, cen + normal);
             //Line azimuthLine = new Line(cen, cen + new Vector3d(0, 1, 0));

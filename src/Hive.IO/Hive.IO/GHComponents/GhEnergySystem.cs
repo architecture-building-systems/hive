@@ -41,8 +41,9 @@ namespace Hive.IO.GHComponents
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Hive.IO.EnergySystems.ConversionTech", "ConversionTech", "Hive.IO.EnergySystems.ConversionTech, such as PV, ST, PVT or GC, ASHP, CHP, boiler, etc.", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Hive.IO.EnergySystems.Emitter", "Emitter", "Hive.IO.EnergySystems.Emitter (e.g. Radiator, floor heating, cooling panel, etc. Will be depricated for Hive 1.x and become part of the Building.Zone.", GH_ParamAccess.item);
+            //pManager.AddGenericParameter("Hive.IO.EnergySystems.ConversionTech", "ConversionTech", "Hive.IO.EnergySystems.ConversionTech, such as PV, ST, PVT or GC, ASHP, CHP, boiler, etc.", GH_ParamAccess.list);
+            //pManager.AddGenericParameter("Hive.IO.EnergySystems.Emitter", "Emitter", "Hive.IO.EnergySystems.Emitter (e.g. Radiator, floor heating, cooling panel, etc. Will be depricated for Hive 1.x and become part of the Building.Zone.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Energy Systems", "EnergySystems", "Building Energy Systems of type <Hive.IO.EnergySystems.>, such as Emitters, ConversionTech, SolarTech, etc.", GH_ParamAccess.list);
         }
 
 
@@ -266,18 +267,25 @@ namespace Hive.IO.GHComponents
                     conversionTech.Add(new CombinedHeatPower(conversionTechProperties.CHPCost, conversionTechProperties.CHPEmissions, conversionTechProperties.CHPCapacity, conversionTechProperties.CHPHTP, conversionTechProperties.CHPEffElec));
             }
 
-
+            Radiator radiator = null;
             if (emitterProperties == null)
             {
-                DA.SetData(1, new Radiator(100.0, 100.0, true, false, 65.0, 55.0));
+                radiator = new Radiator(100.0, 100.0, true, false, 65.0, 55.0);
             }
             else
             {
                 //EmitterProperties emitterProperties = JsonConvert.DeserializeObject<EmitterProperties>(emitterJson);
-                DA.SetData(1, new Radiator(emitterProperties.InvestmentCost, emitterProperties.EmbodiedEmissions, true, false, emitterProperties.SupplyTemperature, emitterProperties.ReturnTemperature));
+                radiator = new Radiator(emitterProperties.InvestmentCost, emitterProperties.EmbodiedEmissions, true, false, emitterProperties.SupplyTemperature, emitterProperties.ReturnTemperature);
             }
 
-            DA.SetDataList(0, conversionTech);
+            //DA.SetDataList(0, conversionTech);
+            //DA.SetData(1, radiator);
+
+            var obj = new List<object>();
+            foreach (object o in conversionTech)
+                obj.Add(o);
+            obj.Add(radiator);
+            DA.SetDataList(0, obj);
         }
 
 
