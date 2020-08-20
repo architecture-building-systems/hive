@@ -36,7 +36,7 @@ namespace Hive.IO.GhDistributors
             pManager.AddGenericParameter("Hive.IO.Environment", "Environment", "Hive.IO.Environment from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.item);
             pManager.AddGenericParameter("Hive.IO.EnergySystems.SurfaceBasedTech", "SurfaceBasedTech", "Hive.IO.EnergySystem. Photovoltaic; .SolarThermal; .PVT; .GroundCollector objects from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.list);
             pManager.AddGenericParameter("Hive.IO.EnergySystems.ConversionTech", "ConversionTech", "Hive.IO.EnergySystem.ConversionTech; AirSourceHeatPump, Chillers, CHP, Boilers, etc.", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Hive.IO.EnergySystems.Emitter", "Emitter", "Hive.IO.EnergySystems.Emitter; Floor heating, radiator, etc.", GH_ParamAccess.item); // should be a list, even for a single zone (different cooling and heating emitter, e.g.). but how to know, which emitter goes to which simulation model?
+            pManager.AddGenericParameter("Hive.IO.EnergySystems.Emitter", "Emitter", "Hive.IO.EnergySystems.Emitter; Floor heating, radiator, etc.", GH_ParamAccess.list); // should be a list, even for a single zone (different cooling and heating emitter, e.g.). but how to know, which emitter goes to which simulation model?
         }
 
 
@@ -53,7 +53,7 @@ namespace Hive.IO.GhDistributors
             var conversionTech = new List<ConversionTech>();
             Building.Building building = null;
             Environment.Environment environment = null;
-            Emitter emitter = null;
+            var emitters = new List<Emitter>();
 
             foreach (GH_ObjectWrapper hiveInput in inputObjects)
             {
@@ -78,7 +78,7 @@ namespace Hive.IO.GhDistributors
                 else if (hiveInput.Value is Environment.Environment)
                     environment = hiveInput.Value as Environment.Environment;
                 else if (hiveInput.Value is Emitter)
-                    emitter = hiveInput.Value as Emitter;
+                    emitters.Add(hiveInput.Value as Emitter);
             }
 
             //if (building != null) Rhino.RhinoApp.WriteLine("Building '{0}' read successfully", building.Type.ToString());
@@ -88,7 +88,7 @@ namespace Hive.IO.GhDistributors
             DA.SetData(1, environment); 
             DA.SetDataList(2, srfBasedTech);
             DA.SetDataList(3, conversionTech);
-            DA.SetData(4, emitter);
+            DA.SetDataList(4, emitters);
         }
 
         protected override System.Drawing.Bitmap Icon
