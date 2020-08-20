@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 using Rhino.Geometry;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 
 
 namespace Hive.IO.GHComponents
@@ -79,8 +79,8 @@ namespace Hive.IO.GHComponents
             DA.GetData(5, ref solarTech.InvestmentCost);
             DA.GetData(6, ref solarTech.EmbodiedEmissions);
 
-            string solarTechJson = JsonConvert.SerializeObject(solarTech);
-            DA.SetData(1, solarTechJson);
+            //string solarTechJson = JsonConvert.SerializeObject(solarTech);
+            DA.SetData(1, solarTech);
 
             DA.SetData(0, mesh);
         }

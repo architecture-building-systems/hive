@@ -1,6 +1,6 @@
 ﻿using System;
 using Grasshopper.Kernel;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 
 namespace Hive.IO.GHComponents
 {
@@ -68,7 +68,8 @@ namespace Hive.IO.GHComponents
             if (!DA.GetData(4, ref emitter.EmbodiedEmissions))
                 emitter.EmbodiedEmissions = 100.0;
 
-            DA.SetData(0, JsonConvert.SerializeObject(emitter));
+            //DA.SetData(0, JsonConvert.SerializeObject(emitter));
+            DA.SetData(0, emitter);
         }
 
         /// <summary>

@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 
 
 namespace Hive.IO.GHComponents
@@ -102,8 +102,8 @@ namespace Hive.IO.GHComponents
             DA.GetData(11, ref energySystemProperties.CHPHTP);
             DA.GetData(12, ref energySystemProperties.CHPEffElec);
 
-            string conversionTechJson = JsonConvert.SerializeObject(energySystemProperties);
-            DA.SetData(0, conversionTechJson);
+            //string conversionTechJson = JsonConvert.SerializeObject(energySystemProperties);
+            DA.SetData(0, energySystemProperties);
         }
 
 

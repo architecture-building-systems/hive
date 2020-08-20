@@ -33,7 +33,17 @@ namespace Hive.IO.EnergySystems
         /// </summary>
         public double[] Irradiance { get; }
 
-        public Radiation(int horizon, double[] irradiation, double surfaceArea = 1, int? vertexId = null)
+        public enum RadiationType
+        {
+            GHI,
+            DNI,
+            DHI
+        }
+
+        public RadiationType Description { get; private set; }
+
+
+        public Radiation(int horizon, double[] irradiation, double surfaceArea = 1, int? vertexId = null, RadiationType radiationType = RadiationType.GHI)
             : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, irradiation, null, null)
         {
             this.Irradiance = new double[irradiation.Length];
@@ -42,6 +52,10 @@ namespace Hive.IO.EnergySystems
 
             if (vertexId.HasValue)
                 this.MeshVertexId = vertexId;
+
+            if (radiationType != RadiationType.GHI)
+                this.Description = radiationType;
+
         }
     }
 
@@ -68,7 +82,7 @@ namespace Hive.IO.EnergySystems
             get
             {
                 if (_monthlySupplyTemperature == null)
-                    _monthlySupplyTemperature = GetAverageMonthlyValue(this.SupplyTemperature);
+                    _monthlySupplyTemperature = Misc.GetAverageMonthlyValue(this.SupplyTemperature);
                 return _monthlySupplyTemperature;
             }
             private set { ; }
@@ -120,6 +134,9 @@ namespace Hive.IO.EnergySystems
     /// </summary>
     public abstract class EnergyCarrier
     {
+        // specifying the carrier. e.g. for <Electricity>, name could be 'UTC-Grid', or for <Gas> it could be 'BioGasZurich' or 'NaturalGasRussia'
+        public string Name { get; internal set; }
+
         /// <summary>
         /// Pre-defined energy units
         /// </summary>
@@ -186,7 +203,7 @@ namespace Hive.IO.EnergySystems
             get
             {
                 if (_monthlyCumulativeEnergy == null)
-                    _monthlyCumulativeEnergy = GetCumulativeMonthlyValue(this.AvailableEnergy);
+                    _monthlyCumulativeEnergy = Misc.GetCumulativeMonthlyValue(this.AvailableEnergy);
                 return _monthlyCumulativeEnergy;
             }
             private set { ; }
@@ -198,66 +215,13 @@ namespace Hive.IO.EnergySystems
             get
             {
                 if (_monthlyAverageEnergy == null)
-                    _monthlyAverageEnergy = GetAverageMonthlyValue(this.AvailableEnergy);
+                    _monthlyAverageEnergy = Misc.GetAverageMonthlyValue(this.AvailableEnergy);
                 return _monthlyAverageEnergy;
             }
             private set { ; }
         }
 
 
-        public static double[] GetAverageMonthlyValue(double[] annualTimeSeries)
-        {
-
-            int months = 12;
-            double[] monthlyTimeSeries = new double[months];
-            int sumOfDays = 0;
-            for (int t = 0; t < months; t++)
-            {
-                int startIndex = sumOfDays * Misc.HoursPerDay;
-                int daysThisMonth = Misc.DaysPerMonth[t];
-                sumOfDays += daysThisMonth;
-                int endIndex = sumOfDays * Misc.HoursPerDay;
-                double average = 0.0;
-                for (int i = startIndex; i < endIndex; i++)
-                {
-                    double temp = annualTimeSeries[i];
-                    if (double.IsNaN(temp))
-                        temp = 0.0;
-                    average += temp;
-                }
-
-                average /= (daysThisMonth * Misc.HoursPerDay);
-                //double average = Enumerable.Range(startIndex, endIndex).Select(i => annualTimeSeries[i]).Average();
-                monthlyTimeSeries[t] = average;
-            }
-
-            return monthlyTimeSeries;
-        }
-
-
-        public static double[] GetCumulativeMonthlyValue(double[] annualTimeSeries)
-        {
-            int months = 12;
-            double[] monthlyTimeSeries = new double[months];
-            int sumOfDays = 0;
-            for (int t = 0; t < months; t++)
-            {
-                int startIndex = sumOfDays * Misc.HoursPerDay;
-                int daysThisMonth = Misc.DaysPerMonth[t];
-                sumOfDays += daysThisMonth;
-                int endIndex = sumOfDays * Misc.HoursPerDay;
-                double sum = 0.0;
-                for (int i=startIndex; i<endIndex; i++)
-                {
-                    double temp = annualTimeSeries[i];
-                    if (double.IsNaN(temp))
-                        temp = 0.0;
-                    sum += temp;
-                }
-                monthlyTimeSeries[t] = sum;
-            }
-
-            return monthlyTimeSeries;
-        }
+        
     }
 }

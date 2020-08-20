@@ -7,7 +7,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
 using Rhino.Geometry;
 using Hive.IO.EnergySystems;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 
 namespace Hive.IO.GHComponents
 {
@@ -194,14 +194,14 @@ namespace Hive.IO.GHComponents
             List<Mesh> meshList = new List<Mesh>();
             DA.GetDataList(0, meshList); 
 
-            List<string> solarTechJson = new List<string>();
-            DA.GetDataList(1, solarTechJson);
+            var solarTechProperties = new List<SolarTechProperties>();
+            DA.GetDataList(1, solarTechProperties);
 
-            string conversionTechJson = null;
-            DA.GetData(2, ref conversionTechJson);
+            ConversionTechProperties conversionTechProperties = null;
+            DA.GetData(2, ref conversionTechProperties);
 
-            string emitterJson = null;
-            DA.GetData(3, ref emitterJson);
+            EmitterProperties emitterProperties = null;
+            DA.GetData(3, ref emitterProperties);
 
             // feed the list into the listbox on the windows form
 
@@ -219,7 +219,7 @@ namespace Hive.IO.GHComponents
             var conversionTech = new List<ConversionTech>();
 
 
-            if (solarTechJson.Count == 0)
+            if (solarTechProperties.Count == 0)
             {
                 foreach (Mesh mesh in meshList)
                 {
@@ -235,11 +235,11 @@ namespace Hive.IO.GHComponents
             }
             else
             {
-                for (int i=0; i<solarTechJson.Count; i++)
+                for (int i=0; i<solarTechProperties.Count; i++)
                 {
-                    string json = solarTechJson[i];
+                    var solarProperties = solarTechProperties[i];
                     Mesh mesh = meshList[i];
-                    var solarProperties = JsonConvert.DeserializeObject<SolarTechProperties>(json);
+                    //var solarProperties = JsonConvert.DeserializeObject<SolarTechProperties>(json);
                     if (solarProperties.Type == "PV")
                         conversionTech.Add(new Photovoltaic(solarProperties.InvestmentCost, solarProperties.EmbodiedEmissions, mesh, solarProperties.Technology, solarProperties.ElectricEfficiency));
                     else if (solarProperties.Type == "PVT")
@@ -251,13 +251,13 @@ namespace Hive.IO.GHComponents
                 }
             }
 
-            if(conversionTechJson == null)
+            if(conversionTechProperties == null)
             {
                 conversionTech.Add(new GasBoiler(100.0, 100.0, 10.0, 0.9));
             }
             else
             {
-                var conversionTechProperties = JsonConvert.DeserializeObject<ConversionTechProperties>(conversionTechJson);
+                //var conversionTechProperties = JsonConvert.DeserializeObject<ConversionTechProperties>(conversionTechJson);
                 if (conversionTechProperties.ASHPCapacity > 0.0)
                     conversionTech.Add(new AirSourceHeatPump(conversionTechProperties.ASHPCost, conversionTechProperties.ASHPEmissions, conversionTechProperties.ASHPCapacity, conversionTechProperties.ASHPCOP));
                 if (conversionTechProperties.GasBoilerCapacity > 0.0)
@@ -267,13 +267,13 @@ namespace Hive.IO.GHComponents
             }
 
 
-            if (emitterJson == null)
+            if (emitterProperties == null)
             {
                 DA.SetData(1, new Radiator(100.0, 100.0, true, false, 65.0, 55.0));
             }
             else
             {
-                EmitterProperties emitterProperties = JsonConvert.DeserializeObject<EmitterProperties>(emitterJson);
+                //EmitterProperties emitterProperties = JsonConvert.DeserializeObject<EmitterProperties>(emitterJson);
                 DA.SetData(1, new Radiator(emitterProperties.InvestmentCost, emitterProperties.EmbodiedEmissions, true, false, emitterProperties.SupplyTemperature, emitterProperties.ReturnTemperature));
             }
 
