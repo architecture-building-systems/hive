@@ -6,11 +6,11 @@ using Grasshopper.Kernel.Types;
 using Hive.IO.EnergySystems;
 using Rhino.Geometry;
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhDistributors
 {
-    public class GhDistributorConversionTech : GH_Component
+    public class GhConversionTech : GH_Component
     {
-        public GhDistributorConversionTech()
+        public GhConversionTech()
           : base("Distributor ConversionTech Hive", "HiveDistConversionTech",
               "Distributor for Hive.IO.EnergySystems.ConversionTech",
               "[hive]", "IO")

@@ -2,19 +2,17 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
-using Rhino.Geometry;
 using Hive.IO.EnergySystems;
 
-
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhMergers
 {
-    public class GhMergerHeatPump : GH_Component
+    public class GhCHP : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the GhMergerHeatPump class.
+        /// Initializes a new instance of the GhMergerCHP class.
         /// </summary>
-        public GhMergerHeatPump()
-          : base("Merger AirSourceHeatPump Hive", "HiveMergerASHP",
+        public GhCHP()
+          : base("Merger CHP Hive", "HiveMergerCHP",
               "Description",
               "[hive]", "IO")
         {
@@ -29,15 +27,15 @@ namespace Hive.IO.GHComponents
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Air", "Air", "Air energy carrier from weather file", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Electricity", "Electricity", "Electricity", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Gas", "Gas", "Gas", GH_ParamAccess.item);
             pManager.AddIntegerParameter("horizon", "horizon", "horizon", GH_ParamAccess.item);
             pManager.AddNumberParameter("heatGenerated", "heatGenerated", "heatGenerated (kWh)", GH_ParamAccess.list);
+            pManager.AddNumberParameter("elecGenerated", "elecGenerated", "elecGenerated (kWh)", GH_ParamAccess.list);
             pManager.AddNumberParameter("cost", "cost", "cost", GH_ParamAccess.list);
             pManager.AddNumberParameter("ghg", "ghg", "ghg", GH_ParamAccess.list);
             pManager.AddNumberParameter("suppTemp", "suppTemp", "suppTemp for water output. necessary to know for COP calculation", GH_ParamAccess.list);
 
-            pManager.AddGenericParameter("ASHP", "ASHP", "ASHP", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.CombinedHeatPower", "CombinedHeatPower", "CombinedHeatPower", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -45,7 +43,7 @@ namespace Hive.IO.GHComponents
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Hive.IO.AirSourceHeatPump", "AirSourceHeatPump", "AirSourceHeatPump", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.CombinedHeatPower", "CombinedHeatPower", "CombinedHeatPower", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -54,17 +52,17 @@ namespace Hive.IO.GHComponents
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            Air air = null;
-            DA.GetData(0, ref air);
-
-            Electricity electricity = null;
-            DA.GetData(1, ref electricity);
+            Gas gas = null;
+            DA.GetData(0, ref gas);
 
             int horizon = 8760;
-            DA.GetData(2, ref horizon);
+            DA.GetData(1, ref horizon);
 
-            var energyGenerated = new List<double>();
-            DA.GetDataList(3, energyGenerated);
+            var heatGenerated = new List<double>();
+            DA.GetDataList(2, heatGenerated);
+
+            var elecGenerated = new List<double>();
+            DA.GetDataList(3, elecGenerated);
 
             var energyCost = new List<double>();
             DA.GetDataList(4, energyCost);
@@ -75,16 +73,16 @@ namespace Hive.IO.GHComponents
             var supplyTemp = new List<double>();
             DA.GetDataList(6, supplyTemp);
 
-            AirSourceHeatPump ashp = null;
-            DA.GetData(7, ref ashp);
+            CombinedHeatPower chp = null;
+            DA.GetData(7, ref chp);
 
 
-            ashp.SetInput(air, electricity);
+            chp.SetInput(gas);
 
-            // this creates a water EnergyCarrier that will be infused into the AirSourceHeatPump
-            ashp.SetOutput(horizon, energyGenerated.ToArray(), energyCost.ToArray(), ghg.ToArray(), supplyTemp.ToArray());
+            // this creates a water and electricity EnergyCarrier that will be infused into the CHP
+            chp.SetOutput(horizon, heatGenerated.ToArray(), elecGenerated.ToArray(), energyCost.ToArray(), ghg.ToArray(), supplyTemp.ToArray());
 
-            DA.SetData(0, ashp);
+            DA.SetData(0, chp);
         }
 
         /// <summary>
@@ -105,7 +103,7 @@ namespace Hive.IO.GHComponents
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("c6279e15-1b9e-4403-aa42-f1e8c1b54d23"); }
+            get { return new Guid("c46bd779-a529-4b02-b59e-0b07cb6b5979"); }
         }
     }
 }

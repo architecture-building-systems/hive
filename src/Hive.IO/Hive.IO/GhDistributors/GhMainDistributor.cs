@@ -5,11 +5,11 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Hive.IO.EnergySystems;
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhDistributors
 {
-    public class GhDistributor : GH_Component
+    public class GhMainDistributor : GH_Component
     {
-        public GhDistributor()
+        public GhMainDistributor()
           : base("Main Distributor Hive", "HiveDistributor",
               "The Hive.IO.Distributor collects all Hive Inputs from outside the Mothercell (the simulation core) and outputs them individually according to their class type, ready for deployment.",
               "[hive]", "IO")

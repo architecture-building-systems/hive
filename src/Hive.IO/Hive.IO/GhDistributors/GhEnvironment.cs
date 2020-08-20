@@ -1,11 +1,11 @@
 ﻿using System;
 using Grasshopper.Kernel;
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhDistributors
 {
-    public class GhDistributorEnvironment : GH_Component
+    public class GhEnvironment : GH_Component
     {
-        public GhDistributorEnvironment()
+        public GhEnvironment()
           : base("Distributor Environment Hive", "HiveDistEnvironment",
               "Environment distributor. Reads in an Hive.IO.Environment object and outputs the filepath of the .epw, as well as energy potentials as list of EnergyCarriers",
               "[hive]", "IO")

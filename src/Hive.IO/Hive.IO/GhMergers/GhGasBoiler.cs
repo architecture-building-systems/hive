@@ -5,14 +5,14 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 using Hive.IO.EnergySystems;
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhMergers
 {
-    public class GhMergerGasBoiler : GH_Component
+    public class GhGasBoiler : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the GhMergerGasBoiler class.
         /// </summary>
-        public GhMergerGasBoiler()
+        public GhGasBoiler()
           : base("Merger GasBoiler Hive", "HiveMergerBoiler",
               "Description",
               "[hive]", "IO")

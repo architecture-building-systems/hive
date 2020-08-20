@@ -6,7 +6,7 @@ using Rhino.Geometry;
 //using Newtonsoft.Json;
 
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhParametricInputs
 {
     internal class SolarTechProperties
     {
@@ -19,12 +19,12 @@ namespace Hive.IO.GHComponents
     }
 
 
-    public class GhParametricInputSolarSystems : GH_Component
+    public class GhSolarSystems : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the GhParametricInputSolarSystems class.
         /// </summary>
-        public GhParametricInputSolarSystems()
+        public GhSolarSystems()
           : base("Parametric Input SolarTech Hive", "HiveParaInSolarTech",
               "Description",
               "[hive]", "IO")

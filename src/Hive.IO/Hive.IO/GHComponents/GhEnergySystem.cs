@@ -7,6 +7,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
 using Rhino.Geometry;
 using Hive.IO.EnergySystems;
+using Hive.IO.GhParametricInputs;
 //using Newtonsoft.Json;
 
 namespace Hive.IO.GHComponents
@@ -35,7 +36,7 @@ namespace Hive.IO.GHComponents
             pManager[1].Optional = true;
             pManager.AddGenericParameter("ConversionTechJson", "ConversionTechJson", "Json describing all other used conversion technologies (ASHP, boiler, CHP, etc", GH_ParamAccess.item);
             pManager[2].Optional = true;
-            pManager.AddGenericParameter("EmitterJson", "EmitterJson", "Json describing emitter properties", GH_ParamAccess.item);
+            pManager.AddGenericParameter("EmitterJson", "EmitterJson", "Json describing emitter properties", GH_ParamAccess.list);
             pManager[3].Optional = true;
         }
 
@@ -201,8 +202,8 @@ namespace Hive.IO.GHComponents
             ConversionTechProperties conversionTechProperties = null;
             DA.GetData(2, ref conversionTechProperties);
 
-            EmitterProperties emitterProperties = null;
-            DA.GetData(3, ref emitterProperties);
+            var emitterProperties = new List<EmitterProperties>();
+            DA.GetDataList(3, emitterProperties);
 
             // feed the list into the listbox on the windows form
 
@@ -269,24 +270,33 @@ namespace Hive.IO.GHComponents
                     conversionTech.Add(new Chiller(conversionTechProperties.ChillerCost, conversionTechProperties.ChillerEmissions, conversionTechProperties.ChillerCapacity, conversionTechProperties.ChillerCOP));
             }
 
-            Radiator radiator = null;
-            if (emitterProperties == null)
+            var emitters = new List<Emitter>();
+            if (emitterProperties.Count == 0)
             {
-                radiator = new Radiator(100.0, 100.0, true, false, 65.0, 55.0);
+                emitters.Add(new Radiator(100.0, 100.0, true, false, 65.0, 55.0));
+                emitters[0].SetEmitterName("ConventionalRadiator");
+                emitters.Add(new AirDiffuser(100.0, 100.0, false, true, 20.0, 25.0));
+                emitters[1].SetEmitterName("AirDiffuser");
             }
             else
             {
-                //EmitterProperties emitterProperties = JsonConvert.DeserializeObject<EmitterProperties>(emitterJson);
-                radiator = new Radiator(emitterProperties.InvestmentCost, emitterProperties.EmbodiedEmissions, true, false, emitterProperties.SupplyTemperature, emitterProperties.ReturnTemperature);
+                int counter = 0;
+                foreach (EmitterProperties emProp in emitterProperties)
+                {
+                    if (emProp.IsRadiation)
+                        emitters.Add(new Radiator(emProp.InvestmentCost, emProp.EmbodiedEmissions, emProp.IsHeating, emProp.IsCooling, emProp.SupplyTemperature, emProp.ReturnTemperature));
+                    else
+                        emitters.Add(new AirDiffuser(emProp.InvestmentCost, emProp.EmbodiedEmissions, emProp.IsHeating, emProp.IsCooling, emProp.SupplyTemperature, emProp.ReturnTemperature));
+                    emitters[counter].SetEmitterName(emProp.Name);
+                    counter++;
+                }
             }
-
-            //DA.SetDataList(0, conversionTech);
-            //DA.SetData(1, radiator);
 
             var obj = new List<object>();
             foreach (object o in conversionTech)
                 obj.Add(o);
-            obj.Add(radiator);
+            foreach (object e in emitters)
+                obj.Add(e);
             DA.SetDataList(0, obj);
         }
 

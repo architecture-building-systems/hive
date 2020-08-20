@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 using Hive.IO.EnergySystems;
+using Hive.IO.GhParametricInputs;
 
 namespace Hive.IO.GHComponents
 {
@@ -39,7 +40,7 @@ namespace Hive.IO.GHComponents
             List<Mesh> geometry = new List<Mesh>();
             DA.GetDataList(1, geometry);
 
-            GhParametricInputEnergyPotentials.EnergyCarrierTimeseries potentials = null; // new GhParametricInputEnergyPotentials.EnergyPotentialsProperties();
+            GhEnergyPotentials.EnergyCarrierTimeseries potentials = null; // new GhParametricInputEnergyPotentials.EnergyPotentialsProperties();
             DA.GetData(2, ref potentials);
 
 

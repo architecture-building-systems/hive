@@ -5,7 +5,7 @@ using Grasshopper.Kernel;
 using Rhino.Geometry;
 
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhParametricInputs
 {
     public class ConversionTechProperties
     {
@@ -32,12 +32,12 @@ namespace Hive.IO.GHComponents
     }
 
 
-    public class GhParametricInputEnergySystems : GH_Component
+    public class GhEnergySystems : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the GhParametricInputEnergySystems class.
         /// </summary>
-        public GhParametricInputEnergySystems()
+        public GhEnergySystems()
           : base("Parametric Input EnergySystems Hive", "HiveParaInEnSys",
               "Description",
               "[hive]", "IO")

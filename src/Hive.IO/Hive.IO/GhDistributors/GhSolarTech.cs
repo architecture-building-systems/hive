@@ -4,12 +4,12 @@ using Grasshopper.Kernel;
 using Hive.IO.EnergySystems;
 using Rhino.Geometry;
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhDistributors
 {
-    public class GhDistributorSolarTech : GH_Component
+    public class GhSolarTech : GH_Component
     {
 
-        public GhDistributorSolarTech()
+        public GhSolarTech()
           : base("Distributor SolarTech Hive", "HiveDistSolarTech",
               "Distributor for Solar technologies." +
                 "\nOutputs relevant parameters for Solar Energy Generation calculations (PV, ST, PVT, GC).",
@@ -86,7 +86,7 @@ namespace Hive.IO.GHComponents
                         A_PVT.Add(AreaMassProperties.Compute(_pvt.SurfaceGeometry).Area);
                         break;
                     case "Hive.IO.EnergySystems.GroundCollector":
-                        
+
                         break;
                 }
             }

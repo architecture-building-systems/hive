@@ -4,14 +4,14 @@ using System.Linq;
 using Grasshopper.Kernel;
 
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhParametricInputs
 {
-    public class GhParametricInputEnergyPotentials : GH_Component
+    public class GhEnergyPotentials : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the GhParametricInputEnergyPotentials class.
         /// </summary>
-        public GhParametricInputEnergyPotentials()
+        public GhEnergyPotentials()
           : base("Parametric Input Energy Potantials Hive", "HiveParaInPotentials",
               "Description",
               "[hive]", "IO")
