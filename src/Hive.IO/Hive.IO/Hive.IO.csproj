@@ -75,23 +75,32 @@
     <Compile Include="Building\BuildingConstruction.cs" />
     <Compile Include="Building\BuildingMaterial.cs" />
     <Compile Include="Building\Sia2024Record.cs" />
+    <Compile Include="EnergySystems\CombustionTech.cs" />
     <Compile Include="EnergySystems\EnergyCarrier.cs" />
     <Compile Include="EnergySystems\Emitter.cs" />
     <Compile Include="EnergySystems\Lighting.cs" />
     <Compile Include="EnergySystems\Storage.cs" />
+    <Compile Include="EnergySystems\SurfaceBasedTech.cs" />
     <Compile Include="EnergySystems\Ventilation.cs" />
     <Compile Include="Forms\BuildingInput.xaml.cs">
       <DependentUpon>BuildingInput.xaml</DependentUpon>
     </Compile>
-    <Compile Include="GHComponents\GhDistributorEPW.cs" />
-    <Compile Include="GHComponents\GhDistributorSIA.cs" />
-    <Compile Include="GHComponents\GhDistributorSolar.cs" />
-    <Compile Include="GHComponents\GhDistributorSupplySystem.cs" />
-    <Compile Include="GHComponents\GhParametricInputEmitter.cs" />
+    <Compile Include="GhDistributors\GhConversionTech.cs" />
+    <Compile Include="GhDistributors\GhEnvironment.cs" />
+    <Compile Include="GhDistributors\GhSIA.cs" />
+    <Compile Include="GhDistributors\GhSolarSimulation.cs" />
+    <Compile Include="GhDistributors\GhSolarTech.cs" />
+    <Compile Include="GhMergers\GhChiller.cs" />
+    <Compile Include="GhMergers\GhCHP.cs" />
+    <Compile Include="GhMergers\GhGasBoiler.cs" />
+    <Compile Include="GhMergers\GhSolarTech.cs" />
+    <Compile Include="GhParametricInputs\GhEmitter.cs" />
     <Compile Include="GHComponents\GhEnvironment.cs" />
-    <Compile Include="GHComponents\GhParametricInputEnergySystems.cs" />
-    <Compile Include="GHComponents\GhParametricInputSiaRoom.cs" />
-    <Compile Include="GHComponents\GhParametricInputSolarSystems.cs" />
+    <Compile Include="GhMergers\GhHeatPump.cs" />
+    <Compile Include="GhParametricInputs\GhEnergyPotentials.cs" />
+    <Compile Include="GhParametricInputs\GhEnergySystems.cs" />
+    <Compile Include="GhParametricInputs\GhSIARoom.cs" />
+    <Compile Include="GhParametricInputs\GhSolarSystems.cs" />
     <Compile Include="GHComponents\GhResults.cs" />
     <Compile Include="GHComponents\GhVisualizer.cs" />
     <Compile Include="Environment\Environment.cs" />
@@ -108,9 +117,10 @@
       <DependentUpon>FormEnSysSolar.cs</DependentUpon>
     </Compile>
     <Compile Include="GHComponents\GhBuilding.cs" />
-    <Compile Include="GHComponents\GhDistributor.cs" />
+    <Compile Include="GhDistributors\GhMainDistributor.cs" />
     <Compile Include="GHComponents\GhVisualizerAttributes.cs" />
     <Compile Include="GHComponents\HiveIOInfo.cs" />
+    <Compile Include="Misc.cs" />
     <Compile Include="GHComponents\GhEnergySystem.cs" />
     <Compile Include="Plots\AmrPlotBase.cs" />
     <Compile Include="Plots\AmrPlotStyle.cs" />

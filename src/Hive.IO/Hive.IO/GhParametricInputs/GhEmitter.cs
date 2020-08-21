@@ -1,8 +1,8 @@
-﻿using System;
-using Grasshopper.Kernel;
-using Newtonsoft.Json;
+﻿using Grasshopper.Kernel;
+using System;
 
-namespace Hive.IO.GHComponents
+
+namespace Hive.IO.GhParametricInputs
 {
     internal class EmitterProperties
     {
@@ -11,20 +11,29 @@ namespace Hive.IO.GHComponents
         public double Capacity;
         public double InvestmentCost;
         public double EmbodiedEmissions;
+        public string Name;
+        public bool IsAir;
+        public bool IsRadiation;
+        public bool IsCooling;
+        public bool IsHeating;
     }
 
-    public class GhParametricInputEmitter : GH_Component
+    public class GhEmitter : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the GhEnergySystems class.
         /// </summary>
-        public GhParametricInputEmitter()
-          : base("Hive.IO.EnergySystems.Emitter", "EmitterInputs",
+        public GhEmitter()
+          : base("Parametric Input Emitter Hive", "HiveParaInEmitter",
               "Heat/Cold Emitter Design Inputs (radiator, floor heating, ...).",
               "[hive]", "IO")
         {
         }
 
+
+        public override GH_Exposure Exposure => GH_Exposure.tertiary;
+        
+        
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
@@ -35,6 +44,9 @@ namespace Hive.IO.GHComponents
             pManager.AddNumberParameter("Capacity", "Capacity", "Maximal Heating power in kW", GH_ParamAccess.item);
             pManager.AddNumberParameter("InvestmentCost", "InvestmentCost", "Investment cost CHF/kW", GH_ParamAccess.item);
             pManager.AddNumberParameter("EmbodiedEmissions", "EmbodiedEmissions", "Embodied emissions in kgCO2/kW", GH_ParamAccess.item);
+            pManager.AddTextParameter("Name", "Name", "Name of the emitter", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("AirEmitter?", "AirEmitter?", "AirEmitter? radiator by default", GH_ParamAccess.item, false);
+            pManager.AddBooleanParameter("Cooling?", "Cooling?", "Cooling? Heating by default", GH_ParamAccess.item, false);
         }
 
         /// <summary>
@@ -63,8 +75,18 @@ namespace Hive.IO.GHComponents
                 emitter.InvestmentCost = 100.0;
             if (!DA.GetData(4, ref emitter.EmbodiedEmissions))
                 emitter.EmbodiedEmissions = 100.0;
-
-            DA.SetData(0, JsonConvert.SerializeObject(emitter));
+            if (!DA.GetData(5, ref emitter.Name))
+                emitter.Name = "ConventionalRadiator";
+            if (!DA.GetData(6, ref emitter.IsAir))
+                emitter.IsAir = false;
+            if (emitter.IsAir) emitter.IsRadiation = false;
+            else emitter.IsRadiation = true;
+            if (!DA.GetData(7, ref emitter.IsCooling))
+                emitter.IsCooling = false;
+            if (emitter.IsCooling) emitter.IsHeating = false;
+            else emitter.IsHeating = true;
+            
+            DA.SetData(0, emitter);
         }
 
         /// <summary>

@@ -2,14 +2,16 @@
 using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
+using Hive.IO.EnergySystems;
+using Hive.IO.GhParametricInputs;
 
 namespace Hive.IO.GHComponents
 {
     public class GhEnvironment : GH_Component
     {
         public GhEnvironment()
-          : base("Hive.IO.Environment", "Hive.IO.Env",
-              "Creates an instance of the Hive.IO.Environment class, describing the environment of a building.",
+          : base("Input Environment Hive", "HiveInputEnvironment",
+              "Hive.IO.Environment input, describing the environment of a building.",
               "[hive]", "IO")
         {
         }
@@ -20,6 +22,8 @@ namespace Hive.IO.GHComponents
             pManager.AddTextParameter("EPW Path", "epwPath", "epwPath", GH_ParamAccess.item);
             pManager.AddMeshParameter("Obstacles Geometry", "ObstMesh", "Mesh geometries of any adjacent obstacles, such as buildings, trees, etc.", GH_ParamAccess.list);
             pManager[1].Optional = true;
+            pManager.AddGenericParameter("Potentials", "Potentials", "Energy potentials of the site, of type <EnergyPotentialsProperties>.", GH_ParamAccess.item);
+            pManager[2].Optional = true;
         }
 
 
@@ -36,8 +40,34 @@ namespace Hive.IO.GHComponents
             List<Mesh> geometry = new List<Mesh>();
             DA.GetDataList(1, geometry);
 
+            GhEnergyPotentials.EnergyCarrierTimeseries potentials = null; // new GhParametricInputEnergyPotentials.EnergyPotentialsProperties();
+            DA.GetData(2, ref potentials);
+
+
             Mesh[] geometryArray = geometry.Count > 0 ? geometry.ToArray() : null;
             Environment.Environment environment = new Environment.Environment(path, geometryArray);
+            if (potentials == null)
+            {
+                environment.SetDefaultEnergyPotentials();    // replace this with inputs from the windows form later
+            }
+            else
+            {
+                EnergyCarrier[] inputCarriers = new EnergyCarrier[6];
+                inputCarriers[0] = new Gas(Misc.HoursPerYear, potentials.NaturalGasAvailability, potentials.NaturalGasPrice, potentials.NaturalGasEmissions);
+                inputCarriers[0].Name = potentials.NaturalGasName;
+                inputCarriers[1] = new Gas(Misc.HoursPerYear, potentials.BioGasAvailability, potentials.BioGasPrice, potentials.BioGasEmissions);
+                inputCarriers[1].Name = potentials.BioGasName;
+                inputCarriers[2] = new Pellets(Misc.HoursPerYear, potentials.WoodPelletsAvailability, potentials.WoodPelletsPrice, potentials.WoodPelletsEmissions);
+                inputCarriers[2].Name = potentials.WoodPelletsName;
+                inputCarriers[3] = new Water(Misc.HoursPerYear, potentials.DistrictHeatingAvailability, potentials.DistrictHeatingPrice, potentials.DistrictHeatingEmissions, potentials.DistrictHeatingSupplyTemp);
+                inputCarriers[3].Name = potentials.DistrictHeatingName;
+                inputCarriers[4] = new Water(Misc.HoursPerYear, potentials.DistrictCoolingAvailability, potentials.DistrictCoolingPrice, potentials.DistrictCoolingEmissions, potentials.DistrictCoolingSupplyTemp);
+                inputCarriers[4].Name = potentials.DistrictCoolingName;
+                inputCarriers[5] = new Electricity(Misc.HoursPerYear, potentials.GridElectricityAvailability, potentials.GridElectricityPrice, potentials.GridElectricityEmissions);
+                inputCarriers[5].Name = potentials.GridElectricityName;
+                environment.SetEnergyPotentials(inputCarriers);
+            }
+
             DA.SetData(0, environment);
         }
 

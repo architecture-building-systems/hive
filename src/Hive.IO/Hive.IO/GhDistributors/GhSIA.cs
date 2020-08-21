@@ -3,17 +3,18 @@ using System.Web.Script.Serialization;
 using Grasshopper.Kernel;
 using Hive.IO.Building;
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhDistributors
 {
-    public class GhDistributorSIA : GH_Component
+    public class GhSIA : GH_Component
     {
-        public GhDistributorSIA()
-          : base("Hive.IO.DistributorSIA", "HiveIODistrSIA",
+        public GhSIA()
+          : base("Distributor SIARoom Hive", "HiveDistSIARoom",
               "Sia 2024 distributor that reads in an Hive.IO.Building object and outputs its Sia 2024 room definition.",
-              "[hive]", "Mothercell")
+              "[hive]", "IO")
         {
         }
 
+        public override GH_Exposure Exposure => GH_Exposure.quarternary;
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {

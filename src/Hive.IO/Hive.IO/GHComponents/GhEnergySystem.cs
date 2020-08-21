@@ -7,7 +7,8 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
 using Rhino.Geometry;
 using Hive.IO.EnergySystems;
-using Newtonsoft.Json;
+using Hive.IO.GhParametricInputs;
+//using Newtonsoft.Json;
 
 namespace Hive.IO.GHComponents
 {
@@ -23,7 +24,7 @@ namespace Hive.IO.GHComponents
 
 
         public GhEnergySystem()
-          : base("Hive.IO.EnergySystems", "EnergySystems", "Hive.IO.EnergySystems input component (solar energy systems, other conversion technologies, emitters)." +
+          : base("Input EnergySystems Hive", "HiveInputEnergySystems", "Hive.IO.EnergySystems input component (solar energy systems, other conversion technologies, emitters)." +
                 "\nThe component opens a Form upon double click, where details of the solar energy system can be specified." +
                 "\nPossible technologies are Photovoltaic (PV), Solar Thermal (ST), hybrid PVT, or Ground Collector (GC).", "[hive]", "IO") { indexNow = 0; }
 
@@ -35,14 +36,15 @@ namespace Hive.IO.GHComponents
             pManager[1].Optional = true;
             pManager.AddGenericParameter("ConversionTechJson", "ConversionTechJson", "Json describing all other used conversion technologies (ASHP, boiler, CHP, etc", GH_ParamAccess.item);
             pManager[2].Optional = true;
-            pManager.AddGenericParameter("EmitterJson", "EmitterJson", "Json describing emitter properties", GH_ParamAccess.item);
+            pManager.AddGenericParameter("EmitterJson", "EmitterJson", "Json describing emitter properties", GH_ParamAccess.list);
             pManager[3].Optional = true;
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Hive.IO.EnergySystems.ConversionTech", "ConversionTech", "Hive.IO.EnergySystems.ConversionTech, such as PV, ST, PVT or GC, ASHP, CHP, boiler, etc.", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Hive.IO.EnergySystems.Emitter", "Emitter", "Hive.IO.EnergySystems.Emitter (e.g. Radiator, floor heating, cooling panel, etc. Will be depricated for Hive 1.x and become part of the Building.Zone.", GH_ParamAccess.item);
+            //pManager.AddGenericParameter("Hive.IO.EnergySystems.ConversionTech", "ConversionTech", "Hive.IO.EnergySystems.ConversionTech, such as PV, ST, PVT or GC, ASHP, CHP, boiler, etc.", GH_ParamAccess.list);
+            //pManager.AddGenericParameter("Hive.IO.EnergySystems.Emitter", "Emitter", "Hive.IO.EnergySystems.Emitter (e.g. Radiator, floor heating, cooling panel, etc. Will be depricated for Hive 1.x and become part of the Building.Zone.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Energy Systems", "EnergySystems", "Building Energy Systems of type <Hive.IO.EnergySystems.>, such as Emitters, ConversionTech, SolarTech, etc.", GH_ParamAccess.list);
         }
 
 
@@ -194,14 +196,14 @@ namespace Hive.IO.GHComponents
             List<Mesh> meshList = new List<Mesh>();
             DA.GetDataList(0, meshList); 
 
-            List<string> solarTechJson = new List<string>();
-            DA.GetDataList(1, solarTechJson);
+            var solarTechProperties = new List<SolarTechProperties>();
+            DA.GetDataList(1, solarTechProperties);
 
-            string conversionTechJson = null;
-            DA.GetData(2, ref conversionTechJson);
+            ConversionTechProperties conversionTechProperties = null;
+            DA.GetData(2, ref conversionTechProperties);
 
-            string emitterJson = null;
-            DA.GetData(3, ref emitterJson);
+            var emitterProperties = new List<EmitterProperties>();
+            DA.GetDataList(3, emitterProperties);
 
             // feed the list into the listbox on the windows form
 
@@ -219,7 +221,7 @@ namespace Hive.IO.GHComponents
             var conversionTech = new List<ConversionTech>();
 
 
-            if (solarTechJson.Count == 0)
+            if (solarTechProperties.Count == 0)
             {
                 foreach (Mesh mesh in meshList)
                 {
@@ -235,11 +237,11 @@ namespace Hive.IO.GHComponents
             }
             else
             {
-                for (int i=0; i<solarTechJson.Count; i++)
+                for (int i=0; i<solarTechProperties.Count; i++)
                 {
-                    string json = solarTechJson[i];
+                    var solarProperties = solarTechProperties[i];
                     Mesh mesh = meshList[i];
-                    var solarProperties = JsonConvert.DeserializeObject<SolarTechProperties>(json);
+                    //var solarProperties = JsonConvert.DeserializeObject<SolarTechProperties>(json);
                     if (solarProperties.Type == "PV")
                         conversionTech.Add(new Photovoltaic(solarProperties.InvestmentCost, solarProperties.EmbodiedEmissions, mesh, solarProperties.Technology, solarProperties.ElectricEfficiency));
                     else if (solarProperties.Type == "PVT")
@@ -251,33 +253,51 @@ namespace Hive.IO.GHComponents
                 }
             }
 
-            if(conversionTechJson == null)
+            if(conversionTechProperties == null)
             {
                 conversionTech.Add(new GasBoiler(100.0, 100.0, 10.0, 0.9));
             }
             else
             {
-                var conversionTechProperties = JsonConvert.DeserializeObject<ConversionTechProperties>(conversionTechJson);
+                //var conversionTechProperties = JsonConvert.DeserializeObject<ConversionTechProperties>(conversionTechJson);
                 if (conversionTechProperties.ASHPCapacity > 0.0)
                     conversionTech.Add(new AirSourceHeatPump(conversionTechProperties.ASHPCost, conversionTechProperties.ASHPEmissions, conversionTechProperties.ASHPCapacity, conversionTechProperties.ASHPCOP));
                 if (conversionTechProperties.GasBoilerCapacity > 0.0)
                     conversionTech.Add(new GasBoiler(conversionTechProperties.GasBoilerCost, conversionTechProperties.GasBoilerEmissions, conversionTechProperties.GasBoilerCapacity, conversionTechProperties.GasBoilerEfficiency));
                 if (conversionTechProperties.CHPCapacity > 0.0)
                     conversionTech.Add(new CombinedHeatPower(conversionTechProperties.CHPCost, conversionTechProperties.CHPEmissions, conversionTechProperties.CHPCapacity, conversionTechProperties.CHPHTP, conversionTechProperties.CHPEffElec));
+                if (conversionTechProperties.ChillerCapacity > 0.0)
+                    conversionTech.Add(new Chiller(conversionTechProperties.ChillerCost, conversionTechProperties.ChillerEmissions, conversionTechProperties.ChillerCapacity, conversionTechProperties.ChillerCOP));
             }
 
-
-            if (emitterJson == null)
+            var emitters = new List<Emitter>();
+            if (emitterProperties.Count == 0)
             {
-                DA.SetData(1, new Radiator(100.0, 100.0, true, false, 65.0, 55.0));
+                emitters.Add(new Radiator(100.0, 100.0, true, false, 65.0, 55.0));
+                emitters[0].SetEmitterName("ConventionalRadiator");
+                emitters.Add(new AirDiffuser(100.0, 100.0, false, true, 20.0, 25.0));
+                emitters[1].SetEmitterName("AirDiffuser");
             }
             else
             {
-                EmitterProperties emitterProperties = JsonConvert.DeserializeObject<EmitterProperties>(emitterJson);
-                DA.SetData(1, new Radiator(emitterProperties.InvestmentCost, emitterProperties.EmbodiedEmissions, true, false, emitterProperties.SupplyTemperature, emitterProperties.ReturnTemperature));
+                int counter = 0;
+                foreach (EmitterProperties emProp in emitterProperties)
+                {
+                    if (emProp.IsRadiation)
+                        emitters.Add(new Radiator(emProp.InvestmentCost, emProp.EmbodiedEmissions, emProp.IsHeating, emProp.IsCooling, emProp.SupplyTemperature, emProp.ReturnTemperature));
+                    else
+                        emitters.Add(new AirDiffuser(emProp.InvestmentCost, emProp.EmbodiedEmissions, emProp.IsHeating, emProp.IsCooling, emProp.SupplyTemperature, emProp.ReturnTemperature));
+                    emitters[counter].SetEmitterName(emProp.Name);
+                    counter++;
+                }
             }
 
-            DA.SetDataList(0, conversionTech);
+            var obj = new List<object>();
+            foreach (object o in conversionTech)
+                obj.Add(o);
+            foreach (object e in emitters)
+                obj.Add(e);
+            DA.SetDataList(0, obj);
         }
 
 

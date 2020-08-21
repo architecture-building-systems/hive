@@ -3,16 +3,16 @@ using Grasshopper.Kernel;
 using Hive.IO.Building;
 
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhParametricInputs
 {
-    public class GhParametricInputSiaRoom : GH_Component
+    public class GhSIARoom : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the GhParametricInputSiaRoom class.
         /// </summary>
-        public GhParametricInputSiaRoom()
-          : base("GhParametricInputSiaRoom", "SiaRoom",
-              "SIA Room (parametric input for custom room types)",
+        public GhSIARoom()
+          : base("Parametric Input SIARoom Hive", "HiveParaInRoom",
+              "Description",
               "[hive]", "IO")
         {
         }

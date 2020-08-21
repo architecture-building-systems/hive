@@ -3,10 +3,10 @@ using System.Collections.Generic;
 
 using Grasshopper.Kernel;
 using Rhino.Geometry;
-using Newtonsoft.Json;
+//using Newtonsoft.Json;
 
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhParametricInputs
 {
     internal class SolarTechProperties
     {
@@ -19,13 +19,13 @@ namespace Hive.IO.GHComponents
     }
 
 
-    public class GhParametricInputSolarSystems : GH_Component
+    public class GhSolarSystems : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the GhParametricInputSolarSystems class.
         /// </summary>
-        public GhParametricInputSolarSystems()
-          : base("GhParametricInputSolarSystems", "Nickname",
+        public GhSolarSystems()
+          : base("Parametric Input SolarTech Hive", "HiveParaInSolarTech",
               "Description",
               "[hive]", "IO")
         {
@@ -79,8 +79,8 @@ namespace Hive.IO.GHComponents
             DA.GetData(5, ref solarTech.InvestmentCost);
             DA.GetData(6, ref solarTech.EmbodiedEmissions);
 
-            string solarTechJson = JsonConvert.SerializeObject(solarTech);
-            DA.SetData(1, solarTechJson);
+            //string solarTechJson = JsonConvert.SerializeObject(solarTech);
+            DA.SetData(1, solarTech);
 
             DA.SetData(0, mesh);
         }

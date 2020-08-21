@@ -4,18 +4,21 @@ using Grasshopper.Kernel;
 using Hive.IO.EnergySystems;
 using Rhino.Geometry;
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhDistributors
 {
-    public class GhDistributorSupplySystem : GH_Component
+    public class GhSolarTech : GH_Component
     {
 
-        public GhDistributorSupplySystem()
-          : base("Hive.IO.DistributorSupplySystem", "HiveIODistrSupSys",
-              "Distributor for the Energy Supply Systems models." +
-                "\nOutputs relevant parameters for Energy Supply Systems calculations.",
-              "[hive]", "Mothercell")
+        public GhSolarTech()
+          : base("Distributor SolarTech Hive", "HiveDistSolarTech",
+              "Distributor for Solar technologies." +
+                "\nOutputs relevant parameters for Solar Energy Generation calculations (PV, ST, PVT, GC).",
+              "[hive]", "IO")
         {
         }
+
+
+        public override GH_Exposure Exposure => GH_Exposure.quarternary;
 
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
@@ -83,7 +86,7 @@ namespace Hive.IO.GHComponents
                         A_PVT.Add(AreaMassProperties.Compute(_pvt.SurfaceGeometry).Area);
                         break;
                     case "Hive.IO.EnergySystems.GroundCollector":
-                        
+
                         break;
                 }
             }
