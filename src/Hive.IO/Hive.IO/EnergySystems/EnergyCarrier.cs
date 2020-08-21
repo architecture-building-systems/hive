@@ -282,7 +282,7 @@ namespace Hive.IO.EnergySystems
 
 
         private double[] _monthlyTemperature = null;
-        public double[] MonthlySupplyTemperature
+        public double[] MonthlyTemperature
         {
             get
             {

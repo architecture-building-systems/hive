@@ -139,7 +139,7 @@ namespace Hive.IO.EnergySystems
         /// <summary>
         /// Performance Ratio [0.0, 1.0]
         /// </summary>
-        public double PR { get; private set; }
+        public double PR { get; set; }
 
         /// <summary>
         /// PV module efficiency [0.0, 1.0]
@@ -193,7 +193,7 @@ namespace Hive.IO.EnergySystems
             int horizon = Misc.HoursPerYear;
             double refTemp = 25.0;
 
-            double[] ambientTemp = ambientTemperatureCarrier.Energy;
+            double[] ambientTemp = ambientTemperatureCarrier.Temperature;
             double[] electricityGenerated = new double[horizon];
             double[] energyCost = new double[horizon];
             double[] ghgEmissions = new double[horizon];
@@ -365,7 +365,7 @@ namespace Hive.IO.EnergySystems
             double[] availableEnergy = new double[horizon];
             for (int t = 0; t < horizon; t++)
             {
-                double etaTemp = Math.Max(0, this.FRtauAlpha - ((this.FRUL * (inletWaterCarrier.Temperature[t] - ambientAirCarrier.Energy[t])) / meanIrradiance[t]));
+                double etaTemp = Math.Max(0, this.FRtauAlpha - ((this.FRUL * (inletWaterCarrier.Temperature[t] - ambientAirCarrier.Temperature[t])) / meanIrradiance[t]));
                 double temp = meanIrradiance[t] * etaTemp * this.SurfaceArea / 1000.0;
                 availableEnergy[t] = double.IsNaN(temp) ? 0.0 : temp;
             }

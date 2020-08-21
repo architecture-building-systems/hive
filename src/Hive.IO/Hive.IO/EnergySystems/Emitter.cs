@@ -20,6 +20,9 @@ namespace Hive.IO.EnergySystems
                 inletTemperatures[t] = inletTemperature;
                 returnTemperatures[t] = returnTemperature;
             }
+
+            base.InletCarrier = new Water(Misc.HoursPerYear, null, null, null, inletTemperatures);
+            base.ReturnCarrier = new Water(Misc.HoursPerYear, null, null, null, returnTemperatures);
         }
 
         /// <summary>
@@ -47,6 +50,9 @@ namespace Hive.IO.EnergySystems
                 inletTemperatures[t] = inletTemperature;
                 returnTemperatures[t] = returnTemperature;
             }
+
+            base.InletCarrier = new Air(Misc.HoursPerYear, null, null, null, inletTemperatures);
+            base.ReturnCarrier = new Air(Misc.HoursPerYear, null, null, null, returnTemperatures);
         }
 
         public void SetAirflow(Air airIn, Air airOut)

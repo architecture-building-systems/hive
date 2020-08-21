@@ -19,54 +19,72 @@ namespace Hive.IO
         public static double[] GetAverageMonthlyValue(double[] annualTimeSeries)
         {
             double[] monthlyTimeSeries = new double[Misc.MonthsPerYear];
-            int sumOfDays = 0;
-            for (int t = 0; t < Misc.MonthsPerYear; t++)
+            if (annualTimeSeries.Length == Misc.HoursPerYear)
             {
-                int startIndex = sumOfDays * Misc.HoursPerDay;
-                int daysThisMonth = Misc.DaysPerMonth[t];
-                sumOfDays += daysThisMonth;
-                int endIndex = sumOfDays * Misc.HoursPerDay;
-                double average = 0.0;
-                for (int i = startIndex; i < endIndex; i++)
+                int sumOfDays = 0;
+                for (int t = 0; t < Misc.MonthsPerYear; t++)
                 {
-                    double temp = annualTimeSeries[i];
-                    if (double.IsNaN(temp))
-                        temp = 0.0;
-                    average += temp;
+                    int startIndex = sumOfDays * Misc.HoursPerDay;
+                    int daysThisMonth = Misc.DaysPerMonth[t];
+                    sumOfDays += daysThisMonth;
+                    int endIndex = sumOfDays * Misc.HoursPerDay;
+                    double average = 0.0;
+                    for (int i = startIndex; i < endIndex; i++)
+                    {
+                        double temp = annualTimeSeries[i];
+                        if (double.IsNaN(temp))
+                            temp = 0.0;
+                        average += temp;
+                    }
+                    average /= (daysThisMonth * Misc.HoursPerDay);
+                    //double average = Enumerable.Range(startIndex, endIndex).Select(i => annualTimeSeries[i]).Average();
+                    monthlyTimeSeries[t] = average;
                 }
-
-                average /= (daysThisMonth * Misc.HoursPerDay);
-                //double average = Enumerable.Range(startIndex, endIndex).Select(i => annualTimeSeries[i]).Average();
-                monthlyTimeSeries[t] = average;
+                return monthlyTimeSeries;
             }
-
-            return monthlyTimeSeries;
+            else if(annualTimeSeries.Length == Misc.MonthsPerYear)
+            {
+                return annualTimeSeries;
+            }
+            else
+            {
+                return null;
+            }
         }
 
 
         public static double[] GetCumulativeMonthlyValue(double[] annualTimeSeries)
         {
-            int months = 12;
-            double[] monthlyTimeSeries = new double[months];
-            int sumOfDays = 0;
-            for (int t = 0; t < months; t++)
+            double[] monthlyTimeSeries = new double[Misc.MonthsPerYear];
+            if (annualTimeSeries.Length == Misc.HoursPerYear)
             {
-                int startIndex = sumOfDays * Misc.HoursPerDay;
-                int daysThisMonth = Misc.DaysPerMonth[t];
-                sumOfDays += daysThisMonth;
-                int endIndex = sumOfDays * Misc.HoursPerDay;
-                double sum = 0.0;
-                for (int i = startIndex; i < endIndex; i++)
+                int sumOfDays = 0;
+                for (int t = 0; t < Misc.MonthsPerYear; t++)
                 {
-                    double temp = annualTimeSeries[i];
-                    if (double.IsNaN(temp))
-                        temp = 0.0;
-                    sum += temp;
+                    int startIndex = sumOfDays * Misc.HoursPerDay;
+                    int daysThisMonth = Misc.DaysPerMonth[t];
+                    sumOfDays += daysThisMonth;
+                    int endIndex = sumOfDays * Misc.HoursPerDay;
+                    double sum = 0.0;
+                    for (int i = startIndex; i < endIndex; i++)
+                    {
+                        double temp = annualTimeSeries[i];
+                        if (double.IsNaN(temp))
+                            temp = 0.0;
+                        sum += temp;
+                    }
+                    monthlyTimeSeries[t] = sum;
                 }
-                monthlyTimeSeries[t] = sum;
+                return monthlyTimeSeries;
             }
-
-            return monthlyTimeSeries;
+            else if (annualTimeSeries.Length == Misc.MonthsPerYear)
+            {
+                return annualTimeSeries;
+            }
+            else
+            {
+                return null;
+            }
         }
     }
 }

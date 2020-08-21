@@ -104,7 +104,7 @@ def epw_reader(path):
         drybulb_monthly.append(sum(drybulb[start_hour:end_hour]) / hours_per_month)
         rh_monthly.append(sum(rh[start_hour:end_hour]) / hours_per_month)
 
-    ambient_temp_carrier = ensys.Air(hours_per_year, System.Array[float](drybulb))
+    ambient_temp_carrier = ensys.Air(hours_per_year, None, None, None, System.Array[float](drybulb))
 
     return latitude, longitude, city_country, ghi, dni, dhi, drybulb, dewpoint, rh, \
            ghi_monthly, drybulb_monthly, rh_monthly, ambient_temp_carrier
