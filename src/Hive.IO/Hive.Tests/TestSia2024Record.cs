@@ -14,9 +14,9 @@ namespace Hive.Tests
         [Test]
         public void TestReadRecords()
         {
-            var records = Sia2024Record.ReadRecords();
+            var records = Sia2024Record.All();
             Assert.IsNotEmpty(records);
-            Assert.AreEqual(records[0].Quality, "Standardwert");
+            Assert.AreEqual(records.First().RoomType, "1.1 Wohnen Mehrfamilienhaus");
         }
 
         [Test]
@@ -33,10 +33,13 @@ namespace Hive.Tests
         }
 
         [Test]
-        public void TestToString()
+        public void TestJson()
         {
-            var record = Sia2024Record.ReadRecords().First();
-            Assert.IsInstanceOf(typeof(string), record.ToString());
+            var record = Sia2024Record.All().First();
+            var json = record.ToJson();
+            Assert.IsInstanceOf(typeof(string), json);
+            var record2 = Sia2024Record.FromJson(json);
+            Assert.NotNull(record2);
         }
     }
 }

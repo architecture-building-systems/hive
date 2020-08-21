@@ -1,12 +1,11 @@
-﻿using System.Windows;
-using Hive.IO.Building;
+﻿using Hive.IO.Building;
 
 namespace Hive.IO.Forms
 {
     /// <summary>
     /// Interaction logic for BuildingInput.xaml
     /// </summary>
-    public partial class BuildingInput : Window
+    public partial class BuildingInput
     {
         public BuildingInput()
         {

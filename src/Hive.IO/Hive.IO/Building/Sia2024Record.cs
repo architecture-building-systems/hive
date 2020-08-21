@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
@@ -7,14 +8,22 @@ using Newtonsoft.Json;
 namespace Hive.IO.Building
 {
     /// <summary>
-    /// Stores data from the Sia2024.json resource and loads an array of that information.
+    /// Stores data from the sia2024_room_data.json resource - enriched with information about
+    /// building-use-type and quality, which are used to select a specific Sia2024Record from
+    /// the json file. Use Sia202Record - this class is just for loading the data and filtering.
     /// </summary>
-    public class Sia2024Record
+    public class Sia2024RecordEx: Sia2024Record
     {
         public string Quality;
         public string BuildingUseType;
-        public string RoomType;
-
+    }
+    
+    /// <summary>
+    /// Describes a SIA 2024 room and can load / save this information to JSON.
+    /// </summary>
+    public class Sia2024Record
+    {
+        public string RoomType;  // description, e.g. "1.1 Wohnen Mehrfamilienhaus"
         public double RoomConstant; // Zeitkonstante
         public double CoolingSetpoint; // Raumlufttemperatur Auslegung Kuehlung (Sommer)
         public double HeatingSetpoint; // Raumlufttemperatur Auslegung Heizen (Winter)
@@ -41,16 +50,90 @@ namespace Hive.IO.Building
 
 
         /// <summary>
-        /// Serialize to JSON - we might need that for debugging in the future.
+        /// Serialize to JSON - using the interchange format used in the Hive.Core components.
         /// </summary>
         /// <returns></returns>
-        public override string ToString()
+        public string ToJson()
         {
-            return JsonConvert.SerializeObject(this);
+            var result = new Dictionary<string, object>
+            {
+                { "description", RoomType },
+                { "Zeitkonstante", RoomConstant},
+                { "Raumlufttemperatur Auslegung Kuehlung (Sommer)", CoolingSetpoint},
+                { "Raumlufttemperatur Auslegung Heizen (Winter)", HeatingSetpoint},
+                { "Nettogeschossflaeche", FloorArea},
+                { "Thermische Gebaeudehuellflaeche", EnvelopeArea},
+                { "Glasanteil", GlazingRatio},
+                { "U-Wert opake Bauteile", UValueOpaque},
+                { "U-Wert Fenster", UValueTransparent},
+                { "Gesamtenergiedurchlassgrad Verglasung", GValue},
+                { "Abminderungsfaktor fuer Fensterrahmen", WindowFrameReduction},
+                { "Aussenluft-Volumenstrom (pro NGF)", AirChangeRate},
+                { "Aussenluft-Volumenstrom durch Infiltration", Infiltration},
+                { "Temperatur-Aenderungsgrad der Waermerueckgewinnung", HeatRecovery},
+                { "Waermeeintragsleistung Personen (bei 24.0 deg C, bzw. 70 W)", OccupantLoads},
+                { "Waermeeintragsleistung der Raumbeleuchtung", LightingLoads},
+                { "Waermeeintragsleistung der Geraete", EquipmentLoads},
+                { "Vollaststunden pro Jahr (Personen)", OccupantYearlyHours},
+                { "Jaehrliche Vollaststunden der Raumbeleuchtung", LightingYearlyHours},
+                { "Jaehrliche Vollaststunden der Geraete", EquipmentYearlyHours},
+                { "Kosten opake Bauteile", OpaqueCost},
+                { "Kosten transparente Bauteile", TransparentCost},
+                { "Emissionen opake Bauteile", OpaqueEmissions},
+                { "Emissionen transparente Bauteile", TransparentEmissions}
+            };
+            return JsonConvert.SerializeObject(result);
         }
 
-        private static Sia2024Record[]_records = null;
-        public static Sia2024Record[] ReadRecords()
+        public static Sia2024Record FromJson(string json)
+        {
+            var d = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+            if (!d.ContainsKey("BuildingUseType"))
+            {
+                d["BuildingUseType"] = "Custom";
+            }
+
+            if (!d.ContainsKey("Quality"))
+            {
+                d["Quality"] = "Standardwert";
+            }
+
+            if (!d.ContainsKey("description"))
+            {
+                d["description"] = "Custom";
+            }
+
+            return new Sia2024Record
+            {
+                RoomType = d["description"] as string,
+                RoomConstant = (double)d["Zeitkonstante"],
+                CoolingSetpoint = (double)d["Raumlufttemperatur Auslegung Kuehlung (Sommer)"],
+                HeatingSetpoint = (double)d["Raumlufttemperatur Auslegung Heizen (Winter)"],
+                FloorArea = (double)d["Nettogeschossflaeche"],
+                EnvelopeArea = (double)d["Thermische Gebaeudehuellflaeche"],
+                GlazingRatio = (double)d["Glasanteil"],
+                UValueOpaque = (double)d["U-Wert opake Bauteile"],
+                UValueTransparent = (double)d["U-Wert Fenster"],
+                GValue = (double)d["Gesamtenergiedurchlassgrad Verglasung"],
+                WindowFrameReduction = (double)d["Abminderungsfaktor fuer Fensterrahmen"],
+                AirChangeRate = (double)d["Aussenluft-Volumenstrom (pro NGF)"],
+                Infiltration = (double)d["Aussenluft-Volumenstrom durch Infiltration"],
+                HeatRecovery = (double)d["Temperatur-Aenderungsgrad der Waermerueckgewinnung"],
+                OccupantLoads = (double)d["Waermeeintragsleistung Personen (bei 24.0 deg C, bzw. 70 W)"],
+                LightingLoads = (double)d["Waermeeintragsleistung der Raumbeleuchtung"],
+                EquipmentLoads = (double)d["Waermeeintragsleistung der Geraete"],
+                OccupantYearlyHours = (double)d["Vollaststunden pro Jahr (Personen)"],
+                LightingYearlyHours = (double)d["Jaehrliche Vollaststunden der Raumbeleuchtung"],
+                EquipmentYearlyHours = (double)d["Jaehrliche Vollaststunden der Geraete"],
+                OpaqueCost = (double)d["Kosten opake Bauteile"],
+                TransparentCost = (double)d["Kosten transparente Bauteile"],
+                OpaqueEmissions = (double)d["Emissionen opake Bauteile"],
+                TransparentEmissions = (double)d["Emissionen transparente Bauteile"],
+            };
+        }
+
+        private static Sia2024RecordEx[]_records;
+        private static Sia2024RecordEx[] ReadRecords()
         {
             if (_records == null)
             {
@@ -59,11 +142,11 @@ namespace Hive.IO.Building
                 var serializer = new JsonSerializer();
                 using (var stream = assembly.GetManifestResourceStream(resourceName))
                 {
-                    using (var streamReader = new StreamReader(stream))
+                    using (var streamReader = new StreamReader(stream ?? throw new InvalidOperationException($"Could not find manifest resource '{resourceName}'")))
                     { 
                         using (var jsonTextReader = new JsonTextReader(streamReader))
                         {
-                            _records = serializer.Deserialize<Sia2024Record[]>(jsonTextReader);
+                            _records = serializer.Deserialize<Sia2024RecordEx[]>(jsonTextReader);
                         }
                     }
                 }
@@ -81,5 +164,7 @@ namespace Hive.IO.Building
         public static Sia2024Record Lookup(string useType, string roomType, string quality) =>
             ReadRecords()
                 .First(r => r.BuildingUseType == useType && r.RoomType == roomType && r.Quality == quality);
+
+        public static IEnumerable<Sia2024Record> All() => ReadRecords();
     }
 }

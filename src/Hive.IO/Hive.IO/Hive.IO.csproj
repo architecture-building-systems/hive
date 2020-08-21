@@ -90,7 +90,7 @@
     <Compile Include="GHComponents\GhParametricInputEmitter.cs" />
     <Compile Include="GHComponents\GhEnvironment.cs" />
     <Compile Include="GHComponents\GhParametricInputEnergySystems.cs" />
-    <Compile Include="GHComponents\GhParametricInputSIARoom.cs" />
+    <Compile Include="GHComponents\GhParametricInputSiaRoom.cs" />
     <Compile Include="GHComponents\GhParametricInputSolarSystems.cs" />
     <Compile Include="GHComponents\GhResults.cs" />
     <Compile Include="GHComponents\GhVisualizer.cs" />

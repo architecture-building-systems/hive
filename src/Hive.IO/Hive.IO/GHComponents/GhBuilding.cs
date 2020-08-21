@@ -62,65 +62,21 @@ namespace Hive.IO.GHComponents
             public BuildingComponentAttributes(IGH_Component component) : base(component) { }
             public override GH_ObjectResponse RespondToMouseDoubleClick(GH_Canvas sender, GH_CanvasMouseEvent e)
             {
-                var form = new BuildingInput();
-                form.ShowDialog();
-                // (Owner as GhBuilding)?.DisplayForm();
+                ((GhBuilding)Owner).ShowUiClicked(this, null);
                 return GH_ObjectResponse.Handled;
             }
         }
-
-        FormBuilding _form;
-        public void DisplayForm()
-        {
-            if (_form != null) 
-                return;
-
-            _form = new FormBuilding();
-            _form.SetRhinoDoc(Rhino.RhinoDoc.ActiveDoc);
-
-            _form.button11.MouseClick += OnButton11Click;
-
-            _form.FormClosed += OnFormClosed;
-
-            GH_WindowsFormUtil.CenterFormOnCursor(_form, true);
-            _form.Show(Grasshopper.Instances.DocumentEditor);
-            _form.Location = Cursor.Position;
-        }
-
-        //maybe in the FormBuilding.cs?
-        // trying to jump into rhino viewport for selecting geometry there.
-        // leave for Hive 0.3
-        private void OnButton11Click(object sender, EventArgs e)
-        {
-            ri.GetObject go = new ri.GetObject();
-            go.SetCommandPrompt("pick building brep");
-            go.GroupSelect = false; //set to true for Hive0.3
-            if (go.CommandResult() != Rhino.Commands.Result.Success)
-                return;
-
-            List<Guid> ids = new List<Guid>();
-            for (int i=0; i<go.ObjectCount; i++)
-            {
-                ids.Add(go.Object(i).ObjectId);
-            }
-            Rhino.RhinoDoc.ActiveDoc.Views.Redraw();
-
-        }
-
-        private void OnFormClosed(object sender, FormClosedEventArgs formClosedEventArgs)
-        {
-            _form = null;
-        }
-
 
 
         protected override void AppendAdditionalComponentMenuItems(ToolStripDropDown menu)
         {
             Menu_AppendItem(menu, "Show UI", ShowUiClicked, null, true, false);
         }
-        private void ShowUiClicked(object sender, EventArgs e)
+
+        public void ShowUiClicked(object sender, EventArgs e)
         {
-            DisplayForm();
+            var form = new BuildingInput();
+            form.ShowDialog();
         }
 
 
@@ -135,62 +91,83 @@ namespace Hive.IO.GHComponents
             var floors = new List<rg.BrepFace>();
             DA.GetDataList(2, floors);
 
-            string json = null;
-            if (!DA.GetData(3, ref json)) return;
-            var jss = new JavaScriptSerializer();
-            var sia2024 = (IDictionary<string, object>)jss.DeserializeObject(json);
             
-            BuildingType bldg_type;
-            string zone_description = sia2024["description"].ToString();
-            switch (zone_description)
+            // figure out output of this component - either from the input parameter (if one is specified)
+            // or a building from the form.
+            Building.Building building = GetBuildingFromFormInput();
+
+            string json = null;
+            var parametricSiaRoomSpecified = DA.GetData(3, ref json);
+            if (parametricSiaRoomSpecified)
+            {
+                building = CreateParametricBuilding(json, zoneBrep, windows, floors);
+            }
+
+            DA.SetData(0, building);
+        }
+
+        /// <summary>
+        /// Create a building based on the form input. Note, that if no form input
+        /// was given by the user ("double-click" on the form), then default to null.
+        /// (This avoids surprises for the user)
+        /// </summary>
+        private Building.Building GetBuildingFromFormInput()
+        {
+            throw new NotImplementedException();
+        }
+
+        private Building.Building CreateParametricBuilding(string json, rg.Brep zoneBrep, List<rg.BrepFace> windows, List<rg.BrepFace> floors)
+        {
+            var siaRoom = Sia2024Record.FromJson(json);
+
+            BuildingType buildingType;
+            switch (siaRoom.RoomType)
             {
                 case "1.1 Wohnen Mehrfamilienhaus":
                 case "1.2 Wohnen Einfamilienhaus":
-                    bldg_type = BuildingType.Residential;
+                    buildingType = BuildingType.Residential;
                     break;
                 case "3.1 Einzel-, Gruppenbuero":
                 case "3.2 Grossraumbuero":
-                    bldg_type = BuildingType.Office;
+                    buildingType = BuildingType.Office;
                     break;
                 case "9.1 Produktion (grobe Arbeit)":
                 case "9.2 Produktion (feine Arbeit)":
-                    bldg_type = BuildingType.Industry;
+                    buildingType = BuildingType.Industry;
                     break;
                 case "9.3 Laborraum":
-                    bldg_type = BuildingType.Laboratory;
+                    buildingType = BuildingType.Laboratory;
                     break;
                 case "4.1 Schulzimmer":
                 case "4.2 Lehrerzimmer":
                 case "4.3 Bibliothek":
                 case "4.4 Hoersaal":
-                    bldg_type = BuildingType.School;
+                    buildingType = BuildingType.School;
                     break;
                 case "5.1 Lebensmittelverkauf":
-                    bldg_type = BuildingType.Supermarket;
+                    buildingType = BuildingType.Supermarket;
                     break;
                 default:
-                    bldg_type = BuildingType.Undefined;
+                    buildingType = BuildingType.Undefined;
                     break;
             }
 
-            double tolerance = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
-            Zone zone = new Zone(zoneBrep, 0, tolerance, zone_description, windows.ToArray(), floors.ToArray());
+            var tolerance = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
+            var zone = new Zone(zoneBrep, 0, tolerance, siaRoom.RoomType, windows.ToArray(), floors.ToArray());
             if (!zone.IsValid)
             {
-                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Error, zone.ErrorText);
-                return;
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, zone.ErrorText);
+                return null;
             }
+
             if (!zone.IsValidEPlus || !zone.IsFloorInZone)
             {
-                this.AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, zone.ErrorText);
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, zone.ErrorText);
             }
 
-            Building.Building building = new Building.Building(new[] { zone }, bldg_type);
-            building.SetSIA2024((Dictionary<string, object>)sia2024, building.Zones);   // can be changed in the future via Windows Form: FormBuilding.cs
-
-
-
-            DA.SetData(0, building);
+            var building = new Building.Building(new[] {zone}, buildingType);
+            building.ApplySia2024Constructions(siaRoom, building.Zones);
+            return building;
         }
 
 
