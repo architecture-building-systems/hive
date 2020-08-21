@@ -30,7 +30,6 @@ namespace Hive.IO.EnergySystems
             var gasPrice = new double[horizon];
             var gasEmissionsFactor = new double[horizon];
 
-
             for (int t = 0; t < horizon; t++)
             {
                 gasConsumed[t] = heatingGenerated[t] / this.Efficiency;
@@ -40,8 +39,6 @@ namespace Hive.IO.EnergySystems
                 gasPrice = Misc.GetAverageMonthlyValue(gasInput.EnergyPrice);
                 gasEmissionsFactor = Misc.GetAverageMonthlyValue(gasInput.GhgEmissionsFactor);
             }
-
-            //check if monthly or hourly values
 
             Gas gasConsumedCarrier = new Gas(horizon, gasConsumed, gasPrice, gasEmissionsFactor);
             base.InputCarrier = gasConsumedCarrier; // infused with how much gas is consumed. input Gas carrier has no Energy information
@@ -64,9 +61,44 @@ namespace Hive.IO.EnergySystems
             base.Name = "CombinedHeatPower";
         }
 
-        public void SetInputOutput()
+        public void SetInputOutput(Gas gasInput, double [] energyGenerated, double [] supplyTemperature, bool energyIsHeat = false)
         {
+            int horizon = energyGenerated.Length;
 
+            var gasConsumed = new double[horizon];
+            var gasPrice = new double[horizon];
+            var gasEmissionsFactor = new double[horizon];
+
+            var heatingGenerated = new double[horizon];
+            var elecGenerated = new double[horizon];
+
+            for (int t = 0; t < horizon; t++)
+            {
+                if (energyIsHeat)
+                {
+                    heatingGenerated[t] = energyGenerated[t];
+                    elecGenerated[t] = heatingGenerated[t] / this.HeatToPowerRatio;
+                }
+                else
+                {
+                    elecGenerated[t] = energyGenerated[t];
+                    heatingGenerated[t] = elecGenerated[t] * this.HeatToPowerRatio;
+                }
+                gasConsumed[t] = elecGenerated[t] / this.ElectricEfficiency;
+            }
+
+            if (horizon == Misc.MonthsPerYear)
+            {
+                gasPrice = Misc.GetAverageMonthlyValue(gasInput.EnergyPrice);
+                gasEmissionsFactor = Misc.GetAverageMonthlyValue(gasInput.GhgEmissionsFactor);
+            }
+
+            Gas gasConsumedCarrier = new Gas(horizon, gasConsumed, gasPrice, gasEmissionsFactor);
+            base.InputCarrier = gasConsumedCarrier; // infused with how much gas is consumed. input Gas carrier has no Energy information
+
+            base.OutputCarriers = new EnergyCarrier[2];
+            base.OutputCarriers[0] = new Water(horizon, heatingGenerated, null, null, supplyTemperature);
+            base.OutputCarriers[1] = new Electricity(horizon, elecGenerated, null, null);
         }
 
 
