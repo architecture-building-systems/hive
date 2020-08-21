@@ -15,6 +15,18 @@ namespace Hive.IO.EnergySystems
     {
         public Air(int horizon, double[] airTemperature)
             : base(horizon, EnergyCarrier.EnergyUnit.DegreeCelsius, airTemperature, null, null) { }
+
+        private double[] _monthlySupplyTemperature = null;
+        public double[] MonthlySupplyTemperature
+        {
+            get
+            {
+                if (_monthlySupplyTemperature == null)
+                    _monthlySupplyTemperature = Misc.GetAverageMonthlyValue(this.AvailableEnergy);
+                return _monthlySupplyTemperature;
+            }
+            private set {; }
+        }
     }
 
 

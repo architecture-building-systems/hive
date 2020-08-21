@@ -26,15 +26,28 @@ namespace Hive.IO.EnergySystems
             base.InletCarrier = waterIn;
             base.ReturnCarrier = waterOut;
         }
-
-        public void SetRadiatorName(string name)
-        {
-            base.Name = name;
-        }
     }
 
 
+    public class AirDiffuser : Emitter
+    {
+        public AirDiffuser(double investmentCost, double embodiedGhg, bool isHeating, bool isCooling, double inletTemperature, double returnTemperature)
+            : base(investmentCost, embodiedGhg, isHeating, isCooling)
+        {
+            double[] inletTemperatures = new double[Horizon];
+            double[] returnTemperatures = new double[Horizon];
+            for (int t = 0; t < Horizon; t++)
+            {
+                inletTemperatures[t] = inletTemperature;
+                returnTemperatures[t] = returnTemperature;
+            }
 
+            Air airIn = new Air(Horizon, inletTemperatures);
+            Air airOut = new Air(Horizon, returnTemperatures);
+            base.InletCarrier = airIn;
+            base.ReturnCarrier = airOut;
+        }
+    }
 
 
 
@@ -102,6 +115,13 @@ namespace Hive.IO.EnergySystems
             this.SpecificEmbodiedGhg = embodiedGhg;
             this.IsHeating = isHeating;
             this.IsCooling = isCooling;
+        }
+
+
+
+        public void SetEmitterName(string name)
+        {
+            this.Name = name;
         }
     }
 }

@@ -3,11 +3,11 @@ using System.Web.Script.Serialization;
 using Grasshopper.Kernel;
 using Hive.IO.Building;
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhDistributors
 {
-    public class GhDistributorSIA : GH_Component
+    public class GhSIA : GH_Component
     {
-        public GhDistributorSIA()
+        public GhSIA()
           : base("Distributor SIARoom Hive", "HiveDistSIARoom",
               "Sia 2024 distributor that reads in an Hive.IO.Building object and outputs its Sia 2024 room definition.",
               "[hive]", "IO")

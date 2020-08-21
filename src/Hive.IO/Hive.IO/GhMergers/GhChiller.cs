@@ -4,14 +4,14 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Hive.IO.EnergySystems;
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhMergers
 {
-    public class GhMergerChiller : GH_Component
+    public class GhChiller : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the GhMergerChiller class.
         /// </summary>
-        public GhMergerChiller()
+        public GhChiller()
           : base("Merger Chiller Hive", "HiveMergerChiller",
               "Description",
               "[hive]", "IO")

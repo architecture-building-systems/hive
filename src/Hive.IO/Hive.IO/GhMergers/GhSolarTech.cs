@@ -4,14 +4,14 @@ using System.Reflection;
 using Grasshopper.Kernel;
 using Rhino.Geometry;
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhMergers
 {
-    public class GhMergerSolarTech : GH_Component
+    public class GhSolarTech : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the GhMergerPV class.
         /// </summary>
-        public GhMergerSolarTech()
+        public GhSolarTech()
           : base("Merger SolarTech Hive", "HiveMergerSolarTech",
               "Description",
               "[hive]", "IO")

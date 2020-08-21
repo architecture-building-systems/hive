@@ -6,14 +6,14 @@ using Rhino.Geometry;
 using Newtonsoft.Json;
 
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhParametricInputs
 {
-    public class GhParametricInputSIARoom : GH_Component
+    public class GhSIARoom : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the GhParametricInputSIARoom class.
         /// </summary>
-        public GhParametricInputSIARoom()
+        public GhSIARoom()
           : base("Parametric Input SIARoom Hive", "HiveParaInRoom",
               "Description",
               "[hive]", "IO")
