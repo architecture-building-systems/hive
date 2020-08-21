@@ -39,6 +39,11 @@ namespace Hive.IO.EnergySystems
                 gasPrice = Misc.GetAverageMonthlyValue(gasInput.EnergyPrice);
                 gasEmissionsFactor = Misc.GetAverageMonthlyValue(gasInput.GhgEmissionsFactor);
             }
+            else
+            {
+                gasPrice = gasInput.EnergyPrice;
+                gasEmissionsFactor = gasInput.GhgEmissionsFactor;
+            }
 
             Gas gasConsumedCarrier = new Gas(horizon, gasConsumed, gasPrice, gasEmissionsFactor);
             base.InputCarrier = gasConsumedCarrier; // infused with how much gas is consumed. input Gas carrier has no Energy information
@@ -91,6 +96,11 @@ namespace Hive.IO.EnergySystems
             {
                 gasPrice = Misc.GetAverageMonthlyValue(gasInput.EnergyPrice);
                 gasEmissionsFactor = Misc.GetAverageMonthlyValue(gasInput.GhgEmissionsFactor);
+            }
+            else
+            {
+                gasPrice = gasInput.EnergyPrice;
+                gasEmissionsFactor = gasInput.GhgEmissionsFactor;
             }
 
             Gas gasConsumedCarrier = new Gas(horizon, gasConsumed, gasPrice, gasEmissionsFactor);

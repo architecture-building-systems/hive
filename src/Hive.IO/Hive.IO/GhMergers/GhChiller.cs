@@ -29,11 +29,10 @@ namespace Hive.IO.GhMergers
         {
             pManager.AddGenericParameter("Air", "Air", "Air energy carrier from weather file", GH_ParamAccess.item);
             pManager.AddGenericParameter("Electricity", "Electricity", "Electricity", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("horizon", "horizon", "horizon", GH_ParamAccess.item);
             pManager.AddNumberParameter("coolingGenerated", "coolingGenerated", "coolingGenerated (kWh)", GH_ParamAccess.list);
-            pManager.AddNumberParameter("cost", "cost", "cost", GH_ParamAccess.list);
-            pManager.AddNumberParameter("ghg", "ghg", "ghg", GH_ParamAccess.list);
             pManager.AddNumberParameter("suppTemp", "suppTemp", "suppTemp for water output. necessary to know for COP calculation", GH_ParamAccess.list);
+            pManager.AddNumberParameter("returnTemp", "returnTemp", "returnTemp. required for simple COP", GH_ParamAccess.list);
+            pManager.AddBooleanParameter("simpleMode?", "simpleMode?", "simpleMode?", GH_ParamAccess.item, true);
 
             pManager.AddGenericParameter("Chiller", "Chiller", "Hive.IO.EnergySystems.Chiller", GH_ParamAccess.item);
         }
@@ -58,29 +57,26 @@ namespace Hive.IO.GhMergers
             Electricity electricity = null;
             DA.GetData(1, ref electricity);
 
-            int horizon = 8760;
-            DA.GetData(2, ref horizon);
-
             var energyGenerated = new List<double>();
-            DA.GetDataList(3, energyGenerated);
-
-            var energyCost = new List<double>();
-            DA.GetDataList(4, energyCost);
-
-            var ghg = new List<double>();
-            DA.GetDataList(5, ghg);
+            DA.GetDataList(2, energyGenerated);
 
             var supplyTemp = new List<double>();
-            DA.GetDataList(6, supplyTemp);
+            DA.GetDataList(3, supplyTemp);
+
+            var returnTemp = new List<double>();
+            DA.GetDataList(4, returnTemp);
+
+            bool simple = true;
+            DA.GetData(5, ref simple);
 
             Chiller chiller = null;
-            DA.GetData(7, ref chiller);
+            DA.GetData(6, ref chiller);
 
 
-            chiller.SetInput(air, electricity);
-
-            // this creates a water EnergyCarrier that will be infused into the Chiller
-            chiller.SetOutput(horizon, energyGenerated.ToArray(), energyCost.ToArray(), ghg.ToArray(), supplyTemp.ToArray());
+            if (simple)
+                chiller.SetInputOutputSimple(electricity, energyGenerated.ToArray(), returnTemp.ToArray(), supplyTemp.ToArray());
+            else
+                chiller.SetInputOutput(electricity, air, energyGenerated.ToArray(), supplyTemp.ToArray());
 
             DA.SetData(0, chiller);
         }

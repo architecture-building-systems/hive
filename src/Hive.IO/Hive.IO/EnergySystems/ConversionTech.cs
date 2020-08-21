@@ -19,75 +19,88 @@ namespace Hive.IO.EnergySystems
         }
 
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="electricity"></param>
-        /// <param name="tempWarm"></param>
-        /// <param name="tempCold"></param>
-        /// <param name="coolingDemand"></param>
-        /// <param name="electricityIn"></param>
-        /// <param name="timeResolution">"'monthly' (12) or 'hourly' (8760)"</param>
-        public void ComputeInputOutputSimple(double [] coolingDemand, Electricity electricityIn, double tempWarm, double tempCold, string timeResolution = "monthly")
+        public void SetInputOutputSimple(Electricity electricityIn, double[] coolingGenerated, double [] tempWarm, double [] tempCold)
         {
-            int horizon;
-            double [] elecPrice = null;
-            if (string.Equals(timeResolution, "monthly"))
+            int horizon = coolingGenerated.Length;
+
+            var tempWarmHorizon = new double[horizon];
+            var tempColdHorizon = new double[horizon];
+
+            var elecConsumed = new double[horizon];
+            var elecPrice = new double[horizon];
+            var elecEmissionsFactor = new double[horizon];
+
+            if (horizon == Misc.MonthsPerYear)
             {
-                horizon = Misc.MonthsPerYear;
-                elecPrice = electricityIn.EnergyPrice;
+                elecPrice = Misc.GetAverageMonthlyValue(electricityIn.EnergyPrice);
+                elecEmissionsFactor = Misc.GetAverageMonthlyValue(electricityIn.GhgEmissionsFactor);
+                tempWarmHorizon = Misc.GetAverageMonthlyValue(tempWarm);
+                tempColdHorizon = Misc.GetAverageMonthlyValue(tempCold);
             }
             else
             {
-                horizon = Misc.HoursPerYear;
-                elecPrice = Misc.GetAverageMonthlyValue(electricityIn.EnergyPrice);
+                elecPrice = electricityIn.EnergyPrice;
+                elecEmissionsFactor = electricityIn.GhgEmissionsFactor;
+                tempWarmHorizon = tempWarm;
+                tempColdHorizon = tempCold;
             }
 
-            double COP = this.EtaRef * (tempWarm / (tempWarm - tempCold));
+            for (int t = 0; t < horizon; t++)
+            {
+                double COP = this.EtaRef * (tempWarmHorizon[t] / (tempWarmHorizon[t] - tempColdHorizon[t]));
+                elecConsumed[t] = coolingGenerated[t] / COP;
+            }
+
+            Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor);
+            base.InputCarrier = electricityConsumedCarrier;
+
+            base.OutputCarriers = new EnergyCarrier[1];
+            base.OutputCarriers[0] = new Water(horizon, coolingGenerated, null, null, tempCold);
+            
+        }
+
+
+        /// <summary>
+        /// 10.1016/j.apenergy.2019.03.177
+        /// Eq. A.8
+        /// </summary>
+        /// <param name="electricityIn"></param>
+        /// <param name="airIn"></param>
+        /// <param name="coolingGenerated"></param>
+        /// <param name="supplyTemp"></param>
+        public void SetInputOutput(Electricity electricityIn, Air airIn, double[] coolingGenerated, double [] supplyTemp)
+        {
+            int horizon = coolingGenerated.Length;
 
             var elecConsumed = new double[horizon];
-            var elecCost = new double[horizon];
-            var elecEmissions = new double[horizon];
-            for(int t=0; t<horizon; t++)
+            var elecPrice = new double[horizon];
+            var elecEmissionsFactor = new double[horizon];
+            var airTemp = new double[horizon];
+
+            if (horizon == Misc.MonthsPerYear)
             {
-                elecConsumed[t] = coolingDemand[t] / COP;
-                elecCost[t] = elecConsumed[t] * elecPrice[t];
-                //elecEmissions[t] = elecConsumed[t] * elecEmissio
+                elecPrice = Misc.GetAverageMonthlyValue(electricityIn.EnergyPrice);
+                elecEmissionsFactor = Misc.GetAverageMonthlyValue(electricityIn.GhgEmissionsFactor);
+                airTemp = airIn.MonthlyTemperature;
+            }
+            else
+            {
+                elecPrice = electricityIn.EnergyPrice;
+                elecEmissionsFactor = electricityIn.GhgEmissionsFactor;
+                airTemp = airIn.Temperature;
             }
 
+            for (int t = 0; t < horizon; t++)
+            {
+                double COP = (638.95 - 4.238 * airTemp[t]) / (100.0 + 3.534 * airTemp[t]);
+                elecConsumed[t] = coolingGenerated[t] / COP;
+            }
 
-            Electricity electricityInInfused = null;
-            base.InputCarrier = electricityInInfused;
+            Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor);
+            base.InputCarrier = electricityConsumedCarrier;
 
             base.OutputCarriers = new EnergyCarrier[1];
-            base.OutputCarriers[0] = new Water(Misc.HoursPerYear, null, null, null, null);
-        }
-
-
-        /// <summary>
-        /// inputs from Hive.IO.Environment. But electricity also needs information on quantity... form Core simulator? 
-        /// </summary>
-        /// <param name="ambientAir"></param>
-        /// <param name="electricity"></param>
-        public void SetInput(Air ambientAir, Electricity electricity)
-        {
-            this.AmbientAir = ambientAir;
-            base.InputCarrier = electricity;
-        }
-
-
-        /// <summary>
-        /// parameters from a simulator in Hive.IO.Core
-        /// </summary>
-        /// <param name="horizon"></param>
-        /// <param name="availableEnergy"></param>
-        /// <param name="energyCost"></param>
-        /// <param name="ghgEmissions"></param>
-        /// <param name="supplyTemperature"></param>
-        public void SetOutput(int horizon, double[] availableEnergy, double[] energyCost, double[] ghgEmissions, double[] supplyTemperature)
-        {
-            base.OutputCarriers = new EnergyCarrier[1];
-            base.OutputCarriers[0] = new Water(horizon, availableEnergy, energyCost, ghgEmissions, supplyTemperature);
+            base.OutputCarriers[0] = new Water(horizon, coolingGenerated, null, null, supplyTemp);
         }
     }
 
