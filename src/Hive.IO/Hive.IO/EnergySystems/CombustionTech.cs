@@ -8,8 +8,6 @@ namespace Hive.IO.EnergySystems
             : base(investmentCost, embodiedGhg, capacity, "kW", isHeating, false, isElectric)
         {
         }
-
-        protected abstract double[] SetConversionEfficiencyHeating();
     }
 
 
@@ -24,33 +22,32 @@ namespace Hive.IO.EnergySystems
         }
 
 
-        protected override double[] SetConversionEfficiencyHeating()
+        public void SetInputOutput(Gas gasInput, double[] heatingGenerated, double[] supplyTemperature)
         {
-            throw new System.NotImplementedException();
-        }
+            int horizon = heatingGenerated.Length;
+
+            var gasConsumed = new double[horizon];
+            var gasPrice = new double[horizon];
+            var gasEmissionsFactor = new double[horizon];
 
 
-        //where is gas defined?? for solar, its clear, its from a weather file...
-        // so all Input Carriers should be part of Hive.IO.Environment!
-        // indicate, whether we have biogas, wood pellets, district heating, electricity grid, natural gas, oil, etc
-        public void SetInput(Gas gasInput)
-        {
-            base.InputCarrier = gasInput;
-        }
+            for (int t = 0; t < horizon; t++)
+            {
+                gasConsumed[t] = heatingGenerated[t] / this.Efficiency;
+            }
+            if (horizon == Misc.MonthsPerYear)
+            {
+                gasPrice = Misc.GetAverageMonthlyValue(gasInput.EnergyPrice);
+                gasEmissionsFactor = Misc.GetAverageMonthlyValue(gasInput.GhgEmissionsFactor);
+            }
 
+            //check if monthly or hourly values
 
-        /// <summary>
-        /// all these parameters are computed externally, with some simulator within the Core
-        /// </summary>
-        /// <param name="horizon"></param>
-        /// <param name="heatingGenerated"></param>
-        /// <param name="energyCost"></param>
-        /// <param name="ghgEmissions"></param>
-        /// <param name="supplyTemperature"></param>
-        public void SetOutput(int horizon, double[] heatingGenerated, double[] energyCost, double[] ghgEmissions, double[] supplyTemperature)
-        {
+            Gas gasConsumedCarrier = new Gas(horizon, gasConsumed, gasPrice, gasEmissionsFactor);
+            base.InputCarrier = gasConsumedCarrier; // infused with how much gas is consumed. input Gas carrier has no Energy information
+
             base.OutputCarriers = new EnergyCarrier[1];
-            base.OutputCarriers[0] = new Water(horizon, heatingGenerated, energyCost, ghgEmissions, supplyTemperature);
+            base.OutputCarriers[0] = new Water(horizon, heatingGenerated, null, null, supplyTemperature);
         }
     }
 
@@ -67,15 +64,12 @@ namespace Hive.IO.EnergySystems
             base.Name = "CombinedHeatPower";
         }
 
-        protected override double[] SetConversionEfficiencyHeating()
+        public void SetInputOutput()
         {
-            return new double[] { };
+
         }
 
-        public double[] SetConversionEfficiencyElectricity()
-        {
-            return new double[] { };
-        }
+
 
 
         public void SetInput(Gas gasInput)
@@ -83,7 +77,7 @@ namespace Hive.IO.EnergySystems
             base.InputCarrier = gasInput;
         }
 
-        public void SetOutput(int horizon, double [] heatingGenerated, double [] electricityGenerated, double [] energyCost, double [] ghgEmissions, double [] supplyTemperature)
+        public void SetOutput(int horizon, double[] heatingGenerated, double[] electricityGenerated, double[] energyCost, double[] ghgEmissions, double[] supplyTemperature)
         {
             base.OutputCarriers = new EnergyCarrier[2];
             base.OutputCarriers[0] = new Water(horizon, heatingGenerated, energyCost, ghgEmissions, supplyTemperature);

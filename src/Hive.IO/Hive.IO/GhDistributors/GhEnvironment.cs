@@ -23,7 +23,16 @@ namespace Hive.IO.GhDistributors
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddTextParameter("Filepath", "Filepath", "Outputs the filepath of the .epw weather file belonging to Hive.IO.Environment. Can be used to e.g. open the weather file in another component.", GH_ParamAccess.item);
-            pManager.AddGenericParameter("InputCarriers", "InputCarriers", "InputCarriers", GH_ParamAccess.list);
+            pManager.AddGenericParameter("NaturalGas", "NaturalGas", "NaturalGas", GH_ParamAccess.item);
+            pManager.AddGenericParameter("BioGas", "BioGas", "BioGas", GH_ParamAccess.item);
+            pManager.AddGenericParameter("WoodPellets", "WoodPellets", "WoodPellets", GH_ParamAccess.item);
+            pManager.AddGenericParameter("DistrictHeating", "DistrictHeating", "DistrictHeating", GH_ParamAccess.item);
+            pManager.AddGenericParameter("DistrictCooling", "DistrictCooling", "DistrictCooling", GH_ParamAccess.item);
+            pManager.AddGenericParameter("GridElectricity", "GridElectricity", "GridElectricity", GH_ParamAccess.item);
+            pManager.AddGenericParameter("AmbientAirTemp", "AmbientAirTemp", "AmbientAirTemp", GH_ParamAccess.item);
+            pManager.AddGenericParameter("GHI", "GHI", "GHI", GH_ParamAccess.item);
+            pManager.AddGenericParameter("DNI", "DNI", "DNI", GH_ParamAccess.item);
+            pManager.AddGenericParameter("DHI", "DHI", "DHI", GH_ParamAccess.item);
         }
 
 
@@ -35,7 +44,8 @@ namespace Hive.IO.GhDistributors
             if (environment != null)
             {
                 DA.SetData(0, environment.EpwPath);
-                DA.SetDataList(1, environment.EnergyPotentials);
+                for(int i=0; i<environment.EnergyPotentials.Length; i++)
+                    DA.SetData(i+1, environment.EnergyPotentials[i]);
             }
 
         }

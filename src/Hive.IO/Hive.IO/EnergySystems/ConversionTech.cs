@@ -200,9 +200,7 @@ namespace Hive.IO.EnergySystems
 
 
 
-        protected ConversionTech(double investmentCost, double embodiedGhg,
-            double capacity, string capacityUnity,
-            bool isHeating, bool isCooling, bool isElectric)
+        protected ConversionTech(double investmentCost, double embodiedGhg, double capacity, string capacityUnity, bool isHeating, bool isCooling, bool isElectric)
         {
             this.SpecificInvestmentCost = investmentCost;
             this.SpecificEmbodiedGhg = embodiedGhg;

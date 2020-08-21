@@ -29,11 +29,8 @@ namespace Hive.IO.GhMergers
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Gas", "Gas", "Gas", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("horizon", "horizon", "horizon", GH_ParamAccess.item);
-            pManager.AddNumberParameter("heatGenerated", "heatGenerated", "heatGenerated (kWh)", GH_ParamAccess.list);
-            pManager.AddNumberParameter("cost", "cost", "cost", GH_ParamAccess.list);
-            pManager.AddNumberParameter("ghg", "ghg", "ghg", GH_ParamAccess.list);
-            pManager.AddNumberParameter("suppTemp", "suppTemp", "suppTemp for water output. necessary to know for COP calculation", GH_ParamAccess.list);
+            pManager.AddNumberParameter("heatDemand", "heatDemand", "heatDemand (kWh). Either 12 values (monthly) or 8760 (hourly)", GH_ParamAccess.list);
+            pManager.AddNumberParameter("suppTemp", "suppTemp", "Water temperature at the outlet of the boiler", GH_ParamAccess.list);
 
             pManager.AddGenericParameter("Hive.IO.GasBoiler", "GasBoiler", "GasBoiler", GH_ParamAccess.item);
         }
@@ -54,31 +51,17 @@ namespace Hive.IO.GhMergers
         {
             Gas gas = null;
             DA.GetData(0, ref gas);
-
-            int horizon = 8760;
-            DA.GetData(1, ref horizon);
-
-            var energyGenerated = new List<double>();
-            DA.GetDataList(2, energyGenerated);
-
-            var energyCost = new List<double>();
-            DA.GetDataList(3, energyCost);
-
-            var ghg = new List<double>();
-            DA.GetDataList(4, ghg);
+          
+            var heatingDemand = new List<double>();
+            DA.GetDataList(1, heatingDemand);
 
             var supplyTemp = new List<double>();
-            DA.GetDataList(5, supplyTemp);
+            DA.GetDataList(2, supplyTemp);
 
             GasBoiler boiler = null;
-            DA.GetData(6, ref boiler);
+            DA.GetData(3, ref boiler);
 
-
-            boiler.SetInput(gas);
-
-            // this creates a water EnergyCarrier that will be infused into the AirSourceHeatPump
-            boiler.SetOutput(horizon, energyGenerated.ToArray(), energyCost.ToArray(), ghg.ToArray(), supplyTemp.ToArray());
-
+            boiler.SetInputOutput(gas, heatingDemand.ToArray(), supplyTemp.ToArray());
             DA.SetData(0, boiler);
         }
 
