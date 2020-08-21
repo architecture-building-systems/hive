@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Script.Serialization;
 using System.Windows.Forms;
 using Grasshopper.GUI;
@@ -21,6 +22,8 @@ namespace Hive.IO.GHComponents
               "[hive]", "IO")
         {
         }
+
+        private BuildingInputState _buildingInputState = null;
 
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
@@ -75,7 +78,12 @@ namespace Hive.IO.GHComponents
 
         public void ShowUiClicked(object sender, EventArgs e)
         {
-            var form = new BuildingInput();
+            if (_buildingInputState == null)
+            {
+                _buildingInputState = new BuildingInputState();
+                _buildingInputState.SiaRoom = Sia2024Record.All().First() as Sia2024RecordEx;
+            }
+            var form = new BuildingInput(_buildingInputState);
             form.ShowDialog();
         }
 
@@ -184,5 +192,13 @@ namespace Hive.IO.GHComponents
         {
             get { return new Guid("43a45a89-485b-4134-b073-17bac23e76d5"); }
         }
+    }
+
+    /// <summary>
+    /// Capture the state of the BuildingInput form...
+    /// </summary>
+    public class BuildingInputState
+    {
+        public Sia2024RecordEx SiaRoom { get; set; }
     }
 }

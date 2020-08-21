@@ -6,7 +6,9 @@ using System.Reflection;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using Hive.IO;
+using Hive.IO.Building;
 using Hive.IO.Forms;
+using Hive.IO.GHComponents;
 
 namespace TestVisualizer
 {
@@ -21,7 +23,9 @@ namespace TestVisualizer
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.AssemblyResolve += new ResolveEventHandler(LoadRhinoDlls);
 
-            new BuildingInput().ShowDialog();
+            var state = new BuildingInputState();
+            state.SiaRoom = Sia2024Record.All().First() as Sia2024RecordEx;
+            new BuildingInput(state).ShowDialog();
 
             /*Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);

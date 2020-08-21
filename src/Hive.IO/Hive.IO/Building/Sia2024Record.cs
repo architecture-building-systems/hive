@@ -163,7 +163,7 @@ namespace Hive.IO.Building
 
         public static Sia2024Record Lookup(string useType, string roomType, string quality) =>
             ReadRecords()
-                .First(r => r.BuildingUseType == useType && r.RoomType == roomType && r.Quality == quality);
+                .FirstOrDefault(r => r.BuildingUseType == useType && r.RoomType == roomType && r.Quality == quality);
 
         public static IEnumerable<Sia2024Record> All() => ReadRecords();
     }

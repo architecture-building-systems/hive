@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="hizard | Building"
     x:Class="Hive.IO.Forms.BuildingInput"
-    Width="452.628" Height="589.124" WindowStyle="ToolWindow">
+    Width="452.628" Height="589.124" WindowStyle="ToolWindow" Loaded="Window_Loaded">
     <TabControl>
         <TabItem Header="SIA">
             <Grid Margin="10">
@@ -22,9 +22,9 @@
                 <Label Grid.Row="0" Grid.Column="0" FontWeight="Bold">Building use type</Label>
                 <ComboBox Name="BuildingUseType" Grid.Row="0" Grid.Column="1" Margin="0,0,-0.5,0" VerticalAlignment="Center" SelectionChanged="BuildingUseType_SelectionChanged"></ComboBox>
                 <Label Grid.Row="1" Grid.Column="0" FontWeight="Bold" Content="Room type"/>
-                <ComboBox Name="RoomType" Grid.Row="1" Grid.Column="1" Margin="0,0,-0.5,0" VerticalAlignment="Center"></ComboBox>
+                <ComboBox Name="RoomType" Grid.Row="1" Grid.Column="1" Margin="0,0,-0.5,0" VerticalAlignment="Center" SelectionChanged="RoomType_SelectionChanged"></ComboBox>
                 <Label Grid.Row="2" Grid.Column="0" FontWeight="Bold">Building quality</Label>
-                <ComboBox Name="BuildingQuality" Grid.Row="2" Grid.Column="1" Margin="0,0,-0.5,0" VerticalAlignment="Center"></ComboBox>
+                <ComboBox Name="BuildingQuality" Grid.Row="2" Grid.Column="1" Margin="0,0,-0.5,0" VerticalAlignment="Center" SelectionChanged="BuildingQuality_SelectionChanged"></ComboBox>
 
                 <TextBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="WrapWithOverflow" 
                      HorizontalAlignment="Center" Width="Auto" TextAlignment="Center" 
