@@ -4,54 +4,63 @@ namespace Hive.IO.EnergySystems
 {
     #region MiscSupply
 
-    // these are all networks, containing input energy carriers. but not conversion tech
-    /*
-    public class ElectricityGrid : ConversionTech
-    {
-        public ElectricityGrid(double investmentCost, double embodiedGhg) 
-            : base(investmentCost, embodiedGhg, double.MaxValue, "kW", false, false, true)
-        {
-        }
-
-
-    }
-
-    public class DistrictHeating : ConversionTech
-    {
-        public DistrictHeating(double investmentCost, double embodiedGhg) 
-            : base(investmentCost, embodiedGhg, Double.MaxValue, "kW", true, false, false)
-        {
-        }
-
-
-    }
-
-
-    public class DistrictCooling : ConversionTech
-    {
-        public DistrictCooling(double investmentCost, double embodiedGhg) 
-            : base(investmentCost, embodiedGhg, double.MaxValue, "kW", false, true, false)
-        {
-        }
-
-
-
-    }
-    */
-
-
     public class Chiller : ConversionTech
     {
         /// <summary>
         /// Ambient air carrier. This will influence COP of the Chiller
         /// </summary>
         public Air AmbientAir { get; private set; }
-        public double COP { get; private set; }
-        public Chiller(double investmentCost, double embodiedGhg, double capacity, double COP) 
+        public double EtaRef { get; private set; }
+        public Chiller(double investmentCost, double embodiedGhg, double capacity, double etaRef) 
             : base(investmentCost, embodiedGhg, capacity, "kW", false, true, false)
         {
-            this.COP = COP;
+            this.EtaRef = etaRef;
             base.Name = "Chiller";
+        }
+
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="electricity"></param>
+        /// <param name="tempWarm"></param>
+        /// <param name="tempCold"></param>
+        /// <param name="coolingDemand"></param>
+        /// <param name="electricityIn"></param>
+        /// <param name="timeResolution">"'monthly' (12) or 'hourly' (8760)"</param>
+        public void ComputeInputOutputSimple(double [] coolingDemand, Electricity electricityIn, double tempWarm, double tempCold, string timeResolution = "monthly")
+        {
+            int horizon;
+            double [] elecPrice = null;
+            if (string.Equals(timeResolution, "monthly"))
+            {
+                horizon = Misc.MonthsPerYear;
+                elecPrice = electricityIn.EnergyPrice;
+            }
+            else
+            {
+                horizon = Misc.HoursPerYear;
+                elecPrice = Misc.GetAverageMonthlyValue(electricityIn.EnergyPrice);
+            }
+
+            double COP = this.EtaRef * (tempWarm / (tempWarm - tempCold));
+
+            var elecConsumed = new double[horizon];
+            var elecCost = new double[horizon];
+            var elecEmissions = new double[horizon];
+            for(int t=0; t<horizon; t++)
+            {
+                elecConsumed[t] = coolingDemand[t] / COP;
+                elecCost[t] = elecConsumed[t] * elecPrice[t];
+                //elecEmissions[t] = elecConsumed[t] * elecEmissio
+            }
+
+
+            Electricity electricityInInfused = null;
+            base.InputCarrier = electricityInInfused;
+
+            base.OutputCarriers = new EnergyCarrier[1];
+            base.OutputCarriers[0] = new Water(Misc.HoursPerYear, null, null, null, null);
         }
 
 
@@ -89,11 +98,11 @@ namespace Hive.IO.EnergySystems
         /// Ambient air carrier. This will influence COP of the ASHP
         /// </summary>
         public Air AmbientAir { get; private set; }
-		public double COP { get; private set; }
-        public AirSourceHeatPump(double investmentCost, double embodiedGhg, double capacity, double COP) 
+		public double EtaRef { get; private set; }
+        public AirSourceHeatPump(double investmentCost, double embodiedGhg, double capacity, double etaRef) 
             : base(investmentCost, embodiedGhg, capacity, "kW", true, false, false)
         {
-			this.COP = COP;
+			this.EtaRef = etaRef;
             base.Name = "AirSourceHeatPump";
         }
 

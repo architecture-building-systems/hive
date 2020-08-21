@@ -13,19 +13,48 @@ namespace Hive.IO.EnergySystems
     /// </summary>
     public class Air : EnergyCarrier
     {
-        public Air(int horizon, double[] airTemperature)
-            : base(horizon, EnergyCarrier.EnergyUnit.DegreeCelsius, airTemperature, null, null) { }
-
-        private double[] _monthlySupplyTemperature = null;
-        public double[] MonthlySupplyTemperature
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="horizon">Time horizon</param>
+        /// <param name="airEnergy">kWh</param>
+        /// <param name="airPrice">CHF/kWh</param>
+        /// <param name="ghgEmissionsFactor">kgCO2eq./kWh</param>
+        /// <param name="airTemperature">deg C</param>
+        public Air(int horizon, double [] airEnergy, double [] airPrice, double [] ghgEmissionsFactor, double[] airTemperature)
+            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, airEnergy, airPrice, ghgEmissionsFactor) 
         {
-            get
+            if (airTemperature != null && airTemperature.Length > 0)
             {
-                if (_monthlySupplyTemperature == null)
-                    _monthlySupplyTemperature = Misc.GetAverageMonthlyValue(this.AvailableEnergy);
-                return _monthlySupplyTemperature;
+                base.Temperature = new double[airTemperature.Length];
+                airTemperature.CopyTo(base.Temperature, 0);
             }
-            private set {; }
+        }
+    }
+
+
+    /// <summary>
+    /// Water as energy carrier, e.g. the output of a boiler, heat pump, or solar thermal collector
+    /// Could also be used for district heating/cooling
+    /// </summary>
+    public class Water : EnergyCarrier
+    {
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="horizon">Time horizon</param>
+        /// <param name="waterEnergy">kWh</param>
+        /// <param name="waterPrice">CHF/kWh</param>
+        /// <param name="ghgEmissionsFactor">kgCO2eq./kWh</param>
+        /// <param name="waterTemperature">deg C</param>
+        public Water(int horizon, double[] waterEnergy, double[] waterPrice, double[] ghgEmissionsFactor, double[] waterTemperature)
+            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, waterEnergy, waterPrice, ghgEmissionsFactor)
+        {
+            if (waterTemperature != null && waterTemperature.Length > 0)
+            {
+                base.Temperature = new double[waterTemperature.Length];
+                waterTemperature.CopyTo(base.Temperature, 0);
+            }
         }
     }
 
@@ -54,7 +83,14 @@ namespace Hive.IO.EnergySystems
 
         public RadiationType Description { get; private set; }
 
-
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="horizon">Time horizon</param>
+        /// <param name="irradiation">solar energy in kWh. If you only know solar irradiance in kWh/m2, use that and leave default 'surfaceArea = 1'. Then, irradiation = irradiance</param>
+        /// <param name="surfaceArea"></param>
+        /// <param name="vertexId"></param>
+        /// <param name="radiationType"></param>
         public Radiation(int horizon, double[] irradiation, double surfaceArea = 1, int? vertexId = null, RadiationType radiationType = RadiationType.GHI)
             : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, irradiation, null, null)
         {
@@ -72,45 +108,21 @@ namespace Hive.IO.EnergySystems
     }
 
 
-    /// <summary>
-    /// Water as energy carrier, e.g. the output of a boiler, heat pump, or solar thermal collector
-    /// Could also be used for district heating/cooling
-    /// </summary>
-    public class Water : EnergyCarrier
-    {
-        public double[] SupplyTemperature { get; private set; } //8760
-        public Water(int horizon, double[] availableEnergy, double[] energyCost, double[] ghgEmissions,
-            double[] supplyTemperature)
-            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, availableEnergy, energyCost, ghgEmissions)
-        {
-            this.SupplyTemperature = new double[supplyTemperature.Length];
-            supplyTemperature.CopyTo(this.SupplyTemperature, 0);
-        }
-
-
-        private double[] _monthlySupplyTemperature = null;
-        public double[] MonthlySupplyTemperature
-        {
-            get
-            {
-                if (_monthlySupplyTemperature == null)
-                    _monthlySupplyTemperature = Misc.GetAverageMonthlyValue(this.SupplyTemperature);
-                return _monthlySupplyTemperature;
-            }
-            private set { ; }
-        }
-
-    }
-
 
     /// <summary>
     /// Electricity. Could be from the grid or from a conversion technology
     /// </summary>
     public class Electricity : EnergyCarrier
     {
-        public Electricity(int horizon, double[] availableElectricity, double[] energyCost, double[] ghgEmissions)
-            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, availableElectricity, energyCost, ghgEmissions) { }
-
+        /// <summary>
+        /// Electricity
+        /// </summary>
+        /// <param name="horizon">Time horizon</param>
+        /// <param name="electricEnergy">kWh</param>
+        /// <param name="electricityPrice">CHF/kWh</param>
+        /// <param name="ghgEmissionsFactor">kgCO2eq./kWh</param>
+        public Electricity(int horizon, double[] electricEnergy, double[] electricityPrice, double[] ghgEmissionsFactor)
+            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, electricEnergy, electricityPrice, ghgEmissionsFactor) { }
     }
 
 
@@ -119,10 +131,15 @@ namespace Hive.IO.EnergySystems
     /// </summary>
     public class Gas : EnergyCarrier
     {
-        public Gas(int horizon, double[] availableGas, double[] energyCost, double[] ghgEmissions)
-            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, availableGas, energyCost, ghgEmissions)
-        {
-        }
+        /// <summary>
+        /// Gas
+        /// </summary>
+        /// <param name="horizon">Time horizon</param>
+        /// <param name="gasEnergy">kWh</param>
+        /// <param name="gasPrice">CHF/kWh</param>
+        /// <param name="ghgEmissionsFactor">kgCO2eq./kWh</param>
+        public Gas(int horizon, double[] gasEnergy, double[] gasPrice, double[] ghgEmissionsFactor)
+            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, gasEnergy, gasPrice, ghgEmissionsFactor) { }
     }
 
 
@@ -132,10 +149,15 @@ namespace Hive.IO.EnergySystems
     /// </summary>
     public class Pellets : EnergyCarrier
     {
-        public Pellets(int horizon, double[] availablePellets, double[] energyCost, double[] ghgEmissions)
-            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, availablePellets, energyCost, ghgEmissions)
-        {
-        }
+        /// <summary>
+        /// Wood pellets
+        /// </summary>
+        /// <param name="horizon">Time horizon</param>
+        /// <param name="pelletEnergy">Time-resolved pellets in kWh</param>
+        /// <param name="pelletsPrice">price per kWh</param>
+        /// <param name="ghgEmissionsFactor">kgCO2eq./kWh</param>
+        public Pellets(int horizon, double[] pelletEnergy, double[] pelletsPrice, double[] ghgEmissionsFactor)
+            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, pelletEnergy, pelletsPrice, ghgEmissionsFactor) { }
     }
     #endregion
 
@@ -154,8 +176,7 @@ namespace Hive.IO.EnergySystems
         /// </summary>
         public enum EnergyUnit
         {
-            KiloWattHours,
-            DegreeCelsius
+            KiloWattHours
         }
         /// <summary>
         /// Setting the energy unit from this.EnergyUnit
@@ -170,41 +191,67 @@ namespace Hive.IO.EnergySystems
         /// Time series of available/provided energy of this carrier in this.Unit per time step.
         /// Could be the potentials (solar) or the operation from a conversion technology
         /// </summary>
-        public double[] AvailableEnergy { get; protected set; }
+        public double[] Energy { get; protected set; }
         /// <summary>
         /// Time series with cost coefficients per this.Unit
         /// </summary>
-        public double[] EnergyCost { get; protected set; }
+        public double[] EnergyPrice { get; protected set; }
+        public double[] TotalEnergyCost { get; protected set; }
         /// <summary>
         /// Time series of Greenhouse gas emissions in kgCO2eq/this.Unit
         /// </summary>
-        public double[] GhgEmissions { get; protected set; }
+        public double[] GhgEmissionsFactor { get; protected set; }
+        public double[] TotalGhgEmissions { get; protected set; }
 
+        /// <summary>
+        /// Temperature of the medium in degree Celsius. Not all carriers will need to implement this
+        /// </summary>
+        public double [] Temperature { get; protected set; }
 
-        protected EnergyCarrier(int horizon, EnergyUnit unit, double[] availableEnergy, double[] energyCost, double[] ghgEmissions)
+        protected EnergyCarrier(int horizon, EnergyUnit unit, double[] energy, double[] energyPrice, double[] ghgEmissionsFactor)
         {
             this.Horizon = horizon;
             this.Unit = unit;
 
             // energy could be unbound, e.g. electricity grid, in which case energy == null
-            if (availableEnergy != null && availableEnergy.Length != 0)
+            if (energy != null && energy.Length != 0)
             {
-                this.AvailableEnergy = new double[availableEnergy.Length];
-                availableEnergy.CopyTo(this.AvailableEnergy, 0);
+                this.Energy = new double[energy.Length];
+                energy.CopyTo(this.Energy, 0);
             }
 
             // energy could be free, e.g. air, in which case energyCost == null
-            if (energyCost != null && energyCost.Length != 0)
+            if (energyPrice != null && energyPrice.Length != 0)
             {
-                this.EnergyCost = new double[energyCost.Length];
-                energyCost.CopyTo(this.EnergyCost, 0);
+                this.EnergyPrice = new double[energyPrice.Length];
+                energyPrice.CopyTo(this.EnergyPrice, 0);
             }
 
             // energy could have zero emissions, e.g. air or solar, in which case ghgEmissions == null
-            if (ghgEmissions != null && ghgEmissions.Length != 0)
+            if (ghgEmissionsFactor != null && ghgEmissionsFactor.Length != 0)
             {
-                this.GhgEmissions = new double[ghgEmissions.Length];
-                ghgEmissions.CopyTo(this.GhgEmissions, 0);
+                this.GhgEmissionsFactor = new double[ghgEmissionsFactor.Length];
+                ghgEmissionsFactor.CopyTo(this.GhgEmissionsFactor, 0);
+            }
+
+            if(this.Energy != null && this.EnergyPrice != null && this.Energy.Length == this.EnergyPrice.Length)
+            {
+                int _horizon = this.Energy.Length;
+                this.TotalEnergyCost = new double[_horizon];
+                for (int t = 0; t < _horizon; t++)
+                {
+                    this.TotalEnergyCost[t] = this.Energy[t] * this.EnergyPrice[t];
+                }
+            }
+
+            if (this.Energy != null && this.GhgEmissionsFactor != null && this.Energy.Length == this.GhgEmissionsFactor.Length)
+            {
+                int _horizon = this.Energy.Length;
+                this.TotalGhgEmissions = new double[_horizon];
+                for (int t = 0; t < _horizon; t++)
+                {
+                    this.TotalGhgEmissions[t] = this.Energy[t] * this.GhgEmissionsFactor[t];
+                }
             }
         }
 
@@ -215,7 +262,7 @@ namespace Hive.IO.EnergySystems
             get
             {
                 if (_monthlyCumulativeEnergy == null)
-                    _monthlyCumulativeEnergy = Misc.GetCumulativeMonthlyValue(this.AvailableEnergy);
+                    _monthlyCumulativeEnergy = Misc.GetCumulativeMonthlyValue(this.Energy);
                 return _monthlyCumulativeEnergy;
             }
             private set { ; }
@@ -227,13 +274,24 @@ namespace Hive.IO.EnergySystems
             get
             {
                 if (_monthlyAverageEnergy == null)
-                    _monthlyAverageEnergy = Misc.GetAverageMonthlyValue(this.AvailableEnergy);
+                    _monthlyAverageEnergy = Misc.GetAverageMonthlyValue(this.Energy);
                 return _monthlyAverageEnergy;
             }
             private set { ; }
         }
 
 
-        
+        private double[] _monthlyTemperature = null;
+        public double[] MonthlySupplyTemperature
+        {
+            get
+            {
+                if (_monthlyTemperature == null)
+                    _monthlyTemperature = Misc.GetAverageMonthlyValue(this.Temperature);
+                return _monthlyTemperature;
+            }
+            private set {; }
+        }
+
     }
 }

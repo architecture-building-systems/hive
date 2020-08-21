@@ -12,7 +12,7 @@ namespace Hive.IO.GhParametricInputs
         public double ASHPCapacity;
         public double ASHPCost;
         public double ASHPEmissions;
-        public double ASHPCOP;
+        public double ASHPEtaRef;
 
         public double GasBoilerCapacity;
         public double GasBoilerCost;
@@ -28,16 +28,16 @@ namespace Hive.IO.GhParametricInputs
         public double ChillerCapacity;
         public double ChillerCost;
         public double ChillerEmissions;
-        public double ChillerCOP;
+        public double ChillerEtaRef;
     }
 
 
-    public class GhEnergySystems : GH_Component
+    public class GhConversionTech : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the GhParametricInputEnergySystems class.
         /// </summary>
-        public GhEnergySystems()
+        public GhConversionTech()
           : base("Parametric Input EnergySystems Hive", "HiveParaInEnSys",
               "Description",
               "[hive]", "IO")
@@ -56,7 +56,7 @@ namespace Hive.IO.GhParametricInputs
             pManager.AddNumberParameter("ASHPCapacity", "ASHPCapacity", "Air source heat pump capacity, in kW", GH_ParamAccess.item);
             pManager.AddNumberParameter("ASHPCost", "ASHPCost", "Air source heat pump cost, in CHF/kW", GH_ParamAccess.item);
             pManager.AddNumberParameter("ASHPEmissions", "ASHPEmissions", "Air source heat pump embodied green house gas emissions in kgCO2/kW", GH_ParamAccess.item);
-            pManager.AddNumberParameter("ASHPCOP", "ASHPCOP", "Air source heat pump reference coefficient of performance", GH_ParamAccess.item);
+            pManager.AddNumberParameter("ASHPEtaRef", "ASHPEtaRef", "Air source heat pump reference efficiency used for COP calculation", GH_ParamAccess.item);
 
             pManager.AddNumberParameter("NGBoilerCapacity", "NGBoilerCapacity", "Natural gas boiler capacity, in kW", GH_ParamAccess.item);
             pManager.AddNumberParameter("NGBoilerCost", "NGBoilerCost", "Natural gas boiler cost, in CHF/kW", GH_ParamAccess.item);
@@ -72,7 +72,7 @@ namespace Hive.IO.GhParametricInputs
             pManager.AddNumberParameter("ChillerCapacity", "ChillerCapacity", "Chiller capacity, in kW", GH_ParamAccess.item);
             pManager.AddNumberParameter("ChillerCost", "ChillerCost", "Chiller cost, in CHF/kW", GH_ParamAccess.item);
             pManager.AddNumberParameter("ChillerEmissions", "ChillerEmissions", "Chiller embodied green house gas emissions, in kgCO2/kW", GH_ParamAccess.item);
-            pManager.AddNumberParameter("ChillerCOP", "ChillerCOP", "Chiller coefficient of performance", GH_ParamAccess.item);
+            pManager.AddNumberParameter("ChillerEtaRef", "ChillerEtaRef", "Chiller reference efficiency used for COP calculation", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -98,7 +98,7 @@ namespace Hive.IO.GhParametricInputs
             DA.GetData(0, ref energySystemProperties.ASHPCapacity);
             DA.GetData(1, ref energySystemProperties.ASHPCost);
             DA.GetData(2, ref energySystemProperties.ASHPEmissions);
-            DA.GetData(3, ref energySystemProperties.ASHPCOP);
+            DA.GetData(3, ref energySystemProperties.ASHPEtaRef);
 
             DA.GetData(4, ref energySystemProperties.GasBoilerCapacity);
             DA.GetData(5, ref energySystemProperties.GasBoilerCost);
@@ -114,7 +114,7 @@ namespace Hive.IO.GhParametricInputs
             DA.GetData(13, ref energySystemProperties.ChillerCapacity);
             DA.GetData(14, ref energySystemProperties.ChillerCost);
             DA.GetData(15, ref energySystemProperties.ChillerEmissions);
-            DA.GetData(16, ref energySystemProperties.ChillerCOP);
+            DA.GetData(16, ref energySystemProperties.ChillerEtaRef);
 
             DA.SetData(0, energySystemProperties);
         }

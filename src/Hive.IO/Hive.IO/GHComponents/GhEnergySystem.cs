@@ -261,13 +261,13 @@ namespace Hive.IO.GHComponents
             {
                 //var conversionTechProperties = JsonConvert.DeserializeObject<ConversionTechProperties>(conversionTechJson);
                 if (conversionTechProperties.ASHPCapacity > 0.0)
-                    conversionTech.Add(new AirSourceHeatPump(conversionTechProperties.ASHPCost, conversionTechProperties.ASHPEmissions, conversionTechProperties.ASHPCapacity, conversionTechProperties.ASHPCOP));
+                    conversionTech.Add(new AirSourceHeatPump(conversionTechProperties.ASHPCost, conversionTechProperties.ASHPEmissions, conversionTechProperties.ASHPCapacity, conversionTechProperties.ASHPEtaRef));
                 if (conversionTechProperties.GasBoilerCapacity > 0.0)
                     conversionTech.Add(new GasBoiler(conversionTechProperties.GasBoilerCost, conversionTechProperties.GasBoilerEmissions, conversionTechProperties.GasBoilerCapacity, conversionTechProperties.GasBoilerEfficiency));
                 if (conversionTechProperties.CHPCapacity > 0.0)
                     conversionTech.Add(new CombinedHeatPower(conversionTechProperties.CHPCost, conversionTechProperties.CHPEmissions, conversionTechProperties.CHPCapacity, conversionTechProperties.CHPHTP, conversionTechProperties.CHPEffElec));
                 if (conversionTechProperties.ChillerCapacity > 0.0)
-                    conversionTech.Add(new Chiller(conversionTechProperties.ChillerCost, conversionTechProperties.ChillerEmissions, conversionTechProperties.ChillerCapacity, conversionTechProperties.ChillerCOP));
+                    conversionTech.Add(new Chiller(conversionTechProperties.ChillerCost, conversionTechProperties.ChillerEmissions, conversionTechProperties.ChillerCapacity, conversionTechProperties.ChillerEtaRef));
             }
 
             var emitters = new List<Emitter>();

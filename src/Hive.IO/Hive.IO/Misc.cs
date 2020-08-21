@@ -14,14 +14,13 @@ namespace Hive.IO
         public static readonly int[] DaysPerMonth = new int[12] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
         public const int HoursPerDay = 24;
         public const int HoursPerYear = 8760;
+        public const int MonthsPerYear = 12;
 
         public static double[] GetAverageMonthlyValue(double[] annualTimeSeries)
         {
-
-            int months = 12;
-            double[] monthlyTimeSeries = new double[months];
+            double[] monthlyTimeSeries = new double[Misc.MonthsPerYear];
             int sumOfDays = 0;
-            for (int t = 0; t < months; t++)
+            for (int t = 0; t < Misc.MonthsPerYear; t++)
             {
                 int startIndex = sumOfDays * Misc.HoursPerDay;
                 int daysThisMonth = Misc.DaysPerMonth[t];
