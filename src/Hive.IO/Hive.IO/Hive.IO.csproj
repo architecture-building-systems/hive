@@ -85,6 +85,7 @@
     <Compile Include="Forms\BuildingInput.xaml.cs">
       <DependentUpon>BuildingInput.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\BuildingInputState.cs" />
     <Compile Include="GhDistributors\GhConversionTech.cs" />
     <Compile Include="GhDistributors\GhEnvironment.cs" />
     <Compile Include="GhDistributors\GhSIA.cs" />

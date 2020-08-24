@@ -3,7 +3,7 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     Title="hizard | Building"
     x:Class="Hive.IO.Forms.BuildingInput"
-    Width="452.628" Height="589.124" WindowStyle="ToolWindow" Loaded="Window_Loaded"
+    Width="452.628" Height="589.124" WindowStyle="ToolWindow"
     DataContext="{Binding RelativeSource={RelativeSource Self}}">
     <TabControl>
         <TabItem Header="SIA">
@@ -22,12 +22,12 @@
 
                 <Label Grid.Row="0" Grid.Column="0" FontWeight="Bold">Building use type</Label>
                 <ComboBox Name="BuildingUseType" Grid.Row="0" Grid.Column="1" Margin="0,0,-0.5,0" VerticalAlignment="Center" 
-                          IsEnabled="{Binding Path=AllowEditing}"
+                          IsEnabled="{Binding Path=State.IsEditable}"
                           SelectionChanged="BuildingUseType_SelectionChanged"></ComboBox>
                 <Label Grid.Row="1" Grid.Column="0" FontWeight="Bold" Content="Room type"/>
-                <ComboBox Name="RoomType" Grid.Row="1" Grid.Column="1" Margin="0,0,-0.5,0" VerticalAlignment="Center" SelectionChanged="RoomType_SelectionChanged" IsEnabled="{Binding Path=AllowEditing}"></ComboBox>
+                <ComboBox Name="RoomType" Grid.Row="1" Grid.Column="1" Margin="0,0,-0.5,0" VerticalAlignment="Center" SelectionChanged="RoomType_SelectionChanged" IsEnabled="{Binding Path=State.IsEditable}"></ComboBox>
                 <Label Grid.Row="2" Grid.Column="0" FontWeight="Bold">Building quality</Label>
-                <ComboBox Name="BuildingQuality" Grid.Row="2" Grid.Column="1" Margin="0,0,-0.5,0" VerticalAlignment="Center" SelectionChanged="BuildingQuality_SelectionChanged" IsEnabled="{Binding Path=AllowEditing}"></ComboBox>
+                <ComboBox Name="BuildingQuality" Grid.Row="2" Grid.Column="1" Margin="0,0,-0.5,0" VerticalAlignment="Center" SelectionChanged="BuildingQuality_SelectionChanged" IsEnabled="{Binding Path=State.IsEditable}"></ComboBox>
 
                 <TextBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="WrapWithOverflow" 
                      HorizontalAlignment="Center" Width="Auto" TextAlignment="Center" 
@@ -62,9 +62,13 @@
                             <TextBox Name="RoofArea" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Margin="0" TextAlignment="Right" IsEnabled="False">10.3</TextBox>
                             <Label Grid.Row="0" Grid.Column="3" FontWeight="Bold" Grid.ColumnSpan="2">Set-points</Label>
                             <Label Grid.Row="1" Grid.Column="3">Heating</Label>
-                            <TextBox Name="HeatingSetPoint" Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" Margin="0,4,-1,4" TextAlignment="Right" IsEnabled="False">20</TextBox>
+                            <TextBox Name="HeatingSetPoint" Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" Margin="0,4,-1,4" 
+                                     TextAlignment="Right" IsEnabled="False"
+                                     Text="{Binding Path=State.HeatingSetpoint}"></TextBox>
                             <Label Grid.Row="2" Grid.Column="3">Cooling</Label>
-                            <TextBox Name="CoolingSetPoint" Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" Margin="0,4,-1,4" TextAlignment="Right" IsEnabled="False">26</TextBox>
+                            <TextBox Name="CoolingSetPoint" Grid.Row="2" Grid.Column="4" VerticalAlignment="Center" Margin="0,4,-1,4" 
+                                     TextAlignment="Right" IsEnabled="False"
+                                     Text="{Binding Path=State.CoolingSetpoint}"></TextBox>
                         </Grid>
                     </GroupBox>
                     <!-- hide empty header space hack -->
@@ -105,14 +109,17 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">Wall</Label>
-                    <ComboBox Name="WallTemplate" Grid.Row="1" Grid.ColumnSpan="2" SelectionChanged="WallTemplate_SelectionChanged" IsEnabled="{Binding Path=AllowEditing}"></ComboBox>
+                    <ComboBox Name="WallTemplate" Grid.Row="1" Grid.ColumnSpan="2" SelectionChanged="WallTemplate_SelectionChanged" IsEnabled="{Binding Path=State.IsEditable}"></ComboBox>
                     <Label Grid.Row="2">U-value (W/m²K)</Label>
-                    <TextBox Name="WallUValue" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right"
-                             IsEnabled="{Binding Path=AllowEditing}">0.5</TextBox>
+                    <TextBox Name="WallUValue" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" 
+                             Text="{Binding Path=State.UValueOpaque}"
+                             IsEnabled="{Binding Path=State.IsEditable}"></TextBox>
                     <Label Grid.Row="3">Emissions (kgCO2/m²)</Label>
-                    <TextBox Name="WallEmissions" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" IsEnabled="{Binding Path=AllowEditing}">15</TextBox>
+                    <TextBox Name="WallEmissions" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" IsEnabled="{Binding Path=State.IsEditable}" 
+                             Text="{Binding Path=State.OpaqueEmissions}"></TextBox>
                     <Label Grid.Row="4">Cost (CHF/m²)</Label>
-                    <TextBox Name="WallCost" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" IsEnabled="{Binding Path=AllowEditing}">15</TextBox>
+                    <TextBox Name="WallCost" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" IsEnabled="{Binding Path=State.IsEditable}"
+                             Text="{Binding Path=State.OpaqueCost}"></TextBox>
                     <Image Name="WallImage" Grid.Row="5" Grid.ColumnSpan="2"></Image>
                 </Grid>
                 <Grid Grid.Row="0" Grid.Column="2">
@@ -129,13 +136,19 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">Floor</Label>
-                    <ComboBox Name="FloorTemplate" Grid.Row="1" Grid.ColumnSpan="2" SelectionChanged="FloorTemplate_SelectionChanged" IsEnabled="{Binding Path=AllowEditing}"></ComboBox>
+                    <ComboBox Name="FloorTemplate" Grid.Row="1" Grid.ColumnSpan="2" SelectionChanged="FloorTemplate_SelectionChanged" IsEnabled="{Binding Path=State.IsEditable}"></ComboBox>
                     <Label Grid.Row="2">U-value (W/m²K)</Label>
-                    <TextBox Name="FloorUValue" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" IsEnabled="{Binding Path=AllowEditing}">0.5</TextBox>
+                    <TextBox Name="FloorUValue" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" 
+                             IsEnabled="{Binding Path=State.IsEditable}"
+                             Text="{Binding Path=State.UValueOpaque}"></TextBox>
                     <Label Grid.Row="3">Emissions (kgCO2/m²)</Label>
-                    <TextBox Name="FloorEmissions" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" IsEnabled="{Binding Path=AllowEditing}">15</TextBox>
+                    <TextBox Name="FloorEmissions" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" 
+                             IsEnabled="{Binding Path=State.IsEditable}"
+                             Text="{Binding Path=State.OpaqueEmissions}"></TextBox>
                     <Label Grid.Row="4">Cost (CHF/m²)</Label>
-                    <TextBox Name="FloorCost" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" IsEnabled="{Binding Path=AllowEditing}">15</TextBox>
+                    <TextBox Name="FloorCost" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" 
+                             IsEnabled="{Binding Path=State.IsEditable}"
+                             Text="{Binding Path=State.OpaqueCost}"></TextBox>
                     <Image Name="FloorImage" Grid.Row="5" Grid.ColumnSpan="2"></Image>
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
@@ -153,15 +166,23 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">Window</Label>
-                    <ComboBox Name="WindowTemplate" Grid.Row="1" Grid.ColumnSpan="2" SelectionChanged="WindowTemplate_SelectionChanged" IsEnabled="{Binding Path=AllowEditing}"></ComboBox>
+                    <ComboBox Name="WindowTemplate" Grid.Row="1" Grid.ColumnSpan="2" SelectionChanged="WindowTemplate_SelectionChanged" IsEnabled="{Binding Path=State.IsEditable}"></ComboBox>
                     <Label Grid.Row="2">U-value (W/m²K)</Label>
-                    <TextBox Name="WindowUValue" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" IsEnabled="{Binding Path=AllowEditing}">1.2</TextBox>
+                    <TextBox Name="WindowUValue" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right"
+                             IsEnabled="{Binding Path=State.IsEditable}"
+                             Text="{Binding Path=State.UValueTransparent}"></TextBox>
                     <Label Grid.Row="3">g-value (-)</Label>
-                    <TextBox Name="WindowGValue" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" IsEnabled="{Binding Path=AllowEditing}">0.5</TextBox>
+                    <TextBox Name="WindowGValue" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" 
+                             IsEnabled="{Binding Path=State.IsEditable}"
+                             Text="{Binding Path=State.GValue}"></TextBox>
                     <Label Grid.Row="4">Emissions (kgCO2/m²)</Label>
-                    <TextBox Name="WindowEmissions" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" IsEnabled="{Binding Path=AllowEditing}">15</TextBox>
+                    <TextBox Name="WindowEmissions" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" 
+                             IsEnabled="{Binding Path=State.IsEditable}"
+                             Text="{Binding Path=State.TransparentEmissions}"></TextBox>
                     <Label Grid.Row="5">Cost (CHF/m²)</Label>
-                    <TextBox Name="WindowCost" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" IsEnabled="{Binding Path=AllowEditing}">15</TextBox>
+                    <TextBox Name="WindowCost" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" 
+                             IsEnabled="{Binding Path=State.IsEditable}"
+                             Text="{Binding Path=State.TransparentCost}"></TextBox>
                     <Image Name="WindowImage" Grid.Row="6" Grid.ColumnSpan="2"></Image>
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="2">
@@ -178,13 +199,19 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">Roof</Label>
-                    <ComboBox Name="RoofTemplate" Grid.Row="1" Grid.ColumnSpan="2" SelectionChanged="RoofTemplate_SelectionChanged" IsEnabled="{Binding Path=AllowEditing}"></ComboBox>
+                    <ComboBox Name="RoofTemplate" Grid.Row="1" Grid.ColumnSpan="2" SelectionChanged="RoofTemplate_SelectionChanged" IsEnabled="{Binding Path=State.IsEditable}"></ComboBox>
                     <Label Grid.Row="2">U-value (W/m²K)</Label>
-                    <TextBox Name="RoofUValue" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" IsEnabled="{Binding Path=AllowEditing}">0.5</TextBox>
+                    <TextBox Name="RoofUValue" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" 
+                             IsEnabled="{Binding Path=State.IsEditable}"
+                             Text="{Binding Path=State.UValueOpaque}"></TextBox>
                     <Label Grid.Row="3">Emissions (kgCO2/m²)</Label>
-                    <TextBox Name="RoofEmissions" Grid.Row="3" Grid.Column="1" VerticalAlignment="Bottom" TextAlignment="Right" IsEnabled="{Binding Path=AllowEditing}" Margin="0,0,-0.2,4">15</TextBox>
+                    <TextBox Name="RoofEmissions" Grid.Row="3" Grid.Column="1" VerticalAlignment="Bottom" TextAlignment="Right" 
+                             IsEnabled="{Binding Path=State.IsEditable}"
+                             Text="{Binding Path=State.OpaqueEmissions}"></TextBox>
                     <Label Grid.Row="4">Cost (CHF/m²)</Label>
-                    <TextBox Name="RoofCost" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" IsEnabled="{Binding Path=AllowEditing}">15</TextBox>
+                    <TextBox Name="RoofCost" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right" 
+                             IsEnabled="{Binding Path=State.IsEditable}"
+                             Text="{Binding Path=State.OpaqueCost}"></TextBox>
                     <Image Name="RoofImage" Grid.Row="5" Grid.ColumnSpan="2"></Image>
                 </Grid>
             </Grid>
@@ -205,17 +232,29 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Label FontWeight="Bold">People heat (W/m²)</Label>
-                <TextBox Name="PeopleHeat" Grid.Row="1" VerticalAlignment="Center" Margin="10,0" IsEnabled="{Binding Path=AllowEditing}">2.3</TextBox>
+                <TextBox Name="PeopleHeat" Grid.Row="1" VerticalAlignment="Center" Margin="10,0" 
+                         IsEnabled="{Binding Path=State.IsEditable}"
+                         Text="{Binding Path=State.OccupantLoads}"></TextBox>
                 <Label Grid.Column="1" FontWeight="Bold">People load hours (h)</Label>
-                <TextBox Name="PeopleLoadHours" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="10,0" IsEnabled="{Binding Path=AllowEditing}">4090</TextBox>
+                <TextBox Name="PeopleLoadHours" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="10,0" 
+                         IsEnabled="{Binding Path=State.IsEditable}"
+                         Text="{Binding Path=State.OccupantYearlyHours}"></TextBox>
                 <Label Grid.Row="2" FontWeight="Bold">Light heat (W/m²)</Label>
-                <TextBox Name="LightHeat" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="10,0" IsEnabled="{Binding Path=AllowEditing}">2.7</TextBox>
+                <TextBox Name="LightHeat" Grid.Row="3" Grid.Column="0" VerticalAlignment="Center" Margin="10,0" 
+                         IsEnabled="{Binding Path=State.IsEditable}"
+                         Text="{Binding Path=State.LightingLoads}"></TextBox>
                 <Label Grid.Row="2" Grid.Column="1" FontWeight="Bold">Light load hours (h)</Label>
-                <TextBox Name="LightLoadHours" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="10,0" IsEnabled="{Binding Path=AllowEditing}">1450</TextBox>
+                <TextBox Name="LightLoadHours" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="10,0"
+                         IsEnabled="{Binding Path=State.IsEditable}"
+                         Text="{Binding Path=State.LightingYearlyHours}"></TextBox>
                 <Label Grid.Row="4" FontWeight="Bold">Equipment heat (W/m²)</Label>
-                <TextBox Name="EquipmentHeat" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="10,0" IsEnabled="{Binding Path=AllowEditing}">10</TextBox>
+                <TextBox Name="EquipmentHeat" Grid.Row="5" Grid.Column="0" VerticalAlignment="Center" Margin="10,0" 
+                         IsEnabled="{Binding Path=State.IsEditable}"
+                         Text="{Binding Path=State.EquipmentLoads}"></TextBox>
                 <Label Grid.Row="4" Grid.Column="1" FontWeight="Bold">Equipment load hours (h)</Label>
-                <TextBox Name="EquipmentLoadHours" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="10,0" IsEnabled="{Binding Path=AllowEditing}">1780</TextBox>
+                <TextBox Name="EquipmentLoadHours" Grid.Row="5" Grid.Column="1" VerticalAlignment="Center" Margin="10,0" 
+                         IsEnabled="{Binding Path=State.IsEditable}"
+                         Text="{Binding Path=State.EquipmentYearlyHours}"></TextBox>
                 <TextBox Grid.Row="7" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="WrapWithOverflow" 
                          HorizontalAlignment="Center" Width="Auto" TextAlignment="Center" 
                          VerticalAlignment="Bottom" BorderThickness="0">
@@ -239,11 +278,14 @@
                     <ColumnDefinition Width="*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <Label FontWeight="Bold">Volumetric air flow (m³/m²h)</Label>
-                <TextBox Name="VolumetricAirFlow" Grid.Row="1" Margin="10,0" IsEnabled="{Binding Path=AllowEditing}">3.6</TextBox>
+                <TextBox Name="VolumetricAirFlow" Grid.Row="1" Margin="10,0" IsEnabled="{Binding Path=State.IsEditable}"
+                         Text="{Binding Path=State.AirChangeRate}"></TextBox>
                 <Label Grid.Row="2" FontWeight="Bold">Infiltration (m³/m²h)</Label>
-                <TextBox Name="Infiltration" Grid.Row="3" Margin="10,0" IsEnabled="{Binding Path=AllowEditing}">0.15</TextBox>
+                <TextBox Name="Infiltration" Grid.Row="3" Margin="10,0" IsEnabled="{Binding Path=State.IsEditable}"
+                         Text="{Binding Path=State.Infiltration}"></TextBox>
                 <Label Grid.Row="4" FontWeight="Bold">Heat recovery (-)</Label>
-                <TextBox Name="HeatRecovery" Grid.Row="5" Margin="10,0" IsEnabled="{Binding Path=AllowEditing}">0.8</TextBox>
+                <TextBox Name="HeatRecovery" Grid.Row="5" Margin="10,0" IsEnabled="{Binding Path=State.IsEditable}"
+                         Text="{Binding Path=State.HeatRecovery}"></TextBox>
                 <TextBox Grid.Row="6" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="WrapWithOverflow" 
                          HorizontalAlignment="Center" Width="Auto" TextAlignment="Center" 
                          VerticalAlignment="Bottom" BorderThickness="0">

@@ -108,11 +108,7 @@ namespace Hive.IO.GHComponents
             var parametricSiaRoomSpecified = DA.GetData(3, ref json);
             if (parametricSiaRoomSpecified)
             {
-                _buildingInputState = new BuildingInputState
-                {
-                    SiaRoom = new Sia2024RecordEx(Sia2024Record.FromJson(json)),
-                    IsEditable = false
-                };
+                _buildingInputState = new BuildingInputState(new Sia2024RecordEx(Sia2024Record.FromJson(json)), false);
                 building = CreateBuilding(_buildingInputState.SiaRoom, zoneBrep, windows, floors);
             }
             else
@@ -220,14 +216,5 @@ namespace Hive.IO.GHComponents
         {
             get { return new Guid("43a45a89-485b-4134-b073-17bac23e76d5"); }
         }
-    }
-
-    /// <summary>
-    /// Capture the state of the BuildingInput form...
-    /// </summary>
-    public class BuildingInputState
-    {
-        public Sia2024RecordEx SiaRoom { get; set; }
-        public bool IsEditable { get; set; }
     }
 }
