@@ -31,8 +31,9 @@ namespace Hive.IO.GhMergers
             pManager.AddMatrixParameter("I_hourly", "I_hourly", "I_hourly from GHSolar_CResults as Rhino.Geometry.Matrix. Solar potential results from GHSolar (https://github.com/christophwaibel/GH_Solar_V2) yearly hourly simulations", GH_ParamAccess.list);
             pManager.AddGenericParameter("SolarTech", "SolarTech", "Hive.IO.EnergySystems.SurfaceBasedTech, such as PV, PVT, Solar Thermal, Ground Collector", GH_ParamAccess.list);
             pManager.AddGenericParameter("Air", "Air", "Hive.IO.EnergySystems.Air carrier, containing ambient air temperature", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Water", "Water", "Return Water from Hive.IO.EnergySystems.Emitter, containing information about return water temperature (for thermal technologies ST, PVT and GC)", GH_ParamAccess.item);
-            pManager.AddTextParameter("TimeResolution", "TimeResolution", "Time resolution, either 'hourly', or 'monthly'. Default is 'monthly'", GH_ParamAccess.item, "monthly");
+            pManager.AddNumberParameter("SupplyTemp", "SupplyTemp", "SupplyTemp from Hive.IO.EnergySystems.Emitter", GH_ParamAccess.list);
+            pManager.AddNumberParameter("ReturnTemp", "ReturnTemp", "ReturnTemp from Hive.IO.EnergySystems.Emitter", GH_ParamAccess.list);
+
             pManager.AddBooleanParameter("SimpleMode", "SimpleMode", "SimpleMode for efficiency calculations, i.e. not depending on ambient air temperature", GH_ParamAccess.item, false);
         }
 
@@ -68,11 +69,11 @@ namespace Hive.IO.GhMergers
             Air air = null;
             DA.GetData(2, ref air);
 
-            Water water = null;
-            DA.GetData(3, ref water);
+            var supTemp = new List<double>();
+            DA.GetDataList(3, supTemp);
 
-            string timeResolution = null;
-            DA.GetData(4, ref timeResolution);
+            var retTemp = new List<double>();
+            DA.GetDataList(4, retTemp);
 
             bool simple = false;
             DA.GetData(5, ref simple);
@@ -102,7 +103,7 @@ namespace Hive.IO.GhMergers
                     }
                     else
                     {
-                        tech.SetInputComputeOutput(irradHourly[i], water, air);
+                        tech.SetInputComputeOutput(irradHourly[i], retTemp.ToArray(), supTemp.ToArray(), air);
                     }
                     solarTechInfused.Add(tech);
                 }

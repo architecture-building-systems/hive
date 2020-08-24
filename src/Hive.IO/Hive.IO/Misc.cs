@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Rhino.Geometry;
 
 namespace Hive.IO
 {
@@ -86,5 +83,36 @@ namespace Hive.IO
                 return null;
             }
         }
+
+        // source: http://james-ramsden.com/area-of-a-mesh-face-in-c-in-grasshopper/
+        public static double GetMeshFaceArea(int _meshFaceIndex, Mesh _mesh)
+        {
+            // get points into a nice, concise format
+            Point3d pt0 = _mesh.Vertices[_mesh.Faces[_meshFaceIndex].A];
+            Point3d pt1 = _mesh.Vertices[_mesh.Faces[_meshFaceIndex].B];
+            Point3d pt2 = _mesh.Vertices[_mesh.Faces[_meshFaceIndex].C];
+
+            // calculate areas of triangles
+            double a = pt0.DistanceTo(pt1);
+            double b = pt1.DistanceTo(pt2);
+            double c = pt2.DistanceTo(pt0);
+            double p = 0.5 * (a + b + c);
+            double area1 = Math.Sqrt(p * (p - a) * (p - b) * (p - c));
+
+            // if quad, calc area of second triangle
+            double area2 = 0.0;
+            if (_mesh.Faces[_meshFaceIndex].IsQuad)
+            {
+                Point3d pt3 = _mesh.Vertices[_mesh.Faces[_meshFaceIndex].D];
+                a = pt0.DistanceTo(pt2);
+                b = pt2.DistanceTo(pt3);
+                c = pt3.DistanceTo(pt0);
+                p = 0.5 * (a + b + c);
+                area2 = Math.Sqrt(p * (p - a) * (p - b) * (p - c));
+            }
+
+            return area1 + area2;
+        }
+
     }
 }
