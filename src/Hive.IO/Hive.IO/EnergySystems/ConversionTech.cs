@@ -218,6 +218,12 @@ namespace Hive.IO.EnergySystems
             : base(investmentCost, embodiedGhg, capacity, "kW", heatingExchanger, coolingExchanger, false)
         {
             this.DistributionLosses = losses;
+            if (heatingExchanger && !coolingExchanger)
+                base.Name = "HeatExchanger";
+            else if (coolingExchanger && !heatingExchanger)
+                base.Name = "CoolingExchanger";
+            else if (heatingExchanger && coolingExchanger)
+                base.Name = "HeatCoolingExchanger";
         }
 
 

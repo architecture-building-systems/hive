@@ -44,7 +44,7 @@ namespace Hive.IO.GhDistributors
             if (environment != null)
             {
                 // bad programming here... I know the order of my inputs, so I can loop...
-                // I do have EnergyCarrier.Name... but that's not robust. Implement an enum for a discrete set? like BuildingType?
+                // I do have EnergyCarrier.Name... but that is not robust to use... implement enum?
                 DA.SetData(0, environment.EpwPath);
                 for(int i=0; i<environment.EnergyPotentials.Length; i++)
                     DA.SetData(i+1, environment.EnergyPotentials[i]);
