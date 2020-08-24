@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Hive.IO.Building;
 using Hive.IO.GHComponents;
 
@@ -10,10 +11,17 @@ namespace Hive.IO.Forms
     /// </summary>
     public partial class BuildingInput
     {
-        private BuildingInputState _state;
+        private readonly BuildingInputState _state;
 
-        public BuildingInput()
+        public bool AllowEditing => _state.IsEditable;
+
+        private BuildingInput()
         {
+            _state = new BuildingInputState
+            {
+                SiaRoom = Sia2024Record.All().First() as Sia2024RecordEx,
+                IsEditable = false
+            };
             InitializeComponent();
 
             BuildingUseType.ItemsSource = Sia2024Record.BuildingUseTypes();
@@ -126,6 +134,7 @@ namespace Hive.IO.Forms
             WindowCost.Text = $"{siaRoom.TransparentCost:0.00}";
             WindowEmissions.Text = $"{siaRoom.TransparentEmissions:0.00}";
         }
+
 
         private void RoomType_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {

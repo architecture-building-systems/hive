@@ -4,6 +4,7 @@ using System.IO;
 using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
+using OxyPlot;
 
 namespace Hive.IO.Building
 {
@@ -16,6 +17,41 @@ namespace Hive.IO.Building
     {
         public string Quality;
         public string BuildingUseType;
+
+        public Sia2024RecordEx() : base()
+        {
+        }
+
+        public Sia2024RecordEx(Sia2024Record room)
+        {
+            Quality = "<Custom>";
+            BuildingUseType = "<Custom>";
+
+            RoomType = room.RoomType;
+            RoomConstant = room.RoomConstant;
+            CoolingSetpoint = room.CoolingSetpoint;
+            HeatingSetpoint = room.HeatingSetpoint;
+            FloorArea = room.FloorArea;
+            EnvelopeArea = room.EnvelopeArea;
+            GlazingRatio = room.GlazingRatio;
+            UValueOpaque = room.UValueOpaque;
+            UValueTransparent = room.UValueTransparent;
+            GValue = room.GValue;
+            WindowFrameReduction = room.WindowFrameReduction;
+            AirChangeRate = room.AirChangeRate;
+            Infiltration = room.Infiltration;
+            HeatRecovery = room.HeatRecovery;
+            OccupantLoads = room.OccupantLoads;
+            LightingLoads = room.LightingLoads;
+            EquipmentLoads = room.EquipmentLoads;
+            OccupantYearlyHours = room.OccupantYearlyHours;
+            LightingYearlyHours = room.LightingYearlyHours;
+            EquipmentYearlyHours = room.EquipmentYearlyHours;
+            OpaqueCost = room.OpaqueCost;
+            TransparentCost = room.TransparentCost;
+            OpaqueEmissions = room.OpaqueEmissions;
+            TransparentEmissions = room.TransparentEmissions;
+        }
     }
     
     /// <summary>

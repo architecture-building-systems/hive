@@ -80,8 +80,8 @@ namespace Hive.IO.GHComponents
         {
             if (_buildingInputState == null)
             {
-                _buildingInputState = new BuildingInputState();
-                _buildingInputState.SiaRoom = Sia2024Record.All().First() as Sia2024RecordEx;
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Building input state not set");
+                return;
             }
             var form = new BuildingInput(_buildingInputState);
             form.ShowDialog();
@@ -108,7 +108,12 @@ namespace Hive.IO.GHComponents
             var parametricSiaRoomSpecified = DA.GetData(3, ref json);
             if (parametricSiaRoomSpecified)
             {
-                building = CreateBuilding(Sia2024Record.FromJson(json), zoneBrep, windows, floors);
+                _buildingInputState = new BuildingInputState
+                {
+                    SiaRoom = new Sia2024RecordEx(Sia2024Record.FromJson(json)),
+                    IsEditable = false
+                };
+                building = CreateBuilding(_buildingInputState.SiaRoom, zoneBrep, windows, floors);
             }
             else
             {
@@ -223,5 +228,6 @@ namespace Hive.IO.GHComponents
     public class BuildingInputState
     {
         public Sia2024RecordEx SiaRoom { get; set; }
+        public bool IsEditable { get; set; }
     }
 }
