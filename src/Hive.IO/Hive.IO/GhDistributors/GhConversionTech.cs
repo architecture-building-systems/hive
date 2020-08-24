@@ -28,10 +28,12 @@ namespace Hive.IO.GhDistributors
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Hive.IO.EnergySystem.AirSourceHeatPump", "AirSourceHeatPump", "Hive.IO.EnergySystem.AirSourceHeatPump", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Hive.IO.EnergySystem.Chiller", "Chiller", "Hive.IO.EnergySystem.Chiller", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Hive.IO.EnergySystems.Boiler", "Boiler", "Hive.IO.EnergySystemc.Boiler", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Hive.IO.EnergySystems.CombinedHeatPowert", "CHP", "Hive.IO.EnergySystemc.CombinedHeatPower", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.EnergySystem.AirSourceHeatPump", "AirSourceHeatPump", "Hive.IO.EnergySystems.AirSourceHeatPump", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.EnergySystem.Chiller", "Chiller", "Hive.IO.EnergySystems.Chiller", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.EnergySystems.Boiler", "Boiler", "Hive.IO.EnergySystems.Boiler", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.EnergySystems.CombinedHeatPowert", "CHP", "Hive.IO.EnergySystems.CombinedHeatPower", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.EnergySystems.HeatExchanger", "HX", "Hive.IO.EnergySystems.HeatCoolExchanger, this one here is heat exchanger", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.EnergySystems.CoolExchanger", "CX", "Hive.IO.EnergySystems.HeatCoolExchanger, this one here is cooling exchanger", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -43,6 +45,9 @@ namespace Hive.IO.GhDistributors
             Chiller chiller = null;
             CombinedHeatPower chp = null;
             GasBoiler boiler = null;
+            HeatCoolingExchanger hx = null;
+            HeatCoolingExchanger cx = null;
+            HeatCoolingExchanger hcx = null;
 
             foreach (GH_ObjectWrapper convTech in inputObjects)
             {
@@ -60,12 +65,23 @@ namespace Hive.IO.GhDistributors
                     chp = convTech.Value as CombinedHeatPower;
                 else if (convTech.Value is GasBoiler)
                     boiler = convTech.Value as GasBoiler;
+                else if (convTech.Value is HeatCoolingExchanger)
+                {
+                    hcx = convTech.Value as HeatCoolingExchanger;
+                    if (hcx.IsHeating && !hcx.IsCooling)
+                        hx = hcx;
+                    else if (hcx.IsCooling && !hcx.IsHeating)
+                        cx = hcx;
+                }
+
             }
 
             DA.SetData(0, ashp);
             DA.SetData(1, chiller);
             DA.SetData(2, boiler);
             DA.SetData(3, chp);
+            DA.SetData(4, hx);
+            DA.SetData(5, cx);
         }
 
         protected override System.Drawing.Bitmap Icon

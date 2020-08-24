@@ -43,6 +43,7 @@ namespace Hive.IO.GhDistributors
 
             if (environment != null)
             {
+                // bad programming here... I know the order of my inputs, so I can loop...
                 DA.SetData(0, environment.EpwPath);
                 for(int i=0; i<environment.EnergyPotentials.Length; i++)
                     DA.SetData(i+1, environment.EnergyPotentials[i]);

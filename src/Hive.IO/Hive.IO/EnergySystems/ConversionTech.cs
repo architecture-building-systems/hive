@@ -206,6 +206,55 @@ namespace Hive.IO.EnergySystems
         }
     }
 
+
+
+    public class HeatCoolingExchanger : ConversionTech
+    {
+        // assume perfect heat exchange?, according to Dr. Somil District Heating Miglani, only distribution losses. but since we don't have network implemented yet, lets use a coefficient
+        public double DistributionLosses { get; private set; }
+
+
+        public HeatCoolingExchanger(double investmentCost, double embodiedGhg, double capacity, double losses, bool heatingExchanger = true, bool coolingExchanger = false)
+            : base(investmentCost, embodiedGhg, capacity, "kW", heatingExchanger, coolingExchanger, false)
+        {
+            this.DistributionLosses = losses;
+        }
+
+
+        public void SetInputOutput(Water districtFluid, double[] generatedEnergy, double [] supplyTemp, double [] returnTemp)
+        {
+            int horizon = generatedEnergy.Length;
+            var consumedEnergy = new double[horizon];
+            var energyPrice = new double[horizon];
+            var energyGhg = new double[horizon];
+
+            if (horizon == Misc.MonthsPerYear)
+            {
+                energyPrice = Misc.GetAverageMonthlyValue(districtFluid.EnergyPrice);
+                energyGhg = Misc.GetAverageMonthlyValue(districtFluid.GhgEmissionsFactor);
+            }
+            else
+            {
+                energyPrice = districtFluid.EnergyPrice;
+                energyGhg = districtFluid.GhgEmissionsFactor;
+            }
+
+            for(int t=0; t<horizon; t++)
+            {
+                consumedEnergy[t] = generatedEnergy[t] / (1.0 - this.DistributionLosses);
+            }
+
+            base.InputCarrier = new Water(horizon, consumedEnergy, energyPrice, energyGhg, supplyTemp);  // simplified assumption, that DH supply temp is already at the right level
+
+            base.OutputCarriers = new EnergyCarrier[1] { new Water(horizon, generatedEnergy, null, null, supplyTemp) };
+
+        }
+
+
+
+
+    }
+
     #endregion
 
 

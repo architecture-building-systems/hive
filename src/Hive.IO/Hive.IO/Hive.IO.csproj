@@ -84,7 +84,9 @@
     <Compile Include="GhDistributors\GhSolarTech.cs" />
     <Compile Include="GhMergers\GhChiller.cs" />
     <Compile Include="GhMergers\GhCHP.cs" />
+    <Compile Include="GhMergers\GhCoolingExchanger.cs" />
     <Compile Include="GhMergers\GhGasBoiler.cs" />
+    <Compile Include="GhMergers\GhHeatExchanger.cs" />
     <Compile Include="GhMergers\GhSolarTech.cs" />
     <Compile Include="GhParametricInputs\GhEmitter.cs" />
     <Compile Include="GHComponents\GhEnvironment.cs" />
