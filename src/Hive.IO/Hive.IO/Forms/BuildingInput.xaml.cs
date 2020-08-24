@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Hive.IO.Building;
 using Hive.IO.GHComponents;
 
@@ -23,10 +24,20 @@ namespace Hive.IO.Forms
 
             BuildingQuality.ItemsSource = Sia2024Record.Qualities();
             BuildingQuality.SelectedIndex = 0;
+
+            WallTemplate.ItemsSource = new List<string> { "<SIA 2024>" };
+            RoofTemplate.ItemsSource = new List<string> { "<SIA 2024>" };
+            FloorTemplate.ItemsSource = new List<string> { "<SIA 2024>" };
+            WindowTemplate.ItemsSource = new List<string> { "<SIA 2024>" };
+
+            WallTemplate.SelectedIndex = 0;
+            RoofTemplate.SelectedIndex = 0;
+            FloorTemplate.SelectedIndex = 0;
+            WindowTemplate.SelectedIndex = 0;
         }
 
 
-        public BuildingInput(BuildingInputState state): this()
+        public BuildingInput(BuildingInputState state) : this()
         {
             _state = state;
         }
@@ -35,8 +46,8 @@ namespace Hive.IO.Forms
         {
             RoomType.ItemsSource = Sia2024Record.RoomTypes(BuildingUseType.SelectedItem as string);
             RoomType.SelectedIndex = 0;
-            
-            UpdateControls();
+
+            UpdateControls(true);
         }
 
 
@@ -53,14 +64,14 @@ namespace Hive.IO.Forms
             }
 
             // read the stored values from the state and update the controls...
-            UpdateControls();
+            UpdateControls(false);
         }
 
         /// <summary>
         /// Update the values in the controls based on the state
         /// </summary>
         /// <param name="siaRoom"></param>
-        private void UpdateControls()
+        private void UpdateControls(bool reloadRoom)
         {
             if (_state == null)
             {
@@ -72,48 +83,78 @@ namespace Hive.IO.Forms
             var roomType = RoomType.SelectedValue as string;
             var quality = BuildingQuality.SelectedValue as string;
 
-            var siaRoom = (Sia2024RecordEx)Sia2024Record.Lookup(useType, roomType, quality);
-            if (siaRoom == null)
+            Sia2024RecordEx siaRoom;
+            if (reloadRoom)
             {
-                // still updating events...
-                return;
+                siaRoom = (Sia2024RecordEx)Sia2024Record.Lookup(useType, roomType, quality);
+                if (siaRoom == null)
+                {
+                    // still updating events...
+                    return;
+                }
+                _state.SiaRoom = siaRoom;
             }
-            _state.SiaRoom = siaRoom;
+            else
+            {
+                siaRoom = _state.SiaRoom;
+            }
+            
+            
 
-            BuildingUseType.Text = _state.SiaRoom.BuildingUseType;
-            BuildingQuality.Text = _state.SiaRoom.Quality;
-            RoomType.Text = _state.SiaRoom.RoomType;
+            BuildingUseType.Text = siaRoom.BuildingUseType;
+            BuildingQuality.Text = siaRoom.Quality;
+            RoomType.Text = siaRoom.RoomType;
 
-            WallUValue.Text = $"{_state.SiaRoom.UValueOpaque:0.00}";
-            WallCost.Text = $"{_state.SiaRoom.OpaqueCost:0.00}";
-            WallEmissions.Text = $"{_state.SiaRoom.OpaqueEmissions:0.00}";
-            WallTemplate.Text = $"(SIA) {_state.SiaRoom.RoomType}";
-
-            RoofUValue.Text = $"{_state.SiaRoom.UValueOpaque:0.00}";
-            RoofCost.Text = $"{_state.SiaRoom.OpaqueCost:0.00}"; ;
-            RoofEmissions.Text = $"{_state.SiaRoom.OpaqueEmissions:0.00}";
-            RoofTemplate.Text = $"(SIA) {_state.SiaRoom.RoomType}";
-
-            FloorUValue.Text = $"{_state.SiaRoom.UValueOpaque:0.00}";
-            FloorCost.Text = $"{_state.SiaRoom.OpaqueCost:0.00}";
-            FloorEmissions.Text = $"{_state.SiaRoom.OpaqueEmissions:0.00}";
-            FloorTemplate.Text = $"(SIA) {_state.SiaRoom.RoomType}";
-
-            WindowUValue.Text = $"{_state.SiaRoom.UValueTransparent:0.00}";
-            WindowGValue.Text = $"{_state.SiaRoom.GValue:0.00}";
-            WindowCost.Text = $"{_state.SiaRoom.TransparentCost:0.00}";
-            WindowEmissions.Text = $"{_state.SiaRoom.TransparentEmissions:0.00}";
-            WindowTemplate.Text = $"(SIA) {_state.SiaRoom.RoomType}";
+            WallTemplate.Text = WallTemplate.SelectedItem as string;
+            WallUValue.Text = $"{siaRoom.UValueOpaque:0.00}";
+            WallCost.Text = $"{siaRoom.OpaqueCost:0.00}";
+            WallEmissions.Text = $"{siaRoom.OpaqueEmissions:0.00}";
+            
+            RoofTemplate.Text = RoofTemplate.SelectedItem as string;
+            RoofUValue.Text = $"{siaRoom.UValueOpaque:0.00}";
+            RoofCost.Text = $"{siaRoom.OpaqueCost:0.00}"; ;
+            RoofEmissions.Text = $"{siaRoom.OpaqueEmissions:0.00}";
+            
+            FloorTemplate.Text = FloorTemplate.SelectedItem as string;
+            FloorUValue.Text = $"{siaRoom.UValueOpaque:0.00}";
+            FloorCost.Text = $"{siaRoom.OpaqueCost:0.00}";
+            FloorEmissions.Text = $"{siaRoom.OpaqueEmissions:0.00}";
+            
+            WindowTemplate.Text = WindowTemplate.SelectedItem as string;
+            WindowUValue.Text = $"{siaRoom.UValueTransparent:0.00}";
+            WindowGValue.Text = $"{siaRoom.GValue:0.00}";
+            WindowCost.Text = $"{siaRoom.TransparentCost:0.00}";
+            WindowEmissions.Text = $"{siaRoom.TransparentEmissions:0.00}";
         }
 
         private void RoomType_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            UpdateControls();
+            UpdateControls(true);
         }
 
         private void BuildingQuality_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-            UpdateControls();
+            UpdateControls(true);
+        }
+
+        private void WallTemplate_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            UpdateControls(false);
+        }
+
+        private void FloorTemplate_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            UpdateControls(false);
+        }
+
+        private void WindowTemplate_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            UpdateControls(false);
+        }
+
+        private void RoofTemplate_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            UpdateControls(false);
         }
     }
 }

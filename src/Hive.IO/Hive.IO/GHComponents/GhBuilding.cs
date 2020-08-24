@@ -23,7 +23,7 @@ namespace Hive.IO.GHComponents
         {
         }
 
-        private BuildingInputState _buildingInputState = null;
+        private BuildingInputState _buildingInputState;
 
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
@@ -85,6 +85,7 @@ namespace Hive.IO.GHComponents
             }
             var form = new BuildingInput(_buildingInputState);
             form.ShowDialog();
+            ExpireSolution(true);
         }
 
 
@@ -102,13 +103,24 @@ namespace Hive.IO.GHComponents
             
             // figure out output of this component - either from the input parameter (if one is specified)
             // or a building from the form.
-            Building.Building building = GetBuildingFromFormInput();
-
             string json = null;
+            Building.Building building;
             var parametricSiaRoomSpecified = DA.GetData(3, ref json);
             if (parametricSiaRoomSpecified)
             {
-                building = CreateParametricBuilding(json, zoneBrep, windows, floors);
+                building = CreateBuilding(Sia2024Record.FromJson(json), zoneBrep, windows, floors);
+            }
+            else
+            {
+                // did user specify sia 2024 parameter manually?
+                var siaRoom = GetSiaRoomFromFormInput();
+                if (siaRoom == null)
+                {
+                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Either specify parametric SIA 2024 or double-click to use hizard.");
+                    return;
+                }
+
+                building = CreateBuilding(siaRoom, zoneBrep, windows, floors);
             }
 
             DA.SetData(0, building);
@@ -119,17 +131,43 @@ namespace Hive.IO.GHComponents
         /// was given by the user ("double-click" on the form), then default to null.
         /// (This avoids surprises for the user)
         /// </summary>
-        private Building.Building GetBuildingFromFormInput()
+        private Sia2024Record GetSiaRoomFromFormInput()
         {
-            throw new NotImplementedException();
+            if (_buildingInputState == null)
+            {
+                // form was never opened
+                return null;
+            }
+
+            return _buildingInputState.SiaRoom;
         }
 
-        private Building.Building CreateParametricBuilding(string json, rg.Brep zoneBrep, List<rg.BrepFace> windows, List<rg.BrepFace> floors)
+        private Building.Building CreateBuilding(Sia2024Record siaRoom, rg.Brep zoneBrep, List<rg.BrepFace> windows, List<rg.BrepFace> floors)
         {
-            var siaRoom = Sia2024Record.FromJson(json);
+            var buildingType = BuildingTypeFromDescription(siaRoom.RoomType);
 
+            var tolerance = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
+            var zone = new Zone(zoneBrep, 0, tolerance, siaRoom.RoomType, windows.ToArray(), floors.ToArray());
+            if (!zone.IsValid)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, zone.ErrorText);
+                return null;
+            }
+
+            if (!zone.IsValidEPlus || !zone.IsFloorInZone)
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, zone.ErrorText);
+            }
+
+            var building = new Building.Building(new[] {zone}, buildingType);
+            building.ApplySia2024Constructions(siaRoom, building.Zones);
+            return building;
+        }
+
+        private static BuildingType BuildingTypeFromDescription(string description)
+        {
             BuildingType buildingType;
-            switch (siaRoom.RoomType)
+            switch (description)
             {
                 case "1.1 Wohnen Mehrfamilienhaus":
                 case "1.2 Wohnen Einfamilienhaus":
@@ -160,22 +198,7 @@ namespace Hive.IO.GHComponents
                     break;
             }
 
-            var tolerance = Rhino.RhinoDoc.ActiveDoc.ModelAbsoluteTolerance;
-            var zone = new Zone(zoneBrep, 0, tolerance, siaRoom.RoomType, windows.ToArray(), floors.ToArray());
-            if (!zone.IsValid)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Error, zone.ErrorText);
-                return null;
-            }
-
-            if (!zone.IsValidEPlus || !zone.IsFloorInZone)
-            {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, zone.ErrorText);
-            }
-
-            var building = new Building.Building(new[] {zone}, buildingType);
-            building.ApplySia2024Constructions(siaRoom, building.Zones);
-            return building;
+            return buildingType;
         }
 
 

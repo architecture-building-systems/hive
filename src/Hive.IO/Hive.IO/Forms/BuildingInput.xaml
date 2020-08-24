@@ -102,7 +102,7 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">Wall</Label>
-                    <ComboBox Name="WallTemplate" Grid.Row="1" Grid.ColumnSpan="2"></ComboBox>
+                    <ComboBox Name="WallTemplate" Grid.Row="1" Grid.ColumnSpan="2" SelectionChanged="WallTemplate_SelectionChanged"></ComboBox>
                     <Label Grid.Row="2">U-value (W/m²K)</Label>
                     <TextBox Name="WallUValue" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right">0.5</TextBox>
                     <Label Grid.Row="3">Emissions (kgCO2/m²)</Label>
@@ -125,7 +125,7 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">Floor</Label>
-                    <ComboBox Name="FloorTemplate" Grid.Row="1" Grid.ColumnSpan="2"></ComboBox>
+                    <ComboBox Name="FloorTemplate" Grid.Row="1" Grid.ColumnSpan="2" SelectionChanged="FloorTemplate_SelectionChanged"></ComboBox>
                     <Label Grid.Row="2">U-value (W/m²K)</Label>
                     <TextBox Name="FloorUValue" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right">0.5</TextBox>
                     <Label Grid.Row="3">Emissions (kgCO2/m²)</Label>
@@ -149,7 +149,7 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">Window</Label>
-                    <ComboBox Name="WindowTemplate" Grid.Row="1" Grid.ColumnSpan="2"></ComboBox>
+                    <ComboBox Name="WindowTemplate" Grid.Row="1" Grid.ColumnSpan="2" SelectionChanged="WindowTemplate_SelectionChanged"></ComboBox>
                     <Label Grid.Row="2">U-value (W/m²K)</Label>
                     <TextBox Name="WindowUValue" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right">1.2</TextBox>
                     <Label Grid.Row="3">g-value (-)</Label>
@@ -174,7 +174,7 @@
                         <ColumnDefinition Width="*"></ColumnDefinition>
                     </Grid.ColumnDefinitions>
                     <Label Grid.Row="0" Grid.Column="0" Grid.ColumnSpan="2">Roof</Label>
-                    <ComboBox Name="RoofTemplate" Grid.Row="1" Grid.ColumnSpan="2"></ComboBox>
+                    <ComboBox Name="RoofTemplate" Grid.Row="1" Grid.ColumnSpan="2" SelectionChanged="RoofTemplate_SelectionChanged"></ComboBox>
                     <Label Grid.Row="2">U-value (W/m²K)</Label>
                     <TextBox Name="RoofUValue" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" TextAlignment="Right">0.5</TextBox>
                     <Label Grid.Row="3">Emissions (kgCO2/m²)</Label>
