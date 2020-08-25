@@ -85,6 +85,7 @@ namespace Hive.IO.GHComponents
             }
             var form = new BuildingInput(_buildingInputState);
             form.ShowDialog();
+            _buildingInputState.SiaRoom = form.State.SiaRoom;
             ExpireSolution(true);
         }
 
@@ -113,7 +114,15 @@ namespace Hive.IO.GHComponents
             }
             else
             {
-                // did user specify sia 2024 parameter manually?
+                try
+                {
+                    // make sure we have clean _buildingInputState if it was parametric before...
+                    Sia2024Record.Lookup(_buildingInputState.SiaRoom);
+                }
+                catch (Exception e)
+                {
+                    _buildingInputState = new BuildingInputState(Sia2024RecordEx.All().First() as Sia2024RecordEx, true);
+                }
                 var siaRoom = GetSiaRoomFromFormInput();
                 if (siaRoom == null)
                 {
