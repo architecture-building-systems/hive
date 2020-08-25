@@ -104,13 +104,14 @@ namespace Hive.IO.GHComponents
             
             // figure out output of this component - either from the input parameter (if one is specified)
             // or a building from the form.
+            // we need to set _buildingInputState so that the BuildingInput form can be shown...
             string json = null;
             Building.Building building;
             var parametricSiaRoomSpecified = DA.GetData(3, ref json);
             if (parametricSiaRoomSpecified)
             {
                 _buildingInputState = new BuildingInputState(new Sia2024RecordEx(Sia2024Record.FromJson(json)), false);
-                building = CreateBuilding(_buildingInputState.SiaRoom, zoneBrep, windows, floors);
+                
             }
             else
             {
@@ -121,35 +122,11 @@ namespace Hive.IO.GHComponents
                 }
                 catch (Exception e)
                 {
-                    _buildingInputState = new BuildingInputState(Sia2024RecordEx.All().First() as Sia2024RecordEx, true);
+                    _buildingInputState = new BuildingInputState(Sia2024Record.All().First() as Sia2024RecordEx, true);
                 }
-                var siaRoom = GetSiaRoomFromFormInput();
-                if (siaRoom == null)
-                {
-                    AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Either specify parametric SIA 2024 or double-click to use hizard.");
-                    return;
-                }
-
-                building = CreateBuilding(siaRoom, zoneBrep, windows, floors);
             }
-
+            building = CreateBuilding(_buildingInputState.SiaRoom, zoneBrep, windows, floors);
             DA.SetData(0, building);
-        }
-
-        /// <summary>
-        /// Create a building based on the form input. Note, that if no form input
-        /// was given by the user ("double-click" on the form), then default to null.
-        /// (This avoids surprises for the user)
-        /// </summary>
-        private Sia2024Record GetSiaRoomFromFormInput()
-        {
-            if (_buildingInputState == null)
-            {
-                // form was never opened
-                return null;
-            }
-
-            return _buildingInputState.SiaRoom;
         }
 
         private Building.Building CreateBuilding(Sia2024Record siaRoom, rg.Brep zoneBrep, List<rg.BrepFace> windows, List<rg.BrepFace> floors)
