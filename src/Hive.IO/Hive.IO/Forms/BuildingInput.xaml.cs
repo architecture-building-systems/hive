@@ -17,25 +17,6 @@ namespace Hive.IO.Forms
         {
             State = new BuildingInputState(Sia2024Record.All().First() as Sia2024RecordEx, false);
             InitializeComponent();
-
-            BuildingUseType.ItemsSource = Sia2024Record.BuildingUseTypes();
-            BuildingUseType.SelectedIndex = 0;
-
-            RoomType.ItemsSource = Sia2024Record.RoomTypes(BuildingUseType.SelectedItem as string);
-            RoomType.SelectedIndex = 0;
-
-            BuildingQuality.ItemsSource = Sia2024Record.Qualities();
-            BuildingQuality.SelectedIndex = 0;
-
-            WallTemplate.ItemsSource = new List<string> { "<SIA 2024>" };
-            RoofTemplate.ItemsSource = new List<string> { "<SIA 2024>" };
-            FloorTemplate.ItemsSource = new List<string> { "<SIA 2024>" };
-            WindowTemplate.ItemsSource = new List<string> { "<SIA 2024>" };
-
-            WallTemplate.SelectedIndex = 0;
-            RoofTemplate.SelectedIndex = 0;
-            FloorTemplate.SelectedIndex = 0;
-            WindowTemplate.SelectedIndex = 0;
         }
 
 
@@ -43,12 +24,6 @@ namespace Hive.IO.Forms
         {
             State.SiaRoom = state.SiaRoom;
             State.IsEditable = state.IsEditable;
-        }
-
-        private void BuildingUseType_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            RoomType.ItemsSource = Sia2024Record.RoomTypes(BuildingUseType.SelectedItem as string);
-            RoomType.SelectedIndex = 0;
         }
 
 

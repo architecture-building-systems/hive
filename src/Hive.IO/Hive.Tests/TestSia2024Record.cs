@@ -33,6 +33,17 @@ namespace Hive.Tests
         }
 
         [Test]
+        public void TestQualitiesZielwert()
+        {
+            var useType = Sia2024Record.BuildingUseTypes().First();
+            var roomType = Sia2024Record.RoomTypes(useType).First();
+            var quality = Sia2024Record.Qualities().Last();
+            Assert.AreEqual(quality, "Zielwert");
+            var record = Sia2024Record.Lookup(useType, roomType, quality);
+            Assert.AreEqual(record.UValueOpaque, 0.1, 0.0000001);
+        }
+
+        [Test]
         public void TestJson()
         {
             var record = Sia2024Record.All().First();

@@ -21,13 +21,21 @@
                 </Grid.ColumnDefinitions>
 
                 <Label Grid.Row="0" Grid.Column="0" FontWeight="Bold">Building use type</Label>
-                <ComboBox Name="BuildingUseType" Grid.Row="0" Grid.Column="1" Margin="0,0,-0.5,0" VerticalAlignment="Center" 
+                <ComboBox Name="BuildingUseType" Grid.Row="0" Grid.Column="1" VerticalAlignment="Center" 
                           IsEnabled="{Binding Path=State.IsEditable}"
-                          SelectionChanged="BuildingUseType_SelectionChanged"></ComboBox>
+                          ItemsSource="{Binding Path=State.BuildingUseTypes}"
+                          SelectedItem="{Binding State.BuildingUseType}">
+                </ComboBox>
                 <Label Grid.Row="1" Grid.Column="0" FontWeight="Bold" Content="Room type"/>
-                <ComboBox Name="RoomType" Grid.Row="1" Grid.Column="1" Margin="0,0,-0.5,0" VerticalAlignment="Center" SelectionChanged="RoomType_SelectionChanged" IsEnabled="{Binding Path=State.IsEditable}"></ComboBox>
+                <ComboBox Name="RoomType" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" 
+                          ItemsSource="{Binding Path=State.RoomTypes}"
+                          SelectedItem="{Binding State.RoomType}"
+                          IsEnabled="{Binding Path=State.IsEditable}"></ComboBox>
                 <Label Grid.Row="2" Grid.Column="0" FontWeight="Bold">Building quality</Label>
-                <ComboBox Name="BuildingQuality" Grid.Row="2" Grid.Column="1" Margin="0,0,-0.5,0" VerticalAlignment="Center" SelectionChanged="BuildingQuality_SelectionChanged" IsEnabled="{Binding Path=State.IsEditable}"></ComboBox>
+                <ComboBox Name="BuildingQuality" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"
+                          ItemsSource="{Binding Path=State.Qualities}"
+                          SelectedItem="{Binding Path=State.Quality}"
+                          IsEnabled="{Binding Path=State.IsEditable}" />
 
                 <TextBox Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2" TextWrapping="WrapWithOverflow" 
                      HorizontalAlignment="Center" Width="Auto" TextAlignment="Center" 

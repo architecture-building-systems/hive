@@ -1,5 +1,8 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
+using System.Diagnostics.CodeAnalysis;
+using System.Linq;
 using System.Runtime.CompilerServices;
 using Hive.IO.Building;
 
@@ -8,10 +11,11 @@ namespace Hive.IO.Forms
     /// <summary>
     /// Capture the state of the BuildingInput form... allow binding controls to manipulate the _siaRoom...
     /// </summary>
-    public class BuildingInputState: INotifyPropertyChanged
+    public class BuildingInputState : INotifyPropertyChanged
     {
         private Sia2024RecordEx _siaRoom;
         private bool _editable;
+
 
         public BuildingInputState(Sia2024RecordEx room, bool editable)
         {
@@ -25,16 +29,58 @@ namespace Hive.IO.Forms
             set
             {
                 _siaRoom = value;
-                RaisePropertyChangedEvent("SiaRoom");
+                RaiseAllPropertiesChangedEvent();
             }
         }
+
         public bool IsEditable
         {
             get => _editable;
             set
             {
                 _editable = value;
-                RaisePropertyChangedEvent("IsEditable");
+                RaisePropertyChangedEvent(null);
+            }
+        }
+
+        public IEnumerable<string> BuildingUseTypes
+        {
+            get => _editable ? Sia2024Record.BuildingUseTypes() : new List<string> {"<Custom>"};
+        }
+
+        public IEnumerable<string> RoomTypes
+        {
+            get => _editable ? Sia2024Record.RoomTypes(BuildingUseType) : new List<string> {RoomType};
+        }
+
+        public IEnumerable<string> Qualities
+        {
+            get => _editable ? Sia2024Record.Qualities() : new List<string> {"<Custom>"};
+        }
+
+        public string Quality
+        {
+            get => _siaRoom.Quality;
+            set
+            {
+                _siaRoom = Sia2024Record.Lookup(BuildingUseType, RoomType, value) as Sia2024RecordEx;
+                RaisePropertyChangedEvent();
+                RaiseAllPropertiesChangedEvent();
+            }
+        }
+
+        [SuppressMessage("ReSharper", "ExplicitCallerInfoArgument")]
+        public string BuildingUseType
+        {
+            get => _siaRoom.BuildingUseType;
+            set
+            {
+                var roomType = Sia2024Record.RoomTypes(value).First();
+                _siaRoom = Sia2024Record.Lookup(value, roomType, Quality) as Sia2024RecordEx;
+                RaisePropertyChangedEvent();
+                RaisePropertyChangedEvent("RoomType");
+                RaisePropertyChangedEvent("RoomTypes");
+                RaiseAllPropertiesChangedEvent();
             }
         }
 
@@ -43,8 +89,9 @@ namespace Hive.IO.Forms
             get => _siaRoom.RoomType;
             set
             {
-                _siaRoom.RoomType = value;
-                RaisePropertyChangedEvent("RoomType");
+                _siaRoom = Sia2024Record.Lookup(BuildingUseType, value, Quality) as Sia2024RecordEx;
+                RaisePropertyChangedEvent();
+                RaiseAllPropertiesChangedEvent();
             }
         }
 
@@ -60,8 +107,8 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                
-                RaisePropertyChangedEvent("RoomConstant");
+
+                RaisePropertyChangedEvent();
             }
         }
         public string CoolingSetpoint
@@ -76,7 +123,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("CoolingSetpoint");
+                RaisePropertyChangedEvent();
             }
         }
         public string HeatingSetpoint
@@ -91,7 +138,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("HeatingSetpoint");
+                RaisePropertyChangedEvent();
             }
         }
         public string FloorArea
@@ -106,7 +153,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("FloorArea");
+                RaisePropertyChangedEvent();
             }
         }
         public string EnvelopeArea
@@ -121,7 +168,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("EnvelopeArea");
+                RaisePropertyChangedEvent();
             }
         }
         public string GlazingRatio
@@ -136,7 +183,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("GlazingRatio");
+                RaisePropertyChangedEvent();
             }
         }
         public string UValueOpaque
@@ -152,7 +199,7 @@ namespace Hive.IO.Forms
                 {
                     // don't update the value                    
                 }
-                RaisePropertyChangedEvent("UValueOpaque");
+                RaisePropertyChangedEvent();
             }
         }
         public string UValueTransparent
@@ -167,7 +214,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("UValueTransparent");
+                RaisePropertyChangedEvent();
             }
         }
         public string GValue
@@ -182,7 +229,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("GValue");
+                RaisePropertyChangedEvent();
             }
         }
 
@@ -198,7 +245,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("WindowFrameReduction");
+                RaisePropertyChangedEvent();
             }
         }
         public string AirChangeRate
@@ -213,7 +260,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("AirChangeRate");
+                RaisePropertyChangedEvent();
             }
         }
         public string Infiltration
@@ -228,7 +275,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("Infiltration");
+                RaisePropertyChangedEvent();
             }
         }
         public string HeatRecovery
@@ -243,7 +290,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("HeatRecovery");
+                RaisePropertyChangedEvent();
             }
         }
         public string OccupantLoads
@@ -258,7 +305,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("OccupantLoads");
+                RaisePropertyChangedEvent();
             }
         }
         public string LightingLoads
@@ -273,7 +320,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("LightingLoads");
+                RaisePropertyChangedEvent();
             }
         }
         public string EquipmentLoads
@@ -288,7 +335,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("EquipmentLoads");
+                RaisePropertyChangedEvent();
             }
         }
         public string OccupantYearlyHours
@@ -303,7 +350,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("OccupantYearlyHours");
+                RaisePropertyChangedEvent();
             }
         }
         public string LightingYearlyHours
@@ -318,7 +365,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("LightingYearlyHours");
+                RaisePropertyChangedEvent();
             }
         }
         public string EquipmentYearlyHours
@@ -333,7 +380,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("EquipmentYearlyHours");
+                RaisePropertyChangedEvent();
             }
         }
         public string OpaqueCost
@@ -348,7 +395,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("OpaqueCost");
+                RaisePropertyChangedEvent();
             }
         }
         public string TransparentCost
@@ -363,7 +410,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("TransparentCost");
+                RaisePropertyChangedEvent();
             }
         }
         public string OpaqueEmissions
@@ -378,7 +425,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("OpaqueEmissions");
+                RaisePropertyChangedEvent();
             }
         }
         public string TransparentEmissions
@@ -393,15 +440,47 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent("TransparentEmissions");
+                RaisePropertyChangedEvent();
             }
         }
 
 
         public event PropertyChangedEventHandler PropertyChanged;
+
         protected virtual void RaisePropertyChangedEvent([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private void RaiseAllPropertiesChangedEvent()
+        {
+            if (PropertyChanged != null)
+            {
+                RaisePropertyChangedEvent(nameof(RoomType));
+                RaisePropertyChangedEvent(nameof(RoomConstant));
+                RaisePropertyChangedEvent(nameof(CoolingSetpoint));
+                RaisePropertyChangedEvent(nameof(HeatingSetpoint));
+                RaisePropertyChangedEvent(nameof(FloorArea));
+                RaisePropertyChangedEvent(nameof(EnvelopeArea));
+                RaisePropertyChangedEvent(nameof(GlazingRatio));
+                RaisePropertyChangedEvent(nameof(UValueOpaque));
+                RaisePropertyChangedEvent(nameof(UValueTransparent));
+                RaisePropertyChangedEvent(nameof(GValue));
+                RaisePropertyChangedEvent(nameof(WindowFrameReduction));
+                RaisePropertyChangedEvent(nameof(AirChangeRate));
+                RaisePropertyChangedEvent(nameof(Infiltration));
+                RaisePropertyChangedEvent(nameof(HeatRecovery));
+                RaisePropertyChangedEvent(nameof(OccupantLoads));
+                RaisePropertyChangedEvent(nameof(LightingLoads));
+                RaisePropertyChangedEvent(nameof(EquipmentLoads));
+                RaisePropertyChangedEvent(nameof(OccupantYearlyHours));
+                RaisePropertyChangedEvent(nameof(LightingYearlyHours));
+                RaisePropertyChangedEvent(nameof(EquipmentYearlyHours));
+                RaisePropertyChangedEvent(nameof(OpaqueCost));
+                RaisePropertyChangedEvent(nameof(TransparentCost));
+                RaisePropertyChangedEvent(nameof(OpaqueEmissions));
+                RaisePropertyChangedEvent(nameof(TransparentEmissions));
+            }
         }
     }
 }

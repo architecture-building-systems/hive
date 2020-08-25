@@ -24,11 +24,11 @@ namespace TestVisualizer
             currentDomain.AssemblyResolve += new ResolveEventHandler(LoadRhinoDlls);
 
             var state = new BuildingInputState(Sia2024Record.All().Take(20).Last() as Sia2024RecordEx, true);
-            if (state.SiaRoom != null)
-            {
-                state.SiaRoom.Quality = "<Custom>";
-                state.SiaRoom.BuildingUseType = "<Custom>";
-            }
+            //if (state.SiaRoom != null)
+            //{
+            //    state.SiaRoom.Quality = "<Custom>";
+            //    state.SiaRoom.BuildingUseType = "<Custom>";
+            //}
 
             new BuildingInput(state).ShowDialog();
 
