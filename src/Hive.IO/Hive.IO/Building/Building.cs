@@ -30,10 +30,10 @@ namespace Hive.IO.Building
         /// <summary>
         /// Building properties, such as U-values, infiltration, etc., according to SIA2024
         /// </summary>
-        public Dictionary<string, object> SIA2024 { get; private set; }
+        public Sia2024Record SIA2024 { get; private set; }
         // TO DO: Should be property of Zone, since each zone could have a different room usage
         // but then we copy paste so much data... maybe dictionarys are here in building, but it should be a list of dictionaries
-        // and each zone has an identifier, which sia2024 room it is
+        // and each zone has an identifier, which siaRoom room it is
 
 
         public Building(Zone[] zones, BuildingType type)
@@ -49,32 +49,27 @@ namespace Hive.IO.Building
         /// <summary>
         /// Sets SIA2024 constructions. Optional.
         /// </summary>
-        /// <param name="sia2024"></param>
-        public void SetSIA2024(Dictionary<string, object> sia2024, Zone[] zones)
+        /// <param name="siaRoom"></param>
+        public void ApplySia2024Constructions(Sia2024Record siaRoom, Zone[] zones)
         {
-            this.SIA2024 = sia2024;
+            SIA2024 = siaRoom;
 
-            OpaqueConstruction sia2024_opaque = new OpaqueConstruction("SIA2024_Opaque")
-            {
-                UValue = Convert.ToDouble(sia2024["U-Wert opake Bauteile"])
-            };
-            TransparentConstruction sia2024_window = new TransparentConstruction("SIA2024_Window")
-            {
-                UValue = Convert.ToDouble(sia2024["U-Wert Fenster"])
-            };
+            //OpaqueConstruction opaqueConstruction = new OpaqueConstruction("SIA2024_Opaque")
+            //{
+            //    UValue = siaRoom.UValueOpaque
+            //};
+            //TransparentConstruction transparentConstruction = new TransparentConstruction("SIA2024_Window")
+            //{
+            //    UValue = siaRoom.UValueTransparent,
+            //    Transmissivity = siaRoom.GValue
+            //};
 
             foreach(Zone zone in zones)
             {
-                foreach (Wall wall in zone.Walls)
-                    wall.Construction = sia2024_opaque;
-                foreach (Roof roof in zone.Roofs)
-                    roof.Construction = sia2024_opaque;
-                foreach (Ceiling ceiling in zone.Ceilings)
-                    ceiling.Construction = sia2024_opaque;
-                foreach (Floor floor in zone.Floors)
-                    floor.Construction = sia2024_opaque;
-                foreach (Opening opening in zone.Openings)
-                    opening.Construction = sia2024_window;
+                foreach(Component component in zone.SurfaceComponents)
+                {
+                    component.ApplySia2024Construction(siaRoom);
+                }
             }
         }
 

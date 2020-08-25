@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using Hive.IO.Building;
+using Hive.IO.Forms;
 
 namespace TestVisualizer
 {
@@ -19,9 +18,8 @@ namespace TestVisualizer
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.AssemblyResolve += new ResolveEventHandler(LoadRhinoDlls);
 
-            Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new Form1());
+            var state = new BuildingInputState(Sia2024Record.First(), null, true);
+            new BuildingInput(state).ShowDialog();
         }
         
 

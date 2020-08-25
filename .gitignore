@@ -137,3 +137,4 @@ Release/
 _ReSharper.*
 *.resharper
 Ankh.NoLoad
+.vscode/settings.json

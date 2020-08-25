@@ -1,9 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-
 using Grasshopper.Kernel;
-using Rhino.Geometry;
-using Newtonsoft.Json;
+using Hive.IO.Building;
 
 
 namespace Hive.IO.GhParametricInputs
@@ -11,7 +8,7 @@ namespace Hive.IO.GhParametricInputs
     public class GhSIARoom : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the GhParametricInputSIARoom class.
+        /// Initializes a new instance of the GhParametricInputSiaRoom class.
         /// </summary>
         public GhSIARoom()
           : base("Parametric Input SIARoom Hive", "HiveParaInRoom",
@@ -29,8 +26,8 @@ namespace Hive.IO.GhParametricInputs
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("descriptiont", "description", "SIA 2024 room name. Must follow hive sia 2024 naming convention", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("roomConstant", "roomConstant", "Room constant ('Zeitkonstante'), in hours", GH_ParamAccess.item);
+            pManager.AddTextParameter("description", "description", "SIA 2024 room name. Must follow hive sia 2024 naming convention", GH_ParamAccess.item);
+            pManager.AddNumberParameter("roomConstant", "roomConstant", "Room constant ('Zeitkonstante'), in hours", GH_ParamAccess.item);
             pManager.AddNumberParameter("coolingSetpoint", "coolingSetpoint", "Cooling setpoint 'Raumlufttemperatur Auslegung Kuehlung (Sommer)'. in deg Celsius", GH_ParamAccess.item);
             pManager.AddNumberParameter("heatingSetpoint", "heatingSetpoint", "Heating setpoint 'Raumlufttemperatur Auslegung Heizen (Winter)'. in deg Celsius", GH_ParamAccess.item);
             pManager.AddNumberParameter("floorArea", "floorArea", "Floor area 'Nettogeschossflaeche' in m^2", GH_ParamAccess.item);
@@ -60,7 +57,7 @@ namespace Hive.IO.GhParametricInputs
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("SIARoom", "SIARoom", "SIA Room as json, containing information about the building. Uses SIA 2024 naming conventions", GH_ParamAccess.item);
+            pManager.AddGenericParameter("SiaRoom", "SIA Room", "SIA Room as Sia2024Record object, containing information about the building. Uses SIA 2024 naming conventions", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -69,9 +66,9 @@ namespace Hive.IO.GhParametricInputs
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            SiaRoomProperties siaRoom = new SiaRoomProperties();
+            var siaRoom = new Sia2024Record();
 
-            DA.GetData(0, ref siaRoom.Description);
+            DA.GetData(0, ref siaRoom.RoomType);
             DA.GetData(1, ref siaRoom.RoomConstant);
             DA.GetData(2, ref siaRoom.CoolingSetpoint);
             DA.GetData(3, ref siaRoom.HeatingSetpoint);
@@ -96,62 +93,7 @@ namespace Hive.IO.GhParametricInputs
             DA.GetData(22, ref siaRoom.OpaqueEmissions);
             DA.GetData(23, ref siaRoom.TransparentEmissions);
 
-            var siaRoomDict = new Dictionary<string, object>();
-            siaRoomDict.Add("description", siaRoom.Description);
-            siaRoomDict.Add("Zeitkonstante", siaRoom.RoomConstant);
-            siaRoomDict.Add("Raumlufttemperatur Auslegung Kuehlung (Sommer)", siaRoom.CoolingSetpoint);
-            siaRoomDict.Add("Raumlufttemperatur Auslegung Heizen (Winter)", siaRoom.HeatingSetpoint);
-            siaRoomDict.Add("Nettogeschossflaeche", siaRoom.FloorArea);
-            siaRoomDict.Add("Thermische Gebaeudehuellflaeche", siaRoom.EnvelopeArea);
-            siaRoomDict.Add("Glasanteil", siaRoom.GlazingRatio);
-            siaRoomDict.Add("U-Wert opake Bauteile", siaRoom.UValueOpaque);
-            siaRoomDict.Add("U-Wert Fenster", siaRoom.UValueTransparent);
-            siaRoomDict.Add("Gesamtenergiedurchlassgrad Verglasung", siaRoom.GValue);
-            siaRoomDict.Add("Abminderungsfaktor fuer Fensterrahmen", siaRoom.WindowFrameReduction);
-            siaRoomDict.Add("Aussenluft-Volumenstrom (pro NGF)", siaRoom.AirChangeRate);
-            siaRoomDict.Add("Aussenluft-Volumenstrom durch Infiltration", siaRoom.Infiltration);
-            siaRoomDict.Add("Temperatur-Aenderungsgrad der Waermerueckgewinnung", siaRoom.HeatRecovery);
-            siaRoomDict.Add("Waermeeintragsleistung Personen (bei 24.0 deg C, bzw. 70 W)", siaRoom.OccupantLoads);
-            siaRoomDict.Add("Waermeeintragsleistung der Raumbeleuchtung", siaRoom.LightingLoads);
-            siaRoomDict.Add("Waermeeintragsleistung der Geraete", siaRoom.EquipmentLoads);
-            siaRoomDict.Add("Vollaststunden pro Jahr (Personen)", siaRoom.OccupantYearlyHours);
-            siaRoomDict.Add("Jaehrliche Vollaststunden der Raumbeleuchtung", siaRoom.LightingYearlyHours);
-            siaRoomDict.Add("Jaehrliche Vollaststunden der Geraete", siaRoom.EquipmentYearlyHours);
-            siaRoomDict.Add("Kosten opake Bauteile", siaRoom.OpaqueCost);
-            siaRoomDict.Add("Kosten transparente Bauteile", siaRoom.TransparentCost);
-            siaRoomDict.Add("Emissionen opake Bauteile", siaRoom.OpaqueEmissions);
-            siaRoomDict.Add("Emissionen transparente Bauteile", siaRoom.TransparentEmissions);
-
-            string siaRoomJson = JsonConvert.SerializeObject(siaRoomDict);
-            DA.SetData(0, siaRoomJson);
-        }
-
-        private class SiaRoomProperties
-        {
-            public string Description;
-            public int RoomConstant;
-            public double CoolingSetpoint;
-            public double HeatingSetpoint;
-            public double FloorArea;
-            public double EnvelopeArea;
-            public double GlazingRatio;
-            public double UValueOpaque;
-            public double UValueTransparent;
-            public double GValue;
-            public double WindowFrameReduction;
-            public double AirChangeRate;
-            public double Infiltration;
-            public double HeatRecovery;
-            public double OccupantLoads;
-            public double LightingLoads;
-            public double EquipmentLoads;
-            public double OccupantYearlyHours;
-            public double LightingYearlyHours;
-            public double EquipmentYearlyHours;
-            public double OpaqueCost;
-            public double TransparentCost;
-            public double OpaqueEmissions;
-            public double TransparentEmissions;
+            DA.SetData(0, siaRoom.ToJson());
         }
 
         /// <summary>
