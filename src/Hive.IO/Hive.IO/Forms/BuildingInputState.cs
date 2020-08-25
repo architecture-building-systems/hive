@@ -213,7 +213,7 @@ namespace Hive.IO.Forms
                 {
                     _siaRoom.UValueOpaque = double.Parse(value);
                 }
-                catch (FormatException e)
+                catch (FormatException)
                 {
                     // don't update the value                    
                 }
@@ -229,7 +229,7 @@ namespace Hive.IO.Forms
                 {
                     _siaRoom.UValueTransparent = double.Parse(value);
                 }
-                catch
+                catch (FormatException)
                 {
                 }
                 RaisePropertyChangedEventEx();
@@ -244,7 +244,7 @@ namespace Hive.IO.Forms
                 {
                     _siaRoom.GValue = double.Parse(value);
                 }
-                catch
+                catch (FormatException)
                 {
                 }
                 RaisePropertyChangedEventEx();
@@ -260,7 +260,7 @@ namespace Hive.IO.Forms
                 {
                     _siaRoom.WindowFrameReduction = double.Parse(value);
                 }
-                catch
+                catch (FormatException)
                 {
                 }
                 RaisePropertyChangedEventEx();
@@ -275,7 +275,7 @@ namespace Hive.IO.Forms
                 {
                     _siaRoom.AirChangeRate = double.Parse(value);
                 }
-                catch
+                catch (FormatException)
                 {
                 }
                 RaisePropertyChangedEventEx();
@@ -290,7 +290,7 @@ namespace Hive.IO.Forms
                 {
                     _siaRoom.Infiltration = double.Parse(value);
                 }
-                catch
+                catch (FormatException)
                 {
                 }
                 RaisePropertyChangedEventEx();
@@ -305,7 +305,7 @@ namespace Hive.IO.Forms
                 {
                     _siaRoom.HeatRecovery = double.Parse(value);
                 }
-                catch
+                catch (FormatException)
                 {
                 }
                 RaisePropertyChangedEventEx();
@@ -320,7 +320,7 @@ namespace Hive.IO.Forms
                 {
                     _siaRoom.OccupantLoads = double.Parse(value);
                 }
-                catch
+                catch (FormatException)
                 {
                 }
                 RaisePropertyChangedEventEx();
@@ -335,7 +335,7 @@ namespace Hive.IO.Forms
                 {
                     _siaRoom.LightingLoads = double.Parse(value);
                 }
-                catch
+                catch (FormatException)
                 {
                 }
                 RaisePropertyChangedEventEx();
@@ -350,7 +350,7 @@ namespace Hive.IO.Forms
                 {
                     _siaRoom.EquipmentLoads = double.Parse(value);
                 }
-                catch
+                catch (FormatException)
                 {
                 }
                 RaisePropertyChangedEventEx();
@@ -365,7 +365,7 @@ namespace Hive.IO.Forms
                 {
                     _siaRoom.OccupantYearlyHours = double.Parse(value);
                 }
-                catch
+                catch (FormatException)
                 {
                 }
                 RaisePropertyChangedEventEx();
@@ -380,7 +380,7 @@ namespace Hive.IO.Forms
                 {
                     _siaRoom.LightingYearlyHours = double.Parse(value);
                 }
-                catch
+                catch (FormatException)
                 {
                 }
                 RaisePropertyChangedEventEx();
@@ -395,7 +395,7 @@ namespace Hive.IO.Forms
                 {
                     _siaRoom.EquipmentYearlyHours = double.Parse(value);
                 }
-                catch
+                catch (FormatException)
                 {
                 }
                 RaisePropertyChangedEventEx();
@@ -410,7 +410,7 @@ namespace Hive.IO.Forms
                 {
                     _siaRoom.OpaqueCost = double.Parse(value);
                 }
-                catch
+                catch (FormatException)
                 {
                 }
                 RaisePropertyChangedEventEx();
@@ -425,7 +425,7 @@ namespace Hive.IO.Forms
                 {
                     _siaRoom.TransparentCost = double.Parse(value);
                 }
-                catch
+                catch (FormatException)
                 {
                 }
                 RaisePropertyChangedEventEx();
@@ -440,7 +440,7 @@ namespace Hive.IO.Forms
                 {
                     _siaRoom.OpaqueEmissions = double.Parse(value);
                 }
-                catch
+                catch (FormatException)
                 {
                 }
                 RaisePropertyChangedEventEx();
@@ -455,7 +455,7 @@ namespace Hive.IO.Forms
                 {
                     _siaRoom.TransparentEmissions = double.Parse(value);
                 }
-                catch
+                catch (FormatException)
                 {
                 }
                 RaisePropertyChangedEventEx();
@@ -473,7 +473,7 @@ namespace Hive.IO.Forms
         {
             var member = callerMemberName.Replace("Brush", "").Replace("FontWeight", "");
             var fieldInfo = typeof(Sia2024RecordEx).GetField(member);
-            return !AreEqual((double) fieldInfo.GetValue(_siaRoom), (double) fieldInfo.GetValue(Sia2024RecordEx.Lookup(_siaRoom)));
+            return !AreEqual((double) fieldInfo.GetValue(_siaRoom), (double) fieldInfo.GetValue(Sia2024Record.Lookup(_siaRoom)));
         }
 
         public Brush RoomConstantBrush => Modified() ? _modifiedBrush : _normalBrush;
