@@ -29,11 +29,11 @@ namespace Hive.IO.Building
         /// <summary>
         /// Total Cost in [Currency]
         /// </summary>
-        public double Cost { get; private set; }
+        public double Cost { get; protected set; }
         /// <summary>
         /// Total CO2 emissions [kgCO2eq.]
         /// </summary>
-        public double CO2 { get; private set; }
+        public double CO2 { get; protected set; }
         /// <summary>
         /// Total surface area of this component, in [sqm]
         /// </summary>
@@ -62,42 +62,26 @@ namespace Hive.IO.Building
         public Construction Construction { get; set; }
 
 
-        public bool IsTransparent { get; private set; }
-
-        public Component(rg.BrepFace surface_geometry, bool isTransparent)
+        public Component(rg.BrepFace surface_geometry)
         {
             this.BrepGeometry = surface_geometry.DuplicateFace(false);
             this.Area = rg.AreaMassProperties.Compute(surface_geometry).Area;
-            this.IsTransparent = isTransparent;
         }
 
 
-        public void ApplySia2024Construction(Sia2024Record siaRoom)
+        public virtual void ApplySia2024Construction(Sia2024Record siaRoom)
         {
-            if (this.IsTransparent)
-            {
 
-                TransparentConstruction transparentConstruction = new TransparentConstruction("SIA2024_Window")
-                {
-                    UValue = siaRoom.UValueTransparent,
-                    Transmissivity = siaRoom.GValue
-                };
-                this.CO2 = siaRoom.TransparentEmissions;
-                this.Cost = siaRoom.TransparentCost;
-                this.Construction = transparentConstruction;
-            }
-            else
+            OpaqueConstruction opaqueConstruction = new OpaqueConstruction("SIA2024_Opaque")
             {
-                OpaqueConstruction opaqueConstruction = new OpaqueConstruction("SIA2024_Opaque")
-                {
-                    UValue = siaRoom.UValueOpaque
-                };
-                this.CO2 = siaRoom.OpaqueEmissions;
-                this.Cost = siaRoom.OpaqueCost;
-                this.Construction = opaqueConstruction;
-            }
+                UValue = siaRoom.UValueOpaque
+            };
+            this.CO2 = siaRoom.OpaqueEmissions;
+            this.Cost = siaRoom.OpaqueCost;
+            this.Construction = opaqueConstruction;
+
         }
-                
+
 
     }
 
@@ -111,9 +95,21 @@ namespace Hive.IO.Building
     {
         // Should also contain information for dynamic shading
         // static shading is defined as static shading object
-        public Window(rg.BrepFace surface_geometry) : base(surface_geometry, true)
+        public Window(rg.BrepFace surface_geometry) : base(surface_geometry)
         {
 
+        }
+
+        public override void ApplySia2024Construction(Sia2024Record siaRoom)
+        {
+            TransparentConstruction transparentConstruction = new TransparentConstruction("SIA2024_Window")
+            {
+                UValue = siaRoom.UValueTransparent,
+                Transmissivity = siaRoom.GValue
+            };
+            base.CO2 = siaRoom.TransparentEmissions;
+            base.Cost = siaRoom.TransparentCost;
+            base.Construction = transparentConstruction;
         }
     }
 
@@ -124,7 +120,7 @@ namespace Hive.IO.Building
     public class Wall : Component
     {
         // Wall, Roof, Floor, Ceiling are not input manually. But they need to be own classes, because they'll contain information like construction.
-        public Wall(rg.BrepFace surface_geometry) : base(surface_geometry, false)
+        public Wall(rg.BrepFace surface_geometry) : base(surface_geometry)
         {
 
         }
@@ -136,7 +132,7 @@ namespace Hive.IO.Building
     /// </summary>
     public class Roof : Component
     {
-        public Roof(rg.BrepFace surface_geometry) : base(surface_geometry, false)
+        public Roof(rg.BrepFace surface_geometry) : base(surface_geometry)
         {
 
         }
@@ -148,7 +144,7 @@ namespace Hive.IO.Building
     /// </summary>
     public class Ceiling : Component
     {
-        public Ceiling(rg.BrepFace surface_geometry) : base(surface_geometry, false)
+        public Ceiling(rg.BrepFace surface_geometry) : base(surface_geometry)
         {
 
         }
@@ -160,7 +156,7 @@ namespace Hive.IO.Building
     /// </summary>
     public class Floor : Component
     {
-        public Floor(rg.BrepFace surface_geometry) : base(surface_geometry, false)
+        public Floor(rg.BrepFace surface_geometry) : base(surface_geometry)
         {
 
         }
@@ -170,7 +166,7 @@ namespace Hive.IO.Building
 
     public class Shading : Component
     {
-        public Shading(rg.BrepFace surface_geometry) : base(surface_geometry, false)
+        public Shading(rg.BrepFace surface_geometry) : base(surface_geometry)
         {
 
         }
@@ -224,7 +220,7 @@ namespace Hive.IO.Building
 
 
 
-        public DynamicShading(rg.BrepFace surface_geometry) : base(surface_geometry, false)
+        public DynamicShading(rg.BrepFace surface_geometry) : base(surface_geometry)
         {
 
         }
