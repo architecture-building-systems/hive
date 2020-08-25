@@ -70,21 +70,6 @@ namespace Hive.IO.Building
                 {
                     component.ApplySia2024Construction(siaRoom);
                 }
-                //foreach (Wall wall in zone.Walls)
-                //{
-                //    wall.Construction = opaqueConstruction;
-                //    wall.Cost = siaRoom.OpaqueCost;
-                //    wall.CO2 = siaRoom.OpaqueEmissions;
-                //}
-
-                //foreach (Roof roof in zone.Roofs)
-                //    roof.Construction = opaqueConstruction;
-                //foreach (Ceiling ceiling in zone.Ceilings)
-                //    ceiling.Construction = opaqueConstruction;
-                //foreach (Floor floor in zone.Floors)
-                //    floor.Construction = opaqueConstruction;
-                //foreach (Window opening in zone.Openings)
-                //    opening.Construction = transparentConstruction;
             }
         }
 

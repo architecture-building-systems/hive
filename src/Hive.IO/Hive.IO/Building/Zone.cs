@@ -79,7 +79,8 @@ namespace Hive.IO.Building
 
         #region Building Components
 
-        public List<Component> SurfaceComponents { get; private set; }
+        public IEnumerable<Component> SurfaceComponents =>
+            Walls.Cast<Component>().Concat(Ceilings).Concat(Roofs).Concat(Floors).Concat(Openings);
 
         /// <summary>
         /// Wall components of this zone. Cannot be empty.
@@ -269,13 +270,6 @@ namespace Hive.IO.Building
                 this.Schedule.Lighting[i] = 1.0;
                 this.Schedule.Devices[i] = 1.0;
             }
-
-
-            this.SurfaceComponents.AddRange(this.Walls);
-            this.SurfaceComponents.AddRange(this.Ceilings);
-            this.SurfaceComponents.AddRange(this.Roofs);
-            this.SurfaceComponents.AddRange(this.Floors);
-            this.SurfaceComponents.AddRange(this.Openings);
         }
         #endregion
 
