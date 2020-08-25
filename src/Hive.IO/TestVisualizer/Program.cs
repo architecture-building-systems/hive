@@ -1,14 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Hive.IO;
 using Hive.IO.Building;
 using Hive.IO.Forms;
-using Hive.IO.GHComponents;
 
 namespace TestVisualizer
 {

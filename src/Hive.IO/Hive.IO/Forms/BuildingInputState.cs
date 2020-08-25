@@ -4,6 +4,8 @@ using System.ComponentModel;
 using System.Diagnostics.CodeAnalysis;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Windows;
+using System.Windows.Media;
 using Hive.IO.Building;
 
 namespace Hive.IO.Forms
@@ -19,7 +21,7 @@ namespace Hive.IO.Forms
 
         public BuildingInputState(Sia2024RecordEx room, bool editable)
         {
-            _siaRoom = room;
+            _siaRoom = room.Clone();
             _editable = editable;
         }
 
@@ -90,7 +92,7 @@ namespace Hive.IO.Forms
             set
             {
                 _siaRoom = Sia2024Record.Lookup(BuildingUseType, value, Quality) as Sia2024RecordEx;
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEvent(); 
                 RaiseAllPropertiesChangedEvent();
             }
         }
@@ -108,7 +110,7 @@ namespace Hive.IO.Forms
                 {
                 }
 
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string CoolingSetpoint
@@ -123,7 +125,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string HeatingSetpoint
@@ -138,7 +140,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string FloorArea
@@ -153,7 +155,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string EnvelopeArea
@@ -168,7 +170,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string GlazingRatio
@@ -183,7 +185,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string UValueOpaque
@@ -199,7 +201,7 @@ namespace Hive.IO.Forms
                 {
                     // don't update the value                    
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string UValueTransparent
@@ -214,7 +216,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string GValue
@@ -229,7 +231,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
 
@@ -245,7 +247,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string AirChangeRate
@@ -260,7 +262,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string Infiltration
@@ -275,7 +277,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string HeatRecovery
@@ -290,7 +292,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string OccupantLoads
@@ -305,7 +307,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string LightingLoads
@@ -320,7 +322,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string EquipmentLoads
@@ -335,7 +337,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string OccupantYearlyHours
@@ -350,7 +352,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string LightingYearlyHours
@@ -365,7 +367,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string EquipmentYearlyHours
@@ -380,7 +382,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string OpaqueCost
@@ -395,7 +397,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string TransparentCost
@@ -410,7 +412,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string OpaqueEmissions
@@ -425,7 +427,7 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
         public string TransparentEmissions
@@ -440,16 +442,84 @@ namespace Hive.IO.Forms
                 catch
                 {
                 }
-                RaisePropertyChangedEvent();
+                RaisePropertyChangedEventEx();
             }
         }
 
+        #region colors
+        private readonly Brush _normalBrush = new SolidColorBrush(Colors.Black);
+        private readonly Brush _modifiedBrush = new SolidColorBrush(Colors.ForestGreen);
+
+        private bool AreEqual(double a, double b) => Math.Abs(a - b) < 0.001;
+
+        private bool Modified([CallerMemberName] string callerMemberName = null)
+        {
+            var member = callerMemberName.Replace("Brush", "").Replace("FontWeight", "");
+            var fieldInfo = typeof(Sia2024RecordEx).GetField(member);
+            return !AreEqual((double) fieldInfo.GetValue(_siaRoom), (double) fieldInfo.GetValue(Sia2024RecordEx.Lookup(_siaRoom)));
+        }
+
+        public Brush RoomConstantBrush => Modified() ? _modifiedBrush : _normalBrush;
+        public Brush UValueOpaqueBrush => Modified() ? _modifiedBrush : _normalBrush;
+        public Brush UValueTransparentBrush => Modified() ? _modifiedBrush : _normalBrush;
+        public Brush GValueBrush => Modified() ? _modifiedBrush : _normalBrush;
+        public Brush WindowFrameReductionBrush => Modified() ? _modifiedBrush : _normalBrush;
+        public Brush AirChangeRateBrush => Modified() ? _modifiedBrush : _normalBrush;
+        public Brush InfiltrationBrush => Modified() ? _modifiedBrush : _normalBrush;
+        public Brush HeatRecoveryBrush => Modified() ? _modifiedBrush : _normalBrush;
+        public Brush OccupantLoadsBrush => Modified() ? _modifiedBrush : _normalBrush;
+        public Brush LightingLoadsBrush => Modified() ? _modifiedBrush : _normalBrush;
+        public Brush EquipmentLoadsBrush => Modified() ? _modifiedBrush : _normalBrush;
+        public Brush OccupantYearlyHoursBrush => Modified() ? _modifiedBrush : _normalBrush;
+        public Brush LightingYearlyHoursBrush => Modified() ? _modifiedBrush : _normalBrush;
+        public Brush EquipmentYearlyHoursBrush => Modified() ? _modifiedBrush : _normalBrush;
+        public Brush OpaqueCostBrush => Modified() ? _modifiedBrush : _normalBrush;
+        public Brush TransparentCostBrush => Modified() ? _modifiedBrush : _normalBrush;
+        public Brush OpaqueEmissionsBrush => Modified() ? _modifiedBrush : _normalBrush;
+        public Brush TransparentEmissionsBrush => Modified() ? _modifiedBrush : _normalBrush;
+
+        #endregion colors
+
+        #region fontweights
+        private readonly FontWeight _normalFontWeight = FontWeights.Normal;
+        private readonly FontWeight _modifiedFontWeight = FontWeights.Bold;
+
+        public FontWeight RoomConstantFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight UValueOpaqueFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight UValueTransparentFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight GValueFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight WindowFrameReductionFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight AirChangeRateFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight InfiltrationFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight HeatRecoveryFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight OccupantLoadsFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight LightingLoadsFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight EquipmentLoadsFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight OccupantYearlyHoursFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight LightingYearlyHoursFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight EquipmentYearlyHoursFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight OpaqueCostFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight TransparentCostFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight OpaqueEmissionsFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight TransparentEmissionsFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        #endregion fontweights
 
         public event PropertyChangedEventHandler PropertyChanged;
 
         protected virtual void RaisePropertyChangedEvent([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        /// <summary>
+        /// Notify the GUI that not only has the property changed, but all the brushes and fonts changed too.
+        /// </summary>
+        /// <param name="propertyName"></param>
+        protected virtual void RaisePropertyChangedEventEx([CallerMemberName] string propertyName = null)
+        {
+            RaisePropertyChangedEvent(propertyName);
+            RaisePropertyChangedEvent(propertyName + "Brush");
+            RaisePropertyChangedEvent(propertyName + "FontWeight");
         }
 
         private void RaiseAllPropertiesChangedEvent()

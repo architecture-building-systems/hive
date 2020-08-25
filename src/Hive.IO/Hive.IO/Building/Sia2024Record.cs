@@ -5,6 +5,7 @@ using System.Linq;
 using System.Reflection;
 using Newtonsoft.Json;
 using OxyPlot;
+using Rhino.Input.Custom;
 
 namespace Hive.IO.Building
 {
@@ -52,6 +53,8 @@ namespace Hive.IO.Building
             OpaqueEmissions = room.OpaqueEmissions;
             TransparentEmissions = room.TransparentEmissions;
         }
+
+        public Sia2024RecordEx Clone() => MemberwiseClone() as Sia2024RecordEx;
     }
     
     /// <summary>
@@ -197,9 +200,24 @@ namespace Hive.IO.Building
         public static IEnumerable<string> RoomTypes(string useType) =>
             ReadRecords().Where(r => r.BuildingUseType == useType).Select(r => r.RoomType).Distinct();
 
-        public static Sia2024Record Lookup(string useType, string roomType, string quality) =>
-            ReadRecords()
-                .First(r => r.BuildingUseType == useType && r.RoomType == roomType && r.Quality == quality);
+        private static Dictionary<Tuple<string, string, string>, Sia2024RecordEx> _recordLookup;
+
+        public static Sia2024Record Lookup(string useType, string roomType, string quality)
+        {
+            if (_recordLookup == null)
+            {
+                _recordLookup = new Dictionary<Tuple<string, string, string>, Sia2024RecordEx>();
+                foreach (var record in ReadRecords())
+                {
+                    _recordLookup.Add(new Tuple<string, string, string>(record.BuildingUseType, record.RoomType, record.Quality), record);
+                }
+            }
+
+            return _recordLookup[new Tuple<string, string, string>(useType, roomType, quality)].Clone();
+        }
+
+        public static Sia2024Record Lookup(Sia2024RecordEx record) =>
+            Lookup(record.BuildingUseType, record.RoomType, record.Quality);
 
         public static IEnumerable<Sia2024Record> All() => ReadRecords();
     }
