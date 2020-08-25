@@ -61,13 +61,17 @@
                             </Grid.ColumnDefinitions>
                             <Label Grid.Row="0" Grid.Column="0" FontWeight="Bold" Grid.ColumnSpan="2">Geometry</Label>
                             <Label Grid.Row="1" Grid.Column="0">Floor Area (m²)</Label>
-                            <TextBox Name="FloorArea" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="0" TextAlignment="Right" IsEnabled="False">10.3</TextBox>
+                            <TextBox Name="FloorArea" Grid.Row="1" Grid.Column="1" VerticalAlignment="Center" Margin="0" TextAlignment="Right" IsEnabled="False"
+                                     Text="{Binding State.ZoneFloorArea, Mode=OneWay}"></TextBox>
                             <Label Grid.Row="2" Grid.Column="0">Wall Area (m²)</Label>
-                            <TextBox Name="WallArea" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="0" TextAlignment="Right" IsEnabled="False">37.2</TextBox>
+                            <TextBox Name="WallArea" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center" Margin="0" TextAlignment="Right" IsEnabled="False"
+                                     Text="{Binding State.ZoneWallArea, Mode=OneWay}"></TextBox>
                             <Label Grid.Row="3" Grid.Column="0" Grid.ColumnSpan="2">Win Area (m²)</Label>
-                            <TextBox Name="WindowArea" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="0,4" TextAlignment="Right" IsEnabled="False">6.0</TextBox>
+                            <TextBox Name="WindowArea" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center" Margin="0,4" TextAlignment="Right" IsEnabled="False"
+                                     Text="{Binding State.ZoneWindowArea, Mode=OneWay}"></TextBox>
                             <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">Roof Area (m²)</Label>
-                            <TextBox Name="RoofArea" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Margin="0" TextAlignment="Right" IsEnabled="False">10.3</TextBox>
+                            <TextBox Name="RoofArea" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center" Margin="0" TextAlignment="Right" IsEnabled="False"
+                                     Text="{Binding State.ZoneRoofArea, Mode=OneWay}"></TextBox>
                             <Label Grid.Row="0" Grid.Column="3" FontWeight="Bold" Grid.ColumnSpan="2">Set-points</Label>
                             <Label Grid.Row="1" Grid.Column="3">Heating</Label>
                             <TextBox Name="HeatingSetPoint" Grid.Row="1" Grid.Column="4" VerticalAlignment="Center" Margin="0,4,-1,4" 

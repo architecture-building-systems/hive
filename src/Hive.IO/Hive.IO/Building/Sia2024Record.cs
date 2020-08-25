@@ -54,6 +54,11 @@ namespace Hive.IO.Building
             TransparentEmissions = room.TransparentEmissions;
         }
 
+        public new static Sia2024RecordEx FromJson(string json)
+        {
+            return new Sia2024RecordEx(Sia2024Record.FromJson(json));
+        }
+
         public Sia2024RecordEx Clone() => MemberwiseClone() as Sia2024RecordEx;
     }
     
@@ -127,21 +132,6 @@ namespace Hive.IO.Building
         public static Sia2024Record FromJson(string json)
         {
             var d = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
-            if (!d.ContainsKey("BuildingUseType"))
-            {
-                d["BuildingUseType"] = "Custom";
-            }
-
-            if (!d.ContainsKey("Quality"))
-            {
-                d["Quality"] = "Standardwert";
-            }
-
-            if (!d.ContainsKey("description"))
-            {
-                d["description"] = "Custom";
-            }
-
             return new Sia2024Record
             {
                 RoomType = d["description"] as string,
@@ -215,6 +205,8 @@ namespace Hive.IO.Building
 
             return _recordLookup[new Tuple<string, string, string>(useType, roomType, quality)].Clone();
         }
+
+        public static Sia2024RecordEx First() => ReadRecords().First();
 
         public static Sia2024Record Lookup(Sia2024RecordEx record) =>
             Lookup(record.BuildingUseType, record.RoomType, record.Quality);

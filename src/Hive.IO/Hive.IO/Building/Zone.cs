@@ -104,6 +104,11 @@ namespace Hive.IO.Building
         /// </summary>
         public Shading[] ShadingDevices { get; private set; }
 
+        public double WallArea => Walls.Sum(w => w.Area);
+        public double RoofArea => Roofs.Sum(r => r.Area);
+        public double WindowArea => Openings.Sum(o => o.Area);
+        public double FloorArea => Floors.Sum(f => f.Area);
+
         #endregion
 
 

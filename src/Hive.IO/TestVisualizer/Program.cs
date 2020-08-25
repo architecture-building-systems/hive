@@ -18,18 +18,8 @@ namespace TestVisualizer
             AppDomain currentDomain = AppDomain.CurrentDomain;
             currentDomain.AssemblyResolve += new ResolveEventHandler(LoadRhinoDlls);
 
-            var state = new BuildingInputState(Sia2024Record.All().Take(20).Last() as Sia2024RecordEx, true);
-            //if (state.SiaRoom != null)
-            //{
-            //    state.SiaRoom.Quality = "<Custom>";
-            //    state.SiaRoom.BuildingUseType = "<Custom>";
-            //}
-
+            var state = new BuildingInputState(Sia2024Record.First(), null, true);
             new BuildingInput(state).ShowDialog();
-
-            /*Application.EnableVisualStyles();
-            Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new BuildingInput());*/
         }
         
 

@@ -17,12 +17,14 @@ namespace Hive.IO.Forms
     {
         private Sia2024RecordEx _siaRoom;
         private bool _editable;
+        private Zone _zone;
 
 
-        public BuildingInputState(Sia2024RecordEx room, bool editable)
+        public BuildingInputState(Sia2024RecordEx room, Zone zone, bool editable)
         {
             _siaRoom = room.Clone();
             _editable = editable;
+            _zone = zone;
         }
 
         public Sia2024RecordEx SiaRoom
@@ -45,6 +47,18 @@ namespace Hive.IO.Forms
             }
         }
 
+        #region areas
+        // NOTE: the funny syntax (x?.a ?? y.b) returns x.a, unless x is null, then it returns y.b
+        // it works like this: (x?.a) is x.a if x != null, else null. (A ?? B) is A if A != null, else B
+        // I'm using this to enable creating a BuildingInputSate with zone == null for testing purposes.
+        public string ZoneWallArea => $"{_zone?.WallArea ?? _siaRoom.EnvelopeArea:0.00}";
+        public string ZoneFloorArea => $"{_zone?.FloorArea ?? _siaRoom.FloorArea:0.00}";
+        public string ZoneRoofArea => $"{_zone?.RoofArea ?? _siaRoom.EnvelopeArea:0.00}";
+        public string ZoneWindowArea => $"{_zone?.WindowArea ?? _siaRoom.EnvelopeArea:0.00}";
+
+        #endregion areas
+
+        #region comboboxes
         public IEnumerable<string> BuildingUseTypes
         {
             get => _editable ? Sia2024Record.BuildingUseTypes() : new List<string> {"<Custom>"};
@@ -96,7 +110,9 @@ namespace Hive.IO.Forms
                 RaiseAllPropertiesChangedEvent();
             }
         }
+        #endregion comboboxes
 
+        #region sia2024 properties
         public string RoomConstant
         {
             get => $"{_siaRoom.RoomConstant:0.00}";
@@ -106,7 +122,7 @@ namespace Hive.IO.Forms
                 {
                     _siaRoom.RoomConstant = double.Parse(value);
                 }
-                catch
+                catch(Exception)
                 {
                 }
 
@@ -445,6 +461,7 @@ namespace Hive.IO.Forms
                 RaisePropertyChangedEventEx();
             }
         }
+        #endregion sia2024 properties
 
         #region colors
         private readonly Brush _normalBrush = new SolidColorBrush(Colors.Black);
@@ -506,7 +523,7 @@ namespace Hive.IO.Forms
 
         public event PropertyChangedEventHandler PropertyChanged;
 
-        protected virtual void RaisePropertyChangedEvent([CallerMemberName] string propertyName = null)
+        public virtual void RaisePropertyChangedEvent([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
