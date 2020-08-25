@@ -56,7 +56,7 @@ namespace Hive.IO.Building
 
             OpaqueConstruction opaqueConstruction = new OpaqueConstruction("SIA2024_Opaque")
             {
-                UValue = Convert.ToDouble(siaRoom.UValueOpaque)
+                UValue = siaRoom.UValueOpaque
             };
             TransparentConstruction transparentConstruction = new TransparentConstruction("SIA2024_Window")
             {
@@ -67,7 +67,12 @@ namespace Hive.IO.Building
             foreach(Zone zone in zones)
             {
                 foreach (Wall wall in zone.Walls)
+                {
                     wall.Construction = opaqueConstruction;
+                    wall.Cost = siaRoom.OpaqueCost;
+                    wall.CO2 = siaRoom.OpaqueEmissions;
+                }
+
                 foreach (Roof roof in zone.Roofs)
                     roof.Construction = opaqueConstruction;
                 foreach (Ceiling ceiling in zone.Ceilings)
