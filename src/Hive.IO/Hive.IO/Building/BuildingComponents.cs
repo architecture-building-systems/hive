@@ -61,11 +61,43 @@ namespace Hive.IO.Building
         /// </summary>
         public Construction Construction { get; set; }
 
-        public Component(rg.BrepFace surface_geometry)
+
+        public bool IsTransparent { get; private set; }
+
+        public Component(rg.BrepFace surface_geometry, bool isTransparent)
         {
             this.BrepGeometry = surface_geometry.DuplicateFace(false);
             this.Area = rg.AreaMassProperties.Compute(surface_geometry).Area;
+            this.IsTransparent = isTransparent;
         }
+
+
+        public void ApplySia2024Construction(Sia2024Record siaRoom)
+        {
+            if (this.IsTransparent)
+            {
+
+                TransparentConstruction transparentConstruction = new TransparentConstruction("SIA2024_Window")
+                {
+                    UValue = siaRoom.UValueTransparent,
+                    Transmissivity = siaRoom.GValue
+                };
+                this.CO2 = siaRoom.TransparentEmissions;
+                this.Cost = siaRoom.TransparentCost;
+                this.Construction = transparentConstruction;
+            }
+            else
+            {
+                OpaqueConstruction opaqueConstruction = new OpaqueConstruction("SIA2024_Opaque")
+                {
+                    UValue = siaRoom.UValueOpaque
+                };
+                this.CO2 = siaRoom.OpaqueEmissions;
+                this.Cost = siaRoom.OpaqueCost;
+                this.Construction = opaqueConstruction;
+            }
+        }
+                
 
     }
 
@@ -73,13 +105,13 @@ namespace Hive.IO.Building
 
 
     /// <summary>
-    /// Openings on building hull, e.g. windows or doors. Could be opaque or transparent.
+    /// Transparent surfaces on building hull
     /// </summary>
-    public class Opening : Component
+    public class Window : Component
     {
         // Should also contain information for dynamic shading
         // static shading is defined as static shading object
-        public Opening(rg.BrepFace surface_geometry) : base(surface_geometry)
+        public Window(rg.BrepFace surface_geometry) : base(surface_geometry, true)
         {
 
         }
@@ -92,7 +124,7 @@ namespace Hive.IO.Building
     public class Wall : Component
     {
         // Wall, Roof, Floor, Ceiling are not input manually. But they need to be own classes, because they'll contain information like construction.
-        public Wall(rg.BrepFace surface_geometry) : base(surface_geometry)
+        public Wall(rg.BrepFace surface_geometry) : base(surface_geometry, false)
         {
 
         }
@@ -104,7 +136,7 @@ namespace Hive.IO.Building
     /// </summary>
     public class Roof : Component
     {
-        public Roof(rg.BrepFace surface_geometry) : base(surface_geometry)
+        public Roof(rg.BrepFace surface_geometry) : base(surface_geometry, false)
         {
 
         }
@@ -116,7 +148,7 @@ namespace Hive.IO.Building
     /// </summary>
     public class Ceiling : Component
     {
-        public Ceiling(rg.BrepFace surface_geometry) : base(surface_geometry)
+        public Ceiling(rg.BrepFace surface_geometry) : base(surface_geometry, false)
         {
 
         }
@@ -128,7 +160,7 @@ namespace Hive.IO.Building
     /// </summary>
     public class Floor : Component
     {
-        public Floor(rg.BrepFace surface_geometry) : base(surface_geometry)
+        public Floor(rg.BrepFace surface_geometry) : base(surface_geometry, false)
         {
 
         }
@@ -138,7 +170,7 @@ namespace Hive.IO.Building
 
     public class Shading : Component
     {
-        public Shading(rg.BrepFace surface_geometry) : base(surface_geometry)
+        public Shading(rg.BrepFace surface_geometry) : base(surface_geometry, false)
         {
 
         }
@@ -192,7 +224,7 @@ namespace Hive.IO.Building
 
 
 
-        public DynamicShading(rg.BrepFace surface_geometry) : base(surface_geometry)
+        public DynamicShading(rg.BrepFace surface_geometry) : base(surface_geometry, false)
         {
 
         }

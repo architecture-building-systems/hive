@@ -78,6 +78,9 @@ namespace Hive.IO.Building
 
 
         #region Building Components
+
+        public List<Component> SurfaceComponents { get; private set; }
+
         /// <summary>
         /// Wall components of this zone. Cannot be empty.
         /// </summary>
@@ -93,7 +96,7 @@ namespace Hive.IO.Building
         /// <summary>
         /// Apertures of this zone, e.g. windows, skylights, doors, ventilation openings, etc.. Can be empty.
         /// </summary>
-        public Opening[] Openings { get; private set; }
+        public Window[] Openings { get; private set; }
         /// <summary>
         /// Roof components of this zone. Can be empty.
         /// </summary>
@@ -226,7 +229,7 @@ namespace Hive.IO.Building
 
             if (this.IsValid)
             {
-                Tuple<Wall[], Ceiling[], Roof[], Floor[], Opening[], Shading[]> tuple = IdentifyComponents(zone_geometry, openingSrfs, shadingSrfs);
+                Tuple<Wall[], Ceiling[], Roof[], Floor[], Window[], Shading[]> tuple = IdentifyComponents(zone_geometry, openingSrfs, shadingSrfs);
                 this.Walls = tuple.Item1;
                 this.Ceilings = tuple.Item2;
                 this.Roofs = tuple.Item3;
@@ -268,8 +271,11 @@ namespace Hive.IO.Building
             }
 
 
-
-
+            this.SurfaceComponents.AddRange(this.Walls);
+            this.SurfaceComponents.AddRange(this.Ceilings);
+            this.SurfaceComponents.AddRange(this.Roofs);
+            this.SurfaceComponents.AddRange(this.Floors);
+            this.SurfaceComponents.AddRange(this.Openings);
         }
         #endregion
 
@@ -506,17 +512,17 @@ namespace Hive.IO.Building
         /// <param name="openings_geometry"></param>
         /// <param name="shading_geometry"></param>
         /// <returns></returns>
-        private static Tuple<Wall[], Ceiling[], Roof[], Floor[], Opening[], Shading[]>
+        private static Tuple<Wall[], Ceiling[], Roof[], Floor[], Window[], Shading[]>
             IdentifyComponents(rg.Brep zone_geometry, rg.BrepFace[] openings_geometry, rg.BrepFace[] shading_geometry)
         {
-            Opening[] openings = new Opening[0];
+            Window[] openings = new Window[0];
             Shading[] shadings = new Shading[0];
             if (openings_geometry != null && openings_geometry.Length > 0)
             {
-                openings = new Opening[openings_geometry.Length];
+                openings = new Window[openings_geometry.Length];
                 for (int i = 0; i < openings.Length; i++)
                 {
-                    openings[i] = new Opening(openings_geometry[i]);
+                    openings[i] = new Window(openings_geometry[i]);
                 }
             }
 
@@ -573,7 +579,7 @@ namespace Hive.IO.Building
                 floors[i] = new Floor(zone_geometry.Faces[floor_indices[i]]);
 
 
-            return new Tuple<Wall[], Ceiling[], Roof[], Floor[], Opening[], Shading[]>(walls, ceilings, roofs, floors, openings, shadings);
+            return new Tuple<Wall[], Ceiling[], Roof[], Floor[], Window[], Shading[]>(walls, ceilings, roofs, floors, openings, shadings);
         }
         #endregion
     }

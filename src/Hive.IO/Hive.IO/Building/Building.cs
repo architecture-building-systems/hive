@@ -54,33 +54,37 @@ namespace Hive.IO.Building
         {
             SIA2024 = siaRoom;
 
-            OpaqueConstruction opaqueConstruction = new OpaqueConstruction("SIA2024_Opaque")
-            {
-                UValue = siaRoom.UValueOpaque
-            };
-            TransparentConstruction transparentConstruction = new TransparentConstruction("SIA2024_Window")
-            {
-                UValue = siaRoom.UValueTransparent,
-                Transmissivity = siaRoom.GValue
-            };
+            //OpaqueConstruction opaqueConstruction = new OpaqueConstruction("SIA2024_Opaque")
+            //{
+            //    UValue = siaRoom.UValueOpaque
+            //};
+            //TransparentConstruction transparentConstruction = new TransparentConstruction("SIA2024_Window")
+            //{
+            //    UValue = siaRoom.UValueTransparent,
+            //    Transmissivity = siaRoom.GValue
+            //};
 
             foreach(Zone zone in zones)
             {
-                foreach (Wall wall in zone.Walls)
+                foreach(Component component in zone.SurfaceComponents)
                 {
-                    wall.Construction = opaqueConstruction;
-                    wall.Cost = siaRoom.OpaqueCost;
-                    wall.CO2 = siaRoom.OpaqueEmissions;
+                    component.ApplySia2024Construction(siaRoom);
                 }
+                //foreach (Wall wall in zone.Walls)
+                //{
+                //    wall.Construction = opaqueConstruction;
+                //    wall.Cost = siaRoom.OpaqueCost;
+                //    wall.CO2 = siaRoom.OpaqueEmissions;
+                //}
 
-                foreach (Roof roof in zone.Roofs)
-                    roof.Construction = opaqueConstruction;
-                foreach (Ceiling ceiling in zone.Ceilings)
-                    ceiling.Construction = opaqueConstruction;
-                foreach (Floor floor in zone.Floors)
-                    floor.Construction = opaqueConstruction;
-                foreach (Opening opening in zone.Openings)
-                    opening.Construction = transparentConstruction;
+                //foreach (Roof roof in zone.Roofs)
+                //    roof.Construction = opaqueConstruction;
+                //foreach (Ceiling ceiling in zone.Ceilings)
+                //    ceiling.Construction = opaqueConstruction;
+                //foreach (Floor floor in zone.Floors)
+                //    floor.Construction = opaqueConstruction;
+                //foreach (Window opening in zone.Openings)
+                //    opening.Construction = transparentConstruction;
             }
         }
 
