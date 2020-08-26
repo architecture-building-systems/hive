@@ -54,7 +54,7 @@ namespace Hive.IO.GhDistributors
                 }
 
                 windowAreas[i] = 0.0;
-                foreach (Window opening in zone.Openings)
+                foreach (Window opening in zone.Windows)
                 {
                     windowAreas[i] += opening.Area;
                 }

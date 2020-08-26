@@ -80,7 +80,7 @@ namespace Hive.IO.Building
         #region Building Components
 
         public IEnumerable<Component> SurfaceComponents =>
-            Walls.Cast<Component>().Concat(Ceilings).Concat(Roofs).Concat(Floors).Concat(Openings);
+            Walls.Cast<Component>().Concat(Ceilings).Concat(Roofs).Concat(Floors).Concat(Windows);
 
         /// <summary>
         /// Wall components of this zone. Cannot be empty.
@@ -97,7 +97,7 @@ namespace Hive.IO.Building
         /// <summary>
         /// Apertures of this zone, e.g. windows, skylights, doors, ventilation openings, etc.. Can be empty.
         /// </summary>
-        public Window[] Openings { get; private set; }
+        public Window[] Windows { get; private set; }
         /// <summary>
         /// Roof components of this zone. Can be empty.
         /// </summary>
@@ -110,7 +110,7 @@ namespace Hive.IO.Building
 
         public double WallArea => Walls.Sum(w => w.Area);
         public double RoofArea => Roofs.Sum(r => r.Area);
-        public double WindowArea => Openings.Sum(o => o.Area);
+        public double WindowArea => Windows.Sum(o => o.Area);
         public double FloorArea => Floors.Sum(f => f.Area);
 
         #endregion
@@ -182,7 +182,7 @@ namespace Hive.IO.Building
         /// <param name="zone_geometry">Brep geometry. Must be closed, linear and convex.</param>
         /// <param name="index">Unique identifier</param>
         /// <param name="name">Zone name, e.g. kitchen 1</param>
-        public Zone(rg.Brep zone_geometry, int index, double tolerance, string name, rg.BrepFace[] openingSrfs = null, rg.BrepFace[] floorSrfs = null, rg.BrepFace[] shadingSrfs = null)
+        public Zone(rg.Brep zone_geometry, int index, double tolerance, string name, rg.BrepFace[] windowSrfs = null, rg.BrepFace[] floorSrfs = null, rg.BrepFace[] shadingSrfs = null)
         {
             this.ZoneGeometry = zone_geometry;
             this.Index = index;
@@ -204,10 +204,10 @@ namespace Hive.IO.Building
                 this.IsConvex = CheckConvexity(this.ZoneGeometry, this.Tolerance);
             }
 
-            if (openingSrfs.Length > 0)
+            if (windowSrfs.Length > 0)
             {
-                this.IsWindowsOnZone = CheckWindowsOnZone(this.ZoneGeometry, openingSrfs, this.Tolerance);
-                this.IsWindowsNoSelfIntersect = CheckWindowsSelfIntersect(openingSrfs, this.Tolerance);
+                this.IsWindowsOnZone = CheckWindowsOnZone(this.ZoneGeometry, windowSrfs, this.Tolerance);
+                this.IsWindowsNoSelfIntersect = CheckWindowsSelfIntersect(windowSrfs, this.Tolerance);
             }
 
             var floorList = new List<rg.BrepFace>();
@@ -230,7 +230,7 @@ namespace Hive.IO.Building
 
             if (this.IsValid)
             {
-                Tuple<Wall[], Ceiling[], Roof[], Floor[], Window[], Shading[]> tuple = IdentifyComponents(zone_geometry, openingSrfs, shadingSrfs);
+                Tuple<Wall[], Ceiling[], Roof[], Floor[], Window[], Shading[]> tuple = IdentifyComponents(zone_geometry, windowSrfs, shadingSrfs);
                 this.Walls = tuple.Item1;
                 this.Ceilings = tuple.Item2;
                 this.Roofs = tuple.Item3;
@@ -243,7 +243,7 @@ namespace Hive.IO.Building
                 for (int i=mainFloors; i<mainFloors+additionalFloors; i++)
                     this.Floors[i] = new Floor(floorList[i - mainFloors]);
 
-                this.Openings = tuple.Item5;
+                this.Windows = tuple.Item5;
                 this.ShadingDevices = tuple.Item6;
 
                 this.Volume = zone_geometry.GetVolume();

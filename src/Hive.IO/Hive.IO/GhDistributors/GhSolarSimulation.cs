@@ -82,7 +82,7 @@ namespace Hive.IO.GhDistributors
                     extSrfs.Add(roof.BrepGeometry);
                 }
 
-                foreach(Window opening in zone.Openings)
+                foreach(Window opening in zone.Windows)
                 {
                     windows.Add(opening.BrepGeometry);
                     double[] winProp = ComputeTiltAzimuthArea(opening.BrepGeometry);
