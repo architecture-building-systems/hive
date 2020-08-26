@@ -1,44 +1,8 @@
-﻿
+﻿using System;
 
 namespace Hive.IO.EnergySystems
 {
     #region MiscSupply
-
-    // these are all networks, containing input energy carriers. but not conversion tech
-    /*
-    public class ElectricityGrid : ConversionTech
-    {
-        public ElectricityGrid(double investmentCost, double embodiedGhg) 
-            : base(investmentCost, embodiedGhg, double.MaxValue, "kW", false, false, true)
-        {
-        }
-
-
-    }
-
-    public class DistrictHeating : ConversionTech
-    {
-        public DistrictHeating(double investmentCost, double embodiedGhg) 
-            : base(investmentCost, embodiedGhg, Double.MaxValue, "kW", true, false, false)
-        {
-        }
-
-
-    }
-
-
-    public class DistrictCooling : ConversionTech
-    {
-        public DistrictCooling(double investmentCost, double embodiedGhg) 
-            : base(investmentCost, embodiedGhg, double.MaxValue, "kW", false, true, false)
-        {
-        }
-
-
-
-    }
-    */
-
 
     public class Chiller : ConversionTech
     {
@@ -46,39 +10,97 @@ namespace Hive.IO.EnergySystems
         /// Ambient air carrier. This will influence COP of the Chiller
         /// </summary>
         public Air AmbientAir { get; private set; }
-        public double COP { get; private set; }
-        public Chiller(double investmentCost, double embodiedGhg, double capacity, double COP) 
+        public double EtaRef { get; private set; }
+        public Chiller(double investmentCost, double embodiedGhg, double capacity, double etaRef) 
             : base(investmentCost, embodiedGhg, capacity, "kW", false, true, false)
         {
-            this.COP = COP;
+            this.EtaRef = etaRef;
             base.Name = "Chiller";
         }
 
 
-        /// <summary>
-        /// inputs from Hive.IO.Environment. But electricity also needs information on quantity... form Core simulator? 
-        /// </summary>
-        /// <param name="ambientAir"></param>
-        /// <param name="electricity"></param>
-        public void SetInput(Air ambientAir, Electricity electricity)
+        public void SetInputOutputSimple(Electricity electricityIn, double[] coolingGenerated, double [] tempWarm, double [] tempCold)
         {
-            this.AmbientAir = ambientAir;
-            base.InputCarrier = electricity;
+            int horizon = coolingGenerated.Length;
+
+            var tempWarmHorizon = new double[horizon];
+            var tempColdHorizon = new double[horizon];
+
+            var elecConsumed = new double[horizon];
+            var elecPrice = new double[horizon];
+            var elecEmissionsFactor = new double[horizon];
+
+            if (horizon == Misc.MonthsPerYear)
+            {
+                elecPrice = Misc.GetAverageMonthlyValue(electricityIn.EnergyPrice);
+                elecEmissionsFactor = Misc.GetAverageMonthlyValue(electricityIn.GhgEmissionsFactor);
+                tempWarmHorizon = Misc.GetAverageMonthlyValue(tempWarm);
+                tempColdHorizon = Misc.GetAverageMonthlyValue(tempCold);
+            }
+            else
+            {
+                elecPrice = electricityIn.EnergyPrice;
+                elecEmissionsFactor = electricityIn.GhgEmissionsFactor;
+                tempWarmHorizon = tempWarm;
+                tempColdHorizon = tempCold;
+            }
+
+            for (int t = 0; t < horizon; t++)
+            {
+                double COP = this.EtaRef * (tempWarmHorizon[t] / (tempWarmHorizon[t] - tempColdHorizon[t]));
+                elecConsumed[t] = coolingGenerated[t] / COP;
+            }
+
+            Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor);
+            base.InputCarrier = electricityConsumedCarrier;
+
+            base.OutputCarriers = new EnergyCarrier[1];
+            base.OutputCarriers[0] = new Water(horizon, coolingGenerated, null, null, tempCold);
+            
         }
 
 
         /// <summary>
-        /// parameters from a simulator in Hive.IO.Core
+        /// 10.1016/j.apenergy.2019.03.177
+        /// Eq. A.8
         /// </summary>
-        /// <param name="horizon"></param>
-        /// <param name="availableEnergy"></param>
-        /// <param name="energyCost"></param>
-        /// <param name="ghgEmissions"></param>
-        /// <param name="supplyTemperature"></param>
-        public void SetOutput(int horizon, double[] availableEnergy, double[] energyCost, double[] ghgEmissions, double[] supplyTemperature)
+        /// <param name="electricityIn">Empty electricity carrier, i.e. no information yet how much is consumed. Will be computed here and be infused into this.InputCarrier</param>
+        /// <param name="airIn"></param>
+        /// <param name="coolingGenerated"></param>
+        /// <param name="supplyTemp"></param>
+        public void SetInputOutput(Electricity electricityIn, Air airIn, double[] coolingGenerated, double [] supplyTemp)
         {
+            int horizon = coolingGenerated.Length;
+
+            var elecConsumed = new double[horizon];
+            var elecPrice = new double[horizon];
+            var elecEmissionsFactor = new double[horizon];
+            var airTemp = new double[horizon];
+
+            if (horizon == Misc.MonthsPerYear)
+            {
+                elecPrice = Misc.GetAverageMonthlyValue(electricityIn.EnergyPrice);
+                elecEmissionsFactor = Misc.GetAverageMonthlyValue(electricityIn.GhgEmissionsFactor);
+                airTemp = airIn.MonthlyTemperature;
+            }
+            else
+            {
+                elecPrice = electricityIn.EnergyPrice;
+                elecEmissionsFactor = electricityIn.GhgEmissionsFactor;
+                airTemp = airIn.Temperature;
+            }
+
+            for (int t = 0; t < horizon; t++)
+            {
+                double COP = (638.95 - 4.238 * airTemp[t]) / (100.0 + 3.534 * airTemp[t]);
+                elecConsumed[t] = coolingGenerated[t] / COP;
+            }
+
+            Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor);
+            base.InputCarrier = electricityConsumedCarrier;
+
             base.OutputCarriers = new EnergyCarrier[1];
-            base.OutputCarriers[0] = new Water(horizon, availableEnergy, energyCost, ghgEmissions, supplyTemperature);
+            base.OutputCarriers[0] = new Water(horizon, coolingGenerated, null, null, supplyTemp);
         }
     }
 
@@ -89,40 +111,154 @@ namespace Hive.IO.EnergySystems
         /// Ambient air carrier. This will influence COP of the ASHP
         /// </summary>
         public Air AmbientAir { get; private set; }
-		public double COP { get; private set; }
-        public AirSourceHeatPump(double investmentCost, double embodiedGhg, double capacity, double COP) 
+		public double EtaRef { get; private set; }
+        public AirSourceHeatPump(double investmentCost, double embodiedGhg, double capacity, double etaRef) 
             : base(investmentCost, embodiedGhg, capacity, "kW", true, false, false)
         {
-			this.COP = COP;
+			this.EtaRef = etaRef;
             base.Name = "AirSourceHeatPump";
         }
 
 
-        /// <summary>
-        /// inputs from Hive.IO.Environment. But electricity also needs information on quantity... form Core simulator? 
-        /// </summary>
-        /// <param name="ambientAir"></param>
-        /// <param name="electricity"></param>
-        public void SetInput(Air ambientAir, Electricity electricity)
+        // this is a copy of Chiller.setinpuitoutputsimple... can we avoid redundancy? Make abstract class HeatPump?
+        public void SetInputOutputSimple(Electricity electricityIn, double[] heatingGenerated, double[] tempWarm, double[] tempCold)
         {
-            this.AmbientAir = ambientAir;
-            base.InputCarrier = electricity;
-        }
+            int horizon = heatingGenerated.Length;
 
+            var tempWarmHorizon = new double[horizon];
+            var tempColdHorizon = new double[horizon];
 
-        /// <summary>
-        /// parameters from a simulator in Hive.IO.Core
-        /// </summary>
-        /// <param name="horizon"></param>
-        /// <param name="availableEnergy"></param>
-        /// <param name="energyCost"></param>
-        /// <param name="ghgEmissions"></param>
-        /// <param name="supplyTemperature"></param>
-        public void SetOutput(int horizon, double[] availableEnergy, double[] energyCost, double[] ghgEmissions, double[] supplyTemperature)
-        {
+            var elecConsumed = new double[horizon];
+            var elecPrice = new double[horizon];
+            var elecEmissionsFactor = new double[horizon];
+
+            if (horizon == Misc.MonthsPerYear)
+            {
+                elecPrice = Misc.GetAverageMonthlyValue(electricityIn.EnergyPrice);
+                elecEmissionsFactor = Misc.GetAverageMonthlyValue(electricityIn.GhgEmissionsFactor);
+                tempWarmHorizon = Misc.GetAverageMonthlyValue(tempWarm);
+                tempColdHorizon = Misc.GetAverageMonthlyValue(tempCold);
+            }
+            else
+            {
+                elecPrice = electricityIn.EnergyPrice;
+                elecEmissionsFactor = electricityIn.GhgEmissionsFactor;
+                tempWarmHorizon = tempWarm;
+                tempColdHorizon = tempCold;
+            }
+
+            for (int t = 0; t < horizon; t++)
+            {
+                double COP = this.EtaRef * (tempWarmHorizon[t] / (tempWarmHorizon[t] - tempColdHorizon[t]));
+                elecConsumed[t] = heatingGenerated[t] / COP;
+            }
+
+            Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor);
+            base.InputCarrier = electricityConsumedCarrier;
+
             base.OutputCarriers = new EnergyCarrier[1];
-            base.OutputCarriers[0] = new Water(horizon, availableEnergy, energyCost, ghgEmissions, supplyTemperature);
+            base.OutputCarriers[0] = new Water(horizon, heatingGenerated, null, null, tempCold);
+
         }
+
+
+        /// <summary>
+        /// 10.1016/j.apenergy.2019.03.177  Eq. (A.7)
+        /// </summary>
+        /// <param name="electricityIn"></param>
+        /// <param name="airIn"></param>
+        /// <param name="heatingGenerated"></param>
+        /// <param name="supplyTemp"></param>
+        public void SetInputOutput(Electricity electricityIn, Air airIn, double[] heatingGenerated, double[] supplyTemp, 
+            double pi1 = 13.39, double pi2 = -0.047, double pi3 = 1.109, double pi4 = 0.012)
+        {
+            int horizon = heatingGenerated.Length;
+
+            var elecConsumed = new double[horizon];
+            var elecPrice = new double[horizon];
+            var elecEmissionsFactor = new double[horizon];
+            var airTemp = new double[horizon];
+
+            if (horizon == Misc.MonthsPerYear)
+            {
+                elecPrice = Misc.GetAverageMonthlyValue(electricityIn.EnergyPrice);
+                elecEmissionsFactor = Misc.GetAverageMonthlyValue(electricityIn.GhgEmissionsFactor);
+                airTemp = airIn.MonthlyTemperature;
+            }
+            else
+            {
+                elecPrice = electricityIn.EnergyPrice;
+                elecEmissionsFactor = electricityIn.GhgEmissionsFactor;
+                airTemp = airIn.Temperature;
+            }
+
+            for (int t = 0; t < horizon; t++)
+            {
+                double COP = pi1 * Math.Exp(pi2 * (supplyTemp[t] - airTemp[t])) + pi3 * Math.Exp(pi4 * (supplyTemp[t] - airTemp[t]));
+                elecConsumed[t] = heatingGenerated[t] / COP;
+            }
+
+            Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor);
+            base.InputCarrier = electricityConsumedCarrier;
+
+            base.OutputCarriers = new EnergyCarrier[1];
+            base.OutputCarriers[0] = new Water(horizon, heatingGenerated, null, null, supplyTemp);
+        }
+    }
+
+
+
+    public class HeatCoolingExchanger : ConversionTech
+    {
+        // assume perfect heat exchange?, according to Dr. Somil District Heating Miglani, only distribution losses. but since we don't have network implemented yet, lets use a coefficient
+        public double DistributionLosses { get; private set; }
+
+
+        public HeatCoolingExchanger(double investmentCost, double embodiedGhg, double capacity, double losses, bool heatingExchanger = true, bool coolingExchanger = false)
+            : base(investmentCost, embodiedGhg, capacity, "kW", heatingExchanger, coolingExchanger, false)
+        {
+            this.DistributionLosses = losses;
+            if (heatingExchanger && !coolingExchanger)
+                base.Name = "HeatExchanger";
+            else if (coolingExchanger && !heatingExchanger)
+                base.Name = "CoolingExchanger";
+            else if (heatingExchanger && coolingExchanger)
+                base.Name = "HeatCoolingExchanger";
+        }
+
+
+        public void SetInputOutput(Water districtFluid, double[] generatedEnergy, double [] supplyTemp, double [] returnTemp)
+        {
+            int horizon = generatedEnergy.Length;
+            var consumedEnergy = new double[horizon];
+            var energyPrice = new double[horizon];
+            var energyGhg = new double[horizon];
+
+            if (horizon == Misc.MonthsPerYear)
+            {
+                energyPrice = Misc.GetAverageMonthlyValue(districtFluid.EnergyPrice);
+                energyGhg = Misc.GetAverageMonthlyValue(districtFluid.GhgEmissionsFactor);
+            }
+            else
+            {
+                energyPrice = districtFluid.EnergyPrice;
+                energyGhg = districtFluid.GhgEmissionsFactor;
+            }
+
+            for(int t=0; t<horizon; t++)
+            {
+                consumedEnergy[t] = generatedEnergy[t] / (1.0 - this.DistributionLosses);
+            }
+
+            base.InputCarrier = new Water(horizon, consumedEnergy, energyPrice, energyGhg, supplyTemp);  // simplified assumption, that DH supply temp is already at the right level
+
+            base.OutputCarriers = new EnergyCarrier[1] { new Water(horizon, generatedEnergy, null, null, supplyTemp) };
+
+        }
+
+
+
+
     }
 
     #endregion
@@ -191,9 +327,7 @@ namespace Hive.IO.EnergySystems
 
 
 
-        protected ConversionTech(double investmentCost, double embodiedGhg,
-            double capacity, string capacityUnity,
-            bool isHeating, bool isCooling, bool isElectric)
+        protected ConversionTech(double investmentCost, double embodiedGhg, double capacity, string capacityUnity, bool isHeating, bool isCooling, bool isElectric)
         {
             this.SpecificInvestmentCost = investmentCost;
             this.SpecificEmbodiedGhg = embodiedGhg;

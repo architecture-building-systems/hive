@@ -29,7 +29,7 @@ def solar_tech_set_outputs(GHSolar_CResults, Hive_SurfaceBased, amb_T_carrier, e
         if isinstance(solar_tech, ensys.Photovoltaic):
             solar_tech.SetInputComputeOutput(GHSolar_CResults[i].I_hourly, amb_T_carrier)
         if isinstance(solar_tech, ensys.SolarThermal):
-            solar_tech.SetInputComputeOutput(GHSolar_CResults[i].I_hourly, emitter.ReturnCarrier, amb_T_carrier)
+            solar_tech.SetInputComputeOutput(GHSolar_CResults[i].I_hourly, emitter.ReturnCarrier.Temperature, emitter.InletCarrier.Temperature, amb_T_carrier)
         if isinstance(solar_tech, ensys.GroundCollector):
             pass
             # hot_water_generated =

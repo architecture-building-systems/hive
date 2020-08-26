@@ -2,18 +2,18 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
-using Rhino.Geometry;
 using Hive.IO.EnergySystems;
+
 
 namespace Hive.IO.GhMergers
 {
-    public class GhGasBoiler : GH_Component
+    public class GhCoolingExchanger : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the GhMergerGasBoiler class.
+        /// Initializes a new instance of the GhCoolingExchanger class.
         /// </summary>
-        public GhGasBoiler()
-          : base("Merger GasBoiler Hive", "HiveMergerBoiler",
+        public GhCoolingExchanger()
+          : base("Merger CoolingExchanger Hive", "HiveMergerCX",
               "Description",
               "[hive]", "IO")
         {
@@ -28,11 +28,14 @@ namespace Hive.IO.GhMergers
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Gas", "Gas", "Gas", GH_ParamAccess.item);
-            pManager.AddNumberParameter("heatDemand", "heatDemand", "heatDemand (kWh). Either 12 values (monthly) or 8760 (hourly)", GH_ParamAccess.list);
-            pManager.AddNumberParameter("suppTemp", "suppTemp", "Water temperature at the outlet of the boiler", GH_ParamAccess.list);
+            pManager.AddGenericParameter("DistrictCooling", "DistrictCooling", "DistrictCooling, as <Water>", GH_ParamAccess.item);
 
-            pManager.AddGenericParameter("Hive.IO.GasBoiler", "GasBoiler", "GasBoiler", GH_ParamAccess.item);
+            pManager.AddNumberParameter("coolDemand", "coolDemand", "coolDemand", GH_ParamAccess.list);
+            pManager.AddNumberParameter("suppTemp", "suppTemp", "suppTemp", GH_ParamAccess.list);
+            pManager.AddNumberParameter("returnTemp", "returnTemp", "returnTemp", GH_ParamAccess.list);
+
+            pManager.AddGenericParameter("CoolingExchanger", "CoolingExchanger", "CoolingExchanger", GH_ParamAccess.item);
+
         }
 
         /// <summary>
@@ -40,7 +43,7 @@ namespace Hive.IO.GhMergers
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Hive.IO.GasBoiler", "GasBoiler", "GasBoiler", GH_ParamAccess.item);
+            pManager.AddGenericParameter("CoolingExchanger", "CoolingExchanger", "CoolingExchanger, infused with coolingConsumed and 'generated' and operational cost and emissions", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -49,20 +52,24 @@ namespace Hive.IO.GhMergers
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            Gas gas = null;
-            DA.GetData(0, ref gas);
-          
-            var heatingDemand = new List<double>();
-            DA.GetDataList(1, heatingDemand);
+            Water dc = null;
+            DA.GetData(0, ref dc);
+
+            var coolDemand = new List<double>();
+            DA.GetDataList(1, coolDemand);
 
             var supplyTemp = new List<double>();
             DA.GetDataList(2, supplyTemp);
 
-            GasBoiler boiler = null;
-            DA.GetData(3, ref boiler);
+            var returnTemp = new List<double>();
+            DA.GetDataList(3, returnTemp);
 
-            boiler.SetInputOutput(gas, heatingDemand.ToArray(), supplyTemp.ToArray());
-            DA.SetData(0, boiler);
+            HeatCoolingExchanger cx = null;
+            DA.GetData(4, ref cx);
+
+            cx.SetInputOutput(dc, coolDemand.ToArray(), supplyTemp.ToArray(), returnTemp.ToArray());
+
+            DA.SetData(0, cx);
         }
 
         /// <summary>
@@ -83,7 +90,7 @@ namespace Hive.IO.GhMergers
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("a8196942-924f-44d7-83e7-19565b462b6f"); }
+            get { return new Guid("d0e958ac-4d82-4942-adc4-89b53f1d3c85"); }
         }
     }
 }

@@ -21,8 +21,17 @@ namespace Hive.IO.EnergySystems
                 returnTemperatures[t] = returnTemperature;
             }
 
-            Water waterIn = new Water(Horizon, new double[Horizon], new double[Horizon], new double[Horizon], inletTemperatures);
-            Water waterOut = new Water(Horizon, new double[Horizon], new double[Horizon], new double[Horizon], returnTemperatures);
+            base.InletCarrier = new Water(Misc.HoursPerYear, null, null, null, inletTemperatures);
+            base.ReturnCarrier = new Water(Misc.HoursPerYear, null, null, null, returnTemperatures);
+        }
+
+        /// <summary>
+        /// Setting supply and return carriers. Should contain information on energy (function of flowrate and temperature)
+        /// </summary>
+        /// <param name="waterIn">Supply</param>
+        /// <param name="waterOut">Return</param>
+        public void SetWaterflow(Water waterIn, Water waterOut)
+        {
             base.InletCarrier = waterIn;
             base.ReturnCarrier = waterOut;
         }
@@ -42,8 +51,12 @@ namespace Hive.IO.EnergySystems
                 returnTemperatures[t] = returnTemperature;
             }
 
-            Air airIn = new Air(Horizon, inletTemperatures);
-            Air airOut = new Air(Horizon, returnTemperatures);
+            base.InletCarrier = new Air(Misc.HoursPerYear, null, null, null, inletTemperatures);
+            base.ReturnCarrier = new Air(Misc.HoursPerYear, null, null, null, returnTemperatures);
+        }
+
+        public void SetAirflow(Air airIn, Air airOut)
+        {
             base.InletCarrier = airIn;
             base.ReturnCarrier = airOut;
         }

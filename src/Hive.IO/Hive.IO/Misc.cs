@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using Rhino.Geometry;
 
 namespace Hive.IO
 {
@@ -14,60 +11,108 @@ namespace Hive.IO
         public static readonly int[] DaysPerMonth = new int[12] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
         public const int HoursPerDay = 24;
         public const int HoursPerYear = 8760;
+        public const int MonthsPerYear = 12;
 
         public static double[] GetAverageMonthlyValue(double[] annualTimeSeries)
         {
-
-            int months = 12;
-            double[] monthlyTimeSeries = new double[months];
-            int sumOfDays = 0;
-            for (int t = 0; t < months; t++)
+            double[] monthlyTimeSeries = new double[Misc.MonthsPerYear];
+            if (annualTimeSeries.Length == Misc.HoursPerYear)
             {
-                int startIndex = sumOfDays * Misc.HoursPerDay;
-                int daysThisMonth = Misc.DaysPerMonth[t];
-                sumOfDays += daysThisMonth;
-                int endIndex = sumOfDays * Misc.HoursPerDay;
-                double average = 0.0;
-                for (int i = startIndex; i < endIndex; i++)
+                int sumOfDays = 0;
+                for (int t = 0; t < Misc.MonthsPerYear; t++)
                 {
-                    double temp = annualTimeSeries[i];
-                    if (double.IsNaN(temp))
-                        temp = 0.0;
-                    average += temp;
+                    int startIndex = sumOfDays * Misc.HoursPerDay;
+                    int daysThisMonth = Misc.DaysPerMonth[t];
+                    sumOfDays += daysThisMonth;
+                    int endIndex = sumOfDays * Misc.HoursPerDay;
+                    double average = 0.0;
+                    for (int i = startIndex; i < endIndex; i++)
+                    {
+                        double temp = annualTimeSeries[i];
+                        if (double.IsNaN(temp))
+                            temp = 0.0;
+                        average += temp;
+                    }
+                    average /= (daysThisMonth * Misc.HoursPerDay);
+                    //double average = Enumerable.Range(startIndex, endIndex).Select(i => annualTimeSeries[i]).Average();
+                    monthlyTimeSeries[t] = average;
                 }
-
-                average /= (daysThisMonth * Misc.HoursPerDay);
-                //double average = Enumerable.Range(startIndex, endIndex).Select(i => annualTimeSeries[i]).Average();
-                monthlyTimeSeries[t] = average;
+                return monthlyTimeSeries;
             }
-
-            return monthlyTimeSeries;
+            else if(annualTimeSeries.Length == Misc.MonthsPerYear)
+            {
+                return annualTimeSeries;
+            }
+            else
+            {
+                return null;
+            }
         }
 
 
         public static double[] GetCumulativeMonthlyValue(double[] annualTimeSeries)
         {
-            int months = 12;
-            double[] monthlyTimeSeries = new double[months];
-            int sumOfDays = 0;
-            for (int t = 0; t < months; t++)
+            double[] monthlyTimeSeries = new double[Misc.MonthsPerYear];
+            if (annualTimeSeries.Length == Misc.HoursPerYear)
             {
-                int startIndex = sumOfDays * Misc.HoursPerDay;
-                int daysThisMonth = Misc.DaysPerMonth[t];
-                sumOfDays += daysThisMonth;
-                int endIndex = sumOfDays * Misc.HoursPerDay;
-                double sum = 0.0;
-                for (int i = startIndex; i < endIndex; i++)
+                int sumOfDays = 0;
+                for (int t = 0; t < Misc.MonthsPerYear; t++)
                 {
-                    double temp = annualTimeSeries[i];
-                    if (double.IsNaN(temp))
-                        temp = 0.0;
-                    sum += temp;
+                    int startIndex = sumOfDays * Misc.HoursPerDay;
+                    int daysThisMonth = Misc.DaysPerMonth[t];
+                    sumOfDays += daysThisMonth;
+                    int endIndex = sumOfDays * Misc.HoursPerDay;
+                    double sum = 0.0;
+                    for (int i = startIndex; i < endIndex; i++)
+                    {
+                        double temp = annualTimeSeries[i];
+                        if (double.IsNaN(temp))
+                            temp = 0.0;
+                        sum += temp;
+                    }
+                    monthlyTimeSeries[t] = sum;
                 }
-                monthlyTimeSeries[t] = sum;
+                return monthlyTimeSeries;
+            }
+            else if (annualTimeSeries.Length == Misc.MonthsPerYear)
+            {
+                return annualTimeSeries;
+            }
+            else
+            {
+                return null;
+            }
+        }
+
+        // source: http://james-ramsden.com/area-of-a-mesh-face-in-c-in-grasshopper/
+        public static double GetMeshFaceArea(int _meshFaceIndex, Mesh _mesh)
+        {
+            // get points into a nice, concise format
+            Point3d pt0 = _mesh.Vertices[_mesh.Faces[_meshFaceIndex].A];
+            Point3d pt1 = _mesh.Vertices[_mesh.Faces[_meshFaceIndex].B];
+            Point3d pt2 = _mesh.Vertices[_mesh.Faces[_meshFaceIndex].C];
+
+            // calculate areas of triangles
+            double a = pt0.DistanceTo(pt1);
+            double b = pt1.DistanceTo(pt2);
+            double c = pt2.DistanceTo(pt0);
+            double p = 0.5 * (a + b + c);
+            double area1 = Math.Sqrt(p * (p - a) * (p - b) * (p - c));
+
+            // if quad, calc area of second triangle
+            double area2 = 0.0;
+            if (_mesh.Faces[_meshFaceIndex].IsQuad)
+            {
+                Point3d pt3 = _mesh.Vertices[_mesh.Faces[_meshFaceIndex].D];
+                a = pt0.DistanceTo(pt2);
+                b = pt2.DistanceTo(pt3);
+                c = pt3.DistanceTo(pt0);
+                p = 0.5 * (a + b + c);
+                area2 = Math.Sqrt(p * (p - a) * (p - b) * (p - c));
             }
 
-            return monthlyTimeSeries;
+            return area1 + area2;
         }
+
     }
 }

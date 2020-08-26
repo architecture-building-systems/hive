@@ -28,11 +28,8 @@ namespace Hive.IO.GhMergers
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Gas", "Gas", "Gas", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("horizon", "horizon", "horizon", GH_ParamAccess.item);
-            pManager.AddNumberParameter("heatGenerated", "heatGenerated", "heatGenerated (kWh)", GH_ParamAccess.list);
-            pManager.AddNumberParameter("elecGenerated", "elecGenerated", "elecGenerated (kWh)", GH_ParamAccess.list);
-            pManager.AddNumberParameter("cost", "cost", "cost", GH_ParamAccess.list);
-            pManager.AddNumberParameter("ghg", "ghg", "ghg", GH_ParamAccess.list);
+            pManager.AddNumberParameter("energyDemand", "energyDemand", "energyDemand (kWh). Can be electricity (default) or heating", GH_ParamAccess.list);
+            pManager.AddBooleanParameter("IsHeatingDemand?", "IsHeatingDemand?", "IsHeatingDemand?", GH_ParamAccess.item, false);
             pManager.AddNumberParameter("suppTemp", "suppTemp", "suppTemp for water output. necessary to know for COP calculation", GH_ParamAccess.list);
 
             pManager.AddGenericParameter("Hive.IO.CombinedHeatPower", "CombinedHeatPower", "CombinedHeatPower", GH_ParamAccess.item);
@@ -55,32 +52,19 @@ namespace Hive.IO.GhMergers
             Gas gas = null;
             DA.GetData(0, ref gas);
 
-            int horizon = 8760;
-            DA.GetData(1, ref horizon);
+            var energyGenerated = new List<double>();
+            DA.GetDataList(1, energyGenerated);
 
-            var heatGenerated = new List<double>();
-            DA.GetDataList(2, heatGenerated);
-
-            var elecGenerated = new List<double>();
-            DA.GetDataList(3, elecGenerated);
-
-            var energyCost = new List<double>();
-            DA.GetDataList(4, energyCost);
-
-            var ghg = new List<double>();
-            DA.GetDataList(5, ghg);
+            bool isHeat = false;
+            DA.GetData(2, ref isHeat);
 
             var supplyTemp = new List<double>();
-            DA.GetDataList(6, supplyTemp);
+            DA.GetDataList(3, supplyTemp);
 
             CombinedHeatPower chp = null;
-            DA.GetData(7, ref chp);
+            DA.GetData(4, ref chp);
 
-
-            chp.SetInput(gas);
-
-            // this creates a water and electricity EnergyCarrier that will be infused into the CHP
-            chp.SetOutput(horizon, heatGenerated.ToArray(), elecGenerated.ToArray(), energyCost.ToArray(), ghg.ToArray(), supplyTemp.ToArray());
+            chp.SetInputOutput(gas, energyGenerated.ToArray(), supplyTemp.ToArray(), isHeat);
 
             DA.SetData(0, chp);
         }

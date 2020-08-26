@@ -241,7 +241,7 @@ namespace Hive.IO.GHComponents
                 {
                     var solarProperties = solarTechProperties[i];
                     Mesh mesh = meshList[i];
-                    //var solarProperties = JsonConvert.DeserializeObject<SolarTechProperties>(json);
+
                     if (solarProperties.Type == "PV")
                         conversionTech.Add(new Photovoltaic(solarProperties.InvestmentCost, solarProperties.EmbodiedEmissions, mesh, solarProperties.Technology, solarProperties.ElectricEfficiency));
                     else if (solarProperties.Type == "PVT")
@@ -259,15 +259,18 @@ namespace Hive.IO.GHComponents
             }
             else
             {
-                //var conversionTechProperties = JsonConvert.DeserializeObject<ConversionTechProperties>(conversionTechJson);
                 if (conversionTechProperties.ASHPCapacity > 0.0)
-                    conversionTech.Add(new AirSourceHeatPump(conversionTechProperties.ASHPCost, conversionTechProperties.ASHPEmissions, conversionTechProperties.ASHPCapacity, conversionTechProperties.ASHPCOP));
+                    conversionTech.Add(new AirSourceHeatPump(conversionTechProperties.ASHPCost, conversionTechProperties.ASHPEmissions, conversionTechProperties.ASHPCapacity, conversionTechProperties.ASHPEtaRef));
                 if (conversionTechProperties.GasBoilerCapacity > 0.0)
                     conversionTech.Add(new GasBoiler(conversionTechProperties.GasBoilerCost, conversionTechProperties.GasBoilerEmissions, conversionTechProperties.GasBoilerCapacity, conversionTechProperties.GasBoilerEfficiency));
                 if (conversionTechProperties.CHPCapacity > 0.0)
                     conversionTech.Add(new CombinedHeatPower(conversionTechProperties.CHPCost, conversionTechProperties.CHPEmissions, conversionTechProperties.CHPCapacity, conversionTechProperties.CHPHTP, conversionTechProperties.CHPEffElec));
                 if (conversionTechProperties.ChillerCapacity > 0.0)
-                    conversionTech.Add(new Chiller(conversionTechProperties.ChillerCost, conversionTechProperties.ChillerEmissions, conversionTechProperties.ChillerCapacity, conversionTechProperties.ChillerCOP));
+                    conversionTech.Add(new Chiller(conversionTechProperties.ChillerCost, conversionTechProperties.ChillerEmissions, conversionTechProperties.ChillerCapacity, conversionTechProperties.ChillerEtaRef));
+                if (conversionTechProperties.HeatExchangerCapacity > 0.0)
+                    conversionTech.Add(new HeatCoolingExchanger(conversionTechProperties.HeatExchangerCost, conversionTechProperties.HeatExchangerEmissions, conversionTechProperties.HeatExchangerCapacity, conversionTechProperties.HeatExchangerLosses));
+                if (conversionTechProperties.CoolExchangerCapacity > 0.0)
+                    conversionTech.Add(new HeatCoolingExchanger(conversionTechProperties.CoolExchangerCost, conversionTechProperties.CoolExchangerEmissions, conversionTechProperties.CoolExchangerCapacity, conversionTechProperties.CoolExchangerLosses, false, true));
             }
 
             var emitters = new List<Emitter>();

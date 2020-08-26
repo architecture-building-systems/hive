@@ -132,7 +132,7 @@ namespace Hive.IO.Environment
         {
             this.EnergyPotentials = new EnergyCarrier[this.totalPotentials];
             inputCarriers.CopyTo(this.EnergyPotentials, 0);
-            this.EnergyPotentials[6] = new Air(this.Horizon, this.ClimateData.DryBulbTemperature);
+            this.EnergyPotentials[6] = new Air(this.Horizon, null, null, null, this.ClimateData.DryBulbTemperature);
             this.EnergyPotentials[6].Name = "DryBulbTemperature";
             this.EnergyPotentials[7] = new Radiation(this.Horizon, this.ClimateData.GHI);
             this.EnergyPotentials[7].Name = "GHI"; // redundant, because <Radiation> has a enum for GHI
@@ -158,7 +158,7 @@ namespace Hive.IO.Environment
             this.EnergyPotentials[4].Name = "DistrictCooling";
             this.EnergyPotentials[5] = new Electricity(this.Horizon, Enumerable.Repeat<double>(double.MaxValue, this.Horizon).ToArray(), Enumerable.Repeat<double>(0.12, this.Horizon).ToArray(), Enumerable.Repeat<double>(0.597, this.Horizon).ToArray());
             this.EnergyPotentials[5].Name = "UCT-Mix";
-            this.EnergyPotentials[6] = new Air(this.Horizon, this.ClimateData.DryBulbTemperature);
+            this.EnergyPotentials[6] = new Air(this.Horizon, null, null, null, this.ClimateData.DryBulbTemperature);
             this.EnergyPotentials[6].Name = "DryBulbTemperature";
             this.EnergyPotentials[7] = new Radiation(this.Horizon, this.ClimateData.GHI);
             this.EnergyPotentials[7].Name = "GHI"; // redundant, because <Radiation> has a enum for GHI
