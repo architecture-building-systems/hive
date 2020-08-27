@@ -2,7 +2,7 @@ digraph energysystems {
     rankdir=LR;
     splines=ortho;
 
-    node [shape=html, style=filled];
+    node [shape=record, style=filled];
 
     
     
@@ -24,11 +24,19 @@ digraph energysystems {
         edge [arrowhead="empty", dir=back];
         node [fillcolor="yellow"];
 
-        ConversionTech;
+        ConversionTech[label="ConversionTech|Name\lDetailedName\lIsElectric\lIsHeating\lIsCooling\lCapacity\lCapacityUnit\lSpecificInvestmentCost\lSpecificEmbodiedGhg\l "];
+        
+        HeatCoolingExchanger[label="HeatCoolingExchanger|DistributionLosses"]
+        AirSourceHeatPump[label="AirSourceHeatPump|Air\lEtaRef\l "]
+        Chiller[label="Chiller|Air\lEtaRef\l "]
+
         ConversionTech -> AirSourceHeatPump;
         ConversionTech -> Chiller;
         ConversionTech -> HeatCoolingExchanger;
 
+        CombustionTech[label="CombustionTech"];
+        GasBoiler[label="GasBoiler|Efficiency"];
+        CombinedHeatPower[label="CombinedHeatPower|HeatToPowerRatio\lElectricEfficiency "];
         ConversionTech -> CombustionTech;
         CombustionTech -> CombinedHeatPower;
         CombustionTech -> GasBoiler;
