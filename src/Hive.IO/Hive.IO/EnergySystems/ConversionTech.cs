@@ -326,7 +326,6 @@ namespace Hive.IO.EnergySystems
         public EnergyCarrier[] OutputCarriers { get; protected set; }
 
 
-
         protected ConversionTech(double investmentCost, double embodiedGhg, double capacity, string capacityUnity, bool isHeating, bool isCooling, bool isElectric)
         {
             this.SpecificInvestmentCost = investmentCost;
@@ -337,21 +336,6 @@ namespace Hive.IO.EnergySystems
             this.IsCooling = isCooling;
             this.IsElectric = isElectric;
         }
-
-
-        // how can I change parameters of methods in derived classes? the argument should still be an EnergyCarrier, but I wanna specifiy, e.g. restricting to Solar
-
-        ///// <summary>
-        ///// Not part of the constructor, because it can be set at a later stage of the program
-        ///// For example, for PV, solar potentials need to be calculated first, which might happen after a PV object has been instantiated
-        ///// </summary>
-        ///// <param name="inputCarrier"></param>
-        //public virtual void SetInput(EnergyCarrier inputCarrier) { }
-        ///// <summary>
-        ///// Same as with inputs, the outputs might be calculated later after a Conversion class has been instantiated
-        ///// </summary>
-        ///// <param name="outputCarriers"></param>
-        //public virtual void SetOutputs(EnergyCarrier[] outputCarriers) { }
     }
 
 
