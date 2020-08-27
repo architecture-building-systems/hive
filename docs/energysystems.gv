@@ -1,30 +1,47 @@
 digraph energysystems {
-    rankdir=TB;
+    rankdir=LR;
     splines=ortho;
 
-    node [shape=html];
+    node [shape=html, style=filled];
 
-    subgraph baseClasses {
+    
+    
+    
+    subgraph energy_carriers {
+        node [style=filled, fillcolor=green];
+        edge [arrowhead="empty", dir=back];
+
         EnergyCarrier;
+        EnergyCarrier -> Water;
+        EnergyCarrier -> Air;
+        EnergyCarrier -> Gas;
+        EnergyCarrier -> Radiation;
+        EnergyCarrier -> Electricity;
+        EnergyCarrier -> Pellets;
+    }
+
+    subgraph conversion_technologies {
+        edge [arrowhead="empty", dir=back];
+        node [fillcolor="yellow"];
+
         ConversionTech;
+        ConversionTech -> AirSourceHeatPump;
+        ConversionTech -> Chiller;
+        ConversionTech -> HeatCoolingExchanger;
+
+        ConversionTech -> CombustionTech;
+        CombustionTech -> CombinedHeatPower;
+        CombustionTech -> GasBoiler;
+        
+        
+        ConversionTech -> SurfaceBasedTech;
+        SurfaceBasedTech -> GroundCollector;
+        SurfaceBasedTech -> Photovoltaic;
+        SurfaceBasedTech -> PVT;
+        SurfaceBasedTech -> SolarThermal;
     }
 
-    ConversionTech -> EnergyCarrier [headlabel="InputCarriers"]
-    ConversionTech -> EnergyCarrier [headlabel="OutputCarriers"]
-
-    # EnergyCarrier subclasses
-    subgraph EnergyCarrierSubclasses {
-        edge [arrowhead="empty"];
-        Water -> EnergyCarrier;
-        Air -> EnergyCarrier;
-        Gas -> EnergyCarrier;
-        Radiation -> EnergyCarrier;
-        Electricity -> EnergyCarrier;
-        Pellets -> EnergyCarrier;        
-    }
-
-    subgraph ConversionTechSubclasses {
-
-    }
+    ConversionTech -> EnergyCarrier [label="InputCarriers", arrowhead=none, headlabel="*"]
+    ConversionTech -> EnergyCarrier [label="OutputCarriers", arrowhead=none, headlabel="*"]
 
 }
