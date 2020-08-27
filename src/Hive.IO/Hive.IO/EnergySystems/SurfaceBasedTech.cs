@@ -41,12 +41,9 @@ namespace Hive.IO.EnergySystems
         /// <param name="hourlyIrradiance"></param>
         /// <param name="surfaceTech"></param>
         /// <returns></returns>
-        protected static double[] ComputeMeanHourlyEnergy(Matrix hourlyIrradiance, SurfaceBasedTech surfaceTech)
+        protected double[] ComputeMeanHourlyEnergy(Matrix hourlyIrradiance)
         {
-            Mesh mesh = surfaceTech.SurfaceGeometry;
-            double surfaceArea = surfaceTech.SurfaceArea;
-
-            int meshFacesCount = mesh.Faces.Count;
+            int meshFacesCount = SurfaceGeometry.Faces.Count;
             int horizon = hourlyIrradiance.ColumnCount;
             double[] meanIrradiance = new double[horizon];
 
@@ -57,14 +54,14 @@ namespace Hive.IO.EnergySystems
                 double totalIrradiance = 0.0;
                 for (int i = 0; i < meshFacesCount; i++)
                 {
-                    meshFaceAreas[i] = Misc.GetMeshFaceArea(i, mesh);
+                    meshFaceAreas[i] = Misc.GetMeshFaceArea(i, SurfaceGeometry);
                     double faceIrradiance = 0.0;
-                    double irradianceVertex1 = hourlyIrradiance[mesh.Faces[i].A, t];
-                    double irradianceVertex2 = hourlyIrradiance[mesh.Faces[i].B, t];
-                    double irradianceVertex3 = hourlyIrradiance[mesh.Faces[i].C, t];
-                    if (mesh.Faces[i].IsQuad)
+                    double irradianceVertex1 = hourlyIrradiance[SurfaceGeometry.Faces[i].A, t];
+                    double irradianceVertex2 = hourlyIrradiance[SurfaceGeometry.Faces[i].B, t];
+                    double irradianceVertex3 = hourlyIrradiance[SurfaceGeometry.Faces[i].C, t];
+                    if (SurfaceGeometry.Faces[i].IsQuad)
                     {
-                        double irradianceVertex4 = hourlyIrradiance[mesh.Faces[i].D, t];
+                        double irradianceVertex4 = hourlyIrradiance[SurfaceGeometry.Faces[i].D, t];
                         faceIrradiance = ((irradianceVertex1 + irradianceVertex2 + irradianceVertex3 + irradianceVertex4) / 4) * meshFaceAreas[i];
                     }
                     else
@@ -75,7 +72,7 @@ namespace Hive.IO.EnergySystems
                     totalIrradiance += faceIrradiance;
                 }
 
-                double temp = totalIrradiance / surfaceArea;
+                double temp = totalIrradiance / SurfaceArea;
                 if (double.IsNaN(temp))
                     temp = 0.0;
                 meanIrradiance[t] = temp;
@@ -203,7 +200,7 @@ namespace Hive.IO.EnergySystems
             double[] electricityGenerated = new double[horizon];
             double[] energyCost = new double[horizon];
             double[] ghgEmissions = new double[horizon];
-            double[] meanIrradiance = SurfaceBasedTech.ComputeMeanHourlyEnergy(irradiance, this);
+            double[] meanIrradiance = ComputeMeanHourlyEnergy(irradiance);
             base.InputCarrier = new Radiation(horizon, meanIrradiance);
             base.AmbientAir = new Air(horizon, null, null, null, ambientTemp);
 
@@ -228,7 +225,7 @@ namespace Hive.IO.EnergySystems
         public void SetInputComputeOutputSimple(Matrix irradiance)
         {
             int horizon = Misc.HoursPerYear;
-            double[] meanIrradiance = SurfaceBasedTech.ComputeMeanHourlyEnergy(irradiance, this);
+            double[] meanIrradiance = ComputeMeanHourlyEnergy(irradiance);
             base.InputCarrier = new Radiation(horizon, meanIrradiance);
 
             // compute pv electricity yield
@@ -325,7 +322,7 @@ namespace Hive.IO.EnergySystems
         public void SetInputComputeOutputSimple(Matrix irradiance)
         {
             int horizon = Misc.HoursPerYear;
-            double[] meanIrradiance = SurfaceBasedTech.ComputeMeanHourlyEnergy(irradiance, this);
+            double[] meanIrradiance = ComputeMeanHourlyEnergy(irradiance);
             Radiation solarCarrier = new Radiation(horizon, meanIrradiance);
             base.InputCarrier = solarCarrier;
 
@@ -364,7 +361,7 @@ namespace Hive.IO.EnergySystems
 
             base.AmbientAir = ambientAirCarrier;
 
-            double[] meanIrradiance = SurfaceBasedTech.ComputeMeanHourlyEnergy(irradiance, this);
+            double[] meanIrradiance = ComputeMeanHourlyEnergy(irradiance);
             Radiation solarCarrier = new Radiation(horizon, meanIrradiance);
             base.InputCarrier = solarCarrier;
 
