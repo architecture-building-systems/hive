@@ -1,0 +1,30 @@
+digraph energysystems {
+    rankdir=TB;
+    splines=ortho;
+
+    node [shape=html];
+
+    subgraph baseClasses {
+        EnergyCarrier;
+        ConversionTech;
+    }
+
+    ConversionTech -> EnergyCarrier [headlabel="InputCarriers"]
+    ConversionTech -> EnergyCarrier [headlabel="OutputCarriers"]
+
+    # EnergyCarrier subclasses
+    subgraph EnergyCarrierSubclasses {
+        edge [arrowhead="empty"];
+        Water -> EnergyCarrier;
+        Air -> EnergyCarrier;
+        Gas -> EnergyCarrier;
+        Radiation -> EnergyCarrier;
+        Electricity -> EnergyCarrier;
+        Pellets -> EnergyCarrier;        
+    }
+
+    subgraph ConversionTechSubclasses {
+
+    }
+
+}
