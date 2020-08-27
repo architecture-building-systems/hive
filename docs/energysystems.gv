@@ -9,7 +9,7 @@ digraph energysystems {
     
     subgraph energy_carriers {
         node [style=filled, fillcolor=green];
-        edge [arrowhead="empty", dir=back];
+        edge [arrowtail="empty", dir=back];
 
         EnergyCarrier;
         EnergyCarrier -> Water;
@@ -21,7 +21,7 @@ digraph energysystems {
     }
 
     subgraph conversion_technologies {
-        edge [arrowhead="empty", dir=back];
+        edge [arrowtail="empty", dir=back];
         node [fillcolor="yellow"];
 
         ConversionTech[label="ConversionTech|Name\lDetailedName\lIsElectric\lIsHeating\lIsCooling\lCapacity\lCapacityUnit\lSpecificInvestmentCost\lSpecificEmbodiedGhg\l "];
