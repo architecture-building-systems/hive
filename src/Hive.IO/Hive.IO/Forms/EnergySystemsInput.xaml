@@ -4,8 +4,20 @@
     xmlns:forms="clr-namespace:Hive.IO.Forms"
     Title="hizard | Systems"
     x:Class="Hive.IO.Forms.EnergySystemsInput"
-    Width="989.094" Height="589.124" WindowStyle="ToolWindow"
-    DataContext="{Binding RelativeSource={RelativeSource Self}}">
+    Width="989.094" Height="589.124" WindowStyle="ToolWindow">
+    <Window.DataContext>
+        <forms:EnergySystemsInputViewModel/>
+    </Window.DataContext>
+
+    <Window.Resources>
+        <DataTemplate DataType="{x:Type forms:PhotovoltaicPropertiesViewModel}">
+            <forms:PhotovoltaicProperties/>
+        </DataTemplate>
+        <DataTemplate DataType="{x:Type forms:GasBoilerPropertiesViewModel}">
+            <forms:GasBoilerProperties/>
+        </DataTemplate>
+    </Window.Resources>
+
     <TabControl>
         <TabItem Header="Conversion">
             <Grid>
@@ -16,9 +28,7 @@
                 <ScrollViewer Grid.Row="0">
                     <forms:ConversionSelector></forms:ConversionSelector>
                 </ScrollViewer>
-                <forms:ConversionProperties>
-
-                </forms:ConversionProperties>
+                <ContentPresenter Content="{Binding CurrentConversionTechProperties}" Grid.Row="1"/>
             </Grid>
         </TabItem>
         <TabItem Header="Emission"></TabItem>

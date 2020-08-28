@@ -86,16 +86,20 @@
       <DependentUpon>BuildingInput.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\BuildingInputState.cs" />
+    <Compile Include="Forms\ConversionTechPropertiesViewModel.cs" />
     <Compile Include="Forms\ConversionSelector.xaml.cs">
       <DependentUpon>ConversionSelector.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\EnergySystemsInput.xaml.cs">
       <DependentUpon>EnergySystemsInput.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ConversionProperties.xaml.cs">
-      <DependentUpon>ConversionProperties.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Forms\EnergySystemsInputViewModel.cs" />
+    <Compile Include="Forms\GasBoilerProperties.xaml.cs">
+      <DependentUpon>GasBoilerProperties.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PhotovoltaicProperties.xaml.cs">
+      <DependentUpon>PhotovoltaicProperties.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ViewModels.cs" />
     <Compile Include="GhDistributors\GhConversionTech.cs" />
     <Compile Include="GhDistributors\GhEnvironment.cs" />
@@ -233,7 +237,11 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-    <Page Include="Forms\ConversionProperties.xaml">
+    <Page Include="Forms\GasBoilerProperties.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\PhotovoltaicProperties.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

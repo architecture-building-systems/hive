@@ -1,7 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
 using System.Windows;
+using System.Windows.Input;
 
 namespace Hive.IO.Forms
 {
@@ -32,5 +34,31 @@ namespace Hive.IO.Forms
         {
             return Application.Current.MainWindow == null || DesignerProperties.GetIsInDesignMode(Application.Current.MainWindow);
         }
+    }
+
+    public class RelayCommand<T> : ICommand
+    {
+        private readonly Action<T> execute;
+        private readonly Predicate<T> canExecute;
+
+        public RelayCommand(Action<T> execute, Predicate<T> canExecute = null)
+        {
+            this.execute = execute ?? throw new ArgumentNullException("execute");
+            this.canExecute = canExecute;
+        }
+
+        public bool CanExecute(object parameter)
+            => canExecute == null || canExecute((T)parameter);
+
+        public event EventHandler CanExecuteChanged
+        {
+            add => CommandManager.RequerySuggested += value;
+            remove => CommandManager.RequerySuggested -= value;
+        }
+
+        public void Execute(object parameter)
+            => execute(parameter == null
+                ? default(T)
+                : (T)Convert.ChangeType(parameter, typeof(T)));
     }
 }

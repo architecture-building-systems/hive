@@ -16,11 +16,11 @@ using System.Windows.Shapes;
 namespace Hive.IO.Forms
 {
     /// <summary>
-    /// Interaction logic for UserControl1.xaml
+    /// Interaction logic for GasBoilerProperties.xaml
     /// </summary>
-    public partial class ConversionProperties
+    public partial class GasBoilerProperties : UserControl
     {
-        public ConversionProperties()
+        public GasBoilerProperties()
         {
             InitializeComponent();
         }
