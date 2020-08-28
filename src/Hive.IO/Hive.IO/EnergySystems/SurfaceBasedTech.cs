@@ -177,12 +177,18 @@ namespace Hive.IO.EnergySystems
         /// <param name="noct">Nominal operating cell temperature [deg C]</param>
         /// <param name="noct_ref">Reference temperature in [deg C]</param>
         /// <param name="noct_sol">Reference irradiance in [W/m^2]</param>
-        public void SetNOCTParameters(double beta, double noct, double noct_ref, double noct_sol)
+        public void SetTechnologyParameters(double beta, double noct, double noct_ref, double noct_sol)
         {
             this.Beta = beta;
             this.NOCT = noct;
             this.NOCT_ref = noct_ref;
             this.NOCT_sol = noct_sol;
+        }
+
+        public void SetTechnologyParametersSimple(double performanceRatio, double referenceEfficiency)
+        {
+            this.PR = performanceRatio;
+            this.RefEfficiencyElectric = referenceEfficiency;
         }
 
 
@@ -377,7 +383,6 @@ namespace Hive.IO.EnergySystems
             // zeros, because renewable energy and because equation doesnt calc output temperature. Supply temp, I'd need to calculate according to: See ShanShans mail from 21.8.2020
             double[] energyCost = new double[horizon];
             double[] ghgEmissions = new double[horizon];
-            //double[] supplyTemperature = new double[horizon];
             base.OutputCarriers[0] = new Water(horizon, heatingEnergy, energyCost, ghgEmissions, returnTemperature);
         }
     }

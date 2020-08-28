@@ -16,6 +16,8 @@ namespace Hive.IO.GhParametricInputs
         public double ThermalEfficiency;
         public double InvestmentCost;
         public double EmbodiedEmissions;
+
+        public Mesh MeshSurface;
     }
 
 
@@ -40,7 +42,7 @@ namespace Hive.IO.GhParametricInputs
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddMeshParameter("Mesh", "Mesh", "Mesh surface of the solar system", GH_ParamAccess.item);
+            pManager.AddMeshParameter("Mesh", "Mesh", "Mesh surface of the solar system", GH_ParamAccess.list);
 
             pManager.AddTextParameter("Type", "Type", "Type of solar system {'PV', 'PVT', 'ST', 'GC'} standing for Photovoltaic (PV), Hybrid PV and Solar Thermal (PVT), Solar Thermal (ST), Ground Collector (GC)", GH_ParamAccess.item);
 
@@ -57,8 +59,7 @@ namespace Hive.IO.GhParametricInputs
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddMeshParameter("Mesh", "Mesh", "Mesh", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Json", "Json", "Json", GH_ParamAccess.item);
+            pManager.AddGenericParameter("solarTech", "solarTech", "solarTech", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -67,11 +68,10 @@ namespace Hive.IO.GhParametricInputs
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            Mesh mesh = new Mesh();
-            DA.GetData(0, ref mesh);
+            var meshes = new List<Mesh>();
+            DA.GetDataList(0, meshes);
 
             var solarTech = new SolarTechProperties();
-
             DA.GetData(1, ref solarTech.Type);
             DA.GetData(2, ref solarTech.Technology);
             DA.GetData(3, ref solarTech.ElectricEfficiency);
@@ -79,10 +79,16 @@ namespace Hive.IO.GhParametricInputs
             DA.GetData(5, ref solarTech.InvestmentCost);
             DA.GetData(6, ref solarTech.EmbodiedEmissions);
 
+            var solarTechList = new List<SolarTechProperties>();
+            foreach (var mesh in meshes)
+            {
+                solarTech.MeshSurface = mesh;
+                solarTechList.Add(solarTech);
+            }
             //string solarTechJson = JsonConvert.SerializeObject(solarTech);
-            DA.SetData(1, solarTech);
+            DA.SetDataList(0, solarTechList);
 
-            DA.SetData(0, mesh);
+            //DA.SetData(0, mesh);
         }
 
 
