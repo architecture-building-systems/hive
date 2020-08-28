@@ -95,6 +95,8 @@
     <Compile Include="Forms\ConversionProperties.xaml.cs">
       <DependentUpon>ConversionProperties.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\EnergySystemsInputViewModel.cs" />
+    <Compile Include="Forms\ViewModels.cs" />
     <Compile Include="GhDistributors\GhConversionTech.cs" />
     <Compile Include="GhDistributors\GhEnvironment.cs" />
     <Compile Include="GhDistributors\GhSIA.cs" />
