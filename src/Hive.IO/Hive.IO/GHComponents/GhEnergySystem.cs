@@ -10,6 +10,8 @@ using Rhino.Geometry;
 using Hive.IO.EnergySystems;
 using Hive.IO.Forms;
 using Hive.IO.GhParametricInputs;
+using ConversionTechProperties = Hive.IO.GhParametricInputs.ConversionTechProperties;
+
 //using Newtonsoft.Json;
 
 namespace Hive.IO.GHComponents

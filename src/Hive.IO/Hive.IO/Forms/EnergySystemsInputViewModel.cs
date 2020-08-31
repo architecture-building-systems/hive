@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
+using System.Windows.Data;
 using Hive.IO.EnergySystems;
 
 namespace Hive.IO.Forms
@@ -18,7 +20,7 @@ namespace Hive.IO.Forms
             private set => Set(ref _currentConversionTechProperties, value);
         }
 
-        private Dictionary<string, Func<IConversionTechProperties>> _conversions =
+        private readonly Dictionary<string, Func<IConversionTechProperties>> _conversions =
             new Dictionary<string, Func<IConversionTechProperties>>
             {
                 {"Photovoltaic (PV)", () => new PhotovoltaicPropertiesViewModel()},
@@ -29,9 +31,14 @@ namespace Hive.IO.Forms
 
         public ObservableCollection<IConversionTechProperties> ConversionTechnologies { get; private set; }
 
+        public ICollectionView ConversionTechnologiesView =>
+            CollectionViewSource.GetDefaultView(ConversionTechnologies);
+
         public EnergySystemsInputViewModel()
         {
             ConversionTechnologies = new ObservableCollection<IConversionTechProperties>();
+            ConversionTechnologies.Add(new PhotovoltaicPropertiesViewModel());
+            ConversionTechnologies.Add(new GasBoilerPropertiesViewModel());
         }
     }
 }

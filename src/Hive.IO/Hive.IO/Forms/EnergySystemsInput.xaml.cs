@@ -1,4 +1,6 @@
-﻿namespace Hive.IO.Forms
+﻿using System.Windows;
+
+namespace Hive.IO.Forms
 {
     /// <summary>
     /// Interaction logic for EnergySystemsInput.xaml
@@ -8,6 +10,12 @@
         public EnergySystemsInput()
         {
             InitializeComponent();
+        }
+
+        private void DeleteConversionTech_OnClick(object sender, RoutedEventArgs e)
+        {
+            
+
         }
     }
 }

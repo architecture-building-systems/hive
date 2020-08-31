@@ -23,12 +23,35 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="2*"></RowDefinition>
+                    <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="3*"></RowDefinition>
                 </Grid.RowDefinitions>
-                <ScrollViewer Grid.Row="0">
-                    <forms:ConversionSelector></forms:ConversionSelector>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="2*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                </Grid.ColumnDefinitions>
+                <ScrollViewer Grid.Row="0" Grid.ColumnSpan="3">
+                    <DataGrid Name="TechGrid" ItemsSource="{Binding ConversionTechnologiesView, Mode=OneWay}"  AutoGenerateColumns="False" CanUserAddRows="True" SelectionMode="Single" IsSynchronizedWithCurrentItem="True"
+                              >
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Binding="{Binding Source, Mode=OneWay}" Width="*" CanUserResize="False" Header="Source"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding Name, Mode=OneWay}" Width="2*" CanUserResize="False" Header="Conversion"></DataGridTextColumn>
+                            <DataGridTextColumn Binding="{Binding EndUse, Mode=OneWay}" Width="*" CanUserResize="False" Header="End Use"></DataGridTextColumn>
+                            <DataGridTemplateColumn>
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <Button Name="DeleteConversionTech" Click="DeleteConversionTech_OnClick">Delete</Button>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
                 </ScrollViewer>
-                <ContentPresenter Content="{Binding CurrentConversionTechProperties}" Grid.Row="1"/>
+                <ComboBox Name="NewConversionTech" Grid.Row="1"  Grid.Column="1" ItemsSource="{Binding Conversions}"/>
+                <Button Grid.Row="1" Grid.Column="2" Name="AddNewConversionTech">Add</Button>
+                <ContentPresenter Content="{Binding Path=ConversionTechnologiesView.CurrentItem}" Grid.Row="2" Grid.ColumnSpan="3"
+                                  Grid.Column="0" />
             </Grid>
         </TabItem>
         <TabItem Header="Emission"></TabItem>
