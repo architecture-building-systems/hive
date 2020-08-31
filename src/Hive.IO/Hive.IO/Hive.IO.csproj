@@ -87,9 +87,6 @@
     </Compile>
     <Compile Include="Forms\BuildingInputState.cs" />
     <Compile Include="Forms\ConversionTechPropertiesViewModel.cs" />
-    <Compile Include="Forms\ConversionSelector.xaml.cs">
-      <DependentUpon>ConversionSelector.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Forms\EnergySystemsInput.xaml.cs">
       <DependentUpon>EnergySystemsInput.xaml</DependentUpon>
     </Compile>
@@ -100,7 +97,7 @@
     <Compile Include="Forms\PhotovoltaicProperties.xaml.cs">
       <DependentUpon>PhotovoltaicProperties.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\ViewModels.cs" />
+    <Compile Include="Forms\ViewModelBase.cs" />
     <Compile Include="GhDistributors\GhConversionTech.cs" />
     <Compile Include="GhDistributors\GhEnvironment.cs" />
     <Compile Include="GhDistributors\GhSIA.cs" />
@@ -226,10 +223,6 @@
   <ItemGroup />
   <ItemGroup>
     <Page Include="Forms\BuildingInput.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Forms\ConversionSelector.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
