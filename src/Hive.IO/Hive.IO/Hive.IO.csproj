@@ -97,6 +97,7 @@
     <Compile Include="Forms\PhotovoltaicProperties.xaml.cs">
       <DependentUpon>PhotovoltaicProperties.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\PropertiesDataTemplateSelector.cs" />
     <Compile Include="Forms\ViewModelBase.cs" />
     <Compile Include="GhDistributors\GhConversionTech.cs" />
     <Compile Include="GhDistributors\GhEnvironment.cs" />

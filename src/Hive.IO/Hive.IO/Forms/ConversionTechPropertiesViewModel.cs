@@ -1,23 +1,65 @@
-﻿namespace Hive.IO.Forms
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+
+namespace Hive.IO.Forms
 {
-    public interface IConversionTechProperties
+    public class ConversionTechPropertiesViewModel : ViewModelBase
     {
-        string Name { get; }
-        string Source { get; }
-        string EndUse { get; }
-    }
+        /// <summary>
+        ///     A list of default values for the conversion technology properties
+        /// </summary>
+        private static readonly Dictionary<string, Action<ConversionTechPropertiesViewModel>> Defaults =
+            new Dictionary<string, Action<ConversionTechPropertiesViewModel>>
+            {
+                {
+                    "Photovoltaic (PV)", self =>
+                    {
+                        self.Source = "Solar";
+                        self.EndUse = "Electricity demand";
+                    }
+                },
+                {
+                    "Boiler (Gas)", self =>
+                    {
+                        self.Source = "Gas";
+                        self.EndUse = "Heating demand, DHW";
+                    }
+                }
+            };
 
-    public class PhotovoltaicPropertiesViewModel: ViewModelBase, IConversionTechProperties
-    {
-        public string Name => "Photovoltaic (PV)";
-        public string Source => "Solar";
-        public string EndUse => "Electricity demand";
-    }
+        public static IEnumerable<string> ValidNames => Defaults.Keys;
 
-    public class GasBoilerPropertiesViewModel : ViewModelBase, IConversionTechProperties
-    {
-        public string Name => "Boiler (Gas)";
-        public string Source => "Gas";
-        public string EndUse => "Heating demand, DHW";
+        private string _name;
+        public string Name
+        {
+            get => _name ?? "Photovoltaic (PV)";
+            set
+            {
+                if (ValidNames.Contains(value))
+                {
+                    Set(ref _name, value);
+                    AssignDefaults();
+                }
+                else
+                {
+                    throw new ArgumentException($"Invalid ConversionTechPropertiesViewModel.Name: {value}");
+                }
+            }
+        }
+
+        private string _source;
+        public string Source { get => _source; set => Set(ref _source, value); }
+        private string _endUse;
+        public string EndUse { get => _endUse; set => Set(ref _endUse, value); }
+
+        /// <summary>
+        ///     Assign default values based on the Name - gets called when setting the name.
+        /// </summary>
+        public void AssignDefaults()
+        {
+            Defaults[Name](this);
+        }
     }
 }

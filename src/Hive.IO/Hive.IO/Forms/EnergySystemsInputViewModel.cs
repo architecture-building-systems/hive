@@ -12,33 +12,26 @@ namespace Hive.IO.Forms
     /// </summary>
     public class EnergySystemsInputViewModel: ViewModelBase
     {
-        private IConversionTechProperties _currentConversionTechProperties;
+        public IEnumerable<string> ConversionNames => ConversionTechPropertiesViewModel.ValidNames;
 
-        public IConversionTechProperties CurrentConversionTechProperties
-        {
-            get => _currentConversionTechProperties;
-            private set => Set(ref _currentConversionTechProperties, value);
-        }
-
-        private readonly Dictionary<string, Func<IConversionTechProperties>> _conversions =
-            new Dictionary<string, Func<IConversionTechProperties>>
-            {
-                {"Photovoltaic (PV)", () => new PhotovoltaicPropertiesViewModel()},
-                {"Boiler (Gas)", () => new GasBoilerPropertiesViewModel()}
-            };
-
-        public IEnumerable<string> Conversions => _conversions.Keys;
-
-        public ObservableCollection<IConversionTechProperties> ConversionTechnologies { get; private set; }
+        public ObservableCollection<ConversionTechPropertiesViewModel> ConversionTechnologies { get; }
 
         public ICollectionView ConversionTechnologiesView =>
             CollectionViewSource.GetDefaultView(ConversionTechnologies);
 
         public EnergySystemsInputViewModel()
         {
-            ConversionTechnologies = new ObservableCollection<IConversionTechProperties>();
-            ConversionTechnologies.Add(new PhotovoltaicPropertiesViewModel());
-            ConversionTechnologies.Add(new GasBoilerPropertiesViewModel());
+            ConversionTechnologies = new ObservableCollection<ConversionTechPropertiesViewModel>
+            {
+                new ConversionTechPropertiesViewModel()
+                {
+                    Name = "Photovoltaic (PV)",
+                },
+                new ConversionTechPropertiesViewModel()
+                {
+                    Name = "Boiler (Gas)",
+                }
+            };
         }
     }
 }

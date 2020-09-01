@@ -10,10 +10,11 @@
     </Window.DataContext>
 
     <Window.Resources>
-        <DataTemplate DataType="{x:Type forms:PhotovoltaicPropertiesViewModel}">
+        <forms:PropertiesDataTemplateSelector x:Key="PropertiesDataTemplateSelector"></forms:PropertiesDataTemplateSelector>
+        <DataTemplate x:Key="PhotovoltaicProperties">
             <forms:PhotovoltaicProperties/>
         </DataTemplate>
-        <DataTemplate DataType="{x:Type forms:GasBoilerPropertiesViewModel}">
+        <DataTemplate x:Key="GasBoilerProperties">
             <forms:GasBoilerProperties/>
         </DataTemplate>
     </Window.Resources>
@@ -23,7 +24,6 @@
             <Grid>
                 <Grid.RowDefinitions>
                     <RowDefinition Height="2*"></RowDefinition>
-                    <RowDefinition Height="Auto"></RowDefinition>
                     <RowDefinition Height="3*"></RowDefinition>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
@@ -32,26 +32,41 @@
                     <ColumnDefinition Width="1*"></ColumnDefinition>
                 </Grid.ColumnDefinitions>
                 <ScrollViewer Grid.Row="0" Grid.ColumnSpan="3">
-                    <DataGrid Name="TechGrid" ItemsSource="{Binding ConversionTechnologiesView, Mode=OneWay}"  AutoGenerateColumns="False" CanUserAddRows="True" SelectionMode="Single" IsSynchronizedWithCurrentItem="True"
-                              >
+                    <DataGrid Name="TechGrid" ItemsSource="{Binding ConversionTechnologiesView, Mode=OneWay}" CanUserDeleteRows="True"  
+                              AutoGenerateColumns="False" CanUserAddRows="True" SelectionMode="Single" 
+                              IsSynchronizedWithCurrentItem="True">
                         <DataGrid.Columns>
-                            <DataGridTextColumn Binding="{Binding Source, Mode=OneWay}" Width="*" CanUserResize="False" Header="Source"></DataGridTextColumn>
-                            <DataGridTextColumn Binding="{Binding Name, Mode=OneWay}" Width="2*" CanUserResize="False" Header="Conversion"></DataGridTextColumn>
-                            <DataGridTextColumn Binding="{Binding EndUse, Mode=OneWay}" Width="*" CanUserResize="False" Header="End Use"></DataGridTextColumn>
-                            <DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Source" Width="1*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <Button Name="DeleteConversionTech" Click="DeleteConversionTech_OnClick">Delete</Button>
+                                        <TextBlock Text="{Binding Source, Mode=OneWay}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Conversion" Width="2*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name, Mode=OneWay}"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox ItemsSource="{Binding ValidNames}" SelectionChanged="ConversionNames_OnSelectionChanged"/>
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="End Use" Width="1*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding EndUse, Mode=OneWay}"/>
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </ScrollViewer>
-                <ComboBox Name="NewConversionTech" Grid.Row="1"  Grid.Column="1" ItemsSource="{Binding Conversions}"/>
-                <Button Grid.Row="1" Grid.Column="2" Name="AddNewConversionTech">Add</Button>
-                <ContentPresenter Content="{Binding Path=ConversionTechnologiesView.CurrentItem}" Grid.Row="2" Grid.ColumnSpan="3"
-                                  Grid.Column="0" />
+                <ContentPresenter Content="{Binding Path=ConversionTechnologiesView.CurrentItem}" Grid.Row="1" Grid.ColumnSpan="3"
+                                  Grid.Column="0" ContentTemplateSelector="{StaticResource PropertiesDataTemplateSelector}"/>
             </Grid>
         </TabItem>
         <TabItem Header="Emission"></TabItem>
