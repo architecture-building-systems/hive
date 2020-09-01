@@ -29,21 +29,33 @@ namespace Hive.IO.Forms
             }
         }
 
-        private void TechGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)
+        private void TechGrid_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (sender is DataGrid dataGrid)
+            if (PropertiesView == null)
             {
-                PropertiesView.ContentTemplate =
-                    new PropertiesDataTemplateSelector().SelectTemplate(dataGrid.CurrentItem, dataGrid);
+                // still loading...
+                return;
+            }
+            if (sender is DataGrid techGrid &&
+                techGrid.DataContext is EnergySystemsInputViewModel esivm && techGrid.SelectedItem is ConversionTechPropertiesViewModel ctpvm)
+            {
+                InjectListOfAvailableSurfaces(ctpvm, esivm);
             }
         }
 
-        private void TechGrid_CurrentCellChanged(object sender, EventArgs e)
+        private void InjectListOfAvailableSurfaces(ConversionTechPropertiesViewModel ctpvm, EnergySystemsInputViewModel esivm)
         {
-            if (sender is DataGrid dataGrid)
+            // inject list of surfaces available for this tech
+            ctpvm.AvailableSurfaces = esivm.SurfacesForConversion(ctpvm);
+            PropertiesView.ContentTemplate =
+                new PropertiesDataTemplateSelector().SelectTemplate(TechGrid.CurrentItem, TechGrid);
+        }
+
+        private void Window_ContentRendered(object sender, EventArgs e)
+        {
+            if (TechGrid.DataContext is EnergySystemsInputViewModel esivm && TechGrid.SelectedItem is ConversionTechPropertiesViewModel ctpvm)
             {
-                PropertiesView.ContentTemplate =
-                    new PropertiesDataTemplateSelector().SelectTemplate(dataGrid.CurrentItem, dataGrid);
+                InjectListOfAvailableSurfaces(ctpvm, esivm);
             }
         }
     }

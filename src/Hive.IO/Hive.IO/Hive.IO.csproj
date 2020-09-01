@@ -82,10 +82,16 @@
     <Compile Include="EnergySystems\Storage.cs" />
     <Compile Include="EnergySystems\SurfaceBasedTech.cs" />
     <Compile Include="EnergySystems\Ventilation.cs" />
+    <Compile Include="Forms\AshpProperties.xaml.cs">
+      <DependentUpon>AshpProperties.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\BuildingInput.xaml.cs">
       <DependentUpon>BuildingInput.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\BuildingInputState.cs" />
+    <Compile Include="Forms\ChillerProperties.xaml.cs">
+      <DependentUpon>ChillerProperties.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ConversionTechPropertiesViewModel.cs" />
     <Compile Include="Forms\EnergySystemsInput.xaml.cs">
       <DependentUpon>EnergySystemsInput.xaml</DependentUpon>
@@ -226,7 +232,15 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Page Include="Forms\AshpProperties.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\BuildingInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\ChillerProperties.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

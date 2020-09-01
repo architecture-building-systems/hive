@@ -85,17 +85,17 @@ namespace Hive.IO.GHComponents
 
             foreach (GH_ObjectWrapper ghObj in solarObjects)
             {
-                if (ghObj.Value is GH_Mesh)
+                if (ghObj.Value is GH_Mesh ghMesh)
                 {
-                    meshList.Add((ghObj.Value as GH_Mesh).Value);
+                    meshList.Add(ghMesh.Value);
                 }
-                else if(ghObj.Value is Mesh)
+                else if(ghObj.Value is Mesh mesh)
                 {
-                    meshList.Add(ghObj.Value as Mesh);
+                    meshList.Add(mesh);
                 }
-                else if (ghObj.Value is SolarTechProperties)
+                else if (ghObj.Value is SolarTechProperties stp)
                 {
-                    solarTechProperties.Add(ghObj.Value as SolarTechProperties);
+                    solarTechProperties.Add(stp);
                 }
             }
 

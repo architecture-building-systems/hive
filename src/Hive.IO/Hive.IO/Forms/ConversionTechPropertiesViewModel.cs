@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using Rhino.Geometry;
 
 namespace Hive.IO.Forms
 {
@@ -21,6 +23,13 @@ namespace Hive.IO.Forms
                     }
                 },
                 {
+                    "Solar Thermal (ST)", self =>
+                    {
+                        self.Source = "Solar";
+                        self.EndUse = "Heating demand";
+                    }
+                },
+                {
                     "Boiler (Gas)", self =>
                     {
                         self.Source = "Gas";
@@ -33,12 +42,31 @@ namespace Hive.IO.Forms
                         self.Source = "Gas";
                         self.EndUse = "Electricity demand, Heating demand, DHW";
                     }
+                },
+                {
+                    "Chiller (Electricity)", self =>
+                    {
+                        self.Source = "Electricity Grid";
+                        self.EndUse = "Cooling demand";
+                    }
+                },
+                {
+                    "ASHP (Electricity)", self =>
+                    {
+                        self.Source = "Air";
+                        self.EndUse = "Electricity demand";
+                    }
                 }
             };
 
-        public static IEnumerable<string> ValidNames => Defaults.Keys;
+        private string _endUse;
 
         private string _name;
+
+        private string _source;
+
+        public static IEnumerable<string> ValidNames => Defaults.Keys;
+
         public string Name
         {
             get => _name ?? "Photovoltaic (PV)";
@@ -56,19 +84,17 @@ namespace Hive.IO.Forms
             }
         }
 
-        private string _source;
-        public string Source { get => _source; set => Set(ref _source, value); }
-        private string _endUse;
-        public string EndUse { get => _endUse; set => Set(ref _endUse, value); }
+        public string Source
+        {
+            get => _source;
+            set => Set(ref _source, value);
+        }
 
-        #region GasBoiler properties
-        private double _efficiency;
-        private double _capacity;
-        private double _lifetime;
-        private double _capitalCost;
-        private double _operationalCost;
-        private double _embodiedEmissions;
-        #endregion
+        public string EndUse
+        {
+            get => _endUse;
+            set => Set(ref _endUse, value);
+        }
 
         public string Efficiency
         {
@@ -107,7 +133,7 @@ namespace Hive.IO.Forms
         }
 
         /// <summary>
-        /// Parses the string to a double or returns the oldValue on error.
+        ///     Parses the string to a double or returns the oldValue on error.
         /// </summary>
         /// <param name="value"></param>
         /// <param name="oldValue"></param>
@@ -115,10 +141,7 @@ namespace Hive.IO.Forms
         private double ParseDouble(string value, double oldValue)
         {
             double result;
-            if (double.TryParse(value, out result))
-            {
-                return result;
-            }
+            if (double.TryParse(value, out result)) return result;
 
             return oldValue;
         }
@@ -130,5 +153,44 @@ namespace Hive.IO.Forms
         {
             Defaults[Name](this);
         }
+
+        private IEnumerable<SurfaceViewModel> _availableSurfaces;
+        public IEnumerable<SurfaceViewModel> AvailableSurfaces { get => _availableSurfaces; set => Set(ref _availableSurfaces, value); }
+
+        private void SelectSurfaces(IEnumerable<SurfaceViewModel> surfaces)
+        {
+            foreach (var surface in _availableSurfaces)
+            {
+                surface.Connection = null;
+            }
+            foreach (var surface in surfaces)
+            {
+                surface.Connection = this;
+            }
+        }
+        public IEnumerable<SurfaceViewModel> SelectedSurfaces
+        {
+            get => _availableSurfaces?.Where(sm => sm.Connection == this) ?? new List<SurfaceViewModel>();
+            set { SelectSurfaces(value); RaisePropertyChangedEvent(); }
+        }
+
+        #region properties
+
+        private double _efficiency;
+        private double _capacity;
+        private double _lifetime;
+        private double _capitalCost;
+        private double _operationalCost;
+        private double _embodiedEmissions;
+
+        #endregion
+    }
+
+    public class SurfaceViewModel : ViewModelBase
+    {
+        public string Name { get; set; }
+        public double Area { get; set; }
+
+        public ConversionTechPropertiesViewModel Connection { get; set; }
     }
 }

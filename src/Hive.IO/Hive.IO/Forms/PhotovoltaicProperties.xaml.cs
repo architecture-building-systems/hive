@@ -12,6 +12,7 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
+using Rhino.Geometry;
 
 namespace Hive.IO.Forms
 {
@@ -23,6 +24,44 @@ namespace Hive.IO.Forms
         public PhotovoltaicProperties()
         {
             InitializeComponent();
+        }
+
+        private bool _changingDataContext;
+        private void ListBox_DataContextChanged(object sender, DependencyPropertyChangedEventArgs e)
+        {
+            if (sender is ListBox list && e.NewValue is ConversionTechPropertiesViewModel vm)
+            {
+                _changingDataContext = true;
+                list.UnselectAll(); 
+                foreach (var surface in vm.SelectedSurfaces)
+                {
+                    list.SelectedItems.Add(surface);
+                }
+                _changingDataContext = false;
+            }
+        }
+
+        private void ListBox_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (!_changingDataContext && sender is ListBox list && list.DataContext is ConversionTechPropertiesViewModel vm)
+            {
+                foreach (var item in e.RemovedItems)
+                {
+                    if (item is SurfaceViewModel sm && sm.Connection == vm)
+                    {
+                        sm.Connection = null;
+                    }
+                }
+
+                foreach (var item in e.AddedItems)
+                {
+                    if (item is SurfaceViewModel sm && sm.Connection == null)
+                    {
+                        sm.Connection = vm;
+                    }
+                }
+                vm.SelectedSurfaces = list.SelectedItems.Cast<SurfaceViewModel>();
+            }
         }
     }
 }

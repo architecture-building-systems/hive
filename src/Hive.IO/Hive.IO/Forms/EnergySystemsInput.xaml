@@ -4,21 +4,27 @@
     xmlns:forms="clr-namespace:Hive.IO.Forms"
     Title="hizard | Systems"
     x:Class="Hive.IO.Forms.EnergySystemsInput"
-    Width="989.094" Height="589.124" WindowStyle="ToolWindow">
+    Width="989.094" Height="589.124" WindowStyle="ToolWindow" ContentRendered="Window_ContentRendered">
     <Window.DataContext>
-        <forms:EnergySystemsInputViewModel/>
+        <forms:EnergySystemsInputViewModel />
     </Window.DataContext>
 
     <Window.Resources>
-        <forms:PropertiesDataTemplateSelector x:Key="PropertiesDataTemplateSelector"></forms:PropertiesDataTemplateSelector>
+        <forms:PropertiesDataTemplateSelector x:Key="PropertiesDataTemplateSelector" />
         <DataTemplate x:Key="PhotovoltaicProperties">
-            <forms:PhotovoltaicProperties/>
+            <forms:PhotovoltaicProperties />
         </DataTemplate>
         <DataTemplate x:Key="GasBoilerProperties">
-            <forms:GasBoilerProperties/>
+            <forms:GasBoilerProperties />
         </DataTemplate>
         <DataTemplate x:Key="ChpProperties">
-            <forms:GasBoilerProperties/>
+            <forms:ChpProperties />
+        </DataTemplate>
+        <DataTemplate x:Key="ChillerProperties">
+            <forms:ChillerProperties />
+        </DataTemplate>
+        <DataTemplate x:Key="AshpProperties">
+            <forms:AshpProperties />
         </DataTemplate>
     </Window.Resources>
 
@@ -26,52 +32,56 @@
         <TabItem Header="Conversion">
             <Grid>
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="2*"></RowDefinition>
-                    <RowDefinition Height="3*"></RowDefinition>
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="3*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
-                    <ColumnDefinition Width="2*"></ColumnDefinition>
-                    <ColumnDefinition Width="1*"></ColumnDefinition>
+                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="2*" />
+                    <ColumnDefinition Width="1*" />
                 </Grid.ColumnDefinitions>
                 <ScrollViewer Grid.Row="0" Grid.ColumnSpan="3">
-                    <DataGrid Name="TechGrid" ItemsSource="{Binding ConversionTechnologiesView, Mode=OneWay}" CanUserDeleteRows="True"  
-                              AutoGenerateColumns="False" CanUserAddRows="True" SelectionMode="Single" 
-                              IsSynchronizedWithCurrentItem="True" CurrentCellChanged="TechGrid_CurrentCellChanged" CellEditEnding="TechGrid_CellEditEnding">
+                    <DataGrid Name="TechGrid" ItemsSource="{Binding ConversionTechnologiesView, Mode=OneWay}"
+                              CanUserDeleteRows="True"
+                              AutoGenerateColumns="False" CanUserAddRows="True" SelectionMode="Single"
+                              IsSynchronizedWithCurrentItem="True" SelectionChanged="TechGrid_SelectionChanged">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="Source" Width="1*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Source, Mode=OneWay}"/>
+                                        <TextBlock Text="{Binding Source, Mode=OneWay}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="Conversion" Width="2*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding Name, Mode=OneWay}"/>
+                                        <TextBlock Text="{Binding Name, Mode=OneWay}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                                 <DataGridTemplateColumn.CellEditingTemplate>
                                     <DataTemplate>
-                                        <ComboBox ItemsSource="{Binding ValidNames}" SelectionChanged="ConversionNames_OnSelectionChanged"/>
+                                        <ComboBox ItemsSource="{Binding ValidNames}"
+                                                  SelectionChanged="ConversionNames_OnSelectionChanged" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellEditingTemplate>
                             </DataGridTemplateColumn>
                             <DataGridTemplateColumn Header="End Use" Width="1*">
                                 <DataGridTemplateColumn.CellTemplate>
                                     <DataTemplate>
-                                        <TextBlock Text="{Binding EndUse, Mode=OneWay}"/>
+                                        <TextBlock Text="{Binding EndUse, Mode=OneWay}" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellTemplate>
                             </DataGridTemplateColumn>
                         </DataGrid.Columns>
                     </DataGrid>
                 </ScrollViewer>
-                <ContentPresenter Name="PropertiesView" Content="{Binding Path=ConversionTechnologiesView.CurrentItem}" Grid.Row="1" Grid.ColumnSpan="3"
-                                  Grid.Column="0" ContentTemplateSelector="{StaticResource PropertiesDataTemplateSelector}"/>
+                <ContentPresenter Name="PropertiesView" Content="{Binding Path=ConversionTechnologiesView.CurrentItem}"
+                                  Grid.Row="1" Grid.ColumnSpan="3"
+                                  Grid.Column="0"
+                                  ContentTemplateSelector="{StaticResource PropertiesDataTemplateSelector}" />
             </Grid>
         </TabItem>
-        <TabItem Header="Emission"></TabItem>
+        <TabItem Header="Emission" />
     </TabControl>
 </Window>
