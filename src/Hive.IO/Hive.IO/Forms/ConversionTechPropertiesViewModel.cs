@@ -26,6 +26,13 @@ namespace Hive.IO.Forms
                         self.Source = "Gas";
                         self.EndUse = "Heating demand, DHW";
                     }
+                },
+                {
+                    "CHP", self =>
+                    {
+                        self.Source = "Gas";
+                        self.EndUse = "Electricity demand, Heating demand, DHW";
+                    }
                 }
             };
 

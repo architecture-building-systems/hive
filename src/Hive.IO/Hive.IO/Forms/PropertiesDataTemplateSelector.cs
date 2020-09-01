@@ -9,7 +9,8 @@ namespace Hive.IO.Forms
         private static readonly Dictionary<string, string> TemplateMapping = new Dictionary<string, string>
         {
             {"Photovoltaic (PV)", "PhotovoltaicProperties"},
-            {"Boiler (Gas)", "GasBoilerProperties"}
+            {"Boiler (Gas)", "GasBoilerProperties"},
+            {"CHP", "ChpProperties"}
         };
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)

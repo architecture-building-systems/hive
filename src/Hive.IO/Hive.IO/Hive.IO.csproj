@@ -91,6 +91,9 @@
       <DependentUpon>EnergySystemsInput.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\EnergySystemsInputViewModel.cs" />
+    <Compile Include="Forms\ChpProperties.xaml.cs">
+      <DependentUpon>ChpProperties.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\GasBoilerProperties.xaml.cs">
       <DependentUpon>GasBoilerProperties.xaml</DependentUpon>
     </Compile>
@@ -230,6 +233,10 @@
     <Page Include="Forms\EnergySystemsInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\ChpProperties.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Forms\GasBoilerProperties.xaml">
       <SubType>Designer</SubType>

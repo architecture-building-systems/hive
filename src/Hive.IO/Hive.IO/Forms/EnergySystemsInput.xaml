@@ -17,6 +17,9 @@
         <DataTemplate x:Key="GasBoilerProperties">
             <forms:GasBoilerProperties/>
         </DataTemplate>
+        <DataTemplate x:Key="ChpProperties">
+            <forms:GasBoilerProperties/>
+        </DataTemplate>
     </Window.Resources>
 
     <TabControl>
