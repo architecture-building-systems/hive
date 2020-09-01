@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows.Controls;
 
 namespace Hive.IO.Forms
@@ -13,6 +14,10 @@ namespace Hive.IO.Forms
             InitializeComponent();
         }
 
+        private EnergySystemsInputViewModel ViewModel => (EnergySystemsInputViewModel) DataContext;
+
+        public IEnumerable<ConversionTechPropertiesViewModel> Conversions => ViewModel.ConversionTechnologies;
+
         private void ConversionNames_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (sender is ComboBox conversionNames &&
@@ -22,7 +27,6 @@ namespace Hive.IO.Forms
                 PropertiesView.ContentTemplate =
                     new PropertiesDataTemplateSelector().SelectTemplate(TechGrid.CurrentItem, TechGrid);
             }
-
         }
 
         private void TechGrid_CellEditEnding(object sender, DataGridCellEditEndingEventArgs e)

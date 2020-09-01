@@ -54,6 +54,68 @@ namespace Hive.IO.Forms
         private string _endUse;
         public string EndUse { get => _endUse; set => Set(ref _endUse, value); }
 
+        #region GasBoiler properties
+        private double _efficiency;
+        private double _capacity;
+        private double _lifetime;
+        private double _capitalCost;
+        private double _operationalCost;
+        private double _embodiedEmissions;
+        #endregion
+
+        public string Efficiency
+        {
+            get => $"{_efficiency:0.00}";
+            set => Set(ref _efficiency, ParseDouble(value, _efficiency));
+        }
+
+        public string Capacity
+        {
+            get => $"{_capacity:0.00}";
+            set => Set(ref _capacity, ParseDouble(value, _capacity));
+        }
+
+        public string Lifetime
+        {
+            get => $"{_lifetime:0}";
+            set => Set(ref _lifetime, ParseDouble(value, _lifetime));
+        }
+
+        public string CapitalCost
+        {
+            get => $"{_capitalCost:0.00}";
+            set => Set(ref _capitalCost, ParseDouble(value, _capitalCost));
+        }
+
+        public string OperationalCost
+        {
+            get => $"{_operationalCost:0.00}";
+            set => Set(ref _operationalCost, ParseDouble(value, _operationalCost));
+        }
+
+        public string EmbodiedEmissions
+        {
+            get => $"{_embodiedEmissions:0.00}";
+            set => Set(ref _embodiedEmissions, ParseDouble(value, _embodiedEmissions));
+        }
+
+        /// <summary>
+        /// Parses the string to a double or returns the oldValue on error.
+        /// </summary>
+        /// <param name="value"></param>
+        /// <param name="oldValue"></param>
+        /// <returns></returns>
+        private double ParseDouble(string value, double oldValue)
+        {
+            double result;
+            if (double.TryParse(value, out result))
+            {
+                return result;
+            }
+
+            return oldValue;
+        }
+
         /// <summary>
         ///     Assign default values based on the Name - gets called when setting the name.
         /// </summary>

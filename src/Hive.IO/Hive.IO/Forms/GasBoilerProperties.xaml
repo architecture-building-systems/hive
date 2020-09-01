@@ -14,9 +14,55 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
-            <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <ListBox Grid.Row="0" Grid.Column="0"></ListBox>
-        <Label Grid.Row="0" Grid.Column="1">Gas Boiler properties go here...</Label>
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.ColumnSpan="2">Efficiency</Label>
+            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Efficiency}"/>
+            <Label Grid.Row="1" Grid.Column="1">(-)</Label>
+            <Label Grid.Row="2" Grid.ColumnSpan="2">Capacity</Label>
+            <TextBox Grid.Row="3" Grid.Column="0">...</TextBox>
+            <Label Grid.Row="3" Grid.Column="1">(kW)</Label>
+            <Label Grid.Row="4" Grid.ColumnSpan="2">Lifetime</Label>
+            <TextBox Grid.Row="5" Grid.Column="0">...</TextBox>
+            <Label Grid.Row="5" Grid.Column="1">(years)</Label>
+        </Grid>
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+                <RowDefinition></RowDefinition>
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"></ColumnDefinition>
+                <ColumnDefinition Width="1*"></ColumnDefinition>
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.ColumnSpan="2">Capital cost (CAPEX)</Label>
+            <TextBox Grid.Row="1" Grid.Column="0">...</TextBox>
+            <Label Grid.Row="1" Grid.Column="1">(CHF)</Label>
+            <Label Grid.Row="2" Grid.ColumnSpan="2">Operational cost (OPEX)</Label>
+            <TextBox Grid.Row="3" Grid.Column="0">...</TextBox>
+            <Label Grid.Row="3" Grid.Column="1">(CHF)</Label>
+            <Label Grid.Row="4" Grid.ColumnSpan="2">Embodied Emissions</Label>
+            <TextBox Grid.Row="5" Grid.Column="0">...</TextBox>
+            <Label Grid.Row="5" Grid.Column="1">(kgCO₂)</Label>
+        </Grid>
+
+        <Label Grid.Row="1" Grid.Column="0">Technology Image</Label>
+        <Label Grid.Row="1" Grid.Column="1">Project example Image</Label>
     </Grid>
 </UserControl>
