@@ -34,7 +34,7 @@
                 <ScrollViewer Grid.Row="0" Grid.ColumnSpan="3">
                     <DataGrid Name="TechGrid" ItemsSource="{Binding ConversionTechnologiesView, Mode=OneWay}" CanUserDeleteRows="True"  
                               AutoGenerateColumns="False" CanUserAddRows="True" SelectionMode="Single" 
-                              IsSynchronizedWithCurrentItem="True">
+                              IsSynchronizedWithCurrentItem="True" CurrentCellChanged="TechGrid_CurrentCellChanged" CellEditEnding="TechGrid_CellEditEnding">
                         <DataGrid.Columns>
                             <DataGridTemplateColumn Header="Source" Width="1*">
                                 <DataGridTemplateColumn.CellTemplate>
@@ -65,7 +65,7 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </ScrollViewer>
-                <ContentPresenter Content="{Binding Path=ConversionTechnologiesView.CurrentItem}" Grid.Row="1" Grid.ColumnSpan="3"
+                <ContentPresenter Name="PropertiesView" Content="{Binding Path=ConversionTechnologiesView.CurrentItem}" Grid.Row="1" Grid.ColumnSpan="3"
                                   Grid.Column="0" ContentTemplateSelector="{StaticResource PropertiesDataTemplateSelector}"/>
             </Grid>
         </TabItem>
