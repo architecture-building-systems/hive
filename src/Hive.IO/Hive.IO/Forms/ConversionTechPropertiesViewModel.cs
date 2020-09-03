@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using System.ComponentModel;
 using System.Linq;
 using Hive.IO.EnergySystems;
 using Rhino.Geometry;
@@ -74,13 +72,17 @@ namespace Hive.IO.Forms
                 }
             };
 
+        private IEnumerable<SurfaceViewModel> _availableSurfaces;
+
         private string _endUse;
 
         private string _name;
 
         private string _source;
 
-        public IEnumerable<string> ValidNames =>  IsParametricDefined ? new List<string>{Name}.AsEnumerable() : Defaults.Keys;
+        public IEnumerable<string> ValidNames =>
+            IsParametricDefined ? new List<string> {Name}.AsEnumerable() : Defaults.Keys;
+
         public IEnumerable<string> AllNames => Defaults.Keys;
 
         public string Name
@@ -148,8 +150,33 @@ namespace Hive.IO.Forms
             set => Set(ref _embodiedEmissions, ParseDouble(value, _embodiedEmissions));
         }
 
-        public bool IsParametricDefined { get; set; }
+        public string HeatToPowerRatio
+        {
+            get => $"{_heatToPowerRatio:0.00}";
+            set => Set(ref _heatToPowerRatio, ParseDouble(value, _heatToPowerRatio));
+        }
+
+
+        public bool IsParametricDefined => ConversionTech != null;
+        public ConversionTech ConversionTech { get; private set; }
+
         public bool IsEditable => !IsParametricDefined;
+
+        public IEnumerable<SurfaceViewModel> AvailableSurfaces
+        {
+            get => _availableSurfaces;
+            set => Set(ref _availableSurfaces, value);
+        }
+
+        public IEnumerable<SurfaceViewModel> SelectedSurfaces
+        {
+            get => _availableSurfaces?.Where(sm => sm.Connection == this) ?? new List<SurfaceViewModel>();
+            set
+            {
+                SelectSurfaces(value);
+                RaisePropertyChangedEvent();
+            }
+        }
 
         /// <summary>
         ///     Parses the string to a double or returns the oldValue on error.
@@ -173,24 +200,10 @@ namespace Hive.IO.Forms
             Defaults[Name](this);
         }
 
-        private IEnumerable<SurfaceViewModel> _availableSurfaces;
-        public IEnumerable<SurfaceViewModel> AvailableSurfaces { get => _availableSurfaces; set => Set(ref _availableSurfaces, value); }
-
         private void SelectSurfaces(IEnumerable<SurfaceViewModel> surfaces)
         {
-            foreach (var surface in _availableSurfaces)
-            {
-                surface.Connection = null;
-            }
-            foreach (var surface in surfaces)
-            {
-                surface.Connection = this;
-            }
-        }
-        public IEnumerable<SurfaceViewModel> SelectedSurfaces
-        {
-            get => _availableSurfaces?.Where(sm => sm.Connection == this) ?? new List<SurfaceViewModel>();
-            set { SelectSurfaces(value); RaisePropertyChangedEvent(); }
+            foreach (var surface in _availableSurfaces) surface.Connection = null;
+            foreach (var surface in surfaces) surface.Connection = this;
         }
 
         #region properties
@@ -201,13 +214,20 @@ namespace Hive.IO.Forms
         private double _capitalCost;
         private double _operationalCost;
         private double _embodiedEmissions;
+        private double _heatToPowerRatio;
 
         #endregion
 
         #region SetProperties
+        /// <summary>
+        /// If this viewmodel was generated in the form itself, then this is null, else,
+        /// it's set to the ConversionTech object created in GhEnergySystems.SolveInstance.
+        /// </summary>
 
         public void SetProperties(GasBoiler gasBoiler)
         {
+            ConversionTech = gasBoiler;
+
             _efficiency = gasBoiler.Efficiency;
             _capacity = gasBoiler.Capacity;
             _capitalCost = gasBoiler.SpecificInvestmentCost;
@@ -218,6 +238,8 @@ namespace Hive.IO.Forms
 
         public void SetProperties(HeatCoolingExchanger exchanger)
         {
+            ConversionTech = exchanger;
+
             _efficiency = exchanger.DistributionLosses;
             _capacity = exchanger.Capacity;
             _capitalCost = exchanger.SpecificInvestmentCost;
@@ -228,6 +250,8 @@ namespace Hive.IO.Forms
 
         public void SetProperties(Chiller chiller)
         {
+            ConversionTech = chiller;
+
             _efficiency = chiller.EtaRef;
             _capacity = chiller.Capacity;
             _capitalCost = chiller.SpecificInvestmentCost;
@@ -238,16 +262,21 @@ namespace Hive.IO.Forms
 
         public void SetProperties(CombinedHeatPower chp)
         {
+            ConversionTech = chp;
+
             _efficiency = chp.ElectricEfficiency;
             _capacity = chp.Capacity;
             _capitalCost = chp.SpecificInvestmentCost;
             _embodiedEmissions = chp.SpecificEmbodiedGhg;
             _lifetime = 9999999.0;
             _operationalCost = 999999.0;
+            _heatToPowerRatio = chp.HeatToPowerRatio;
         }
 
         public void SetProperties(AirSourceHeatPump ashp)
         {
+            ConversionTech = ashp;
+
             _efficiency = ashp.EtaRef;
             _capacity = ashp.Capacity;
             _capitalCost = ashp.SpecificInvestmentCost;
@@ -258,6 +287,8 @@ namespace Hive.IO.Forms
 
         public void SetProperties(Photovoltaic photovoltaic)
         {
+            ConversionTech = photovoltaic;
+
             _efficiency = photovoltaic.RefEfficiencyElectric;
             _capacity = photovoltaic.Capacity;
             _capitalCost = photovoltaic.SpecificInvestmentCost;
@@ -268,6 +299,8 @@ namespace Hive.IO.Forms
 
         public void SetProperties(SolarThermal solarThermal)
         {
+            ConversionTech = solarThermal;
+
             _efficiency = solarThermal.RefEfficiencyHeating;
             _capacity = solarThermal.Capacity;
             _capitalCost = solarThermal.SpecificInvestmentCost;
@@ -283,6 +316,8 @@ namespace Hive.IO.Forms
     {
         public string Name { get; set; }
         public double Area { get; set; }
+
+        public Mesh Mesh { get; set; }
 
         public ConversionTechPropertiesViewModel Connection { get; set; }
     }

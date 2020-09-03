@@ -201,6 +201,7 @@ namespace Hive.IO.GHComponents
 
             // compute the results
             var result = new List<object>();
+            result = ReadViewModel();
             result.AddRange(conversionTech);
             result.AddRange(emitters);
             DA.SetDataList(0, result);
@@ -223,7 +224,7 @@ namespace Hive.IO.GHComponents
             var surfaceIndex = 0;
             foreach (var ct in conversionTechnologies)
             {
-                var ctvm = new ConversionTechPropertiesViewModel {IsParametricDefined = true};
+                var ctvm = new ConversionTechPropertiesViewModel();
                 switch (ct)
                 {
                     case GasBoiler gasBoiler:
@@ -237,7 +238,8 @@ namespace Hive.IO.GHComponents
                         var pvSurface = new SurfaceViewModel
                         {
                             Area = AreaMassProperties.Compute(photovoltaic.SurfaceGeometry).Area,
-                            Name = $"srf{surfaceIndex++}"
+                            Name = $"srf{surfaceIndex++}",
+                            Mesh = photovoltaic.SurfaceGeometry
                         };
                         pvSurface.Connection = ctvm;
                         vm.Surfaces.Add(pvSurface);
@@ -249,7 +251,8 @@ namespace Hive.IO.GHComponents
                         var stSurface = new SurfaceViewModel
                         {
                             Area = AreaMassProperties.Compute(solarThermal.SurfaceGeometry).Area,
-                            Name = $"srf{surfaceIndex++}"
+                            Name = $"srf{surfaceIndex++}",
+                            Mesh = solarThermal.SurfaceGeometry
                         };
                         stSurface.Connection = ctvm;
                         vm.Surfaces.Add(stSurface);
@@ -284,12 +287,73 @@ namespace Hive.IO.GHComponents
                 var surface = new SurfaceViewModel
                 {
                     Area = AreaMassProperties.Compute(m).Area,
-                    Name = $"srf{surfaceIndex++}"
+                    Name = $"srf{surfaceIndex++}",
+                    Mesh = m
                 };
                 vm.Surfaces.Add(surface);
             }
 
             return vm;
+        }
+
+        /// <summary>
+        ///     Read out the results from the ViewModel. These include the originally (unmodified)
+        ///     parametric inputs as created in SolveInstance.
+        /// </summary>
+        /// <returns></returns>
+        private List<object> ReadViewModel()
+        {
+            var result = new List<object>();
+            foreach (var ct in _viewModel.ConversionTechnologies)
+                if (ct.IsParametricDefined)
+                {
+                    result.Add(ct.ConversionTech);
+                }
+                else
+                {
+                    var capitalCost = double.Parse(ct.CapitalCost);
+                    var embodiedEmissions = double.Parse(ct.EmbodiedEmissions);
+                    var efficiency = double.Parse(ct.Efficiency);
+                    var capacity = double.Parse(ct.Capacity);
+                    var heatToPowerRatio = double.Parse(ct.HeatToPowerRatio);
+                    switch (ct.Name)
+                    {
+                        case "Photovoltaic (PV)":
+                            foreach (var sm in ct.SelectedSurfaces)
+                                result.Add(new Photovoltaic(capitalCost, embodiedEmissions, sm.Mesh, "FIXME: PV",
+                                    efficiency));
+                            break;
+                        case "Solar Thermal (ST)":
+                            foreach (var sm in ct.SelectedSurfaces)
+                                result.Add(new SolarThermal(capitalCost, embodiedEmissions, sm.Mesh, "FIXME: ST",
+                                    efficiency));
+                            break;
+                        case "Boiler (Gas)":
+                            result.Add(new GasBoiler(capitalCost, embodiedEmissions, capacity, efficiency));
+                            break;
+                        case "CHP":
+                            result.Add(new CombinedHeatPower(capitalCost, embodiedEmissions, capacity, heatToPowerRatio,
+                                efficiency));
+                            break;
+                        case "Chiller (Electricity)":
+                            result.Add(new Chiller(capitalCost, embodiedEmissions, capacity, efficiency));
+                            break;
+                        case "ASHP (Electricity)":
+                            result.Add(new AirSourceHeatPump(capitalCost, embodiedEmissions, capacity, efficiency));
+                            break;
+                        case "Heat Exchanger":
+                            result.Add(new HeatCoolingExchanger(capitalCost, embodiedEmissions, capacity, efficiency));
+                            break;
+                        case "Cooling Exchanger":
+                            result.Add(new HeatCoolingExchanger(capitalCost, embodiedEmissions, capacity, efficiency,
+                                false, true));
+                            break;
+                        default:
+                            throw new Exception($"Don't know how to read {ct.Name}");
+                    }
+                }
+
+            return result;
         }
 
         /// <summary>
