@@ -69,6 +69,7 @@ namespace Hive.IO.GHComponents
             var form = new EnergySystemsInput();
             form.DataContext = _viewModel;
             form.ShowDialog();
+            ExpireSolution(true);
         }
 
 
