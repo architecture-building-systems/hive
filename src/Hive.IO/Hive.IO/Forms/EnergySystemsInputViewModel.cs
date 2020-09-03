@@ -14,8 +14,6 @@ namespace Hive.IO.Forms
     /// </summary>
     public class EnergySystemsInputViewModel: ViewModelBase
     {
-        public IEnumerable<string> ConversionNames => ConversionTechPropertiesViewModel.ValidNames;
-
         public ObservableCollection<ConversionTechPropertiesViewModel> ConversionTechnologies { get; }
 
         public ICollectionView ConversionTechnologiesView =>

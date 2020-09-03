@@ -80,14 +80,15 @@ namespace Hive.IO.Forms
 
         private string _source;
 
-        public static IEnumerable<string> ValidNames => Defaults.Keys;
+        public IEnumerable<string> ValidNames =>  IsParametricDefined ? new List<string>{Name}.AsEnumerable() : Defaults.Keys;
+        public IEnumerable<string> AllNames => Defaults.Keys;
 
         public string Name
         {
             get => _name ?? "Photovoltaic (PV)";
             set
             {
-                if (ValidNames.Contains(value))
+                if (AllNames.Contains(value))
                 {
                     Set(ref _name, value);
                     AssignDefaults();
@@ -146,6 +147,9 @@ namespace Hive.IO.Forms
             get => $"{_embodiedEmissions:0.00}";
             set => Set(ref _embodiedEmissions, ParseDouble(value, _embodiedEmissions));
         }
+
+        public bool IsParametricDefined { get; set; }
+        public bool IsEditable => !IsParametricDefined;
 
         /// <summary>
         ///     Parses the string to a double or returns the oldValue on error.
