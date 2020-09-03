@@ -110,7 +110,7 @@ namespace Hive.IO.Building
 
         public double WallArea => Walls.Sum(w => w.Area);
         public double RoofArea => Roofs.Sum(r => r.Area);
-        public double WindowArea => Windows.Sum(o => o.Area);
+        public double WindowArea => Windows.Sum(w => w.Area);
         public double FloorArea => Floors.Sum(f => f.Area);
 
         #endregion

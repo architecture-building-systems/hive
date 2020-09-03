@@ -1,4 +1,5 @@
-﻿using rg = Rhino.Geometry;
+﻿using System.Collections.Generic;
+using rg = Rhino.Geometry;
 
 namespace Hive.IO.Building
 {
@@ -11,6 +12,11 @@ namespace Hive.IO.Building
         /// Rhino BrepFace of this component
         /// </summary>
         public rg.Brep BrepGeometry { get; private set; }
+
+        /// <summary>
+        /// Surface Components that are on this component. E.g. a window as part of a wall. Important to know for Area calculation.
+        /// </summary>
+        public List<Component> SubComponents { get; set; }
 
         /// <summary>
         /// Unique identifier
