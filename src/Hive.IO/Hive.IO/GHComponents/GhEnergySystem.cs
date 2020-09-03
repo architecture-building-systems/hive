@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows.Forms;
+using System.Windows.Input;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
@@ -18,6 +21,7 @@ namespace Hive.IO.GHComponents
 {
     public class GhEnergySystem : GH_Component
     {
+        private EnergySystemsInputViewModel _viewModel;
 
         public GhEnergySystem()
             : base("Input EnergySystems Hive", "HiveInputEnergySystems",
@@ -72,8 +76,11 @@ namespace Hive.IO.GHComponents
         private void ShowForm()
         {
             var form = new EnergySystemsInput();
+            form.DataContext = _viewModel;
             form.ShowDialog();
         }
+
+        
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
@@ -119,13 +126,13 @@ namespace Hive.IO.GHComponents
             //    foreach (Mesh mesh in meshList)
             //    {
             //        if (Form_SystemType == "pv") 
-            //            conversionTech.Add(new Photovoltaic(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_pv_eff));
+            //            conversionTechnologies.Add(new Photovoltaic(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_pv_eff));
             //        else if (Form_SystemType == "pvt") 
-            //            conversionTech.Add(new PVT(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_pv_eff, Form_thermal_eff));
+            //            conversionTechnologies.Add(new PVT(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_pv_eff, Form_thermal_eff));
             //        else if (Form_SystemType == "st") 
-            //            conversionTech.Add(new SolarThermal(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_thermal_eff));
+            //            conversionTechnologies.Add(new SolarThermal(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_thermal_eff));
             //        else 
-            //            conversionTech.Add(new GroundCollector(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name)); // Form_thermal_eff, 
+            //            conversionTechnologies.Add(new GroundCollector(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name)); // Form_thermal_eff, 
             //    }
             //}
             if (solarTechProperties.Count > 0)
@@ -185,13 +192,117 @@ namespace Hive.IO.GHComponents
                 }
             }
 
-            var obj = new List<object>();
-            foreach (object o in conversionTech)
-                obj.Add(o);
-            foreach (object e in emitters)
-                obj.Add(e);
-            DA.SetDataList(0, obj);
+            // create a viewmodel for the form (note, it get's set to null when the input values change...)
+            if (_viewModel == null)
+            {
+                _viewModel = CreateViewModel(conversionTech, meshList, emitters);
+            }
+
+            // the result might be changed by opening the form,
+            // so we need to create it based on the view model (the result of the form)
+            //var result = ComputeResults(_viewModel);
+            
+
+            // compute the results
+            var result = new List<object>();
+            result.AddRange(conversionTech);
+            result.AddRange(emitters);
+            DA.SetDataList(0, result);
         }
+
+        /// <summary>
+        /// Read in the conversion technologies and the emitters and build up a view model for
+        /// the form.
+        /// </summary>
+        /// <param name="conversionTechnologies"></param>
+        /// <param name="emitters"></param>
+        /// <returns></returns>
+        private EnergySystemsInputViewModel CreateViewModel(
+            IEnumerable<ConversionTech> conversionTechnologies, IEnumerable<Mesh> meshes, IEnumerable<Emitter> emitters)
+        {
+            var vm = new EnergySystemsInputViewModel();
+            vm.ConversionTechnologies.Clear();
+            vm.Surfaces.Clear();
+
+            var surfaceIndex = 0;
+            foreach (var ct in conversionTechnologies)
+            {
+                var ctvm = new ConversionTechPropertiesViewModel();
+                switch (ct)
+                {
+                    case GasBoiler gasBoiler:
+                        ctvm.Name = "Boiler(Gas)";
+                        ctvm.SetProperties(gasBoiler);
+                        break;
+
+                    case Photovoltaic photovoltaic:
+                        ctvm.Name = "Photovoltaic (PV)";
+                        ctvm.SetProperties(photovoltaic);
+                        var pvSurface = new SurfaceViewModel
+                        {
+                            Area = AreaMassProperties.Compute(photovoltaic.SurfaceGeometry).Area,
+                            Name = $"srf{surfaceIndex++}"
+                        };
+                        pvSurface.Connection = ctvm;
+                        vm.Surfaces.Add(pvSurface);
+                        break;
+
+                    case SolarThermal solarThermal:
+                        ctvm.Name = "Solar Thermal (ST)";
+                        ctvm.SetProperties(solarThermal);
+                        var stSurface = new SurfaceViewModel
+                        {
+                            Area = AreaMassProperties.Compute(solarThermal.SurfaceGeometry).Area,
+                            Name = $"srf{surfaceIndex++}"
+                        };
+                        stSurface.Connection = ctvm;
+                        vm.Surfaces.Add(stSurface);
+                        break;
+
+                    case AirSourceHeatPump ashp:
+                        ctvm.Name = "ASHP (Electricity)";
+                        ctvm.SetProperties(ashp);
+                        break;
+
+                    case CombinedHeatPower chp:
+                        ctvm.Name = "CHP";
+                        ctvm.SetProperties(chp);
+                        break;
+
+                    case Chiller chiller:
+                        ctvm.Name = "Chiller (Electricity)";
+                        ctvm.SetProperties(chiller);
+                        break;
+
+                    case HeatCoolingExchanger exchanger:
+                        ctvm.Name = exchanger.IsHeating ? "Heat Exchanger" : "Cooling Exchanger";
+                        ctvm.SetProperties(exchanger);
+                        break;
+                }
+                vm.ConversionTechnologies.Add(ctvm);
+            }
+
+            foreach (var m in meshes)
+            {
+                var surface = new SurfaceViewModel
+                {
+                    Area = AreaMassProperties.Compute(m).Area,
+                    Name = $"srf{surfaceIndex++}"
+                };
+                vm.Surfaces.Add(surface);
+            }
+            return vm;
+        }
+
+        /// <summary>
+        /// Input changed, delete the viewModel.
+        /// </summary>
+        protected override void ValuesChanged()
+        {
+            _viewModel = null;
+            base.ValuesChanged();
+        }
+
 
 
         protected override System.Drawing.Bitmap Icon => Properties.Resources.IO_Solartech;

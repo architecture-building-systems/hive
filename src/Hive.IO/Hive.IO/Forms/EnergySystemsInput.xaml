@@ -26,6 +26,12 @@
         <DataTemplate x:Key="AshpProperties">
             <forms:AshpProperties />
         </DataTemplate>
+        <DataTemplate x:Key="HeatExchangerProperties">
+            <forms:AshpProperties />
+        </DataTemplate>
+        <DataTemplate x:Key="CoolingExchangerProperties">
+            <forms:AshpProperties />
+        </DataTemplate>
     </Window.Resources>
 
     <TabControl>

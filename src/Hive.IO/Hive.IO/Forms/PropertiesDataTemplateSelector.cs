@@ -14,6 +14,8 @@ namespace Hive.IO.Forms
             {"CHP", "ChpProperties"},
             {"Chiller (Electricity)", "ChillerProperties"},
             {"ASHP (Electricity)", "AshpProperties"},
+            {"Heat Exchanger", "HeatExchangerProperties" },
+            {"Cooling Exchanger", "CoolingExchangerProperties" }
         };
 
         public override DataTemplate SelectTemplate(object item, DependencyObject container)

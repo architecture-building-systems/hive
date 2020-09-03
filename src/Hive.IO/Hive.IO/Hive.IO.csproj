@@ -89,6 +89,12 @@
       <DependentUpon>BuildingInput.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\BuildingInputState.cs" />
+    <Compile Include="Forms\HeatExchangerProperties.xaml.cs">
+      <DependentUpon>HeatExchangerProperties.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CoolingExchangerProperties.xaml.cs">
+      <DependentUpon>CoolingExchangerProperties.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\ChillerProperties.xaml.cs">
       <DependentUpon>ChillerProperties.xaml</DependentUpon>
     </Compile>
@@ -239,6 +245,14 @@
     <Page Include="Forms\BuildingInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\HeatExchangerProperties.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\CoolingExchangerProperties.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
     </Page>
     <Page Include="Forms\ChillerProperties.xaml">
       <SubType>Designer</SubType>

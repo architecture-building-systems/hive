@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
+using Hive.IO.EnergySystems;
 using Rhino.Geometry;
 
 namespace Hive.IO.Forms
@@ -52,6 +53,20 @@ namespace Hive.IO.Forms
                 },
                 {
                     "ASHP (Electricity)", self =>
+                    {
+                        self.Source = "Air";
+                        self.EndUse = "Electricity demand";
+                    }
+                },
+                {
+                    "Heat Exchanger", self =>
+                    {
+                        self.Source = "Air";
+                        self.EndUse = "Electricity demand";
+                    }
+                },
+                {
+                    "Cooling Exchanger", self =>
                     {
                         self.Source = "Air";
                         self.EndUse = "Electricity demand";
@@ -182,6 +197,80 @@ namespace Hive.IO.Forms
         private double _capitalCost;
         private double _operationalCost;
         private double _embodiedEmissions;
+
+        #endregion
+
+        #region SetProperties
+
+        public void SetProperties(GasBoiler gasBoiler)
+        {
+            _efficiency = gasBoiler.Efficiency;
+            _capacity = gasBoiler.Capacity;
+            _capitalCost = gasBoiler.SpecificInvestmentCost;
+            _embodiedEmissions = gasBoiler.SpecificEmbodiedGhg;
+            _lifetime = 9999999.0;
+            _operationalCost = 999999.0;
+        }
+
+        public void SetProperties(HeatCoolingExchanger exchanger)
+        {
+            _efficiency = exchanger.DistributionLosses;
+            _capacity = exchanger.Capacity;
+            _capitalCost = exchanger.SpecificInvestmentCost;
+            _embodiedEmissions = exchanger.SpecificEmbodiedGhg;
+            _lifetime = 9999999.0;
+            _operationalCost = 999999.0;
+        }
+
+        public void SetProperties(Chiller chiller)
+        {
+            _efficiency = chiller.EtaRef;
+            _capacity = chiller.Capacity;
+            _capitalCost = chiller.SpecificInvestmentCost;
+            _embodiedEmissions = chiller.SpecificEmbodiedGhg;
+            _lifetime = 9999999.0;
+            _operationalCost = 999999.0;
+        }
+
+        public void SetProperties(CombinedHeatPower chp)
+        {
+            _efficiency = chp.ElectricEfficiency;
+            _capacity = chp.Capacity;
+            _capitalCost = chp.SpecificInvestmentCost;
+            _embodiedEmissions = chp.SpecificEmbodiedGhg;
+            _lifetime = 9999999.0;
+            _operationalCost = 999999.0;
+        }
+
+        public void SetProperties(AirSourceHeatPump ashp)
+        {
+            _efficiency = ashp.EtaRef;
+            _capacity = ashp.Capacity;
+            _capitalCost = ashp.SpecificInvestmentCost;
+            _embodiedEmissions = ashp.SpecificEmbodiedGhg;
+            _lifetime = 9999999.0;
+            _operationalCost = 999999.0;
+        }
+
+        public void SetProperties(Photovoltaic photovoltaic)
+        {
+            _efficiency = photovoltaic.RefEfficiencyElectric;
+            _capacity = photovoltaic.Capacity;
+            _capitalCost = photovoltaic.SpecificInvestmentCost;
+            _embodiedEmissions = photovoltaic.SpecificEmbodiedGhg;
+            _lifetime = 9999999.0;
+            _operationalCost = 999999.0;
+        }
+
+        public void SetProperties(SolarThermal solarThermal)
+        {
+            _efficiency = solarThermal.RefEfficiencyHeating;
+            _capacity = solarThermal.Capacity;
+            _capitalCost = solarThermal.SpecificInvestmentCost;
+            _embodiedEmissions = solarThermal.SpecificEmbodiedGhg;
+            _lifetime = 9999999.0;
+            _operationalCost = 999999.0;
+        }
 
         #endregion
     }
