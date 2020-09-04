@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Windows.Controls;
 
 namespace Hive.IO.Forms
@@ -20,13 +21,16 @@ namespace Hive.IO.Forms
 
         private void ConversionNames_OnSelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (sender is ComboBox conversionNames &&
-                conversionNames.DataContext is ConversionTechPropertiesViewModel vm)
+            if (sender is ComboBox conversionNames 
+                && conversionNames.DataContext is ConversionTechPropertiesViewModel vm
+                && vm.Name != (string) conversionNames.SelectedValue)
             {
                 vm.Name = (string) conversionNames.SelectedValue;
-                vm.ModuleType = vm.ModuleType;
                 PropertiesView.ContentTemplate =
                     new PropertiesDataTemplateSelector().SelectTemplate(TechGrid.CurrentItem, TechGrid);
+
+                // make sure module list changed
+                vm.ModuleType = vm.ModuleType;
             }
         }
 

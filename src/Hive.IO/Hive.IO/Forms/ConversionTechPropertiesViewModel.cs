@@ -166,6 +166,7 @@ namespace Hive.IO.Forms
                     
                     // make sure everyone knows about this!
                     RaisePropertyChangedEvent();
+                    RaisePropertyChangedEvent("ModuleTypes");
                     RaisePropertyChangedEvent("Efficiency");
                     RaisePropertyChangedEvent("EmbodiedEmissions");
                     RaisePropertyChangedEvent("CapitalCost");
