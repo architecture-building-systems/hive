@@ -1,34 +1,90 @@
 {
   "Photovoltaic (PV)": {
     "Source": "Solar",
-    "EndUse": "Electricity demand"
+    "EndUse": "Electricity demand",
+    "Efficiency": 0.00,
+    "Capacity":  0.00,
+    "CapitalCost":  0.00,
+    "Lifetime":  0.00,
+    "OperationalCost":  0.00,
+    "EmbodiedEmissions": 0.00,
+    "HeatToPowerRatio":  0.00, 
   },
   "Solar Thermal (ST)": {
     "Source": "Solar",
-    "EndUse": "Electricity demand"
+    "EndUse": "Electricity demand",
+    "Efficiency": 0.00,
+    "Capacity": 0.00,
+    "CapitalCost": 0.00,
+    "Lifetime": 0.00,
+    "OperationalCost": 0.00,
+    "EmbodiedEmissions": 0.00,
+    "HeatToPowerRatio": 0.00
   },
   "Boiler (Gas)": {
     "Source": "Gas",
-    "EndUse": "Heating demand, DHW"
+    "EndUse": "Heating demand, DHW",
+    "Efficiency": 0.00,
+    "Capacity": 0.00,
+    "CapitalCost": 0.00,
+    "Lifetime": 0.00,
+    "OperationalCost": 0.00,
+    "EmbodiedEmissions": 0.00,
+    "HeatToPowerRatio": 0.00
   },
   "CHP": {
     "Source": "Gas",
-    "EndUse": "Electricity demand, Heating demand, DHW"
+    "EndUse": "Electricity demand, Heating demand, DHW",
+    "Efficiency": 0.00,
+    "Capacity": 0.00,
+    "CapitalCost": 0.00,
+    "Lifetime": 0.00,
+    "OperationalCost": 0.00,
+    "EmbodiedEmissions": 0.00,
+    "HeatToPowerRatio": 0.00
   },
   "Chiller (Electricity)": {
     "Source": "Electricity Grid",
-    "EndUse": "Cooling demand"
+    "EndUse": "Cooling demand",
+    "Efficiency": 0.00,
+    "Capacity": 0.00,
+    "CapitalCost": 0.00,
+    "Lifetime": 0.00,
+    "OperationalCost": 0.00,
+    "EmbodiedEmissions": 0.00,
+    "HeatToPowerRatio": 0.00
   },
   "ASHP (Electricity)": {
     "Source": "Air",
-    "EndUse": "Electricity demand"
+    "EndUse": "Electricity demand",
+    "Efficiency": 0.00,
+    "Capacity": 0.00,
+    "CapitalCost": 0.00,
+    "Lifetime": 0.00,
+    "OperationalCost": 0.00,
+    "EmbodiedEmissions": 0.00,
+    "HeatToPowerRatio": 0.00
   },
   "Heat Exchanger": {
     "Source": "Air",
-    "EndUse": "Heating demand"
+    "EndUse": "Heating demand",
+    "Efficiency": 0.00,
+    "Capacity": 0.00,
+    "CapitalCost": 0.00,
+    "Lifetime": 0.00,
+    "OperationalCost": 0.00,
+    "EmbodiedEmissions": 0.00,
+    "HeatToPowerRatio": 0.00
   },
   "Cooling Exchanger": {
     "Source": "Air",
-    "EndUse": "Cooling demand"
+    "EndUse": "Cooling demand",
+    "Efficiency": 0.00,
+    "Capacity": 0.00,
+    "CapitalCost": 0.00,
+    "Lifetime": 0.00,
+    "OperationalCost": 0.00,
+    "EmbodiedEmissions": 0.00,
+    "HeatToPowerRatio": 0.00
   }
 }

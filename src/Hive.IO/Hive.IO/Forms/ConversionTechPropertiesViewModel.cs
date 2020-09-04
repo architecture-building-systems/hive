@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
+using System.Windows.Media;
 using Hive.IO.EnergySystems;
 using Hive.IO.Resources;
 using Rhino.Geometry;
@@ -58,43 +60,43 @@ namespace Hive.IO.Forms
         public string Efficiency
         {
             get => $"{_efficiency:0.00}";
-            set => Set(ref _efficiency, ParseDouble(value, _efficiency));
+            set => SetWithColors(ref _efficiency, ParseDouble(value, _efficiency));
         }
 
         public string Capacity
         {
             get => $"{_capacity:0.00}";
-            set => Set(ref _capacity, ParseDouble(value, _capacity));
+            set => SetWithColors(ref _capacity, ParseDouble(value, _capacity));
         }
 
         public string Lifetime
         {
             get => $"{_lifetime:0}";
-            set => Set(ref _lifetime, ParseDouble(value, _lifetime));
+            set => SetWithColors(ref _lifetime, ParseDouble(value, _lifetime));
         }
 
         public string CapitalCost
         {
             get => $"{_capitalCost:0.00}";
-            set => Set(ref _capitalCost, ParseDouble(value, _capitalCost));
+            set => SetWithColors(ref _capitalCost, ParseDouble(value, _capitalCost));
         }
 
         public string OperationalCost
         {
             get => $"{_operationalCost:0.00}";
-            set => Set(ref _operationalCost, ParseDouble(value, _operationalCost));
+            set => SetWithColors(ref _operationalCost, ParseDouble(value, _operationalCost));
         }
 
         public string EmbodiedEmissions
         {
             get => $"{_embodiedEmissions:0.00}";
-            set => Set(ref _embodiedEmissions, ParseDouble(value, _embodiedEmissions));
+            set => SetWithColors(ref _embodiedEmissions, ParseDouble(value, _embodiedEmissions));
         }
 
         public string HeatToPowerRatio
         {
             get => $"{_heatToPowerRatio:0.00}";
-            set => Set(ref _heatToPowerRatio, ParseDouble(value, _heatToPowerRatio));
+            set => SetWithColors(ref _heatToPowerRatio, ParseDouble(value, _heatToPowerRatio));
         }
 
 
@@ -141,6 +143,12 @@ namespace Hive.IO.Forms
             var defaults = Defaults[Name];
             Source = defaults.Source;
             EndUse = defaults.EndUse;
+            _efficiency = defaults.Efficiency;
+            _capacity = defaults.Capacity;
+            _capitalCost = defaults.CapitalCost;
+            _embodiedEmissions = defaults.EmbodiedEmissions;
+            _lifetime = defaults.Lifetime;
+            _operationalCost = defaults.OperationalCost;
         }
 
         private void SelectSurfaces(IEnumerable<SurfaceViewModel> surfaces)
@@ -158,6 +166,46 @@ namespace Hive.IO.Forms
         private double _operationalCost;
         private double _embodiedEmissions;
         private double _heatToPowerRatio;
+
+        #endregion
+
+        #region Highlighting differences
+
+        private readonly Brush _normalBrush = new SolidColorBrush(Colors.Black);
+        private readonly Brush _modifiedBrush = new SolidColorBrush(Colors.ForestGreen);
+        private readonly FontWeight _normalFontWeight = FontWeights.Normal;
+        private readonly FontWeight _modifiedFontWeight = FontWeights.Bold;
+
+        private bool AreEqual(double a, double b)
+        {
+            return Math.Abs(a - b) < 0.001;
+        }
+
+        private Brush CompareBrush(double a, double b)
+        {
+            return ConversionTech == null ? AreEqual(a, b) ? _normalBrush : _modifiedBrush : _normalBrush;
+        }
+
+        private FontWeight CompareFontWeight(double a, double b)
+        {
+            return ConversionTech == null ? AreEqual(a, b) ? _normalFontWeight : _modifiedFontWeight : _normalFontWeight;
+        }
+
+        public Brush EfficiencyBrush => CompareBrush(_efficiency, Defaults[Name].Efficiency);
+        public Brush CapacityBrush => CompareBrush(_capacity, Defaults[Name].Capacity);
+        public Brush LifetimeBrush => CompareBrush(_lifetime, Defaults[Name].Lifetime);
+        public Brush CapitalCostBrush => CompareBrush(_capitalCost, Defaults[Name].CapitalCost);
+        public Brush OperationalCostBrush => CompareBrush(_operationalCost, Defaults[Name].OperationalCost);
+        public Brush EmbodiedEmissionsBrush => CompareBrush(_embodiedEmissions, Defaults[Name].EmbodiedEmissions);
+        public Brush HeatToPowerRatioBrush => CompareBrush(_heatToPowerRatio, Defaults[Name].HeatToPowerRatio);
+
+        public FontWeight EfficiencyFontWeight => CompareFontWeight(_efficiency, Defaults[Name].Efficiency);
+        public FontWeight CapacityFontWeight => CompareFontWeight(_capacity, Defaults[Name].Capacity);
+        public FontWeight LifetimeFontWeight => CompareFontWeight(_lifetime, Defaults[Name].Lifetime);
+        public FontWeight CapitalCostFontWeight => CompareFontWeight(_capitalCost, Defaults[Name].CapitalCost);
+        public FontWeight OperationalCostFontWeight => CompareFontWeight(_operationalCost, Defaults[Name].OperationalCost);
+        public FontWeight EmbodiedEmissionsFontWeight => CompareFontWeight(_embodiedEmissions, Defaults[Name].EmbodiedEmissions);
+        public FontWeight HeatToPowerRatioFontWeight => CompareFontWeight(_heatToPowerRatio, Defaults[Name].HeatToPowerRatio);
 
         #endregion
 
@@ -265,10 +313,17 @@ namespace Hive.IO.Forms
         public ConversionTechPropertiesViewModel Connection { get; set; }
     }
 
-    public class ConversionTechDefaults
+    public struct ConversionTechDefaults
     {
         public static string ResourceName = "Hive.IO.EnergySystems.conversion_technology_defaults.json";
         public string EndUse;
         public string Source;
+        public double Efficiency;
+        public double Capacity;
+        public double CapitalCost;
+        public double Lifetime;
+        public double OperationalCost;
+        public double EmbodiedEmissions;
+        public double HeatToPowerRatio;
     }
 }

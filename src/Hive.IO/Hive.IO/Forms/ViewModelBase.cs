@@ -28,6 +28,21 @@ namespace Hive.IO.Forms
             }
         }
 
+        public void SetWithColors<TValue>(ref TValue field,
+            TValue newValue,
+            [CallerMemberName] string propertyName = "")
+        {
+            if (EqualityComparer<TValue>.Default.Equals(field, default)
+                || !field.Equals(newValue))
+            {
+                field = newValue;
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName + "Brush"));
+                PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName + "FontWeight"));
+            }
+        }
+
+
         public virtual void RaisePropertyChangedEvent([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
