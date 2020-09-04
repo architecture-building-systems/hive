@@ -173,7 +173,7 @@ namespace Hive.IO.Forms
             }
         }
 
-        private bool IsSurfaceTech => Name == "Photovoltaic (PV)" || Name == "Solar Thermal (ST)";
+        public bool IsSurfaceTech => Name == "Photovoltaic (PV)" || Name == "Solar Thermal (ST)";
 
         private static Dictionary<string, List<ModuleTypeRecord>> ModuleTypesCatalog =>
             JsonResource.ReadRecords(ModuleTypeRecord.ResourceName, ref _moduleTypesCatalog);
