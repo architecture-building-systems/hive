@@ -16,7 +16,7 @@
             <ColumnDefinition></ColumnDefinition>
             <ColumnDefinition></ColumnDefinition>
         </Grid.ColumnDefinitions>
-        <ListBox Grid.Row="0" Grid.Column="0" ItemsSource="{Binding AvailableSurfaces}"
+        <ListBox Grid.Row="0" Grid.Column="0" ItemsSource="{Binding AvailableSurfaces}" IsEnabled="{Binding IsEditable}"
                  DisplayMemberPath="Name" SelectionMode="Multiple" DataContextChanged="ListBox_DataContextChanged"
                  SelectionChanged="ListBox_OnSelectionChanged"></ListBox>
         <Grid Grid.Row="0" Grid.Column="1">
@@ -37,9 +37,9 @@
             <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Efficiency}"/>
             <Label Grid.Row="1" Grid.Column="1">(-)</Label>
             <Label Grid.Row="2" Grid.ColumnSpan="2">Capacity</Label>
-            <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding Capacity}"/>
+            <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding Capacity}"  IsEnabled="{Binding IsEditable}"/>
             <Label Grid.Row="4" Grid.ColumnSpan="2">Lifetime</Label>
-            <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding Lifetime}"/>
+            <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding Lifetime}" IsEnabled="{Binding IsEditable}"/>
             <Label Grid.Row="5" Grid.Column="1">(years)</Label>
         </Grid>
         <Grid Grid.Row="0" Grid.Column="2">
@@ -56,13 +56,13 @@
                 <ColumnDefinition Width="1*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Label Grid.Row="0" Grid.ColumnSpan="2">Capital cost (CAPEX)</Label>
-            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding CapitalCost}"/>
+            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding CapitalCost}" IsEnabled="{Binding IsEditable}"/>
             <Label Grid.Row="1" Grid.Column="1">(CHF)</Label>
             <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">Operational cost (OPEX)</Label>
-            <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding OperationalCost}"/>
+            <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding OperationalCost}" IsEnabled="{Binding IsEditable}"/>
             <Label Grid.Row="3" Grid.Column="1">(CHF)</Label>
             <Label Grid.Row="4" Grid.Column="0" Grid.ColumnSpan="2">Embodied Emissions</Label>
-            <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding EmbodiedEmissions}"/>
+            <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding EmbodiedEmissions}" IsEnabled="{Binding IsEditable}"/>
             <Label Grid.Row="5" Grid.Column="1">(kgCO₂)</Label>
         </Grid>
         <TextBox Grid.Row="1" Grid.Column="0" TextWrapping="Wrap">Description of the conversion technology. This information should be provided by @IH or @CL</TextBox>
