@@ -24,6 +24,7 @@ namespace Hive.IO.Forms
                 conversionNames.DataContext is ConversionTechPropertiesViewModel vm)
             {
                 vm.Name = (string) conversionNames.SelectedValue;
+                vm.ModuleType = vm.ModuleType;
                 PropertiesView.ContentTemplate =
                     new PropertiesDataTemplateSelector().SelectTemplate(TechGrid.CurrentItem, TechGrid);
             }

@@ -68,7 +68,7 @@
                                 <DataGridTemplateColumn.CellEditingTemplate>
                                     <DataTemplate>
                                         <ComboBox ItemsSource="{Binding ValidNames}" SelectedItem="{Binding Name}"
-                                                  IsEditable="False" IsReadOnly="True"
+                                                  IsEditable="False" IsReadOnly="True" IsEnabled="{Binding IsEditable}"
                                                   SelectionChanged="ConversionNames_OnSelectionChanged" />
                                     </DataTemplate>
                                 </DataGridTemplateColumn.CellEditingTemplate>

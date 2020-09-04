@@ -12,6 +12,8 @@ namespace Hive.IO.Forms
     public class ConversionTechPropertiesViewModel : ViewModelBase
     {
         private static Dictionary<string, ConversionTechDefaults> _defaults;
+
+        private static Dictionary<string, List<ModuleTypeRecord>> _moduleTypesCatalog;
         private IEnumerable<SurfaceViewModel> _availableSurfaces;
 
         private string _endUse;
@@ -121,6 +123,61 @@ namespace Hive.IO.Forms
             }
         }
 
+        public IEnumerable<ModuleTypeRecord> ModuleTypes
+        {
+            get
+            {
+                if (!IsSurfaceTech)
+                {
+                    return new List<ModuleTypeRecord>().AsEnumerable();
+                }
+
+                if (!IsParametricDefined)
+                {
+                    return ModuleTypesCatalog[Name].AsEnumerable();
+                }
+
+                // parametric surface tech - it was set in SetProperties...
+                return new List<ModuleTypeRecord>{_moduleType}.AsEnumerable();
+            }
+        }
+
+        public ModuleTypeRecord ModuleType
+        {
+            get => _moduleType;
+            set
+            {
+                if (IsSurfaceTech && ModuleTypesCatalog[Name].Contains(value))
+                {
+                    _moduleType = value;
+                    switch (Name)
+                    {
+                        case "Photovoltaic (PV)":
+                            _efficiency = _moduleType.ElectricEfficiency;
+                            break;
+                        case "Solar Thermal (ST)":
+                            _efficiency = _moduleType.ThermalEfficiency;
+                            break;
+                    }
+
+                    var area = SelectedSurfaces.Sum(sm => sm.Area);
+                    _capitalCost = _moduleType.SpecificCapitalCost * area;
+                    _embodiedEmissions = _moduleType.SpecificEmbodiedEmissions * area;
+                    
+                    // make sure everyone knows about this!
+                    RaisePropertyChangedEvent();
+                    RaisePropertyChangedEvent("Efficiency");
+                    RaisePropertyChangedEvent("EmbodiedEmissions");
+                    RaisePropertyChangedEvent("CapitalCost");
+                }
+            }
+        }
+
+        private bool IsSurfaceTech => Name == "Photovoltaic (PV)" || Name == "Solar Thermal (ST)";
+
+        private static Dictionary<string, List<ModuleTypeRecord>> ModuleTypesCatalog =>
+            JsonResource.ReadRecords(ModuleTypeRecord.ResourceName, ref _moduleTypesCatalog);
+
         /// <summary>
         ///     Parses the string to a double or returns the oldValue on error.
         /// </summary>
@@ -143,12 +200,18 @@ namespace Hive.IO.Forms
             var defaults = Defaults[Name];
             Source = defaults.Source;
             EndUse = defaults.EndUse;
+
             _efficiency = defaults.Efficiency;
             _capacity = defaults.Capacity;
             _capitalCost = defaults.CapitalCost;
             _embodiedEmissions = defaults.EmbodiedEmissions;
             _lifetime = defaults.Lifetime;
             _operationalCost = defaults.OperationalCost;
+
+            if (IsSurfaceTech)  // NOTE: yep. this should be a subclass. maybe we'll fix it someday.
+            {
+                ModuleType = ModuleTypesCatalog.ContainsKey(Name) ? ModuleTypesCatalog[Name].First() : new ModuleTypeRecord { Name = "<custom>" };
+            }
         }
 
         private void SelectSurfaces(IEnumerable<SurfaceViewModel> surfaces)
@@ -166,6 +229,7 @@ namespace Hive.IO.Forms
         private double _operationalCost;
         private double _embodiedEmissions;
         private double _heatToPowerRatio;
+        private ModuleTypeRecord _moduleType;
 
         #endregion
 
@@ -188,7 +252,9 @@ namespace Hive.IO.Forms
 
         private FontWeight CompareFontWeight(double a, double b)
         {
-            return ConversionTech == null ? AreEqual(a, b) ? _normalFontWeight : _modifiedFontWeight : _normalFontWeight;
+            return ConversionTech == null
+                ? AreEqual(a, b) ? _normalFontWeight : _modifiedFontWeight
+                : _normalFontWeight;
         }
 
         public Brush EfficiencyBrush => CompareBrush(_efficiency, Defaults[Name].Efficiency);
@@ -203,9 +269,15 @@ namespace Hive.IO.Forms
         public FontWeight CapacityFontWeight => CompareFontWeight(_capacity, Defaults[Name].Capacity);
         public FontWeight LifetimeFontWeight => CompareFontWeight(_lifetime, Defaults[Name].Lifetime);
         public FontWeight CapitalCostFontWeight => CompareFontWeight(_capitalCost, Defaults[Name].CapitalCost);
-        public FontWeight OperationalCostFontWeight => CompareFontWeight(_operationalCost, Defaults[Name].OperationalCost);
-        public FontWeight EmbodiedEmissionsFontWeight => CompareFontWeight(_embodiedEmissions, Defaults[Name].EmbodiedEmissions);
-        public FontWeight HeatToPowerRatioFontWeight => CompareFontWeight(_heatToPowerRatio, Defaults[Name].HeatToPowerRatio);
+
+        public FontWeight OperationalCostFontWeight =>
+            CompareFontWeight(_operationalCost, Defaults[Name].OperationalCost);
+
+        public FontWeight EmbodiedEmissionsFontWeight =>
+            CompareFontWeight(_embodiedEmissions, Defaults[Name].EmbodiedEmissions);
+
+        public FontWeight HeatToPowerRatioFontWeight =>
+            CompareFontWeight(_heatToPowerRatio, Defaults[Name].HeatToPowerRatio);
 
         #endregion
 
@@ -286,6 +358,14 @@ namespace Hive.IO.Forms
             _embodiedEmissions = photovoltaic.SpecificEmbodiedGhg;
             _lifetime = 9999999.0;
             _operationalCost = 999999.0;
+            _moduleType = new ModuleTypeRecord
+            {
+                Name = "<custom>",
+                ElectricEfficiency = photovoltaic.RefEfficiencyElectric,
+                SpecificCapitalCost = photovoltaic.SpecificInvestmentCost,
+                SpecificEmbodiedEmissions = photovoltaic.SpecificEmbodiedGhg,
+                ThermalEfficiency = 0.00
+            };
         }
 
         public void SetProperties(SolarThermal solarThermal)
@@ -298,6 +378,15 @@ namespace Hive.IO.Forms
             _embodiedEmissions = solarThermal.SpecificEmbodiedGhg;
             _lifetime = 9999999.0;
             _operationalCost = 999999.0;
+
+            _moduleType = new ModuleTypeRecord
+            {
+                Name = "<custom>",
+                ElectricEfficiency = 0.00,
+                SpecificCapitalCost = solarThermal.SpecificInvestmentCost,
+                SpecificEmbodiedEmissions = solarThermal.SpecificEmbodiedGhg,
+                ThermalEfficiency = solarThermal.RefEfficiencyHeating
+            };
         }
 
         #endregion
@@ -325,5 +414,15 @@ namespace Hive.IO.Forms
         public double OperationalCost;
         public double EmbodiedEmissions;
         public double HeatToPowerRatio;
+    }
+
+    public struct ModuleTypeRecord
+    {
+        public static string ResourceName = "Hive.IO.EnergySystems.surface_tech_module_types.json";
+        public string Name { get; set; }
+        public double ElectricEfficiency;
+        public double ThermalEfficiency;
+        public double SpecificCapitalCost;
+        public double SpecificEmbodiedEmissions;
     }
 }

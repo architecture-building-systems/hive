@@ -177,6 +177,7 @@
   <ItemGroup>
     <EmbeddedResource Include="Building\sia2024_room_data.json" />
     <EmbeddedResource Include="EnergySystems\conversion_technology_defaults.json" />
+    <EmbeddedResource Include="EnergySystems\surface_tech_module_types.json" />
     <None Include="packages.config" />
     <None Include="Resources\article_18.jpg" />
     <None Include="Resources\gc_efficiency.csv" />
