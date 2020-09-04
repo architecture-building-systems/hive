@@ -8,42 +8,45 @@ using System.Windows.Input;
 namespace Hive.IO.Forms
 {
     /// <summary>
-    /// I'm using this link: https://www.codeproject.com/Questions/1255014/Wpf-MVVM-dynamic-binding-of-usercontrols-and-show
-    /// as a basis for setting up the MVVM design pattern. 
+    ///     I'm using this link:
+    ///     https://www.codeproject.com/Questions/1255014/Wpf-MVVM-dynamic-binding-of-usercontrols-and-show
+    ///     as a basis for setting up the MVVM design pattern.
     /// </summary>
     public abstract class ObservableBase : INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+
         public void Set<TValue>(ref TValue field,
             TValue newValue,
             [CallerMemberName] string propertyName = "")
         {
-            if (EqualityComparer<TValue>.Default.Equals(field, default(TValue))
+            if (EqualityComparer<TValue>.Default.Equals(field, default)
                 || !field.Equals(newValue))
             {
                 field = newValue;
                 PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
             }
         }
+
         public virtual void RaisePropertyChangedEvent([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
-
-        public event PropertyChangedEventHandler PropertyChanged;
     }
 
     public abstract class ViewModelBase : ObservableBase
     {
         public bool IsInDesignMode()
         {
-            return Application.Current.MainWindow == null || DesignerProperties.GetIsInDesignMode(Application.Current.MainWindow);
+            return Application.Current.MainWindow == null ||
+                   DesignerProperties.GetIsInDesignMode(Application.Current.MainWindow);
         }
     }
 
     public class RelayCommand<T> : ICommand
     {
-        private readonly Action<T> execute;
         private readonly Predicate<T> canExecute;
+        private readonly Action<T> execute;
 
         public RelayCommand(Action<T> execute, Predicate<T> canExecute = null)
         {
@@ -52,7 +55,9 @@ namespace Hive.IO.Forms
         }
 
         public bool CanExecute(object parameter)
-            => canExecute == null || canExecute((T)parameter);
+        {
+            return canExecute == null || canExecute((T) parameter);
+        }
 
         public event EventHandler CanExecuteChanged
         {
@@ -61,8 +66,10 @@ namespace Hive.IO.Forms
         }
 
         public void Execute(object parameter)
-            => execute(parameter == null
-                ? default(T)
-                : (T)Convert.ChangeType(parameter, typeof(T)));
+        {
+            execute(parameter == null
+                ? default
+                : (T) Convert.ChangeType(parameter, typeof(T)));
+        }
     }
 }

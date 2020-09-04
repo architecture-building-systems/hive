@@ -31,7 +31,7 @@ namespace Hive.IO.GHComponents
         }
 
 
-        protected override Bitmap Icon => Resources.IO_Solartech;
+        protected override Bitmap Icon => Properties.Resources.IO_Solartech;
 
 
         public override Guid ComponentGuid => new Guid("59389231-9a1b-4732-99dd-2bdda6b78bb8");

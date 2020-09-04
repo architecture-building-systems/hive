@@ -2,76 +2,14 @@
 using System.Collections.Generic;
 using System.Linq;
 using Hive.IO.EnergySystems;
+using Hive.IO.Resources;
 using Rhino.Geometry;
 
 namespace Hive.IO.Forms
 {
     public class ConversionTechPropertiesViewModel : ViewModelBase
     {
-        /// <summary>
-        ///     A list of default values for the conversion technology properties
-        /// </summary>
-        private static readonly Dictionary<string, Action<ConversionTechPropertiesViewModel>> Defaults =
-            new Dictionary<string, Action<ConversionTechPropertiesViewModel>>
-            {
-                {
-                    "Photovoltaic (PV)", self =>
-                    {
-                        self.Source = "Solar";
-                        self.EndUse = "Electricity demand";
-                    }
-                },
-                {
-                    "Solar Thermal (ST)", self =>
-                    {
-                        self.Source = "Solar";
-                        self.EndUse = "Heating demand";
-                    }
-                },
-                {
-                    "Boiler (Gas)", self =>
-                    {
-                        self.Source = "Gas";
-                        self.EndUse = "Heating demand, DHW";
-                    }
-                },
-                {
-                    "CHP", self =>
-                    {
-                        self.Source = "Gas";
-                        self.EndUse = "Electricity demand, Heating demand, DHW";
-                    }
-                },
-                {
-                    "Chiller (Electricity)", self =>
-                    {
-                        self.Source = "Electricity Grid";
-                        self.EndUse = "Cooling demand";
-                    }
-                },
-                {
-                    "ASHP (Electricity)", self =>
-                    {
-                        self.Source = "Air";
-                        self.EndUse = "Electricity demand";
-                    }
-                },
-                {
-                    "Heat Exchanger", self =>
-                    {
-                        self.Source = "Air";
-                        self.EndUse = "Electricity demand";
-                    }
-                },
-                {
-                    "Cooling Exchanger", self =>
-                    {
-                        self.Source = "Air";
-                        self.EndUse = "Electricity demand";
-                    }
-                }
-            };
-
+        private static Dictionary<string, ConversionTechDefaults> _defaults;
         private IEnumerable<SurfaceViewModel> _availableSurfaces;
 
         private string _endUse;
@@ -79,6 +17,9 @@ namespace Hive.IO.Forms
         private string _name;
 
         private string _source;
+
+        private static Dictionary<string, ConversionTechDefaults> Defaults =>
+            JsonResource.ReadRecords(ConversionTechDefaults.ResourceName, ref _defaults);
 
         public IEnumerable<string> ValidNames =>
             IsParametricDefined ? new List<string> {Name}.AsEnumerable() : Defaults.Keys;
@@ -197,7 +138,9 @@ namespace Hive.IO.Forms
         /// </summary>
         public void AssignDefaults()
         {
-            Defaults[Name](this);
+            var defaults = Defaults[Name];
+            Source = defaults.Source;
+            EndUse = defaults.EndUse;
         }
 
         private void SelectSurfaces(IEnumerable<SurfaceViewModel> surfaces)
@@ -219,11 +162,11 @@ namespace Hive.IO.Forms
         #endregion
 
         #region SetProperties
-        /// <summary>
-        /// If this viewmodel was generated in the form itself, then this is null, else,
-        /// it's set to the ConversionTech object created in GhEnergySystems.SolveInstance.
-        /// </summary>
 
+        /// <summary>
+        ///     If this viewmodel was generated in the form itself, then this is null, else,
+        ///     it's set to the ConversionTech object created in GhEnergySystems.SolveInstance.
+        /// </summary>
         public void SetProperties(GasBoiler gasBoiler)
         {
             ConversionTech = gasBoiler;
@@ -320,5 +263,12 @@ namespace Hive.IO.Forms
         public Mesh Mesh { get; set; }
 
         public ConversionTechPropertiesViewModel Connection { get; set; }
+    }
+
+    public class ConversionTechDefaults
+    {
+        public static string ResourceName = "Hive.IO.EnergySystems.conversion_technology_defaults.json";
+        public string EndUse;
+        public string Source;
     }
 }

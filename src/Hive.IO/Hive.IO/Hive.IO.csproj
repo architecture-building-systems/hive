@@ -135,12 +135,6 @@
     <Compile Include="GHComponents\GhResults.cs" />
     <Compile Include="GHComponents\GhVisualizer.cs" />
     <Compile Include="Environment\Environment.cs" />
-    <Compile Include="GHComponents\FormEnSysSolar.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GHComponents\FormEnSysSolar.Designer.cs">
-      <DependentUpon>FormEnSysSolar.cs</DependentUpon>
-    </Compile>
     <Compile Include="GHComponents\GhBuilding.cs" />
     <Compile Include="GhDistributors\GhMainDistributor.cs" />
     <Compile Include="GHComponents\GhVisualizerAttributes.cs" />
@@ -172,11 +166,9 @@
     </Compile>
     <Compile Include="DataHandling\Results.cs" />
     <Compile Include="Building\Zone.cs" />
+    <Compile Include="Util\JsonResource.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GHComponents\FormEnSysSolar.resx">
-      <DependentUpon>FormEnSysSolar.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -184,6 +176,7 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Building\sia2024_room_data.json" />
+    <EmbeddedResource Include="EnergySystems\conversion_technology_defaults.json" />
     <None Include="packages.config" />
     <None Include="Resources\article_18.jpg" />
     <None Include="Resources\gc_efficiency.csv" />

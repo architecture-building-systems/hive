@@ -1,0 +1,34 @@
+{
+  "Photovoltaic (PV)": {
+    "Source": "Solar",
+    "EndUse": "Electricity demand"
+  },
+  "Solar Thermal (ST)": {
+    "Source": "Solar",
+    "EndUse": "Electricity demand"
+  },
+  "Boiler (Gas)": {
+    "Source": "Gas",
+    "EndUse": "Heating demand, DHW"
+  },
+  "CHP": {
+    "Source": "Gas",
+    "EndUse": "Electricity demand, Heating demand, DHW"
+  },
+  "Chiller (Electricity)": {
+    "Source": "Electricity Grid",
+    "EndUse": "Cooling demand"
+  },
+  "ASHP (Electricity)": {
+    "Source": "Air",
+    "EndUse": "Electricity demand"
+  },
+  "Heat Exchanger": {
+    "Source": "Air",
+    "EndUse": "Heating demand"
+  },
+  "Cooling Exchanger": {
+    "Source": "Air",
+    "EndUse": "Cooling demand"
+  }
+}
