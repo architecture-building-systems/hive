@@ -218,6 +218,7 @@ namespace Hive.IO.GHComponents
             var vm = new EnergySystemsInputViewModel();
             vm.ConversionTechnologies.Clear();
             vm.Surfaces.Clear();
+            vm.Emitters.Clear();
 
             var surfaceIndex = 0;
             foreach (var ct in conversionTechnologies)
@@ -319,6 +320,7 @@ namespace Hive.IO.GHComponents
         {
             var result = new List<object>();
             foreach (var ct in _viewModel.ConversionTechnologies)
+            {
                 if (ct.IsParametricDefined)
                 {
                     result.Add(ct.ConversionTech);
@@ -366,7 +368,27 @@ namespace Hive.IO.GHComponents
                             throw new Exception($"Don't know how to read {ct.Name}");
                     }
                 }
+            }
 
+            foreach (var emitter in _viewModel.Emitters)
+            {
+                var specificInvestmentCost = double.Parse(emitter.CapitalCost);
+                var specificEmbodiedEmissions = double.Parse(emitter.EmbodiedEmissions);
+                var inletTemperature = double.Parse(emitter.SupplyTemperature);
+                var returnTemperature = double.Parse(emitter.SupplyTemperature);
+                
+                switch (emitter.Name)
+                {
+                    case "Radiator":
+                        result.Add(new Radiator(specificInvestmentCost, specificEmbodiedEmissions, emitter.IsHeating, emitter.IsCooling,
+                            inletTemperature, returnTemperature));
+                        break;
+                    case "Air diffuser":
+                        result.Add(new AirDiffuser(specificInvestmentCost, specificEmbodiedEmissions, emitter.IsHeating, emitter.IsCooling,
+                            inletTemperature, returnTemperature));
+                        break;
+                }
+            }
             return result;
         }
 
