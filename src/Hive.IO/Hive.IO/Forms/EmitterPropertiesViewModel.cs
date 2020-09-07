@@ -189,6 +189,8 @@ namespace Hive.IO.Forms
             IsParametricDefined ? new List<string> { Name }.AsEnumerable() : Defaults.Keys;
 
         public bool IsParametricDefined => Emitter != null;
+        public bool IsEditable => !IsParametricDefined;
+
         public Emitter Emitter { get; private set; }
     }
 
