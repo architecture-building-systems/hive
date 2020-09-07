@@ -31,10 +31,11 @@
             <Label Grid.Row="0" Grid.ColumnSpan="2">Supply Temperature</Label>
             <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding SupplyTemperature}" IsEnabled="{Binding IsEditable}"
                      Foreground="{Binding SupplyTemperatureBrush}" FontWeight="{Binding SupplyTemperatureFontWeight}" />
-            <Label Grid.Row="1" Grid.Column="1">(-)</Label>
+            <Label Grid.Row="1" Grid.Column="1">(°C)</Label>
             <Label Grid.Row="2" Grid.ColumnSpan="2">Return Temperature</Label>
             <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding ReturnTemperature}" IsEnabled="{Binding IsEditable}"
                      Foreground="{Binding ReturnTemperatureBrush}" FontWeight="{Binding ReturnTemperatureFontWeight}" />
+            <Label Grid.Row="3" Grid.Column="1">(°C)</Label>
             <Label Grid.Row="4" Grid.ColumnSpan="2">Lifetime</Label>
             <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding Lifetime}" IsEnabled="{Binding IsEditable}"
                      Foreground="{Binding LifetimeBrush}" FontWeight="{Binding LifetimeFontWeight}" />
@@ -53,20 +54,20 @@
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.ColumnSpan="2">Capital cost (CAPEX)</Label>
+            <Label Grid.Row="0" Grid.ColumnSpan="2">Specific Investment Cost</Label>
             <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding CapitalCost}" IsEnabled="{Binding IsEditable}"
                      Foreground="{Binding CapitalCostBrush}" FontWeight="{Binding CapitalCostFontWeight}" />
-            <Label Grid.Row="1" Grid.Column="1">(CHF)</Label>
-            <Label Grid.Row="2" Grid.ColumnSpan="2">Operational cost (OPEX)</Label>
+            <Label Grid.Row="1" Grid.Column="1">(CHF/kW)</Label>
+            <Label Grid.Row="2" Grid.ColumnSpan="2">Operation &amp; Maintenance</Label>
             <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding OperationalCost}" IsEnabled="{Binding IsEditable}"
                      Foreground="{Binding OperationalCostBrush}" FontWeight="{Binding OperationalCostFontWeight}" />
-            <Label Grid.Row="3" Grid.Column="1">(CHF)</Label>
-            <Label Grid.Row="4" Grid.ColumnSpan="2">Embodied Emissions</Label>
+            <Label Grid.Row="3" Grid.Column="1">(CHF/kWh)</Label>
+            <Label Grid.Row="4" Grid.ColumnSpan="2">Specific Embodied Emissions</Label>
             <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding EmbodiedEmissions}" IsEnabled="{Binding IsEditable}"
                      Foreground="{Binding EmbodiedEmissionsBrush}" />
             <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding EmbodiedEmissions}" IsEnabled="{Binding IsEditable}"
                      Foreground="{Binding EmbodiedEmissionsBrush}" FontWeight="{Binding EmbodiedEmissionsFontWeight}" />
-            <Label Grid.Row="5" Grid.Column="1">(kgCO₂)</Label>
+            <Label Grid.Row="5" Grid.Column="1">(kgCO₂/kW)</Label>
         </Grid>
 
         <Label Grid.Row="1" Grid.Column="0">Technology Image</Label>

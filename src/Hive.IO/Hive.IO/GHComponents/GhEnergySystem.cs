@@ -201,10 +201,7 @@ namespace Hive.IO.GHComponents
 
 
             // compute the results
-            var result = new List<object>();
-            result = ReadViewModel();
-            result.AddRange(conversionTech);
-            result.AddRange(emitters);
+            var result = ReadViewModel();
             DA.SetDataList(0, result);
         }
 
@@ -279,7 +276,6 @@ namespace Hive.IO.GHComponents
                         ctvm.SetProperties(exchanger);
                         break;
                 }
-
                 vm.ConversionTechnologies.Add(ctvm);
             }
 
@@ -292,6 +288,23 @@ namespace Hive.IO.GHComponents
                     Mesh = m
                 };
                 vm.Surfaces.Add(surface);
+            }
+
+            foreach (var emitter in emitters)
+            {
+                var epvm = new EmitterPropertiesViewModel();
+                switch (emitter)
+                {
+                    case AirDiffuser airDiffuser:
+                        epvm.Name = "Air diffuser";
+                        epvm.SetProperties(airDiffuser);
+                        break;
+                    case Radiator radiator:
+                        epvm.Name = "Radiator";
+                        epvm.SetProperties(radiator);
+                        break;
+                }
+                vm.Emitters.Add(epvm);
             }
 
             return vm;

@@ -69,6 +69,26 @@ namespace Hive.IO.Forms
             RaisePropertyChangedEvent(null);
         }
 
+        public void SetProperties(Emitter emitter)
+        {
+            Emitter = emitter;
+
+            _supplyTemperature = emitter.InletCarrier.Temperature.Average();
+            _returnTemperature = emitter.ReturnCarrier.Temperature.Average();
+
+            _lifetime = 0.00;
+            _capacity = 0.00;
+            _capitalCost = emitter.SpecificInvestmentCost;
+
+            _operationalCost = 0.00;
+            _embodiedEmissions = emitter.SpecificEmbodiedGhg;
+
+            _isAir = emitter is AirDiffuser;
+            _isRadiation = emitter is Radiator;
+            _isHeating = emitter.IsHeating;
+            _isCooling = emitter.IsCooling;
+        }
+
         public static IEnumerable<string> AllNames => Defaults.Keys;
 
         public string EndUse
