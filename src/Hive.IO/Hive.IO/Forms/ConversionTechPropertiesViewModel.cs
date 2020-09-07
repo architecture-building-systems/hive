@@ -28,7 +28,7 @@ namespace Hive.IO.Forms
         public IEnumerable<string> ValidNames =>
             IsParametricDefined ? new List<string> {Name}.AsEnumerable() : Defaults.Keys;
 
-        public IEnumerable<string> AllNames => Defaults.Keys;
+        public static IEnumerable<string> AllNames => Defaults.Keys;
 
         public string Name
         {
@@ -178,20 +178,6 @@ namespace Hive.IO.Forms
 
         private static Dictionary<string, List<ModuleTypeRecord>> ModuleTypesCatalog =>
             JsonResource.ReadRecords(ModuleTypeRecord.ResourceName, ref _moduleTypesCatalog);
-
-        /// <summary>
-        ///     Parses the string to a double or returns the oldValue on error.
-        /// </summary>
-        /// <param name="value"></param>
-        /// <param name="oldValue"></param>
-        /// <returns></returns>
-        private double ParseDouble(string value, double oldValue)
-        {
-            double result;
-            if (double.TryParse(value, out result)) return result;
-
-            return oldValue;
-        }
 
         /// <summary>
         ///     Assign default values based on the Name - gets called when setting the name.

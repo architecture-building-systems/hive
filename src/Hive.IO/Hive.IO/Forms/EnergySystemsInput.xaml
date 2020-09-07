@@ -32,6 +32,9 @@
         <DataTemplate x:Key="CoolingExchangerProperties">
             <forms:AshpProperties />
         </DataTemplate>
+        <DataTemplate x:Key="EmitterPropertiesView">
+            <forms:EmitterPropertiesView/>
+        </DataTemplate>
     </Window.Resources>
 
     <TabControl>
@@ -42,11 +45,12 @@
                     <RowDefinition Height="3*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="1*" />
-                    <ColumnDefinition Width="2*" />
-                    <ColumnDefinition Width="1*" />
+                    <ColumnDefinition Width="84*" />
+                    <ColumnDefinition Width="161*"/>
+                    <ColumnDefinition Width="489*" />
+                    <ColumnDefinition Width="245*" />
                 </Grid.ColumnDefinitions>
-                <ScrollViewer Grid.Row="0" Grid.ColumnSpan="3">
+                <ScrollViewer Grid.Row="0" Grid.ColumnSpan="4">
                     <DataGrid Name="TechGrid" ItemsSource="{Binding ConversionTechnologiesView, Mode=OneWay}"
                               CanUserDeleteRows="True"
                               AutoGenerateColumns="False" CanUserAddRows="True" SelectionMode="Single"
@@ -84,11 +88,65 @@
                     </DataGrid>
                 </ScrollViewer>
                 <ContentPresenter Name="PropertiesView" Content="{Binding Path=ConversionTechnologiesView.CurrentItem}"
-                                  Grid.Row="1" Grid.ColumnSpan="3"
+                                  Grid.Row="1" Grid.ColumnSpan="4"
                                   Grid.Column="0"
                                   ContentTemplateSelector="{StaticResource PropertiesDataTemplateSelector}" />
             </Grid>
         </TabItem>
-        <TabItem Header="Emission" />
+        <TabItem Header="Emission">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="2*" />
+                    <RowDefinition Height="3*" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="84*" />
+                    <ColumnDefinition Width="161*"/>
+                    <ColumnDefinition Width="489*" />
+                    <ColumnDefinition Width="245*" />
+                </Grid.ColumnDefinitions>
+                <ScrollViewer Grid.Row="0" Grid.ColumnSpan="4">
+                    <DataGrid Name="EmitterGrid" ItemsSource="{Binding EmitterPropertiesView, Mode=OneWay}"
+                              CanUserDeleteRows="True"
+                              AutoGenerateColumns="False" CanUserAddRows="True" SelectionMode="Single"
+                              IsSynchronizedWithCurrentItem="True" SelectionChanged="TechGrid_SelectionChanged">
+                        <DataGrid.Columns>
+                            <DataGridTemplateColumn Header="Source" Width="1*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="Conversion" Width="2*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding Name, Mode=OneWay}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                                <DataGridTemplateColumn.CellEditingTemplate>
+                                    <DataTemplate>
+                                        <ComboBox ItemsSource="{Binding ValidNames}" SelectedItem="{Binding Name}"
+                                                  IsEditable="False" IsReadOnly="True" IsEnabled="{Binding IsEditable}"
+                                                  SelectionChanged="ConversionNames_OnSelectionChanged" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellEditingTemplate>
+                            </DataGridTemplateColumn>
+                            <DataGridTemplateColumn Header="End Use" Width="1*">
+                                <DataGridTemplateColumn.CellTemplate>
+                                    <DataTemplate>
+                                        <TextBlock Text="{Binding EndUse, Mode=OneWay}" />
+                                    </DataTemplate>
+                                </DataGridTemplateColumn.CellTemplate>
+                            </DataGridTemplateColumn>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </ScrollViewer>
+                <ContentPresenter Name="EmitterPropertiesView" Content="{Binding Path=EmitterPropertiesView.CurrentItem}"
+                                  Grid.Row="1" Grid.ColumnSpan="4"
+                                  Grid.Column="0" ContentTemplate="{StaticResource EmitterPropertiesView}" />
+            </Grid>
+
+        </TabItem>
     </TabControl>
 </Window>

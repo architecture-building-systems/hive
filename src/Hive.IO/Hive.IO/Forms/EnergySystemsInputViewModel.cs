@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.Collections.Specialized;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Data;
@@ -19,14 +18,25 @@ namespace Hive.IO.Forms
             {
                 new ConversionTechPropertiesViewModel
                 {
-                    Name = "Photovoltaic (PV)"
+                    Name = "Photovoltaic (PV)",
                 },
                 new ConversionTechPropertiesViewModel
                 {
                     Name = "Boiler (Gas)"
                 }
             };
-            ConversionTechnologies.CollectionChanged += OnConversionTechnologiesOnCollectionChanged;
+
+            Emitters = new ObservableCollection<EmitterPropertiesViewModel>
+            {
+                new EmitterPropertiesViewModel
+                {
+                    Name = "Radiator",
+                },
+                new EmitterPropertiesViewModel
+                {
+                    Name = "Air diffuser",
+                }
+            };
 
             Surfaces = new ObservableCollection<SurfaceViewModel>
             {
@@ -37,6 +47,9 @@ namespace Hive.IO.Forms
                 new SurfaceViewModel {Area = 4.4, Name = "Srf4"}
             };
         }
+
+        public ObservableCollection<EmitterPropertiesViewModel> Emitters { get; }
+        public ICollectionView EmitterPropertiesView => CollectionViewSource.GetDefaultView(Emitters);
 
         public ObservableCollection<ConversionTechPropertiesViewModel> ConversionTechnologies { get; }
 
@@ -53,10 +66,6 @@ namespace Hive.IO.Forms
         {
             return Surfaces.Where(
                 sm => sm.Connection == null || sm.Connection == vm || !sm.Connection.IsSurfaceTech);
-        }
-
-        private void OnConversionTechnologiesOnCollectionChanged(object sender, NotifyCollectionChangedEventArgs args)
-        {
         }
     }
 }
