@@ -188,8 +188,21 @@ namespace Hive.IO.Building
             this.Index = index;
             this.Tolerance = tolerance;
 
+            // check if floor is in zone
+            var floorList = new List<rg.BrepFace>();
+            if (floorSrfs.Length > 0)
+            {
+                foreach (var floor in floorSrfs)
+                {
+                    if (CheckFloorInZone(zone_geometry, floor))
+                        floorList.Add(floor);
+                    else
+                        this.IsFloorInZone = false;
+                }
+            }           
+            
             // only IsClosed needs to strictly guaranteed in all cases
-            this.IsClosed = false; 
+            this.IsClosed = false;
             this.IsConvex = false;
             this.IsPlanar = false;
             this.IsWindowsOnZone = true; // zone might have no windows. so default is true
@@ -204,23 +217,31 @@ namespace Hive.IO.Building
                 this.IsConvex = CheckConvexity(this.ZoneGeometry, this.Tolerance);
             }
 
+            // identify building components based on their surface angles
+            Tuple<Wall[], Ceiling[], Roof[], Floor[], Window[], Shading[]> tuple = IdentifyComponents(zone_geometry, windowSrfs, shadingSrfs);
+            this.Walls = tuple.Item1;
+            this.Ceilings = tuple.Item2;
+            this.Roofs = tuple.Item3;
+            this.Floors = new Floor[floorList.Count + tuple.Item4.Length];
+            int mainFloors = tuple.Item4.Length;
+            int additionalFloors = floorList.Count;
+            for (int i = 0; i < mainFloors; i++)
+                this.Floors[i] = tuple.Item4[i];
+            for (int i = mainFloors; i < mainFloors + additionalFloors; i++)
+                this.Floors[i] = new Floor(floorList[i - mainFloors]);
+            this.Windows = tuple.Item5;
+            this.ShadingDevices = tuple.Item6;
+
+            // check window surfaces. Also assign them as subsurface to a wall
             if (windowSrfs.Length > 0)
             {
                 this.IsWindowsOnZone = CheckWindowsOnZone(this.ZoneGeometry, windowSrfs, this.Tolerance);
                 this.IsWindowsNoSelfIntersect = CheckWindowsSelfIntersect(windowSrfs, this.Tolerance);
             }
 
-            var floorList = new List<rg.BrepFace>();
-            if (floorSrfs.Length > 0)
-            {
-                foreach (var floor in floorSrfs)
-                {
-                    if (CheckFloorInZone(zone_geometry, floor))
-                        floorList.Add(floor);
-                    else
-                        this.IsFloorInZone = false;
-                }
-            }
+
+
+
 
             this.IsValidEPlus = CheckValidity(this.IsClosed, this.IsConvex, this.IsLinear, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsNoSelfIntersect);
             this.IsValid = (this.IsClosed && this.IsWindowsOnZone && this.IsWindowsNoSelfIntersect) ? true : false;
@@ -228,47 +249,25 @@ namespace Hive.IO.Building
     + "IsWindowsOnZone: {4} \n " + "IsWindowsSelfIntersect: {5} \n" + "IsFloorInZone: {6}",
     this.IsLinear, this.IsConvex, this.IsClosed, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsNoSelfIntersect, this.IsFloorInZone);
 
-            if (this.IsValid)
-            {
-                Tuple<Wall[], Ceiling[], Roof[], Floor[], Window[], Shading[]> tuple = IdentifyComponents(zone_geometry, windowSrfs, shadingSrfs);
-                this.Walls = tuple.Item1;
-                this.Ceilings = tuple.Item2;
-                this.Roofs = tuple.Item3;
-
-                this.Floors = new Floor[floorList.Count + tuple.Item4.Length];
-                int mainFloors = tuple.Item4.Length;
-                int additionalFloors = floorList.Count;
-                for(int i=0; i<mainFloors; i++)
-                    this.Floors[i] = tuple.Item4[i];
-                for (int i=mainFloors; i<mainFloors+additionalFloors; i++)
-                    this.Floors[i] = new Floor(floorList[i - mainFloors]);
-
-                this.Windows = tuple.Item5;
-                this.ShadingDevices = tuple.Item6;
-
-                this.Volume = zone_geometry.GetVolume();
-            }
-            else
-            {
-                return;
-            }
-
-
             // define standard building physical properties upon inizialization. 
             // Can be changed later via Windows Form
-            this.Name = name;
-            this.InternalLoads.Occupants = 16.0;
-            this.InternalLoads.Lighting = 4.0;
-            this.InternalLoads.Devices = 3.0;
-            this.Schedule.Occupants = new double[_horizon];
-            this.Schedule.Lighting = new double[_horizon];
-            this.Schedule.Devices = new double[_horizon];
-            // windows form with interface to change schedules for workdays and weekends / holidays?
-            for (int i = 0; i < _horizon; i++)
+            if (this.IsValid)
             {
-                this.Schedule.Occupants[i] = 1.0;
-                this.Schedule.Lighting[i] = 1.0;
-                this.Schedule.Devices[i] = 1.0;
+                this.Volume = zone_geometry.GetVolume();
+                this.Name = name;
+                this.InternalLoads.Occupants = 16.0;
+                this.InternalLoads.Lighting = 4.0;
+                this.InternalLoads.Devices = 3.0;
+                this.Schedule.Occupants = new double[_horizon];
+                this.Schedule.Lighting = new double[_horizon];
+                this.Schedule.Devices = new double[_horizon];
+                // windows form with interface to change schedules for workdays and weekends / holidays?
+                for (int i = 0; i < _horizon; i++)
+                {
+                    this.Schedule.Occupants[i] = 1.0;
+                    this.Schedule.Lighting[i] = 1.0;
+                    this.Schedule.Devices[i] = 1.0;
+                }
             }
         }
         #endregion
@@ -454,6 +453,45 @@ namespace Hive.IO.Building
 
             return true;
         }
+
+
+        //// should be part of CheckWindowsOnZone to reduce compuation. otherwise loops run twice
+        //private static bool CheckWindowsAndZoneAndAssignWindowsToWallOrRoof(List<Wall> walls, List<Roof> roofs, List<Window> windows, double tolerance)
+        //{
+        //    int roundingDecimals = tolerance.ToString().Split('.')[1].Length;
+
+        //    // check for Windows on Zone
+        //    bool[] equalAreas = new bool[windows.Count()];
+        //    for (int i = 0; i < windows.Count(); i++)
+        //    {
+        //        rg.BrepFace srf = windows[i].BrepGeometry;
+        //        rg.Brep srfbrep = rg.Brep.CreateTrimmedSurface(srf, srf.UnderlyingSurface(), tolerance);
+        //        rg.Curve[] intersectionCrvs;
+        //        rg.Point3d[] intersectionPts;
+        //        //rg.Intersect.Intersection.BrepSurface(brep, srf, tolerance, out intersectionCrvs, out intersectionPts);
+        //        rg.Intersect.Intersection.BrepBrep(brep, srfbrep, tolerance, out intersectionCrvs, out intersectionPts);
+        //        rg.Curve curve = intersectionCrvs[0];
+        //        if (intersectionCrvs.Length > 1)
+        //        {
+        //            rg.Curve[] crv = rg.Curve.JoinCurves(intersectionCrvs);
+        //            if (crv.Length > 1 && !crv[0].IsClosed)
+        //                return false;
+        //            else
+        //                curve = crv[0];
+        //        }
+        //        double curveArea = rg.AreaMassProperties.Compute(curve).Area;
+        //        double srfArea = rg.AreaMassProperties.Compute(srf).Area;
+        //        if (Math.Round(curveArea, roundingDecimals) != Math.Round(srfArea, roundingDecimals))
+        //            return false;
+        //        else
+        //            equalAreas[i] = true;
+        //    }
+        //    foreach (bool equalArea in equalAreas)
+        //        if (!equalArea)
+        //            return false;
+
+        //    return true;
+        //}
 
 
         // !!!!!!!!!!! TO DO
