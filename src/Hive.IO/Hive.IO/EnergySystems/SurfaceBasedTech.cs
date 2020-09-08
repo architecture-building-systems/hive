@@ -26,6 +26,8 @@ namespace Hive.IO.EnergySystems
         /// </summary>
         public Air AmbientAir { get; protected set; }
 
+        public double CostPerSquareMeter { get; protected set; }
+        public double EmissionsPerSquareMeter { get; protected set; }
 
         protected SurfaceBasedTech(double investmentCost, double embodiedGhg, bool isHeating, bool isCooling, bool isElectric, Mesh surfaceGeometry)
             : base(investmentCost, embodiedGhg, 0.0, "undefined", isHeating, isCooling, isElectric)
@@ -166,6 +168,8 @@ namespace Hive.IO.EnergySystems
 
             base.CapacityUnit = "kW_peak";
             base.Capacity = refEfficiencyElectric * base.SurfaceArea; // kW_peak, assuming 1kW per m^2 solar irradiance
+            base.CostPerSquareMeter = SpecificInvestmentCost * refEfficiencyElectric;
+            base.EmissionsPerSquareMeter = refEfficiencyElectric * embodiedGhg;
         }
 
 
@@ -293,6 +297,8 @@ namespace Hive.IO.EnergySystems
 
             base.CapacityUnit = "kW_peak";
             base.Capacity = base.SurfaceArea * refEfficiencyHeating; // kW_peak, assuming 1 kW/m^2 solar irradiance
+            base.CostPerSquareMeter = investmentCost * refEfficiencyHeating;
+            base.EmissionsPerSquareMeter = refEfficiencyHeating * embodiedGhg;
         }
 
 
