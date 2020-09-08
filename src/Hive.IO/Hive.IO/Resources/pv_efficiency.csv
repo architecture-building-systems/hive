@@ -1,11 +1,6 @@
-PV tech,electric efficiency,thermal efficiency,cost per m2,life cycle GHG factor kgCO2eq per m2
-polycristalline,0.160,0.0,400.0,35.96
-polycristalline_high,0.206,0.0,400.0,35.96
-monocristalline,0.184,0.0,400.0,35.96
-monocristalline_high,0.228,0.0,400.0,35.96
-CIGS,0.133,0.0,400.0,35.96
-CIGS_high,0.156,0.0,400.0,35.96
-CdTe,0.162,0.0,400.0,35.96
-CdTe_high,0.182,0.0,400.0,35.96
-HIT,0.194,0.0,400.0,35.96
-HIT_high,0.209,0.0,400.0,35.96
+PV tech,electric efficiency,thermal efficiency,cost per m2,cost per kWp,life cycle GHG factor kgCO2eq per m2,life cycle GHG factor kgCO2eq per kWp,Lifetime
+polycristalline,0.206,0,633.656,3076,171.598,833,30
+monocristalline,0.228,0,701.328,3076,189.924,833,30
+CIGS,0.156,0,NaN,NaN,121.68,780,30
+CdTe,0.182,0,NaN,NaN,78.806,433,30
+HIT,0.209,0,642.884,3076,174.097,833,30
