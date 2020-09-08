@@ -30,9 +30,14 @@ namespace Hive.IO.Forms
 
         public static IEnumerable<string> AllNames => Defaults.Keys;
 
+        public ConversionTechPropertiesViewModel()
+        {
+            Name = "Photovoltaic (PV)";
+        }
+
         public string Name
         {
-            get => _name ?? "Photovoltaic (PV)";
+            get => _name;
             set
             {
                 if (AllNames.Contains(value))
@@ -199,6 +204,8 @@ namespace Hive.IO.Forms
             {
                 ModuleType = ModuleTypesCatalog.ContainsKey(Name) ? ModuleTypesCatalog[Name].First() : new ModuleTypeRecord { Name = "<custom>" };
             }
+
+            RaisePropertyChangedEvent(null);
         }
 
         private void SelectSurfaces(IEnumerable<SurfaceViewModel> surfaces)
