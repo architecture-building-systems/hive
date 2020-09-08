@@ -1,0 +1,59 @@
+digraph energysystems {
+    rankdir=LR;
+    splines=ortho;
+
+    node [shape=record, style=filled];
+
+    
+    
+    
+    subgraph energy_carriers {
+        node [style=filled, fillcolor=green];
+        edge [arrowtail="empty", dir=back];
+
+        EnergyCarrier;
+        EnergyCarrier -> Water;
+        EnergyCarrier -> Air;
+        EnergyCarrier -> Gas;
+        EnergyCarrier -> Radiation;
+        EnergyCarrier -> Electricity;
+        EnergyCarrier -> Pellets;
+    }
+
+    subgraph conversion_technologies {
+        edge [arrowtail="empty", dir=back];
+        node [fillcolor="yellow"];
+
+        ConversionTech[label="ConversionTech|Name\lDetailedName\lIsElectric\lIsHeating\lIsCooling\lCapacity\lCapacityUnit\lSpecificInvestmentCost\lSpecificEmbodiedGhg\l "];
+        
+        HeatCoolingExchanger[label="HeatCoolingExchanger|DistributionLosses"]
+        AirSourceHeatPump[label="AirSourceHeatPump|Air\lEtaRef\l "]
+        Chiller[label="Chiller|Air\lEtaRef\l "]
+
+        ConversionTech -> AirSourceHeatPump;
+        ConversionTech -> Chiller;
+        ConversionTech -> HeatCoolingExchanger;
+
+        CombustionTech[label="CombustionTech"];
+        GasBoiler[label="GasBoiler|Efficiency"];
+        CombinedHeatPower[label="CombinedHeatPower|HeatToPowerRatio\lElectricEfficiency "];
+        ConversionTech -> CombustionTech;
+        CombustionTech -> CombinedHeatPower;
+        CombustionTech -> GasBoiler;
+        
+
+        SurfaceBasedTech[label="SurfaceBasedTech|SurfaceGeometry\lSurfaceArea\lAmbientAir\l|ComputeMeanHourlyEnergy(irradiance)"];
+        PVT[label="PVT|RefEfficiencyElectric\lRefEfficiencyHeating"];
+        SolarThermal[label="SolarThermal|InletWater\lFRtauAlpha\lFRUL\lR_V\lRefEfficiencyHeating\l"];
+        Photovoltaic[label="Photovoltaic|Beta\lNOCT\lNOCT_ref\lNOCT_sol\lPR\lRefEfficiencyElectric"];
+
+        ConversionTech -> SurfaceBasedTech;
+        SurfaceBasedTech -> GroundCollector;
+        SurfaceBasedTech -> Photovoltaic;
+        SurfaceBasedTech -> PVT;
+        SurfaceBasedTech -> SolarThermal;
+    }
+
+    ConversionTech -> EnergyCarrier [label="InputCarriers", arrowhead=none, headlabel="*"]
+    ConversionTech -> EnergyCarrier [label="OutputCarriers", arrowhead=none, headlabel="*"]
+}

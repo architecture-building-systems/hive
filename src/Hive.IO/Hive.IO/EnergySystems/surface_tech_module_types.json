@@ -1,0 +1,97 @@
+{
+  "Photovoltaic (PV)": [
+    {
+      "Name": "Polycristalline (16%)",
+      "ElectricEfficiency": 0.160,
+      "ThermalEfficiency": 0.00,
+      "SpecificCapitalCost": 400.0,
+      "SpecificEmbodiedEmissions": 35.96
+    },
+    {
+      "Name": "Polycristalline (20%)",
+      "ElectricEfficiency": 0.206,
+      "ThermalEfficiency": 0.00,
+      "SpecificCapitalCost": 400.0,
+      "SpecificEmbodiedEmissions": 35.96
+    },
+    {
+      "Name": "Monocristalline (18%)",
+      "ElectricEfficiency": 0.184,
+      "ThermalEfficiency": 0.00,
+      "SpecificCapitalCost": 400.0,
+      "SpecificEmbodiedEmissions": 35.96
+    },
+    {
+      "Name": "Monocristalline (22%)",
+      "ElectricEfficiency": 0.228,
+      "ThermalEfficiency": 0.00,
+      "SpecificCapitalCost": 400.0,
+      "SpecificEmbodiedEmissions": 35.96
+    },
+    {
+      "Name": "CIGS (13%)",
+      "ElectricEfficiency": 0.133,
+      "ThermalEfficiency": 0.00,
+      "SpecificCapitalCost": 400.0,
+      "SpecificEmbodiedEmissions": 35.96
+    },
+    {
+      "Name": "CIGS (15%)",
+      "ElectricEfficiency": 0.156,
+      "ThermalEfficiency": 0.00,
+      "SpecificCapitalCost": 400.0,
+      "SpecificEmbodiedEmissions": 35.96
+    },
+    {
+      "Name": "CdTe (16%)",
+      "ElectricEfficiency": 0.162,
+      "ThermalEfficiency": 0.00,
+      "SpecificCapitalCost": 400.0,
+      "SpecificEmbodiedEmissions": 35.96
+    },
+    {
+      "Name": "CdTe (18%)",
+      "ElectricEfficiency": 0.182,
+      "ThermalEfficiency": 0.00,
+      "SpecificCapitalCost": 400.0,
+      "SpecificEmbodiedEmissions": 35.96
+    },
+    {
+      "Name": "HIT (19%)",
+      "ElectricEfficiency": 0.194,
+      "ThermalEfficiency": 0.00,
+      "SpecificCapitalCost": 400.0,
+      "SpecificEmbodiedEmissions": 35.96
+    },
+    {
+      "Name": "HIT (20%)",
+      "ElectricEfficiency": 0.209,
+      "ThermalEfficiency": 0.00,
+      "SpecificCapitalCost": 400.0,
+      "SpecificEmbodiedEmissions": 35.96
+    }
+  ],
+  "Solar Thermal (ST)": [
+    {
+      "Name": "Cheap",
+      "ElectricEfficiency": 0.00,
+      "ThermalEfficiency": 0.1,
+      "SpecificCapitalCost": 300.0,
+      "SpecificEmbodiedEmissions": 1.0
+    },
+    {
+      "Name": "Normal",
+      "ElectricEfficiency": 0.00,
+      "ThermalEfficiency": 0.2,
+      "SpecificCapitalCost": 400.0,
+      "SpecificEmbodiedEmissions": 2.0
+    },
+    {
+      "Name": "High-Tech",
+      "ElectricEfficiency": 0.00,
+      "ThermalEfficiency": 0.3,
+      "SpecificCapitalCost": 500.0,
+      "SpecificEmbodiedEmissions": 3.0
+    }
+  ] 
+}
