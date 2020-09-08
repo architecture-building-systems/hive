@@ -221,7 +221,7 @@ namespace Hive.IO.EnergySystems
                 electricityGenerated[t] = this.SurfaceArea * eta * meanIrradiance[t] / 1000.0; // in kWh/m^2
             }
 
-            base.OutputCarriers = new EnergyCarrier[1];
+            base.OutputCarriers = new Carrier[1];
             base.OutputCarriers[0] = new Electricity(horizon, electricityGenerated, energyCost, ghgEmissions);
         }
 
@@ -248,7 +248,7 @@ namespace Hive.IO.EnergySystems
             double[] energyCost = new double[horizon];
             double[] ghgEmissions = new double[horizon];
 
-            base.OutputCarriers = new EnergyCarrier[1];
+            base.OutputCarriers = new Carrier[1];
             base.OutputCarriers[0] = new Electricity(horizon, electricityGenerated, energyCost, ghgEmissions);
         }
     }
@@ -335,7 +335,7 @@ namespace Hive.IO.EnergySystems
             Radiation solarCarrier = new Radiation(horizon, meanIrradiance);
             base.InputCarrier = solarCarrier;
 
-            base.OutputCarriers = new EnergyCarrier[1];
+            base.OutputCarriers = new Carrier[1];
             double[] availableEnergy = new double[8760];
             for (int t = 0; t < horizon; t++)
             {
@@ -374,7 +374,7 @@ namespace Hive.IO.EnergySystems
             Radiation solarCarrier = new Radiation(horizon, meanIrradiance);
             base.InputCarrier = solarCarrier;
 
-            base.OutputCarriers = new EnergyCarrier[1];
+            base.OutputCarriers = new Carrier[1];
             double[] heatingEnergy = new double[horizon];
             for (int t = 0; t < horizon; t++)
             {

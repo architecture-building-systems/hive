@@ -54,7 +54,7 @@ namespace Hive.IO.EnergySystems
             Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor);
             base.InputCarrier = electricityConsumedCarrier;
 
-            base.OutputCarriers = new EnergyCarrier[1];
+            base.OutputCarriers = new Carrier[1];
             base.OutputCarriers[0] = new Water(horizon, coolingGenerated, null, null, tempCold);
             
         }
@@ -99,7 +99,7 @@ namespace Hive.IO.EnergySystems
             Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor);
             base.InputCarrier = electricityConsumedCarrier;
 
-            base.OutputCarriers = new EnergyCarrier[1];
+            base.OutputCarriers = new Carrier[1];
             base.OutputCarriers[0] = new Water(horizon, coolingGenerated, null, null, supplyTemp);
         }
     }
@@ -156,7 +156,7 @@ namespace Hive.IO.EnergySystems
             Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor);
             base.InputCarrier = electricityConsumedCarrier;
 
-            base.OutputCarriers = new EnergyCarrier[1];
+            base.OutputCarriers = new Carrier[1];
             base.OutputCarriers[0] = new Water(horizon, heatingGenerated, null, null, tempCold);
 
         }
@@ -201,7 +201,7 @@ namespace Hive.IO.EnergySystems
             Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor);
             base.InputCarrier = electricityConsumedCarrier;
 
-            base.OutputCarriers = new EnergyCarrier[1];
+            base.OutputCarriers = new Carrier[1];
             base.OutputCarriers[0] = new Water(horizon, heatingGenerated, null, null, supplyTemp);
         }
     }
@@ -252,7 +252,7 @@ namespace Hive.IO.EnergySystems
 
             base.InputCarrier = new Water(horizon, consumedEnergy, energyPrice, energyGhg, supplyTemp);  // simplified assumption, that DH supply temp is already at the right level
 
-            base.OutputCarriers = new EnergyCarrier[1] { new Water(horizon, generatedEnergy, null, null, supplyTemp) };
+            base.OutputCarriers = new Carrier[1] { new Water(horizon, generatedEnergy, null, null, supplyTemp) };
 
         }
 
@@ -319,11 +319,11 @@ namespace Hive.IO.EnergySystems
         /// <summary>
         /// Input stream. e.g. for a CHP this could be 'NaturalGas'
         /// </summary>
-        public EnergyCarrier InputCarrier { get; protected set; }
+        public Carrier InputCarrier { get; protected set; }
         /// <summary>
         /// Output streams. e.g. for a CHP this could be 'Heating' and 'Electricity'
         /// </summary>
-        public EnergyCarrier[] OutputCarriers { get; protected set; }
+        public Carrier[] OutputCarriers { get; protected set; }
 
 
         protected ConversionTech(double investmentCost, double embodiedGhg, double capacity, string capacityUnity, bool isHeating, bool isCooling, bool isElectric)
@@ -336,6 +336,7 @@ namespace Hive.IO.EnergySystems
             this.IsCooling = isCooling;
             this.IsElectric = isElectric;
         }
+
     }
 
 

@@ -182,13 +182,13 @@ namespace Hive.IO.GHComponents
             Building.Building building = null;
             var conversionTechs = new List<ConversionTech>();
             var emitters = new List<Emitter>();
-            var outputEnergies = new List<EnergyCarrier>();
-            var inputEnergies = new List<EnergyCarrier>();
+            var outputEnergies = new List<Carrier>();
+            var inputEnergies = new List<Carrier>();
             DA.GetData(17, ref building);
             DA.GetDataList(18, conversionTechs);
             DA.GetDataList(19, emitters);
-            DA.GetDataList(20, outputEnergies);
-            DA.GetDataList(21, inputEnergies);
+            DA.GetDataList(20, outputEnergies); // pv electricity?
+            DA.GetDataList(21, inputEnergies); // all consumed energy. includes solar?
 
 
             building.Zones[0].SetEnergyDemandsMonthly(heatingMonthly.ToArray(), domesticHotWaterMonthly.ToArray(), coolingMonthly.ToArray(), electricityMonthly.ToArray());
@@ -198,7 +198,7 @@ namespace Hive.IO.GHComponents
             
             // these methods should handle nulls or wrong list lengths themselves
             //results.SetTotalDemandMonthly(coolingMonthly.ToArray(), heatingMonthly.ToArray(), electricityMonthly.ToArray(), domesticHotWaterMonthly.ToArray());
-            results.SetTotalDemandHourly(coolingHourly.ToArray(), heatingHourly.ToArray(), electricityHourly.ToArray(), domesticHotWaterHourly.ToArray());
+            //results.SetTotalDemandHourly(coolingHourly.ToArray(), heatingHourly.ToArray(), electricityHourly.ToArray(), domesticHotWaterHourly.ToArray());
             results.SetSupplySystemsCapacity(supplyNames.ToArray(), supplyTypes, supplyCap.ToArray(), supplyUnits.ToArray());
             results.SetSupplySystemsGenerationMonthly(operationMonthly);
             results.SetSupplySystemsGenerationHourly(operationHourly);

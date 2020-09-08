@@ -113,11 +113,11 @@ namespace Hive.IO.EnergySystems
         /// <summary>
         /// Input stream. For most emitters, this would be water
         /// </summary>
-        public EnergyCarrier InletCarrier { get; protected set; }
+        public Carrier InletCarrier { get; protected set; }
         /// <summary>
         /// Output streams. Must be of same type as InletCarrier (?)
         /// </summary>
-        public EnergyCarrier ReturnCarrier { get; protected set; }
+        public Carrier ReturnCarrier { get; protected set; }
 
 
 

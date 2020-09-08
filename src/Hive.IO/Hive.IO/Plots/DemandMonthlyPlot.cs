@@ -13,7 +13,7 @@ namespace Hive.IO.Plots
             const int months = 12;
             var model = new PlotModel { Title = "Energy demand (Total Monthly)" };
 
-            var resultsTotalHeatingMonthly = results.Results.TotalHeatingMonthly ?? new double[months];
+            var resultsTotalHeatingMonthly = results.Results.TotalFinalHeatingMonthly ?? new double[months];
             var demandHeating = new ColumnSeries
             {
                 ItemsSource = resultsTotalHeatingMonthly.Select(demand => new ColumnItem { Value = demand }),
@@ -22,7 +22,7 @@ namespace Hive.IO.Plots
             };
             model.Series.Add(demandHeating);
 
-            var resultsTotalCoolingMonthly = results.Results.TotalCoolingMonthly ?? new double[months];
+            var resultsTotalCoolingMonthly = results.Results.TotalFinalCoolingMonthly ?? new double[months];
             var demandCooling = new ColumnSeries
             {
                 ItemsSource = resultsTotalCoolingMonthly.Select(demand => new ColumnItem { Value = demand }),
@@ -31,7 +31,7 @@ namespace Hive.IO.Plots
             };
             model.Series.Add(demandCooling);
 
-            var resultsTotalElectricityMonthly = results.Results.TotalElectricityMonthly ?? new double[months];
+            var resultsTotalElectricityMonthly = results.Results.TotalFinalElectricityMonthly ?? new double[months];
             var demandElectricity = new ColumnSeries
             {
                 ItemsSource = resultsTotalElectricityMonthly.Select(demand => new ColumnItem { Value = demand }),
@@ -40,7 +40,7 @@ namespace Hive.IO.Plots
             };
             model.Series.Add(demandElectricity);
 
-            var resultsTotalDwhMonthly = results.Results.TotalDHWMonthly ?? new double[months];
+            var resultsTotalDwhMonthly = results.Results.TotalFinalDomesticHotWaterMonthly ?? new double[months];
             var demandDhw = new ColumnSeries
             {
                 ItemsSource = resultsTotalDwhMonthly.Select(demand => new ColumnItem { Value = demand }),

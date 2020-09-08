@@ -11,7 +11,7 @@ namespace Hive.IO.EnergySystems
     /// e.g. input for air source heat pump (in which case zero cost and emissions)
     /// or output from AirCon (in which case it has cost and emissions)
     /// </summary>
-    public class Air : EnergyCarrier
+    public class Air : Carrier
     {
         /// <summary>
         /// 
@@ -22,7 +22,7 @@ namespace Hive.IO.EnergySystems
         /// <param name="ghgEmissionsFactor">kgCO2eq./kWh</param>
         /// <param name="airTemperature">deg C</param>
         public Air(int horizon, double [] airEnergy, double [] airPrice, double [] ghgEmissionsFactor, double[] airTemperature)
-            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, airEnergy, airPrice, ghgEmissionsFactor) 
+            : base(horizon, Carrier.EnergyUnit.KiloWattHours, airEnergy, airPrice, ghgEmissionsFactor) 
         {
             if (airTemperature != null && airTemperature.Length > 0)
             {
@@ -37,7 +37,7 @@ namespace Hive.IO.EnergySystems
     /// Water as energy carrier, e.g. the output of a boiler, heat pump, or solar thermal collector
     /// Could also be used for district heating/cooling
     /// </summary>
-    public class Water : EnergyCarrier
+    public class Water : Carrier
     {
         /// <summary>
         /// 
@@ -48,7 +48,7 @@ namespace Hive.IO.EnergySystems
         /// <param name="ghgEmissionsFactor">kgCO2eq./kWh</param>
         /// <param name="waterTemperature">deg C</param>
         public Water(int horizon, double[] waterEnergy, double[] waterPrice, double[] ghgEmissionsFactor, double[] waterTemperature)
-            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, waterEnergy, waterPrice, ghgEmissionsFactor)
+            : base(horizon, Carrier.EnergyUnit.KiloWattHours, waterEnergy, waterPrice, ghgEmissionsFactor)
         {
             if (waterTemperature != null && waterTemperature.Length > 0)
             {
@@ -62,7 +62,7 @@ namespace Hive.IO.EnergySystems
     /// <summary>
     /// Radiation energy carrier, e.g. solar radiation for PV and solar thermal
     /// </summary>
-    public class Radiation : EnergyCarrier
+    public class Radiation : Carrier
     {
         /// <summary>
         /// ID of the mesh vertex that this solar carrier corresponds to (solar panel). In case of Sun, ID can be ignored
@@ -92,7 +92,7 @@ namespace Hive.IO.EnergySystems
         /// <param name="vertexId"></param>
         /// <param name="radiationType"></param>
         public Radiation(int horizon, double[] irradiation, double surfaceArea = 1, int? vertexId = null, RadiationType radiationType = RadiationType.GHI)
-            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, irradiation, null, null)
+            : base(horizon, Carrier.EnergyUnit.KiloWattHours, irradiation, null, null)
         {
             this.Irradiance = new double[irradiation.Length];
             for (int i = 0; i < Irradiance.Length; i++)
@@ -112,7 +112,7 @@ namespace Hive.IO.EnergySystems
     /// <summary>
     /// Electricity. Could be from the grid or from a conversion technology
     /// </summary>
-    public class Electricity : EnergyCarrier
+    public class Electricity : Carrier
     {
         /// <summary>
         /// Electricity
@@ -122,14 +122,14 @@ namespace Hive.IO.EnergySystems
         /// <param name="electricityPrice">CHF/kWh</param>
         /// <param name="ghgEmissionsFactor">kgCO2eq./kWh</param>
         public Electricity(int horizon, double[] electricEnergy, double[] electricityPrice, double[] ghgEmissionsFactor)
-            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, electricEnergy, electricityPrice, ghgEmissionsFactor) { }
+            : base(horizon, Carrier.EnergyUnit.KiloWattHours, electricEnergy, electricityPrice, ghgEmissionsFactor) { }
     }
 
 
     /// <summary>
     /// Gas (natural gas or biogas)
     /// </summary>
-    public class Gas : EnergyCarrier
+    public class Gas : Carrier
     {
         /// <summary>
         /// Gas
@@ -139,7 +139,7 @@ namespace Hive.IO.EnergySystems
         /// <param name="gasPrice">CHF/kWh</param>
         /// <param name="ghgEmissionsFactor">kgCO2eq./kWh</param>
         public Gas(int horizon, double[] gasEnergy, double[] gasPrice, double[] ghgEmissionsFactor)
-            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, gasEnergy, gasPrice, ghgEmissionsFactor) { }
+            : base(horizon, Carrier.EnergyUnit.KiloWattHours, gasEnergy, gasPrice, ghgEmissionsFactor) { }
     }
 
 
@@ -147,7 +147,7 @@ namespace Hive.IO.EnergySystems
     /// <summary>
     /// Wood pellets. Availability might be limited
     /// </summary>
-    public class Pellets : EnergyCarrier
+    public class Pellets : Carrier
     {
         /// <summary>
         /// Wood pellets
@@ -157,7 +157,7 @@ namespace Hive.IO.EnergySystems
         /// <param name="pelletsPrice">price per kWh</param>
         /// <param name="ghgEmissionsFactor">kgCO2eq./kWh</param>
         public Pellets(int horizon, double[] pelletEnergy, double[] pelletsPrice, double[] ghgEmissionsFactor)
-            : base(horizon, EnergyCarrier.EnergyUnit.KiloWattHours, pelletEnergy, pelletsPrice, ghgEmissionsFactor) { }
+            : base(horizon, Carrier.EnergyUnit.KiloWattHours, pelletEnergy, pelletsPrice, ghgEmissionsFactor) { }
     }
     #endregion
 
@@ -166,7 +166,7 @@ namespace Hive.IO.EnergySystems
     /// <summary>
     /// Energy Carrier
     /// </summary>
-    public abstract class EnergyCarrier
+    public abstract class Carrier
     {
         // specifying the carrier. e.g. for <Electricity>, name could be 'UTC-Grid', or for <Gas> it could be 'BioGasZurich' or 'NaturalGasRussia'
         public string Name { get; internal set; }
@@ -208,7 +208,7 @@ namespace Hive.IO.EnergySystems
         /// </summary>
         public double [] Temperature { get; protected set; }
 
-        protected EnergyCarrier(int horizon, EnergyUnit unit, double[] energy, double[] energyPrice, double[] ghgEmissionsFactor)
+        protected Carrier(int horizon, EnergyUnit unit, double[] energy, double[] energyPrice, double[] ghgEmissionsFactor)
         {
             this.Horizon = horizon;
             this.Unit = unit;
