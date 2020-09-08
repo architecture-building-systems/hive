@@ -119,21 +119,19 @@ namespace Hive.IO.DataHandling
         public double[] EmbodiedEnergyBuildingsMonthly(bool normalized)
         {
             // FIXME: plug in real values here...
-            double dummy = 123.0;
+            double dummy = 0.0;
             double[] result = new double[12].Select(r => dummy).ToArray();
             return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
         }
         public double EmbodiedEnergyBuildings(bool normalized) => EmbodiedEnergyBuildingsMonthly(normalized).Sum();
 
-        // FIX ME what is embodied energy?
-        public double[] EmbodiedEnergySystemsMonthly(bool normalized)
+        // operational carbon emissions from energy systems
+        public double[] OperationalEmissionsMonthly(bool normalized)
         {
-            // FIXME: plug in real values here...
-            double dummy = 234.0;
-            double[] result = new double[12].Select(r => dummy).ToArray();
+            double[] result = Results.TotalOperationalEmissionsMonthly;
             return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
         }
-        public double EmbodiedEnergySystems(bool normalized) => EmbodiedEnergySystemsMonthly(normalized).Sum();
+        public double OperationalEmissions(bool normalized) => OperationalEmissionsMonthly(normalized).Sum();
 
         // Ideal demands, a.k.a. final energy demand
         public double[] OperationEnergyBuildingsMonthly(bool normalized)
@@ -167,7 +165,7 @@ namespace Hive.IO.DataHandling
 
         // FIX ME what is embodied energy?
         public double TotalEmbodiedEnergy(bool normalized) =>
-            EmbodiedEnergyBuildings(normalized) + EmbodiedEnergySystems(normalized);
+            EmbodiedEnergyBuildings(normalized) + OperationalEmissions(normalized);
 
         // FIX ME wrong addition. final energy is subset of primary energy
         public double TotalOperationEnergy(bool normalized) =>

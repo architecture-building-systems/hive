@@ -52,6 +52,13 @@ namespace Hive.IO.DataHandling
         #endregion
 
 
+        #region Total Emissions
+
+        public double [] TotalOperationalEmissionsMonthly { get; private set; }
+
+        #endregion
+
+
         #region Zone-wise loads
         public double[][] ZoneElectricityMonthly { get; private set; }
         public double[][] ZoneElectricityHourly { get; private set; }
@@ -160,7 +167,7 @@ namespace Hive.IO.DataHandling
             this.TotalFinalElectricityMonthly = new double[Misc.MonthsPerYear];
 
             this.TotalPrimaryEnergyMonthly = new double[Misc.MonthsPerYear];
-
+            this.TotalOperationalEmissionsMonthly = new double[Misc.MonthsPerYear];
 
             //this.TotalFinalCoolingHourly = new double[Misc.HoursPerYear];
             //this.TotalFinalHeatingHourly = new double[Misc.HoursPerYear];
@@ -195,8 +202,8 @@ namespace Hive.IO.DataHandling
             this.TotalFinalCoolingMonthly = GetTotalMonthlyFinalLoads(building, "cooling");
             this.TotalFinalElectricityMonthly = GetTotalMonthlyFinalLoads(building, "electricity");
 
-
             this.TotalPrimaryEnergyMonthly = GetTotalMonthlyPrimaryLoads(conversionTech);
+            this.TotalOperationalEmissionsMonthly = GetTotalMonthlyOperationalEmissions(conversionTech);
 
             //this.TotalFinalCoolingHourly = new double[Misc.HoursPerYear];
             //this.TotalFinalHeatingHourly = new double[Misc.HoursPerYear];
@@ -444,7 +451,23 @@ namespace Hive.IO.DataHandling
             {
                 for (int i = 0; i < Misc.MonthsPerYear; i++)
                 {
-                    result[i] += tech.InputCarrier.Energy[i];
+                    result[i] += tech.InputCarrier.MonthlyCumulativeEnergy[i];
+                }
+            }
+
+            return result;
+        }
+
+
+
+        public static double[] GetTotalMonthlyOperationalEmissions(List<ConversionTech> conversionTech)
+        {
+            double[] result = new double[Misc.MonthsPerYear];
+            foreach (var tech in conversionTech)
+            {
+                for (int i = 0; i < result.Length; i++)
+                {
+                    result[i] += tech.InputCarrier.MonthlyCumulativeEmissions[i];
                 }
             }
 

@@ -103,7 +103,6 @@ namespace Hive.IO.EnergySystems
 
             if (radiationType != RadiationType.GHI)
                 this.Description = radiationType;
-
         }
     }
 
@@ -219,6 +218,10 @@ namespace Hive.IO.EnergySystems
                 this.Energy = new double[energy.Length];
                 energy.CopyTo(this.Energy, 0);
             }
+            else
+            {
+                this.Energy = new double[horizon].Select(x => 0.0).ToArray();
+            }
 
             // energy could be free, e.g. air, in which case energyCost == null
             if (energyPrice != null && energyPrice.Length != 0)
@@ -226,12 +229,20 @@ namespace Hive.IO.EnergySystems
                 this.EnergyPrice = new double[energyPrice.Length];
                 energyPrice.CopyTo(this.EnergyPrice, 0);
             }
+            else
+            {
+                this.EnergyPrice = new double[horizon].Select(x => 0.0).ToArray();
+            }
 
             // energy could have zero emissions, e.g. air or solar, in which case ghgEmissions == null
             if (ghgEmissionsFactor != null && ghgEmissionsFactor.Length != 0)
             {
                 this.GhgEmissionsFactor = new double[ghgEmissionsFactor.Length];
                 ghgEmissionsFactor.CopyTo(this.GhgEmissionsFactor, 0);
+            }
+            else
+            {
+                this.GhgEmissionsFactor = new double[horizon].Select(x => 0.0).ToArray();
             }
 
             if(this.Energy != null && this.EnergyPrice != null && this.Energy.Length == this.EnergyPrice.Length)
@@ -243,6 +254,10 @@ namespace Hive.IO.EnergySystems
                     this.TotalEnergyCost[t] = this.Energy[t] * this.EnergyPrice[t];
                 }
             }
+            else
+            {
+                this.TotalEnergyCost = new double[horizon].Select(x=>0.0).ToArray();
+            }
 
             if (this.Energy != null && this.GhgEmissionsFactor != null && this.Energy.Length == this.GhgEmissionsFactor.Length)
             {
@@ -253,6 +268,23 @@ namespace Hive.IO.EnergySystems
                     this.TotalGhgEmissions[t] = this.Energy[t] * this.GhgEmissionsFactor[t];
                 }
             }
+            else
+            {
+                this.TotalGhgEmissions = new double[horizon].Select(x=>0.0).ToArray();
+            }
+        }
+
+
+        private double[] _monthlyCumulativeEmissions = null;
+        public double[] MonthlyCumulativeEmissions
+        {
+            get
+            {
+                if (_monthlyCumulativeEmissions == null)
+                    _monthlyCumulativeEmissions = Misc.GetCumulativeMonthlyValue(this.TotalGhgEmissions);
+                return _monthlyCumulativeEmissions;
+            }
+            private set { ; }
         }
 
 

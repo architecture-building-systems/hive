@@ -96,6 +96,8 @@ namespace Hive.IO.EnergySystems
                 elecConsumed[t] = coolingGenerated[t] / COP;
             }
 
+            this.AmbientAir = new Air(horizon, null, null, null, airTemp); // how would I know air energy? i'd need that for exergy calculation?
+
             Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor);
             base.InputCarrier = electricityConsumedCarrier;
 
