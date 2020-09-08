@@ -24,7 +24,7 @@
   "Boiler (Gas)": {
     "Source": "Gas",
     "EndUse": "Heating demand, DHW",
-    "Efficiency": 0.00,
+    "Efficiency": 0.94,
     "Capacity": 0.00,
     "CapitalCost": 0.00,
     "Lifetime": 0.00,
@@ -35,18 +35,18 @@
   "CHP": {
     "Source": "Gas",
     "EndUse": "Electricity demand, Heating demand, DHW",
-    "Efficiency": 0.00,
+    "Efficiency": 0.3,
     "Capacity": 0.00,
     "CapitalCost": 0.00,
     "Lifetime": 0.00,
     "OperationalCost": 0.00,
     "EmbodiedEmissions": 0.00,
-    "HeatToPowerRatio": 0.00
+    "HeatToPowerRatio": 1.73
   },
   "Chiller (Electricity)": {
     "Source": "Electricity Grid",
     "EndUse": "Cooling demand",
-    "Efficiency": 0.00,
+    "Efficiency": 3.50,
     "Capacity": 0.00,
     "CapitalCost": 0.00,
     "Lifetime": 0.00,
@@ -57,7 +57,7 @@
   "ASHP (Electricity)": {
     "Source": "Air",
     "EndUse": "Electricity demand",
-    "Efficiency": 0.00,
+    "Efficiency": 3.50,
     "Capacity": 0.00,
     "CapitalCost": 0.00,
     "Lifetime": 0.00,
@@ -68,7 +68,7 @@
   "Heat Exchanger": {
     "Source": "Air",
     "EndUse": "Heating demand",
-    "Efficiency": 0.00,
+    "Efficiency": 0.05,
     "Capacity": 0.00,
     "CapitalCost": 0.00,
     "Lifetime": 0.00,
@@ -79,7 +79,7 @@
   "Cooling Exchanger": {
     "Source": "Air",
     "EndUse": "Cooling demand",
-    "Efficiency": 0.00,
+    "Efficiency": 0.05,
     "Capacity": 0.00,
     "CapitalCost": 0.00,
     "Lifetime": 0.00,
