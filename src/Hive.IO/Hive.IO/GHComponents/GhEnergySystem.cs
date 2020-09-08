@@ -216,7 +216,7 @@ namespace Hive.IO.GHComponents
             }
 
             // remove parametrically defined conversion technologies and emitters - they'll be added below anyway
-            var oldMeshes = _viewModel.Surfaces.Where(s => !s.Connection.IsParametricDefined).ToArray();
+            var oldMeshes = _viewModel.Surfaces.Where(s => s.Connection == null || !s.Connection.IsParametricDefined).ToArray();
             var formDefinedConversionTech = _viewModel.ConversionTechnologies.Where(ct => !ct.IsParametricDefined).ToArray();
             var formDefinedEmitters = _viewModel.Emitters.Where(e => !e.IsParametricDefined).ToArray();
             _viewModel.ConversionTechnologies.Clear();
