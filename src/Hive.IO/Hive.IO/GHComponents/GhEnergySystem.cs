@@ -5,6 +5,7 @@ using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
+using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 using Hive.IO.EnergySystems;
 using Hive.IO.GhParametricInputs;
@@ -30,20 +31,16 @@ namespace Hive.IO.GHComponents
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddMeshParameter("Mesh", "Mesh", "Mesh geometries of the solar energy systems (Photovolatic, Solar Thermal, or hybrid PVT)", GH_ParamAccess.list);
+            pManager.AddGenericParameter("SolarTechProperties", "SolarTechProperties", "List of SolarTechProperties describing solar technologies. Could also be just a mesh, in which case technology properties will be set via the form", GH_ParamAccess.list);
             pManager[0].Optional = true;
-            pManager.AddGenericParameter("SolarTechJson", "SolarTechJson", "List of jsons describing solar technologies. One json per mesh", GH_ParamAccess.list);
+            pManager.AddGenericParameter("ConversionTechProperties", "ConversionTechProperties", "ConversionTechProperties describing all other used conversion technologies (ASHP, boiler, CHP, etc", GH_ParamAccess.item);
             pManager[1].Optional = true;
-            pManager.AddGenericParameter("ConversionTechJson", "ConversionTechJson", "Json describing all other used conversion technologies (ASHP, boiler, CHP, etc", GH_ParamAccess.item);
+            pManager.AddGenericParameter("EmitterProperties", "EmitterProperties", "EmitterProperties describing emitter properties", GH_ParamAccess.list);
             pManager[2].Optional = true;
-            pManager.AddGenericParameter("EmitterJson", "EmitterJson", "Json describing emitter properties", GH_ParamAccess.list);
-            pManager[3].Optional = true;
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            //pManager.AddGenericParameter("Hive.IO.EnergySystems.ConversionTech", "ConversionTech", "Hive.IO.EnergySystems.ConversionTech, such as PV, ST, PVT or GC, ASHP, CHP, boiler, etc.", GH_ParamAccess.list);
-            //pManager.AddGenericParameter("Hive.IO.EnergySystems.Emitter", "Emitter", "Hive.IO.EnergySystems.Emitter (e.g. Radiator, floor heating, cooling panel, etc. Will be depricated for Hive 1.x and become part of the Building.Zone.", GH_ParamAccess.item);
             pManager.AddGenericParameter("Energy Systems", "EnergySystems", "Building Energy Systems of type <Hive.IO.EnergySystems.>, such as Emitters, ConversionTech, SolarTech, etc.", GH_ParamAccess.list);
         }
 
@@ -193,35 +190,44 @@ namespace Hive.IO.GHComponents
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            var solarObjects = new List<GH_ObjectWrapper>();
+            DA.GetDataList(0, solarObjects);
+            
             List<Mesh> meshList = new List<Mesh>();
-            DA.GetDataList(0, meshList); 
-
             var solarTechProperties = new List<SolarTechProperties>();
-            DA.GetDataList(1, solarTechProperties);
+
+            foreach (GH_ObjectWrapper ghObj in solarObjects)
+            {
+                if (ghObj.Value is GH_Mesh)
+                {
+                    meshList.Add((ghObj.Value as GH_Mesh).Value);
+                }
+                else if(ghObj.Value is Mesh)
+                {
+                    meshList.Add(ghObj.Value as Mesh);
+                }
+                else if (ghObj.Value is SolarTechProperties)
+                {
+                    solarTechProperties.Add(ghObj.Value as SolarTechProperties);
+                }
+            }
 
             ConversionTechProperties conversionTechProperties = null;
-            DA.GetData(2, ref conversionTechProperties);
+            DA.GetData(1, ref conversionTechProperties);
 
             var emitterProperties = new List<EmitterProperties>();
-            DA.GetDataList(3, emitterProperties);
-
-            // feed the list into the listbox on the windows form
-
-
-            // by default, its all PV
-
+            DA.GetDataList(2, emitterProperties);
 
 
             // To do Daren: coding
             // To do Amr: UI/UX design
             // when opening the form, the user can select certain surfaces and change them to ST, GC, PVT, or PV individually
 
-            
 
             var conversionTech = new List<ConversionTech>();
 
 
-            if (solarTechProperties.Count == 0)
+            if (meshList.Count > 0)
             {
                 foreach (Mesh mesh in meshList)
                 {
@@ -235,21 +241,18 @@ namespace Hive.IO.GHComponents
                         conversionTech.Add(new GroundCollector(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name)); // Form_thermal_eff, 
                 }
             }
-            else
+            if (solarTechProperties.Count > 0)
             {
-                for (int i=0; i<solarTechProperties.Count; i++)
+                foreach (var solarProperties in solarTechProperties)
                 {
-                    var solarProperties = solarTechProperties[i];
-                    Mesh mesh = meshList[i];
-
                     if (solarProperties.Type == "PV")
-                        conversionTech.Add(new Photovoltaic(solarProperties.InvestmentCost, solarProperties.EmbodiedEmissions, mesh, solarProperties.Technology, solarProperties.ElectricEfficiency));
+                        conversionTech.Add(new Photovoltaic(solarProperties.InvestmentCost, solarProperties.EmbodiedEmissions, solarProperties.MeshSurface, solarProperties.Technology, solarProperties.ElectricEfficiency));
                     else if (solarProperties.Type == "PVT")
-                        conversionTech.Add(new PVT(solarProperties.InvestmentCost, solarProperties.EmbodiedEmissions, mesh, solarProperties.Technology, solarProperties.ElectricEfficiency, solarProperties.ThermalEfficiency));
+                        conversionTech.Add(new PVT(solarProperties.InvestmentCost, solarProperties.EmbodiedEmissions, solarProperties.MeshSurface, solarProperties.Technology, solarProperties.ElectricEfficiency, solarProperties.ThermalEfficiency));
                     else if (solarProperties.Type == "ST")
-                        conversionTech.Add(new SolarThermal(solarProperties.InvestmentCost, solarProperties.EmbodiedEmissions, mesh, solarProperties.Technology, solarProperties.ThermalEfficiency));
+                        conversionTech.Add(new SolarThermal(solarProperties.InvestmentCost, solarProperties.EmbodiedEmissions, solarProperties.MeshSurface, solarProperties.Technology, solarProperties.ThermalEfficiency));
                     else
-                        conversionTech.Add(new GroundCollector(solarProperties.InvestmentCost, solarProperties.EmbodiedEmissions, mesh, solarProperties.Technology));
+                        conversionTech.Add(new GroundCollector(solarProperties.InvestmentCost, solarProperties.EmbodiedEmissions, solarProperties.MeshSurface, solarProperties.Technology));
                 }
             }
 
