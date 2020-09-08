@@ -227,7 +227,7 @@ namespace Hive.IO.GHComponents
                 switch (ct)
                 {
                     case GasBoiler gasBoiler:
-                        ctvm.Name = "Boiler(Gas)";
+                        ctvm.Name = "Boiler (Gas)";
                         ctvm.SetProperties(gasBoiler);
                         break;
 
