@@ -136,6 +136,14 @@ namespace Hive.IO.Building
         #endregion
 
 
+        #region Losses and Gains
+        public double [] TransmissionHeatLosses { get; private set; }
+        public double [] VentilationHeatLosses { get; private set; }
+        public double [] InternalHeatGains { get; private set; }
+        public double [] SolarGains { get; private set; }
+        #endregion
+
+
         #region Error handling
         /// <summary>
         /// For simplicity of thermal calculations, avoid curves etc., only accept linear floorplans and geometries
@@ -285,16 +293,30 @@ namespace Hive.IO.Building
         /// <param name="electricityLoads"></param>
         public void SetEnergyDemandsMonthly(double[] heatingLoads, double[] dhwLoads, double[] coolingLoads, double[] electricityLoads)
         {
-            const int months = 12;
-            this.HeatingLoadsMonthly = new double[months];
-            this.DHWLoadsMonthly = new double[months];
-            this.CoolingLoadsMonthly = new double[months];
-            this.ElectricityLoadsMonthly = new double[months];
+            this.HeatingLoadsMonthly = new double[Misc.MonthsPerYear];
+            this.DHWLoadsMonthly = new double[Misc.MonthsPerYear];
+            this.CoolingLoadsMonthly = new double[Misc.MonthsPerYear];
+            this.ElectricityLoadsMonthly = new double[Misc.MonthsPerYear];
 
             heatingLoads.CopyTo(this.HeatingLoadsMonthly, 0);
             dhwLoads.CopyTo(this.DHWLoadsMonthly, 0);
             coolingLoads.CopyTo(this.CoolingLoadsMonthly, 0);
             electricityLoads.CopyTo(this.ElectricityLoadsMonthly, 0);
+        }
+
+
+
+        public void SetLossesAndGains(double[] Qt, double[] Qv, double[] Qi, double[] Qs)
+        {
+            this.TransmissionHeatLosses =  new double[Misc.MonthsPerYear];
+            this.VentilationHeatLosses = new double[Misc.MonthsPerYear];
+            this.InternalHeatGains = new double[Misc.MonthsPerYear];
+            this.SolarGains = new double[Misc.MonthsPerYear];
+
+            Qt.CopyTo(this.TransmissionHeatLosses, 0);
+            Qv.CopyTo(this.VentilationHeatLosses,0);
+            Qi.CopyTo(this.InternalHeatGains, 0);
+            Qs.CopyTo(this.SolarGains,0);
         }
 
         #endregion

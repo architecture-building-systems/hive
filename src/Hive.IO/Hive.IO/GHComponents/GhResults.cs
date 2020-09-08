@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Windows.Documents;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
@@ -65,6 +66,13 @@ namespace Hive.IO.GHComponents
             pManager.AddGenericParameter("OutputEnergy", "OutputEnergy", "Output energy (a.k.a. 'met demands') from the EnergyHub. Of type 'Hive.EnergySytems.EnergyCarrier'.", GH_ParamAccess.list);
             // 21
             pManager.AddGenericParameter("InputEnergy", "InputEnergy", "Input energy (also: 'potentials', or 'source') into the EnergyHub. Of type 'Hive.EnergySystems.EnergyCarrier'.", GH_ParamAccess.list);
+
+
+            // 22, 23, 24, 25
+            pManager.AddNumberParameter("Q_T", "Q_T", "transmission heat losses", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Q_V", "Q_V", "ventilation heat losses", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Q_i", "Q_i", "Internal gains", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Q_s", "Q_s", "Solar heat gains", GH_ParamAccess.list);
 
             for (int i = 0; i < pManager.ParamCount; i++)
                 pManager[i].Optional = true;
@@ -190,9 +198,19 @@ namespace Hive.IO.GHComponents
             DA.GetDataList(20, outputEnergies); // pv electricity?
             DA.GetDataList(21, inputEnergies); // all consumed energy. includes solar?
 
+            var Qt = new List<double>();
+            var Qv = new List<double>();
+            var Qi = new List<double>();
+            var Qs = new List<double>();
+            DA.GetDataList(22, Qt);
+            DA.GetDataList(23, Qv);
+            DA.GetDataList(24, Qi);
+            DA.GetDataList(25, Qs);
+
+
 
             building.Zones[0].SetEnergyDemandsMonthly(heatingMonthly.ToArray(), domesticHotWaterMonthly.ToArray(), coolingMonthly.ToArray(), electricityMonthly.ToArray());
-
+            building.Zones[0].SetLossesAndGains(Qt.ToArray(), Qv.ToArray(), Qi.ToArray(), Qs.ToArray());
             // writing data into results object
             Results results = new Results(building, conversionTechs, emitters, outputEnergies, inputEnergies);
             

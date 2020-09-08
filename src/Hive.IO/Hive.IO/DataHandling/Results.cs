@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -56,6 +57,14 @@ namespace Hive.IO.DataHandling
 
         public double [] TotalOperationalEmissionsMonthly { get; private set; }
 
+        #endregion
+
+
+        #region Total Losses and Gains
+        public double TotalTransmissionHeatLosses { get; private set; }
+        public double TotalVentilationHeatLosses { get; private set; }
+        public double TotalInternalGains { get; private set; }
+        public double TotalSolarGains { get; private set; }
         #endregion
 
 
@@ -210,6 +219,12 @@ namespace Hive.IO.DataHandling
             //this.TotalFinalElectricityHourly = new double[Misc.HoursPerYear];
             //this.TotalFinalDomesticHotWaterHourly = new double[Misc.HoursPerYear];
 
+            this.TotalTransmissionHeatLosses = GetTotalGainsOrLosses(building, "Qt");
+            this.TotalVentilationHeatLosses = GetTotalGainsOrLosses(building, "Qv");
+            this.TotalInternalGains = GetTotalGainsOrLosses(building, "Qi");
+            this.TotalSolarGains = GetTotalGainsOrLosses(building, "Qs");
+
+
             this.SupplyNames = null;
             this.SupplyTypes = null;
             this.SupplyCapacities = null;
@@ -218,6 +233,12 @@ namespace Hive.IO.DataHandling
             this.SkyViewFactors = null;
             this.SkySunPath = null;
             this.IrradiationSurfaces = null;
+
+            this.Building = building;
+            this.ConversionTechnologies = conversionTech;
+            this.Emitters = emitters;
+            this.OutputEnergyStreams = outputEnergy;
+            this.InputEnergyStreams = inputEnergy;
         }
 
 
@@ -473,6 +494,35 @@ namespace Hive.IO.DataHandling
 
             return result;
         }
+
+
+
+
+        public static double GetTotalGainsOrLosses(Building.Building building, string loadType)
+        {
+            double result = 0.0;
+            foreach (var zone in building.Zones)
+            {
+                switch (loadType)
+                {
+                    case "Qt":
+                        result += zone.TransmissionHeatLosses.Sum();
+                        break;
+                    case "Qv":
+                        result += zone.VentilationHeatLosses.Sum();
+                        break;
+                    case "Qi":
+                        result += zone.InternalHeatGains.Sum();
+                        break;
+                    case "Qs":
+                        result += zone.SolarGains.Sum();
+                        break;
+                }
+            }
+
+            return result;
+        }
+
 
         #endregion
 
