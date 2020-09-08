@@ -1,6 +1,8 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using System.Windows.Forms;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
@@ -183,7 +185,7 @@ namespace Hive.IO.GHComponents
             }
 
             // create a viewmodel for the form (note, it get's set to null when the input values change...)
-            if (_viewModel == null) _viewModel = CreateViewModel(conversionTech, meshList, emitters);
+            CreateViewModel(conversionTech, meshList, emitters);
 
             // the result might be changed by opening the form,
             // so we need to create it based on the view model (the result of the form)
@@ -201,14 +203,26 @@ namespace Hive.IO.GHComponents
         /// </summary>
         /// <param name="conversionTechnologies"></param>
         /// <param name="emitters"></param>
-        /// <returns></returns>
-        private EnergySystemsInputViewModel CreateViewModel(
+        private void CreateViewModel(
             IEnumerable<ConversionTech> conversionTechnologies, IEnumerable<Mesh> meshes, IEnumerable<Emitter> emitters)
         {
-            var vm = new EnergySystemsInputViewModel();
-            vm.ConversionTechnologies.Clear();
-            vm.Surfaces.Clear();
-            vm.Emitters.Clear();
+            if (_viewModel == null)
+            {
+                // first time we run CreateViewModel, _viewModel is not set yet...
+                _viewModel = new EnergySystemsInputViewModel();
+                _viewModel.ConversionTechnologies.Clear();
+                _viewModel.Surfaces.Clear();
+                _viewModel.Emitters.Clear();
+            }
+
+            // remove parametrically defined conversion technologies and emitters - they'll be added below anyway
+            var oldMeshes = _viewModel.Surfaces.Where(s => !s.Connection.IsParametricDefined).ToArray();
+            var formDefinedConversionTech = _viewModel.ConversionTechnologies.Where(ct => !ct.IsParametricDefined).ToArray();
+            var formDefinedEmitters = _viewModel.Emitters.Where(e => !e.IsParametricDefined).ToArray();
+            _viewModel.ConversionTechnologies.Clear();
+            _viewModel.Emitters.Clear();
+            _viewModel.Surfaces.Clear();
+            
 
             var surfaceIndex = 0;
             foreach (var ct in conversionTechnologies)
@@ -231,7 +245,7 @@ namespace Hive.IO.GHComponents
                             Mesh = photovoltaic.SurfaceGeometry
                         };
                         pvSurface.Connection = ctvm;
-                        vm.Surfaces.Add(pvSurface);
+                        _viewModel.Surfaces.Add(pvSurface);
                         break;
 
                     case SolarThermal solarThermal:
@@ -244,7 +258,7 @@ namespace Hive.IO.GHComponents
                             Mesh = solarThermal.SurfaceGeometry
                         };
                         stSurface.Connection = ctvm;
-                        vm.Surfaces.Add(stSurface);
+                        _viewModel.Surfaces.Add(stSurface);
                         break;
 
                     case AirSourceHeatPump ashp:
@@ -267,19 +281,38 @@ namespace Hive.IO.GHComponents
                         ctvm.SetProperties(exchanger);
                         break;
                 }
-                vm.ConversionTechnologies.Add(ctvm);
+                _viewModel.ConversionTechnologies.Add(ctvm);
             }
 
+            foreach (var ctvm in formDefinedConversionTech)
+            {
+                // add user (form) defined conversion technologies back to the list
+                _viewModel.ConversionTechnologies.Add(ctvm);
+            }
+
+            // was the list of meshes changed since the last SolveInstance?
             foreach (var m in meshes)
             {
-                var surface = new SurfaceViewModel
+                if (oldMeshes.Any(svm => svm.Mesh == m))
                 {
-                    Area = AreaMassProperties.Compute(m).Area,
-                    Name = $"srf{surfaceIndex++}",
-                    Mesh = m
-                };
-                vm.Surfaces.Add(surface);
+                    // mesh was input in last SolvInstance too, just keep it
+                    var surface = oldMeshes.First(svm => svm.Mesh == m);
+                    surface.Name = $"srf{surfaceIndex++}";
+                    _viewModel.Surfaces.Add(surface);
+                }
+                else
+                {
+                    // mesh is a newly added mesh
+                    var surface = new SurfaceViewModel
+                    {
+                        Area = AreaMassProperties.Compute(m).Area,
+                        Name = $"srf{surfaceIndex++}",
+                        Mesh = m
+                    };
+                    _viewModel.Surfaces.Add(surface);
+                }
             }
+            
 
             foreach (var emitter in emitters)
             {
@@ -295,10 +328,14 @@ namespace Hive.IO.GHComponents
                         epvm.SetProperties(radiator);
                         break;
                 }
-                vm.Emitters.Add(epvm);
+                _viewModel.Emitters.Add(epvm);
             }
 
-            return vm;
+            foreach (var evm in formDefinedEmitters)
+            {
+                // add user (form) defined emitters back to the list
+                _viewModel.Emitters.Add(evm);
+            }
         }
 
         /// <summary>
