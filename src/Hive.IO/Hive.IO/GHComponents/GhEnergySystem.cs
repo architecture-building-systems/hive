@@ -136,11 +136,7 @@ namespace Hive.IO.GHComponents
                             solarProperties.EmbodiedEmissions, solarProperties.MeshSurface,
                             solarProperties.Technology));
 
-            if (conversionTechProperties == null)
-            {
-                conversionTech.Add(new GasBoiler(100.0, 100.0, 10.0, 0.9));
-            }
-            else
+            if (conversionTechProperties != null)
             {
                 if (conversionTechProperties.ASHPCapacity > 0.0)
                     conversionTech.Add(new AirSourceHeatPump(conversionTechProperties.ASHPCost,
@@ -169,27 +165,21 @@ namespace Hive.IO.GHComponents
             }
 
             var emitters = new List<Emitter>();
-            if (emitterProperties.Count == 0)
+            foreach (var emProp in emitterProperties)
             {
-                emitters.Add(new Radiator(100.0, 100.0, true, false, 65.0, 55.0));
-                emitters[0].SetEmitterName("ConventionalRadiator");
-                emitters.Add(new AirDiffuser(100.0, 100.0, false, true, 20.0, 25.0));
-                emitters[1].SetEmitterName("AirDiffuser");
-            }
-            else
-            {
-                var counter = 0;
-                foreach (var emProp in emitterProperties)
+                Emitter emitter;
+                if (emProp.IsRadiation)
                 {
-                    if (emProp.IsRadiation)
-                        emitters.Add(new Radiator(emProp.InvestmentCost, emProp.EmbodiedEmissions, emProp.IsHeating,
-                            emProp.IsCooling, emProp.SupplyTemperature, emProp.ReturnTemperature));
-                    else
-                        emitters.Add(new AirDiffuser(emProp.InvestmentCost, emProp.EmbodiedEmissions, emProp.IsHeating,
-                            emProp.IsCooling, emProp.SupplyTemperature, emProp.ReturnTemperature));
-                    emitters[counter].SetEmitterName(emProp.Name);
-                    counter++;
+                    emitter = new Radiator(emProp.InvestmentCost, emProp.EmbodiedEmissions, emProp.IsHeating,
+                        emProp.IsCooling, emProp.SupplyTemperature, emProp.ReturnTemperature);
                 }
+                else
+                {
+                    emitter = new AirDiffuser(emProp.InvestmentCost, emProp.EmbodiedEmissions, emProp.IsHeating,
+                        emProp.IsCooling, emProp.SupplyTemperature, emProp.ReturnTemperature);
+                }
+                emitter.SetEmitterName(emProp.Name);
+                emitters.Add(emitter);
             }
 
             // create a viewmodel for the form (note, it get's set to null when the input values change...)
