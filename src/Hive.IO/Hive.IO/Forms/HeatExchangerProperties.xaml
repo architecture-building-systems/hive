@@ -1,0 +1,73 @@
+﻿<UserControl x:Class="Hive.IO.Forms.HeatExchangerProperties"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:local="clr-namespace:Hive.IO.Forms"
+             mc:Ignorable="d"
+             d:DesignHeight="450" d:DesignWidth="800">
+    <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+            <RowDefinition />
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid Grid.Row="0" Grid.Column="0">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.ColumnSpan="2">Efficiency</Label>
+            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Efficiency}" IsEnabled="{Binding IsEditable}"
+                     Foreground="{Binding EfficiencyBrush}" FontWeight="{Binding EfficiencyFontWeight}" />
+            <Label Grid.Row="1" Grid.Column="1">(-)</Label>
+            <Label Grid.Row="2" Grid.ColumnSpan="2">Capacity</Label>
+            <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding Capacity}" IsEnabled="{Binding IsEditable}"
+                     Foreground="{Binding CapacityBrush}" FontWeight="{Binding CapacityFontWeight}" />
+            <Label Grid.Row="4" Grid.ColumnSpan="2">Lifetime</Label>
+            <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding Lifetime}" IsEnabled="{Binding IsEditable}"
+                     Foreground="{Binding LifetimeBrush}" FontWeight="{Binding LifetimeFontWeight}" />
+            <Label Grid.Row="5" Grid.Column="1">(years)</Label>
+        </Grid>
+        <Grid Grid.Row="0" Grid.Column="1">
+            <Grid.RowDefinitions>
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+                <RowDefinition />
+            </Grid.RowDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+            <Label Grid.Row="0" Grid.ColumnSpan="2">Capital cost (CAPEX)</Label>
+            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding CapitalCost}" IsEnabled="{Binding IsEditable}"
+                     Foreground="{Binding CapitalCostBrush}" FontWeight="{Binding CapitalCostFontWeight}" />
+            <Label Grid.Row="1" Grid.Column="1">(CHF)</Label>
+            <Label Grid.Row="2" Grid.ColumnSpan="2">Operational cost (OPEX)</Label>
+            <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding OperationalCost}" IsEnabled="{Binding IsEditable}"
+                     Foreground="{Binding OperationalCostBrush}" FontWeight="{Binding OperationalCostFontWeight}" />
+            <Label Grid.Row="3" Grid.Column="1">(CHF)</Label>
+            <Label Grid.Row="4" Grid.ColumnSpan="2">Embodied Emissions</Label>
+            <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding EmbodiedEmissions}" IsEnabled="{Binding IsEditable}"
+                     Foreground="{Binding EmbodiedEmissionsBrush}" FontWeight="{Binding EmbodiedEmissionsFontWeight}" />
+            <Label Grid.Row="5" Grid.Column="1">(kgCO₂)</Label>
+        </Grid>
+
+        <Label Grid.Row="1" Grid.Column="0">Technology Image</Label>
+        <Label Grid.Row="1" Grid.Column="1">Project example Image</Label>
+    </Grid>
+</UserControl>

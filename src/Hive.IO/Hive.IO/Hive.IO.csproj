@@ -82,10 +82,42 @@
     <Compile Include="EnergySystems\Storage.cs" />
     <Compile Include="EnergySystems\SurfaceBasedTech.cs" />
     <Compile Include="EnergySystems\Ventilation.cs" />
+    <Compile Include="Forms\AshpProperties.xaml.cs">
+      <DependentUpon>AshpProperties.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Forms\BuildingInput.xaml.cs">
       <DependentUpon>BuildingInput.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\BuildingInputState.cs" />
+    <Compile Include="Forms\EmitterPropertiesView.xaml.cs">
+      <DependentUpon>EmitterPropertiesView.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\EmitterPropertiesViewModel.cs" />
+    <Compile Include="Forms\HeatExchangerProperties.xaml.cs">
+      <DependentUpon>HeatExchangerProperties.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\CoolingExchangerProperties.xaml.cs">
+      <DependentUpon>CoolingExchangerProperties.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ChillerProperties.xaml.cs">
+      <DependentUpon>ChillerProperties.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\ConversionTechPropertiesViewModel.cs" />
+    <Compile Include="Forms\EnergySystemsInput.xaml.cs">
+      <DependentUpon>EnergySystemsInput.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\EnergySystemsInputViewModel.cs" />
+    <Compile Include="Forms\ChpProperties.xaml.cs">
+      <DependentUpon>ChpProperties.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\GasBoilerProperties.xaml.cs">
+      <DependentUpon>GasBoilerProperties.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PhotovoltaicProperties.xaml.cs">
+      <DependentUpon>PhotovoltaicProperties.xaml</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\PropertiesDataTemplateSelector.cs" />
+    <Compile Include="Forms\ViewModelBase.cs" />
     <Compile Include="GhDistributors\GhConversionTech.cs" />
     <Compile Include="GhDistributors\GhEnvironment.cs" />
     <Compile Include="GhDistributors\GhSIA.cs" />
@@ -107,12 +139,6 @@
     <Compile Include="GHComponents\GhResults.cs" />
     <Compile Include="GHComponents\GhVisualizer.cs" />
     <Compile Include="Environment\Environment.cs" />
-    <Compile Include="GHComponents\FormEnSysSolar.cs">
-      <SubType>Form</SubType>
-    </Compile>
-    <Compile Include="GHComponents\FormEnSysSolar.Designer.cs">
-      <DependentUpon>FormEnSysSolar.cs</DependentUpon>
-    </Compile>
     <Compile Include="GHComponents\GhBuilding.cs" />
     <Compile Include="GhDistributors\GhMainDistributor.cs" />
     <Compile Include="GHComponents\GhVisualizerAttributes.cs" />
@@ -144,11 +170,9 @@
     </Compile>
     <Compile Include="DataHandling\Results.cs" />
     <Compile Include="Building\Zone.cs" />
+    <Compile Include="Util\JsonResource.cs" />
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="GHComponents\FormEnSysSolar.resx">
-      <DependentUpon>FormEnSysSolar.cs</DependentUpon>
-    </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
@@ -156,6 +180,9 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Building\sia2024_room_data.json" />
+    <EmbeddedResource Include="EnergySystems\conversion_technology_defaults.json" />
+    <EmbeddedResource Include="EnergySystems\surface_tech_module_types.json" />
+    <EmbeddedResource Include="EnergySystems\emitter_defaults.json" />
     <None Include="packages.config" />
     <None Include="Resources\article_18.jpg" />
     <None Include="Resources\gc_efficiency.csv" />
@@ -210,7 +237,43 @@
   </ItemGroup>
   <ItemGroup />
   <ItemGroup>
+    <Page Include="Forms\AshpProperties.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Forms\BuildingInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\EmitterPropertiesView.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\HeatExchangerProperties.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\CoolingExchangerProperties.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\ChillerProperties.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\EnergySystemsInput.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\ChpProperties.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Forms\GasBoilerProperties.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Forms\PhotovoltaicProperties.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
