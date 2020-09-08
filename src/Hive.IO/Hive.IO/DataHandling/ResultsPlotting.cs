@@ -179,16 +179,19 @@ namespace Hive.IO.DataHandling
 
         #region EnergyBalance
 
+        // ingoing energy
         public float SolarGains => (float)Results.TotalSolarGains;
         public float InternalGains => (float)Results.TotalInternalGains;
         public float PrimaryEnergy => 0.0f;
         public float RenewableEnergy => 0.0f;
-        public float Electricity => 0.0f;
+        
+        // outgoing energy
+        public float Electricity => 0.0f; // electricity loads?
         public float VentilationLosses => (float)Results.TotalVentilationHeatLosses;
         public float EnvelopeLosses => (float)Results.TotalTransmissionHeatLosses;
-        public float WindowsLosses => 0f;
-        public float SystemLosses => 0f;
-        public float PrimaryTransferLosses => 0f;
+        public float WindowsLosses => 0f; // ok, change the python code to get envelope separate from window losses
+        public float SystemLosses => 0f; // what's the difference to primary transfer losses?
+        public float PrimaryTransferLosses => 0f; // difference between primary energy and final loads?
 
 
         #endregion EnergyBalance
