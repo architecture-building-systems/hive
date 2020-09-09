@@ -16,7 +16,7 @@ from __future__ import division
 import math
 
 
-def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_areas, surface_type, surface_irradiance):
+def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_areas, surface_type, surface_irradiance_obstructed, surface_irradiance_unobstructed):
     '''
     Computes monthly heating, cooling and electricity demand for a thermal zone, based on SIA 380.1
     :param room_properties: room properties in json format
@@ -147,6 +147,11 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         - ...   ...:
         _____________________________________________________________________________________
     """
+
+    if not surface_irradiance_obstructed:
+        surface_irradiance = surface_irradiance_unobstructed
+    else:
+        surface_irradiance = surface_irradiance_obstructed
 
     rho = 1.2       # Luftdichte in kg/m^3
     c_p = 1005      # Spez. Wärmekapazität Luft in J/(kgK)

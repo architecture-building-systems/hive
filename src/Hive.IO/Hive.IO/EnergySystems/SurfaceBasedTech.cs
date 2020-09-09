@@ -199,9 +199,20 @@ namespace Hive.IO.EnergySystems
         /// <summary>
         /// computes pv electricity yield according to NOCT method
         /// </summary>
-        /// <param name="irradiance">Irradiance matrix from e.g. GHSolar.CResults.I_hourly in W/sqm</param>
+        /// <param name="irradiance">Irradiance matrix from e.g. GHSolar.CResults.I_hourly in W/sqm. The mean for all vertices is calculated first.</param>
         /// <param name="ambientTemperatureCarrier">Ambient air temperature energy carrier</param>
         public void SetInputComputeOutput(Matrix irradiance, Air ambientTemperatureCarrier)
+        {
+            double[] meanIrradiance = ComputeMeanHourlyEnergy(irradiance);
+            SetInputComputeOutput(meanIrradiance, ambientTemperatureCarrier);
+        }
+
+        /// <summary>
+        /// computes pv electricity yield according to NOCT method
+        /// </summary>
+        /// <param name="meanIrradiance">Irradiance time series for the PV</param>
+        /// <param name="ambientTemperatureCarrier">Ambient air temperature energy carrier</param>
+        public void SetInputComputeOutput(double[] meanIrradiance, Air ambientTemperatureCarrier)
         {
             int horizon = Misc.HoursPerYear;
             double refTemp = 25.0;
@@ -210,7 +221,6 @@ namespace Hive.IO.EnergySystems
             double[] electricityGenerated = new double[horizon];
             double[] energyCost = new double[horizon];
             double[] ghgEmissions = new double[horizon];
-            double[] meanIrradiance = ComputeMeanHourlyEnergy(irradiance);
             base.InputCarrier = new Radiation(horizon, meanIrradiance);
             base.AmbientAir = new Air(horizon, null, null, null, ambientTemp);
 
@@ -234,8 +244,18 @@ namespace Hive.IO.EnergySystems
         /// <param name="irradiance">Irradiance matrix from e.g. GHSolar.CResults.I_hourly in W/sqm</param>
         public void SetInputComputeOutputSimple(Matrix irradiance)
         {
-            int horizon = Misc.HoursPerYear;
             double[] meanIrradiance = ComputeMeanHourlyEnergy(irradiance);
+            SetInputComputeOutputSimple(meanIrradiance);
+        }
+
+        /// <summary>
+        /// Computes PV electricity yield according to Energie und Klimasysteme lecture FS2019
+        /// E_PV = G * F_F * A * eta_PV * PR
+        /// </summary>
+        /// <param name="irradiance">Irradiance time series in W/sqm</param>
+        public void SetInputComputeOutputSimple(double [] meanIrradiance)
+        {
+            int horizon = Misc.HoursPerYear;
             base.InputCarrier = new Radiation(horizon, meanIrradiance);
 
             // compute pv electricity yield
@@ -333,8 +353,18 @@ namespace Hive.IO.EnergySystems
         /// <param name="irradiance">Matrix with annual hourly time resolved irradiance values for each mesh vertex in W/m^2</param>
         public void SetInputComputeOutputSimple(Matrix irradiance)
         {
-            int horizon = Misc.HoursPerYear;
             double[] meanIrradiance = ComputeMeanHourlyEnergy(irradiance);
+            SetInputComputeOutputSimple(meanIrradiance);
+        }
+
+        /// <summary>
+        /// Computing heating energy according to Energy und Klimasysteme Lectures FS 2019
+        /// Q_th = G * F_F * A * eta_K * R_V
+        /// </summary>
+        /// <param name="irradiance">Time series with annual hourly time resolved irradiance values in W/m^2</param>
+        public void SetInputComputeOutputSimple(double [] meanIrradiance)
+        {
+            int horizon = Misc.HoursPerYear;
             Radiation solarCarrier = new Radiation(horizon, meanIrradiance);
             base.InputCarrier = solarCarrier;
 
@@ -368,12 +398,25 @@ namespace Hive.IO.EnergySystems
         /// <param name="ambientAirCarrier">Ambient Air carrier around the solar thermal collector</param>
         public void SetInputComputeOutput(Matrix irradiance, double[] inletTemperature, double[] returnTemperature, Air ambientAirCarrier)
         {
+            double[] meanIrradiance = ComputeMeanHourlyEnergy(irradiance);
+            SetInputComputeOutput(meanIrradiance, inletTemperature, returnTemperature, ambientAirCarrier);
+        }
+
+        /// <summary>
+        /// Computing heating energy as a function of ambient air temperature and inlet water temperature.
+        /// </summary>
+        /// <remarks>Source: https:// doi.org/10.1016/j.enpol.2013.05.009</remarks>
+        /// <param name="irradiance">Rhino.Geometry.Matrix containing annual hourly time series of solar irradiance for each mesh vertex in W/m^2</param>
+        /// <param name="inletTemperature">Water carrier flowing into the solar thermal collector</param>
+        /// <param name="returnTemperature">outlet temperatur from the collector. For now, assumed it is just the supply temperature of the room heating emitter</param>
+        /// <param name="ambientAirCarrier">Ambient Air carrier around the solar thermal collector</param>
+        public void SetInputComputeOutput(double [] meanIrradiance, double[] inletTemperature, double[] returnTemperature, Air ambientAirCarrier)
+        {
             int horizon = Misc.HoursPerYear;
             this.InletWater = new Water(horizon, null, null, null, returnTemperature);
 
             base.AmbientAir = ambientAirCarrier;
 
-            double[] meanIrradiance = ComputeMeanHourlyEnergy(irradiance);
             Radiation solarCarrier = new Radiation(horizon, meanIrradiance);
             base.InputCarrier = solarCarrier;
 

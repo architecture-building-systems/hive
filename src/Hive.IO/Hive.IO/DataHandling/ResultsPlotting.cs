@@ -182,8 +182,8 @@ namespace Hive.IO.DataHandling
         // ingoing energy
         public float SolarGains => (float)Results.TotalSolarGains;
         public float InternalGains => (float)Results.TotalInternalGains;
-        public float PrimaryEnergy => 0.0f;
-        public float RenewableEnergy => 0.0f;
+        public float PrimaryEnergy => 0.0f; //inputCarriers from conversionTech, except renewable tech (solar)
+        public float RenewableEnergy => 0.0f; //inputCarriers from 
         
         // outgoing energy
         public float Electricity => 0.0f; // electricity loads?
