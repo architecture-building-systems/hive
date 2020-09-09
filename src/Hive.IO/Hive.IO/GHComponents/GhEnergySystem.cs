@@ -400,8 +400,8 @@ namespace Hive.IO.GHComponents
 
             foreach (var emitter in _viewModel.Emitters)
             {
-                var specificInvestmentCost = double.Parse(emitter.CapitalCost);
-                var specificEmbodiedEmissions = double.Parse(emitter.EmbodiedEmissions);
+                var specificInvestmentCost = double.Parse(emitter.SpecificCapitalCost);
+                var specificEmbodiedEmissions = double.Parse(emitter.SpecificEmbodiedEmissions);
                 var inletTemperature = double.Parse(emitter.SupplyTemperature);
                 var returnTemperature = double.Parse(emitter.SupplyTemperature);
                 
