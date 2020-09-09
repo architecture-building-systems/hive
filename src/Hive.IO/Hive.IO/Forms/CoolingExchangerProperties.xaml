@@ -28,17 +28,20 @@
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.ColumnSpan="2">Efficiency</Label>
-            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Efficiency}" IsEnabled="{Binding IsEditable}"
-                     Foreground="{Binding EfficiencyBrush}" FontWeight="{Binding EfficiencyFontWeight}" />
+            <Label Grid.Row="0" Grid.ColumnSpan="2">Distribution Losses</Label>
+            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding DistributionLosses}" IsEnabled="{Binding IsEditable}"
+                     Foreground="{Binding DistributionLossesBrush}" FontWeight="{Binding DistributionLossesFontWeight}" />
             <Label Grid.Row="1" Grid.Column="1">(-)</Label>
-            <Label Grid.Row="2" Grid.ColumnSpan="2">Capacity</Label>
-            <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding Capacity}" IsEnabled="{Binding IsEditable}"
-                     Foreground="{Binding CapacityBrush}" FontWeight="{Binding CapacityFontWeight}" />
-            <Label Grid.Row="4" Grid.ColumnSpan="2">Lifetime</Label>
-            <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding Lifetime}" IsEnabled="{Binding IsEditable}"
-                     Foreground="{Binding LifetimeBrush}" FontWeight="{Binding LifetimeFontWeight}" />
-            <Label Grid.Row="5" Grid.Column="1">(years)</Label>
+            <Label Grid.Row="2" Grid.ColumnSpan="2">Specific Embodied Emissions</Label>
+            <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding SpecificEmbodiedEmissions}"
+                     IsEnabled="{Binding IsEditable}"
+                     Foreground="{Binding SpecificEmbodiedEmissionsBrush}"
+                     FontWeight="{Binding SpecificEmbodiedEmissionsFontWeight}" />
+            <Label Grid.Row="3" Grid.Column="1">(kgCO₂/kW)</Label>
+            <Label Grid.Row="4" Grid.ColumnSpan="2">Embodied Emissions</Label>
+            <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding EmbodiedEmissions, Mode=OneWay, StringFormat=0.00}"
+                     IsEnabled="False" />
+            <Label Grid.Row="5" Grid.Column="1">(kgCO₂)</Label>
         </Grid>
         <Grid Grid.Row="0" Grid.Column="1">
             <Grid.RowDefinitions>
@@ -53,18 +56,19 @@
                 <ColumnDefinition Width="2*" />
                 <ColumnDefinition Width="1*" />
             </Grid.ColumnDefinitions>
-            <Label Grid.Row="0" Grid.ColumnSpan="2">Capital cost (CAPEX)</Label>
-            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding CapitalCost}" IsEnabled="{Binding IsEditable}"
-                     Foreground="{Binding CapitalCostBrush}" FontWeight="{Binding CapitalCostFontWeight}" />
-            <Label Grid.Row="1" Grid.Column="1">(CHF)</Label>
-            <Label Grid.Row="2" Grid.ColumnSpan="2">Operational cost (OPEX)</Label>
-            <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding OperationalCost}" IsEnabled="{Binding IsEditable}"
-                     Foreground="{Binding OperationalCostBrush}" FontWeight="{Binding OperationalCostFontWeight}" />
-            <Label Grid.Row="3" Grid.Column="1">(CHF)</Label>
-            <Label Grid.Row="4" Grid.ColumnSpan="2">Embodied Emissions</Label>
-            <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding EmbodiedEmissions}" IsEnabled="{Binding IsEditable}"
-                     Foreground="{Binding EmbodiedEmissionsBrush}" FontWeight="{Binding EmbodiedEmissionsFontWeight}" />
-            <Label Grid.Row="5" Grid.Column="1">(kgCO₂)</Label>
+            <Label Grid.Row="0" Grid.ColumnSpan="2">Capacity</Label>
+            <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding Capacity}" IsEnabled="{Binding IsEditable}"
+                     Foreground="{Binding CapacityBrush}" FontWeight="{Binding CapacityFontWeight}" />
+            <Label Grid.Row="1" Grid.Column="1">(kW)</Label>
+            <Label Grid.Row="2" Grid.ColumnSpan="2">Specific Capital Cost</Label>
+            <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding SpecificCapitalCost}" IsEnabled="{Binding IsEditable}"
+                     Foreground="{Binding SpecificCapitalCostBrush}"
+                     FontWeight="{Binding SpecificCapitalCostFontWeight}" />
+            <Label Grid.Row="3" Grid.Column="1">(CHF/kW)</Label>
+            <Label Grid.Row="4" Grid.ColumnSpan="2">Capital Cost</Label>
+            <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding CapitalCost, Mode=OneWay, StringFormat=0.00}"
+                     IsEnabled="False" />
+            <Label Grid.Row="5" Grid.Column="1">(CHF)</Label>
         </Grid>
 
         <Label Grid.Row="1" Grid.Column="0">Technology Image</Label>

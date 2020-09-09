@@ -27,10 +27,10 @@
             <forms:AshpProperties />
         </DataTemplate>
         <DataTemplate x:Key="HeatExchangerProperties">
-            <forms:AshpProperties />
+            <forms:HeatExchangerProperties />
         </DataTemplate>
         <DataTemplate x:Key="CoolingExchangerProperties">
-            <forms:AshpProperties />
+            <forms:CoolingExchangerProperties />
         </DataTemplate>
         <DataTemplate x:Key="EmitterPropertiesView">
             <forms:EmitterPropertiesView/>
