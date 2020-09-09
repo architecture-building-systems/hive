@@ -22,6 +22,11 @@ namespace Hive.IO.Forms
 
         private string _source;
 
+        public ConversionTechPropertiesViewModel()
+        {
+            Name = "Photovoltaic (PV)";
+        }
+
         private static Dictionary<string, ConversionTechDefaults> Defaults =>
             JsonResource.ReadRecords(ConversionTechDefaults.ResourceName, ref _defaults);
 
@@ -29,11 +34,6 @@ namespace Hive.IO.Forms
             IsParametricDefined ? new List<string> {Name}.AsEnumerable() : Defaults.Keys;
 
         public static IEnumerable<string> AllNames => Defaults.Keys;
-
-        public ConversionTechPropertiesViewModel()
-        {
-            Name = "Photovoltaic (PV)";
-        }
 
         public string Name
         {
@@ -85,7 +85,11 @@ namespace Hive.IO.Forms
         public string SpecificEmbodiedEmissions
         {
             get => $"{_specificEmbodiedEmissions:0.00}";
-            set => SetWithColors(ref _specificEmbodiedEmissions, ParseDouble(value, _specificEmbodiedEmissions));
+            set
+            {
+                SetWithColors(ref _specificEmbodiedEmissions, ParseDouble(value, _specificEmbodiedEmissions));
+                RaisePropertyChangedEvent("EmbodiedEmissions");
+            }
         }
 
         public string HeatToPowerRatio
@@ -126,18 +130,12 @@ namespace Hive.IO.Forms
         {
             get
             {
-                if (!IsSurfaceTech)
-                {
-                    return new List<ModuleTypeRecord>().AsEnumerable();
-                }
+                if (!IsSurfaceTech) return new List<ModuleTypeRecord>().AsEnumerable();
 
-                if (!IsParametricDefined)
-                {
-                    return ModuleTypesCatalog[Name].AsEnumerable();
-                }
+                if (!IsParametricDefined) return ModuleTypesCatalog[Name].AsEnumerable();
 
                 // parametric surface tech - it was set in SetProperties...
-                return new List<ModuleTypeRecord>{_moduleType}.AsEnumerable();
+                return new List<ModuleTypeRecord> {_moduleType}.AsEnumerable();
             }
         }
 
@@ -159,9 +157,9 @@ namespace Hive.IO.Forms
                             break;
                     }
 
-                    _specificCapitalCost = _moduleType.SpecificCapitalCost * Area;  // for other techs: captial cost = capacity * specificCapitalCost
-                    _specificEmbodiedEmissions = _moduleType.SpecificEmbodiedEmissions * Area;
-                    
+                    _specificCapitalCost = _moduleType.SpecificCapitalCost;
+                    _specificEmbodiedEmissions = _moduleType.SpecificEmbodiedEmissions;
+
                     // make sure everyone knows about this!
                     RaisePropertyChangedEvent(null);
                 }
@@ -172,6 +170,14 @@ namespace Hive.IO.Forms
         {
             get { return SelectedSurfaces.Sum(sm => sm.Area); }
         }
+
+        public double EmbodiedEmissions =>
+            IsSurfaceTech ? _specificEmbodiedEmissions * Area : _specificEmbodiedEmissions * _capacity;
+
+        public double CapitalCost =>
+            IsSurfaceTech ? _specificCapitalCost * Area : _specificCapitalCost * _capacity;
+
+        public double SurfaceTechCapacity => _efficiency * Area;
 
         public bool IsSurfaceTech => Name == "Photovoltaic (PV)" || Name == "Solar Thermal (ST)";
 
@@ -190,13 +196,13 @@ namespace Hive.IO.Forms
             _efficiency = defaults.Efficiency;
             _capacity = defaults.Capacity;
             _specificCapitalCost = defaults.SpecificCapitalCost;
-            _specificEmbodiedEmissions= defaults.SpecificEmbodiedEmissions;
+            _specificEmbodiedEmissions = defaults.SpecificEmbodiedEmissions;
             _distributionLosses = defaults.DistributionLosses;
 
-            if (IsSurfaceTech)  // NOTE: yep. this should be a subclass. maybe we'll fix it someday.
-            {
-                ModuleType = ModuleTypesCatalog.ContainsKey(Name) ? ModuleTypesCatalog[Name].First() : new ModuleTypeRecord { Name = "<custom>" };
-            }
+            if (IsSurfaceTech) // NOTE: yep. this should be a subclass. maybe we'll fix it someday.
+                ModuleType = ModuleTypesCatalog.ContainsKey(Name)
+                    ? ModuleTypesCatalog[Name].First()
+                    : new ModuleTypeRecord {Name = "<custom>"};
 
             RaisePropertyChangedEvent(null);
         }
@@ -245,17 +251,26 @@ namespace Hive.IO.Forms
 
         public Brush EfficiencyBrush => CompareBrush(_efficiency, Defaults[Name].Efficiency);
         public Brush CapacityBrush => CompareBrush(_capacity, Defaults[Name].Capacity);
-        public Brush SpecificCapitalCostBrush => CompareBrush(_specificCapitalCost, Defaults[Name].SpecificCapitalCost);
-        public Brush SpecificEmbodiedEmissionsBrush => CompareBrush(_specificEmbodiedEmissions, Defaults[Name].SpecificEmbodiedEmissions);
+
+        public Brush SpecificCapitalCostBrush => CompareBrush(_specificCapitalCost,
+            IsSurfaceTech ? ModuleType.SpecificCapitalCost : Defaults[Name].SpecificCapitalCost);
+
+        public Brush SpecificEmbodiedEmissionsBrush => CompareBrush(_specificEmbodiedEmissions,
+            IsSurfaceTech ? ModuleType.SpecificEmbodiedEmissions : Defaults[Name].SpecificEmbodiedEmissions);
+
         public Brush HeatToPowerRatioBrush => CompareBrush(_heatToPowerRatio, Defaults[Name].HeatToPowerRatio);
         public Brush DistributionLossesBrush => CompareBrush(_distributionLosses, Defaults[Name].DistributionLosses);
 
         public FontWeight SpecificEfficiencyFontWeight => CompareFontWeight(_efficiency, Defaults[Name].Efficiency);
         public FontWeight CapacityFontWeight => CompareFontWeight(_capacity, Defaults[Name].Capacity);
-        public FontWeight SpecificCapitalCostFontWeight => CompareFontWeight(_specificCapitalCost, Defaults[Name].SpecificCapitalCost);
+
+        public FontWeight SpecificCapitalCostFontWeight =>
+            CompareFontWeight(_specificCapitalCost,
+                IsSurfaceTech ? ModuleType.SpecificCapitalCost : Defaults[Name].SpecificCapitalCost);
 
         public FontWeight SpecificEmbodiedEmissionsFontWeight =>
-            CompareFontWeight(_specificEmbodiedEmissions, Defaults[Name].SpecificEmbodiedEmissions);
+            CompareFontWeight(_specificEmbodiedEmissions,
+                IsSurfaceTech ? ModuleType.SpecificEmbodiedEmissions : Defaults[Name].SpecificEmbodiedEmissions);
 
         public FontWeight HeatToPowerRatioFontWeight =>
             CompareFontWeight(_heatToPowerRatio, Defaults[Name].HeatToPowerRatio);
@@ -378,11 +393,11 @@ namespace Hive.IO.Forms
         public string EndUse;
         public string Source;
         public double Efficiency;
-        public double DistributionLosses;  // only heat/cooling exchangers
+        public double DistributionLosses; // only heat/cooling exchangers
         public double Capacity;
         public double SpecificCapitalCost;
         public double SpecificEmbodiedEmissions;
-        public double HeatToPowerRatio;  // only CHP
+        public double HeatToPowerRatio; // only CHP
     }
 
     public struct ModuleTypeRecord
