@@ -359,6 +359,7 @@ namespace Hive.IO.GHComponents
                     var efficiency = double.Parse(ct.Efficiency);
                     var capacity = double.Parse(ct.Capacity);
                     var heatToPowerRatio = double.Parse(ct.HeatToPowerRatio);
+                    var distributionLosses = double.Parse(ct.DistributionLosses);
                     switch (ct.Name)
                     {
                         case "Photovoltaic (PV)":
@@ -385,10 +386,10 @@ namespace Hive.IO.GHComponents
                             result.Add(new AirSourceHeatPump(specificCapitalCost, specificEmbodiedEmissions, capacity, efficiency));
                             break;
                         case "Heat Exchanger":
-                            result.Add(new HeatCoolingExchanger(specificCapitalCost, specificEmbodiedEmissions, capacity, efficiency));
+                            result.Add(new HeatCoolingExchanger(specificCapitalCost, specificEmbodiedEmissions, capacity, distributionLosses));
                             break;
                         case "Cooling Exchanger":
-                            result.Add(new HeatCoolingExchanger(specificCapitalCost, specificEmbodiedEmissions, capacity, efficiency,
+                            result.Add(new HeatCoolingExchanger(specificCapitalCost, specificEmbodiedEmissions, capacity, distributionLosses,
                                 false, true));
                             break;
                         default:

@@ -313,7 +313,7 @@ namespace Hive.IO.Forms
         {
             ConversionTech = exchanger;
 
-            _efficiency = exchanger.DistributionLosses;
+            _distributionLosses = exchanger.DistributionLosses;
             _capacity = exchanger.Capacity;
             _specificCapitalCost = exchanger.SpecificInvestmentCost;
             _specificEmbodiedEmissions = exchanger.SpecificEmbodiedGhg;
