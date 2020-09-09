@@ -5,8 +5,6 @@
     "Efficiency": 0.00,
     "Capacity":  0.00,
     "CapitalCost":  0.00,
-    "Lifetime":  0.00,
-    "OperationalCost":  0.00,
     "EmbodiedEmissions": 0.00,
     "HeatToPowerRatio":  0.00, 
   },
@@ -16,8 +14,6 @@
     "Efficiency": 0.00,
     "Capacity": 0.00,
     "CapitalCost": 0.00,
-    "Lifetime": 0.00,
-    "OperationalCost": 0.00,
     "EmbodiedEmissions": 0.00,
     "HeatToPowerRatio": 0.00
   },
@@ -26,11 +22,8 @@
     "EndUse": "Heating demand, DHW",
     "Efficiency": 0.94,
     "Capacity": 0.00,
-    "CapitalCost": 0.00,
-    "Lifetime": 0.00,
-    "OperationalCost": 0.00,
-    "EmbodiedEmissions": 0.00,
-    "HeatToPowerRatio": 0.00
+    "SpecificCapitalCost": 0.00,
+    "SpecificEmbodiedEmissions": 0.00
   },
   "CHP": {
     "Source": "Gas",
@@ -38,8 +31,6 @@
     "Efficiency": 0.3,
     "Capacity": 0.00,
     "CapitalCost": 0.00,
-    "Lifetime": 0.00,
-    "OperationalCost": 0.00,
     "EmbodiedEmissions": 0.00,
     "HeatToPowerRatio": 1.73
   },
@@ -49,8 +40,6 @@
     "Efficiency": 3.50,
     "Capacity": 0.00,
     "CapitalCost": 0.00,
-    "Lifetime": 0.00,
-    "OperationalCost": 0.00,
     "EmbodiedEmissions": 0.00,
     "HeatToPowerRatio": 0.00
   },
@@ -60,8 +49,6 @@
     "Efficiency": 3.50,
     "Capacity": 0.00,
     "CapitalCost": 0.00,
-    "Lifetime": 0.00,
-    "OperationalCost": 0.00,
     "EmbodiedEmissions": 0.00,
     "HeatToPowerRatio": 0.00
   },
@@ -71,8 +58,6 @@
     "Efficiency": 0.05,
     "Capacity": 0.00,
     "CapitalCost": 0.00,
-    "Lifetime": 0.00,
-    "OperationalCost": 0.00,
     "EmbodiedEmissions": 0.00,
     "HeatToPowerRatio": 0.00
   },
@@ -82,8 +67,6 @@
     "Efficiency": 0.05,
     "Capacity": 0.00,
     "CapitalCost": 0.00,
-    "Lifetime": 0.00,
-    "OperationalCost": 0.00,
     "EmbodiedEmissions": 0.00,
     "HeatToPowerRatio": 0.00
   }

@@ -165,8 +165,8 @@ namespace Hive.IO.Forms
                             break;
                     }
 
-                    _capitalCost = _moduleType.SpecificCapitalCost * _efficiency;
-                    _embodiedEmissions = _moduleType.SpecificEmbodiedEmissions * _efficiency;
+                    _capitalCost = _moduleType.SpecificCapitalCost * Area;  // for other techs: captial cost = capacity * specificCapitalCost
+                    _embodiedEmissions = _moduleType.SpecificEmbodiedEmissions * Area;
                     
                     // make sure everyone knows about this!
                     RaisePropertyChangedEvent(null);

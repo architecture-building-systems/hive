@@ -4,8 +4,8 @@
       "Name": "Polycristalline (16%)",
       "ElectricEfficiency": 0.160,
       "ThermalEfficiency": 0.00,
-      "SpecificCapitalCost": 400.0,
-      "SpecificEmbodiedEmissions": 35.96
+      "SpecificCapitalCost": 400.0, // [CHF/m2]
+      "SpecificEmbodiedEmissions": 35.96 // [kgCO2/m2]
     },
     {
       "Name": "Polycristalline (20%)",
