@@ -41,7 +41,7 @@
             <Label Grid.Row="4" Grid.ColumnSpan="2">Embodied Emissions</Label>
             <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding EmbodiedEmissions, Mode=OneWay, StringFormat=0.00}"
                      IsEnabled="False" />
-            <Label Grid.Row="5" Grid.Column="1">(years)</Label>
+            <Label Grid.Row="5" Grid.Column="1">(kgCO₂)</Label>
         </Grid>
         <Grid Grid.Row="0" Grid.Column="1">
             <Grid.RowDefinitions>
