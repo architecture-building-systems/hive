@@ -22,16 +22,21 @@
     "EndUse": "Heating demand, DHW",
     "Efficiency": 0.94,
     "Capacity": 0.00,
-    "SpecificCapitalCost": 0.00,
-    "SpecificEmbodiedEmissions": 0.00
+    "CapitalCost": 780.00,
+    "Lifetime": 0.00,
+    "OperationalCost": 0.00,
+    "EmbodiedEmissions": 38.4,
+    "HeatToPowerRatio": 0.00
   },
   "CHP": {
     "Source": "Gas",
     "EndUse": "Electricity demand, Heating demand, DHW",
     "Efficiency": 0.3,
     "Capacity": 0.00,
-    "CapitalCost": 0.00,
-    "EmbodiedEmissions": 0.00,
+    "CapitalCost": 1463.00,
+    "Lifetime": 0.00,
+    "OperationalCost": 0.00,
+    "EmbodiedEmissions": 558.2,
     "HeatToPowerRatio": 1.73
   },
   "Chiller (Electricity)": {
@@ -40,7 +45,9 @@
     "Efficiency": 3.50,
     "Capacity": 0.00,
     "CapitalCost": 0.00,
-    "EmbodiedEmissions": 0.00,
+    "Lifetime": 0.00,
+    "OperationalCost": 320.0,
+    "EmbodiedEmissions": 364,
     "HeatToPowerRatio": 0.00
   },
   "ASHP (Electricity)": {
@@ -48,8 +55,10 @@
     "EndUse": "Electricity demand",
     "Efficiency": 3.50,
     "Capacity": 0.00,
-    "CapitalCost": 0.00,
-    "EmbodiedEmissions": 0.00,
+    "CapitalCost": 1798,
+    "Lifetime": 0.00,
+    "OperationalCost": 0.00,
+    "EmbodiedEmissions": 364.00,
     "HeatToPowerRatio": 0.00
   },
   "Heat Exchanger": {
