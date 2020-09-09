@@ -354,41 +354,42 @@ namespace Hive.IO.GHComponents
                 }
                 else
                 {
-                    var capitalCost = double.Parse(ct.CapitalCost);
-                    var embodiedEmissions = double.Parse(ct.EmbodiedEmissions);
+                    var specificCapitalCost = double.Parse(ct.SpecificCapitalCost);
+                    var specificEmbodiedEmissions = double.Parse(ct.SpecificEmbodiedEmissions);
                     var efficiency = double.Parse(ct.Efficiency);
                     var capacity = double.Parse(ct.Capacity);
                     var heatToPowerRatio = double.Parse(ct.HeatToPowerRatio);
+                    var distributionLosses = double.Parse(ct.DistributionLosses);
                     switch (ct.Name)
                     {
                         case "Photovoltaic (PV)":
                             foreach (var sm in ct.SelectedSurfaces)
-                                result.Add(new Photovoltaic(capitalCost, embodiedEmissions, sm.Mesh, "FIXME: PV",
+                                result.Add(new Photovoltaic(specificCapitalCost, specificEmbodiedEmissions, sm.Mesh, "FIXME: PV",
                                     efficiency));
                             break;
                         case "Solar Thermal (ST)":
                             foreach (var sm in ct.SelectedSurfaces)
-                                result.Add(new SolarThermal(capitalCost, embodiedEmissions, sm.Mesh, "FIXME: ST",
+                                result.Add(new SolarThermal(specificCapitalCost, specificEmbodiedEmissions, sm.Mesh, "FIXME: ST",
                                     efficiency));
                             break;
                         case "Boiler (Gas)":
-                            result.Add(new GasBoiler(capitalCost, embodiedEmissions, capacity, efficiency));
+                            result.Add(new GasBoiler(specificCapitalCost, specificEmbodiedEmissions, capacity, efficiency));
                             break;
                         case "CHP":
-                            result.Add(new CombinedHeatPower(capitalCost, embodiedEmissions, capacity, heatToPowerRatio,
+                            result.Add(new CombinedHeatPower(specificCapitalCost, specificEmbodiedEmissions, capacity, heatToPowerRatio,
                                 efficiency));
                             break;
                         case "Chiller (Electricity)":
-                            result.Add(new Chiller(capitalCost, embodiedEmissions, capacity, efficiency));
+                            result.Add(new Chiller(specificCapitalCost, specificEmbodiedEmissions, capacity, efficiency));
                             break;
                         case "ASHP (Electricity)":
-                            result.Add(new AirSourceHeatPump(capitalCost, embodiedEmissions, capacity, efficiency));
+                            result.Add(new AirSourceHeatPump(specificCapitalCost, specificEmbodiedEmissions, capacity, efficiency));
                             break;
                         case "Heat Exchanger":
-                            result.Add(new HeatCoolingExchanger(capitalCost, embodiedEmissions, capacity, efficiency));
+                            result.Add(new HeatCoolingExchanger(specificCapitalCost, specificEmbodiedEmissions, capacity, distributionLosses));
                             break;
                         case "Cooling Exchanger":
-                            result.Add(new HeatCoolingExchanger(capitalCost, embodiedEmissions, capacity, efficiency,
+                            result.Add(new HeatCoolingExchanger(specificCapitalCost, specificEmbodiedEmissions, capacity, distributionLosses,
                                 false, true));
                             break;
                         default:
@@ -399,8 +400,8 @@ namespace Hive.IO.GHComponents
 
             foreach (var emitter in _viewModel.Emitters)
             {
-                var specificInvestmentCost = double.Parse(emitter.CapitalCost);
-                var specificEmbodiedEmissions = double.Parse(emitter.EmbodiedEmissions);
+                var specificInvestmentCost = double.Parse(emitter.SpecificCapitalCost);
+                var specificEmbodiedEmissions = double.Parse(emitter.SpecificEmbodiedEmissions);
                 var inletTemperature = double.Parse(emitter.SupplyTemperature);
                 var returnTemperature = double.Parse(emitter.SupplyTemperature);
                 

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
+using System.Windows.Media;
 using Hive.IO.EnergySystems;
 using Hive.IO.Resources;
 
@@ -14,11 +16,9 @@ namespace Hive.IO.Forms
 
         private double _supplyTemperature;
         private double _returnTemperature;
-        private double _lifetime;
+        private double _specificCapitalCost;
+        private double _specificEmbodiedEmissions;
         private double _capacity;
-        private double _capitalCost;
-        private double _operationalCost;
-        private double _embodiedEmissions;
         private bool _isAir;
         private bool _isRadiation;
         private bool _isCooling;
@@ -56,11 +56,9 @@ namespace Hive.IO.Forms
 
             _supplyTemperature = defaults.SupplyTemperature;
             _returnTemperature = defaults.ReturnTemperature;
-            _lifetime = defaults.Lifetime;
             _capacity = defaults.Capacity;
-            _capitalCost = defaults.CapitalCost;
-            _operationalCost = defaults.OperationalCost;
-            _embodiedEmissions = defaults.EmbodiedEmissions;
+            _specificCapitalCost = defaults.SpecificCapitalCost;
+            _specificEmbodiedEmissions = defaults.SpecificEmbodiedEmissions;
             _isAir = defaults.IsAir;
             _isRadiation = defaults.IsRadiation;
             _isHeating = defaults.IsHeating;
@@ -75,14 +73,9 @@ namespace Hive.IO.Forms
 
             _supplyTemperature = emitter.InletCarrier.Temperature.Average();
             _returnTemperature = emitter.ReturnCarrier.Temperature.Average();
-
-            _lifetime = 0.00;
             _capacity = 0.00;
-            _capitalCost = emitter.SpecificInvestmentCost;
-
-            _operationalCost = 0.00;
-            _embodiedEmissions = emitter.SpecificEmbodiedGhg;
-
+            _specificCapitalCost = emitter.SpecificInvestmentCost;
+            _specificEmbodiedEmissions = emitter.SpecificEmbodiedGhg;
             _isAir = emitter is AirDiffuser;
             _isRadiation = emitter is Radiator;
             _isHeating = emitter.IsHeating;
@@ -117,44 +110,49 @@ namespace Hive.IO.Forms
         public string SupplyTemperature
         {
             get => $"{_supplyTemperature:0.00}";
-            set => SetWithColors(ref _supplyTemperature, ParseDouble(value, _operationalCost));
+            set => SetWithColors(ref _supplyTemperature, ParseDouble(value, _supplyTemperature));
         }
 
         public string ReturnTemperature
         {
             get => $"{_returnTemperature:0.00}";
-            set => SetWithColors(ref _returnTemperature, ParseDouble(value, _operationalCost));
-        }
-
-        public string Lifetime
-        {
-            get => $"{_lifetime:0}";
-            set => SetWithColors(ref _lifetime, ParseDouble(value, _operationalCost));
+            set => SetWithColors(ref _returnTemperature, ParseDouble(value, _returnTemperature));
         }
 
         public string Capacity
         {
             get => $"{_capacity:0.00}";
-            set => SetWithColors(ref _capacity, ParseDouble(value, _operationalCost));
+            set
+            {
+                SetWithColors(ref _capacity, ParseDouble(value, _capacity)); 
+                RaisePropertyChangedEvent("EmbodiedEmissions");
+                RaisePropertyChangedEvent("CapitalCost");
+            }
         }
 
-        public string CapitalCost
+        public string SpecificCapitalCost
         {
-            get => $"{_capitalCost:0.00}";
-            set => SetWithColors(ref _capitalCost, ParseDouble(value, _operationalCost));
+            get => $"{_specificCapitalCost:0.00}";
+            set
+            {
+                SetWithColors(ref _specificCapitalCost, ParseDouble(value, _specificCapitalCost)); 
+                RaisePropertyChangedEvent("CapitalCost");
+            }
         }
 
-        public string OperationalCost
+
+        public string SpecificEmbodiedEmissions
         {
-            get => $"{_operationalCost:0.00}";
-            set => SetWithColors(ref _operationalCost, ParseDouble(value, _operationalCost));
+            get => $"{_specificEmbodiedEmissions:0.00}";
+            set
+            {
+                SetWithColors(ref _specificEmbodiedEmissions, ParseDouble(value, _specificEmbodiedEmissions)); 
+                RaisePropertyChangedEvent("EmbodiedEmissions");
+            }
         }
 
-        public string EmbodiedEmissions
-        {
-            get => $"{_embodiedEmissions:0.00}";
-            set => SetWithColors(ref _embodiedEmissions, ParseDouble(value, _operationalCost));
-        }
+        public double EmbodiedEmissions => _capacity * _specificEmbodiedEmissions;
+        public double CapitalCost => _capacity * _specificCapitalCost;
 
         public bool IsAir
         {
@@ -180,6 +178,48 @@ namespace Hive.IO.Forms
             set => SetWithColors(ref _isHeating, value);
         }
 
+        #region FontWeights and Colors
+        private readonly Brush _normalBrush = new SolidColorBrush(Colors.Black);
+        private readonly Brush _modifiedBrush = new SolidColorBrush(Colors.ForestGreen);
+        private readonly FontWeight _normalFontWeight = FontWeights.Normal;
+        private readonly FontWeight _modifiedFontWeight = FontWeights.Bold;
+
+        private bool AreEqual(double a, double b)
+        {
+            return Math.Abs(a - b) < 0.001;
+        }
+
+        private Brush CompareBrush(double a, double b)
+        {
+            return Emitter == null ? AreEqual(a, b) ? _normalBrush : _modifiedBrush : _normalBrush;
+        }
+
+        private FontWeight CompareFontWeight(double a, double b)
+        {
+            return Emitter == null
+                ? AreEqual(a, b) ? _normalFontWeight : _modifiedFontWeight
+                : _normalFontWeight;
+        }
+
+        public Brush SupplyTemperatureBrush => CompareBrush(_supplyTemperature, Defaults[Name].SupplyTemperature);
+        public Brush ReturnTemperatureBrush => CompareBrush(_returnTemperature, Defaults[Name].ReturnTemperature);
+        public Brush CapacityBrush => CompareBrush(_capacity, Defaults[Name].Capacity);
+
+        public Brush SpecificCapitalCostBrush => CompareBrush(_specificCapitalCost, Defaults[Name].SpecificCapitalCost);
+        public Brush SpecificEmbodiedEmissionsBrush => CompareBrush(_specificEmbodiedEmissions, Defaults[Name].SpecificEmbodiedEmissions);
+
+        public FontWeight SupplyTemperatureFontWeight => CompareFontWeight(_supplyTemperature, Defaults[Name].SupplyTemperature);
+
+        public FontWeight ReturnTemperatureFontWeight =>
+            CompareFontWeight(_returnTemperature, Defaults[Name].ReturnTemperature);
+        public FontWeight SpecificCapitalCostFontWeight =>
+            CompareFontWeight(_specificCapitalCost, Defaults[Name].SpecificCapitalCost);
+        
+        public FontWeight SpecificEmbodiedEmissionsFontWeight =>
+            CompareFontWeight(_specificEmbodiedEmissions, Defaults[Name].SpecificEmbodiedEmissions);
+
+        public FontWeight CapacityFontWeight => CompareFontWeight(_capacity, Defaults[Name].Capacity);
+        #endregion
 
 
         private static Dictionary<string, EmitterDefaults> Defaults =>
@@ -200,11 +240,9 @@ namespace Hive.IO.Forms
 
         public double SupplyTemperature;
         public double ReturnTemperature;
-        public double Lifetime;
         public double Capacity;
-        public double CapitalCost;
-        public double OperationalCost;
-        public double EmbodiedEmissions;
+        public double SpecificCapitalCost;
+        public double SpecificEmbodiedEmissions;
         public bool IsAir;
         public bool IsRadiation;
         public bool IsCooling;

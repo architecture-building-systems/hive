@@ -1,97 +1,55 @@
 {
   "Photovoltaic (PV)": [
     {
-      "Name": "Polycristalline (16%)",
-      "ElectricEfficiency": 0.160,
-      "ThermalEfficiency": 0.00,
-      "SpecificCapitalCost": 400.0,
-      "SpecificEmbodiedEmissions": 35.96
-    },
-    {
-      "Name": "Polycristalline (20%)",
+      "Name": "Polycristalline",
       "ElectricEfficiency": 0.206,
       "ThermalEfficiency": 0.00,
-      "SpecificCapitalCost": 400.0,
-      "SpecificEmbodiedEmissions": 35.96
+      "SpecificCapitalCost": 633.656, // [CHF/m2]
+      "SpecificEmbodiedEmissions": 171.598 // [kgCO2/m2]
     },
     {
-      "Name": "Monocristalline (18%)",
-      "ElectricEfficiency": 0.184,
-      "ThermalEfficiency": 0.00,
-      "SpecificCapitalCost": 400.0,
-      "SpecificEmbodiedEmissions": 35.96
-    },
-    {
-      "Name": "Monocristalline (22%)",
+      "Name": "Monocristalline",
       "ElectricEfficiency": 0.228,
       "ThermalEfficiency": 0.00,
-      "SpecificCapitalCost": 400.0,
-      "SpecificEmbodiedEmissions": 35.96
+      "SpecificCapitalCost": 701.328,
+      "SpecificEmbodiedEmissions": 189.924
     },
     {
-      "Name": "CIGS (13%)",
-      "ElectricEfficiency": 0.133,
-      "ThermalEfficiency": 0.00,
-      "SpecificCapitalCost": 400.0,
-      "SpecificEmbodiedEmissions": 35.96
-    },
-    {
-      "Name": "CIGS (15%)",
+      "Name": "CIGS",
       "ElectricEfficiency": 0.156,
       "ThermalEfficiency": 0.00,
-      "SpecificCapitalCost": 400.0,
-      "SpecificEmbodiedEmissions": 35.96
+      "SpecificCapitalCost": 592.8,
+      "SpecificEmbodiedEmissions": 121.68
     },
     {
-      "Name": "CdTe (16%)",
-      "ElectricEfficiency": 0.162,
-      "ThermalEfficiency": 0.00,
-      "SpecificCapitalCost": 400.0,
-      "SpecificEmbodiedEmissions": 35.96
-    },
-    {
-      "Name": "CdTe (18%)",
+      "Name": "CdTe",
       "ElectricEfficiency": 0.182,
       "ThermalEfficiency": 0.00,
-      "SpecificCapitalCost": 400.0,
-      "SpecificEmbodiedEmissions": 35.96
+      "SpecificCapitalCost": 691.6,
+      "SpecificEmbodiedEmissions": 78.806
     },
     {
-      "Name": "HIT (19%)",
-      "ElectricEfficiency": 0.194,
-      "ThermalEfficiency": 0.00,
-      "SpecificCapitalCost": 400.0,
-      "SpecificEmbodiedEmissions": 35.96
-    },
-    {
-      "Name": "HIT (20%)",
+      "Name": "HIT",
       "ElectricEfficiency": 0.209,
       "ThermalEfficiency": 0.00,
-      "SpecificCapitalCost": 400.0,
-      "SpecificEmbodiedEmissions": 35.96
+      "SpecificCapitalCost": 642.884,
+      "SpecificEmbodiedEmissions": 174.097
     }
   ],
   "Solar Thermal (ST)": [
     {
-      "Name": "Cheap",
+      "Name": "vacume_tube",
       "ElectricEfficiency": 0.00,
-      "ThermalEfficiency": 0.1,
-      "SpecificCapitalCost": 300.0,
-      "SpecificEmbodiedEmissions": 1.0
+      "ThermalEfficiency": 0.45,
+      "SpecificCapitalCost": 2000,
+      "SpecificEmbodiedEmissions": 208
     },
     {
-      "Name": "Normal",
+      "Name": "flat_plate",
       "ElectricEfficiency": 0.00,
-      "ThermalEfficiency": 0.2,
-      "SpecificCapitalCost": 400.0,
-      "SpecificEmbodiedEmissions": 2.0
-    },
-    {
-      "Name": "High-Tech",
-      "ElectricEfficiency": 0.00,
-      "ThermalEfficiency": 0.3,
-      "SpecificCapitalCost": 500.0,
-      "SpecificEmbodiedEmissions": 3.0
+      "ThermalEfficiency": 0.45,
+      "SpecificCapitalCost": 2000,
+      "SpecificEmbodiedEmissions": 184
     }
   ] 
 }

@@ -49,6 +49,7 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="TestConversionTechProperties.cs" />
     <Compile Include="TestSia2024Record.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
