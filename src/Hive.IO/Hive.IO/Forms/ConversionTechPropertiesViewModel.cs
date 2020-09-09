@@ -165,18 +165,18 @@ namespace Hive.IO.Forms
                             break;
                     }
 
-                    var area = SelectedSurfaces.Sum(sm => sm.Area);
-                    _capitalCost = _moduleType.SpecificCapitalCost * area;
-                    _embodiedEmissions = _moduleType.SpecificEmbodiedEmissions * area;
+                    _capitalCost = _moduleType.SpecificCapitalCost * _efficiency;
+                    _embodiedEmissions = _moduleType.SpecificEmbodiedEmissions * _efficiency;
                     
                     // make sure everyone knows about this!
-                    RaisePropertyChangedEvent();
-                    RaisePropertyChangedEvent("ModuleTypes");
-                    RaisePropertyChangedEvent("Efficiency");
-                    RaisePropertyChangedEvent("EmbodiedEmissions");
-                    RaisePropertyChangedEvent("CapitalCost");
+                    RaisePropertyChangedEvent(null);
                 }
             }
+        }
+
+        public double Area
+        {
+            get { return SelectedSurfaces.Sum(sm => sm.Area); }
         }
 
         public bool IsSurfaceTech => Name == "Photovoltaic (PV)" || Name == "Solar Thermal (ST)";
