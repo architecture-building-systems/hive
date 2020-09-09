@@ -73,13 +73,22 @@ namespace Hive.IO.Forms
         public string Capacity
         {
             get => $"{_capacity:0.00}";
-            set => SetWithColors(ref _capacity, ParseDouble(value, _capacity));
+            set
+            {
+                SetWithColors(ref _capacity, ParseDouble(value, _capacity));
+                RaisePropertyChangedEvent("CapitalCost");
+                RaisePropertyChangedEvent("EmbodiedEmissions");
+            }
         }
 
         public string SpecificCapitalCost
         {
             get => $"{_specificCapitalCost:0.00}";
-            set => SetWithColors(ref _specificCapitalCost, ParseDouble(value, _specificCapitalCost));
+            set
+            {
+                SetWithColors(ref _specificCapitalCost, ParseDouble(value, _specificCapitalCost)); 
+                RaisePropertyChangedEvent("CapitalCost");
+            }
         }
 
         public string SpecificEmbodiedEmissions
