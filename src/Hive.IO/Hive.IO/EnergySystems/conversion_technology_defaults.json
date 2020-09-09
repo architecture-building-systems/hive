@@ -2,18 +2,10 @@
   "Photovoltaic (PV)": {
     "Source": "Solar",
     "EndUse": "Electricity demand",
-    "Efficiency": 0.00,
-    "Capacity":  0.00,
-    "SpecificCapitalCost":  0.00,
-    "SpecificEmbodiedEmissions": 0.00,
   },
   "Solar Thermal (ST)": {
     "Source": "Solar",
     "EndUse": "Electricity demand",
-    "Efficiency": 0.00,
-    "Capacity": 0.00,
-    "SpecificCapitalCost": 0.00,
-    "SpecificEmbodiedEmissions": 0.00,
   },
   "Boiler (Gas)": {
     "Source": "Gas",
