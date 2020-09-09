@@ -1,55 +1,55 @@
 {
   "Photovoltaic (PV)": [
     {
-      "Name": "Polycristalline (21%)",
+      "Name": "Polycristalline",
       "ElectricEfficiency": 0.206,
       "ThermalEfficiency": 0.00,
-      "SpecificCapitalCost": 3076,
-      "SpecificEmbodiedEmissions": 833
+      "SpecificCapitalCost": 633.656, // [CHF/m2]
+      "SpecificEmbodiedEmissions": 171.598 // [kgCO2/m2]
     },
     {
-      "Name": "Monocristalline (23%)",
+      "Name": "Monocristalline",
       "ElectricEfficiency": 0.228,
       "ThermalEfficiency": 0.00,
-      "SpecificCapitalCost": 3076,
-      "SpecificEmbodiedEmissions": 833
+      "SpecificCapitalCost": 701.328,
+      "SpecificEmbodiedEmissions": 189.924
     },
     {
-      "Name": "CIGS (16%)",
+      "Name": "CIGS",
       "ElectricEfficiency": 0.156,
       "ThermalEfficiency": 0.00,
-      "SpecificCapitalCost": 3800,
-      "SpecificEmbodiedEmissions": 780
+      "SpecificCapitalCost": 592.8,
+      "SpecificEmbodiedEmissions": 121.68
     },
     {
-      "Name": "CdTe (18%)",
+      "Name": "CdTe",
       "ElectricEfficiency": 0.182,
       "ThermalEfficiency": 0.00,
-      "SpecificCapitalCost": 3800,
-      "SpecificEmbodiedEmissions": 433
+      "SpecificCapitalCost": 691.6,
+      "SpecificEmbodiedEmissions": 78.806
     },
     {
-      "Name": "HIT (21%)",
+      "Name": "HIT",
       "ElectricEfficiency": 0.209,
       "ThermalEfficiency": 0.00,
-      "SpecificCapitalCost": 3076,
-      "SpecificEmbodiedEmissions": 833
+      "SpecificCapitalCost": 642.884,
+      "SpecificEmbodiedEmissions": 174.097
     }
   ],
   "Solar Thermal (ST)": [
     {
-      "Name": "Vacuum Tube (45%)",
+      "Name": "vacume_tube",
       "ElectricEfficiency": 0.00,
       "ThermalEfficiency": 0.45,
-      "SpecificCapitalCost": 4444.44,
-      "SpecificEmbodiedEmissions": 462.22
+      "SpecificCapitalCost": 2000,
+      "SpecificEmbodiedEmissions": 208
     },
     {
-      "Name": "Flat Plate (45%)",
+      "Name": "flat_plate",
       "ElectricEfficiency": 0.00,
       "ThermalEfficiency": 0.45,
-      "SpecificCapitalCost": 4444.44,
-      "SpecificEmbodiedEmissions": 408.88
+      "SpecificCapitalCost": 2000,
+      "SpecificEmbodiedEmissions": 184
     }
   ] 
 }

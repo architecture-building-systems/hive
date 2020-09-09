@@ -22,7 +22,7 @@ namespace Hive.IO.GhParametricInputs
         public double CHPCapacity;
         public double CHPCost;
         public double CHPEmissions;
-        public double CHPHTP;
+        public double CHPHTP;  // heat to power ratio
         public double CHPEffElec;
 
         public double ChillerCapacity;
