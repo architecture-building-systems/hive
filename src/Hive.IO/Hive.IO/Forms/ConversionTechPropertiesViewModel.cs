@@ -207,6 +207,7 @@ namespace Hive.IO.Forms
             _specificCapitalCost = defaults.SpecificCapitalCost;
             _specificEmbodiedEmissions = defaults.SpecificEmbodiedEmissions;
             _distributionLosses = defaults.DistributionLosses;
+            _heatToPowerRatio = defaults.HeatToPowerRatio;
 
             if (IsSurfaceTech) // NOTE: yep. this should be a subclass. maybe we'll fix it someday.
                 ModuleType = ModuleTypesCatalog.ContainsKey(Name)
@@ -286,6 +287,9 @@ namespace Hive.IO.Forms
 
         public FontWeight DistributionLossesFontWeight =>
             CompareFontWeight(_distributionLosses, Defaults[Name].DistributionLosses);
+
+        public FontWeight EfficiencyFontWeight => CompareFontWeight(_efficiency, Defaults[Name].Efficiency);
+
 
         #endregion
 
