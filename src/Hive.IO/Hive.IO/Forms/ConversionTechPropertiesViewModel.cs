@@ -76,34 +76,28 @@ namespace Hive.IO.Forms
             set => SetWithColors(ref _capacity, ParseDouble(value, _capacity));
         }
 
-        public string Lifetime
+        public string SpecificCapitalCost
         {
-            get => $"{_lifetime:0}";
-            set => SetWithColors(ref _lifetime, ParseDouble(value, _lifetime));
+            get => $"{_specificCapitalCost:0.00}";
+            set => SetWithColors(ref _specificCapitalCost, ParseDouble(value, _specificCapitalCost));
         }
 
-        public string CapitalCost
+        public string SpecificEmbodiedEmissions
         {
-            get => $"{_capitalCost:0.00}";
-            set => SetWithColors(ref _capitalCost, ParseDouble(value, _capitalCost));
-        }
-
-        public string OperationalCost
-        {
-            get => $"{_operationalCost:0.00}";
-            set => SetWithColors(ref _operationalCost, ParseDouble(value, _operationalCost));
-        }
-
-        public string EmbodiedEmissions
-        {
-            get => $"{_embodiedEmissions:0.00}";
-            set => SetWithColors(ref _embodiedEmissions, ParseDouble(value, _embodiedEmissions));
+            get => $"{_specificEmbodiedEmissions:0.00}";
+            set => SetWithColors(ref _specificEmbodiedEmissions, ParseDouble(value, _specificEmbodiedEmissions));
         }
 
         public string HeatToPowerRatio
         {
             get => $"{_heatToPowerRatio:0.00}";
             set => SetWithColors(ref _heatToPowerRatio, ParseDouble(value, _heatToPowerRatio));
+        }
+
+        public string DistributionLosses
+        {
+            get => $"{_distributionLosses:0.00}";
+            set => SetWithColors(ref _distributionLosses, ParseDouble(value, _distributionLosses));
         }
 
 
@@ -165,8 +159,8 @@ namespace Hive.IO.Forms
                             break;
                     }
 
-                    _capitalCost = _moduleType.SpecificCapitalCost * Area;  // for other techs: captial cost = capacity * specificCapitalCost
-                    _embodiedEmissions = _moduleType.SpecificEmbodiedEmissions * Area;
+                    _specificCapitalCost = _moduleType.SpecificCapitalCost * Area;  // for other techs: captial cost = capacity * specificCapitalCost
+                    _specificEmbodiedEmissions = _moduleType.SpecificEmbodiedEmissions * Area;
                     
                     // make sure everyone knows about this!
                     RaisePropertyChangedEvent(null);
@@ -195,10 +189,9 @@ namespace Hive.IO.Forms
 
             _efficiency = defaults.Efficiency;
             _capacity = defaults.Capacity;
-            _capitalCost = defaults.CapitalCost;
-            _embodiedEmissions = defaults.EmbodiedEmissions;
-            _lifetime = defaults.Lifetime;
-            _operationalCost = defaults.OperationalCost;
+            _specificCapitalCost = defaults.SpecificCapitalCost;
+            _specificEmbodiedEmissions= defaults.SpecificEmbodiedEmissions;
+            _distributionLosses = defaults.DistributionLosses;
 
             if (IsSurfaceTech)  // NOTE: yep. this should be a subclass. maybe we'll fix it someday.
             {
@@ -218,11 +211,10 @@ namespace Hive.IO.Forms
 
         private double _efficiency;
         private double _capacity;
-        private double _lifetime;
-        private double _capitalCost;
-        private double _operationalCost;
-        private double _embodiedEmissions;
+        private double _specificCapitalCost;
+        private double _specificEmbodiedEmissions;
         private double _heatToPowerRatio;
+        private double _distributionLosses;
         private ModuleTypeRecord _moduleType;
 
         #endregion
@@ -253,25 +245,23 @@ namespace Hive.IO.Forms
 
         public Brush EfficiencyBrush => CompareBrush(_efficiency, Defaults[Name].Efficiency);
         public Brush CapacityBrush => CompareBrush(_capacity, Defaults[Name].Capacity);
-        public Brush LifetimeBrush => CompareBrush(_lifetime, Defaults[Name].Lifetime);
-        public Brush CapitalCostBrush => CompareBrush(_capitalCost, Defaults[Name].CapitalCost);
-        public Brush OperationalCostBrush => CompareBrush(_operationalCost, Defaults[Name].OperationalCost);
-        public Brush EmbodiedEmissionsBrush => CompareBrush(_embodiedEmissions, Defaults[Name].EmbodiedEmissions);
+        public Brush SpecificCapitalCostBrush => CompareBrush(_specificCapitalCost, Defaults[Name].SpecificCapitalCost);
+        public Brush SpecificEmbodiedEmissionsBrush => CompareBrush(_specificEmbodiedEmissions, Defaults[Name].SpecificEmbodiedEmissions);
         public Brush HeatToPowerRatioBrush => CompareBrush(_heatToPowerRatio, Defaults[Name].HeatToPowerRatio);
+        public Brush DistributionLossesBrush => CompareBrush(_distributionLosses, Defaults[Name].DistributionLosses);
 
-        public FontWeight EfficiencyFontWeight => CompareFontWeight(_efficiency, Defaults[Name].Efficiency);
+        public FontWeight SpecificEfficiencyFontWeight => CompareFontWeight(_efficiency, Defaults[Name].Efficiency);
         public FontWeight CapacityFontWeight => CompareFontWeight(_capacity, Defaults[Name].Capacity);
-        public FontWeight LifetimeFontWeight => CompareFontWeight(_lifetime, Defaults[Name].Lifetime);
-        public FontWeight CapitalCostFontWeight => CompareFontWeight(_capitalCost, Defaults[Name].CapitalCost);
+        public FontWeight SpecificCapitalCostFontWeight => CompareFontWeight(_specificCapitalCost, Defaults[Name].SpecificCapitalCost);
 
-        public FontWeight OperationalCostFontWeight =>
-            CompareFontWeight(_operationalCost, Defaults[Name].OperationalCost);
-
-        public FontWeight EmbodiedEmissionsFontWeight =>
-            CompareFontWeight(_embodiedEmissions, Defaults[Name].EmbodiedEmissions);
+        public FontWeight SpecificEmbodiedEmissionsFontWeight =>
+            CompareFontWeight(_specificEmbodiedEmissions, Defaults[Name].SpecificEmbodiedEmissions);
 
         public FontWeight HeatToPowerRatioFontWeight =>
             CompareFontWeight(_heatToPowerRatio, Defaults[Name].HeatToPowerRatio);
+
+        public FontWeight DistributionLossesFontWeight =>
+            CompareFontWeight(_distributionLosses, Defaults[Name].DistributionLosses);
 
         #endregion
 
@@ -287,10 +277,8 @@ namespace Hive.IO.Forms
 
             _efficiency = gasBoiler.Efficiency;
             _capacity = gasBoiler.Capacity;
-            _capitalCost = gasBoiler.SpecificInvestmentCost;
-            _embodiedEmissions = gasBoiler.SpecificEmbodiedGhg;
-            _lifetime = 9999999.0;
-            _operationalCost = 999999.0;
+            _specificCapitalCost = gasBoiler.SpecificInvestmentCost;
+            _specificEmbodiedEmissions = gasBoiler.SpecificEmbodiedGhg;
         }
 
         public void SetProperties(HeatCoolingExchanger exchanger)
@@ -299,10 +287,8 @@ namespace Hive.IO.Forms
 
             _efficiency = exchanger.DistributionLosses;
             _capacity = exchanger.Capacity;
-            _capitalCost = exchanger.SpecificInvestmentCost;
-            _embodiedEmissions = exchanger.SpecificEmbodiedGhg;
-            _lifetime = 9999999.0;
-            _operationalCost = 999999.0;
+            _specificCapitalCost = exchanger.SpecificInvestmentCost;
+            _specificEmbodiedEmissions = exchanger.SpecificEmbodiedGhg;
         }
 
         public void SetProperties(Chiller chiller)
@@ -311,10 +297,8 @@ namespace Hive.IO.Forms
 
             _efficiency = chiller.EtaRef;
             _capacity = chiller.Capacity;
-            _capitalCost = chiller.SpecificInvestmentCost;
-            _embodiedEmissions = chiller.SpecificEmbodiedGhg;
-            _lifetime = 9999999.0;
-            _operationalCost = 999999.0;
+            _specificCapitalCost = chiller.SpecificInvestmentCost;
+            _specificEmbodiedEmissions = chiller.SpecificEmbodiedGhg;
         }
 
         public void SetProperties(CombinedHeatPower chp)
@@ -323,10 +307,8 @@ namespace Hive.IO.Forms
 
             _efficiency = chp.ElectricEfficiency;
             _capacity = chp.Capacity;
-            _capitalCost = chp.SpecificInvestmentCost;
-            _embodiedEmissions = chp.SpecificEmbodiedGhg;
-            _lifetime = 9999999.0;
-            _operationalCost = 999999.0;
+            _specificCapitalCost = chp.SpecificInvestmentCost;
+            _specificEmbodiedEmissions = chp.SpecificEmbodiedGhg;
             _heatToPowerRatio = chp.HeatToPowerRatio;
         }
 
@@ -336,10 +318,8 @@ namespace Hive.IO.Forms
 
             _efficiency = ashp.EtaRef;
             _capacity = ashp.Capacity;
-            _capitalCost = ashp.SpecificInvestmentCost;
-            _embodiedEmissions = ashp.SpecificEmbodiedGhg;
-            _lifetime = 9999999.0;
-            _operationalCost = 999999.0;
+            _specificCapitalCost = ashp.SpecificInvestmentCost;
+            _specificEmbodiedEmissions = ashp.SpecificEmbodiedGhg;
         }
 
         public void SetProperties(Photovoltaic photovoltaic)
@@ -348,10 +328,8 @@ namespace Hive.IO.Forms
 
             _efficiency = photovoltaic.RefEfficiencyElectric;
             _capacity = photovoltaic.Capacity;
-            _capitalCost = photovoltaic.SpecificInvestmentCost;
-            _embodiedEmissions = photovoltaic.SpecificEmbodiedGhg;
-            _lifetime = 9999999.0;
-            _operationalCost = 999999.0;
+            _specificCapitalCost = photovoltaic.SpecificInvestmentCost;
+            _specificEmbodiedEmissions = photovoltaic.SpecificEmbodiedGhg;
             _moduleType = new ModuleTypeRecord
             {
                 Name = "<custom>",
@@ -368,10 +346,8 @@ namespace Hive.IO.Forms
 
             _efficiency = solarThermal.RefEfficiencyHeating;
             _capacity = solarThermal.Capacity;
-            _capitalCost = solarThermal.SpecificInvestmentCost;
-            _embodiedEmissions = solarThermal.SpecificEmbodiedGhg;
-            _lifetime = 9999999.0;
-            _operationalCost = 999999.0;
+            _specificCapitalCost = solarThermal.SpecificInvestmentCost;
+            _specificEmbodiedEmissions = solarThermal.SpecificEmbodiedGhg;
 
             _moduleType = new ModuleTypeRecord
             {
@@ -402,12 +378,11 @@ namespace Hive.IO.Forms
         public string EndUse;
         public string Source;
         public double Efficiency;
+        public double DistributionLosses;  // only heat/cooling exchangers
         public double Capacity;
-        public double CapitalCost;
-        public double Lifetime;
-        public double OperationalCost;
-        public double EmbodiedEmissions;
-        public double HeatToPowerRatio;
+        public double SpecificCapitalCost;
+        public double SpecificEmbodiedEmissions;
+        public double HeatToPowerRatio;  // only CHP
     }
 
     public struct ModuleTypeRecord
