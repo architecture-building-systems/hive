@@ -30,7 +30,7 @@ namespace Hive.IO.Environment
         /// <summary>
         /// Irradiation, ambient air, etc.
         /// </summary>
-        public EnergyCarrier[] EnergyPotentials { get; private set; }
+        public Carrier[] EnergyPotentials { get; private set; }
 
 
         public Environment(string epwFilePath, rg.Mesh[] geometry = null)
@@ -128,9 +128,9 @@ namespace Hive.IO.Environment
 
         // setting all inpuit energy carriers as part of Hive.IO.Environment
         // gas, oil, biogas, wood, district heating, electricity grid, etc.
-        internal void SetEnergyPotentials(EnergyCarrier[] inputCarriers)
+        internal void SetEnergyPotentials(Carrier[] inputCarriers)
         {
-            this.EnergyPotentials = new EnergyCarrier[this.totalPotentials];
+            this.EnergyPotentials = new Carrier[this.totalPotentials];
             inputCarriers.CopyTo(this.EnergyPotentials, 0);
             this.EnergyPotentials[6] = new Air(this.Horizon, null, null, null, this.ClimateData.DryBulbTemperature);
             this.EnergyPotentials[6].Name = "DryBulbTemperature";
@@ -145,7 +145,7 @@ namespace Hive.IO.Environment
 
         internal void SetDefaultEnergyPotentials()
         {
-            this.EnergyPotentials = new EnergyCarrier[this.totalPotentials];
+            this.EnergyPotentials = new Carrier[this.totalPotentials];
             this.EnergyPotentials[0] = new Gas(this.Horizon, Enumerable.Repeat<double>(double.MaxValue, this.Horizon).ToArray(), Enumerable.Repeat<double>(0.09, this.Horizon).ToArray(), Enumerable.Repeat<double>(0.237, this.Horizon).ToArray());
             this.EnergyPotentials[0].Name = "NaturalGas";
             this.EnergyPotentials[1] = new Gas(this.Horizon, Enumerable.Repeat<double>(double.MaxValue, this.Horizon).ToArray(), Enumerable.Repeat<double>(0.15, this.Horizon).ToArray(), Enumerable.Repeat<double>(0.15, this.Horizon).ToArray());

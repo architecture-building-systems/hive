@@ -48,7 +48,7 @@ namespace Hive.IO.EnergySystems
             Gas gasConsumedCarrier = new Gas(horizon, gasConsumed, gasPrice, gasEmissionsFactor);
             base.InputCarrier = gasConsumedCarrier; // infused with how much gas is consumed. input Gas carrier has no Energy information
 
-            base.OutputCarriers = new EnergyCarrier[1];
+            base.OutputCarriers = new Carrier[1];
             base.OutputCarriers[0] = new Water(horizon, heatingGenerated, null, null, supplyTemperature);
         }
     }
@@ -106,7 +106,7 @@ namespace Hive.IO.EnergySystems
             Gas gasConsumedCarrier = new Gas(horizon, gasConsumed, gasPrice, gasEmissionsFactor);
             base.InputCarrier = gasConsumedCarrier; // infused with how much gas is consumed. input Gas carrier has no Energy information
 
-            base.OutputCarriers = new EnergyCarrier[2];
+            base.OutputCarriers = new Carrier[2];
             base.OutputCarriers[0] = new Water(horizon, heatingGenerated, null, null, supplyTemperature);
             base.OutputCarriers[1] = new Electricity(horizon, elecGenerated, null, null);
         }
@@ -121,7 +121,7 @@ namespace Hive.IO.EnergySystems
 
         public void SetOutput(int horizon, double[] heatingGenerated, double[] electricityGenerated, double[] energyCost, double[] ghgEmissions, double[] supplyTemperature)
         {
-            base.OutputCarriers = new EnergyCarrier[2];
+            base.OutputCarriers = new Carrier[2];
             base.OutputCarriers[0] = new Water(horizon, heatingGenerated, energyCost, ghgEmissions, supplyTemperature);
             base.OutputCarriers[1] = new Electricity(horizon, electricityGenerated, energyCost, ghgEmissions);
 

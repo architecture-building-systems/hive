@@ -1,5 +1,7 @@
 ﻿using System.Linq;
 using System.Security.Permissions;
+using System.Windows.Forms.VisualStyles;
+using Grasshopper.Kernel.Geometry.SpatialTrees;
 
 namespace Hive.IO.DataHandling
 {
@@ -13,13 +15,13 @@ namespace Hive.IO.DataHandling
             Results = results;
         }
 
-        public double TotalFloorArea => 180;
+        public double TotalFloorArea => Results.TotalFloorArea;
 
         #region Emissions
 
         public double[] EmbodiedEmissionsBuildingsMonthly(bool normalized)
         {
-            // FIXME: plug in real values here...
+            //// FIXME: plug in real values here...
             double dummy = 100.0;
             double[] result = new double[12].Select(r => dummy).ToArray();
             return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
@@ -113,49 +115,63 @@ namespace Hive.IO.DataHandling
         #endregion Costs
 
         #region Energy
+        // FIX ME what is embodied energy?
         public double[] EmbodiedEnergyBuildingsMonthly(bool normalized)
         {
             // FIXME: plug in real values here...
-            double dummy = 123.0;
+            double dummy = 0.0;
             double[] result = new double[12].Select(r => dummy).ToArray();
             return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
         }
-
         public double EmbodiedEnergyBuildings(bool normalized) => EmbodiedEnergyBuildingsMonthly(normalized).Sum();
-        public double[] EmbodiedEnergySystemsMonthly(bool normalized)
+
+        // operational carbon emissions from energy systems
+        public double[] OperationalEmissionsMonthly(bool normalized)
         {
-            // FIXME: plug in real values here...
-            double dummy = 234.0;
-            double[] result = new double[12].Select(r => dummy).ToArray();
+            double[] result = Results.TotalOperationalEmissionsMonthly;
             return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
         }
+        public double OperationalEmissions(bool normalized) => OperationalEmissionsMonthly(normalized).Sum();
 
-        public double EmbodiedEnergySystems(bool normalized) => EmbodiedEnergySystemsMonthly(normalized).Sum();
+        // Ideal demands, a.k.a. final energy demand
         public double[] OperationEnergyBuildingsMonthly(bool normalized)
         {
-            // FIXME: plug in real values here...
-            double dummy = 345.0;
-            double[] result = new double[12].Select(r => dummy).ToArray();
+            //double[] result = Results.TotalFinalCoolingMonthly
+            //    .Select((x, index) => x + Results.TotalFinalDomesticHotWaterMonthly[index])
+            //    .Select((x, index) => x + Results.TotalFinalElectricityMonthly[index])
+            //    .Select((x, index) => x + Results.TotalFinalHeatingMonthly[index])
+            //    .ToArray();
+
+            double [] result = new double[Misc.MonthsPerYear];
+            for (int i = 0; i < result.Length; i++)
+            {
+                result[i] = Results.TotalFinalCoolingMonthly[i] 
+                            + Results.TotalFinalDomesticHotWaterMonthly[i]
+                            + Results.TotalFinalElectricityMonthly[i] 
+                            + Results.TotalFinalHeatingMonthly[i];
+            }
+
             return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
         }
-
         public double OperationEnergyBuildings(bool normalized) => OperationEnergyBuildingsMonthly(normalized).Sum();
+
+        // Primary energy demand, incl. conversion losses
         public double[] OperationEnergySystemsMonthly(bool normalized)
         {
-            // FIXME: plug in real values here...
-            double dummy = 456.0;
-            double[] result = new double[12].Select(r => dummy).ToArray();
+            double[] result = Results.TotalPrimaryEnergyMonthly.ToArray();
             return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
         }
-
         public double OperationEnergySystems(bool normalized) => OperationEnergySystemsMonthly(normalized).Sum();
 
+        // FIX ME what is embodied energy?
         public double TotalEmbodiedEnergy(bool normalized) =>
-            EmbodiedEnergyBuildings(normalized) + EmbodiedEnergySystems(normalized);
+            EmbodiedEnergyBuildings(normalized) + OperationalEmissions(normalized);
 
+        // FIX ME wrong addition. final energy is subset of primary energy
         public double TotalOperationEnergy(bool normalized) =>
             OperationEnergyBuildings(normalized) + OperationEnergySystems(normalized);
 
+        // FIX ME what is this?
         public double TotalEnergy(bool normalized) =>
             TotalEmbodiedEnergy(normalized) + TotalOperationEnergy(normalized);
 
@@ -163,16 +179,19 @@ namespace Hive.IO.DataHandling
 
         #region EnergyBalance
 
-        public float SolarGains => 100.0f;
-        public float InternalGains => 200f;
-        public float PrimaryEnergy => 300.0f;
-        public float RenewableEnergy => 400.0f;
-        public float Electricity => 110.0f;
-        public float VentilationLosses => 120.0f;
-        public float EnvelopeLosses => 50.0f;
-        public float WindowsLosses => 200f;
-        public float SystemLosses => 300f;
-        public float PrimaryTransferLosses => 123.0f;
+        // ingoing energy
+        public float SolarGains => (float)Results.TotalSolarGains;
+        public float InternalGains => (float)Results.TotalInternalGains;
+        public float PrimaryEnergy => 0.0f; //inputCarriers from conversionTech, except renewable tech (solar)
+        public float RenewableEnergy => 0.0f; //inputCarriers from 
+        
+        // outgoing energy
+        public float Electricity => 0.0f; // electricity loads?
+        public float VentilationLosses => (float)Results.TotalVentilationHeatLosses;
+        public float EnvelopeLosses => (float)Results.TotalTransmissionHeatLosses;
+        public float WindowsLosses => 0f; // ok, change the python code to get envelope separate from window losses
+        public float SystemLosses => 0f; // what's the difference to primary transfer losses?
+        public float PrimaryTransferLosses => 0f; // difference between primary energy and final loads?
 
 
         #endregion EnergyBalance

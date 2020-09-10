@@ -52,7 +52,7 @@ namespace Hive.IO.GHComponents
             }
             else
             {
-                EnergyCarrier[] inputCarriers = new EnergyCarrier[6];
+                Carrier[] inputCarriers = new Carrier[6];
                 inputCarriers[0] = new Gas(Misc.HoursPerYear, potentials.NaturalGasAvailability, potentials.NaturalGasPrice, potentials.NaturalGasEmissions);
                 inputCarriers[0].Name = potentials.NaturalGasName;
                 inputCarriers[1] = new Gas(Misc.HoursPerYear, potentials.BioGasAvailability, potentials.BioGasPrice, potentials.BioGasEmissions);
