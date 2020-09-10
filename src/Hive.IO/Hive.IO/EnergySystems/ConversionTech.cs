@@ -3,6 +3,24 @@
 namespace Hive.IO.EnergySystems
 {
     #region MiscSupply
+    public class Substation : ConversionTech
+    {
+        public double Efficiency { get; private set; }
+        public Substation(double investmentCost, double embodiedGhg, double capacity, double efficiency)
+            : base(investmentCost, embodiedGhg, capacity, "kW", false, false, true)
+        {
+            this.Efficiency = efficiency;
+            base.Name = "Substation";
+        }
+
+
+        //public void SetInputOutput(Electricity electricity, double [] finalElectricityDemand)
+        //{
+        //    int horizon = purchasedElectricity.Length;
+        //    var purchasedElectricity = new double[horizon];
+        //}
+    }
+
 
     public class Chiller : ConversionTech
     {
