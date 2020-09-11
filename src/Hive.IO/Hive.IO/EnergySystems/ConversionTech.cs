@@ -14,11 +14,29 @@ namespace Hive.IO.EnergySystems
         }
 
 
-        //public void SetInputOutput(Electricity electricity, double [] finalElectricityDemand)
-        //{
-        //    int horizon = purchasedElectricity.Length;
-        //    var purchasedElectricity = new double[horizon];
-        //}
+        public void SetInputOutput(Electricity electricity, double[] finalElectricityDemand)
+        {
+            int horizon = finalElectricityDemand.Length;
+            var purchasedElectricity = new double[horizon];
+            finalElectricityDemand.CopyTo(purchasedElectricity, 0);
+
+            double[] elecPrice;
+            double[] elecEmissionsFactor;
+            
+            if (horizon == Misc.MonthsPerYear)
+            {
+                elecPrice = Misc.GetAverageMonthlyValue(electricity.EnergyPrice);
+                elecEmissionsFactor = Misc.GetAverageMonthlyValue(electricity.GhgEmissionsFactor);
+            }
+            else
+            {
+                elecPrice = electricity.EnergyPrice;
+                elecEmissionsFactor = electricity.GhgEmissionsFactor;
+            }
+            base.InputCarrier = new Electricity(horizon, purchasedElectricity, elecPrice, elecEmissionsFactor);
+            base.OutputCarriers = new Carrier[1];
+            base.OutputCarriers[0] = new Electricity(horizon, finalElectricityDemand, null, null); // costs and emissions are already accounted for by the grid in the InputCarrier
+        }
     }
 
 

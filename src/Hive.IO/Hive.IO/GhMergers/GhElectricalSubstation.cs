@@ -28,9 +28,9 @@ namespace Hive.IO.GhMergers
         {
             pManager.AddGenericParameter("GridElectricity", "GridElectricity", "GridElectricity, as <Electricity>", GH_ParamAccess.item);
 
-            pManager.AddNumberParameter("elecDemand", "elecDemand", "elecDemand that will be provided by grid", GH_ParamAccess.list);
+            pManager.AddNumberParameter("elecPurchased", "elecPurchased", "elecDemand that will be purchased from the grid", GH_ParamAccess.list);
             
-            pManager.AddGenericParameter("GridSubstation", "GridSubstation", "GridSubstation", GH_ParamAccess.item);
+            pManager.AddGenericParameter("ElectricalSubstation", "ElectricalSubstation", "ElectricalSubstation", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -50,13 +50,13 @@ namespace Hive.IO.GhMergers
             Electricity elec = null;
             DA.GetData(0, ref elec);
 
-            var elecGenerated = new List<double>();
-            DA.GetDataList(1, elecGenerated);
+            var elecPurchased = new List<double>();
+            DA.GetDataList(1, elecPurchased);
 
-            HeatCoolingExchanger substation = null;
+            ElectricalSubstation substation = null;
             DA.GetData(4, ref substation);
 
-            //substation.SetInputOutput(elec, elecGenerated.ToArray());
+            substation.SetInputOutput(elec, elecPurchased.ToArray());
 
             DA.SetData(0, substation);
 
