@@ -127,25 +127,25 @@
     <Compile Include="GhMergers\GhCHP.cs" />
     <Compile Include="GhMergers\GhCoolingExchanger.cs" />
     <Compile Include="GhMergers\GhGasBoiler.cs" />
-    <Compile Include="GhMergers\GhGridSubstation.cs" />
+    <Compile Include="GhMergers\GhElectricalSubstation.cs" />
     <Compile Include="GhMergers\GhHeatExchanger.cs" />
     <Compile Include="GhMergers\GhSolarTech.cs" />
     <Compile Include="GhParametricInputs\GhEmitter.cs" />
-    <Compile Include="GHComponents\GhEnvironment.cs" />
+    <Compile Include="GhComponents\GhEnvironment.cs" />
     <Compile Include="GhMergers\GhHeatPump.cs" />
     <Compile Include="GhParametricInputs\GhEnergyPotentials.cs" />
     <Compile Include="GhParametricInputs\GhConversionTech.cs" />
     <Compile Include="GhParametricInputs\GhSIARoom.cs" />
     <Compile Include="GhParametricInputs\GhSolarSystems.cs" />
-    <Compile Include="GHComponents\GhResults.cs" />
-    <Compile Include="GHComponents\GhVisualizer.cs" />
+    <Compile Include="GhComponents\GhResults.cs" />
+    <Compile Include="GhComponents\GhVisualizer.cs" />
     <Compile Include="Environment\Environment.cs" />
-    <Compile Include="GHComponents\GhBuilding.cs" />
+    <Compile Include="GhComponents\GhBuilding.cs" />
     <Compile Include="GhDistributors\GhMainDistributor.cs" />
-    <Compile Include="GHComponents\GhVisualizerAttributes.cs" />
-    <Compile Include="GHComponents\HiveIOInfo.cs" />
+    <Compile Include="GhComponents\GhVisualizerAttributes.cs" />
+    <Compile Include="GhComponents\HiveIOInfo.cs" />
     <Compile Include="Misc.cs" />
-    <Compile Include="GHComponents\GhEnergySystem.cs" />
+    <Compile Include="GhComponents\GhEnergySystem.cs" />
     <Compile Include="Plots\AmrPlotBase.cs" />
     <Compile Include="Plots\AmrPlotStyle.cs" />
     <Compile Include="Plots\DemandMonthlyNormalizedPlot.cs" />
@@ -236,7 +236,9 @@
   <ItemGroup>
     <None Include="Resources\Hive_Logo.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\GhMergerElectricalSubstation.bmp" />
+  </ItemGroup>
   <ItemGroup>
     <Page Include="Forms\AshpProperties.xaml">
       <SubType>Designer</SubType>
@@ -278,6 +280,9 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\nxbba8l4_400x400.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

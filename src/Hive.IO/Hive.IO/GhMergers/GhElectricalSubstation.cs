@@ -7,17 +7,19 @@ using Hive.IO.EnergySystems;
 
 namespace Hive.IO.GhMergers
 {
-    public class GhGridSubstation : GH_Component
+    public class GhElectricalSubstation : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the GhGridSubstation class.
         /// </summary>
-        public GhGridSubstation()
+        public GhElectricalSubstation()
           : base("Merger GridSubstation Hive", "HiveMergerGrid",
               "Description",
               "[hive]", "IO")
         {
         }
+
+        public override GH_Exposure Exposure => GH_Exposure.quinary;
 
         /// <summary>
         /// Registers all the input parameters for this component.

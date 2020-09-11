@@ -3,10 +3,10 @@
 namespace Hive.IO.EnergySystems
 {
     #region MiscSupply
-    public class Substation : ConversionTech
+    public class ElectricalSubstation : ConversionTech
     {
         public double Efficiency { get; private set; }
-        public Substation(double investmentCost, double embodiedGhg, double capacity, double efficiency)
+        public ElectricalSubstation(double investmentCost, double embodiedGhg, double capacity, double efficiency)
             : base(investmentCost, embodiedGhg, capacity, "kW", false, false, true)
         {
             this.Efficiency = efficiency;
