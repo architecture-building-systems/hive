@@ -233,7 +233,7 @@ namespace Hive.IO.EnergySystems
             }
 
             base.OutputCarriers = new Carrier[1];
-            base.OutputCarriers[0] = new Electricity(horizon, electricityGenerated, energyCost, ghgEmissions);
+            base.OutputCarriers[0] = new Electricity(horizon, electricityGenerated, energyCost, ghgEmissions, 1.0);
         }
 
 
@@ -270,7 +270,7 @@ namespace Hive.IO.EnergySystems
             double[] ghgEmissions = new double[horizon];
 
             base.OutputCarriers = new Carrier[1];
-            base.OutputCarriers[0] = new Electricity(horizon, electricityGenerated, energyCost, ghgEmissions);
+            base.OutputCarriers[0] = new Electricity(horizon, electricityGenerated, energyCost, ghgEmissions, 1.0);
         }
     }
 
@@ -383,7 +383,7 @@ namespace Hive.IO.EnergySystems
             // not included in this equation...
             double[] supplyTemperature = new double[8760];
 
-            Water supplyWaterCarrier = new Water(horizon, availableEnergy, energyCost, ghgEmissions, supplyTemperature);
+            Water supplyWaterCarrier = new Water(horizon, availableEnergy, energyCost, ghgEmissions, supplyTemperature, 1.0);
             base.OutputCarriers[0] = supplyWaterCarrier;
         }
 
@@ -413,7 +413,7 @@ namespace Hive.IO.EnergySystems
         public void SetInputComputeOutput(double [] meanIrradiance, double[] inletTemperature, double[] returnTemperature, Air ambientAirCarrier)
         {
             int horizon = Misc.HoursPerYear;
-            this.InletWater = new Water(horizon, null, null, null, returnTemperature);
+            this.InletWater = new Water(horizon, null, null, null, returnTemperature, 1.0);
 
             base.AmbientAir = ambientAirCarrier;
 
@@ -432,7 +432,7 @@ namespace Hive.IO.EnergySystems
             // zeros, because renewable energy and because equation doesnt calc output temperature. Supply temp, I'd need to calculate according to: See ShanShans mail from 21.8.2020
             double[] energyCost = new double[horizon];
             double[] ghgEmissions = new double[horizon];
-            base.OutputCarriers[0] = new Water(horizon, heatingEnergy, energyCost, ghgEmissions, returnTemperature);
+            base.OutputCarriers[0] = new Water(horizon, heatingEnergy, energyCost, ghgEmissions, returnTemperature, 1.0);
         }
     }
 

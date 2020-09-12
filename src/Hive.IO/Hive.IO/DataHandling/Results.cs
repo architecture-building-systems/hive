@@ -472,7 +472,7 @@ namespace Hive.IO.DataHandling
             {
                 for (int i = 0; i < Misc.MonthsPerYear; i++)
                 {
-                    result[i] += tech.InputCarrier.MonthlyCumulativeEnergy[i];
+                    result[i] += tech.InputCarrier.MonthlyCumulativeEnergy[i] * tech.InputCarrier.PrimaryEnergyFactor;
                 }
             }
 

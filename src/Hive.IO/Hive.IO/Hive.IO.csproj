@@ -127,24 +127,25 @@
     <Compile Include="GhMergers\GhCHP.cs" />
     <Compile Include="GhMergers\GhCoolingExchanger.cs" />
     <Compile Include="GhMergers\GhGasBoiler.cs" />
+    <Compile Include="GhMergers\GhPurchasedElectricity.cs" />
     <Compile Include="GhMergers\GhHeatExchanger.cs" />
     <Compile Include="GhMergers\GhSolarTech.cs" />
     <Compile Include="GhParametricInputs\GhEmitter.cs" />
-    <Compile Include="GHComponents\GhEnvironment.cs" />
+    <Compile Include="GhComponents\GhEnvironment.cs" />
     <Compile Include="GhMergers\GhHeatPump.cs" />
     <Compile Include="GhParametricInputs\GhEnergyPotentials.cs" />
     <Compile Include="GhParametricInputs\GhConversionTech.cs" />
     <Compile Include="GhParametricInputs\GhSIARoom.cs" />
     <Compile Include="GhParametricInputs\GhSolarSystems.cs" />
-    <Compile Include="GHComponents\GhResults.cs" />
-    <Compile Include="GHComponents\GhVisualizer.cs" />
+    <Compile Include="GhComponents\GhResults.cs" />
+    <Compile Include="GhComponents\GhVisualizer.cs" />
     <Compile Include="Environment\Environment.cs" />
-    <Compile Include="GHComponents\GhBuilding.cs" />
+    <Compile Include="GhComponents\GhBuilding.cs" />
     <Compile Include="GhDistributors\GhMainDistributor.cs" />
-    <Compile Include="GHComponents\GhVisualizerAttributes.cs" />
-    <Compile Include="GHComponents\HiveIOInfo.cs" />
+    <Compile Include="GhComponents\GhVisualizerAttributes.cs" />
+    <Compile Include="GhComponents\HiveIOInfo.cs" />
     <Compile Include="Misc.cs" />
-    <Compile Include="GHComponents\GhEnergySystem.cs" />
+    <Compile Include="GhComponents\GhEnergySystem.cs" />
     <Compile Include="Plots\AmrPlotBase.cs" />
     <Compile Include="Plots\AmrPlotStyle.cs" />
     <Compile Include="Plots\DemandMonthlyNormalizedPlot.cs" />
@@ -184,35 +185,10 @@
     <EmbeddedResource Include="EnergySystems\surface_tech_module_types.json" />
     <EmbeddedResource Include="EnergySystems\emitter_defaults.json" />
     <None Include="packages.config" />
-    <None Include="Resources\article_18.jpg" />
     <None Include="Resources\gc_efficiency.csv" />
     <None Include="Resources\pvt_efficiency.csv" />
     <None Include="Resources\pv_efficiency.csv" />
     <None Include="Resources\st_efficiency.csv" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\asf.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\fraunhofer.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\stardestroyer.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\CdTe.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\CIGS.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\HIT.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\monocristalline.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\polycristalline.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IO_Building.png" />
@@ -235,7 +211,6 @@
   <ItemGroup>
     <None Include="Resources\Hive_Logo.png" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Page Include="Forms\AshpProperties.xaml">
       <SubType>Designer</SubType>

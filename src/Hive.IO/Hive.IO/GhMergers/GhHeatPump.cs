@@ -76,7 +76,7 @@ namespace Hive.IO.GhMergers
 
 
             if (simple)
-                ashp.SetInputOutputSimple(electricity, energyGenerated.ToArray(), returnTemp.ToArray(), supplyTemp.ToArray());
+                ashp.SetInputOutputSimple(electricity, energyGenerated.ToArray(), supplyTemp.ToArray(), returnTemp.ToArray());
             else
                 ashp.SetInputOutput(electricity, air, energyGenerated.ToArray(), supplyTemp.ToArray());
 

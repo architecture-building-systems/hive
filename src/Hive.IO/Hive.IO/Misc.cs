@@ -13,6 +13,11 @@ namespace Hive.IO
         public const int HoursPerYear = 8760;
         public const int MonthsPerYear = 12;
 
+        public const double PEFNaturalGas = 1.13; // https://www.bregroup.com/wp-content/uploads/2019/10/Briefing-note-on-derivation-of-PE-factors-V1.3-01-10-2019.pdf
+        public const double PEFBioGas = 1.286; // "
+        public const double PEFWoodPellets = 1.325; // "
+        public const double PEFElectricitySwiss = 2.02; // 40% Nuclear à 2.8 and 60% hydro à 1.5 http://go.leonardo-energy.org/rs/europeancopper/images/PEF-finalreport.pdf
+
         public static double[] GetAverageMonthlyValue(double[] annualTimeSeries)
         {
             double[] monthlyTimeSeries = new double[Misc.MonthsPerYear];

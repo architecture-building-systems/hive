@@ -22,7 +22,7 @@ namespace Hive.IO.EnergySystems
         /// <param name="ghgEmissionsFactor">kgCO2eq./kWh</param>
         /// <param name="airTemperature">deg C</param>
         public Air(int horizon, double [] airEnergy, double [] airPrice, double [] ghgEmissionsFactor, double[] airTemperature)
-            : base(horizon, Carrier.EnergyUnit.KiloWattHours, airEnergy, airPrice, ghgEmissionsFactor) 
+            : base(horizon, Carrier.EnergyUnit.KiloWattHours, airEnergy, airPrice, ghgEmissionsFactor, 1.0) 
         {
             if (airTemperature != null && airTemperature.Length > 0)
             {
@@ -47,8 +47,8 @@ namespace Hive.IO.EnergySystems
         /// <param name="waterPrice">CHF/kWh</param>
         /// <param name="ghgEmissionsFactor">kgCO2eq./kWh</param>
         /// <param name="waterTemperature">deg C</param>
-        public Water(int horizon, double[] waterEnergy, double[] waterPrice, double[] ghgEmissionsFactor, double[] waterTemperature)
-            : base(horizon, Carrier.EnergyUnit.KiloWattHours, waterEnergy, waterPrice, ghgEmissionsFactor)
+        public Water(int horizon, double[] waterEnergy, double[] waterPrice, double[] ghgEmissionsFactor, double[] waterTemperature, double primaryEnergyFactor)
+            : base(horizon, Carrier.EnergyUnit.KiloWattHours, waterEnergy, waterPrice, ghgEmissionsFactor, primaryEnergyFactor)
         {
             if (waterTemperature != null && waterTemperature.Length > 0)
             {
@@ -92,7 +92,7 @@ namespace Hive.IO.EnergySystems
         /// <param name="vertexId"></param>
         /// <param name="radiationType"></param>
         public Radiation(int horizon, double[] irradiation, double surfaceArea = 1, int? vertexId = null, RadiationType radiationType = RadiationType.GHI)
-            : base(horizon, Carrier.EnergyUnit.KiloWattHours, irradiation, null, null)
+            : base(horizon, Carrier.EnergyUnit.KiloWattHours, irradiation, null, null, 1.0)
         {
             this.Irradiance = new double[irradiation.Length];
             for (int i = 0; i < Irradiance.Length; i++)
@@ -120,8 +120,8 @@ namespace Hive.IO.EnergySystems
         /// <param name="electricEnergy">kWh</param>
         /// <param name="electricityPrice">CHF/kWh</param>
         /// <param name="ghgEmissionsFactor">kgCO2eq./kWh</param>
-        public Electricity(int horizon, double[] electricEnergy, double[] electricityPrice, double[] ghgEmissionsFactor)
-            : base(horizon, Carrier.EnergyUnit.KiloWattHours, electricEnergy, electricityPrice, ghgEmissionsFactor) { }
+        public Electricity(int horizon, double[] electricEnergy, double[] electricityPrice, double[] ghgEmissionsFactor, double primaryEnergyFactor)
+            : base(horizon, Carrier.EnergyUnit.KiloWattHours, electricEnergy, electricityPrice, ghgEmissionsFactor, primaryEnergyFactor) { }
     }
 
 
@@ -137,8 +137,8 @@ namespace Hive.IO.EnergySystems
         /// <param name="gasEnergy">kWh</param>
         /// <param name="gasPrice">CHF/kWh</param>
         /// <param name="ghgEmissionsFactor">kgCO2eq./kWh</param>
-        public Gas(int horizon, double[] gasEnergy, double[] gasPrice, double[] ghgEmissionsFactor)
-            : base(horizon, Carrier.EnergyUnit.KiloWattHours, gasEnergy, gasPrice, ghgEmissionsFactor) { }
+        public Gas(int horizon, double[] gasEnergy, double[] gasPrice, double[] ghgEmissionsFactor, double primaryEnergyFactor)
+            : base(horizon, Carrier.EnergyUnit.KiloWattHours, gasEnergy, gasPrice, ghgEmissionsFactor, primaryEnergyFactor) { }
     }
 
 
@@ -155,8 +155,8 @@ namespace Hive.IO.EnergySystems
         /// <param name="pelletEnergy">Time-resolved pellets in kWh</param>
         /// <param name="pelletsPrice">price per kWh</param>
         /// <param name="ghgEmissionsFactor">kgCO2eq./kWh</param>
-        public Pellets(int horizon, double[] pelletEnergy, double[] pelletsPrice, double[] ghgEmissionsFactor)
-            : base(horizon, Carrier.EnergyUnit.KiloWattHours, pelletEnergy, pelletsPrice, ghgEmissionsFactor) { }
+        public Pellets(int horizon, double[] pelletEnergy, double[] pelletsPrice, double[] ghgEmissionsFactor, double primaryEnergyFactor)
+            : base(horizon, Carrier.EnergyUnit.KiloWattHours, pelletEnergy, pelletsPrice, ghgEmissionsFactor, primaryEnergyFactor) { }
     }
     #endregion
 
@@ -202,15 +202,20 @@ namespace Hive.IO.EnergySystems
         public double[] GhgEmissionsFactor { get; protected set; }
         public double[] TotalGhgEmissions { get; protected set; }
 
+
+        public double PrimaryEnergyFactor { get; protected set; }
+
+
         /// <summary>
         /// Temperature of the medium in degree Celsius. Not all carriers will need to implement this
         /// </summary>
         public double [] Temperature { get; protected set; }
 
-        protected Carrier(int horizon, EnergyUnit unit, double[] energy, double[] energyPrice, double[] ghgEmissionsFactor)
+        protected Carrier(int horizon, EnergyUnit unit, double[] energy, double[] energyPrice, double[] ghgEmissionsFactor, double primaryEnergyFactor)
         {
             this.Horizon = horizon;
             this.Unit = unit;
+            this.PrimaryEnergyFactor = primaryEnergyFactor;
 
             // energy could be unbound, e.g. electricity grid, in which case energy == null
             if (energy != null && energy.Length != 0)

@@ -7,34 +7,30 @@ using Hive.IO.EnergySystems;
 
 namespace Hive.IO.GhMergers
 {
-    public class GhHeatExchanger : GH_Component
+    public class GhPurchasedElectricity : GH_Component
     {
         /// <summary>
-        /// Initializes a new instance of the GhHeatExchanger class.
+        /// Initializes a new instance of the GhGridSubstation class.
         /// </summary>
-        public GhHeatExchanger()
-          : base("Merger HeatExchanger Hive", "HiveMergerHX",
+        public GhPurchasedElectricity()
+          : base("Merger ElectricalSubstation Hive", "HiveMergerSubstation",
               "Description",
               "[hive]", "IO")
         {
         }
 
-
         public override GH_Exposure Exposure => GH_Exposure.quinary;
-
 
         /// <summary>
         /// Registers all the input parameters for this component.
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("DistrictHeating", "DistrictHeating", "DistrictHeating, as <Water>", GH_ParamAccess.item);
+            pManager.AddGenericParameter("GridElectricity", "GridElectricity", "GridElectricity, as <Electricity>", GH_ParamAccess.item);
 
-            pManager.AddNumberParameter("heatDemand", "heatDemand", "heatDemand", GH_ParamAccess.list);
-            pManager.AddNumberParameter("suppTemp", "suppTemp", "suppTemp", GH_ParamAccess.list);
-            pManager.AddNumberParameter("returnTemp", "returnTemp", "returnTemp", GH_ParamAccess.list);
-
-            pManager.AddGenericParameter("HeatExchanger", "HeatExchanger", "HeatExchanger", GH_ParamAccess.item);
+            pManager.AddNumberParameter("elecPurchased", "elecPurchased", "elecDemand that will be purchased from the grid", GH_ParamAccess.list);
+            
+            pManager.AddGenericParameter("DirectElectricity", "DirectElectricity", "DirectElectricity", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -42,7 +38,7 @@ namespace Hive.IO.GhMergers
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("HeatExchanger", "HeatExchanger", "HeatExchanger, infused with heatingConsumed and 'generated' and operational cost and emissions", GH_ParamAccess.item);
+            pManager.AddGenericParameter("DirectElectricity", "DirectElectricity", "DirectElectricity, 'fake' conversion tech 'infused' with elecConsumed from the grid (input carrier) and provided into the building (output carrier), and operational cost and emissions (input carrier)", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -51,24 +47,19 @@ namespace Hive.IO.GhMergers
         /// <param name="DA">The DA object is used to retrieve from inputs and store in outputs.</param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            Water dh = null;
-            DA.GetData(0, ref dh);
+            Electricity elec = null;
+            DA.GetData(0, ref elec);
 
-            var heatGenerated = new List<double>();
-            DA.GetDataList(1, heatGenerated);
+            var elecPurchased = new List<double>();
+            DA.GetDataList(1, elecPurchased);
 
-            var supplyTemp = new List<double>();
-            DA.GetDataList(2, supplyTemp);
+            DirectElectricity substation = null;
+            DA.GetData(2, ref substation);
 
-            var returnTemp = new List<double>();
-            DA.GetDataList(3, returnTemp);
+            substation.SetInputOutput(elec, elecPurchased.ToArray());
 
-            HeatCoolingExchanger hx = null;
-            DA.GetData(4, ref hx);
+            DA.SetData(0, substation);
 
-            hx.SetInputOutput(dh, heatGenerated.ToArray(), supplyTemp.ToArray(), returnTemp.ToArray());
-
-            DA.SetData(0, hx);
         }
 
         /// <summary>
@@ -89,7 +80,7 @@ namespace Hive.IO.GhMergers
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("a6278ca2-bc25-4a01-a017-c3f746120270"); }
+            get { return new Guid("7644b488-19ed-4819-8195-bc1e24428cca"); }
         }
     }
 }

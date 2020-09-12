@@ -403,7 +403,7 @@ namespace Hive.IO.GHComponents
                 var specificInvestmentCost = double.Parse(emitter.SpecificCapitalCost);
                 var specificEmbodiedEmissions = double.Parse(emitter.SpecificEmbodiedEmissions);
                 var inletTemperature = double.Parse(emitter.SupplyTemperature);
-                var returnTemperature = double.Parse(emitter.SupplyTemperature);
+                var returnTemperature = double.Parse(emitter.ReturnTemperature);
                 
                 switch (emitter.Name)
                 {

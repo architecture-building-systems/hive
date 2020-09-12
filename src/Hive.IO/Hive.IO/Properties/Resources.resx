@@ -118,17 +118,8 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
-  <data name="CdTe" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CdTe.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="CIGS" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\CIGS.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="gc_efficiency" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\gc_efficiency.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="HIT" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\HIT.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="Hive_Logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Hive_Logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -144,12 +135,6 @@
   </data>
   <data name="IO_Visualizer" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IO_Visualizer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="monocristalline" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\monocristalline.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
-  <data name="polycristalline" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\polycristalline.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="pvt_efficiency" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\pvt_efficiency.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
