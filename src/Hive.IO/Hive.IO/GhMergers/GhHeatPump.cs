@@ -33,7 +33,6 @@ namespace Hive.IO.GhMergers
             pManager.AddGenericParameter("Electricity", "Electricity", "Electricity", GH_ParamAccess.item);
             pManager.AddNumberParameter("heatGenerated", "heatGenerated", "heatGenerated (kWh)", GH_ParamAccess.list);
             pManager.AddNumberParameter("suppTemp", "suppTemp", "suppTemp for water output. necessary to know for COP calculation", GH_ParamAccess.list);
-            pManager.AddNumberParameter("returnTemp", "returnTemp", "returnTemp. required for simple COP", GH_ParamAccess.list);
             pManager.AddBooleanParameter("simpleMode?", "simpleMode?", "simpleMode?", GH_ParamAccess.item, true);
 
             pManager.AddGenericParameter("ASHP", "ASHP", "Hive.IO.EnergySystems.AirSourceHeatPump", GH_ParamAccess.item);
@@ -65,18 +64,15 @@ namespace Hive.IO.GhMergers
             var supplyTemp = new List<double>();
             DA.GetDataList(3, supplyTemp);
 
-            var returnTemp = new List<double>();
-            DA.GetDataList(4, returnTemp);
-
             bool simple = true;
-            DA.GetData(5, ref simple);
+            DA.GetData(4, ref simple);
 
             AirSourceHeatPump ashp = null;
-            DA.GetData(6, ref ashp);
+            DA.GetData(5, ref ashp);
 
 
             if (simple)
-                ashp.SetInputOutputSimple(electricity, energyGenerated.ToArray(), supplyTemp.ToArray(), returnTemp.ToArray());
+                ashp.SetInputOutputSimple(electricity, air, energyGenerated.ToArray(), supplyTemp.ToArray());
             else
                 ashp.SetInputOutput(electricity, air, energyGenerated.ToArray(), supplyTemp.ToArray());
 
