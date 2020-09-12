@@ -34,6 +34,7 @@ namespace Hive.IO.GhDistributors
             pManager.AddGenericParameter("Hive.IO.EnergySystems.CombinedHeatPowert", "CHP", "Hive.IO.EnergySystems.CombinedHeatPower", GH_ParamAccess.item);
             pManager.AddGenericParameter("Hive.IO.EnergySystems.HeatExchanger", "HX", "Hive.IO.EnergySystems.HeatCoolExchanger, this one here is heat exchanger", GH_ParamAccess.item);
             pManager.AddGenericParameter("Hive.IO.EnergySystems.CoolExchanger", "CX", "Hive.IO.EnergySystems.HeatCoolExchanger, this one here is cooling exchanger", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive.IO.EnergySystem.DirectElectricity", "DirectElectricity", "Hive.IO.EnergySystems.DirectElectricity", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -48,6 +49,9 @@ namespace Hive.IO.GhDistributors
             HeatCoolingExchanger hx = null;
             HeatCoolingExchanger cx = null;
             HeatCoolingExchanger hcx = null;
+            DirectElectricity elec = new DirectElectricity(0.0, 0.0, 0.0, 1.0);
+
+            
 
             foreach (GH_ObjectWrapper convTech in inputObjects)
             {
@@ -73,7 +77,8 @@ namespace Hive.IO.GhDistributors
                     else if (hcx.IsCooling && !hcx.IsHeating)
                         cx = hcx;
                 }
-
+                //else if(convTech.Value is DirectElectricity)
+                //    elec= convTech.Value as DirectElectricity;
             }
 
             DA.SetData(0, ashp);
@@ -82,6 +87,7 @@ namespace Hive.IO.GhDistributors
             DA.SetData(3, chp);
             DA.SetData(4, hx);
             DA.SetData(5, cx);
+            DA.SetData(6, elec);
         }
 
         protected override System.Drawing.Bitmap Icon

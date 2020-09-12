@@ -7,13 +7,13 @@ using Hive.IO.EnergySystems;
 
 namespace Hive.IO.GhMergers
 {
-    public class GhElectricalSubstation : GH_Component
+    public class GhPurchasedElectricity : GH_Component
     {
         /// <summary>
         /// Initializes a new instance of the GhGridSubstation class.
         /// </summary>
-        public GhElectricalSubstation()
-          : base("Merger GridSubstation Hive", "HiveMergerGrid",
+        public GhPurchasedElectricity()
+          : base("Merger ElectricalSubstation Hive", "HiveMergerSubstation",
               "Description",
               "[hive]", "IO")
         {
@@ -30,7 +30,7 @@ namespace Hive.IO.GhMergers
 
             pManager.AddNumberParameter("elecPurchased", "elecPurchased", "elecDemand that will be purchased from the grid", GH_ParamAccess.list);
             
-            pManager.AddGenericParameter("ElectricalSubstation", "ElectricalSubstation", "ElectricalSubstation", GH_ParamAccess.item);
+            pManager.AddGenericParameter("DirectElectricity", "DirectElectricity", "DirectElectricity", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Hive.IO.GhMergers
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("GridSubstation", "GridSubstation", "GridSubstation, infused with elecConsumed from the grid (input carrier) and provided into the building (output carrier), and operational cost and emissions (input carrier)", GH_ParamAccess.item);
+            pManager.AddGenericParameter("DirectElectricity", "DirectElectricity", "DirectElectricity, 'fake' conversion tech 'infused' with elecConsumed from the grid (input carrier) and provided into the building (output carrier), and operational cost and emissions (input carrier)", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -53,8 +53,8 @@ namespace Hive.IO.GhMergers
             var elecPurchased = new List<double>();
             DA.GetDataList(1, elecPurchased);
 
-            ElectricalSubstation substation = null;
-            DA.GetData(4, ref substation);
+            DirectElectricity substation = null;
+            DA.GetData(2, ref substation);
 
             substation.SetInputOutput(elec, elecPurchased.ToArray());
 

@@ -115,7 +115,7 @@ namespace Hive.IO.DataHandling
         #endregion Costs
 
         #region Energy
-        // FIX ME what is embodied energy?
+        // energy that has been used for construction of materials. like kgCO2eq., but in kWh
         public double[] EmbodiedEnergyBuildingsMonthly(bool normalized)
         {
             // FIXME: plug in real values here...
@@ -125,13 +125,13 @@ namespace Hive.IO.DataHandling
         }
         public double EmbodiedEnergyBuildings(bool normalized) => EmbodiedEnergyBuildingsMonthly(normalized).Sum();
 
-        // operational carbon emissions from energy systems
-        public double[] OperationalEmissionsMonthly(bool normalized)
+        // embodied energy that has been used for construction of systems. like kgCO2eq., but in kWh
+        public double[] EmbodiedEnergySystemsMonthly(bool normalized)
         {
             double[] result = Results.TotalOperationalEmissionsMonthly;
             return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
         }
-        public double OperationalEmissions(bool normalized) => OperationalEmissionsMonthly(normalized).Sum();
+        public double EmbodiedEnergySystems(bool normalized) => EmbodiedEnergySystemsMonthly(normalized).Sum();
 
         // Ideal demands, a.k.a. final energy demand
         public double[] OperationEnergyBuildingsMonthly(bool normalized)
@@ -165,7 +165,7 @@ namespace Hive.IO.DataHandling
 
         // FIX ME what is embodied energy?
         public double TotalEmbodiedEnergy(bool normalized) =>
-            EmbodiedEnergyBuildings(normalized) + OperationalEmissions(normalized);
+            EmbodiedEnergyBuildings(normalized) + EmbodiedEnergySystems(normalized);
 
         // FIX ME wrong addition. final energy is subset of primary energy
         public double TotalOperationEnergy(bool normalized) =>

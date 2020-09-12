@@ -3,18 +3,18 @@
 namespace Hive.IO.EnergySystems
 {
     #region MiscSupply
-    public class ElectricalSubstation : ConversionTech
+    public class DirectElectricity : ConversionTech
     {
         public double Efficiency { get; private set; }
-        public ElectricalSubstation(double investmentCost, double embodiedGhg, double capacity, double efficiency)
+        public DirectElectricity(double investmentCost, double embodiedGhg, double capacity, double efficiency)
             : base(investmentCost, embodiedGhg, capacity, "kW", false, false, true)
         {
             this.Efficiency = efficiency;
-            base.Name = "Substation";
+            base.Name = "DirectEletricity";
         }
 
 
-        public void SetInputOutput(Electricity electricity, double[] finalElectricityDemand)
+        public void SetInputOutput(Electricity electricityIn, double[] finalElectricityDemand)
         {
             int horizon = finalElectricityDemand.Length;
             var purchasedElectricity = new double[horizon];
@@ -25,17 +25,17 @@ namespace Hive.IO.EnergySystems
             
             if (horizon == Misc.MonthsPerYear)
             {
-                elecPrice = Misc.GetAverageMonthlyValue(electricity.EnergyPrice);
-                elecEmissionsFactor = Misc.GetAverageMonthlyValue(electricity.GhgEmissionsFactor);
+                elecPrice = Misc.GetAverageMonthlyValue(electricityIn.EnergyPrice);
+                elecEmissionsFactor = Misc.GetAverageMonthlyValue(electricityIn.GhgEmissionsFactor);
             }
             else
             {
-                elecPrice = electricity.EnergyPrice;
-                elecEmissionsFactor = electricity.GhgEmissionsFactor;
+                elecPrice = electricityIn.EnergyPrice;
+                elecEmissionsFactor = electricityIn.GhgEmissionsFactor;
             }
-            base.InputCarrier = new Electricity(horizon, purchasedElectricity, elecPrice, elecEmissionsFactor);
+            base.InputCarrier = new Electricity(horizon, purchasedElectricity, elecPrice, elecEmissionsFactor, electricityIn.PrimaryEnergyFactor);
             base.OutputCarriers = new Carrier[1];
-            base.OutputCarriers[0] = new Electricity(horizon, finalElectricityDemand, null, null); // costs and emissions are already accounted for by the grid in the InputCarrier
+            base.OutputCarriers[0] = new Electricity(horizon, finalElectricityDemand, null, null, 1.0); // costs and emissions are already accounted for by the grid in the InputCarrier
         }
     }
 
@@ -87,11 +87,11 @@ namespace Hive.IO.EnergySystems
                 elecConsumed[t] = coolingGenerated[t] / COP;
             }
 
-            Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor);
+            Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor, electricityIn.PrimaryEnergyFactor);
             base.InputCarrier = electricityConsumedCarrier;
 
             base.OutputCarriers = new Carrier[1];
-            base.OutputCarriers[0] = new Water(horizon, coolingGenerated, null, null, tempCold);
+            base.OutputCarriers[0] = new Water(horizon, coolingGenerated, null, null, tempCold, 1.0);
             
         }
 
@@ -134,11 +134,11 @@ namespace Hive.IO.EnergySystems
 
             this.AmbientAir = new Air(horizon, null, null, null, airTemp); // how would I know air energy? i'd need that for exergy calculation?
 
-            Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor);
+            Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor, electricityIn.PrimaryEnergyFactor);
             base.InputCarrier = electricityConsumedCarrier;
 
             base.OutputCarriers = new Carrier[1];
-            base.OutputCarriers[0] = new Water(horizon, coolingGenerated, null, null, supplyTemp);
+            base.OutputCarriers[0] = new Water(horizon, coolingGenerated, null, null, supplyTemp, 1.0);
         }
     }
 
@@ -191,11 +191,11 @@ namespace Hive.IO.EnergySystems
                 elecConsumed[t] = heatingGenerated[t] / COP;
             }
 
-            Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor);
+            Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor, electricityIn.PrimaryEnergyFactor);
             base.InputCarrier = electricityConsumedCarrier;
 
             base.OutputCarriers = new Carrier[1];
-            base.OutputCarriers[0] = new Water(horizon, heatingGenerated, null, null, tempCold);
+            base.OutputCarriers[0] = new Water(horizon, heatingGenerated, null, null, tempCold, 1.0);
 
         }
 
@@ -236,11 +236,11 @@ namespace Hive.IO.EnergySystems
                 elecConsumed[t] = heatingGenerated[t] / COP;
             }
 
-            Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor);
+            Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor, electricityIn.PrimaryEnergyFactor);
             base.InputCarrier = electricityConsumedCarrier;
 
             base.OutputCarriers = new Carrier[1];
-            base.OutputCarriers[0] = new Water(horizon, heatingGenerated, null, null, supplyTemp);
+            base.OutputCarriers[0] = new Water(horizon, heatingGenerated, null, null, supplyTemp, 1.0);
         }
     }
 
@@ -288,9 +288,9 @@ namespace Hive.IO.EnergySystems
                 consumedEnergy[t] = generatedEnergy[t] / (1.0 - this.DistributionLosses);
             }
 
-            base.InputCarrier = new Water(horizon, consumedEnergy, energyPrice, energyGhg, supplyTemp);  // simplified assumption, that DH supply temp is already at the right level
+            base.InputCarrier = new Water(horizon, consumedEnergy, energyPrice, energyGhg, supplyTemp, districtFluid.PrimaryEnergyFactor);  // simplified assumption, that DH supply temp is already at the right level
 
-            base.OutputCarriers = new Carrier[1] { new Water(horizon, generatedEnergy, null, null, supplyTemp) };
+            base.OutputCarriers = new Carrier[1] { new Water(horizon, generatedEnergy, null, null, supplyTemp, 1.0) };
 
         }
 

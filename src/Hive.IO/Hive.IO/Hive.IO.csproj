@@ -127,7 +127,7 @@
     <Compile Include="GhMergers\GhCHP.cs" />
     <Compile Include="GhMergers\GhCoolingExchanger.cs" />
     <Compile Include="GhMergers\GhGasBoiler.cs" />
-    <Compile Include="GhMergers\GhElectricalSubstation.cs" />
+    <Compile Include="GhMergers\GhPurchasedElectricity.cs" />
     <Compile Include="GhMergers\GhHeatExchanger.cs" />
     <Compile Include="GhMergers\GhSolarTech.cs" />
     <Compile Include="GhParametricInputs\GhEmitter.cs" />
@@ -185,35 +185,10 @@
     <EmbeddedResource Include="EnergySystems\surface_tech_module_types.json" />
     <EmbeddedResource Include="EnergySystems\emitter_defaults.json" />
     <None Include="packages.config" />
-    <None Include="Resources\article_18.jpg" />
     <None Include="Resources\gc_efficiency.csv" />
     <None Include="Resources\pvt_efficiency.csv" />
     <None Include="Resources\pv_efficiency.csv" />
     <None Include="Resources\st_efficiency.csv" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\asf.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\fraunhofer.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\stardestroyer.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\CdTe.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\CIGS.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\HIT.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\monocristalline.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\polycristalline.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IO_Building.png" />
@@ -235,9 +210,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Hive_Logo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\GhMergerElectricalSubstation.bmp" />
   </ItemGroup>
   <ItemGroup>
     <Page Include="Forms\AshpProperties.xaml">
@@ -280,9 +252,6 @@
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\nxbba8l4_400x400.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

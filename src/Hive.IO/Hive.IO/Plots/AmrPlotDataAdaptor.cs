@@ -105,7 +105,7 @@ namespace Hive.IO.Plots
         }
 
         public override string Unit => Normalized ? "kWh/m²" : "kWh";
-        public override float EmbodiedSystems => (float)Results.OperationalEmissions(Normalized);
+        public override float EmbodiedSystems => (float)Results.EmbodiedEnergySystems(Normalized);
         public override float EmbodiedBuildings => (float)Results.EmbodiedEnergyBuildings(Normalized);
         public override float OperationSystems => (float)Results.OperationEnergySystems(Normalized);
         public override float OperationBuildings => (float)Results.OperationEnergyBuildings(Normalized);
@@ -114,7 +114,7 @@ namespace Hive.IO.Plots
         public override float Total => (float)Results.TotalEnergy(Normalized);
 
         public override float[] EmbodiedSystemsMonthly =>
-            Results.OperationalEmissionsMonthly(Normalized).ToFloatArray();
+            Results.EmbodiedEnergySystemsMonthly(Normalized).ToFloatArray();
 
         public override float[] EmbodiedBuildingsMonthly =>
             Results.EmbodiedEnergyBuildingsMonthly(Normalized).ToFloatArray();

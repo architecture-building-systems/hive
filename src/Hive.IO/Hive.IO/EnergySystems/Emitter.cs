@@ -21,8 +21,8 @@ namespace Hive.IO.EnergySystems
                 returnTemperatures[t] = returnTemperature;
             }
 
-            base.InletCarrier = new Water(Misc.HoursPerYear, null, null, null, inletTemperatures);
-            base.ReturnCarrier = new Water(Misc.HoursPerYear, null, null, null, returnTemperatures);
+            base.InletCarrier = new Water(Misc.HoursPerYear, null, null, null, inletTemperatures, 0.0);
+            base.ReturnCarrier = new Water(Misc.HoursPerYear, null, null, null, returnTemperatures, 0.0);
         }
 
         /// <summary>
