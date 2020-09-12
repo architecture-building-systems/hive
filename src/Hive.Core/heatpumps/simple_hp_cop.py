@@ -14,4 +14,7 @@ output:
 
 
 def main(eta, T_1, T_2):
+    kelvin = 273.15
+    T_1 += kelvin
+    T_2 += kelvin
     return eta * (T_1 / (T_1 - T_2))
