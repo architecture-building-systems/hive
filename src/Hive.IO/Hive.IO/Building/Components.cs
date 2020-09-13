@@ -37,10 +37,25 @@ namespace Hive.IO.Building
         /// Total Cost in [Currency]
         /// </summary>
         public double Cost { get; protected set; }
+
+
         /// <summary>
-        /// Total CO2 emissions [kgCO2eq.]
+        /// Specific CO2 emissions [kgCO2eq./m^2]
         /// </summary>
-        public double CO2 { get; protected set; }
+        public double SpecificCo2 { get; protected set; }
+
+        private double? _totalCo2 = null;
+
+        public double TotalCo2
+        {
+            get
+            {
+                if (_totalCo2 == null)
+                    _totalCo2 = this.SpecificCo2 * this.Area;
+
+                return (double) _totalCo2;
+            }
+        }
 
         private double? _baseArea = null;
         private double? _subComponentsArea = null;
@@ -116,13 +131,10 @@ namespace Hive.IO.Building
             {
                 UValue = siaRoom.UValueOpaque
             };
-            this.CO2 = siaRoom.OpaqueEmissions;
+            this.SpecificCo2 = siaRoom.OpaqueEmissions;
             this.Cost = siaRoom.OpaqueCost;
             this.Construction = opaqueConstruction;
-
         }
-
-
     }
 
 
@@ -147,7 +159,7 @@ namespace Hive.IO.Building
                 UValue = siaRoom.UValueTransparent,
                 Transmissivity = siaRoom.GValue
             };
-            base.CO2 = siaRoom.TransparentEmissions;
+            base.SpecificCo2 = siaRoom.TransparentEmissions;
             base.Cost = siaRoom.TransparentCost;
             base.Construction = transparentConstruction;
         }

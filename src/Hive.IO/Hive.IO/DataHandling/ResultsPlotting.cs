@@ -21,9 +21,8 @@ namespace Hive.IO.DataHandling
 
         public double[] EmbodiedEmissionsBuildingsMonthly(bool normalized)
         {
-            //// FIXME: plug in real values here...
-            double dummy = 100.0;
-            double[] result = new double[12].Select(r => dummy).ToArray();
+            double totalEmissions = this.Results.TotalEmbodiedConstructionEmissions;
+            double[] result = new double[Misc.MonthsPerYear].Select(r => totalEmissions / Misc.MonthsPerYear).ToArray();
             return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
         }
         public double EmbodiedEmissionsBuildings(bool normalized) => EmbodiedEmissionsBuildingsMonthly(normalized).Sum();
