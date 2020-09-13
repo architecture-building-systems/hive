@@ -162,5 +162,15 @@ namespace Hive.IO.Properties {
                 return ResourceManager.GetString("st_efficiency", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap tesseract {
+            get {
+                object obj = ResourceManager.GetObject("tesseract", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
     }
 }
