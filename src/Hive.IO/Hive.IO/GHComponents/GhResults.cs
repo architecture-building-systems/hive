@@ -68,8 +68,9 @@ namespace Hive.IO.GHComponents
             pManager.AddGenericParameter("InputEnergy", "InputEnergy", "Input energy (also: 'potentials', or 'source') into the EnergyHub. Of type 'Hive.EnergySystems.EnergyCarrier'.", GH_ParamAccess.list);
 
 
-            // 22, 23, 24, 25
-            pManager.AddNumberParameter("Q_T", "Q_T", "transmission heat losses", GH_ParamAccess.list);
+            // 22, 23, 24, 25, 26
+            pManager.AddNumberParameter("Q_T_opaque", "Q_T_opaque", "transmission heat losses from opaque construction", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Q_T_transparent", "Q_T_transparent", "Q_T_transparent", GH_ParamAccess.list);
             pManager.AddNumberParameter("Q_V", "Q_V", "ventilation heat losses", GH_ParamAccess.list);
             pManager.AddNumberParameter("Q_i", "Q_i", "Internal gains", GH_ParamAccess.list);
             pManager.AddNumberParameter("Q_s", "Q_s", "Solar heat gains", GH_ParamAccess.list);
@@ -198,19 +199,21 @@ namespace Hive.IO.GHComponents
             DA.GetDataList(20, outputEnergies); // pv electricity?
             DA.GetDataList(21, inputEnergies); // all consumed energy. includes solar?
 
-            var Qt = new List<double>();
+            var Qt_opaque = new List<double>();
+            var Qt_transparent = new List<double>();
             var Qv = new List<double>();
             var Qi = new List<double>();
             var Qs = new List<double>();
-            DA.GetDataList(22, Qt);
-            DA.GetDataList(23, Qv);
-            DA.GetDataList(24, Qi);
-            DA.GetDataList(25, Qs);
+            DA.GetDataList(22, Qt_opaque);
+            DA.GetDataList(25, Qt_transparent);
+            DA.GetDataList(24, Qv);
+            DA.GetDataList(25, Qi);
+            DA.GetDataList(26, Qs);
 
 
 
             building.Zones[0].SetEnergyDemandsMonthly(heatingMonthly.ToArray(), domesticHotWaterMonthly.ToArray(), coolingMonthly.ToArray(), electricityMonthly.ToArray());
-            building.Zones[0].SetLossesAndGains(Qt.ToArray(), Qv.ToArray(), Qi.ToArray(), Qs.ToArray());
+            building.Zones[0].SetLossesAndGains(Qt_opaque.ToArray(), Qt_transparent.ToArray(), Qv.ToArray(), Qi.ToArray(), Qs.ToArray());
             // writing data into results object
             Results results = new Results(building, conversionTechs, emitters, outputEnergies, inputEnergies);
             

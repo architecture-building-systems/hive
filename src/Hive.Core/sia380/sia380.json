@@ -32,10 +32,12 @@
         {"type": "float", "name": "Q_Heat", "nick-name": "Q_Heat", "description": "Monthly heating loads of a room in kWh.", "access": "list"},
         {"type": "float", "name": "Q_Cool", "nick-name": "Q_Cool", "description": "Monthly cooling loads of a room in kWh.", "access": "list"},
         {"type": "float", "name": "Q_Elec", "nick-name": "Q_Elec", "description": "Monthly electricity loads of a room in kWh.", "access": "list"},
-        {"type": "float", "name": "Q_T", "nick-name": "Q_T", "description": "Monthly transmission heat losses in Wh.", "access": "list"},
-        {"type": "float", "name": "Q_V", "nick-name": "Q_V", "description": "Monthly ventilation heat losses in Wh.", "access": "list"},
-        {"type": "float", "name": "Q_i", "nick-name": "Q_i", "description": "Monthly internal gains in Wh.", "access": "list"},
-        {"type": "float", "name": "Q_s", "nick-name": "Q_s", "description": "Monthly solar gains in Wh.", "access": "list"}
+        {"type": "float", "name": "Q_T", "nick-name": "Q_T", "description": "Monthly transmission heat losses in kWh.", "access": "list"},
+        {"type": "float", "name": "Q_V", "nick-name": "Q_V", "description": "Monthly ventilation heat losses in kWh.", "access": "list"},
+        {"type": "float", "name": "Q_i", "nick-name": "Q_i", "description": "Monthly internal gains in kWh.", "access": "list"},
+        {"type": "float", "name": "Q_s", "nick-name": "Q_s", "description": "Monthly solar gains in kWh.", "access": "list"},
+        {"type": "float", "name": "Q_T_opaque", "nick-name": "Q_T_opaque", "description": "Monthly transmission heat losses through opaque envelope in kWh", "access": "list"},
+        {"type": "float", "name": "Q_T_transparent", "nick-name": "Q_T_transp", "description": "Monthly transmission heat losses through transparent envelope in kWh", "access": "list"}
       ]
     },
     {

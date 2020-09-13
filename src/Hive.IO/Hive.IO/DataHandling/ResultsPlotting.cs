@@ -181,15 +181,15 @@ namespace Hive.IO.DataHandling
         // ingoing energy
         public float SolarGains => (float)Results.TotalSolarGains;
         public float InternalGains => (float)Results.TotalInternalGains;
-        public float PrimaryEnergy => 0.0f; //inputCarriers from conversionTech, except renewable tech (solar)
+        public float PrimaryEnergy => (float)Results.TotalPrimaryEnergyMonthly.Sum(); //inputCarriers from conversionTech, except renewable tech (solar)
         public float RenewableEnergy => 0.0f; //inputCarriers from 
         
         // outgoing energy
-        public float Electricity => 0.0f; // electricity loads?
+        public float Electricity => (float)Results.TotalFinalElectricityMonthly.Sum(); 
         public float VentilationLosses => (float)Results.TotalVentilationHeatLosses;
-        public float EnvelopeLosses => (float)Results.TotalTransmissionHeatLosses;
-        public float WindowsLosses => 0f; // ok, change the python code to get envelope separate from window losses
-        public float SystemLosses => 0f; // what's the difference to primary transfer losses?
+        public float EnvelopeLosses => (float)Results.TotalOpaqueTransmissionHeatLosses;
+        public float WindowsLosses => (float)Results.TotalWindowTransmissionHeatLosses;
+        public float SystemLosses => (float)Results.TotalSystemLosses; 
         public float PrimaryTransferLosses => 0f; // difference between primary energy and final loads?
 
 
