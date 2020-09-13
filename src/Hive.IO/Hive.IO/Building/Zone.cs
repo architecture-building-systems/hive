@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-
+using System.Runtime.CompilerServices;
 using rg = Rhino.Geometry;
 
 namespace Hive.IO.Building
@@ -137,10 +137,10 @@ namespace Hive.IO.Building
 
 
         #region Losses and Gains
-        public double [] TransmissionHeatLosses { get; private set; }
-        public double [] VentilationHeatLosses { get; private set; }
-        public double [] InternalHeatGains { get; private set; }
-        public double [] SolarGains { get; private set; }
+        public double[] TransmissionHeatLosses { get; private set; }
+        public double[] VentilationHeatLosses { get; private set; }
+        public double[] InternalHeatGains { get; private set; }
+        public double[] SolarGains { get; private set; }
         #endregion
 
 
@@ -207,8 +207,8 @@ namespace Hive.IO.Building
                     else
                         this.IsFloorInZone = false;
                 }
-            }           
-            
+            }
+
             // only IsClosed needs to strictly guaranteed in all cases
             this.IsClosed = false;
             this.IsConvex = false;
@@ -253,9 +253,7 @@ namespace Hive.IO.Building
 
             this.IsValidEPlus = CheckValidity(this.IsClosed, this.IsConvex, this.IsLinear, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsNoSelfIntersect);
             this.IsValid = (this.IsClosed && this.IsWindowsOnZone && this.IsWindowsNoSelfIntersect) ? true : false;
-            this.ErrorText = String.Format("IsLinear: {0} \n " + "IsConvex: {1} \n " + "IsClosed: {2} \n " + "IsPlanar: {3} \n "
-    + "IsWindowsOnZone: {4} \n " + "IsWindowsSelfIntersect: {5} \n" + "IsFloorInZone: {6}",
-    this.IsLinear, this.IsConvex, this.IsClosed, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsNoSelfIntersect, this.IsFloorInZone);
+            this.ErrorText = String.Format("IsLinear: {0} \n " + "IsConvex: {1} \n " + "IsClosed: {2} \n " + "IsPlanar: {3} \n " + "IsWindowsOnZone: {4} \n " + "IsWindowsSelfIntersect: {5} \n" + "IsFloorInZone: {6}", this.IsLinear, this.IsConvex, this.IsClosed, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsNoSelfIntersect, this.IsFloorInZone);
 
             // define standard building physical properties upon inizialization. 
             // Can be changed later via Windows Form
@@ -307,15 +305,15 @@ namespace Hive.IO.Building
 
         public void SetLossesAndGains(double[] Qt, double[] Qv, double[] Qi, double[] Qs)
         {
-            this.TransmissionHeatLosses =  new double[Misc.MonthsPerYear];
+            this.TransmissionHeatLosses = new double[Misc.MonthsPerYear];
             this.VentilationHeatLosses = new double[Misc.MonthsPerYear];
             this.InternalHeatGains = new double[Misc.MonthsPerYear];
             this.SolarGains = new double[Misc.MonthsPerYear];
 
             Qt.CopyTo(this.TransmissionHeatLosses, 0);
-            Qv.CopyTo(this.VentilationHeatLosses,0);
+            Qv.CopyTo(this.VentilationHeatLosses, 0);
             Qi.CopyTo(this.InternalHeatGains, 0);
-            Qs.CopyTo(this.SolarGains,0);
+            Qs.CopyTo(this.SolarGains, 0);
         }
 
         #endregion
@@ -361,6 +359,7 @@ namespace Hive.IO.Building
             return isLinear;
         }
 
+
         /// <summary>
         /// Check the convexity of the zone. Hive only allows convex spaces, for simplicity.
         /// </summary>
@@ -404,6 +403,7 @@ namespace Hive.IO.Building
             return true;
         }
 
+
         /// <summary>
         /// Check the closedness of the brep. No open breps allowed, since a the brep is used to define a thermal space.
         /// </summary>
@@ -413,6 +413,7 @@ namespace Hive.IO.Building
         {
             return brep.IsSolid;
         }
+
 
         /// <summary>
         /// Check for planarity of surfaces
@@ -453,16 +454,24 @@ namespace Hive.IO.Building
                 rg.Point3d[] intersectionPts;
                 //rg.Intersect.Intersection.BrepSurface(brep, srf, tolerance, out intersectionCrvs, out intersectionPts);
                 rg.Intersect.Intersection.BrepBrep(brep, srfbrep, tolerance, out intersectionCrvs, out intersectionPts);
+                if (intersectionCrvs.Length == 0)
+                    return false;
+
                 rg.Curve curve = intersectionCrvs[0];
                 if (intersectionCrvs.Length > 1)
                 {
-                    rg.Curve [] crv = rg.Curve.JoinCurves(intersectionCrvs);
+                    rg.Curve[] crv = rg.Curve.JoinCurves(intersectionCrvs);
                     if (crv.Length > 1 && !crv[0].IsClosed)
                         return false;
-                    else 
+                    else
                         curve = crv[0];
                 }
-                double curveArea = rg.AreaMassProperties.Compute(curve).Area;
+
+                rg.AreaMassProperties amp = rg.AreaMassProperties.Compute(curve);
+                if(amp == null)
+                    return false;
+                double curveArea = amp.Area;
+
                 double srfArea = rg.AreaMassProperties.Compute(srf).Area;
                 if (Math.Round(curveArea, roundingDecimals) != Math.Round(srfArea, roundingDecimals))
                     return false;
@@ -476,44 +485,49 @@ namespace Hive.IO.Building
             return true;
         }
 
+        private static bool CheckWindowOnZone(rg.Brep brep, rg.BrepFace window, double tolerance)
+        {
+            int roundingDecimals = tolerance.ToString().Split('.')[1].Length;
 
-        //// should be part of CheckWindowsOnZone to reduce compuation. otherwise loops run twice
-        //private static bool CheckWindowsAndZoneAndAssignWindowsToWallOrRoof(List<Wall> walls, List<Roof> roofs, List<Window> windows, double tolerance)
-        //{
-        //    int roundingDecimals = tolerance.ToString().Split('.')[1].Length;
+            // check for Windows on Zone
+            bool equalArea = false;
 
-        //    // check for Windows on Zone
-        //    bool[] equalAreas = new bool[windows.Count()];
-        //    for (int i = 0; i < windows.Count(); i++)
-        //    {
-        //        rg.BrepFace srf = windows[i].BrepGeometry;
-        //        rg.Brep srfbrep = rg.Brep.CreateTrimmedSurface(srf, srf.UnderlyingSurface(), tolerance);
-        //        rg.Curve[] intersectionCrvs;
-        //        rg.Point3d[] intersectionPts;
-        //        //rg.Intersect.Intersection.BrepSurface(brep, srf, tolerance, out intersectionCrvs, out intersectionPts);
-        //        rg.Intersect.Intersection.BrepBrep(brep, srfbrep, tolerance, out intersectionCrvs, out intersectionPts);
-        //        rg.Curve curve = intersectionCrvs[0];
-        //        if (intersectionCrvs.Length > 1)
-        //        {
-        //            rg.Curve[] crv = rg.Curve.JoinCurves(intersectionCrvs);
-        //            if (crv.Length > 1 && !crv[0].IsClosed)
-        //                return false;
-        //            else
-        //                curve = crv[0];
-        //        }
-        //        double curveArea = rg.AreaMassProperties.Compute(curve).Area;
-        //        double srfArea = rg.AreaMassProperties.Compute(srf).Area;
-        //        if (Math.Round(curveArea, roundingDecimals) != Math.Round(srfArea, roundingDecimals))
-        //            return false;
-        //        else
-        //            equalAreas[i] = true;
-        //    }
-        //    foreach (bool equalArea in equalAreas)
-        //        if (!equalArea)
-        //            return false;
+            rg.BrepFace srf = window;
+            rg.Brep srfbrep = rg.Brep.CreateTrimmedSurface(srf, srf.UnderlyingSurface(), tolerance);
+            rg.Curve[] intersectionCrvs;
+            rg.Point3d[] intersectionPts;
+            //rg.Intersect.Intersection.BrepSurface(brep, srf, tolerance, out intersectionCrvs, out intersectionPts);
+            rg.Intersect.Intersection.BrepBrep(brep, srfbrep, tolerance, out intersectionCrvs, out intersectionPts);
+            if (intersectionCrvs.Length == 0)
+                return false;
+            rg.Curve curve = intersectionCrvs[0];
+            if (intersectionCrvs.Length > 1)
+            {
+                rg.Curve[] crv = rg.Curve.JoinCurves(intersectionCrvs);
+                if (crv.Length > 1 && !crv[0].IsClosed)
+                    return false;
+                else
+                    curve = crv[0];
+            }
 
-        //    return true;
-        //}
+            double curveArea, srfArea;
+            rg.AreaMassProperties amp = rg.AreaMassProperties.Compute(curve);
+            if (amp == null)
+                return false;
+            curveArea = rg.AreaMassProperties.Compute(curve).Area;
+            srfArea = rg.AreaMassProperties.Compute(srf).Area;
+
+            
+            if (Math.Round(curveArea, roundingDecimals) != Math.Round(srfArea, roundingDecimals))
+                return false;
+            else
+                equalArea = true;
+
+            if (!equalArea)
+                return false;
+
+            return true;
+        }
 
 
         // !!!!!!!!!!! TO DO
@@ -546,6 +560,7 @@ namespace Hive.IO.Building
             return true;
         }
 
+
         /// <summary>
         /// Check if all conditions are fulffilled.
         /// </summary>
@@ -563,32 +578,12 @@ namespace Hive.IO.Building
         /// Identifies and initializes building components from input geometries
         /// </summary>
         /// <param name="zone_geometry"></param>
-        /// <param name="openings_geometry"></param>
+        /// <param name="window_geometry"></param>
         /// <param name="shading_geometry"></param>
         /// <returns></returns>
-        private static Tuple<Wall[], Ceiling[], Roof[], Floor[], Window[], Shading[]>
-            IdentifyComponents(rg.Brep zone_geometry, rg.BrepFace[] openings_geometry, rg.BrepFace[] shading_geometry)
+        private Tuple<Wall[], Ceiling[], Roof[], Floor[], Window[], Shading[]>
+            IdentifyComponents(rg.Brep zone_geometry, rg.BrepFace[] window_geometry, rg.BrepFace[] shading_geometry)
         {
-            Window[] openings = new Window[0];
-            Shading[] shadings = new Shading[0];
-            if (openings_geometry != null && openings_geometry.Length > 0)
-            {
-                openings = new Window[openings_geometry.Length];
-                for (int i = 0; i < openings.Length; i++)
-                {
-                    openings[i] = new Window(openings_geometry[i]);
-                }
-            }
-
-            if (shading_geometry != null && shading_geometry.Length > 0)
-            {
-                shadings = new Shading[shading_geometry.Length];
-                for (int i = 0; i < shading_geometry.Length; i++)
-                {
-                    shadings[i] = new Shading(shading_geometry[i]);
-                }
-            }
-
             List<int> wall_indices = new List<int>();
             List<int> ceiling_indices = new List<int>();
             List<int> roof_indices = new List<int>();
@@ -633,7 +628,35 @@ namespace Hive.IO.Building
                 floors[i] = new Floor(zone_geometry.Faces[floor_indices[i]]);
 
 
-            return new Tuple<Wall[], Ceiling[], Roof[], Floor[], Window[], Shading[]>(walls, ceilings, roofs, floors, openings, shadings);
+            var windowList = new List<Window>();
+            if (window_geometry != null && window_geometry.Length > 0)
+            {
+                foreach (var w in walls)
+                {
+                    w.SubComponents = new List<Component>();
+                    foreach (var win in window_geometry)
+                    {
+                        if (CheckWindowOnZone(w.BrepGeometry, win, this.Tolerance))     // how to return error message, if window is not on zone without double running this routine? (in constructor, CheckWindowSSSOnZone())
+                        {
+                            Window window = new Window(win);
+                            windowList.Add(window);
+                            w.SubComponents.Add(window);
+                        }
+                    }
+                }
+            }
+
+            Shading[] shadings = new Shading[0];
+            if (shading_geometry != null && shading_geometry.Length > 0)
+            {
+                shadings = new Shading[shading_geometry.Length];
+                for (int i = 0; i < shading_geometry.Length; i++)
+                {
+                    shadings[i] = new Shading(shading_geometry[i]);
+                }
+            }
+
+            return new Tuple<Wall[], Ceiling[], Roof[], Floor[], Window[], Shading[]>(walls, ceilings, roofs, floors, windowList.ToArray(), shadings);
         }
         #endregion
     }
