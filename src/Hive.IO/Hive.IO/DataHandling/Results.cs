@@ -68,6 +68,8 @@ namespace Hive.IO.DataHandling
         public double TotalVentilationHeatLosses { get; private set; }
         public double TotalInternalGains { get; private set; }
         public double TotalSolarGains { get; private set; }
+
+        public double TotalSystemLosses { get; private set; }
         #endregion
 
 
@@ -219,6 +221,7 @@ namespace Hive.IO.DataHandling
             this.TotalPrimaryEnergyMonthly = GetTotalMonthlyPrimaryLoads(conversionTech);
             this.TotalOperationalEmissionsMonthly = GetTotalMonthlyOperationalEmissions(conversionTech);
 
+
             //this.TotalFinalCoolingHourly = new double[Misc.HoursPerYear];
             //this.TotalFinalHeatingHourly = new double[Misc.HoursPerYear];
             //this.TotalFinalElectricityHourly = new double[Misc.HoursPerYear];
@@ -229,7 +232,7 @@ namespace Hive.IO.DataHandling
             this.TotalVentilationHeatLosses = GetTotalGainsOrLosses(building, "Qv");
             this.TotalInternalGains = GetTotalGainsOrLosses(building, "Qi");
             this.TotalSolarGains = GetTotalGainsOrLosses(building, "Qs");
-
+            this.TotalSystemLosses = GetTotalMonthlySystemLosses(this, this.TotalPrimaryEnergyMonthly);
 
             this.SupplyNames = null;
             this.SupplyTypes = null;
@@ -494,6 +497,21 @@ namespace Hive.IO.DataHandling
             return result;
         }
 
+
+        public static double GetTotalMonthlySystemLosses(Hive.IO.DataHandling.Results results, double[] monthlyPrimaryEnergy)
+        {
+            var sysLosses = new double[Misc.MonthsPerYear];
+            for (int i = 0; i < sysLosses.Length; i++)
+            {
+                sysLosses[i] = results.TotalPrimaryEnergyMonthly[i]
+                               - results.TotalFinalCoolingMonthly[i]
+                               - results.TotalFinalHeatingMonthly[i]
+                               - results.TotalFinalDomesticHotWaterMonthly[i]
+                               - results.TotalFinalElectricityMonthly[i];
+            }
+
+            return sysLosses.Sum();
+        }
 
 
         public static double[] GetTotalMonthlyOperationalEmissions(List<ConversionTech> conversionTech)

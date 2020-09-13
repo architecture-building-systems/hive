@@ -304,7 +304,9 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         Q_Elec[month] = Phi_L_tot * t_L[month] + Phi_A_tot * t_A[month]   # lighting and utility loads. simplification, because utility and lighting have efficiencies (inefficiencies are heat loads). I would need to know that to get full electricity loads
 
     tokWh = 1000.0
-    return [x / tokWh for x in Q_Heat], [x / tokWh for x in Q_Cool], [x / tokWh for x in Q_Elec], Q_T, Q_V, Q_i, Q_s, QT_opaque, QT_transparent
+    return [x / tokWh for x in Q_Heat], [x / tokWh for x in Q_Cool], [x / tokWh for x in Q_Elec], \
+           [x / tokWh for x in Q_T], [x / tokWh for x in Q_V], [x / tokWh for x in Q_i], \
+           [x / tokWh for x in Q_s], [x / tokWh for x in QT_opaque], [x / tokWh for x in QT_transparent]
 
 
 def calc_eta_g(Q_T_month, Q_V_month, gamma, tau):
