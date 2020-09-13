@@ -52,18 +52,18 @@ namespace Hive.IO.GHComponents
             }
             else
             {
-                EnergyCarrier[] inputCarriers = new EnergyCarrier[6];
-                inputCarriers[0] = new Gas(Misc.HoursPerYear, potentials.NaturalGasAvailability, potentials.NaturalGasPrice, potentials.NaturalGasEmissions);
+                Carrier[] inputCarriers = new Carrier[6];
+                inputCarriers[0] = new Gas(Misc.HoursPerYear, potentials.NaturalGasAvailability, potentials.NaturalGasPrice, potentials.NaturalGasEmissions, Misc.PEFNaturalGas);
                 inputCarriers[0].Name = potentials.NaturalGasName;
-                inputCarriers[1] = new Gas(Misc.HoursPerYear, potentials.BioGasAvailability, potentials.BioGasPrice, potentials.BioGasEmissions);
+                inputCarriers[1] = new Gas(Misc.HoursPerYear, potentials.BioGasAvailability, potentials.BioGasPrice, potentials.BioGasEmissions, Misc.PEFBioGas);
                 inputCarriers[1].Name = potentials.BioGasName;
-                inputCarriers[2] = new Pellets(Misc.HoursPerYear, potentials.WoodPelletsAvailability, potentials.WoodPelletsPrice, potentials.WoodPelletsEmissions);
+                inputCarriers[2] = new Pellets(Misc.HoursPerYear, potentials.WoodPelletsAvailability, potentials.WoodPelletsPrice, potentials.WoodPelletsEmissions, Misc.PEFWoodPellets);
                 inputCarriers[2].Name = potentials.WoodPelletsName;
-                inputCarriers[3] = new Water(Misc.HoursPerYear, potentials.DistrictHeatingAvailability, potentials.DistrictHeatingPrice, potentials.DistrictHeatingEmissions, potentials.DistrictHeatingSupplyTemp);
+                inputCarriers[3] = new Water(Misc.HoursPerYear, potentials.DistrictHeatingAvailability, potentials.DistrictHeatingPrice, potentials.DistrictHeatingEmissions, potentials.DistrictHeatingSupplyTemp, Misc.PEFBioGas);
                 inputCarriers[3].Name = potentials.DistrictHeatingName;
-                inputCarriers[4] = new Water(Misc.HoursPerYear, potentials.DistrictCoolingAvailability, potentials.DistrictCoolingPrice, potentials.DistrictCoolingEmissions, potentials.DistrictCoolingSupplyTemp);
+                inputCarriers[4] = new Water(Misc.HoursPerYear, potentials.DistrictCoolingAvailability, potentials.DistrictCoolingPrice, potentials.DistrictCoolingEmissions, potentials.DistrictCoolingSupplyTemp, Misc.PEFBioGas);
                 inputCarriers[4].Name = potentials.DistrictCoolingName;
-                inputCarriers[5] = new Electricity(Misc.HoursPerYear, potentials.GridElectricityAvailability, potentials.GridElectricityPrice, potentials.GridElectricityEmissions);
+                inputCarriers[5] = new Electricity(Misc.HoursPerYear, potentials.GridElectricityAvailability, potentials.GridElectricityPrice, potentials.GridElectricityEmissions, Misc.PEFElectricitySwiss);
                 inputCarriers[5].Name = potentials.GridElectricityName;
                 environment.SetEnergyPotentials(inputCarriers);
             }

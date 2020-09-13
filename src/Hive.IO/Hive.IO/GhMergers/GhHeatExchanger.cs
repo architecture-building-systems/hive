@@ -35,7 +35,6 @@ namespace Hive.IO.GhMergers
             pManager.AddNumberParameter("returnTemp", "returnTemp", "returnTemp", GH_ParamAccess.list);
 
             pManager.AddGenericParameter("HeatExchanger", "HeatExchanger", "HeatExchanger", GH_ParamAccess.item);
-
         }
 
         /// <summary>

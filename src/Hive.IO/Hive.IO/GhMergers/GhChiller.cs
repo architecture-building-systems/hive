@@ -30,8 +30,7 @@ namespace Hive.IO.GhMergers
             pManager.AddGenericParameter("Air", "Air", "Air energy carrier from weather file", GH_ParamAccess.item);
             pManager.AddGenericParameter("Electricity", "Electricity", "Electricity", GH_ParamAccess.item);
             pManager.AddNumberParameter("coolingGenerated", "coolingGenerated", "coolingGenerated (kWh)", GH_ParamAccess.list);
-            pManager.AddNumberParameter("suppTemp", "suppTemp", "suppTemp for water output. necessary to know for COP calculation", GH_ParamAccess.list);
-            pManager.AddNumberParameter("returnTemp", "returnTemp", "returnTemp. required for simple COP", GH_ParamAccess.list);
+            pManager.AddNumberParameter("condenserTemp", "condenserTemp", "on coil condenserTemp for water output. necessary to know for COP calculation", GH_ParamAccess.list);
             pManager.AddBooleanParameter("simpleMode?", "simpleMode?", "simpleMode?", GH_ParamAccess.item, true);
 
             pManager.AddGenericParameter("Chiller", "Chiller", "Hive.IO.EnergySystems.Chiller", GH_ParamAccess.item);
@@ -63,18 +62,15 @@ namespace Hive.IO.GhMergers
             var supplyTemp = new List<double>();
             DA.GetDataList(3, supplyTemp);
 
-            var returnTemp = new List<double>();
-            DA.GetDataList(4, returnTemp);
-
             bool simple = true;
-            DA.GetData(5, ref simple);
+            DA.GetData(4, ref simple);
 
             Chiller chiller = null;
-            DA.GetData(6, ref chiller);
+            DA.GetData(5, ref chiller);
 
 
             if (simple)
-                chiller.SetInputOutputSimple(electricity, energyGenerated.ToArray(), returnTemp.ToArray(), supplyTemp.ToArray());
+                chiller.SetInputOutputSimple(electricity, air, energyGenerated.ToArray(), supplyTemp.ToArray());
             else
                 chiller.SetInputOutput(electricity, air, energyGenerated.ToArray(), supplyTemp.ToArray());
 

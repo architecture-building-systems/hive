@@ -45,11 +45,10 @@ namespace Hive.IO.EnergySystems
                 gasEmissionsFactor = gasInput.GhgEmissionsFactor;
             }
 
-            Gas gasConsumedCarrier = new Gas(horizon, gasConsumed, gasPrice, gasEmissionsFactor);
-            base.InputCarrier = gasConsumedCarrier; // infused with how much gas is consumed. input Gas carrier has no Energy information
+            base.InputCarrier = new Gas(horizon, gasConsumed, gasPrice, gasEmissionsFactor, gasInput.PrimaryEnergyFactor); // infused with how much gas is consumed. input Gas carrier has no Energy information
 
-            base.OutputCarriers = new EnergyCarrier[1];
-            base.OutputCarriers[0] = new Water(horizon, heatingGenerated, null, null, supplyTemperature);
+            base.OutputCarriers = new Carrier[1];
+            base.OutputCarriers[0] = new Water(horizon, heatingGenerated, null, null, supplyTemperature, 1.0);
         }
     }
 
@@ -103,29 +102,11 @@ namespace Hive.IO.EnergySystems
                 gasEmissionsFactor = gasInput.GhgEmissionsFactor;
             }
 
-            Gas gasConsumedCarrier = new Gas(horizon, gasConsumed, gasPrice, gasEmissionsFactor);
-            base.InputCarrier = gasConsumedCarrier; // infused with how much gas is consumed. input Gas carrier has no Energy information
+            base.InputCarrier = new Gas(horizon, gasConsumed, gasPrice, gasEmissionsFactor, Misc.PEFNaturalGas);  // infused with how much gas is consumed. input Gas carrier has no Energy information
 
-            base.OutputCarriers = new EnergyCarrier[2];
-            base.OutputCarriers[0] = new Water(horizon, heatingGenerated, null, null, supplyTemperature);
-            base.OutputCarriers[1] = new Electricity(horizon, elecGenerated, null, null);
+            base.OutputCarriers = new Carrier[2];
+            base.OutputCarriers[0] = new Water(horizon, heatingGenerated, null, null, supplyTemperature, 1.0);
+            base.OutputCarriers[1] = new Electricity(horizon, elecGenerated, null, null, 1.0);
         }
-
-
-
-
-        public void SetInput(Gas gasInput)
-        {
-            base.InputCarrier = gasInput;
-        }
-
-        public void SetOutput(int horizon, double[] heatingGenerated, double[] electricityGenerated, double[] energyCost, double[] ghgEmissions, double[] supplyTemperature)
-        {
-            base.OutputCarriers = new EnergyCarrier[2];
-            base.OutputCarriers[0] = new Water(horizon, heatingGenerated, energyCost, ghgEmissions, supplyTemperature);
-            base.OutputCarriers[1] = new Electricity(horizon, electricityGenerated, energyCost, ghgEmissions);
-
-        }
-
     }
 }

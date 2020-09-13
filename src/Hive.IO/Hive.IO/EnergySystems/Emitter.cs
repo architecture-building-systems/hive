@@ -21,8 +21,8 @@ namespace Hive.IO.EnergySystems
                 returnTemperatures[t] = returnTemperature;
             }
 
-            base.InletCarrier = new Water(Misc.HoursPerYear, null, null, null, inletTemperatures);
-            base.ReturnCarrier = new Water(Misc.HoursPerYear, null, null, null, returnTemperatures);
+            base.InletCarrier = new Water(Misc.HoursPerYear, null, null, null, inletTemperatures, 0.0);
+            base.ReturnCarrier = new Water(Misc.HoursPerYear, null, null, null, returnTemperatures, 0.0);
         }
 
         /// <summary>
@@ -112,11 +112,11 @@ namespace Hive.IO.EnergySystems
         /// <summary>
         /// Input stream. For most emitters, this would be water
         /// </summary>
-        public EnergyCarrier InletCarrier { get; protected set; }
+        public Carrier InletCarrier { get; protected set; }
         /// <summary>
         /// Output streams. Must be of same type as InletCarrier (?)
         /// </summary>
-        public EnergyCarrier ReturnCarrier { get; protected set; }
+        public Carrier ReturnCarrier { get; protected set; }
 
 
 

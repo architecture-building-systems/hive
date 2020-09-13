@@ -20,10 +20,13 @@ output:
 import math
 
 def main(Q_th, T_supply, T_amb, pi_1, pi_2, pi_3, pi_4):
+    kelvin = 273.15
+    T_supply_kelvin = T_supply + kelvin
     horizon = len(T_amb) if len(T_amb) < len(Q_th) else len(Q_th)
     COP = [0] * horizon
     x_el = [0] * horizon
     for i in range(horizon):
-        COP[i] = pi_1 * math.exp(pi_2 * (T_supply - T_amb[i])) + pi_3 * math.exp(pi_4 * (T_supply - T_amb[i]))
+        T_amb_kelvin = T_amb[i] + kelvin
+        COP[i] = pi_1 * math.exp(pi_2 * (T_supply_kelvin - T_amb_kelvin)) + pi_3 * math.exp(pi_4 * (T_supply_kelvin - T_amb_kelvin))
         x_el[i] = Q_th[i] / COP[i]
     return x_el, COP

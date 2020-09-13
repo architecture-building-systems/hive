@@ -16,7 +16,17 @@ from __future__ import division
 import math
 
 
-def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_areas, surface_type, surface_irradiance):
+def cleanDictForNaN(d):
+    # a = d.values()
+    # b = d.keys()
+    for i in d:
+        if math.isnan(d[i]) or d[i] == "NaN":
+            d[i] = 0.0
+
+    return d
+
+
+def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_areas, surface_type, surface_irradiance_obstructed, surface_irradiance_unobstructed):
     '''
     Computes monthly heating, cooling and electricity demand for a thermal zone, based on SIA 380.1
     :param room_properties: room properties in json format
@@ -148,6 +158,11 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         _____________________________________________________________________________________
     """
 
+    if not surface_irradiance_obstructed:
+        surface_irradiance = surface_irradiance_unobstructed
+    else:
+        surface_irradiance = surface_irradiance_obstructed
+
     rho = 1.2       # Luftdichte in kg/m^3
     c_p = 1005      # Spez. Wärmekapazität Luft in J/(kgK)
     hours_per_day = 24
@@ -156,6 +171,8 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
     t = [(hours_per_day * days) for days in days_per_month]   # length of calculation period (hours per month) [h]
 
     # read room properties from sia2024
+    room_properties = cleanDictForNaN(room_properties)
+
     # f_sh = 0.9  # sia2024, p.12, 1.3.1.9 Reduktion solare Wärmeeinträge
     # theta_i_summer = room_properties["Raumlufttemperatur Auslegung Kuehlung (Sommer)"]
     # theta_i_winter = room_properties["Raumlufttemperatur Auslegung Heizen (Winter)"]

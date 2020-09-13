@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Linq;
+using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -20,32 +22,49 @@ namespace Hive.IO.DataHandling
     /// </summary>
     public class Results
     {
-        #region constants
 
-        private const int months = 12;
-        private const int hours = 8760;
-
-        #endregion
 
 
         #region General
+
         public double InterestRate { get; private set; }
+
+        // implemented in DataHandling.ResultsPlotting
         public double TotalFloorArea { get; private set; }
+
         #endregion
 
 
         #region Total Loads
-        public double[] TotalElectricityMonthly { get; private set; }
-        public double[] TotalElectricityHourly { get; private set; }
 
-        public double[] TotalCoolingMonthly { get; private set; }
-        public double[] TotalCoolingHourly { get; private set; }
+        // implemented in Plots.DemandMonthlyPlot
+        public double[] TotalFinalElectricityMonthly { get; private set; }
+        public double[] TotalFinalCoolingMonthly { get; private set; }
+        public double[] TotalFinalHeatingMonthly { get; private set; }
+        public double[] TotalFinalDomesticHotWaterMonthly { get; private set; }
 
-        public double[] TotalHeatingMonthly { get; private set; }
-        public double[] TotalHeatingHourly { get; private set; }
+        public double [] TotalPrimaryEnergyMonthly { get; private set; }
 
-        public double[] TotalDHWMonthly { get; private set; }
-        public double[] TotalDHWHourly { get; private set; }
+
+        //public double[] TotalFinalElectricityHourly { get; private set; }
+        //public double[] TotalFinalCoolingHourly { get; private set; }
+        //public double[] TotalFinalHeatingHourly { get; private set; }
+        //public double[] TotalFinalDomesticHotWaterHourly { get; private set; }
+        #endregion
+
+
+        #region Total Emissions
+
+        public double [] TotalOperationalEmissionsMonthly { get; private set; }
+
+        #endregion
+
+
+        #region Total Losses and Gains
+        public double TotalTransmissionHeatLosses { get; private set; }
+        public double TotalVentilationHeatLosses { get; private set; }
+        public double TotalInternalGains { get; private set; }
+        public double TotalSolarGains { get; private set; }
         #endregion
 
 
@@ -103,7 +122,7 @@ namespace Hive.IO.DataHandling
         /// <summary>
         /// Operation schedule per technology and month. Unit defined in 'SupplyOperationUnit'
         /// </summary>
-        public double [][] SupplyOperationMonthly { get; private set; }
+        public double[][] SupplyOperationMonthly { get; private set; }
         /// <summary>
         /// Defining unit of operation per technology, e.g. "kWh", "Wh", ...
         /// </summary>
@@ -135,11 +154,11 @@ namespace Hive.IO.DataHandling
         /// <summary>
         /// Final output energy streams to meet building energy demands
         /// </summary>
-        public List<EnergyCarrier> OutputEnergyStreams { get; private set; }
+        public List<Carrier> OutputEnergyStreams { get; private set; }
         /// <summary>
         /// Initial input energy streams into the system. That might include Grid Electricity, Solar Potentials, District Heating, ...
         /// </summary>
-        public List<EnergyCarrier> InputEnergyStreams { get; private set; }
+        public List<Carrier> InputEnergyStreams { get; private set; }
 
         #endregion
 
@@ -151,15 +170,18 @@ namespace Hive.IO.DataHandling
         {
             this.TotalFloorArea = 0.0;
 
-            this.TotalHeatingMonthly = new double[Results.months];
-            this.TotalDHWMonthly = new double[Results.months];
-            this.TotalCoolingMonthly = new double[Results.months];
-            this.TotalElectricityMonthly = new double[Results.months];
+            this.TotalFinalHeatingMonthly = new double[Misc.MonthsPerYear];
+            this.TotalFinalDomesticHotWaterMonthly = new double[Misc.MonthsPerYear];
+            this.TotalFinalCoolingMonthly = new double[Misc.MonthsPerYear];
+            this.TotalFinalElectricityMonthly = new double[Misc.MonthsPerYear];
 
-            this.TotalCoolingHourly = new double[Results.hours];
-            this.TotalHeatingHourly = new double[Results.hours];
-            this.TotalElectricityHourly = new double[Results.hours];
-            this.TotalDHWHourly = new double[Results.hours];
+            this.TotalPrimaryEnergyMonthly = new double[Misc.MonthsPerYear];
+            this.TotalOperationalEmissionsMonthly = new double[Misc.MonthsPerYear];
+
+            //this.TotalFinalCoolingHourly = new double[Misc.HoursPerYear];
+            //this.TotalFinalHeatingHourly = new double[Misc.HoursPerYear];
+            //this.TotalFinalElectricityHourly = new double[Misc.HoursPerYear];
+            //this.TotalFinalDomesticHotWaterHourly = new double[Misc.HoursPerYear];
 
             this.SupplyNames = null;
             this.SupplyTypes = null;
@@ -180,21 +202,28 @@ namespace Hive.IO.DataHandling
         /// <param name="emitters"></param>
         /// <param name="outputEnergy"></param>
         /// <param name="inputEnergy"></param>
-        public Results(Building.Building building, List<ConversionTech> conversionTech, List<Emitter> emitters, List<EnergyCarrier> outputEnergy, List<EnergyCarrier> inputEnergy)
+        public Results(Building.Building building, List<ConversionTech> conversionTech, List<Emitter> emitters, List<Carrier> outputEnergy, List<Carrier> inputEnergy)
         {
             this.TotalFloorArea = GetTotalFloorArea(building);
 
-            this.TotalHeatingMonthly = GetTotalMonthlyLoads(building, "heating");
-            this.TotalDHWMonthly = GetTotalMonthlyLoads(building, "dhw");
-            this.TotalCoolingMonthly = GetTotalMonthlyLoads(building, "cooling");
-            this.TotalElectricityMonthly = GetTotalMonthlyLoads(building, "electricity");
+            this.TotalFinalHeatingMonthly = GetTotalMonthlyFinalLoads(building, "heating");
+            this.TotalFinalDomesticHotWaterMonthly = GetTotalMonthlyFinalLoads(building, "dhw");
+            this.TotalFinalCoolingMonthly = GetTotalMonthlyFinalLoads(building, "cooling");
+            this.TotalFinalElectricityMonthly = GetTotalMonthlyFinalLoads(building, "electricity");
 
+            this.TotalPrimaryEnergyMonthly = GetTotalMonthlyPrimaryLoads(conversionTech);
+            this.TotalOperationalEmissionsMonthly = GetTotalMonthlyOperationalEmissions(conversionTech);
 
+            //this.TotalFinalCoolingHourly = new double[Misc.HoursPerYear];
+            //this.TotalFinalHeatingHourly = new double[Misc.HoursPerYear];
+            //this.TotalFinalElectricityHourly = new double[Misc.HoursPerYear];
+            //this.TotalFinalDomesticHotWaterHourly = new double[Misc.HoursPerYear];
 
-            this.TotalCoolingHourly = new double[Results.hours];
-            this.TotalHeatingHourly = new double[Results.hours];
-            this.TotalElectricityHourly = new double[Results.hours];
-            this.TotalDHWHourly = new double[Results.hours];
+            this.TotalTransmissionHeatLosses = GetTotalGainsOrLosses(building, "Qt");
+            this.TotalVentilationHeatLosses = GetTotalGainsOrLosses(building, "Qv");
+            this.TotalInternalGains = GetTotalGainsOrLosses(building, "Qi");
+            this.TotalSolarGains = GetTotalGainsOrLosses(building, "Qs");
+
 
             this.SupplyNames = null;
             this.SupplyTypes = null;
@@ -204,6 +233,12 @@ namespace Hive.IO.DataHandling
             this.SkyViewFactors = null;
             this.SkySunPath = null;
             this.IrradiationSurfaces = null;
+
+            this.Building = building;
+            this.ConversionTechnologies = conversionTech;
+            this.Emitters = emitters;
+            this.OutputEnergyStreams = outputEnergy;
+            this.InputEnergyStreams = inputEnergy;
         }
 
 
@@ -213,10 +248,10 @@ namespace Hive.IO.DataHandling
         /// </summary>
         /// <param name="viewfactors"></param>
         /// <param name="sunPath"></param>
-        public void SetSkyDome(rg.Mesh viewfactors, rg.Curve [] sunPath)
+        public void SetSkyDome(rg.Mesh viewfactors, rg.Curve[] sunPath)
         {
             if (viewfactors != null) this.SkyViewFactors = viewfactors.DuplicateMesh();
-            
+
             if (sunPath.Length > 0 && sunPath != null)
             {
                 this.SkySunPath = new rg.Curve[sunPath.Length];
@@ -229,7 +264,7 @@ namespace Hive.IO.DataHandling
         /// Sets meshes with coloured vertices representing irradiation
         /// </summary>
         /// <param name="irradiationMesh"></param>
-        public void SetIrradiationMesh(rg.Mesh [] irradiationMesh)
+        public void SetIrradiationMesh(rg.Mesh[] irradiationMesh)
         {
             if (irradiationMesh.Length <= 0 || irradiationMesh == null) return;
 
@@ -245,7 +280,7 @@ namespace Hive.IO.DataHandling
         /// <param name="supplyTypes"></param>
         /// <param name="supplyCapacities"></param>
         /// <param name="supplyCapUnits"></param>
-        public void SetSupplySystemsCapacity(string [] supplyTechNames, bool [,] supplyTypes, double[] supplyCapacities, string[] supplyCapUnits)
+        public void SetSupplySystemsCapacity(string[] supplyTechNames, bool[,] supplyTypes, double[] supplyCapacities, string[] supplyCapUnits)
         {
             // should contain checks, like lengths of arrays match etc
             if (supplyTechNames == null || supplyTypes == null || supplyCapacities == null || supplyCapUnits == null)
@@ -276,19 +311,19 @@ namespace Hive.IO.DataHandling
         /// Sets the mpnthly operation schedule for all supply systems
         /// </summary>
         /// <param name="supplyOperationMonthly">first array represents technologies, second array represents schedule</param>
-        public void SetSupplySystemsGenerationMonthly(double [][] supplyOperationMonthly)
+        public void SetSupplySystemsGenerationMonthly(double[][] supplyOperationMonthly)
         {
             if (supplyOperationMonthly.Length <= 0 || supplyOperationMonthly == null) return;
 
             this.SupplyOperationMonthly = new double[supplyOperationMonthly.Length][];
             for (int i = 0; i < this.SupplyOperationMonthly.Length; i++)
             {
-                if (supplyOperationMonthly[i].Length == Results.months)
+                if (supplyOperationMonthly[i].Length == Misc.MonthsPerYear)
                 {
-                    this.SupplyOperationMonthly[i] = new double[Results.months];
+                    this.SupplyOperationMonthly[i] = new double[Misc.MonthsPerYear];
                     supplyOperationMonthly.CopyTo(this.SupplyOperationMonthly, 0);
-                } 
-                else 
+                }
+                else
                     this.SupplyOperationMonthly[i] = null;
             }
         }
@@ -306,9 +341,9 @@ namespace Hive.IO.DataHandling
             this.SupplyOperationHourly = new double[supplyOperationHourly.Length][];
             for (int i = 0; i < this.SupplyOperationHourly.Length; i++)
             {
-                if (supplyOperationHourly[i].Length == Results.hours)
+                if (supplyOperationHourly[i].Length == Misc.HoursPerYear)
                 {
-                    this.SupplyOperationHourly[i] = new double[Results.hours];
+                    this.SupplyOperationHourly[i] = new double[Misc.HoursPerYear];
                     supplyOperationHourly.CopyTo(this.SupplyOperationHourly, 0);
                 }
                 else
@@ -324,61 +359,61 @@ namespace Hive.IO.DataHandling
         /// <param name="heatingDemand"></param>
         /// <param name="electricityDemand"></param>
         /// <param name="dhwDemand"></param>
-        public void SetTotalDemandMonthly(double[] coolingDemand, double[] heatingDemand, 
-            double[] electricityDemand, double [] dhwDemand)
+        public void SetTotalDemandMonthly(double[] coolingDemand, double[] heatingDemand,
+            double[] electricityDemand, double[] dhwDemand)
         {
-            if (coolingDemand != null && coolingDemand.Length == Results.months)
-                coolingDemand.CopyTo(this.TotalCoolingMonthly, 0);
+            if (coolingDemand != null && coolingDemand.Length == Misc.MonthsPerYear)
+                coolingDemand.CopyTo(this.TotalFinalCoolingMonthly, 0);
             else
-                this.TotalCoolingMonthly = null;
+                this.TotalFinalCoolingMonthly = null;
 
-            if (heatingDemand != null && heatingDemand.Length == Results.months)
-                heatingDemand.CopyTo(this.TotalHeatingMonthly, 0);
+            if (heatingDemand != null && heatingDemand.Length == Misc.MonthsPerYear)
+                heatingDemand.CopyTo(this.TotalFinalHeatingMonthly, 0);
             else
-                this.TotalHeatingMonthly = null;
+                this.TotalFinalHeatingMonthly = null;
 
-            if (electricityDemand != null && electricityDemand.Length == Results.months)
-                electricityDemand.CopyTo(this.TotalElectricityMonthly, 0);
+            if (electricityDemand != null && electricityDemand.Length == Misc.MonthsPerYear)
+                electricityDemand.CopyTo(this.TotalFinalElectricityMonthly, 0);
             else
-                this.TotalElectricityMonthly = null;
+                this.TotalFinalElectricityMonthly = null;
 
-            if (dhwDemand != null && dhwDemand.Length == Results.months)
-                dhwDemand.CopyTo(this.TotalDHWMonthly, 0);
+            if (dhwDemand != null && dhwDemand.Length == Misc.MonthsPerYear)
+                dhwDemand.CopyTo(this.TotalFinalDomesticHotWaterMonthly, 0);
             else
-                this.TotalDHWMonthly = null;
+                this.TotalFinalDomesticHotWaterMonthly = null;
         }
 
 
-        /// <summary>
-        /// Setting hourly energy demand of the entire building for heating, cooling, electricity, and domestic hot water
-        /// </summary>
-        /// <param name="coolingDemand"></param>
-        /// <param name="heatingDemand"></param>
-        /// <param name="electricityDemand"></param>
-        /// <param name="dhwDemand"></param>
-        public void SetTotalDemandHourly(double[] coolingDemand, double[] heatingDemand, 
-            double[] electricityDemand, double [] dhwDemand)
-        {
-            if (coolingDemand != null && coolingDemand.Length == Results.hours)
-                coolingDemand.CopyTo(this.TotalCoolingHourly, 0);
-            else
-                this.TotalCoolingHourly = null;
+        ///// <summary>
+        ///// Setting hourly energy demand of the entire building for heating, cooling, electricity, and domestic hot water
+        ///// </summary>
+        ///// <param name="coolingDemand"></param>
+        ///// <param name="heatingDemand"></param>
+        ///// <param name="electricityDemand"></param>
+        ///// <param name="dhwDemand"></param>
+        //public void SetTotalDemandHourly(double[] coolingDemand, double[] heatingDemand, 
+        //    double[] electricityDemand, double [] dhwDemand)
+        //{
+        //    if (coolingDemand != null && coolingDemand.Length == Misc.HoursPerYear)
+        //        coolingDemand.CopyTo(this.TotalFinalCoolingHourly, 0);
+        //    else
+        //        this.TotalFinalCoolingHourly = null;
 
-            if (heatingDemand != null && heatingDemand.Length == Results.hours)
-                heatingDemand.CopyTo(this.TotalHeatingHourly, 0);
-            else
-                this.TotalHeatingHourly = null;
+        //    if (heatingDemand != null && heatingDemand.Length == Misc.HoursPerYear)
+        //        heatingDemand.CopyTo(this.TotalFinalHeatingHourly, 0);
+        //    else
+        //        this.TotalFinalHeatingHourly = null;
 
-            if (electricityDemand != null && electricityDemand.Length == Results.hours)
-                electricityDemand.CopyTo(this.TotalElectricityHourly, 0);
-            else
-                this.TotalElectricityHourly = null;
+        //    if (electricityDemand != null && electricityDemand.Length == Misc.HoursPerYear)
+        //        electricityDemand.CopyTo(this.TotalFinalElectricityHourly, 0);
+        //    else
+        //        this.TotalFinalElectricityHourly = null;
 
-            if (dhwDemand != null && dhwDemand.Length == Results.hours)
-                dhwDemand.CopyTo(this.TotalDHWHourly, 0);
-            else
-                this.TotalDHWHourly = null;
-        }
+        //    if (dhwDemand != null && dhwDemand.Length == Misc.HoursPerYear)
+        //        dhwDemand.CopyTo(this.TotalFinalDomesticHotWaterHourly, 0);
+        //    else
+        //        this.TotalFinalDomesticHotWaterHourly = null;
+        //}
         #endregion
 
 
@@ -393,14 +428,13 @@ namespace Hive.IO.DataHandling
             return totalFloorArea;
         }
 
-        public static double [] GetTotalMonthlyLoads(Building.Building building, string loadType)
+        public static double[] GetTotalMonthlyFinalLoads(Building.Building building, string loadType)
         {
-            const int months = 12;
-            double [] totalLoads = new double[months];
+            double[] totalLoads = new double[Misc.MonthsPerYear];
 
             foreach (var zone in building.Zones)
             {
-                for (int m = 0; m < months; m++)
+                for (int m = 0; m < Misc.MonthsPerYear; m++)
                 {
                     switch (loadType)
                     {
@@ -422,6 +456,73 @@ namespace Hive.IO.DataHandling
 
             return totalLoads;
         }
+
+
+        /// <summary>
+        /// Reads all input energy carriers from conversion techs and gets their (primary) energy.
+        /// Only plug in conversion tech that uses energy from Environment.
+        /// Don't use conversion tech that gets its inputEnergy from another conversion tech, because then input energy is counted twice
+        /// </summary>
+        /// <param name="inputCarriers"></param>
+        /// <returns></returns>
+        public static double[] GetTotalMonthlyPrimaryLoads(List<ConversionTech> conversionTech)
+        {
+            double [] result = new double[Misc.MonthsPerYear];
+            foreach (var tech in conversionTech)
+            {
+                for (int i = 0; i < Misc.MonthsPerYear; i++)
+                {
+                    result[i] += tech.InputCarrier.MonthlyCumulativeEnergy[i] * tech.InputCarrier.PrimaryEnergyFactor;
+                }
+            }
+
+            return result;
+        }
+
+
+
+        public static double[] GetTotalMonthlyOperationalEmissions(List<ConversionTech> conversionTech)
+        {
+            double[] result = new double[Misc.MonthsPerYear];
+            foreach (var tech in conversionTech)
+            {
+                for (int i = 0; i < result.Length; i++)
+                {
+                    result[i] += tech.InputCarrier.MonthlyCumulativeEmissions[i];
+                }
+            }
+
+            return result;
+        }
+
+
+
+
+        public static double GetTotalGainsOrLosses(Building.Building building, string loadType)
+        {
+            double result = 0.0;
+            foreach (var zone in building.Zones)
+            {
+                switch (loadType)
+                {
+                    case "Qt":
+                        result += zone.TransmissionHeatLosses.Sum();
+                        break;
+                    case "Qv":
+                        result += zone.VentilationHeatLosses.Sum();
+                        break;
+                    case "Qi":
+                        result += zone.InternalHeatGains.Sum();
+                        break;
+                    case "Qs":
+                        result += zone.SolarGains.Sum();
+                        break;
+                }
+            }
+
+            return result;
+        }
+
 
         #endregion
 

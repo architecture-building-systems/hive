@@ -1,0 +1,24 @@
+{
+  "Radiator": {
+    "SupplyTemperature": 65.00,
+    "ReturnTemperature": 55.00,
+    "SpecificCapitalCost": 2.00,
+    "SpecificEmbodiedEmissions": 4.00,
+    "Capacity":  2, 
+    "IsAir": false,
+    "IsRadiation": true,
+    "IsCooling": false,
+    "IsHeating": true
+  },
+  "Air diffuser": {
+    "SupplyTemperature": 20.00,
+    "ReturnTemperature": 25.00,
+    "SpecificCapitalCost": 6.00,
+    "SpecificEmbodiedEmissions": 7.00,
+    "Capacity":  1, 
+    "IsAir": true,
+    "IsRadiation": false,
+    "IsCooling": true,
+    "IsHeating": false
+  }
+}

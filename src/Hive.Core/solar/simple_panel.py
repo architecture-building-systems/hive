@@ -15,11 +15,11 @@ clr.AddReferenceToFileAndPath(os.path.join(path, "Libraries", "SolarModel.dll"))
 import SolarModel as sm
 
 
-def main(tilt, azimuth, DHI, DNI, latitude, longitude, solarazi, solaralti):
-    return simulate_simple_panel(tilt, azimuth, DHI, DNI, latitude, longitude, solarazi, solaralti)
+def main(tilt, azimuth, DHI, DNI, latitude, longitude, solarazi, solaralti, Aw):
+    return simulate_simple_panel(tilt, azimuth, DHI, DNI, latitude, longitude, solarazi, solaralti, Aw)
 
 
-def simulate_simple_panel(tilt, azimuth, _dhi, _dni, latitude, longitude, solarazi, solaralti):
+def simulate_simple_panel(tilt, azimuth, _dhi, _dni, latitude, longitude, solarazi, solaralti, Aw):
     paropts = System.Threading.Tasks.ParallelOptions()
     paropts.MaxDegreeOfParallelism = 1
 
@@ -59,7 +59,7 @@ def simulate_simple_panel(tilt, azimuth, _dhi, _dni, latitude, longitude, solara
     # diff = [0.0] * horizon
     # diff_refl = [0.0] * horizon
     for i in range(0, horizon):
-        total[i] = p.I[0][i]
+        total[i] = p.I[0][i] * Aw
         # beam[i] = p.Ibeam[0][i]
         # diff[i] = p.Idiff[0][i]
         # diff_refl[i] = p.Irefl_diff[0][i]

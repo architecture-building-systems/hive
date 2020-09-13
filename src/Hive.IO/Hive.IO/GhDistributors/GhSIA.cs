@@ -87,14 +87,14 @@ namespace Hive.IO.GhDistributors
 
 
             // serialize sia2024 dictionary back into a json. can we avoid this double work? (Deserialized in GHBuilding, now serialized again)
-            var json = building.SIA2024;
-            JavaScriptSerializer js = new JavaScriptSerializer();
+            //var json = building.SIA2024.ToJson();
+            //JavaScriptSerializer js = new JavaScriptSerializer();
 
 
             DA.SetDataList(0, zoneAreas);
             DA.SetDataList(1, windowAreas);
             DA.SetDataList(2, extSrfAreas);
-            DA.SetData(3, (string)js.Serialize(json));
+            DA.SetData(3, building.SIA2024.ToJson());
         }
 
 
