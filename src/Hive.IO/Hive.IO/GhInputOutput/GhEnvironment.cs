@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Grasshopper.Kernel;
-using Rhino.Geometry;
 using Hive.IO.EnergySystems;
 using Hive.IO.GhParametricInputs;
+using Rhino.Geometry;
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhInputOutput
 {
     public class GhEnvironment : GH_Component
     {

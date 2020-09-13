@@ -1,16 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Data;
+﻿using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using Hive.IO.Building;
 using Hive.IO.EnergySystems;
 using rg = Rhino.Geometry;
 
-namespace Hive.IO.DataHandling
+namespace Hive.IO.Results
 {
     /// <summary>
     /// Results class that contains all kinds of building simulation results
@@ -498,7 +491,7 @@ namespace Hive.IO.DataHandling
         }
 
 
-        public static double GetTotalMonthlySystemLosses(Hive.IO.DataHandling.Results results, double[] monthlyPrimaryEnergy)
+        public static double GetTotalMonthlySystemLosses(Results results, double[] monthlyPrimaryEnergy)
         {
             var sysLosses = new double[Misc.MonthsPerYear];
             for (int i = 0; i < sysLosses.Length; i++)

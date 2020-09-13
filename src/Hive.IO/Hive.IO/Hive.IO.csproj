@@ -132,21 +132,21 @@
     <Compile Include="GhMergers\GhHeatExchanger.cs" />
     <Compile Include="GhMergers\GhSolarTech.cs" />
     <Compile Include="GhParametricInputs\GhEmitter.cs" />
-    <Compile Include="GhComponents\GhEnvironment.cs" />
+    <Compile Include="GhInputOutput\GhEnvironment.cs" />
     <Compile Include="GhMergers\GhHeatPump.cs" />
     <Compile Include="GhParametricInputs\GhEnergyPotentials.cs" />
     <Compile Include="GhParametricInputs\GhConversionTech.cs" />
     <Compile Include="GhParametricInputs\GhSIARoom.cs" />
     <Compile Include="GhParametricInputs\GhSolarSystems.cs" />
-    <Compile Include="GhComponents\GhResults.cs" />
-    <Compile Include="GhComponents\GhVisualizer.cs" />
+    <Compile Include="GhInputOutput\GhResults.cs" />
+    <Compile Include="GhInputOutput\GhVisualizer.cs" />
     <Compile Include="Environment\Environment.cs" />
-    <Compile Include="GhComponents\GhBuilding.cs" />
+    <Compile Include="GhInputOutput\GhBuilding.cs" />
     <Compile Include="GhDistributors\GhMainDistributor.cs" />
-    <Compile Include="GhComponents\GhVisualizerAttributes.cs" />
-    <Compile Include="GhComponents\HiveIOInfo.cs" />
+    <Compile Include="GhInputOutput\GhVisualizerAttributes.cs" />
+    <Compile Include="GhInputOutput\HiveIOInfo.cs" />
     <Compile Include="Misc.cs" />
-    <Compile Include="GhComponents\GhEnergySystem.cs" />
+    <Compile Include="GhInputOutput\GhEnergySystem.cs" />
     <Compile Include="Plots\AmrPlotBase.cs" />
     <Compile Include="Plots\AmrPlotStyle.cs" />
     <Compile Include="Plots\DemandMonthlyNormalizedPlot.cs" />
@@ -155,7 +155,7 @@
     <Compile Include="Plots\EnergyBalancePlot.cs" />
     <Compile Include="Plots\MonthlyAmrPlot.cs" />
     <Compile Include="Plots\YearlyAmrPlot.cs" />
-    <Compile Include="DataHandling\ResultsPlotting.cs" />
+    <Compile Include="Results\ResultsPlotting.cs" />
     <Compile Include="Plots\IVisualizerPlot.cs" />
     <Compile Include="Plots\MenuButton.cs" />
     <Compile Include="Plots\MenuButtonPanel.cs" />
@@ -170,7 +170,7 @@
       <DesignTime>True</DesignTime>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
-    <Compile Include="DataHandling\Results.cs" />
+    <Compile Include="Results\Results.cs" />
     <Compile Include="Building\Zone.cs" />
     <Compile Include="Util\JsonResource.cs" />
   </ItemGroup>

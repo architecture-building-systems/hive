@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
@@ -12,12 +11,11 @@ using Grasshopper.Kernel.Types;
 using Hive.IO.EnergySystems;
 using Hive.IO.Forms;
 using Hive.IO.GhParametricInputs;
-using Hive.IO.Properties;
 using Rhino.Geometry;
 
 //using Newtonsoft.Json;
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhInputOutput
 {
     public class GhEnergySystem : GH_Component
     {

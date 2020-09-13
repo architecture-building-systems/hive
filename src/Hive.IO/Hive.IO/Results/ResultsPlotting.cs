@@ -3,7 +3,7 @@ using System.Security.Permissions;
 using System.Windows.Forms.VisualStyles;
 using Grasshopper.Kernel.Geometry.SpatialTrees;
 
-namespace Hive.IO.DataHandling
+namespace Hive.IO.Results
 {
     // An adaptor for extracting aggregated hive results.
     public class ResultsPlotting

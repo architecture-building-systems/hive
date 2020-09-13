@@ -3,10 +3,9 @@ using System.Drawing;
 using System.Linq;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
-using Hive.IO.DataHandling;
-using Hive.IO.Plots;
+using Hive.IO.Results;
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhInputOutput
 {
 
     public class GhVisualizer : GH_Param<GH_ObjectWrapper>
@@ -16,7 +15,7 @@ namespace Hive.IO.GHComponents
             "Hive Visualizer for simulation results",
             "[hive]", "IO", GH_ParamAccess.item)
         {
-            Results = new ResultsPlotting(new Results());
+            Results = new ResultsPlotting(new Results.Results());
         }
 
         public ResultsPlotting Results { get; private set; }
@@ -38,11 +37,11 @@ namespace Hive.IO.GHComponents
         {
             if (m_data.IsEmpty)
             {
-                Results = new ResultsPlotting(new Results());
+                Results = new ResultsPlotting(new Results.Results());
             }
             else
             {
-                Results = new ResultsPlotting(m_data.First().Value as Results);
+                Results = new ResultsPlotting(m_data.First().Value as Results.Results);
             }
 
 

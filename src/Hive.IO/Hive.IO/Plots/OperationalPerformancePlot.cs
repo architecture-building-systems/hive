@@ -3,7 +3,7 @@ using System.Drawing;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
-using Hive.IO.DataHandling;
+using Hive.IO.Results;
 
 namespace Hive.IO.Plots
 {
@@ -112,7 +112,7 @@ namespace Hive.IO.Plots
             graphics.DrawString(UnitText, _standardFont, brush, unitX, unitY);
         }
 
-        public void NewData(Results results)
+        public void NewData(Results.Results results)
         {
             // for the moment, we'll not do any caching...
         }

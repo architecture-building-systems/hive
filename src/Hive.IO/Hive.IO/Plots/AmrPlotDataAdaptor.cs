@@ -1,10 +1,10 @@
-﻿using Hive.IO.DataHandling;
+﻿using Hive.IO.Results;
 
 namespace Hive.IO.Plots
 {
     /// <summary>
     /// Describes the interface amr plots use to query data
-    /// (basically used to select cost / emissions / energy data from a Hive.IO.DataHandling.ResultsPlotting object.
+    /// (basically used to select cost / emissions / energy data from a Hive.IO.Results.ResultsPlotting object.
     /// </summary>
     public abstract class AmrPlotDataAdaptor
     {
