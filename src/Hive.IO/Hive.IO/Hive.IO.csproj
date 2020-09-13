@@ -71,9 +71,9 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Building\Building.cs" />
-    <Compile Include="Building\BuildingComponents.cs" />
-    <Compile Include="Building\BuildingConstruction.cs" />
-    <Compile Include="Building\BuildingMaterial.cs" />
+    <Compile Include="Building\Components.cs" />
+    <Compile Include="Building\Construction.cs" />
+    <Compile Include="Building\Material.cs" />
     <Compile Include="Building\Sia2024Record.cs" />
     <Compile Include="EnergySystems\CombustionTech.cs" />
     <Compile Include="EnergySystems\Carrier.cs" />

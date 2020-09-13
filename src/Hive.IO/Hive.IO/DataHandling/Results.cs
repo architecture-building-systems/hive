@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Hive.IO.Building;
 using Hive.IO.EnergySystems;
 using rg = Rhino.Geometry;
 
@@ -55,6 +56,7 @@ namespace Hive.IO.DataHandling
 
         #region Total Emissions
 
+        public double TotalEmbodiedConstructionEmissions { get; private set; }
         public double [] TotalOperationalEmissionsMonthly { get; private set; }
 
         #endregion
@@ -169,6 +171,7 @@ namespace Hive.IO.DataHandling
         public Results()
         {
             this.TotalFloorArea = 0.0;
+            this.TotalEmbodiedConstructionEmissions = 0.0;
 
             this.TotalFinalHeatingMonthly = new double[Misc.MonthsPerYear];
             this.TotalFinalDomesticHotWaterMonthly = new double[Misc.MonthsPerYear];
@@ -205,6 +208,7 @@ namespace Hive.IO.DataHandling
         public Results(Building.Building building, List<ConversionTech> conversionTech, List<Emitter> emitters, List<Carrier> outputEnergy, List<Carrier> inputEnergy)
         {
             this.TotalFloorArea = GetTotalFloorArea(building);
+            this.TotalEmbodiedConstructionEmissions = GetTotalEmbodiedConstructionEmissions(building);
 
             this.TotalFinalHeatingMonthly = GetTotalMonthlyFinalLoads(building, "heating");
             this.TotalFinalDomesticHotWaterMonthly = GetTotalMonthlyFinalLoads(building, "dhw");
@@ -426,6 +430,15 @@ namespace Hive.IO.DataHandling
                 foreach (var floor in zone.Floors)
                     totalFloorArea += floor.Area;
             return totalFloorArea;
+        }
+
+        public static double GetTotalEmbodiedConstructionEmissions(Building.Building building)
+        {
+            double totalCo2 = 0.0;
+            foreach (var zone in building.Zones)
+                foreach (var component in zone.SurfaceComponents)
+                    totalCo2 += component.TotalCo2;
+            return totalCo2;
         }
 
         public static double[] GetTotalMonthlyFinalLoads(Building.Building building, string loadType)

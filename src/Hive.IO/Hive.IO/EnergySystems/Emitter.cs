@@ -109,7 +109,6 @@ namespace Hive.IO.EnergySystems
         /// </summary>
         public double SpecificEmbodiedGhg { get; protected set; }
 
-
         /// <summary>
         /// Input stream. For most emitters, this would be water
         /// </summary>
