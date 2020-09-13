@@ -210,8 +210,8 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
     Q_s = [0.0] * months_per_year
     Q_V = [0.0] * months_per_year
     Q_T = [0.0] * months_per_year
-    # Q_s_per_surface = [0.0] * months_per_year
-    Q_T_per_surface = [0.0] * months_per_year
+    QT_opaque = [0.0] * months_per_year
+    QT_transparent = [0.0] * months_per_year
 
     Q_Heat = [0.0] * months_per_year
     Q_Cool = [0.0] * months_per_year
@@ -224,10 +224,6 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
 
     # For each month, compute:
     for month in range(months_per_year):
-        # pre-allocate jagged arrays
-        # Q_s_per_surface[month] = [0.0] * num_surfaces   # solar gains per surface for this month. input for now
-        Q_T_per_surface[month] = [0.0] * num_surfaces   # transmission losses per surface for this month
-
         # External air flowrate (thermisch wirksamer Aussenluftvolumenstrom)
         Vdot_e = Vdot_e_spec * floor_area
         Vdot_inf = Vdot_inf_spec * floor_area
@@ -243,9 +239,13 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
 
         # Internal loads (interne Wärmeeinträge)
         Q_i[month] = Phi_P_tot * t_P[month] + Phi_L_tot * t_L[month] + Phi_A_tot * t_A[month]
-
         Q_T_per_surfaces_this_month_ub = [0.0] * num_surfaces
         Q_T_per_surfaces_this_month_lb = [0.0] * num_surfaces
+        QT_op_per_srf_this_month_ub = []
+        QT_op_per_srf_this_month_lb = []
+        QT_tr_per_srf_this_month_ub = []
+        QT_tr_per_srf_this_month_lb = []
+
         for surface in range(num_surfaces):
             # solar gains (solare Wärmeeinträge), Q_s, (PER SURFACE)
             # unobstructed or obstructed, both using SolarModel.dll and GHSolar.gha
@@ -253,17 +253,19 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
             # Transmission heat transfer coefficient (Transmissions-Wärmetransferkoeffizient), H_T, (PER SURFACE)
             if(surface_type[surface] == "opaque"):
                 H_T = surface_areas[surface] * U_op
+                QT_op_per_srf_this_month_ub.append(H_T * (setpoints_ub[month] - T_e[month]) * t[month])
+                QT_op_per_srf_this_month_lb.append(H_T * (setpoints_lb[month] - T_e[month]) * t[month])
             else:
                 H_T = surface_areas[surface] * U_w
+                QT_tr_per_srf_this_month_ub.append(H_T * (setpoints_ub[month] - T_e[month]) * t[month])
+                QT_tr_per_srf_this_month_lb.append(H_T * (setpoints_lb[month] - T_e[month]) * t[month])
 
             # Transmission losses (Transmissionswärmeverluste), Q_T, (PER SURFACE, because function of H_T)
             Q_T_per_surfaces_this_month_ub[surface] = H_T * (setpoints_ub[month] - T_e[month]) * t[month]
             Q_T_per_surfaces_this_month_lb[surface] = H_T * (setpoints_lb[month] - T_e[month]) * t[month]
-            # Q_T_per_surface[month][surface] = H_T * (T_i[month] - T_e[month]) * t[month]
 
         Q_T_ub = sum(Q_T_per_surfaces_this_month_ub)
         Q_T_lb = sum(Q_T_per_surfaces_this_month_lb)
-        # Q_T[month] = sum(Q_T_per_surface[month])
 
         Q_s[month] = sum(Q_s_per_surface[month])
 
@@ -273,13 +275,6 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         # gamma = (Q_i[month] + Q_s[month]) / (Q_T[month] + Q_V[month])
 
         # usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
-        # if Q_T[month] + Q_V[month] < 0:
-        #     eta_g = 0
-        # elif gamma == 1:
-        #     eta_g = (1 + tau / 5) / (2 + tau / 15)
-        # else:
-        #     a = 1 + tau / 15
-        #     eta_g = (1 - gamma ** a) / (1 - gamma ** (a + 1))
         eta_g_lb = calc_eta_g(Q_T_lb, Q_V_lb, gamma_lb, tau)
         eta_g_ub = calc_eta_g(Q_T_ub, Q_V_ub, gamma_ub, tau)
 
@@ -289,12 +284,17 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         eta_g = 0.0
         if abs(demand_lb) < abs(demand_ub):
             Q_T[month] = Q_T_lb
+            QT_opaque[month] = sum(QT_op_per_srf_this_month_lb)
+            QT_transparent[month] = sum(QT_tr_per_srf_this_month_lb)
             Q_V[month] = Q_V_lb
             eta_g = eta_g_lb
         else:
             Q_T[month] = Q_T_ub
+            QT_opaque[month] = sum(QT_op_per_srf_this_month_ub)
+            QT_transparent[month] = sum(QT_tr_per_srf_this_month_ub)
             Q_V[month] = Q_V_ub
             eta_g = eta_g_ub
+
         demand = Q_T[month] + Q_V[month] - eta_g * (Q_i[month] + Q_s[month])
         if demand > 0:
             Q_Heat[month] = demand
@@ -304,7 +304,7 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         Q_Elec[month] = Phi_L_tot * t_L[month] + Phi_A_tot * t_A[month]   # lighting and utility loads. simplification, because utility and lighting have efficiencies (inefficiencies are heat loads). I would need to know that to get full electricity loads
 
     tokWh = 1000.0
-    return [x / tokWh for x in Q_Heat], [x / tokWh for x in Q_Cool], [x / tokWh for x in Q_Elec], Q_T, Q_V, Q_i, Q_s
+    return [x / tokWh for x in Q_Heat], [x / tokWh for x in Q_Cool], [x / tokWh for x in Q_Elec], Q_T, Q_V, Q_i, Q_s, QT_opaque, QT_transparent
 
 
 def calc_eta_g(Q_T_month, Q_V_month, gamma, tau):
@@ -367,7 +367,7 @@ if __name__ == "__main__":
         Q_s_per_surface = list(map(list, zip(*Q_s_per_surface)))  # transposing
         jaggeddata = Jagged(Q_s_per_surface)
 
-        [Q_Heat, Q_Cool, Q_Elec, Q_T, Q_V, Q_i, Q_s] = main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surface_areas, surface_type, jaggeddata)
+        [Q_Heat, Q_Cool, Q_Elec, Q_T, Q_V, Q_i, Q_s, _, _] = main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surface_areas, surface_type, jaggeddata)
         print(Q_Heat)
         print(Q_Cool)
         print(Q_Elec)

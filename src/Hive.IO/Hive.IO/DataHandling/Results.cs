@@ -63,7 +63,8 @@ namespace Hive.IO.DataHandling
 
 
         #region Total Losses and Gains
-        public double TotalTransmissionHeatLosses { get; private set; }
+        public double TotalOpaqueTransmissionHeatLosses { get; private set; }
+        public double TotalWindowTransmissionHeatLosses { get; private set; }
         public double TotalVentilationHeatLosses { get; private set; }
         public double TotalInternalGains { get; private set; }
         public double TotalSolarGains { get; private set; }
@@ -223,7 +224,8 @@ namespace Hive.IO.DataHandling
             //this.TotalFinalElectricityHourly = new double[Misc.HoursPerYear];
             //this.TotalFinalDomesticHotWaterHourly = new double[Misc.HoursPerYear];
 
-            this.TotalTransmissionHeatLosses = GetTotalGainsOrLosses(building, "Qt");
+            this.TotalOpaqueTransmissionHeatLosses = GetTotalGainsOrLosses(building, "Qt_opaque");
+            this.TotalWindowTransmissionHeatLosses = GetTotalGainsOrLosses(building, "Qt_transparent");
             this.TotalVentilationHeatLosses = GetTotalGainsOrLosses(building, "Qv");
             this.TotalInternalGains = GetTotalGainsOrLosses(building, "Qi");
             this.TotalSolarGains = GetTotalGainsOrLosses(building, "Qs");
@@ -518,8 +520,11 @@ namespace Hive.IO.DataHandling
             {
                 switch (loadType)
                 {
-                    case "Qt":
-                        result += zone.TransmissionHeatLosses.Sum();
+                    case "Qt_opaque":
+                        result += zone.OpaqueTransmissionHeatLosses.Sum();
+                        break;
+                    case "Qt_transparent":
+                        result += zone.TransparentTransmissionHeatLosses.Sum();
                         break;
                     case "Qv":
                         result += zone.VentilationHeatLosses.Sum();

@@ -137,7 +137,8 @@ namespace Hive.IO.Building
 
 
         #region Losses and Gains
-        public double[] TransmissionHeatLosses { get; private set; }
+        public double[] OpaqueTransmissionHeatLosses { get; private set; }
+        public double [] TransparentTransmissionHeatLosses { get; private set; }
         public double[] VentilationHeatLosses { get; private set; }
         public double[] InternalHeatGains { get; private set; }
         public double[] SolarGains { get; private set; }
@@ -303,14 +304,16 @@ namespace Hive.IO.Building
 
 
 
-        public void SetLossesAndGains(double[] Qt, double[] Qv, double[] Qi, double[] Qs)
+        public void SetLossesAndGains(double[] Qt_opaque, double [] Qt_transparent, double[] Qv, double[] Qi, double[] Qs)
         {
-            this.TransmissionHeatLosses = new double[Misc.MonthsPerYear];
+            this.OpaqueTransmissionHeatLosses = new double[Misc.MonthsPerYear];
+            this.TransparentTransmissionHeatLosses = new double[Misc.MonthsPerYear];
             this.VentilationHeatLosses = new double[Misc.MonthsPerYear];
             this.InternalHeatGains = new double[Misc.MonthsPerYear];
             this.SolarGains = new double[Misc.MonthsPerYear];
 
-            Qt.CopyTo(this.TransmissionHeatLosses, 0);
+            Qt_opaque.CopyTo(this.OpaqueTransmissionHeatLosses, 0);
+            Qt_transparent.CopyTo(this.TransparentTransmissionHeatLosses, 0);
             Qv.CopyTo(this.VentilationHeatLosses, 0);
             Qi.CopyTo(this.InternalHeatGains, 0);
             Qs.CopyTo(this.SolarGains, 0);

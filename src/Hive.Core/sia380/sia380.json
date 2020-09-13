@@ -35,7 +35,9 @@
         {"type": "float", "name": "Q_T", "nick-name": "Q_T", "description": "Monthly transmission heat losses in Wh.", "access": "list"},
         {"type": "float", "name": "Q_V", "nick-name": "Q_V", "description": "Monthly ventilation heat losses in Wh.", "access": "list"},
         {"type": "float", "name": "Q_i", "nick-name": "Q_i", "description": "Monthly internal gains in Wh.", "access": "list"},
-        {"type": "float", "name": "Q_s", "nick-name": "Q_s", "description": "Monthly solar gains in Wh.", "access": "list"}
+        {"type": "float", "name": "Q_s", "nick-name": "Q_s", "description": "Monthly solar gains in Wh.", "access": "list"},
+        {"type": "float", "name": "Q_T_opaque", "nick-name": "Q_T_opaque", "description": "Monthly transmission heat losses through opaque envelope in Wh", "access": "list"},
+        {"type": "float", "name": "Q_T_transparent", "nick-name": "Q_T_transp", "description": "Monthly transmission heat losses through transparent envelope in Wh", "access": "list"}
       ]
     },
     {

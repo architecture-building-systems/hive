@@ -187,8 +187,8 @@ namespace Hive.IO.DataHandling
         // outgoing energy
         public float Electricity => 0.0f; // electricity loads?
         public float VentilationLosses => (float)Results.TotalVentilationHeatLosses;
-        public float EnvelopeLosses => (float)Results.TotalTransmissionHeatLosses;
-        public float WindowsLosses => 0f; // ok, change the python code to get envelope separate from window losses
+        public float EnvelopeLosses => (float)Results.TotalOpaqueTransmissionHeatLosses;
+        public float WindowsLosses => (float)Results.TotalWindowTransmissionHeatLosses; 
         public float SystemLosses => 0f; // what's the difference to primary transfer losses?
         public float PrimaryTransferLosses => 0f; // difference between primary energy and final loads?
 
