@@ -2,7 +2,7 @@
 using System.Drawing;
 using Grasshopper.Kernel;
 
-namespace Hive.IO
+namespace Hive.IO.GhInputOutput
 {
     public class HiveIOInfo : GH_AssemblyInfo
     {

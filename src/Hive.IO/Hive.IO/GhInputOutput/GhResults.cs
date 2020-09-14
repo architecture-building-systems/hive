@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Windows.Documents;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using Hive.IO.EnergySystems;
-using Hive.IO.DataHandling;
 using Rhino.Geometry;
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhInputOutput
 {
     public class GhResults : GH_Component
     {
@@ -215,7 +213,7 @@ namespace Hive.IO.GHComponents
             building.Zones[0].SetEnergyDemandsMonthly(heatingMonthly.ToArray(), domesticHotWaterMonthly.ToArray(), coolingMonthly.ToArray(), electricityMonthly.ToArray());
             building.Zones[0].SetLossesAndGains(Qt_opaque.ToArray(), Qt_transparent.ToArray(), Qv.ToArray(), Qi.ToArray(), Qs.ToArray());
             // writing data into results object
-            Results results = new Results(building, conversionTechs, emitters, outputEnergies, inputEnergies);
+            Results.Results results = new Results.Results(building, conversionTechs, emitters, outputEnergies, inputEnergies);
             
             // these methods should handle nulls or wrong list lengths themselves
             //results.SetTotalDemandMonthly(coolingMonthly.ToArray(), heatingMonthly.ToArray(), electricityMonthly.ToArray(), domesticHotWaterMonthly.ToArray());

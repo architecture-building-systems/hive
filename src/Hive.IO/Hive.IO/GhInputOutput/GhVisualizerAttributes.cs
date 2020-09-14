@@ -5,10 +5,10 @@ using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
-using Hive.IO.DataHandling;
 using Hive.IO.Plots;
+using Hive.IO.Results;
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhInputOutput
 {
     public class GhVisualizerAttributes : GH_ResizableAttributes<GhVisualizer>
     {

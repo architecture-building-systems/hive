@@ -5,11 +5,11 @@ using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
-using rg = Rhino.Geometry;
 using Hive.IO.Building;
 using Hive.IO.Forms;
+using rg = Rhino.Geometry;
 
-namespace Hive.IO.GHComponents
+namespace Hive.IO.GhInputOutput
 {
     public class GhBuilding : GH_Component
     {

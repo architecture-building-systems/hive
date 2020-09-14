@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Resources;
 using Hive.IO.Building;
-using Hive.IO.GHComponents;
 
 namespace Hive.IO.Forms
 {
