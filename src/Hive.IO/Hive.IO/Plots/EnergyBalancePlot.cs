@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
@@ -58,8 +57,27 @@ namespace Hive.IO.Plots
             houseBounds.Offset(0, -(houseBounds.Top - bounds.Top));
             var innerHousePolygon = RenderHouse(graphics, houseBounds);
 
-            RenderGainsArrows(results, graphics, innerHousePolygon, houseBounds, bounds);
-            RenderLossesArrows(results, graphics, innerHousePolygon, houseBounds, bounds);
+            var gains = new[]
+            {
+                results.SolarGains,
+                results.InternalGains,
+                results.PrimaryEnergy,
+                results.RenewableEnergy
+            };
+            var losses = new[]
+            {
+                results.Electricity,
+                results.VentilationLosses,
+                results.EnvelopeLosses,
+                results.WindowsLosses,
+                results.SystemLosses,
+                results.PrimaryTransferLosses,
+            };
+
+            var maxTotal = Math.Max(gains.Sum(), losses.Sum());
+
+            RenderGainsArrows(results, graphics, innerHousePolygon, houseBounds, bounds, gains, maxTotal);
+            RenderLossesArrows(results, graphics, innerHousePolygon, houseBounds, bounds, losses, maxTotal);
             RenderLegend(graphics, houseBounds, bounds);
         }
 
@@ -112,8 +130,14 @@ namespace Hive.IO.Plots
 
 
         private void RenderGainsArrows(ResultsPlotting results, Graphics graphics,
-            PointF[] innerHousePolygon, RectangleF houseBounds, RectangleF bounds)
+            PointF[] innerHousePolygon, RectangleF houseBounds, RectangleF bounds, float[] gains, float max)
         {
+            if (max.IsClose(0.0f))
+            {
+                // no data computed yet
+                return;
+            }
+
             // inner axis, centered inside the house, left is end point of gains, right is starting point of losses
             var innerHouseBounds = HousePolygonToInnerRectangleF(innerHousePolygon);
             var houseCenterBounds = innerHouseBounds.CloneInflate(-innerHouseBounds.Width / 4f, -10);
@@ -127,13 +151,6 @@ namespace Hive.IO.Plots
             var innerHouseTop = innerHousePolygon[2].Y;
             var leftBounds = new RectangleF(gainsArrowLeft, innerHouseTop, rightBounds.Width, houseBounds.Bottom - innerHouseTop);
 
-            var gains = new[]
-            {
-                results.SolarGains,
-                results.InternalGains,
-                results.PrimaryEnergy,
-                results.RenewableEnergy
-            };
             var totalGains = gains.Sum();
             var newMax = rightBounds.Height - ArrowPadding * gains.GetUpperBound(0);
             var leftArrowPadding = (leftBounds.Height - newMax) / gains.GetUpperBound(0);
@@ -149,7 +166,7 @@ namespace Hive.IO.Plots
                 color.MoveNext();
                 foreach (var gain in gains)
                 {
-                    var arrowHeight = gain.Scale(totalGains, newMax);
+                    var arrowHeight = gain.Scale(max, newMax);
                     var rightArrowBounds = new RectangleF(rightBounds.Left, rightY, rightBounds.Width, arrowHeight);
                     var leftArrowBounds = new RectangleF(leftBounds.Left, leftY, leftBounds.Width, arrowHeight);
 
@@ -169,8 +186,14 @@ namespace Hive.IO.Plots
         }
 
         private void RenderLossesArrows(ResultsPlotting results, Graphics graphics,
-            PointF[] innerHousePolygon, RectangleF houseBounds, RectangleF bounds)
+            PointF[] innerHousePolygon, RectangleF houseBounds, RectangleF bounds, float[] losses, float max)
         {
+            if (max.IsClose(0.0f))
+            {
+                // no data computed yet
+                return;
+            }
+
             // inner axis, centered inside the house, left is end point of gains, right is starting point of losses
             var innerHouseBounds = HousePolygonToInnerRectangleF(innerHousePolygon);
 
@@ -185,15 +208,6 @@ namespace Hive.IO.Plots
             var innerHouseTop = innerHousePolygon[2].Y;
             var rightBounds = new RectangleF(lossesArrowRight - leftBounds.Width, innerHouseTop, leftBounds.Width, houseBounds.Bottom - innerHouseTop);
 
-            var losses = new[]
-            {
-                results.Electricity,
-                results.VentilationLosses,
-                results.EnvelopeLosses,
-                results.WindowsLosses,
-                results.SystemLosses,
-                results.PrimaryTransferLosses,
-            };
             var totalLosses = losses.Sum();
             var newMax = leftBounds.Height - ArrowPadding * losses.GetUpperBound(0);
             var rightArrowPadding = (rightBounds.Height - newMax) / losses.GetUpperBound(0);
@@ -209,7 +223,7 @@ namespace Hive.IO.Plots
                 color.MoveNext();
                 foreach (var loss in losses)
                 {
-                    var arrowHeight = loss.Scale(totalLosses, newMax);
+                    var arrowHeight = loss.Scale(max, newMax);
                     var leftArrowBounds = new RectangleF(leftBounds.Left, leftY, leftBounds.Width, arrowHeight);
                     var rightArrowBounds = new RectangleF(rightBounds.Left, rightY, rightBounds.Width, arrowHeight);
 

@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Grasshopper.Kernel;
@@ -126,6 +127,8 @@ namespace Hive.IO.Plots
 
             return value / maxValue * newMaxValue;
         }
+
+        public static bool IsClose(this float a, float b) => Math.Abs(a - b) < 0.001;
 
         public static float[] ToFloatArray(this IEnumerable<double> self)
         {
