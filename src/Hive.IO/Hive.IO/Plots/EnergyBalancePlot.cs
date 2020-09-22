@@ -74,6 +74,11 @@ namespace Hive.IO.Plots
                 results.PrimaryTransferLosses,
             };
 
+            if (losses.Any(loss => loss < 0.0f) || gains.Any(gain => gain < 0.0f))
+            {
+                throw new Exception("Losses and Gains need to be positive values.");
+            }
+
             var maxTotal = Math.Max(gains.Sum(), losses.Sum());
 
             RenderGainsArrows(results, graphics, innerHousePolygon, houseBounds, bounds, gains, maxTotal);
