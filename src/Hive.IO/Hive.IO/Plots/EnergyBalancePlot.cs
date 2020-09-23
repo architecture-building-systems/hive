@@ -76,7 +76,10 @@ namespace Hive.IO.Plots
 
             if (losses.Any(loss => loss < 0.0f) || gains.Any(gain => gain < 0.0f))
             {
-                throw new Exception("Losses and Gains need to be positive values.");
+                // throw new Exception("Losses and Gains need to be positive values.");
+                // FIXME: remove this when chris has fixed the bug
+                losses = losses.Select(loss => Math.Max(0.0f, loss)).ToArray();
+                gains = gains.Select(gain => Math.Max(0.0f, gain)).ToArray();
             }
 
             var maxTotal = Math.Max(gains.Sum(), losses.Sum());
