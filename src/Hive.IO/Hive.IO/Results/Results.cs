@@ -459,6 +459,11 @@ namespace Hive.IO.Results
             return new Tuple<double[], double []>(purchased, feedIn);
         }
 
+
+        public static double [] GetTotalMonthlyConsumedElectricity()
+        {
+            return new double[1] { 0 };
+        }
         
 
         public static double [] GetTotalMonthlyFeedInElectricity(List<ConversionTech> conversionTech)
@@ -532,7 +537,7 @@ namespace Hive.IO.Results
             {
                 for (int i = 0; i < Misc.MonthsPerYear; i++)
                 {
-                    if (tech is SurfaceBasedTech == false && tech is DirectElectricity == false)
+                    if (tech is SurfaceBasedTech == false && tech is DirectElectricity == false && tech is HeatPump == false) //no heat pump, because electricity of it is already in DirectElectricity
                     {
                         result[i] += tech.InputCarrier.MonthlyCumulativeEnergy[i] * tech.InputCarrier.PrimaryEnergyFactor;
                     }
@@ -584,7 +589,8 @@ namespace Hive.IO.Results
                 {
                     if (tech is SurfaceBasedTech == false)
                     {
-                        if(tech.InputCarrier.MonthlyCumulativeEnergy[i] > 0.0)
+                        // only for fuel based. not for Heatpumps, because electricity from heatpumps will be attributed to consumed electricity (Outgoing arrows in Sankey)
+                        if(tech.InputCarrier.MonthlyCumulativeEnergy[i] > 0.0 && tech.InputCarrier is Electricity == false)
                             result[i] += ((tech.InputCarrier.MonthlyCumulativeEnergy[i] * tech.InputCarrier.PrimaryEnergyFactor) - tech.OutputCarriers[0].MonthlyCumulativeEnergy[i]);
                     }
                 }
