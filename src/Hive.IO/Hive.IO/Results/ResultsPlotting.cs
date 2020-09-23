@@ -157,7 +157,7 @@ namespace Hive.IO.Results
         // Primary energy demand, incl. conversion losses
         public double[] OperationEnergySystemsMonthly(bool normalized)
         {
-            double[] result = Results.TotalPrimaryEnergyMonthly.ToArray();
+            double[] result = Results.TotalPrimaryEnergyMonthlyNonRenewable.ToArray();
             return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
         }
         public double OperationEnergySystems(bool normalized) => OperationEnergySystemsMonthly(normalized).Sum();
@@ -178,19 +178,24 @@ namespace Hive.IO.Results
 
         #region EnergyBalance
 
+        // bug: with PV energy, following numbers become negative:
+        // - (IN) TotalPrimaryEnergyMonthly
+        // - (OUT) TotalFinalElectricityMonthly
+        // - (OUT) TotalSystemLosses
+
         // ingoing energy
         public float SolarGains => (float)Results.TotalSolarGains;
         public float InternalGains => (float)Results.TotalInternalGains;
-        public float PrimaryEnergy => (float)Results.TotalPrimaryEnergyMonthly.Sum(); //inputCarriers from conversionTech, except renewable tech (solar)
-        public float RenewableEnergy => 0.0f; //inputCarriers from 
+        public float PrimaryEnergy => (float)Results.TotalPrimaryEnergyMonthlyNonRenewable.Sum(); //inputCarriers from conversionTech, except renewable tech (solar). What to do with Electricity Grid? How to account for negative numbers
+        public float RenewableEnergy => (float)Results.TotalFinalEnergyMonthlyRenewable.Sum(); 
         
         // outgoing energy
-        public float Electricity => (float)Results.TotalFinalElectricityMonthly.Sum(); 
+        public float Electricity => (float)Results.TotalFinalElectricityMonthly.Sum(); // without feedin!!!! TO FIX
         public float VentilationLosses => (float)Results.TotalVentilationHeatLosses;
         public float EnvelopeLosses => (float)Results.TotalOpaqueTransmissionHeatLosses;
         public float WindowsLosses => (float)Results.TotalWindowTransmissionHeatLosses;
         public float SystemLosses => (float)Results.TotalSystemLosses; 
-        public float PrimaryTransferLosses => 0f; // difference between primary energy and final loads?
+        public float PrimaryTransferLosses => 0f; // ignore?
 
 
         #endregion EnergyBalance
