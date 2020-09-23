@@ -73,6 +73,9 @@ namespace Hive.IO.GhInputOutput
             pManager.AddNumberParameter("Q_i", "Q_i", "Internal gains", GH_ParamAccess.list);
             pManager.AddNumberParameter("Q_s", "Q_s", "Solar heat gains", GH_ParamAccess.list);
 
+            // 27
+            pManager.AddNumberParameter("consumedElec", "consumedElec", "consumedElec. pManager[2] also has generatedElec from e.g. PV. This here is consumed Elec from occupancy (equip & lighting) and systems (HP)", GH_ParamAccess.list);
+
             for (int i = 0; i < pManager.ParamCount; i++)
                 pManager[i].Optional = true;
         }
@@ -208,6 +211,9 @@ namespace Hive.IO.GhInputOutput
             DA.GetDataList(25, Qi);
             DA.GetDataList(26, Qs);
 
+            var consumedElec = new List<double>();
+            DA.GetDataList(27, consumedElec);
+            building.Zones[0].ConsumedElectricityMonthly = consumedElec.ToArray();
 
 
             building.Zones[0].SetEnergyDemandsMonthly(heatingMonthly.ToArray(), domesticHotWaterMonthly.ToArray(), coolingMonthly.ToArray(), electricityMonthly.ToArray());

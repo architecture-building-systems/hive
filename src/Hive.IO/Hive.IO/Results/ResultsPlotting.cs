@@ -190,13 +190,15 @@ namespace Hive.IO.Results
         public float RenewableEnergy => (float)Results.TotalFinalEnergyMonthlyRenewable.Sum(); 
         
         // outgoing energy
-        public float Electricity => (float)Results.TotalFinalElectricityMonthly.Sum(); // without feedin!!!! TO FIX
+        public float Electricity => (float)Results.TotalConsumedElectricityMonthly.Sum();
         public float VentilationLosses => (float)Results.TotalVentilationHeatLosses;
         public float EnvelopeLosses => (float)Results.TotalOpaqueTransmissionHeatLosses;
         public float WindowsLosses => (float)Results.TotalWindowTransmissionHeatLosses;
         public float SystemLosses => (float)Results.TotalSystemLosses; 
-        public float PrimaryTransferLosses => 0f; // ignore?
-
+        public float PrimaryTransferLosses => 0f; // deactivate for now @Daren
+                                                  // new arrow for active cooling @Daren
+                                                  // new arrow for surplus electricity @Daren
+                                                  // new arrow for surplus heating energy @Daren
 
         #endregion EnergyBalance
     }
