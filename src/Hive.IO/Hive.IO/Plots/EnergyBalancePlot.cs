@@ -236,6 +236,11 @@ namespace Hive.IO.Plots
                     graphics.FillPolygon(new SolidBrush(color.Current), arrowPolygon);
                     graphics.DrawPolygon(blackPen, arrowPolygon);
 
+                    // write the percentages
+                    var gainPercent = gain / totalGains * 100;
+                    graphics.DrawString($"{gainPercent:F0}%", GH_FontServer.Standard, blackBrush, rightArrowBounds,
+                        format);
+
                     rightY += rightArrowBounds.Height + ArrowPadding;
                     leftY += rightArrowBounds.Height + leftArrowPadding;
                     color.MoveNext();
@@ -287,6 +292,11 @@ namespace Hive.IO.Plots
                     var arrowPolygon = CreateLossesArrowPolygon(leftArrowBounds, rightArrowBounds);
                     graphics.FillPolygon(new SolidBrush(color.Current), arrowPolygon);
                     graphics.DrawPolygon(blackPen, arrowPolygon);
+
+                    // write the percentages
+                    var lossPercent = loss / totalLosses * 100;
+                    graphics.DrawString($"{lossPercent:F0}%", GH_FontServer.Standard, blackBrush, leftArrowBounds,
+                        format);
 
                     leftY += leftArrowBounds.Height + ArrowPadding;
                     rightY += rightArrowBounds.Height + rightArrowPadding;
