@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Hive.IO.EnergySystems;
 using rg = Rhino.Geometry;
@@ -37,7 +38,12 @@ namespace Hive.IO.Results
         public double[] TotalFinalHeatingMonthly { get; private set; }
         public double[] TotalFinalDomesticHotWaterMonthly { get; private set; }
 
-        public double [] TotalPrimaryEnergyMonthly { get; private set; }
+        public double[] TotalPrimaryEnergyMonthlyNonRenewable { get; private set; }
+        public double[] TotalFinalEnergyMonthlyRenewable { get; private set; }
+
+        public double[] TotalPurchasedElectricityMonthly { get; private set; }
+        public double[] TotalFeedInElectricityMonthly { get; private set; }
+        public double [] TotalConsumedElectricityMonthly { get; private set; }
 
 
         //public double[] TotalFinalElectricityHourly { get; private set; }
@@ -50,7 +56,7 @@ namespace Hive.IO.Results
         #region Total Emissions
 
         public double TotalEmbodiedConstructionEmissions { get; private set; }
-        public double [] TotalOperationalEmissionsMonthly { get; private set; }
+        public double[] TotalOperationalEmissionsMonthly { get; private set; }
 
         #endregion
 
@@ -176,8 +182,12 @@ namespace Hive.IO.Results
             this.TotalFinalCoolingMonthly = new double[Misc.MonthsPerYear];
             this.TotalFinalElectricityMonthly = new double[Misc.MonthsPerYear];
 
-            this.TotalPrimaryEnergyMonthly = new double[Misc.MonthsPerYear];
+            this.TotalPrimaryEnergyMonthlyNonRenewable = new double[Misc.MonthsPerYear];
+            this.TotalFinalEnergyMonthlyRenewable = new double[Misc.MonthsPerYear];
             this.TotalOperationalEmissionsMonthly = new double[Misc.MonthsPerYear];
+            this.TotalPurchasedElectricityMonthly = new double[Misc.MonthsPerYear];
+            this.TotalFeedInElectricityMonthly = new double[Misc.MonthsPerYear];
+            this.TotalConsumedElectricityMonthly = new double[Misc.MonthsPerYear];
 
             //this.TotalFinalCoolingHourly = new double[Misc.HoursPerYear];
             //this.TotalFinalHeatingHourly = new double[Misc.HoursPerYear];
@@ -213,9 +223,14 @@ namespace Hive.IO.Results
             this.TotalFinalCoolingMonthly = GetTotalMonthlyFinalLoads(building, "cooling");
             this.TotalFinalElectricityMonthly = GetTotalMonthlyFinalLoads(building, "electricity");
 
-            this.TotalPrimaryEnergyMonthly = GetTotalMonthlyPrimaryLoads(conversionTech);
+            this.TotalPrimaryEnergyMonthlyNonRenewable = GetTotalMonthlyPrimaryLoads(conversionTech);
+            this.TotalFinalEnergyMonthlyRenewable = GetTotalMonthlyRenewableEnergy(conversionTech);
             this.TotalOperationalEmissionsMonthly = GetTotalMonthlyOperationalEmissions(conversionTech);
 
+            Tuple<double[], double[]> tuple = GetTotalMonthlyPurchasedAndFeedInElectricity(conversionTech);
+            this.TotalPurchasedElectricityMonthly = tuple.Item1;
+            this.TotalFeedInElectricityMonthly = tuple.Item2;
+            this.TotalConsumedElectricityMonthly = GetTotalMonthlyConsumedElectricity(building, conversionTech);
 
             //this.TotalFinalCoolingHourly = new double[Misc.HoursPerYear];
             //this.TotalFinalHeatingHourly = new double[Misc.HoursPerYear];
@@ -227,7 +242,7 @@ namespace Hive.IO.Results
             this.TotalVentilationHeatLosses = GetTotalGainsOrLosses(building, "Qv");
             this.TotalInternalGains = GetTotalGainsOrLosses(building, "Qi");
             this.TotalSolarGains = GetTotalGainsOrLosses(building, "Qs");
-            this.TotalSystemLosses = GetTotalMonthlySystemLosses(this, this.TotalPrimaryEnergyMonthly);
+            this.TotalSystemLosses = GetTotalMonthlySystemLossesNonRenewable(conversionTech).Sum();
 
             this.SupplyNames = null;
             this.SupplyTypes = null;
@@ -423,6 +438,76 @@ namespace Hive.IO.Results
 
         #region Getters
 
+        // this is not final demand, because final demand could be negative (e.g. from surplus PV). But this is how much electricity we actually consume. we need to know for the Sankey diagram
+        public static double [] GetTotalMonthlyConsumedElectricity(Building.Building building, List<ConversionTech> conversionTech)
+        {
+            // go through all zones and get
+            // building.Zones[0].ConsumedElectricityMonthly.Sum()
+
+            // go tzhrough all conversion tech (of type HeatPump only) and check InputCarrier ConsumedElectricity
+
+            double[] result = new double[Misc.MonthsPerYear];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = 0.0;
+            foreach (var zone in building.Zones)
+            {
+                for (int i = 0; i < result.Length; i++)
+                {
+                    result[i] += zone.ConsumedElectricityMonthly[i];
+                }
+            }
+
+            foreach (var tech in conversionTech)
+            {
+                if(tech is HeatPump)
+                {
+                    for(int i=0; i<result.Length; i++)
+                    {
+                        result[i] += tech.InputCarrier.MonthlyCumulativeEnergy[i]; // inputcarrier is always Electricity in HeatPump
+                    }
+                }
+            }
+
+            return result;
+        }
+
+
+        public static Tuple<double [], double[]> GetTotalMonthlyPurchasedAndFeedInElectricity(List<ConversionTech> conversionTech)
+        {
+            double[] purchased = new double[Misc.MonthsPerYear];
+            double[] feedIn = new double[Misc.MonthsPerYear];
+            for (int i = 0; i < purchased.Length; i++)
+            {
+                purchased[i] = 0.0;
+                feedIn[i] = 0.0;
+            }
+            foreach(var tech in conversionTech)
+            {
+                if(tech is DirectElectricity)
+                {
+                    for(int i=0; i<purchased.Length; i++)
+                    {
+                        double _elec = tech.InputCarrier.MonthlyCumulativeEnergy[i];
+                        if (_elec > 0.0)
+                            purchased[i] += _elec;
+                        else
+                            feedIn[i] += Math.Abs(_elec);
+                    }
+                }
+            }
+            return new Tuple<double[], double []>(purchased, feedIn);
+        }
+
+
+        
+
+        public static double [] GetTotalMonthlyFeedInElectricity(List<ConversionTech> conversionTech)
+        {
+
+            return new double[1] { 0.0 };
+        }
+
+
         public static double GetTotalFloorArea(Building.Building building)
         {
             double totalFloorArea = 0.0;
@@ -480,12 +565,22 @@ namespace Hive.IO.Results
         /// <returns></returns>
         public static double[] GetTotalMonthlyPrimaryLoads(List<ConversionTech> conversionTech)
         {
-            double [] result = new double[Misc.MonthsPerYear];
+            double[] result = new double[Misc.MonthsPerYear];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = 0.0;
             foreach (var tech in conversionTech)
             {
                 for (int i = 0; i < Misc.MonthsPerYear; i++)
                 {
-                    result[i] += tech.InputCarrier.MonthlyCumulativeEnergy[i] * tech.InputCarrier.PrimaryEnergyFactor;
+                    if (tech is SurfaceBasedTech == false && tech is DirectElectricity == false && tech is HeatPump == false) //no heat pump, because electricity of it is already in DirectElectricity
+                    {
+                        result[i] += tech.InputCarrier.MonthlyCumulativeEnergy[i] * tech.InputCarrier.PrimaryEnergyFactor;
+                    }
+                    if(tech is DirectElectricity)
+                    {
+                        if (tech.InputCarrier.MonthlyCumulativeEnergy[i] > 0)
+                            result[i] += tech.InputCarrier.MonthlyCumulativeEnergy[i] * tech.InputCarrier.PrimaryEnergyFactor;
+                    }
                 }
             }
 
@@ -493,19 +588,50 @@ namespace Hive.IO.Results
         }
 
 
-        public static double GetTotalMonthlySystemLosses(Results results, double[] monthlyPrimaryEnergy)
+        /// <summary>
+        /// final (effective) renewable energy, not primary
+        /// </summary>
+        /// <param name="renewableConversionTech"></param>
+        /// <returns></returns>
+        public static double[] GetTotalMonthlyRenewableEnergy(List<ConversionTech> renewableConversionTech)
         {
-            var sysLosses = new double[Misc.MonthsPerYear];
-            for (int i = 0; i < sysLosses.Length; i++)
+            double[] result = new double[Misc.MonthsPerYear];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = 0.0;
+            foreach (var tech in renewableConversionTech)
             {
-                sysLosses[i] = results.TotalPrimaryEnergyMonthly[i]
-                               - results.TotalFinalCoolingMonthly[i]
-                               - results.TotalFinalHeatingMonthly[i]
-                               - results.TotalFinalDomesticHotWaterMonthly[i]
-                               - results.TotalFinalElectricityMonthly[i];
+                if (tech is SurfaceBasedTech)
+                {
+                    for (int i = 0; i < result.Length; i++)
+                    {
+                        result[i] += tech.OutputCarriers[0].MonthlyCumulativeEnergy[i];
+                    }
+                }
             }
 
-            return sysLosses.Sum();
+            return result;
+        }
+
+
+        public static double[] GetTotalMonthlySystemLossesNonRenewable(List<ConversionTech> conversionTech)
+        {
+            double[] result = new double[Misc.MonthsPerYear];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = 0.0;
+            foreach (var tech in conversionTech)
+            {
+                for (int i = 0; i < result.Length; i++)
+                {
+                    if (tech is SurfaceBasedTech == false)
+                    {
+                        // only for fuel based. not for Heatpumps, because electricity from heatpumps will be attributed to consumed electricity (Outgoing arrows in Sankey)
+                        if(tech.InputCarrier.MonthlyCumulativeEnergy[i] > 0.0 && tech.InputCarrier is Electricity == false)
+                            result[i] += ((tech.InputCarrier.MonthlyCumulativeEnergy[i] * tech.InputCarrier.PrimaryEnergyFactor) - tech.OutputCarriers[0].MonthlyCumulativeEnergy[i]);
+                    }
+                }
+            }
+
+            return result;
         }
 
 

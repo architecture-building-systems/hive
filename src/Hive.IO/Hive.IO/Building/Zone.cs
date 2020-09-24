@@ -133,6 +133,11 @@ namespace Hive.IO.Building
         /// in kWh per month
         /// </summary>
         public double[] ElectricityLoadsMonthly { get; private set; }
+
+        /// <summary>
+        /// Differs from ElectricityLoadsMonthly, which can be negative (surplus electricity from e.g. PV). ConsumedElectricityMonthly is what we really consume in the zone
+        /// </summary>
+        public double [] ConsumedElectricityMonthly { get; set; }
         #endregion
 
 
@@ -301,7 +306,6 @@ namespace Hive.IO.Building
             coolingLoads.CopyTo(this.CoolingLoadsMonthly, 0);
             electricityLoads.CopyTo(this.ElectricityLoadsMonthly, 0);
         }
-
 
 
         public void SetLossesAndGains(double[] Qt_opaque, double [] Qt_transparent, double[] Qv, double[] Qi, double[] Qs)
