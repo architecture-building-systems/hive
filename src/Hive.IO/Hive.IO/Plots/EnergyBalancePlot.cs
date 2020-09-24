@@ -114,7 +114,9 @@ namespace Hive.IO.Plots
 
             RenderGainsArrows(results, graphics, innerHousePolygon, houseBounds, bounds, gains, maxTotal);
             RenderLossesArrows(results, graphics, innerHousePolygon, houseBounds, bounds, losses, maxTotal);
-            RenderLegend(graphics, houseBounds, bounds);
+
+            var legendBounds = new RectangleF(bounds.X, houseBounds.Bottom, bounds.Width, bounds.Height-houseBounds.Height).CloneInflate(-LegendPadding, -LegendPadding);
+            RenderLegend(graphics, legendBounds);
         }
 
         public bool Contains(PointF location)
@@ -132,16 +134,8 @@ namespace Hive.IO.Plots
             // ignore for now
         }
 
-        private void RenderLegend(Graphics graphics, RectangleF houseBounds, RectangleF bounds)
+        private void RenderLegend(Graphics graphics, RectangleF legendBounds)
         {
-            var legendLeft = (bounds.Left + houseBounds.Left) / 2f;
-            var legendRight = (bounds.Right + houseBounds.Right) / 2f;
-
-            // the space to draw the legend is between the bottom of the house bounds and the bottom of the bounds
-            var legendBounds = new RectangleF(
-                    legendLeft, houseBounds.Bottom, legendRight - legendLeft, bounds.Bottom - houseBounds.Bottom)
-                .CloneInflate(-LegendPadding, -LegendPadding);
-
             var leftTitle = "ENERGY IN";
 
             var leftLegendWidth =
