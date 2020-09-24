@@ -426,7 +426,7 @@ namespace Hive.IO.EnergySystems
             {
                 double etaTemp = Math.Max(0, this.FRtauAlpha - ((this.FRUL * (inletTemperature[t] - ambientAirCarrier.Temperature[t])) / meanIrradiance[t]));
                 double temp = meanIrradiance[t] * etaTemp * this.SurfaceArea / 1000.0;
-                heatingEnergy[t] = double.IsNaN(temp) ? 0.0 : temp;
+                heatingEnergy[t] = (double.IsNaN(temp) || temp < 0.0) ? 0.0 : temp;
             }
 
             // zeros, because renewable energy and because equation doesnt calc output temperature. Supply temp, I'd need to calculate according to: See ShanShans mail from 21.8.2020

@@ -43,7 +43,9 @@ namespace Hive.IO.Results
 
         public double[] TotalPurchasedElectricityMonthly { get; private set; }
         public double[] TotalFeedInElectricityMonthly { get; private set; }
+        public double [] TotalSurplusHeatingMonthly { get; private set; } // just dumped? we can't utilize it without storage model, or connection to district heating network
         public double [] TotalConsumedElectricityMonthly { get; private set; }
+        public double[] TotalActiveCoolingMonthly { get; private set; }
 
 
         //public double[] TotalFinalElectricityHourly { get; private set; }
@@ -185,8 +187,9 @@ namespace Hive.IO.Results
             this.TotalOperationalEmissionsMonthly = new double[Misc.MonthsPerYear];
             this.TotalPurchasedElectricityMonthly = new double[Misc.MonthsPerYear];
             this.TotalFeedInElectricityMonthly = new double[Misc.MonthsPerYear];
+            this.TotalSurplusHeatingMonthly = new double[Misc.MonthsPerYear];
             this.TotalConsumedElectricityMonthly = new double[Misc.MonthsPerYear];
-
+            this.TotalActiveCoolingMonthly = new double[Misc.MonthsPerYear];
             //this.TotalFinalCoolingHourly = new double[Misc.HoursPerYear];
             //this.TotalFinalHeatingHourly = new double[Misc.HoursPerYear];
             //this.TotalFinalElectricityHourly = new double[Misc.HoursPerYear];
@@ -228,7 +231,9 @@ namespace Hive.IO.Results
             Tuple<double[], double[]> tuple = GetTotalMonthlyPurchasedAndFeedInElectricity(conversionTech);
             this.TotalPurchasedElectricityMonthly = tuple.Item1;
             this.TotalFeedInElectricityMonthly = tuple.Item2;
+            this.TotalSurplusHeatingMonthly = GetTotalMonthlySurplusHeating(building, conversionTech);
             this.TotalConsumedElectricityMonthly = GetTotalMonthlyConsumedElectricity(building, conversionTech);
+            this.TotalActiveCoolingMonthly = GetTotalMonthlyActiveCooling(conversionTech);
 
             //this.TotalFinalCoolingHourly = new double[Misc.HoursPerYear];
             //this.TotalFinalHeatingHourly = new double[Misc.HoursPerYear];
@@ -436,6 +441,60 @@ namespace Hive.IO.Results
 
         #region Getters
 
+
+        public static double [] GetTotalMonthlySurplusHeating(Building.Building building, List<ConversionTech> conversionTech)
+        {
+
+            double[] totalHeatGenerated = new double[Misc.MonthsPerYear];
+            double[] totalHeatLoads = new double[Misc.MonthsPerYear];
+            for (int i = 0; i < totalHeatGenerated.Length; i++)
+            {
+                totalHeatGenerated[i] = 0.0;
+                totalHeatLoads[i] = 0.0;
+            }
+
+            for (int i = 0; i < totalHeatLoads.Length; i++)
+                foreach (var zone in building.Zones)
+                    totalHeatLoads[i] += zone.ConsumedHeatingMonthly[i];
+
+            foreach(var tech in conversionTech)
+            {
+                if (tech.IsHeating) //in case of CHP, I know that it is the first OutputCarrier... no good coding. FIX ME... 
+                {
+                    for(int i=0; i<totalHeatGenerated.Length; i++)
+                    {
+                        totalHeatGenerated[i] += tech.OutputCarriers[0].MonthlyCumulativeEnergy[i];
+                    }
+                }
+            }
+
+            var result = Enumerable.Zip(totalHeatLoads, totalHeatGenerated, (a, b) => a - b).ToArray(); 
+            for(int i=0; i<result.Length; i++)
+                result[i] = result[i] < 0.0 ? Math.Abs(result[i]) : 0.0;
+
+            return result;
+        }
+
+        public static double [] GetTotalMonthlyActiveCooling(List<ConversionTech> conversionTech)
+        {
+            double[] result = new double[Misc.MonthsPerYear];
+            for (int i = 0; i < result.Length; i++)
+                result[i] = 0.0;
+            foreach(var tech in conversionTech)
+            {
+                if (tech.IsCooling)
+                {
+                    for(int i=0; i<result.Length; i++)
+                    {
+                        result[i] += tech.OutputCarriers[0].MonthlyCumulativeEnergy[i];
+                    }
+                }
+            }
+
+            return result;
+        }
+
+
         // this is not final demand, because final demand could be negative (e.g. from surplus PV). But this is how much electricity we actually consume. we need to know for the Sankey diagram
         public static double [] GetTotalMonthlyConsumedElectricity(Building.Building building, List<ConversionTech> conversionTech)
         {
@@ -494,15 +553,6 @@ namespace Hive.IO.Results
                 }
             }
             return new Tuple<double[], double []>(purchased, feedIn);
-        }
-
-
-        
-
-        public static double [] GetTotalMonthlyFeedInElectricity(List<ConversionTech> conversionTech)
-        {
-
-            return new double[1] { 0.0 };
         }
 
 
