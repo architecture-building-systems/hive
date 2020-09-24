@@ -189,12 +189,14 @@ namespace Hive.IO.Results
         public float VentilationLosses => (float)Results.TotalVentilationHeatLosses;
         public float EnvelopeLosses => (float)Results.TotalOpaqueTransmissionHeatLosses;
         public float WindowsLosses => (float)Results.TotalWindowTransmissionHeatLosses;
+
         public float SystemLosses => (float)Results.TotalSystemLosses; // system losses only from fuel based systems. Heatpump electricity is accounted to Electricity (out)
         public float ActiveCooling => (float)Results.TotalActiveCoolingMonthly.Sum();           // new arrow for active cooling @Daren
         public float SurplusElectricity => (float)Results.TotalFeedInElectricityMonthly.Sum();      // new arrow for surplus electricity @Daren
         public float SurplusHeating => (float)Results.TotalSurplusHeatingMonthly.Sum();          // new arrow for surplus heating energy @Daren
 
         public float PrimaryTransferLosses => 0f;   // deactivate for now @Daren
+
 
         #endregion EnergyBalance
     }
