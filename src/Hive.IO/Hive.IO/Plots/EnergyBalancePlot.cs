@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using Grasshopper.GUI;
@@ -32,9 +33,9 @@ namespace Hive.IO.Plots
             Color.FromArgb(153, 179, 214), // Windows losses
             Color.FromArgb(133, 101, 99), // System losses
             // Color.FromArgb(255, 255, 255) // Primary transfer losses
-            Color.FromArgb(204,255,255), // Active cooling
-            Color.FromArgb(204,255,153), // Surplus electricity
-            Color.FromArgb(255, 153, 51), // Surplus heating energy
+            Color.FromArgb(204, 255, 255), // Active cooling
+            Color.FromArgb(204, 255, 153), // Surplus electricity
+            Color.FromArgb(255, 153, 51) // Surplus heating energy
         };
 
         private static readonly string[] EnergyInStrings =
@@ -71,7 +72,7 @@ namespace Hive.IO.Plots
                 var height = (float) GH_FontServer.MeasureString("ENERGY IN/OUT", GH_FontServer.StandardBold).Height;
                 height += EnergyOutStrings.Select(s => GH_FontServer.MeasureString(s, GH_FontServer.Standard).Height)
                     .Sum();
-                height += IconPadding * (EnergyOutStrings.Length);
+                height += IconPadding * EnergyOutStrings.Length;
                 return height + 2 * LegendPadding;
             }
         }
@@ -79,8 +80,9 @@ namespace Hive.IO.Plots
         public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
         {
             _bounds = bounds;
-            var houseBounds = bounds.CloneInflate(-bounds.Width / 3, 0);  // place it in the middle, one third of the width
-            houseBounds.Height = bounds.Height - LegendHeight;  // leave room for the legend
+            var houseBounds =
+                bounds.CloneInflate(-bounds.Width / 3, 0); // place it in the middle, one third of the width
+            houseBounds.Height = bounds.Height - LegendHeight; // leave room for the legend
             var innerHousePolygon = RenderHouse(graphics, houseBounds);
 
             var gains = new[]
@@ -99,7 +101,7 @@ namespace Hive.IO.Plots
                 results.SystemLosses,
                 results.ActiveCooling,
                 results.SurplusElectricity,
-                results.SurplusHeatingEnergy
+                results.SurplusHeating
             };
 
             if (losses.Any(loss => loss < 0.0f) || gains.Any(gain => gain < 0.0f))
@@ -112,11 +114,13 @@ namespace Hive.IO.Plots
 
             var maxTotal = Math.Max(gains.Sum(), losses.Sum());
 
-            RenderGainsArrows(results, graphics, innerHousePolygon, houseBounds, bounds, gains, maxTotal);
-            RenderLossesArrows(results, graphics, innerHousePolygon, houseBounds, bounds, losses, maxTotal);
+            RenderGainsArrows(graphics, innerHousePolygon, houseBounds, bounds, gains, maxTotal);
+            RenderLossesArrows(graphics, innerHousePolygon, houseBounds, bounds, losses, maxTotal);
 
-            var legendBounds = new RectangleF(bounds.X, houseBounds.Bottom, bounds.Width, bounds.Height-houseBounds.Height).CloneInflate(-LegendPadding, -LegendPadding);
-            RenderLegend(graphics, legendBounds);
+            var legendBounds =
+                new RectangleF(bounds.X, houseBounds.Bottom, bounds.Width, bounds.Height - houseBounds.Height)
+                    .CloneInflate(-LegendPadding, -LegendPadding);
+            RenderLegend(graphics, gains, losses, legendBounds);
         }
 
         public bool Contains(PointF location)
@@ -134,30 +138,36 @@ namespace Hive.IO.Plots
             // ignore for now
         }
 
-        private void RenderLegend(Graphics graphics, RectangleF legendBounds)
+        private void RenderLegend(Graphics graphics, float[] gains, float[] losses, RectangleF legendBounds)
         {
             var leftTitle = "ENERGY IN";
-
+            var totalGains = gains.Sum();
+            var energyInStrings = gains.Zip(EnergyInStrings,
+                (gain, s) => $"{s}: {gain:0} kWh ({gain / totalGains * 100:0}%)").ToList();
             var leftLegendWidth =
-                EnergyInStrings.Concat(new[] {leftTitle}).Select(
+                energyInStrings.Concat(new[] {leftTitle}).Select(
                     // NOTE: the "xxx" in the string template is used for a bit of padding
                     s => GH_FontServer.MeasureString($"{s}xxx", GH_FontServer.Standard).Width).Max() + IconWidth +
                 IconPadding;
 
             var leftLegendBounds = new RectangleF(legendBounds.X, legendBounds.Y, leftLegendWidth, legendBounds.Height);
-            RenderLegendColumn(graphics, leftTitle, leftLegendBounds, EnergyInStrings, GainsColors);
+            RenderLegendColumn(graphics, leftTitle, leftLegendBounds, energyInStrings, GainsColors);
 
             var rightTitle = "ENERGY OUT";
-            var rightLegendWidth = EnergyOutStrings.Concat(new[] {rightTitle}).Select(
-                                       s => GH_FontServer.MeasureString($"{s}xxx", GH_FontServer.Standard).Width)
-                                   .Max() + IconWidth +
-                                   IconPadding;
+            var totalLosses = losses.Sum();
+            var energyOutStrings = losses.Zip(EnergyOutStrings,
+                (loss, s) => $"{s}: {loss:0} kWh ({loss / totalLosses * 100:0}%)").ToList();
+            var rightLegendWidth
+                = energyOutStrings.Concat(new[] {rightTitle}).Select(
+                      s => GH_FontServer.MeasureString($"{s}xxx", GH_FontServer.Standard).Width).Max() + IconWidth +
+                  IconPadding;
             var rightLegendBounds = new RectangleF(legendBounds.Right - rightLegendWidth, legendBounds.Y,
                 rightLegendWidth, legendBounds.Height);
-            RenderLegendColumn(graphics, rightTitle, rightLegendBounds, EnergyOutStrings, LossesColors);
+            RenderLegendColumn(graphics, rightTitle, rightLegendBounds, energyOutStrings, LossesColors);
         }
 
-        private static void RenderLegendColumn(Graphics graphics, string title, RectangleF legendBounds, string[] names,
+        private static void RenderLegendColumn(Graphics graphics, string title, RectangleF legendBounds,
+            IEnumerable<string> names,
             Color[] colors)
         {
             graphics.DrawString(title, GH_FontServer.StandardBold, Brushes.Black, legendBounds);
@@ -182,8 +192,8 @@ namespace Hive.IO.Plots
         }
 
 
-        private void RenderGainsArrows(ResultsPlotting results, Graphics graphics,
-            PointF[] innerHousePolygon, RectangleF houseBounds, RectangleF bounds, float[] gains, float max)
+        private void RenderGainsArrows(Graphics graphics, PointF[] innerHousePolygon, RectangleF houseBounds,
+            RectangleF bounds, float[] gains, float max)
         {
             if (max.IsClose(0.0f))
                 // no data computed yet
@@ -226,11 +236,6 @@ namespace Hive.IO.Plots
                     graphics.FillPolygon(new SolidBrush(color.Current), arrowPolygon);
                     graphics.DrawPolygon(blackPen, arrowPolygon);
 
-                    // write the percentages
-                    var gainPercent = gain / totalGains * 100;
-                    graphics.DrawString($"{gainPercent:F0}%", GH_FontServer.Standard, blackBrush, rightArrowBounds,
-                        format);
-
                     rightY += rightArrowBounds.Height + ArrowPadding;
                     leftY += rightArrowBounds.Height + leftArrowPadding;
                     color.MoveNext();
@@ -238,8 +243,8 @@ namespace Hive.IO.Plots
             }
         }
 
-        private void RenderLossesArrows(ResultsPlotting results, Graphics graphics,
-            PointF[] innerHousePolygon, RectangleF houseBounds, RectangleF bounds, float[] losses, float max)
+        private void RenderLossesArrows(Graphics graphics, PointF[] innerHousePolygon, RectangleF houseBounds,
+            RectangleF bounds, float[] losses, float max)
         {
             if (max.IsClose(0.0f))
                 // no data computed yet
@@ -282,11 +287,6 @@ namespace Hive.IO.Plots
                     var arrowPolygon = CreateLossesArrowPolygon(leftArrowBounds, rightArrowBounds);
                     graphics.FillPolygon(new SolidBrush(color.Current), arrowPolygon);
                     graphics.DrawPolygon(blackPen, arrowPolygon);
-
-                    // write the percentages
-                    var lossPercent = loss / totalLosses * 100;
-                    graphics.DrawString($"{lossPercent:F0}%", GH_FontServer.Standard, blackBrush, leftArrowBounds,
-                        format);
 
                     leftY += leftArrowBounds.Height + ArrowPadding;
                     rightY += rightArrowBounds.Height + rightArrowPadding;
