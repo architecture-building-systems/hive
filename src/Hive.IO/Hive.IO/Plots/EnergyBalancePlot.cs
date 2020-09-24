@@ -31,7 +31,10 @@ namespace Hive.IO.Plots
             Color.FromArgb(120, 138, 163), // Envelope losses
             Color.FromArgb(153, 179, 214), // Windows losses
             Color.FromArgb(133, 101, 99), // System losses
-            Color.FromArgb(255, 255, 255) // Primary transfer losses
+            // Color.FromArgb(255, 255, 255) // Primary transfer losses
+            Color.FromArgb(204,255,255), // Active cooling
+            Color.FromArgb(204,255,153), // Surplus electricity
+            Color.FromArgb(255, 153, 51), // Surplus heating energy
         };
 
         private static readonly string[] EnergyInStrings =
@@ -49,8 +52,9 @@ namespace Hive.IO.Plots
             "Envelope losses",
             "Windows losses",
             "System losses",
-            "Cooling losses",
-            "Primary transfer losses"
+            "Active cooling",
+            "Surplus electricity",
+            "Surplus heating energy"
         };
 
         private RectangleF _bounds;
@@ -93,8 +97,9 @@ namespace Hive.IO.Plots
                 results.EnvelopeLosses,
                 results.WindowsLosses,
                 results.SystemLosses,
-                results.CoolingLosses,
-                results.PrimaryTransferLosses
+                results.ActiveCooling,
+                results.SurplusElectricity,
+                results.SurplusHeatingEnergy
             };
 
             if (losses.Any(loss => loss < 0.0f) || gains.Any(gain => gain < 0.0f))
