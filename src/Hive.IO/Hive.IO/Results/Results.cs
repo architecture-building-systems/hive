@@ -71,6 +71,8 @@ namespace Hive.IO.Results
         public double TotalSolarGains { get; private set; }
 
         public double TotalSystemLosses { get; private set; }
+
+        public double TotalCoolingLosses { get; private set; }
         #endregion
 
 

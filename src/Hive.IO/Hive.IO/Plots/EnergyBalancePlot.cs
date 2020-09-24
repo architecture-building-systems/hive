@@ -1,6 +1,6 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
-using System.Drawing.Drawing2D;
 using System.Linq;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
@@ -11,29 +11,34 @@ namespace Hive.IO.Plots
 {
     public class EnergyBalancePlot : IVisualizerPlot
     {
-        private RectangleF _bounds;
         private const float ArrowPadding = 5f;
         private const float ArrowIndent = 10f;
         private const float IconPadding = 5f;
         private const float IconWidth = 20f;
+        private const float LegendPadding = 20f;
 
-        private static readonly Color[] GainsColors = {
+        private static readonly Color[] GainsColors =
+        {
             Color.FromArgb(255, 216, 0), // solar gains
             Color.FromArgb(181, 43, 40), // internal gains
             Color.FromArgb(204, 128, 28), // primary energy
-            Color.FromArgb(242, 153, 35), // renewable energy
+            Color.FromArgb(242, 153, 35) // renewable energy
         };
 
-        private static readonly Color[] LossesColors = {
+        private static readonly Color[] LossesColors =
+        {
             Color.FromArgb(62, 124, 47), // Electricity (Light + Equipment)
             Color.FromArgb(59, 88, 166), // Ventilation losses
-            Color.FromArgb(120,138, 163), // Envelope losses
+            Color.FromArgb(120, 138, 163), // Envelope losses
             Color.FromArgb(153, 179, 214), // Windows losses
             Color.FromArgb(133, 101, 99), // System losses
-            Color.FromArgb(255, 255, 255), // Primary transfer losses
+            // Color.FromArgb(255, 255, 255) // Primary transfer losses
+            Color.FromArgb(204, 255, 255), // Active cooling
+            Color.FromArgb(204, 255, 153), // Surplus electricity
+            Color.FromArgb(255, 153, 51) // Surplus heating energy
         };
 
-        private static readonly string[] EnergyInStrings = new[]
+        private static readonly string[] EnergyInStrings =
         {
             "Solar gains",
             "Internal gains",
@@ -41,58 +46,134 @@ namespace Hive.IO.Plots
             "Renewable energy"
         };
 
-        private static readonly string[] EnergyOutStrings = new[]
+        private static readonly string[] EnergyOutStrings =
         {
             "Electricity (Light + Equipment)",
             "Ventilation losses",
             "Envelope losses",
             "Windows losses",
             "System losses",
-            "Primary transfer losses"
+            "Active cooling",
+            "Surplus electricity",
+            "Surplus heating energy"
         };
+
+        private RectangleF _bounds;
+
+        /// <summary>
+        ///     Figure out the height of the largest legend (hint: it's always the one on the right)
+        /// </summary>
+        /// <param name="graphics"></param>
+        /// <returns></returns>
+        private static float LegendHeight
+        {
+            get
+            {
+                var height = (float) GH_FontServer.MeasureString("ENERGY IN/OUT", GH_FontServer.StandardBold).Height;
+                height += EnergyOutStrings.Select(s => GH_FontServer.MeasureString(s, GH_FontServer.Standard).Height)
+                    .Sum();
+                height += IconPadding * EnergyOutStrings.Length;
+                return height + 2 * LegendPadding;
+            }
+        }
 
         public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
         {
             _bounds = bounds;
-            var houseBounds = bounds.CloneInflate(-bounds.Width / 3, -bounds.Height / 4);
-            houseBounds.Offset(0, -(houseBounds.Top - bounds.Top));
+            var houseBounds =
+                bounds.CloneInflate(-bounds.Width / 3, 0); // place it in the middle, one third of the width
+            houseBounds.Height = bounds.Height - LegendHeight; // leave room for the legend
             var innerHousePolygon = RenderHouse(graphics, houseBounds);
 
-            RenderGainsArrows(results, graphics, innerHousePolygon, houseBounds, bounds);
-            RenderLossesArrows(results, graphics, innerHousePolygon, houseBounds, bounds);
-            RenderLegend(graphics, houseBounds, bounds);
+            var gains = new[]
+            {
+                results.SolarGains,
+                results.InternalGains,
+                results.PrimaryEnergy,
+                results.RenewableEnergy
+            };
+            var losses = new[]
+            {
+                results.Electricity,
+                results.VentilationLosses,
+                results.EnvelopeLosses,
+                results.WindowsLosses,
+                results.SystemLosses,
+                results.ActiveCooling,
+                results.SurplusElectricity,
+                results.SurplusHeating
+            };
+
+            if (losses.Any(loss => loss < 0.0f) || gains.Any(gain => gain < 0.0f))
+            {
+                // throw new Exception("Losses and Gains need to be positive values.");
+                // FIXME: remove this when chris has fixed the bug
+                losses = losses.Select(loss => Math.Max(0.0f, loss)).ToArray();
+                gains = gains.Select(gain => Math.Max(0.0f, gain)).ToArray();
+            }
+
+            var maxTotal = Math.Max(gains.Sum(), losses.Sum());
+
+            RenderGainsArrows(graphics, innerHousePolygon, houseBounds, bounds, gains, maxTotal);
+            RenderLossesArrows(graphics, innerHousePolygon, houseBounds, bounds, losses, maxTotal);
+
+            var legendBounds =
+                new RectangleF(bounds.X, houseBounds.Bottom, bounds.Width, bounds.Height - houseBounds.Height)
+                    .CloneInflate(-LegendPadding, -LegendPadding);
+            RenderLegend(graphics, gains, losses, legendBounds);
         }
 
-        private void RenderLegend(Graphics graphics, RectangleF houseBounds, RectangleF bounds)
+        public bool Contains(PointF location)
         {
-            var legendLeft = (bounds.Left + houseBounds.Left) / 2f;
-            var legendRight = (bounds.Right + houseBounds.Right) / 2f;
+            return _bounds.Contains(location);
+        }
 
-            // the space to draw the legend is between the bottom of the house bounds and the bottom of the bounds
-            var legendBounds = new RectangleF(
-                legendLeft, houseBounds.Bottom, legendRight - legendLeft, bounds.Bottom - houseBounds.Bottom).CloneInflate(-20, -20);
+        public void Clicked(GH_Canvas sender, GH_CanvasMouseEvent e)
+        {
+            throw new NotImplementedException();
+        }
 
+        public void NewData(ResultsPlotting results)
+        {
+            // ignore for now
+        }
+
+        private void RenderLegend(Graphics graphics, float[] gains, float[] losses, RectangleF legendBounds)
+        {
             var leftTitle = "ENERGY IN";
-            var rightTitle = "ENERGY OUT";
+            var totalGains = gains.Sum();
+            var energyInStrings = gains.Zip(EnergyInStrings,
+                (gain, s) => $"{s}: {gain:0} kWh ({gain / totalGains * 100:0}%)").ToList();
             var leftLegendWidth =
-                EnergyInStrings.Concat(new []{leftTitle}).Select(
-                    s => GH_FontServer.MeasureString($"{s}xxx", GH_FontServer.Standard).Width).Max() + IconWidth + IconPadding;
-            var rightLegendWidth = EnergyOutStrings.Concat(new []{rightTitle}).Select(
-                s => GH_FontServer.MeasureString($"{s}xxx", GH_FontServer.Standard).Width).Max() + IconWidth + IconPadding;
+                energyInStrings.Concat(new[] {leftTitle}).Select(
+                    // NOTE: the "xxx" in the string template is used for a bit of padding
+                    s => GH_FontServer.MeasureString($"{s}xxx", GH_FontServer.Standard).Width).Max() + IconWidth +
+                IconPadding;
 
             var leftLegendBounds = new RectangleF(legendBounds.X, legendBounds.Y, leftLegendWidth, legendBounds.Height);
-            RenderLegendColumn(graphics, leftTitle, leftLegendBounds, EnergyInStrings, GainsColors);
+            RenderLegendColumn(graphics, leftTitle, leftLegendBounds, energyInStrings, GainsColors);
 
-            var rightLegendBounds = new RectangleF(legendBounds.Right - rightLegendWidth, legendBounds.Y, rightLegendWidth, legendBounds.Height);
-            RenderLegendColumn(graphics, rightTitle, rightLegendBounds, EnergyOutStrings, LossesColors);
+            var rightTitle = "ENERGY OUT";
+            var totalLosses = losses.Sum();
+            var energyOutStrings = losses.Zip(EnergyOutStrings,
+                (loss, s) => $"{s}: {loss:0} kWh ({loss / totalLosses * 100:0}%)").ToList();
+            var rightLegendWidth
+                = energyOutStrings.Concat(new[] {rightTitle}).Select(
+                      s => GH_FontServer.MeasureString($"{s}xxx", GH_FontServer.Standard).Width).Max() + IconWidth +
+                  IconPadding;
+            var rightLegendBounds = new RectangleF(legendBounds.Right - rightLegendWidth, legendBounds.Y,
+                rightLegendWidth, legendBounds.Height);
+            RenderLegendColumn(graphics, rightTitle, rightLegendBounds, energyOutStrings, LossesColors);
         }
 
-        private static void RenderLegendColumn(Graphics graphics, string title, RectangleF legendBounds, string[] names, Color[] colors)
+        private static void RenderLegendColumn(Graphics graphics, string title, RectangleF legendBounds,
+            IEnumerable<string> names,
+            Color[] colors)
         {
             graphics.DrawString(title, GH_FontServer.StandardBold, Brushes.Black, legendBounds);
             var titleHeight = GH_FontServer.MeasureString(title, GH_FontServer.StandardBold).Height;
             var y = legendBounds.Y + titleHeight;
-            using (var color = colors.Select(s => s).GetEnumerator())
+            using (var color = colors.Select(c => c).GetEnumerator())
             {
                 color.MoveNext();
                 foreach (var s in names)
@@ -111,9 +192,13 @@ namespace Hive.IO.Plots
         }
 
 
-        private void RenderGainsArrows(ResultsPlotting results, Graphics graphics,
-            PointF[] innerHousePolygon, RectangleF houseBounds, RectangleF bounds)
+        private void RenderGainsArrows(Graphics graphics, PointF[] innerHousePolygon, RectangleF houseBounds,
+            RectangleF bounds, float[] gains, float max)
         {
+            if (max.IsClose(0.0f))
+                // no data computed yet
+                return;
+
             // inner axis, centered inside the house, left is end point of gains, right is starting point of losses
             var innerHouseBounds = HousePolygonToInnerRectangleF(innerHousePolygon);
             var houseCenterBounds = innerHouseBounds.CloneInflate(-innerHouseBounds.Width / 4f, -10);
@@ -125,15 +210,9 @@ namespace Hive.IO.Plots
 
             var gainsArrowLeft = (bounds.Left + houseBounds.Left) / 2f;
             var innerHouseTop = innerHousePolygon[2].Y;
-            var leftBounds = new RectangleF(gainsArrowLeft, innerHouseTop, rightBounds.Width, houseBounds.Bottom - innerHouseTop);
+            var leftBounds = new RectangleF(gainsArrowLeft, innerHouseTop, rightBounds.Width,
+                houseBounds.Bottom - innerHouseTop);
 
-            var gains = new[]
-            {
-                results.SolarGains,
-                results.InternalGains,
-                results.PrimaryEnergy,
-                results.RenewableEnergy
-            };
             var totalGains = gains.Sum();
             var newMax = rightBounds.Height - ArrowPadding * gains.GetUpperBound(0);
             var leftArrowPadding = (leftBounds.Height - newMax) / gains.GetUpperBound(0);
@@ -149,7 +228,7 @@ namespace Hive.IO.Plots
                 color.MoveNext();
                 foreach (var gain in gains)
                 {
-                    var arrowHeight = gain.Scale(totalGains, newMax);
+                    var arrowHeight = gain.Scale(max, newMax);
                     var rightArrowBounds = new RectangleF(rightBounds.Left, rightY, rightBounds.Width, arrowHeight);
                     var leftArrowBounds = new RectangleF(leftBounds.Left, leftY, leftBounds.Width, arrowHeight);
 
@@ -159,7 +238,8 @@ namespace Hive.IO.Plots
 
                     // write the percentages
                     var gainPercent = gain / totalGains * 100;
-                    graphics.DrawString($"{gainPercent:F0}%", GH_FontServer.Standard, blackBrush, rightArrowBounds, format);
+                    graphics.DrawString($"{gainPercent:F0}%", GH_FontServer.Standard, blackBrush, rightArrowBounds,
+                        format);
 
                     rightY += rightArrowBounds.Height + ArrowPadding;
                     leftY += rightArrowBounds.Height + leftArrowPadding;
@@ -168,9 +248,13 @@ namespace Hive.IO.Plots
             }
         }
 
-        private void RenderLossesArrows(ResultsPlotting results, Graphics graphics,
-            PointF[] innerHousePolygon, RectangleF houseBounds, RectangleF bounds)
+        private void RenderLossesArrows(Graphics graphics, PointF[] innerHousePolygon, RectangleF houseBounds,
+            RectangleF bounds, float[] losses, float max)
         {
+            if (max.IsClose(0.0f))
+                // no data computed yet
+                return;
+
             // inner axis, centered inside the house, left is end point of gains, right is starting point of losses
             var innerHouseBounds = HousePolygonToInnerRectangleF(innerHousePolygon);
 
@@ -183,17 +267,9 @@ namespace Hive.IO.Plots
 
             var lossesArrowRight = (bounds.Right + houseBounds.Right) / 2f;
             var innerHouseTop = innerHousePolygon[2].Y;
-            var rightBounds = new RectangleF(lossesArrowRight - leftBounds.Width, innerHouseTop, leftBounds.Width, houseBounds.Bottom - innerHouseTop);
+            var rightBounds = new RectangleF(lossesArrowRight - leftBounds.Width, innerHouseTop, leftBounds.Width,
+                houseBounds.Bottom - innerHouseTop);
 
-            var losses = new[]
-            {
-                results.Electricity,
-                results.VentilationLosses,
-                results.EnvelopeLosses,
-                results.WindowsLosses,
-                results.SystemLosses,
-                results.PrimaryTransferLosses,
-            };
             var totalLosses = losses.Sum();
             var newMax = leftBounds.Height - ArrowPadding * losses.GetUpperBound(0);
             var rightArrowPadding = (rightBounds.Height - newMax) / losses.GetUpperBound(0);
@@ -209,7 +285,7 @@ namespace Hive.IO.Plots
                 color.MoveNext();
                 foreach (var loss in losses)
                 {
-                    var arrowHeight = loss.Scale(totalLosses, newMax);
+                    var arrowHeight = loss.Scale(max, newMax);
                     var leftArrowBounds = new RectangleF(leftBounds.Left, leftY, leftBounds.Width, arrowHeight);
                     var rightArrowBounds = new RectangleF(rightBounds.Left, rightY, rightBounds.Width, arrowHeight);
 
@@ -219,7 +295,8 @@ namespace Hive.IO.Plots
 
                     // write the percentages
                     var lossPercent = loss / totalLosses * 100;
-                    graphics.DrawString($"{lossPercent:F0}%", GH_FontServer.Standard, blackBrush, leftArrowBounds, format);
+                    graphics.DrawString($"{lossPercent:F0}%", GH_FontServer.Standard, blackBrush, leftArrowBounds,
+                        format);
 
                     leftY += leftArrowBounds.Height + ArrowPadding;
                     rightY += rightArrowBounds.Height + rightArrowPadding;
@@ -243,18 +320,18 @@ namespace Hive.IO.Plots
                 new PointF(rightBounds.Left, rightBounds.Bottom), // 6
                 new PointF(leftBounds.Right, leftBounds.Bottom), // 7
                 new PointF(leftBounds.Left, leftBounds.Bottom), // 8
-                new PointF(leftBounds.Left + ArrowIndent, leftMiddleY), // 9 
+                new PointF(leftBounds.Left + ArrowIndent, leftMiddleY) // 9 
             };
         }
+
         /// <summary>
-        ///
-        ///            2-------------3
-        ///  0        /               \
-        ///  ---------1                > 4
-        ///  \                        /
-        ///   > 9       6-------------5
-        ///  /          /
-        /// 8 ----------7
+        ///     2-------------3
+        ///     0        /               \
+        ///     ---------1                > 4
+        ///     \                        /
+        ///     > 9       6-------------5
+        ///     /          /
+        ///     8 ----------7
         /// </summary>
         /// <param name="leftBounds"></param>
         /// <param name="rightBounds"></param>
@@ -274,7 +351,7 @@ namespace Hive.IO.Plots
                 new PointF(rightBounds.Left, rightBounds.Bottom), // 6
                 new PointF(leftBounds.Right, leftBounds.Bottom), // 7
                 new PointF(leftBounds.Left, leftBounds.Bottom), // 8
-                new PointF(leftBounds.Left + ArrowIndent, leftMiddleY), // 9 
+                new PointF(leftBounds.Left + ArrowIndent, leftMiddleY) // 9 
             };
         }
 
@@ -308,28 +385,13 @@ namespace Hive.IO.Plots
             var house = new[]
             {
                 // start at bottom left, clockwise
-                new PointF(xLeft, yBottom),  // 0
-                new PointF(xLeft, yRoof),  // 1
-                new PointF(xMiddle, yTop),  // 2
-                new PointF(xRight, yRoof),  // 3
-                new PointF(xRight, yBottom),  // 4
+                new PointF(xLeft, yBottom), // 0
+                new PointF(xLeft, yRoof), // 1
+                new PointF(xMiddle, yTop), // 2
+                new PointF(xRight, yRoof), // 3
+                new PointF(xRight, yBottom) // 4
             };
             return house;
-        }
-
-        public bool Contains(PointF location)
-        {
-            return _bounds.Contains(location);
-        }
-
-        public void Clicked(GH_Canvas sender, GH_CanvasMouseEvent e)
-        {
-            throw new NotImplementedException();
-        }
-
-        public void NewData(ResultsPlotting results)
-        {
-            // ignore for now
         }
     }
 }
