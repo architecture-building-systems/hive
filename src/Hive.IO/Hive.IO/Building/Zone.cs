@@ -137,7 +137,8 @@ namespace Hive.IO.Building
         /// <summary>
         /// Differs from ElectricityLoadsMonthly, which can be negative (surplus electricity from e.g. PV). ConsumedElectricityMonthly is what we really consume in the zone
         /// </summary>
-        public double [] ConsumedElectricityMonthly { get; set; }
+        public double [] ConsumedElectricityMonthly { get; set; } // set in GhResults... FIX ME
+        public double [] ConsumedHeatingMonthly { get; set; } // same
         #endregion
 
 

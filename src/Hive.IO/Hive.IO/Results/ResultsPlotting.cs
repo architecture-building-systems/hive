@@ -178,31 +178,25 @@ namespace Hive.IO.Results
 
         #region EnergyBalance
 
-        // bug: with PV energy, following numbers become negative:
-        // - (IN) TotalPrimaryEnergyMonthly
-        // - (OUT) TotalFinalElectricityMonthly
-        // - (OUT) TotalSystemLosses
-
         // ingoing energy
         public float SolarGains => (float)Results.TotalSolarGains;
         public float InternalGains => (float)Results.TotalInternalGains;
-        public float PrimaryEnergy => (float)Results.TotalPrimaryEnergyMonthlyNonRenewable.Sum(); //inputCarriers from conversionTech, except renewable tech (solar). What to do with Electricity Grid? How to account for negative numbers
-        public float RenewableEnergy => (float)Results.TotalFinalEnergyMonthlyRenewable.Sum(); 
+        public float PrimaryEnergy => (float)Results.TotalPrimaryEnergyMonthlyNonRenewable.Sum(); //inputCarriers from conversionTech, except renewable tech (solar). 
+        public float RenewableEnergy => (float)Results.TotalFinalEnergyMonthlyRenewable.Sum(); // solar tech
         
         // outgoing energy
-        public float Electricity => (float)Results.TotalConsumedElectricityMonthly.Sum();
+        public float Electricity => (float)Results.TotalConsumedElectricityMonthly.Sum(); // consumed electricity. it is not electricity loads, which could become negative with e.g. pv electricity
         public float VentilationLosses => (float)Results.TotalVentilationHeatLosses;
         public float EnvelopeLosses => (float)Results.TotalOpaqueTransmissionHeatLosses;
         public float WindowsLosses => (float)Results.TotalWindowTransmissionHeatLosses;
-        public float SystemLosses => (float)Results.TotalSystemLosses; 
-        // public float PrimaryTransferLosses => 0f; // deactivate for now @Daren
 
-        public float ActiveCooling => 0f;
+        public float SystemLosses => (float)Results.TotalSystemLosses; // system losses only from fuel based systems. Heatpump electricity is accounted to Electricity (out)
+        public float ActiveCooling => (float)Results.TotalActiveCoolingMonthly.Sum();           // new arrow for active cooling @Daren
+        public float SurplusElectricity => (float)Results.TotalFeedInElectricityMonthly.Sum();      // new arrow for surplus electricity @Daren
+        public float SurplusHeating => (float)Results.TotalSurplusHeatingMonthly.Sum();          // new arrow for surplus heating energy @Daren
 
-        public float SurplusElectricity => 0f;
+        public float PrimaryTransferLosses => 0f;   // deactivate for now @Daren
 
-        public float SurplusHeatingEnergy => 0f;
-        
 
         #endregion EnergyBalance
     }
