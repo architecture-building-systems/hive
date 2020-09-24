@@ -189,7 +189,8 @@ namespace Hive.IO.Results
         public float VentilationLosses => (float)Results.TotalVentilationHeatLosses;
         public float EnvelopeLosses => (float)Results.TotalOpaqueTransmissionHeatLosses;
         public float WindowsLosses => (float)Results.TotalWindowTransmissionHeatLosses;
-        public float SystemLosses => (float)Results.TotalSystemLosses; 
+        public float SystemLosses => (float)Results.TotalSystemLosses;
+        public float CoolingLosses => (float) Results.TotalCoolingLosses;
         public float PrimaryTransferLosses => 0f; // difference between primary energy and final loads?
 
 
