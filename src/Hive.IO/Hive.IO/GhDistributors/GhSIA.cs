@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Web.Script.Serialization;
+using System.Windows.Documents;
 using Grasshopper.Kernel;
 using Hive.IO.Building;
 
@@ -29,6 +31,8 @@ namespace Hive.IO.GhDistributors
             pManager.AddNumberParameter("Windows Areas", "WinAreas", "All window areas in [m²] of the building.", GH_ParamAccess.list);
             pManager.AddNumberParameter("External Surfaces Areas", "ExtSrfAreas", "ExtSrfAreas", GH_ParamAccess.list);
             pManager.AddTextParameter("SIA 2024 Room", "SiaRoom", "SIA 2024 room definitions for each zone.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("AllExtSrfAreas", "AllExtSrfAreas", "All external surface areas", GH_ParamAccess.list);
+            pManager.AddTextParameter("Surface Type", "SrfType", "External Surface type, 'opaque' or 'transp'", GH_ParamAccess.list);
         }
 
 
@@ -39,8 +43,12 @@ namespace Hive.IO.GhDistributors
 
             int zoneCount = building.Zones.Length;
             double[] zoneAreas = new double[zoneCount];
-            double[] windowAreas = new double[zoneCount];
-            double[] extSrfAreas = new double[zoneCount];
+            var windowAreas = new List<double>();
+            var extSrfAreas = new List<double>();
+            var allSrfAreas = new List<double>();
+            var srfTypes = new List<string>();
+            string opaque = "opaque";
+            string transp = "transp";
 
             for (int i = 0; i < zoneCount; i++)
             {
@@ -53,13 +61,15 @@ namespace Hive.IO.GhDistributors
                     zoneAreas[i] += floor.Area;
                 }
 
-                windowAreas[i] = 0.0;
+                
                 foreach (Window opening in zone.Windows)
                 {
-                    windowAreas[i] += opening.Area;
+                    windowAreas.Add(opening.Area);
+                    allSrfAreas.Add(opening.Area);
+                    srfTypes.Add(transp);
                 }
 
-                extSrfAreas[i] = 0.0;
+                
                 foreach (Wall wall in zone.Walls)
                 {
                     // TO DO: for Hive 0.2
@@ -67,12 +77,16 @@ namespace Hive.IO.GhDistributors
                     //{
 
                     //}
-                    extSrfAreas[i] += wall.Area;
+                    extSrfAreas.Add(wall.Area);
+                    allSrfAreas.Add(wall.Area);
+                    srfTypes.Add(opaque);
                     // TO DO: check, if external. VERY IMPORTANT
                 }
                 foreach (Roof roof in zone.Roofs)
                 {
-                    extSrfAreas[i] += roof.Area;
+                    extSrfAreas.Add(roof.Area);
+                    allSrfAreas.Add(roof.Area);
+                    srfTypes.Add(opaque);
                     //TO DO: check if external. VERY IMPORTANT
                 }
 
@@ -95,6 +109,8 @@ namespace Hive.IO.GhDistributors
             DA.SetDataList(1, windowAreas);
             DA.SetDataList(2, extSrfAreas);
             DA.SetData(3, building.SIA2024.ToJson());
+            DA.SetDataList(4, allSrfAreas);
+            DA.SetDataList(5, srfTypes);
         }
 
 
