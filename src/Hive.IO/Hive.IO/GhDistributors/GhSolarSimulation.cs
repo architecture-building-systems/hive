@@ -85,7 +85,7 @@ namespace Hive.IO.GhDistributors
                 foreach(Window opening in zone.Windows)
                 {
                     windows.Add(opening.BrepGeometry);
-                    double[] winProp = ComputeTiltAzimuthArea(opening.BrepGeometry);
+                    double[] winProp = Misc.ComputeTiltAzimuthArea(opening.BrepGeometry);
                     windowTilts.Add(winProp[0]);
                     windowAzimuths.Add(winProp[1]);
                     windowAreas.Add(winProp[2]);
@@ -110,7 +110,7 @@ namespace Hive.IO.GhDistributors
             foreach (SurfaceBasedTech srfTech in srfBasedTech)
             {
                 solarTechSurfaces.Add(srfTech.SurfaceGeometry);
-                double [] solarTechProp = ComputeTiltAzimuth(srfTech.SurfaceGeometry);
+                double [] solarTechProp = Misc.ComputeTiltAzimuth(srfTech.SurfaceGeometry);
                 solarTechTilts.Add(solarTechProp[0]);
                 solarTechAzimuths.Add(solarTechProp[1]);
                 solarTechAreas.Add(srfTech.SurfaceArea);
@@ -131,61 +131,7 @@ namespace Hive.IO.GhDistributors
         }
 
 
-        private double [] ComputeTiltAzimuth(Mesh mesh)
-        {
-            double azimuth, tilt;
-
-            mesh.FaceNormals.ComputeFaceNormals();
-            Vector3d normal = mesh.Normals[0];
-            Point3d cen = mesh.Faces.GetFaceCenter(0);
-            Vector3d vnormal = new Vector3d(0, 0, 1);
-            Vector3d tiltZ0 = new Vector3d(0, 0, 1);
-            double tiltValue = Vector3d.VectorAngle(normal, tiltZ0, vnormal);
-            tilt = tiltValue * (180.0 / Math.PI);
-
-            if (tiltValue == 0)
-            {
-                azimuth = 0;
-            }
-            else
-            {
-                double azimuthValue = Vector3d.VectorAngle(new Vector3d(normal.X, normal.Y, 0), new Vector3d(0, 1, 0), vnormal);
-                azimuth = azimuthValue * (180 / Math.PI);
-            }
-
-            //Line normalLine = new Line(cen, cen + normal);
-            //Line azimuthLine = new Line(cen, cen + new Vector3d(0, 1, 0));
-            //Line tiltLine = new Line(cen, cen + tiltZ0);
-
-            return new double[2] { tilt, azimuth};
-        }
-
-
-        private double [] ComputeTiltAzimuthArea(Brep x)
-        {
-            Surface srf = x.Surfaces[0];
-
-            AreaMassProperties massProp = AreaMassProperties.Compute(srf);
-            Point3d cen = massProp.Centroid;
-            double u, v;
-            srf.ClosestPoint(cen, out u, out v);
-            Vector3d normal = srf.NormalAt(u, v);
-
-            if (x.Faces[0].OrientationIsReversed)
-                normal.Reverse();
-
-            Vector3d vnormal = new Vector3d(0, 0, 1);
-            Vector3d tiltZ0 = new Vector3d(0, 0, 1);
-
-            double tiltValue = Vector3d.VectorAngle(normal, tiltZ0, vnormal);
-            double tilt = tiltValue * (180.0 / Math.PI);
-
-            double azimuthValue = Vector3d.VectorAngle(new Vector3d(normal.X, normal.Y, 0), new Vector3d(0, 1, 0), vnormal);
-            double azimuth = azimuthValue * (180 / Math.PI);
-            double area = AreaMassProperties.Compute(x.Faces[0]).Area;
-
-            return new double[3] { tilt, azimuth, area };
-        }
+       
 
 
         protected override System.Drawing.Bitmap Icon

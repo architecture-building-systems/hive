@@ -639,7 +639,7 @@ namespace Hive.IO.Building
             var windowList = new List<Window>();
             if (window_geometry != null && window_geometry.Length > 0)
             {
-                foreach (var w in walls)
+                foreach (var w in walls.Cast<Component>().Concat(roofs))
                 {
                     w.SubComponents = new List<Component>();
                     foreach (var win in window_geometry)
