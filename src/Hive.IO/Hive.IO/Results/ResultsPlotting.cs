@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using System.Security.Permissions;
 using System.Windows.Forms.VisualStyles;
 using Grasshopper.Kernel.Geometry.SpatialTrees;
@@ -199,5 +200,16 @@ namespace Hive.IO.Results
 
 
         #endregion EnergyBalance
+
+        #region Irradiation
+
+        public List<double[]> IrradiationOnWindows => new List<double[]>
+        {
+            new double[Misc.MonthsPerYear],
+            new double[Misc.MonthsPerYear],
+            new double[Misc.MonthsPerYear]
+        };
+
+        #endregion Irradiation
     }
 }
