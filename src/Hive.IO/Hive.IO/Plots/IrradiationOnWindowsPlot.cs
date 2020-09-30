@@ -28,7 +28,9 @@ namespace Hive.IO.Plots
                     ItemsSource = windowIrradiation.Select(x => new ColumnItem {Value = x}),
                     IsStacked = true,
                     FillColor = Colors[i],
-                    Title = $" Window{i}"
+                    Title = $" Win{i:00}",
+                    LabelFormatString = "{0:0}",
+                    LabelPlacement = LabelPlacement.Middle
                 });
                 i++;
             }
