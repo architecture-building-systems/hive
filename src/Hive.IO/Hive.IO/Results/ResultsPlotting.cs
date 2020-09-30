@@ -205,9 +205,9 @@ namespace Hive.IO.Results
 
         public List<double[]> IrradiationOnWindows => new List<double[]>
         {
-            new double[Misc.MonthsPerYear],
-            new double[Misc.MonthsPerYear],
-            new double[Misc.MonthsPerYear]
+            new double[]{29, 49, 88, 124, 153, 166, 168, 143, 99, 58, 30, 22},
+            new double[]{19, 39, 78, 114, 143, 156, 158, 133, 89, 48, 20, 13},
+            new double[]{15, 24, 63, 99, 128, 141, 143, 118, 74, 33, 15, 14}
         };
 
         #endregion Irradiation
