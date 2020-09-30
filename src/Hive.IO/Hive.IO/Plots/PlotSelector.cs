@@ -11,7 +11,7 @@ namespace Hive.IO.Plots
 
     public enum PerformanceResolution { Yearly, Monthly, Hourly }
     public enum Kpi { Energy, Emissions, Costs, None } // None is used for when we're not showing performance plots
-
+    public enum OtherSubcategory { SvD, GvL, Sol }
 
     /// <summary>
     /// Manages the display of plots based on clicks to MenuButton objects. Also manages which MenuButtons
@@ -26,6 +26,7 @@ namespace Hive.IO.Plots
         private bool _breakdown;
         private PanelFactory _panelFactory;
         private MenuButtonPanel _currentPanel;
+        private OtherSubcategory _otherSubcategory = OtherSubcategory.SvD;
 
 
         public MenuButtonPanel CreatePerformancePanel()
@@ -36,7 +37,7 @@ namespace Hive.IO.Plots
                 _panelFactory = CreateSystemsPanel;
                 _currentKpi = Kpi.None;
             };
-            mbCategory.OnClicked += (sender, args) => RhinoApp.Write("P was clicked!");
+            // mbCategory.OnClicked += (sender, args) => RhinoApp.Write("P was clicked!");
 
             MenuButton mbResolution;
             switch (_performanceResolution)
@@ -73,7 +74,7 @@ namespace Hive.IO.Plots
             var mbCategory = new CategoryMenuButton("S");
             mbCategory.OnClicked += (sender, e) =>
             {
-                _panelFactory = CreateOtherPanel;
+                _panelFactory = CreateOtherPanel;  // link to next panel in list
             };
 
             return new MenuButtonPanel(new[]
@@ -89,16 +90,24 @@ namespace Hive.IO.Plots
             var mbCategory = new CategoryMenuButton("O");
             mbCategory.OnClicked += (sender, e) =>
             {
-                _panelFactory = CreatePerformancePanel;
+                _panelFactory = CreatePerformancePanel;  // link to next panel in list
                 _currentKpi = Kpi.Energy;
             };
+
+            MenuButton mbSvD = _otherSubcategory == OtherSubcategory.SvD? new BlackMenuButton("SvD") : new MenuButton("SvD");
+            MenuButton mbGvL= _otherSubcategory == OtherSubcategory.GvL ? new BlackMenuButton("GvL") : new MenuButton("GvL"); ;
+            MenuButton mbSol = _otherSubcategory == OtherSubcategory.Sol ? new BlackMenuButton("SOL") : new MenuButton("SOL"); ;
+
+            mbSvD.OnClicked += (sender, args) => _otherSubcategory = OtherSubcategory.SvD;
+            mbGvL.OnClicked += (sender, args) => _otherSubcategory = OtherSubcategory.GvL;
+            mbSol.OnClicked += (sender, args) => _otherSubcategory = OtherSubcategory.Sol;
 
             return new MenuButtonPanel(new[]
             {
                 mbCategory,
-                new MenuButton("SvD"),
-                new MenuButton("GvL"),
-                new MenuButton("SAN"),
+                mbSvD,
+                mbGvL,
+                mbSol
             });
         }
 
@@ -129,7 +138,17 @@ namespace Hive.IO.Plots
             }
             else if (Category == "O")
             {
-                return new EnergyBalancePlot();
+                switch (_otherSubcategory)
+                {
+                    case OtherSubcategory.SvD:
+                        return new EnergyBalancePlot();
+                    case OtherSubcategory.GvL:
+                        return new EnergyBalancePlot();
+                    case OtherSubcategory.Sol:
+                        return new IrradiationOnWindowsPlot();
+                    default:
+                        return new EnergyBalancePlot();
+                }
             }
             else
             {
