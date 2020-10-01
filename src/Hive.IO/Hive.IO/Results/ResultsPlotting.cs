@@ -18,6 +18,13 @@ namespace Hive.IO.Results
 
         public double TotalFloorArea => Results.TotalFloorArea;
 
+        #region Demand Monthly
+        public double[] TotalHeatingMonthly => Results.TotalFinalHeatingMonthly ?? new double[Misc.MonthsPerYear];
+        public double[] TotalCoolingMonthly => Results.TotalFinalCoolingMonthly ?? new double[Misc.MonthsPerYear];
+        public double[] TotalElectricityMonthly => Results.TotalFinalElectricityMonthly ?? new double[Misc.MonthsPerYear];
+        public double[] TotalDomesticHotWaterMonthly => Results.TotalFinalDomesticHotWaterMonthly ?? new double[Misc.MonthsPerYear];
+        #endregion
+
         #region Emissions
 
         public double[] EmbodiedEmissionsBuildingsMonthly(bool normalized)
