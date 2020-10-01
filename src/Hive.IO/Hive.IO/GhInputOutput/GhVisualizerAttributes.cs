@@ -7,6 +7,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
 using Hive.IO.Plots;
 using Hive.IO.Results;
+using Rhino;
 
 namespace Hive.IO.GhInputOutput
 {
@@ -14,8 +15,8 @@ namespace Hive.IO.GhInputOutput
     {
         // make sure we have a minimum size
         public static float TitleBarHeight = 200f;
-        private static readonly float MinWidth = 200f;
-        private static readonly float MinHeight = TitleBarHeight + 150f;
+        private static readonly float MinWidth = 1144f;
+        private static readonly float MinHeight = 780f; // TitleBarHeight + 150f;
 
         private const int Padding = 6;
 
@@ -84,6 +85,7 @@ namespace Hive.IO.GhInputOutput
             bounds.Height = Math.Max(bounds.Height, MinHeight);
 
             Bounds = new RectangleF(Pivot, bounds.Size);
+            RhinoApp.WriteLine($"Layout (width={bounds.Width}, height={bounds.Height}");
         }
 
         private RectangleF InnerBounds => Bounds.CloneInflate(-Padding, -Padding);
