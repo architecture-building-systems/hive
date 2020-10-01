@@ -60,21 +60,7 @@ namespace Hive.IO.Plots
             {
                 Position = AxisPosition.Bottom,
                 Key = "Months",
-                ItemsSource = new[]
-                {
-                    "Jan",
-                    "Feb",
-                    "Mar",
-                    "Apr",
-                    "May",
-                    "Jun",
-                    "Jul",
-                    "Aug",
-                    "Sep",
-                    "Oct",
-                    "Nov",
-                    "Dec"
-                }
+                ItemsSource = Misc.MonthNames
             });
             return model;
         }

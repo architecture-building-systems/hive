@@ -153,6 +153,7 @@
     <Compile Include="Plots\DemandMonthlyPlot.cs" />
     <Compile Include="Plots\AmrPlotDataAdaptor.cs" />
     <Compile Include="Plots\EnergyBalancePlot.cs" />
+    <Compile Include="Plots\IrradiationOnWindowsPlot.cs" />
     <Compile Include="Plots\MonthlyAmrPlot.cs" />
     <Compile Include="Plots\YearlyAmrPlot.cs" />
     <Compile Include="Results\ResultsPlotting.cs" />
