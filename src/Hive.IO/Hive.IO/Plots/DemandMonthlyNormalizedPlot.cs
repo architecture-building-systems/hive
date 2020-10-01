@@ -14,12 +14,11 @@ namespace Hive.IO.Plots
             var model = new PlotModel { Title = "Energy demand (Normalized Monthly)" };
             var totalFloorArea = results.TotalFloorArea;
 
-            var resultsTotalHeatingMonthly = results.Results.TotalFinalHeatingMonthly ?? new double[months];
             var strokeThickness = 4.0;
 
             var demandHeating = new ColumnSeries
             {
-                ItemsSource = resultsTotalHeatingMonthly.Select(demand => new ColumnItem { Value = demand / totalFloorArea }),
+                ItemsSource = results.TotalHeatingMonthly.Select(demand => new ColumnItem { Value = demand / totalFloorArea }),
                 Title = " Space Heating",
                 FillColor = BackgroundColor,
                 StrokeThickness = strokeThickness,
@@ -27,10 +26,9 @@ namespace Hive.IO.Plots
             };
             model.Series.Add(demandHeating);
 
-            var resultsTotalCoolingMonthly = results.Results.TotalFinalCoolingMonthly ?? new double[months];
             var demandCooling = new ColumnSeries
             {
-                ItemsSource = resultsTotalCoolingMonthly.Select(demand => new ColumnItem { Value = demand / totalFloorArea }),
+                ItemsSource = results.TotalCoolingMonthly.Select(demand => new ColumnItem { Value = demand / totalFloorArea }),
                 Title = " Space Cooling",
                 FillColor = BackgroundColor,
                 StrokeThickness = strokeThickness,
@@ -38,10 +36,9 @@ namespace Hive.IO.Plots
             };
             model.Series.Add(demandCooling);
 
-            var resultsTotalElectricityMonthly = results.Results.TotalFinalElectricityMonthly ?? new double[months];
             var demandElectricity = new ColumnSeries
             {
-                ItemsSource = resultsTotalElectricityMonthly.Select(
+                ItemsSource = results.TotalElectricityMonthly.Select(
                     demand => new ColumnItem { Value = demand / totalFloorArea }),
                 Title = " Electricity",
                 FillColor = BackgroundColor,
@@ -50,10 +47,9 @@ namespace Hive.IO.Plots
             };
             model.Series.Add(demandElectricity);
 
-            var resultsTotalDwhMonthly = results.Results.TotalFinalDomesticHotWaterMonthly ?? new double[months];
             var demandDhw = new ColumnSeries
             {
-                ItemsSource = resultsTotalDwhMonthly.Select(demand => new ColumnItem { Value = demand / totalFloorArea }),
+                ItemsSource = results.TotalDomesticHotWaterMonthly.Select(demand => new ColumnItem { Value = demand / totalFloorArea }),
                 Title = " DWH",
                 FillColor = BackgroundColor,
                 StrokeThickness = strokeThickness,
