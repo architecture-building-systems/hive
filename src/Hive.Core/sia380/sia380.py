@@ -208,6 +208,8 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
     # preAllocate arrays. its a bit faster than .append (https://levelup.gitconnected.com/faster-lists-in-python-4c4287502f0a)
     Q_i = [0.0] * months_per_year
     Q_s = [0.0] * months_per_year
+    Q_i_eta_g = [0.0] * months_per_year
+    Q_s_eta_g = [0.0] * months_per_year
     Q_V = [0.0] * months_per_year
     Q_T = [0.0] * months_per_year
     QT_opaque = [0.0] * months_per_year
@@ -295,7 +297,9 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
             Q_V[month] = Q_V_ub
             eta_g = eta_g_ub
 
-        demand = Q_T[month] + Q_V[month] - eta_g * (Q_i[month] + Q_s[month])
+        Q_i_eta_g[month] = Q_i[month] * eta_g
+        Q_s_eta_g[month] = Q_s[month] * eta_g
+        demand = Q_T[month] + Q_V[month] - (Q_i_eta_g[month] + Q_s_eta_g[month])
         if demand > 0:
             Q_Heat[month] = demand
         else:
@@ -305,8 +309,8 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
 
     tokWh = 1000.0
     return [x / tokWh for x in Q_Heat], [x / tokWh for x in Q_Cool], [x / tokWh for x in Q_Elec], \
-           [x / tokWh for x in Q_T], [x / tokWh for x in Q_V], [x / tokWh for x in Q_i], \
-           [x / tokWh for x in Q_s], [x / tokWh for x in QT_opaque], [x / tokWh for x in QT_transparent]
+           [x / tokWh for x in Q_T], [x / tokWh for x in Q_V], [x / tokWh for x in Q_i_eta_g], \
+           [x / tokWh for x in Q_s_eta_g], [x / tokWh for x in QT_opaque], [x / tokWh for x in QT_transparent]
 
 
 def calc_eta_g(Q_T_month, Q_V_month, gamma, tau):

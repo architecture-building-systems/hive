@@ -670,11 +670,12 @@ namespace Hive.IO.Results
             {
                 for (int i = 0; i < result.Length; i++)
                 {
-                    if (tech is SurfaceBasedTech == false)
+                    // only for fuel based and grid electricity. not for Heatpumps, because electricity from heatpumps will be attributed to consumed electricity (Outgoing arrows in Sankey)
+                    if (tech is SurfaceBasedTech == false && tech is HeatPump == false)
                     {
-                        // only for fuel based. not for Heatpumps, because electricity from heatpumps will be attributed to consumed electricity (Outgoing arrows in Sankey)
-                        if(tech.InputCarrier.MonthlyCumulativeEnergy[i] > 0.0 && tech.InputCarrier is Electricity == false)
+                        if(tech.InputCarrier.MonthlyCumulativeEnergy[i] > 0.0) // don't take negative values
                             result[i] += ((tech.InputCarrier.MonthlyCumulativeEnergy[i] * tech.InputCarrier.PrimaryEnergyFactor) - tech.OutputCarriers[0].MonthlyCumulativeEnergy[i]);
+                        
                     }
                 }
             }
