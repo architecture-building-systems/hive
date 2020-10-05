@@ -191,9 +191,9 @@ namespace Hive.IO.Results
         public float InternalGains => (float)Results.TotalInternalGains;
         public float PrimaryEnergy => (float)Results.TotalPrimaryEnergyMonthlyNonRenewable.Sum(); //inputCarriers from conversionTech, except renewable tech (solar). 
         public float RenewableEnergy => (float)Results.TotalFinalEnergyMonthlyRenewable.Sum(); // solar tech
-        public float VentilationGains => (float) Results.TotalVentilationHeatLosses;    // only take the negative values from this list, and make them Math.Abs( )
-        public float EnvelopeGains => (float) Results.TotalOpaqueTransmissionHeatLosses; // same as above comment
-        public float WindowsGains => (float) Results.TotalWindowTransmissionHeatLosses; // same as above comment
+        public float VentilationGains => (float) Results.TotalVentilationHeatGains;   
+        public float EnvelopeGains => (float) Results.TotalOpaqueTransmissionHeatGains; 
+        public float WindowsGains => (float) Results.TotalWindowTransmissionHeatGains; 
 
 
         // outgoing energy
