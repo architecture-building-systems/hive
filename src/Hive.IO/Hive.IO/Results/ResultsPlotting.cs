@@ -191,7 +191,11 @@ namespace Hive.IO.Results
         public float InternalGains => (float)Results.TotalInternalGains;
         public float PrimaryEnergy => (float)Results.TotalPrimaryEnergyMonthlyNonRenewable.Sum(); //inputCarriers from conversionTech, except renewable tech (solar). 
         public float RenewableEnergy => (float)Results.TotalFinalEnergyMonthlyRenewable.Sum(); // solar tech
-        
+        public float VentilationGains => (float) Results.TotalVentilationHeatGains;   
+        public float EnvelopeGains => (float) Results.TotalOpaqueTransmissionHeatGains; 
+        public float WindowsGains => (float) Results.TotalWindowTransmissionHeatGains; 
+
+
         // outgoing energy
         public float Electricity => (float)Results.TotalConsumedElectricityMonthly.Sum(); // consumed electricity. it is not electricity loads, which could become negative with e.g. pv electricity
         public float VentilationLosses => (float)Results.TotalVentilationHeatLosses;

@@ -65,6 +65,10 @@ namespace Hive.IO.Results
         public double TotalOpaqueTransmissionHeatLosses { get; private set; }
         public double TotalWindowTransmissionHeatLosses { get; private set; }
         public double TotalVentilationHeatLosses { get; private set; }
+        public double TotalOpaqueTransmissionHeatGains { get; private set; }
+        public double TotalWindowTransmissionHeatGains { get; private set; }
+        public double TotalVentilationHeatGains { get; private set; }
+
         public double TotalInternalGains { get; private set; }
         public double TotalSolarGains { get; private set; }
 
@@ -240,9 +244,12 @@ namespace Hive.IO.Results
             //this.TotalFinalElectricityHourly = new double[Misc.HoursPerYear];
             //this.TotalFinalDomesticHotWaterHourly = new double[Misc.HoursPerYear];
 
-            this.TotalOpaqueTransmissionHeatLosses = GetTotalGainsOrLosses(building, "Qt_opaque");
-            this.TotalWindowTransmissionHeatLosses = GetTotalGainsOrLosses(building, "Qt_transparent");
-            this.TotalVentilationHeatLosses = GetTotalGainsOrLosses(building, "Qv");
+            this.TotalOpaqueTransmissionHeatLosses = GetTotalGainsOrLosses(building, "Qt_opaque_positive");
+            this.TotalWindowTransmissionHeatLosses = GetTotalGainsOrLosses(building, "Qt_transparent_positive");
+            this.TotalVentilationHeatLosses = GetTotalGainsOrLosses(building, "Qv_positive");
+            this.TotalOpaqueTransmissionHeatGains = GetTotalGainsOrLosses(building, "Qt_opaque_negative");
+            this.TotalWindowTransmissionHeatGains = GetTotalGainsOrLosses(building, "Qt_transparent_negative");
+            this.TotalVentilationHeatGains = GetTotalGainsOrLosses(building, "Qv_negative");
             this.TotalInternalGains = GetTotalGainsOrLosses(building, "Qi");
             this.TotalSolarGains = GetTotalGainsOrLosses(building, "Qs");
             this.TotalSystemLosses = GetTotalMonthlySystemLossesNonRenewable(conversionTech).Sum();
@@ -670,11 +677,12 @@ namespace Hive.IO.Results
             {
                 for (int i = 0; i < result.Length; i++)
                 {
-                    if (tech is SurfaceBasedTech == false)
+                    // only for fuel based and grid electricity. not for Heatpumps, because electricity from heatpumps will be attributed to consumed electricity (Outgoing arrows in Sankey)
+                    if (tech is SurfaceBasedTech == false && tech is HeatPump == false)
                     {
-                        // only for fuel based. not for Heatpumps, because electricity from heatpumps will be attributed to consumed electricity (Outgoing arrows in Sankey)
-                        if(tech.InputCarrier.MonthlyCumulativeEnergy[i] > 0.0 && tech.InputCarrier is Electricity == false)
+                        if(tech.InputCarrier.MonthlyCumulativeEnergy[i] > 0.0) // don't take negative values
                             result[i] += ((tech.InputCarrier.MonthlyCumulativeEnergy[i] * tech.InputCarrier.PrimaryEnergyFactor) - tech.OutputCarriers[0].MonthlyCumulativeEnergy[i]);
+                        
                     }
                 }
             }
@@ -707,14 +715,23 @@ namespace Hive.IO.Results
             {
                 switch (loadType)
                 {
-                    case "Qt_opaque":
-                        result += zone.OpaqueTransmissionHeatLosses.Sum();
+                    case "Qt_opaque_positive":
+                        result += (from x in zone.OpaqueTransmissionHeatLosses where x > 0.0 select x).Sum();
                         break;
-                    case "Qt_transparent":
-                        result += zone.TransparentTransmissionHeatLosses.Sum();
+                    case "Qt_transparent_positive":
+                        result += (from x in zone.TransparentTransmissionHeatLosses where x > 0.0 select x).Sum();
                         break;
-                    case "Qv":
-                        result += zone.VentilationHeatLosses.Sum();
+                    case "Qv_positive":
+                        result += (from x in zone.VentilationHeatLosses where x > 0.0 select x).Sum();
+                        break;
+                    case "Qt_opaque_negative":
+                        result += Math.Abs((from x in zone.OpaqueTransmissionHeatLosses where x <= 0.0 select x).Sum());
+                        break;
+                    case "Qt_transparent_negative":
+                        result += Math.Abs((from x in zone.TransparentTransmissionHeatLosses where x <= 0.0 select x).Sum());
+                        break;
+                    case "Qv_negative":
+                        result += Math.Abs((from x in zone.VentilationHeatLosses where x <= 0.0 select x).Sum());
                         break;
                     case "Qi":
                         result += zone.InternalHeatGains.Sum();

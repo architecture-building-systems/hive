@@ -207,7 +207,7 @@ namespace Hive.IO.GhInputOutput
             var Qi = new List<double>();
             var Qs = new List<double>();
             DA.GetDataList(22, Qt_opaque);
-            DA.GetDataList(25, Qt_transparent);
+            DA.GetDataList(23, Qt_transparent);
             DA.GetDataList(24, Qv);
             DA.GetDataList(25, Qi);
             DA.GetDataList(26, Qs);
