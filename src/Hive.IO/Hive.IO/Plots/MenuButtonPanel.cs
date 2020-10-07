@@ -2,6 +2,7 @@
 using System.Linq;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
+using Grasshopper.Kernel;
 using Hive.IO.Results;
 using Rhino;
 
@@ -12,7 +13,7 @@ namespace Hive.IO.Plots
     /// </summary>
     public class MenuButtonPanel : IVisualizerControl
     {
-        private const float sideLength = 100;
+        private float sideLength => 3 * GH_FontServer.MeasureString("ABC", GH_FontServer.StandardBold).Height;
         private const float spacer = 25; // space between menu buttons
         private MenuButton[] _menuButtons;
 

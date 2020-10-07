@@ -12,15 +12,12 @@ namespace Hive.IO.GhInputOutput
 {
     public class GhVisualizerAttributes : GH_ResizableAttributes<GhVisualizer>
     {
-        // make sure we have a minimum size
-        public static float TitleBarHeight = 200f;
-        private static readonly float MinWidth = 200f;
-        private static readonly float MinHeight = TitleBarHeight + 150f;
-
         private const int Padding = 6;
+        private static readonly float MinWidth = 1144f;
+        private static readonly float MinHeight = TitleBarHeight + 580;
+        private readonly OperationalPerformancePlot[] _kpiPlots;
 
         private readonly PlotSelector _plotSelector = new PlotSelector();
-        private readonly OperationalPerformancePlot[] _kpiPlots;
 
         public GhVisualizerAttributes(GhVisualizer owner) : base(owner)
         {
@@ -70,21 +67,17 @@ namespace Hive.IO.GhInputOutput
             };
         }
 
+        // make sure we have a minimum size
+        public static float TitleBarHeight =>
+            GH_FontServer.MeasureString("1000", GH_FontServer.StandardBold).Height +
+            3 * GH_FontServer.MeasureString("KPI", GH_FontServer.Standard).Height;
+
         // FIXME: what goes here?
         public override string PathName => "PathName_GHVisualizer";
 
         protected override Size MinimumSize => new Size(50, 50);
 
         protected override Padding SizingBorders => new Padding(Padding);
-
-        protected override void Layout()
-        {
-            var bounds = Bounds;
-            bounds.Width = Math.Max(bounds.Width, MinWidth);
-            bounds.Height = Math.Max(bounds.Height, MinHeight);
-
-            Bounds = new RectangleF(Pivot, bounds.Size);
-        }
 
         private RectangleF InnerBounds => Bounds.CloneInflate(-Padding, -Padding);
 
@@ -99,12 +92,21 @@ namespace Hive.IO.GhInputOutput
             }
         }
 
+        private RectangleF MenuPanelBounds =>
+            new RectangleF(InnerBounds.X, InnerBounds.Y, InnerBounds.Width, TitleBarHeight);
+
+        protected override void Layout()
+        {
+            var bounds = Bounds;
+            bounds.Width = Math.Max(bounds.Width, MinWidth);
+            bounds.Height = Math.Max(bounds.Height, MinHeight);
+
+            Bounds = new RectangleF(Pivot, bounds.Size);
+        }
+
         public override GH_ObjectResponse RespondToMouseDown(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
-            if (e.Button != MouseButtons.Left)
-            {
-                return base.RespondToMouseDown(sender, e);
-            }
+            if (e.Button != MouseButtons.Left) return base.RespondToMouseDown(sender, e);
 
             if (_plotSelector.Contains(e.CanvasLocation))
             {
@@ -113,13 +115,11 @@ namespace Hive.IO.GhInputOutput
             }
 
             foreach (var kpi in _kpiPlots)
-            {
                 if (kpi.Contains(e.CanvasLocation))
                 {
                     kpi.Clicked(sender, e);
                     return base.RespondToMouseDown(sender, e);
                 }
-            }
 
             return base.RespondToMouseDown(sender, e);
         }
@@ -142,11 +142,9 @@ namespace Hive.IO.GhInputOutput
             RenderTitleBar(graphics);
         }
 
-        private RectangleF MenuPanelBounds => new RectangleF(InnerBounds.X, InnerBounds.Y, InnerBounds.Width, TitleBarHeight);
-
         /// <summary>
-        /// Render the title bar at the top with the dropdown for selecting the plot and the
-        /// operational performance metrics.
+        ///     Render the title bar at the top with the dropdown for selecting the plot and the
+        ///     operational performance metrics.
         /// </summary>
         /// <param name="graphics"></param>
         private void RenderTitleBar(Graphics graphics)
@@ -154,8 +152,9 @@ namespace Hive.IO.GhInputOutput
             _plotSelector.RenderMenuPanel(Owner.Results, graphics, MenuPanelBounds);
 
             // render the three operational performance plots
-            var plotWidth = TitleBarHeight;  // squares
-            var bounds = new RectangleF(InnerBounds.Right - plotWidth, InnerBounds.Location.Y, plotWidth, TitleBarHeight);
+            var plotWidth = TitleBarHeight; // squares
+            var bounds = new RectangleF(InnerBounds.Right - plotWidth, InnerBounds.Location.Y, plotWidth,
+                TitleBarHeight);
             foreach (var kpi in _kpiPlots)
             {
                 kpi.Normalized = _plotSelector.Normalized;
