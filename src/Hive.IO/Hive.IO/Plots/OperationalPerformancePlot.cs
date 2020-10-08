@@ -38,7 +38,7 @@ namespace Hive.IO.Plots
             _standardFont = GH_FontServer.Standard;
             _boldFont = GH_FontServer.StandardBold;
             _properties = properties;
-            _penWidth = 30f;
+            _penWidth = GH_FontServer.MeasureString("abc", _standardFont).Height;
         }
 
         public Kpi Kpi => _properties.Kpi;

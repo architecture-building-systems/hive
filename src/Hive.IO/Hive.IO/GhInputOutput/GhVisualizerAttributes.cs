@@ -13,8 +13,12 @@ namespace Hive.IO.GhInputOutput
     public class GhVisualizerAttributes : GH_ResizableAttributes<GhVisualizer>
     {
         private const int Padding = 6;
-        private static readonly float MinWidth = 1144f;
-        private static readonly float MinHeight = TitleBarHeight + 580;
+        private static readonly float MinWidth = 3 * (TitleBarHeight + Padding) + 4 * (MenuButtonPanel.Spacer + MenuButtonPanel.SideLength);
+
+        // 15 is chosen to fit the energy balance plot legend plus some space for the plot itself
+        private static readonly float MinHeight =
+            TitleBarHeight + 15 * GH_FontServer.MeasureString("abc", GH_FontServer.StandardBold).Height;
+
         private readonly OperationalPerformancePlot[] _kpiPlots;
 
         private readonly PlotSelector _plotSelector = new PlotSelector();
