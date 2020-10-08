@@ -26,6 +26,7 @@ header_map = {
     "U-Wert opake Bauteile": "UValueOpaque",
     "U-Wert Fenster": "UValueTransparent",
     "Gesamtenergiedurchlassgrad Verglasung": "GValue",
+    "Gesamtenergiedurchlassgrad Verglasung und Sonnenschutz": "GValueTotal",
     "Abminderungsfaktor fuer Fensterrahmen": "WindowFrameReduction",
     "Aussenluft-Volumenstrom (pro NGF)": "AirChangeRate",
     "Aussenluft-Volumenstrom durch Infiltration": "Infiltration",
@@ -61,8 +62,9 @@ building_use_type_map = {
 }
 
 def main():
-    file_template = "200728_SIA2024_Raumdaten_{quality}.csv"
-    folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "..", "..", "Hive.Core", "sia380"))
+    file_template = "201008_SIA2024_Raumdaten_{quality}.csv"
+    folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Resources")) 
+    #folder = "C:\\users\\chwaibel\\documents\\github\\Hive\\src\\Hive.IO\\Hive.IO\\Resources"
     records = []
     for quality in {"Bestand", "Standardwert", "Zielwert"}:
         file_path = os.path.join(folder, file_template.format(quality=quality))
