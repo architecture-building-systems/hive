@@ -235,6 +235,13 @@
                              Foreground="{Binding Path=State.TransparentCostBrush}"
                              FontWeight="{Binding Path=State.TransparentCostFontWeight}"/>
                     <Image Name="WindowImage" Grid.Row="6" Grid.ColumnSpan="2" Grid.Column="0" />
+                    <Label Grid.Row="6" Grid.Column="0" Content="g-value total (-)" Margin="0,6,0.333,71"/> <!-- i dont know how to properly make the sizes, Daren-->
+                    <TextBox x:Name="WindowGValueTotal" Grid.Row="6" VerticalAlignment="Center"
+                            TextAlignment="Right"
+                            IsEnabled="{Binding State.IsEditable}"
+                            Text="{Binding State.GValueTotal}" 
+                            Foreground="{Binding Path=State.GValueTotalBrush}"
+                            FontWeight="{Binding Path=State.GValueTotalFontWeight}" Grid.ColumnSpan="2" Margin="157,10,0,76"/> <!-- i dont know how to properly make the sizes, Daren-->
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="2">
                     <Grid.RowDefinitions>
