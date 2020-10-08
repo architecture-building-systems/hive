@@ -2,36 +2,37 @@
 using System.Linq;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
+using Grasshopper.Kernel;
 using Hive.IO.Results;
-using Rhino;
 
 namespace Hive.IO.Plots
 {
     /// <summary>
-    /// A MenuButtonPanel contains a list of MenuButtons.
+    ///     A MenuButtonPanel contains a list of MenuButtons.
     /// </summary>
     public class MenuButtonPanel : IVisualizerControl
     {
-        private const float sideLength = 100;
-        private const float spacer = 25; // space between menu buttons
-        private MenuButton[] _menuButtons;
+        public const float Spacer = 25; // space between menu buttons
+        private readonly MenuButton[] _menuButtons;
 
         public MenuButtonPanel(MenuButton[] menuButtons)
         {
             _menuButtons = menuButtons;
         }
 
+        public static float SideLength => 3 * GH_FontServer.MeasureString("ABC", GH_FontServer.StandardBold).Height;
+
         public string Category => _menuButtons.First().Text.Substring(0, 1);
 
         public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
         {
-            var x = bounds.X + spacer;
-            var y = bounds.Y + bounds.Height / 2 - sideLength / 2;
+            var x = bounds.X + Spacer;
+            var y = bounds.Y + bounds.Height / 2 - SideLength / 2;
 
             foreach (var mb in _menuButtons)
             {
-                mb.Render(results, graphics, new RectangleF(x, y, sideLength, sideLength));
-                x += sideLength + spacer;
+                mb.Render(results, graphics, new RectangleF(x, y, SideLength, SideLength));
+                x += SideLength + Spacer;
             }
         }
 
@@ -47,7 +48,7 @@ namespace Hive.IO.Plots
         }
 
         /// <summary>
-        /// Return a new MenuButtonPanel, with a (single) menu button replaced with a new one.
+        ///     Return a new MenuButtonPanel, with a (single) menu button replaced with a new one.
         /// </summary>
         /// <param name="select">the text of the menu button to replace</param>
         /// <param name="replacement"></param>
