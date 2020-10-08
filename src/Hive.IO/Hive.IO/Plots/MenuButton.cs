@@ -1,34 +1,27 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Drawing;
-using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using Hive.IO.Results;
-using Rhino;
 
 namespace Hive.IO.Plots
 {
     /// <summary>
-    /// MenuButtons are clickable regions that can render themselves to to a canvas.
-    /// They are managed by the PlotSelector class.
+    ///     MenuButtons are clickable regions that can render themselves to to a canvas.
+    ///     They are managed by the PlotSelector class.
     /// </summary>
-    public class MenuButton: IVisualizerControl
+    public class MenuButton : IVisualizerControl
     {
-        public event EventHandler OnClicked;
+        private readonly Brush _backgroundBrush;
 
         private readonly Pen _borderPen = new Pen(Color.FromArgb(217, 217, 217));
         private readonly Font _font;
         private readonly Brush _textBrush;
-        private readonly Brush _backgroundBrush;
         private RectangleF _bounds = RectangleF.Empty;
 
-        public MenuButton(string text): this(text, GH_FontServer.Standard, new SolidBrush(Color.Black), new SolidBrush(Color.Transparent))
+        public MenuButton(string text) : this(text, GH_FontServer.Standard, new SolidBrush(Color.Black),
+            new SolidBrush(Color.Transparent))
         {
         }
 
@@ -64,6 +57,8 @@ namespace Hive.IO.Plots
         {
             OnClicked?.Invoke(this, e);
         }
+
+        public event EventHandler OnClicked;
     }
 
     public class CategoryMenuButton : MenuButton
