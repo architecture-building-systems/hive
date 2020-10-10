@@ -27,6 +27,7 @@ header_map = {
     "U-Wert Fenster": "UValueTransparent",
     "Gesamtenergiedurchlassgrad Verglasung": "GValue",
     "Gesamtenergiedurchlassgrad Verglasung und Sonnenschutz": "GValueTotal",
+	"Strahlungsleistung fuer Betaetigung Sonnenschutz": "ShadingSetpoint",
     "Abminderungsfaktor fuer Fensterrahmen": "WindowFrameReduction",
     "Aussenluft-Volumenstrom (pro NGF)": "AirChangeRate",
     "Aussenluft-Volumenstrom durch Infiltration": "Infiltration",

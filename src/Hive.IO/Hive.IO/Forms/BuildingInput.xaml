@@ -241,7 +241,15 @@
                             IsEnabled="{Binding State.IsEditable}"
                             Text="{Binding State.GValueTotal}" 
                             Foreground="{Binding Path=State.GValueTotalBrush}"
-                            FontWeight="{Binding Path=State.GValueTotalFontWeight}" Grid.ColumnSpan="2" Margin="157,10,0,76"/> <!-- i dont know how to properly make the sizes, Daren-->
+                            FontWeight="{Binding Path=State.GValueTotalFontWeight}" Grid.ColumnSpan="2" Margin="157,10,0,76"/>
+                    <Label Grid.Row="6" Grid.Column="0" Content="shading setpoint (W/m²)" Margin="0,38,0,39"/>
+                    <TextBox x:Name="ShadingSetpoint" Grid.Row="6" VerticalAlignment="Center"
+                        TextAlignment="Right"
+                        IsEnabled="{Binding State.IsEditable}"
+                        Text="{Binding State.ShadingSetpoint}" 
+                        Foreground="{Binding State.ShadingSetpointBrush}"
+                        FontWeight="{Binding State.ShadingSetpointFontWeight}" Grid.ColumnSpan="2" Margin="157,42,0,44"/>
+                    <!-- i dont know how to properly make the sizes, Daren-->
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="2">
                     <Grid.RowDefinitions>

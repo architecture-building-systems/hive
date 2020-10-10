@@ -38,6 +38,7 @@ namespace Hive.IO.Building
             UValueTransparent = room.UValueTransparent;
             GValue = room.GValue;
             GValueTotal = room.GValueTotal;
+            ShadingSetpoint = room.ShadingSetpoint;
             WindowFrameReduction = room.WindowFrameReduction;
             AirChangeRate = room.AirChangeRate;
             Infiltration = room.Infiltration;
@@ -82,6 +83,7 @@ namespace Hive.IO.Building
         public double GlazingRatio; // Glasanteil
         public double GValue; // Gesamtenergiedurchlassgrad Verglasung
         public double GValueTotal; // Gesamtenergiedurchlassgrad Verglasung und Sonnenschutz
+        public double ShadingSetpoint; // shading setpoint in W/m^2 at which GValueTotal is used instead of GValue
         public double HeatingSetpoint; // Raumlufttemperatur Auslegung Heizen (Winter)
         public double HeatRecovery; // Temperatur-Aenderungsgrad der Waermerueckgewinnung
         public double Infiltration; // Aussenluft-Volumenstrom durch Infiltration
@@ -119,6 +121,7 @@ namespace Hive.IO.Building
                 {"U-Wert Fenster", UValueTransparent},
                 {"Gesamtenergiedurchlassgrad Verglasung", GValue},
                 {"Gesamtenergiedurchlassgrad Verglasung und Sonnenschutz", GValueTotal},
+                {"Strahlungsleistung fuer Betaetigung Sonnenschutz", ShadingSetpoint},
                 {"Abminderungsfaktor fuer Fensterrahmen", WindowFrameReduction},
                 {"Aussenluft-Volumenstrom (pro NGF)", AirChangeRate},
                 {"Aussenluft-Volumenstrom durch Infiltration", Infiltration},
@@ -153,6 +156,7 @@ namespace Hive.IO.Building
                 UValueTransparent = (double) d["U-Wert Fenster"],
                 GValue = (double) d["Gesamtenergiedurchlassgrad Verglasung"],
                 GValueTotal = (double)d["Gesamtenergiedurchlassgrad Verglasung und Sonnenschutz"],
+                ShadingSetpoint = (double)d["Strahlungsleistung fuer Betaetigung Sonnenschutz"],
                 WindowFrameReduction = (double) d["Abminderungsfaktor fuer Fensterrahmen"],
                 AirChangeRate = (double) d["Aussenluft-Volumenstrom (pro NGF)"],
                 Infiltration = (double) d["Aussenluft-Volumenstrom durch Infiltration"],

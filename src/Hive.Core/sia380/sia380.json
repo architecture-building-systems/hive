@@ -105,7 +105,8 @@
         {"type": "float", "name": "t_A", "nick-name": "t_A [h]", "description": "Vollaststunden Geräte [h] - full load hours Appliances"},
         {"type": "float", "name": "g", "nick-name": "g [-]", "description": "g-Wert [-] - g-Value windows"},
         {"type": "float", "name": "g_total", "nick-name": "g_total [-]", "description": "g-Wert total [-] - g-Value total windows"},
-        {"type": "float", "name": "f_sh", "nick-name": "f_sh [-]", "description": "Reduktionsfaktor solare Wärmeeinträge [-]"}]
+        {"type": "float", "name": "f_sh", "nick-name": "f_sh [-]", "description": "Reduktionsfaktor solare Wärmeeinträge [-]"},
+        {"type": "float", "name": "G_T", "nick-name": "G_T [W/m^2]", "description": "Strahlungsleistung fuer Betaetigung Sonnenschutz [W/m^2]"}]
     },
     {
       "class-name": "Sia2024RoomCreator",

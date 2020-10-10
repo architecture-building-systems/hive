@@ -94,6 +94,7 @@ def read_room(room, area, month, season):
     t_A = [room["Jaehrliche Vollaststunden der Geraete"]] * 12
     g = room["Gesamtenergiedurchlassgrad Verglasung"]
     g_total = room["Gesamtenergiedurchlassgrad Verglasung und Sonnenschutz"]
+    G_T = room["Strahlungsleistung fuer Betaetigung Sonnenschutz"]
 
     # transforming yearly sia2024 data to monthly
     for i in range(len(dayspermonth)):
@@ -106,7 +107,7 @@ def read_room(room, area, month, season):
            q_ve * area, q_vinf * area, eta_rec, \
            phi_P * area, phi_L * area, phi_A * area, \
            t_P[month - 1], t_L[month - 1], t_A[month - 1], \
-           g, g_total, f_sh
+           g, g_total, f_sh, G_T
 
 
 if __name__ == '__main__':

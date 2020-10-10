@@ -345,6 +345,23 @@ namespace Hive.IO.Forms
             }
         }
 
+        public string ShadingSetpoint
+        {
+            get => $"{_siaRoom.ShadingSetpoint:0.00}";
+            set
+            {
+                try
+                {
+                    _siaRoom.ShadingSetpoint = double.Parse(value);
+                }
+                catch (FormatException)
+                {
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
         public string WindowFrameReduction
         {
             get => $"{_siaRoom.WindowFrameReduction:0.00}";
@@ -608,6 +625,7 @@ namespace Hive.IO.Forms
         public Brush UValueTransparentBrush => Modified() ? _modifiedBrush : _normalBrush;
         public Brush GValueBrush => Modified() ? _modifiedBrush : _normalBrush;
         public Brush GValueTotalBrush => Modified() ? _modifiedBrush : _normalBrush;
+        public Brush ShadingSetpointBrush => Modified() ? _modifiedBrush : _normalBrush;
         public Brush WindowFrameReductionBrush => Modified() ? _modifiedBrush : _normalBrush;
         public Brush AirChangeRateBrush => Modified() ? _modifiedBrush : _normalBrush;
         public Brush InfiltrationBrush => Modified() ? _modifiedBrush : _normalBrush;
@@ -635,6 +653,7 @@ namespace Hive.IO.Forms
         public FontWeight UValueTransparentFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight GValueFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight GValueTotalFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight ShadingSetpointFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight WindowFrameReductionFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight AirChangeRateFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight InfiltrationFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
