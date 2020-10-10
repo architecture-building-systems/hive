@@ -87,6 +87,7 @@ namespace Hive.IO.Forms
                     "UValueTransparent",
                     "GValue",
                     "GValueTotal",
+                    "ShadingSetpoint",
                     "WindowFrameReduction",
                     "AirChangeRate",
                     "Infiltration", 
