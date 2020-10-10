@@ -26,7 +26,8 @@ def cleanDictForNaN(d):
     return d
 
 
-def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_areas, surface_type, surface_irradiance_obstructed, surface_irradiance_unobstructed):
+def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_areas, surface_type, surface_irradiance_obstructed, surface_irradiance_unobstructed,
+         srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, run_obstructed_simulation):
     '''
     Computes monthly heating, cooling and electricity demand for a thermal zone, based on SIA 380.1
     :param room_properties: room properties in json format
@@ -196,8 +197,10 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         t_L[i] *= days_per_month[i] / 365.0
         t_A[i] *= days_per_month[i] / 365.0
 
-
-    Q_s_per_surface = surface_irradiance.data   # workaround, because grasshopper components can't read jagged arrays - they are converted into separate lists
+    win_areas = [x for (x, y) in zip(surface_areas, surface_type) if y != "opaque"]
+    # Q_s_per_surface = surface_irradiance.data   # workaround, because grasshopper components can't read jagged arrays - they are converted into separate lists
+    Q_s_jagged = tree_to_jagged_monthly(run_obstructed_simulation, srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, win_areas)
+    Q_s_per_surface = transpose_jagged_2D_array(Q_s_jagged)
 
     # assign room properties to individual surfaces
     #    surface_type = ["opaque", "opaque", "transp", "transp"]
@@ -323,6 +326,84 @@ def calc_eta_g(Q_T_month, Q_V_month, gamma, tau):
         a = 1 + tau / 15
         eta_g = (1 - gamma ** a) / (1 - gamma ** (a + 1))
     return eta_g
+
+
+def tree_to_jagged_monthly(run_obstr, tree_obstr, tree_unobstr, g_value, g_value_total, setpoint, win_areas):
+    # sia2024: 200 W/m2. but maybe should be if srf_irrad > 200 W/m2 && Troom > 22?
+    #
+    # c# code
+    # private void RunScript(DataTree < double > G, double g, ref object Q_s)
+    # {
+    #       int winCount = G.BranchCount;
+    #       double[][] Q_array = new double[12][];
+    #       for (int j = 0; j < G.Branch(0).Count; j++)
+    #           Q_array[j] = new double[G.BranchCount];
+    #       DataTree < double > doubleTree = new DataTree < double > ();
+    #       for (int i = 0; i < G.BranchCount; i++)
+    #       {
+    #           for (int j = 0; j < G.Branch(i).Count; ++j) // should be 12, 1 for each month of the year
+    #           {
+    #               GH_Path path = new GH_Path(i, j);
+    #               double irrad = G.Branch(i)[j] * g;
+    #               doubleTree.Add(irrad, path);
+    #
+    #               Q_array[j][i] = irrad * 1000;
+    #            }
+    #       }
+    #       jagged jag = new jagged();
+    #       jag.data = Q_array;
+    #
+    #       Q_s = jag;
+    # }
+    #
+    # public struct jagged
+    # {
+    #     public double[][] data;
+    # }
+    def get_monthly_average(annual_timeseries):
+        dayspermonth = [31.0, 28.0, 31.0, 30.0, 31.0, 30.0, 31.0, 31.0, 30.0, 31.0, 30.0, 31.0]
+        months = 12
+        hour_per_day = 24
+        monthly_list = []
+        for month in range(months):
+            start_hour = int(hour_per_day * sum(dayspermonth[0:month]))
+            end_hour = int(hour_per_day * sum(dayspermonth[0:month + 1]))
+            monthly_list.append(sum(annual_timeseries[start_hour:end_hour]))
+        return monthly_list
+
+    tree = tree_obstr
+    if run_obstr == False:
+        tree = tree_unobstr
+
+    Q_array = []
+    for i in range(tree.BranchCount):
+        row = []
+        for j in range(tree.Branch(i).Count):
+            irrad = tree.Branch(i)[j] / win_areas[i]    # calculating per W/m2 for shading control
+            if irrad > setpoint:
+                irrad *= g_value_total
+            else:
+                irrad *= g_value
+            row.append(irrad * win_areas[i])    # calculating back to total irradiance of entire surface
+        monthly_row = get_monthly_average(row)
+        Q_array.append(monthly_row)
+
+    return Q_array
+
+def transpose_jagged_2D_array(array):
+    transposed_array = []
+    len_d1 = len(array)
+    len_d2 = len(array[0])
+
+    for i in range(len_d2):
+        transposed_row = []
+        for j in range(len_d1):
+            transposed_row.append(array[j][i])
+        transposed_array.append(transposed_row)
+
+    return transposed_array
+
+
 
 
 if __name__ == "__main__":
