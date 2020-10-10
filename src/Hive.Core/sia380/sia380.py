@@ -14,7 +14,7 @@ electricity demand: currently simply by using sqm and internal loads for lightin
 
 from __future__ import division
 import math
-
+import ghpythonlib.treehelpers as th
 
 def cleanDictForNaN(d):
     # a = d.values()
@@ -310,10 +310,12 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
 
         Q_Elec[month] = Phi_L_tot * t_L[month] + Phi_A_tot * t_A[month]   # lighting and utility loads. simplification, because utility and lighting have efficiencies (inefficiencies are heat loads). I would need to know that to get full electricity loads
 
+    Q_s_tree = th.list_to_tree(Q_s_jagged, source=[0, 0])
+
     tokWh = 1000.0
     return [x / tokWh for x in Q_Heat], [x / tokWh for x in Q_Cool], [x / tokWh for x in Q_Elec], \
            [x / tokWh for x in Q_T], [x / tokWh for x in Q_V], [x / tokWh for x in Q_i_eta_g], \
-           [x / tokWh for x in Q_s_eta_g], [x / tokWh for x in QT_opaque], [x / tokWh for x in QT_transparent]
+           [x / tokWh for x in Q_s_eta_g], [x / tokWh for x in QT_opaque], [x / tokWh for x in QT_transparent], Q_s_tree
 
 
 def calc_eta_g(Q_T_month, Q_V_month, gamma, tau):

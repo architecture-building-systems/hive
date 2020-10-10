@@ -148,6 +148,8 @@ namespace Hive.IO.Building
         public double[] VentilationHeatLosses { get; private set; }
         public double[] InternalHeatGains { get; private set; }
         public double[] SolarGains { get; private set; }
+
+        public double [][] MonthlySolarGainsPerWindow { get; private set; }
         #endregion
 
 
@@ -287,6 +289,20 @@ namespace Hive.IO.Building
 
 
         #region Setters
+
+
+        // data should be put into each Window element
+        // can't do it yet, because I am losing windows order within the Core
+        public void SetMonthlyWindowIrradiance(double[][] Q_s_per_window)
+        {
+            this.MonthlySolarGainsPerWindow = new double[Q_s_per_window.Length][];
+            for (int i = 0; i < Q_s_per_window.Length; i++)
+            {
+                this.MonthlySolarGainsPerWindow[i] = new double[Q_s_per_window[i].Length];
+                for (int j = 0; j < Q_s_per_window[i].Length; j++)
+                    this.MonthlySolarGainsPerWindow[i][j] = Q_s_per_window[i][j];
+            }
+        }
 
         /// <summary>
         /// Setting monthly energy demands of this zone. Loads have to be computed externally, e.g. with Hive.Core SIA380

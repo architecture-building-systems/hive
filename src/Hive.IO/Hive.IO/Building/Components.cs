@@ -82,6 +82,7 @@ namespace Hive.IO.Building
             }
         }
 
+
         //private double[] _monthlyCumulativeEmissions = null;
         //public double[] MonthlyCumulativeEmissions
         //{

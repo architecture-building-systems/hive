@@ -44,7 +44,7 @@
         {"type": "float", "name": "Q_s", "nick-name": "Q_s", "description": "Monthly solar gains in kWh.", "access": "list"},
         {"type": "float", "name": "Q_T_opaque", "nick-name": "Q_T_opaque", "description": "Monthly transmission heat losses through opaque envelope in kWh", "access": "list"},
         {"type": "float", "name": "Q_T_transparent", "nick-name": "Q_T_transp", "description": "Monthly transmission heat losses through transparent envelope in kWh", "access": "list"},
-        {"type": "generic", "name": "test", "nick-name": "test", "description": "test"}
+        {"type": "float", "name": "Q_s_per_windows", "nick-name": "Q_s_per_windows", "description": "Q_s_per_windows", "access":  "tree"}
       ]
     },
     {
