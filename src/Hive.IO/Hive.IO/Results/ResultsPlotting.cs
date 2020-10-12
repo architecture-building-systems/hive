@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Security.Permissions;
+using System.Windows.Forms;
 using System.Windows.Forms.VisualStyles;
 using Grasshopper.Kernel.Geometry.SpatialTrees;
 
@@ -214,12 +215,13 @@ namespace Hive.IO.Results
 
         #region Irradiation
 
-        public List<double[]> IrradiationOnWindows => new List<double[]>
-        {
-            new double[]{29, 49, 88, 124, 153, 166, 168, 143, 99, 58, 30, 22},
-            new double[]{19, 39, 78, 114, 143, 156, 158, 133, 89, 48, 20, 13},
-            new double[]{15, 24, 63, 99, 128, 141, 143, 118, 74, 33, 15, 14}
-        };
+        public List<double[]> IrradiationOnWindows => Results.MonthlySolarGainsPerWindow;
+        //public List<double[]> IrradiationOnWindows => new List<double[]>
+        //{
+        //    new double[]{29, 49, 88, 124, 153, 166, 168, 143, 99, 58, 30, 22},
+        //    new double[]{19, 39, 78, 114, 143, 156, 158, 133, 89, 48, 20, 13},
+        //    new double[]{15, 24, 63, 99, 128, 141, 143, 118, 74, 33, 15, 14}
+        //};
 
         #endregion Irradiation
     }

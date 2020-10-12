@@ -25,8 +25,12 @@
         {"type": "float", "name": "setpoints_lb", "nick-name": "setpoints_lb", "description": "Monthly room temperature setpoint in °C (lower bound).", "access": "list"},
         {"type": "float", "name": "surface_areas", "nick-name": "surface_areas", "description": "Surface areas of all external room surfaces in m2.", "access": "list"},
         {"type": "string", "name": "surface_type", "nick-name": "surface_type", "description": "Surface types of all external room surfaces. Either 'opaque' or 'transp'.", "access": "list"},
-        {"type": "generic", "name": "Q_s_per_surface", "nick-name": "Q_s_per_surface", "description": "Monthly surface irradiation in Wh per surace. Jagged array [months_per_year][num_surfaces]", "access": "item"},
-        {"type": "generic", "name": "Q_s_per_surfaceUnobstructed", "nick-name": "Q_s_per_surfaceUnobstructed", "description": "Monthly unobstructed surface irradiation in Wh per surace. Is used, if the obstructed data (parameter above) is null. Jagged array [months_per_year][num_surfaces]", "access": "item"}
+        {"type": "generic", "name": "Q_s_tree", "nick-name": "Q_s_tree", "description": "Monthly surface irradiation in Wh per surface. Tree", "access": "tree"},
+        {"type": "generic", "name": "Q_s_tree_unobstructed", "nick-name": "Q_s_tree_unobstructed", "description": "Monthly unobstructed surface irradiation in Wh per surface. Is used, if the obstructed data (parameter above) is null. Tree", "access": "tree"},
+        {"type": "float", "name": "g_value", "nick-name": "g_value", "description": "g_value of windows", "access": "item"},
+        {"type": "float", "name": "g_value_total", "nick-name": "g_value_total", "description": "g_value total including Sonnenschutz of windows", "access": "item"},
+        {"type": "float", "name": "setpoint", "nick-name": "setpoint", "description": "shading setpoint of window in W/m2", "access": "item"},
+        {"type": "float", "name": "run_obstr", "nick-name": "run_obstr", "description": "run_obstr? boolean", "access": "item"}
       ],
       "outputs": [
         {"type": "float", "name": "Q_Heat", "nick-name": "Q_Heat", "description": "Monthly heating loads of a room in kWh.", "access": "list"},
@@ -37,7 +41,8 @@
         {"type": "float", "name": "Q_i", "nick-name": "Q_i", "description": "Monthly internal gains in kWh.", "access": "list"},
         {"type": "float", "name": "Q_s", "nick-name": "Q_s", "description": "Monthly solar gains in kWh.", "access": "list"},
         {"type": "float", "name": "Q_T_opaque", "nick-name": "Q_T_opaque", "description": "Monthly transmission heat losses through opaque envelope in kWh", "access": "list"},
-        {"type": "float", "name": "Q_T_transparent", "nick-name": "Q_T_transp", "description": "Monthly transmission heat losses through transparent envelope in kWh", "access": "list"}
+        {"type": "float", "name": "Q_T_transparent", "nick-name": "Q_T_transp", "description": "Monthly transmission heat losses through transparent envelope in kWh", "access": "list"},
+        {"type": "float", "name": "Q_s_per_windows", "nick-name": "Q_s_per_windows", "description": "Q_s_per_windows", "access":  "tree"}
       ]
     },
     {
@@ -97,7 +102,9 @@
         {"type": "float", "name": "t_L", "nick-name": "t_L [h]", "description": "Vollaststunden Beleuchtung [h] - full load hours Lightning"},
         {"type": "float", "name": "t_A", "nick-name": "t_A [h]", "description": "Vollaststunden Geräte [h] - full load hours Appliances"},
         {"type": "float", "name": "g", "nick-name": "g [-]", "description": "g-Wert [-] - g-Value windows"},
-        {"type": "float", "name": "f_sh", "nick-name": "f_sh [-]", "description": "Reduktionsfaktor solare Wärmeeinträge [-]"}]
+        {"type": "float", "name": "g_total", "nick-name": "g_total [-]", "description": "g-Wert total [-] - g-Value total windows"},
+        {"type": "float", "name": "f_sh", "nick-name": "f_sh [-]", "description": "Reduktionsfaktor solare Wärmeeinträge [-]"},
+        {"type": "float", "name": "G_T", "nick-name": "G_T [W/m^2]", "description": "Strahlungsleistung fuer Betaetigung Sonnenschutz [W/m^2]"}]
     },
     {
       "class-name": "Sia2024RoomCreator",
