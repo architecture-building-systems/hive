@@ -102,9 +102,6 @@ namespace Hive.IO.Results
         public double TotalSystemLosses { get; private set; }
 
         [JsonProperty]
-        public double TotalCoolingLosses { get; private set; }
-
-        [JsonProperty]
         public List<double[]> MonthlySolarGainsPerWindow { get; private set; }
 
         #endregion
