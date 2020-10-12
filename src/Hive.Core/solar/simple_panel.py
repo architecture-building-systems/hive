@@ -15,11 +15,7 @@ clr.AddReferenceToFileAndPath(os.path.join(path, "Libraries", "SolarModel.dll"))
 import SolarModel as sm
 
 
-def main(tilt, azimuth, DHI, DNI, latitude, longitude, solarazi, solaralti, Aw):
-    return simulate_simple_panel(tilt, azimuth, DHI, DNI, latitude, longitude, solarazi, solaralti, Aw)
-
-
-def simulate_simple_panel(tilt, azimuth, _dhi, _dni, latitude, longitude, solarazi, solaralti, Aw):
+def main(tilt, azimuth, DHI, DNI, latitude, longitude, solarazi, solaralti, Aw, timezone):
     paropts = System.Threading.Tasks.ParallelOptions()
     paropts.MaxDegreeOfParallelism = 1
 
@@ -33,6 +29,17 @@ def simulate_simple_panel(tilt, azimuth, _dhi, _dni, latitude, longitude, solara
     else:
         sunvectors = sm.SunVector.Create8760SunVectors(longitude, latitude, year, System.Array[float](solarazi), System.Array[float](solaralti))
 
+    # shifting list of sunvectors according to timezone, so it matches weather file data
+    if timezone != 0:
+        copy_array = []
+        shifted_indices = range(0, horizon)
+        shifted_indices = shifted_indices[(timezone*-1):] + shifted_indices[:(timezone*-1)]
+        for i in range(0, horizon):
+            copy_array.append(sunvectors[i])
+        for i in range(0, horizon):
+            sunvectors[i] = copy_array[shifted_indices[i]]
+
+
     # dummy variables, won't be used in this simplified calculation
     coord = [sm.Sensorpoints.p3d()] * 1
     coord[0].X, coord[0].Y, coord[0].Z = 0, 0, 0
@@ -45,8 +52,8 @@ def simulate_simple_panel(tilt, azimuth, _dhi, _dni, latitude, longitude, solara
     sm.Context.cWeatherdata.DNI.SetValue(weather, System.Collections.Generic.List[float]())
     sm.Context.cWeatherdata.Snow.SetValue(weather, System.Collections.Generic.List[float]())
     for i in range(0, horizon):
-        weather.DHI.Add(_dhi[i])
-        weather.DNI.Add(_dni[i])
+        weather.DHI.Add(DHI[i])
+        weather.DNI.Add(DNI[i])
 
     #  Calculation points
     p = sm.Sensorpoints(System.Array[float]([tilt]), System.Array[float]([azimuth]), System.Array[sm.Sensorpoints.p3d](coord), System.Array[sm.Sensorpoints.v3d](normal), recursion)
