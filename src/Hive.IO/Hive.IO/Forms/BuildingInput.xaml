@@ -197,6 +197,8 @@
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
                         <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
+                        <RowDefinition Height="Auto" />
                         <RowDefinition />
                     </Grid.RowDefinitions>
                     <Grid.ColumnDefinitions>
@@ -234,22 +236,21 @@
                              Text="{Binding Path=State.TransparentCost}" 
                              Foreground="{Binding Path=State.TransparentCostBrush}"
                              FontWeight="{Binding Path=State.TransparentCostFontWeight}"/>
-                    <Image Name="WindowImage" Grid.Row="6" Grid.ColumnSpan="2" Grid.Column="0" />
-                    <Label Grid.Row="6" Grid.Column="0" Content="g-value total (-)" Margin="0,6,0.333,71"/> <!-- i dont know how to properly make the sizes, Daren-->
-                    <TextBox x:Name="WindowGValueTotal" Grid.Row="6" VerticalAlignment="Center"
+                    <Label Grid.Row="6" Grid.Column="0" Content="g-value total (-)"/> <!-- i dont know how to properly make the sizes, Daren-->
+                    <TextBox x:Name="WindowGValueTotal" Grid.Row="6" Grid.Column="1" VerticalAlignment="Center"
                             TextAlignment="Right"
                             IsEnabled="{Binding State.IsEditable}"
                             Text="{Binding State.GValueTotal}" 
                             Foreground="{Binding Path=State.GValueTotalBrush}"
-                            FontWeight="{Binding Path=State.GValueTotalFontWeight}" Grid.ColumnSpan="2" Margin="157,10,0,76"/>
-                    <Label Grid.Row="6" Grid.Column="0" Content="shading setpoint (W/m²)" Margin="0,38,0,39"/>
-                    <TextBox x:Name="ShadingSetpoint" Grid.Row="6" VerticalAlignment="Center"
+                            FontWeight="{Binding Path=State.GValueTotalFontWeight}"/>
+                    <Label Grid.Row="7" Grid.Column="0" Content="Shading setpoint (W/m²)"/>
+                    <TextBox x:Name="ShadingSetpoint" Grid.Row="7" Grid.Column="1" VerticalAlignment="Center"
                         TextAlignment="Right"
                         IsEnabled="{Binding State.IsEditable}"
                         Text="{Binding State.ShadingSetpoint}" 
                         Foreground="{Binding State.ShadingSetpointBrush}"
-                        FontWeight="{Binding State.ShadingSetpointFontWeight}" Grid.ColumnSpan="2" Margin="157,42,0,44"/>
-                    <!-- i dont know how to properly make the sizes, Daren-->
+                        FontWeight="{Binding State.ShadingSetpointFontWeight}" />
+                    <Image Name="WindowImage" Grid.Row="8" Grid.ColumnSpan="2" Grid.Column="0" />
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="2">
                     <Grid.RowDefinitions>
