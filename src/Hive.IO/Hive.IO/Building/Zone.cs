@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using Newtonsoft.Json;
 using rg = Rhino.Geometry;
 
 namespace Hive.IO.Building
@@ -11,26 +12,31 @@ namespace Hive.IO.Building
     /// Thermal Zone.
     /// Geometry must be (1) Brep, (2) closed, (3) convex, and (4) not contain any curves, i.e. lines only.
     /// </summary>
+    [JsonObject(MemberSerialization.OptIn)]
     public class Zone
     {
         #region Main Properties
         /// <summary>
         /// The actual zone geometry, as rhino Brep
         /// </summary>
+        [JsonProperty]
         public rg.Brep ZoneGeometry { get; private set; }
         /// <summary>
         /// Unique index, used to identify the zone when it is part of a Building object
         /// </summary>
+        [JsonProperty]
         public int Index { get; private set; }
 
         /// <summary>
         /// Zone volume in [m^3]
         /// </summary>
+        [JsonProperty]
         public double Volume { get; private set; }
 
         /// <summary>
         /// Tolerance for geometric operations. Get from RhinoDoc.ModelAbsoluteTolerance?
         /// </summary>
+        [JsonProperty]
         public double Tolerance { get; private set; }
         /// <summary>
         /// fix the horizon to one year, hourly
@@ -43,6 +49,7 @@ namespace Hive.IO.Building
         /// <summary>
         /// Zone name, e.g. 'Kitchen01'
         /// </summary>
+        [JsonProperty]
         public string Name { get; private set; }
         /// <summary>
         /// Internal loads.
@@ -58,6 +65,7 @@ namespace Hive.IO.Building
         /// <summary>
         /// Internal loads structure. Values in W/m2
         /// </summary>
+        [JsonProperty]
         public StructInternalLoads InternalLoads;
 
         /// <summary>
@@ -73,6 +81,7 @@ namespace Hive.IO.Building
         /// <summary>
         /// Schedules that define annual hourly internal loads schedules
         /// </summary>
+        [JsonProperty]
         public StructSchedules Schedule;
         #endregion
 
@@ -85,27 +94,33 @@ namespace Hive.IO.Building
         /// <summary>
         /// Wall components of this zone. Cannot be empty.
         /// </summary>
+        [JsonProperty]
         public Wall[] Walls { get; private set; }
         /// <summary>
         /// Ceiling components of this zone. Cannot be empty.
         /// </summary>
+        [JsonProperty]
         public Ceiling[] Ceilings { get; private set; }
         /// <summary>
         /// Floor components of this zone. Cannot be empty. A void would also be a floor, but with material property 'air' or something
         /// </summary>
+        [JsonProperty]
         public Floor[] Floors { get; private set; }
         /// <summary>
         /// Apertures of this zone, e.g. windows, skylights, doors, ventilation openings, etc.. Can be empty.
         /// </summary>
+        [JsonProperty]
         public Window[] Windows { get; private set; }
         /// <summary>
         /// Roof components of this zone. Can be empty.
         /// </summary>
+        [JsonProperty]
         public Roof[] Roofs { get; private set; }
 
         /// <summary>
         /// Shading devices
         /// </summary>
+        [JsonProperty]
         public Shading[] ShadingDevices { get; private set; }
 
         public double WallArea => Walls.Sum(w => w.Area);
@@ -120,33 +135,44 @@ namespace Hive.IO.Building
         /// <summary>
         /// in kWh per month
         /// </summary>
+        [JsonProperty]
         public double[] HeatingLoadsMonthly { get; private set; }
         /// <summary>
         /// in kWh per month
         /// </summary>
+        [JsonProperty]
         public double[] DHWLoadsMonthly { get; private set; }
         /// <summary>
         /// in kWh per month
         /// </summary>
+        [JsonProperty]
         public double[] CoolingLoadsMonthly { get; private set; }
         /// <summary>
         /// in kWh per month
         /// </summary>
+        [JsonProperty]
         public double[] ElectricityLoadsMonthly { get; private set; }
 
         /// <summary>
         /// Differs from ElectricityLoadsMonthly, which can be negative (surplus electricity from e.g. PV). ConsumedElectricityMonthly is what we really consume in the zone
         /// </summary>
+        [JsonProperty]
         public double [] ConsumedElectricityMonthly { get; set; } // set in GhResults... FIX ME
+        [JsonProperty]
         public double [] ConsumedHeatingMonthly { get; set; } // same
         #endregion
 
 
         #region Losses and Gains
+        [JsonProperty]
         public double[] OpaqueTransmissionHeatLosses { get; private set; }
+        [JsonProperty]
         public double [] TransparentTransmissionHeatLosses { get; private set; }
+        [JsonProperty]
         public double[] VentilationHeatLosses { get; private set; }
+        [JsonProperty]
         public double[] InternalHeatGains { get; private set; }
+        [JsonProperty]
         public double[] SolarGains { get; private set; }
         #endregion
 
@@ -155,40 +181,54 @@ namespace Hive.IO.Building
         /// <summary>
         /// For simplicity of thermal calculations, avoid curves etc., only accept linear floorplans and geometries
         /// </summary>
+        [JsonProperty]
         public bool IsLinear { get; private set; }
         /// <summary>
         /// For simplicity of thermal calculations, only accept convex zones
         /// </summary>
+        [JsonProperty]
         public bool IsConvex { get; private set; }
         /// <summary>
         /// Zone geometry must be a closed Brep, since it defines a thermal space
         /// </summary>
+        [JsonProperty]
         public bool IsClosed { get; private set; }
         /// <summary>
         /// Check planarity of all surfaces. Must be for simplicity
         /// </summary>
+        [JsonProperty]
         public bool IsPlanar { get; private set; }
         /// <summary>
         /// Main bool, if this is false, then no thermal simulations can be done
         /// </summary>
+        [JsonProperty]
         public bool IsValid { get; private set; }
         /// <summary>
         /// Stricter validity check for EnergyPlus. Can still perform SIA and RC simulations
         /// </summary>
+        [JsonProperty]
         public bool IsValidEPlus { get; private set; }
         /// <summary>
         /// Checking whether window surfaces (if any exist) are lying on the zone geometry. 
         /// Window surfaces associated to a zone cannot just lie somewhere else.
         /// </summary>
+        [JsonProperty]
         public bool IsWindowsOnZone { get; private set; }
         /// <summary>
         /// Windows self intersection
         /// </summary>
+        [JsonProperty]
         public bool IsWindowsNoSelfIntersect { get; private set; }
+        [JsonProperty]
         public bool IsFloorInZone { get; private set; }
+        [JsonProperty]
         public string ErrorText { get; private set; }
         #endregion
 
+        private Zone()
+        {
+            // only for use in deserialization
+        } 
 
         #region Constructor
         /// <summary>
