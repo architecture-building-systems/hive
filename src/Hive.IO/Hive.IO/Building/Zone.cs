@@ -225,7 +225,8 @@ namespace Hive.IO.Building
         public string ErrorText { get; private set; }
         #endregion
 
-        private Zone()
+        [JsonConstructor]
+        protected Zone()
         {
             // only for use in deserialization
         } 

@@ -74,8 +74,6 @@ namespace Hive.IO.GhInputOutput
 
         public override IGH_Goo Duplicate()
         {
-            RhinoApp.WriteLine("ResultsDataType.Duplicate()");
-
             string serialized;
             try
             {
@@ -84,36 +82,24 @@ namespace Hive.IO.GhInputOutput
             catch (Exception ex)
             {
                 RhinoApp.WriteLine($"Could not serialize: {ex}");
-                return new ResultsDataType();
+                throw;
             }
 
-            File.WriteAllText(@"c:\Users\darthoma\Downloads\before.json", serialized);
 
-            Results.Results duplicatedResults;
             try
             {
-                duplicatedResults = JsonConvert.DeserializeObject<Results.Results>(serialized, JsonSerializerSettings);
+                var duplicatedResults = JsonConvert.DeserializeObject<Results.Results>(serialized, JsonSerializerSettings);
+                return new ResultsDataType(duplicatedResults);
             }
             catch (Exception ex)
             {
                 RhinoApp.WriteLine($"Could not deserialize: {ex}");
-                File.WriteAllText(@"c:\Users\darthoma\Downloads\tracewriter.txt", TraceWriter.ToString());
-                return new ResultsDataType();
+                throw;
             }
-
-
-            // FIXME: remove once tested
-            var reSerialized =
-                JsonConvert.SerializeObject(duplicatedResults, Formatting.Indented, JsonSerializerSettings);
-            File.WriteAllText(@"c:\Users\darthoma\Downloads\after.json", reSerialized);
-
-            return new ResultsDataType(duplicatedResults);
         }
 
         public override string ToString()
         {
-            RhinoApp.WriteLine("ResultsDataType.ToString()");
-
             try
             {
                 return JsonConvert.SerializeObject(Value, Formatting.Indented, JsonSerializerSettings);
@@ -128,9 +114,6 @@ namespace Hive.IO.GhInputOutput
         public override bool CastFrom(object source)
         {
             if (source == null) return false;
-
-            RhinoApp.WriteLine($"ResultsDataType.CastFrom: {source.GetType().FullName}");
-
             if (source is Results.Results results)
             {
                 Value = results;
@@ -143,13 +126,9 @@ namespace Hive.IO.GhInputOutput
 
         public override bool Write(GH_IWriter writer)
         {
-            RhinoApp.WriteLine("ResultsDataType.Write()");
-
             try
             {
-                var jss = new JsonSerializerSettings();
-                jss.TypeNameHandling = TypeNameHandling.All;
-                writer.SetString("json", JsonConvert.SerializeObject(Value, Formatting.Indented, jss));
+                writer.SetString("json", JsonConvert.SerializeObject(Value, Formatting.Indented, JsonSerializerSettings));
                 return true;
             }
             catch (Exception ex)
@@ -161,14 +140,10 @@ namespace Hive.IO.GhInputOutput
 
         public override bool Read(GH_IReader reader)
         {
-            RhinoApp.WriteLine("ResultsDataType.Read()");
-
             try
             {
-                var jss = new JsonSerializerSettings();
-                jss.TypeNameHandling = TypeNameHandling.All;
                 var json = reader.GetString("json");
-                Value = JsonConvert.DeserializeObject<Results.Results>(json, jss);
+                Value = JsonConvert.DeserializeObject<Results.Results>(json, JsonSerializerSettings);
                 return true;
             }
             catch (Exception ex)
