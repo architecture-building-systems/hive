@@ -108,6 +108,7 @@ namespace Hive.IO.Building
             this.BrepGeometry = surfaceGeometry.DuplicateFace(false);
         }
 
+        [JsonConstructor]
         protected Component()
         {
             // only to be used during deserialization
@@ -142,6 +143,7 @@ namespace Hive.IO.Building
         {
 
         }
+        [JsonConstructor] 
         protected Window() { }
 
         public override void ApplySia2024Construction(Sia2024Record siaRoom)
@@ -170,6 +172,7 @@ namespace Hive.IO.Building
         {
 
         }
+        [JsonConstructor] 
         protected Wall() { }
     }
 
@@ -184,6 +187,7 @@ namespace Hive.IO.Building
         {
 
         }
+        [JsonConstructor] 
         protected Roof() { }
     }
 
@@ -198,6 +202,7 @@ namespace Hive.IO.Building
         {
 
         }
+        [JsonConstructor] 
         protected Ceiling() { }
     }
 
@@ -212,6 +217,7 @@ namespace Hive.IO.Building
         {
 
         }
+        [JsonConstructor] 
         protected Floor() { }
     }
 
@@ -225,6 +231,7 @@ namespace Hive.IO.Building
 
         }
 
+        [JsonConstructor]
         protected Shading()
         {
         }
@@ -289,6 +296,7 @@ namespace Hive.IO.Building
 
         }
 
+        [JsonConstructor]
         protected DynamicShading()
         {
         }

@@ -31,6 +31,7 @@ namespace Hive.IO.EnergySystems
             }
         }
 
+        [JsonConstructor]
         protected Air()
         {
         }
@@ -62,6 +63,7 @@ namespace Hive.IO.EnergySystems
             }
         }
 
+        [JsonConstructor]
         protected Water()
         {
         }
@@ -106,6 +108,7 @@ namespace Hive.IO.EnergySystems
                 Description = radiationType;
         }
 
+        [JsonConstructor]
         protected Radiation()
         {
         }
@@ -146,6 +149,7 @@ namespace Hive.IO.EnergySystems
         {
         }
 
+        [JsonConstructor]
         protected Electricity()
         {
         }
@@ -171,6 +175,7 @@ namespace Hive.IO.EnergySystems
         {
         }
 
+        [JsonConstructor]
         protected Gas()
         {
         }
@@ -197,6 +202,7 @@ namespace Hive.IO.EnergySystems
         {
         }
 
+        [JsonConstructor]
         protected Pellets()
         {
         }
@@ -230,6 +236,7 @@ namespace Hive.IO.EnergySystems
 
         private double[] _monthlyTemperature;
 
+        [JsonConstructor]
         protected Carrier()
         {
         }
@@ -325,7 +332,8 @@ namespace Hive.IO.EnergySystems
         [JsonProperty]
         public double[] EnergyPrice { get; protected set; }
 
-        [JsonProperty] public double[] TotalEnergyCost { get; protected set; }
+        [JsonProperty] 
+        public double[] TotalEnergyCost { get; protected set; }
 
         /// <summary>
         ///     Time series of Greenhouse gas emissions in kgCO2eq/this.Unit
@@ -333,10 +341,12 @@ namespace Hive.IO.EnergySystems
         [JsonProperty]
         public double[] GhgEmissionsFactor { get; protected set; }
 
-        [JsonProperty] public double[] TotalGhgEmissions { get; protected set; }
+        [JsonProperty] 
+        public double[] TotalGhgEmissions { get; protected set; }
 
 
-        [JsonProperty] public double PrimaryEnergyFactor { get; protected set; }
+        [JsonProperty] 
+        public double PrimaryEnergyFactor { get; protected set; }
 
 
         /// <summary>
