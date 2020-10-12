@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
+using Hive.IO.Building;
 using Hive.IO.EnergySystems;
 using Newtonsoft.Json;
 using rg = Rhino.Geometry;
@@ -101,6 +103,8 @@ namespace Hive.IO.Results
 
         [JsonProperty]
         public double TotalCoolingLosses { get; private set; }
+        public List<double[]> MonthlySolarGainsPerWindow { get; private set; }
+
         #endregion
 
 
@@ -247,6 +251,7 @@ namespace Hive.IO.Results
             this.TotalSurplusHeatingMonthly = new double[Misc.MonthsPerYear];
             this.TotalConsumedElectricityMonthly = new double[Misc.MonthsPerYear];
             this.TotalActiveCoolingMonthly = new double[Misc.MonthsPerYear];
+            this.MonthlySolarGainsPerWindow = null;
             //this.TotalFinalCoolingHourly = new double[Misc.HoursPerYear];
             //this.TotalFinalHeatingHourly = new double[Misc.HoursPerYear];
             //this.TotalFinalElectricityHourly = new double[Misc.HoursPerYear];
@@ -306,6 +311,7 @@ namespace Hive.IO.Results
             this.TotalInternalGains = GetTotalGainsOrLosses(building, "Qi");
             this.TotalSolarGains = GetTotalGainsOrLosses(building, "Qs");
             this.TotalSystemLosses = GetTotalMonthlySystemLossesNonRenewable(conversionTech).Sum();
+            this.MonthlySolarGainsPerWindow = GetMonthlySolarGainsPerWindow(building);
 
             this.SupplyNames = null;
             this.SupplyTypes = null;
@@ -501,6 +507,22 @@ namespace Hive.IO.Results
 
         #region Getters
 
+        public static List<double[]> GetMonthlySolarGainsPerWindow(Building.Building building)
+        {
+            var solarGainsList = new List<double[]>();
+            for (int i = 0; i < building.Zones.Length; i++)
+            {
+                Zone zone = building.Zones[i];
+                for (int j = 0; j < zone.Windows.Length; j++)
+                {
+                    var solarGains = new double[Misc.MonthsPerYear];
+                    zone.MonthlySolarGainsPerWindow[j].CopyTo(solarGains, 0);
+                    solarGainsList.Add(solarGains);
+                }
+            }
+
+            return solarGainsList;
+        }
 
         public static double [] GetTotalMonthlySurplusHeating(Building.Building building, List<ConversionTech> conversionTech)
         {

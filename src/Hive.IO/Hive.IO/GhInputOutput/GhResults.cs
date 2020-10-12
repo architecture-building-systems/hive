@@ -73,9 +73,12 @@ namespace Hive.IO.GhInputOutput
             pManager.AddNumberParameter("Q_i", "Q_i", "Internal gains", GH_ParamAccess.list);
             pManager.AddNumberParameter("Q_s", "Q_s", "Solar heat gains", GH_ParamAccess.list);
 
-            // 27
+            // 27, 28
             pManager.AddNumberParameter("consumedElec", "consumedElec", "consumedElec. pManager[2] also has generatedElec from e.g. PV. This here is consumed Elec from occupancy (equip & lighting) and systems (HP)", GH_ParamAccess.list);
             pManager.AddNumberParameter("consumedHeat", "consumedHeat", "consumedHeat. same as consumedElec... we could have negative heating loads from solar thermal or CHP", GH_ParamAccess.list);
+
+            // 29
+            pManager.AddNumberParameter("Q_s_per_win", "Q_s_per_win", "Solar heat gains per window", GH_ParamAccess.tree);
 
             for (int i = 0; i < pManager.ParamCount; i++)
                 pManager[i].Optional = true;
@@ -169,26 +172,7 @@ namespace Hive.IO.GhInputOutput
                     operationHourly[i][u] = operation[u].Value;
                 }
             }
-
-            //// Long's example about Grasshopper Trees
-            //GH_Structure<GH_Point> iPoints;
-            //DA.GetDataTree(0, out iPoints);
-
-            //GH_Structure<GH_Circle> oCircles = new GH_Structure<GH_Circle>();
-            //foreach (GH_Path path in iPoints.Paths)
-            //{
-            //    List<GH_Point> ghPoints = iPoints[path];
-            //    List<GH_Circle> ghCircles = new List<GH_Circle>();
-            //    foreach (GH_Point ghPoint in ghPoints)
-            //    {
-            //        Circle circle = new Circle(ghPoint.Value, 1.0);
-            //        GH_Circle ghCircle = new GH_Circle(circle);
-            //        ghCircles.Add(ghCircle);
-            //    }
-            //    oCircles.AppendRange(ghCircles, path);
-            //}
-
-            //DA.SetDataTree(0, oCircles);
+            
 
             Building.Building building = null;
             var conversionTechs = new List<ConversionTech>();
@@ -216,11 +200,28 @@ namespace Hive.IO.GhInputOutput
             var consumedHeat = new List<double>();
             DA.GetDataList(27, consumedElec);
             DA.GetDataList(28, consumedHeat);
+
+
+            GH_Structure<GH_Number> iQsPerWin;
+            DA.GetDataTree(29, out iQsPerWin);
+            double[][] QsPerWindow = new double[iQsPerWin.PathCount][];
+            for (int i = 0; i < iQsPerWin.PathCount; i++)
+            {
+                GH_Path path = iQsPerWin.Paths[i];
+                List<GH_Number> numbers = iQsPerWin[path];
+                QsPerWindow[i] = new double[numbers.Count];
+                for (int u = 0; u < numbers.Count; u++)
+                    QsPerWindow[i][u] = (double)numbers[u].Value / 1000.0;
+            }
+
+
             building.Zones[0].ConsumedElectricityMonthly = consumedElec.ToArray();
             building.Zones[0].ConsumedHeatingMonthly = consumedHeat.ToArray();
 
             building.Zones[0].SetEnergyDemandsMonthly(heatingMonthly.ToArray(), domesticHotWaterMonthly.ToArray(), coolingMonthly.ToArray(), electricityMonthly.ToArray());
             building.Zones[0].SetLossesAndGains(Qt_opaque.ToArray(), Qt_transparent.ToArray(), Qv.ToArray(), Qi.ToArray(), Qs.ToArray());
+            building.Zones[0].SetMonthlyWindowIrradiance(QsPerWindow);
+
             // writing data into results object
             Results.Results results = new Results.Results(building, conversionTechs, emitters, outputEnergies, inputEnergies);
             

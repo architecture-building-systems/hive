@@ -86,6 +86,8 @@ namespace Hive.IO.Forms
                     "UValueOpaque",
                     "UValueTransparent",
                     "GValue",
+                    "GValueTotal",
+                    "ShadingSetpoint",
                     "WindowFrameReduction",
                     "AirChangeRate",
                     "Infiltration", 
@@ -318,6 +320,40 @@ namespace Hive.IO.Forms
                 try
                 {
                     _siaRoom.GValue = double.Parse(value);
+                }
+                catch (FormatException)
+                {
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
+        public string GValueTotal
+        {
+            get => $"{_siaRoom.GValueTotal:0.00}";
+            set
+            {
+                try
+                {
+                    _siaRoom.GValueTotal = double.Parse(value);
+                }
+                catch (FormatException)
+                {
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
+        public string ShadingSetpoint
+        {
+            get => $"{_siaRoom.ShadingSetpoint:0.00}";
+            set
+            {
+                try
+                {
+                    _siaRoom.ShadingSetpoint = double.Parse(value);
                 }
                 catch (FormatException)
                 {
@@ -589,6 +625,8 @@ namespace Hive.IO.Forms
         public Brush UValueOpaqueBrush => Modified() ? _modifiedBrush : _normalBrush;
         public Brush UValueTransparentBrush => Modified() ? _modifiedBrush : _normalBrush;
         public Brush GValueBrush => Modified() ? _modifiedBrush : _normalBrush;
+        public Brush GValueTotalBrush => Modified() ? _modifiedBrush : _normalBrush;
+        public Brush ShadingSetpointBrush => Modified() ? _modifiedBrush : _normalBrush;
         public Brush WindowFrameReductionBrush => Modified() ? _modifiedBrush : _normalBrush;
         public Brush AirChangeRateBrush => Modified() ? _modifiedBrush : _normalBrush;
         public Brush InfiltrationBrush => Modified() ? _modifiedBrush : _normalBrush;
@@ -615,6 +653,8 @@ namespace Hive.IO.Forms
         public FontWeight UValueOpaqueFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight UValueTransparentFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight GValueFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight GValueTotalFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight ShadingSetpointFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight WindowFrameReductionFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight AirChangeRateFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight InfiltrationFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
