@@ -69,12 +69,13 @@ def epw_reader(path):
     latitude = None
     longitude = None
     city_country = None
+    timezone = 0
 
     with open(path) as csvfile:
         for row in csv.reader(csvfile):
             if row[0] == "LOCATION":
                 # read in location stuff here
-                _, city, _, country, _, _, latitude, longitude, _, _ = row
+                _, city, _, country, _, _, latitude, longitude, timezone, _ = row
                 city_country = (city, country)
             elif not row[0].isdigit():
                 # still parsing header portion of epw file
@@ -107,7 +108,7 @@ def epw_reader(path):
     ambient_temp_carrier = ensys.Air(hours_per_year, None, None, None, System.Array[float](drybulb))
 
     return latitude, longitude, city_country, ghi, dni, dhi, drybulb, dewpoint, rh, \
-           ghi_monthly, drybulb_monthly, rh_monthly, ambient_temp_carrier
+           ghi_monthly, drybulb_monthly, rh_monthly, ambient_temp_carrier, timezone
 
 
 if __name__ == "__main__":
@@ -119,8 +120,8 @@ if __name__ == "__main__":
         import os
         path = os.path.join(os.path.dirname(__file__), "USA_CA_San.Francisco.Intl.AP.724940_TMY3.epw")
         (latitude, longitude, city_country, ghi, dni, dhi, drybulb, dewpoint, rh,
-         ghi_monthly, drybulb_monthly, rh_monthly) = main(path)
-        print(latitude, longitude, city_country, mean(dni), mean(dhi), mean(drybulb), mean(dewpoint), mean(rh))
+         ghi_monthly, drybulb_monthly, rh_monthly, timezone) = main(path)
+        print(latitude, longitude, city_country, mean(dni), mean(dhi), mean(drybulb), mean(dewpoint), mean(rh), timezone)
 
 
     test()
