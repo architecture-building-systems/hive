@@ -59,7 +59,10 @@ def simulate_simple_panel(tilt, azimuth, _dhi, _dni, latitude, longitude, solara
     # diff = [0.0] * horizon
     # diff_refl = [0.0] * horizon
     for i in range(0, horizon):
-        total[i] = p.I[0][i] * Aw
+        irrad = p.I[0][i]
+        if irrad < 0.0:
+            irrad = 0.0
+        total[i] = irrad * Aw
         # beam[i] = p.Ibeam[0][i]
         # diff[i] = p.Idiff[0][i]
         # diff_refl[i] = p.Irefl_diff[0][i]
