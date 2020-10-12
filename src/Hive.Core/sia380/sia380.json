@@ -25,8 +25,6 @@
         {"type": "float", "name": "setpoints_lb", "nick-name": "setpoints_lb", "description": "Monthly room temperature setpoint in °C (lower bound).", "access": "list"},
         {"type": "float", "name": "surface_areas", "nick-name": "surface_areas", "description": "Surface areas of all external room surfaces in m2.", "access": "list"},
         {"type": "string", "name": "surface_type", "nick-name": "surface_type", "description": "Surface types of all external room surfaces. Either 'opaque' or 'transp'.", "access": "list"},
-        {"type": "generic", "name": "Q_s_per_surface", "nick-name": "Q_s_per_surface", "description": "Monthly surface irradiation in Wh per surace. Jagged array [months_per_year][num_surfaces]", "access": "item"},
-        {"type": "generic", "name": "Q_s_per_surfaceUnobstructed", "nick-name": "Q_s_per_surfaceUnobstructed", "description": "Monthly unobstructed surface irradiation in Wh per surace. Is used, if the obstructed data (parameter above) is null. Jagged array [months_per_year][num_surfaces]", "access": "item"},
         {"type": "generic", "name": "Q_s_tree", "nick-name": "Q_s_tree", "description": "Monthly surface irradiation in Wh per surface. Tree", "access": "tree"},
         {"type": "generic", "name": "Q_s_tree_unobstructed", "nick-name": "Q_s_tree_unobstructed", "description": "Monthly unobstructed surface irradiation in Wh per surface. Is used, if the obstructed data (parameter above) is null. Tree", "access": "tree"},
         {"type": "float", "name": "g_value", "nick-name": "g_value", "description": "g_value of windows", "access": "item"},
