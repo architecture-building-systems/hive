@@ -84,8 +84,8 @@
             <TextBox Grid.Row="5" Grid.Column="0" Text="{Binding CapitalCost, Mode=OneWay, StringFormat=0.00}" IsEnabled="False" />
             <Label Grid.Row="5" Grid.Column="1">(CHF)</Label>
         </Grid>
-        <TextBox Grid.Row="1" Grid.Column="0" TextWrapping="Wrap">Description of the conversion technology. This information should be provided by @IH or @CL</TextBox>
-        <Label Grid.Row="1" Grid.Column="1">Technology Image</Label>
+        <TextBox Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="{Binding Description, Mode=OneWay}"/>
+            <Label Grid.Row="1" Grid.Column="1">Technology Image</Label>
         <Label Grid.Row="1" Grid.Column="2">Project example Image</Label>
     </Grid>
 </UserControl>
