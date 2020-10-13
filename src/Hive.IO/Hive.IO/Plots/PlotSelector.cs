@@ -48,7 +48,10 @@ namespace Hive.IO.Plots
 
         public PlotSelector()
         {
-            _panelFactory = CreatePerformancePanel;
+            // FIXME: @chris, this needs to be changed back again when we add the amr plots!
+            // _panelFactory = CreatePerformancePanel;
+            _panelFactory = CreateSystemsPanel;
+
             _currentPanel = _panelFactory();
         }
 
@@ -58,7 +61,7 @@ namespace Hive.IO.Plots
             set => _normalized = value;
         }
 
-        public Kpi CurrentKpi { get; private set; } = Kpi.Energy;
+        public Kpi CurrentKpi { get; private set; } = Kpi.None; // FIXME: use this for amr plots:  Kpi.Energy;
 
         private string Category => _currentPanel.Category;
 
@@ -115,8 +118,8 @@ namespace Hive.IO.Plots
             return new MenuButtonPanel(new[]
             {
                 mbCategory,
-                new MenuButton("SIZ"),
-                new MenuButton("CHA")
+                // new MenuButton("SIZ"),
+                // new MenuButton("CHA")
             });
         }
 
@@ -125,25 +128,26 @@ namespace Hive.IO.Plots
             var mbCategory = new CategoryMenuButton("O");
             mbCategory.OnClicked += (sender, e) =>
             {
-                _panelFactory = CreatePerformancePanel; // link to next panel in list
-                CurrentKpi = Kpi.Energy;
+                // _panelFactory = CreatePerformancePanel; // FIXME @chris change this back when ready for amr plots
+                _panelFactory = CreateSystemsPanel; // link to next panel in list
+                // CurrentKpi = Kpi.Energy;  // FIXME @chris uncomment this to add amr plots back
             };
 
             var mbSvD = _otherSubcategory == OtherSubcategory.SvD ? new BlackMenuButton("SvD") : new MenuButton("SvD");
-            var mbGvL = _otherSubcategory == OtherSubcategory.GvL ? new BlackMenuButton("GvL") : new MenuButton("GvL");
+            // var mbGvL = _otherSubcategory == OtherSubcategory.GvL ? new BlackMenuButton("GvL") : new MenuButton("GvL");
             ;
             var mbSol = _otherSubcategory == OtherSubcategory.Sol ? new BlackMenuButton("SOL") : new MenuButton("SOL");
             ;
 
             mbSvD.OnClicked += (sender, args) => _otherSubcategory = OtherSubcategory.SvD;
-            mbGvL.OnClicked += (sender, args) => _otherSubcategory = OtherSubcategory.GvL;
+            // mbGvL.OnClicked += (sender, args) => _otherSubcategory = OtherSubcategory.GvL;
             mbSol.OnClicked += (sender, args) => _otherSubcategory = OtherSubcategory.Sol;
 
             return new MenuButtonPanel(new[]
             {
                 mbCategory,
                 mbSvD,
-                mbGvL,
+                // mbGvL,
                 mbSol
             });
         }
