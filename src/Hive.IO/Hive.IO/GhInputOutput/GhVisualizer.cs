@@ -41,9 +41,19 @@ namespace Hive.IO.GhInputOutput
             }
             else
             {
-                Results = new ResultsPlotting(m_data.First().Value as Results.Results);
+                if (m_data.First().Value is Results.Results results)
+                {
+                    Results = new ResultsPlotting(results);
+                }
+                else if (m_data.First().Value is ResultsDataType resultsDataType)
+                {
+                    Results = new ResultsPlotting(resultsDataType.Value);
+                }
+                else
+                {
+                    Results = new ResultsPlotting(new Results.Results());
+                }
             }
-
 
             // notify the plots in case they are caching
             VisualizerAttributes.NewData(Results);

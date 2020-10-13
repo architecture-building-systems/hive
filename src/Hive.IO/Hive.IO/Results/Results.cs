@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using Hive.IO.Building;
 using Hive.IO.EnergySystems;
+using Newtonsoft.Json;
 using rg = Rhino.Geometry;
 
 namespace Hive.IO.Results
@@ -17,14 +18,16 @@ namespace Hive.IO.Results
     /// - etc
     /// Also includes rhino geometry that represent e.g. solar potentials on buildings
     /// </summary>
+    [JsonObject(MemberSerialization.OptIn)]
     public class Results
     {
 
         #region General
-
+        [JsonProperty]
         public double InterestRate { get; private set; }
 
         // implemented in DataHandling.ResultsPlotting
+        [JsonProperty]
         public double TotalFloorArea { get; private set; }
 
         #endregion
@@ -33,18 +36,29 @@ namespace Hive.IO.Results
         #region Total Loads
 
         // implemented in Plots.DemandMonthlyPlot
+        [JsonProperty]
         public double[] TotalFinalElectricityMonthly { get; private set; }
+        [JsonProperty]
         public double[] TotalFinalCoolingMonthly { get; private set; }
+        [JsonProperty]
         public double[] TotalFinalHeatingMonthly { get; private set; }
+        [JsonProperty]
         public double[] TotalFinalDomesticHotWaterMonthly { get; private set; }
 
+        [JsonProperty]
         public double[] TotalPrimaryEnergyMonthlyNonRenewable { get; private set; }
+        [JsonProperty]
         public double[] TotalFinalEnergyMonthlyRenewable { get; private set; }
 
+        [JsonProperty]
         public double[] TotalPurchasedElectricityMonthly { get; private set; }
+        [JsonProperty]
         public double[] TotalFeedInElectricityMonthly { get; private set; }
+        [JsonProperty]
         public double [] TotalSurplusHeatingMonthly { get; private set; } // just dumped? we can't utilize it without storage model, or connection to district heating network
+        [JsonProperty]
         public double [] TotalConsumedElectricityMonthly { get; private set; }
+        [JsonProperty]
         public double[] TotalActiveCoolingMonthly { get; private set; }
 
 
@@ -57,38 +71,58 @@ namespace Hive.IO.Results
 
         #region Total Emissions
 
+        [JsonProperty]
         public double TotalEmbodiedConstructionEmissions { get; private set; }
+        [JsonProperty]
         public double[] TotalOperationalEmissionsMonthly { get; private set; }
 
         #endregion
 
 
         #region Total Losses and Gains
+        [JsonProperty]
         public double TotalOpaqueTransmissionHeatLosses { get; private set; }
+        [JsonProperty]
         public double TotalWindowTransmissionHeatLosses { get; private set; }
+        [JsonProperty]
         public double TotalVentilationHeatLosses { get; private set; }
+        [JsonProperty]
         public double TotalOpaqueTransmissionHeatGains { get; private set; }
+        [JsonProperty]
         public double TotalWindowTransmissionHeatGains { get; private set; }
+        [JsonProperty]
         public double TotalVentilationHeatGains { get; private set; }
 
+        [JsonProperty]
         public double TotalInternalGains { get; private set; }
+        [JsonProperty]
         public double TotalSolarGains { get; private set; }
 
+        [JsonProperty]
         public double TotalSystemLosses { get; private set; }
 
+        [JsonProperty]
         public List<double[]> MonthlySolarGainsPerWindow { get; private set; }
 
         #endregion
 
 
         #region Zone-wise loads
+        [JsonProperty]
         public double[][] ZoneElectricityMonthly { get; private set; }
+        [JsonProperty]
         public double[][] ZoneElectricityHourly { get; private set; }
+        [JsonProperty]
         public double[][] ZoneCoolingMonthly { get; private set; }
+        [JsonProperty]
         public double[][] ZoneCoolingHourly { get; private set; }
+        [JsonProperty]
         public double[][] ZoneHeatingMonthly { get; private set; }
+        [JsonProperty]
         public double[][] ZoneHeatingHourly { get; private set; }
+        [JsonProperty]
         public double[][] ZoneDHWMonthly { get; private set; }
+        [JsonProperty]
         public double[][] ZoneDHWHourly { get; private set; }
         #endregion
 
@@ -97,55 +131,69 @@ namespace Hive.IO.Results
         /// <summary>
         /// Names for each supply technology, e.g. "Boiler", "CHP", ...
         /// </summary>
+        [JsonProperty]
         public string[] SupplyNames { get; private set; }
         /// <summary>
         /// Matrix defining the suitability of each technology per carrier type.
         /// Rows: Technologies
         /// Columns: [0]: Electricity, [1]: Heating, [2]: Cooling
         /// </summary>
+        [JsonProperty]
         public bool[,] SupplyTypes { get; private set; }
         /// <summary>
         /// Capacity per technology. Unit is defined in 'SupplyCapUnits
         /// </summary>
+        [JsonProperty]
         public double[] SupplyCapacities { get; private set; }
         /// <summary>
         /// Defining Capacity unit per technology. E.g. m2, kW, kWh, ...
         /// </summary>
+        [JsonProperty]
         public string[] SupplyCapUnits { get; private set; }
         /// <summary>
         /// Total investment cost per technology
         /// </summary>
+        [JsonProperty]
         public double[] SupplyCapex { get; private set; }
         /// <summary>
         /// Levelized investment cost per technology (considering their lifetime and interest rate)
         /// </summary>
+        [JsonProperty]
         public double[] SupplyCapexLev { get; private set; }
         /// <summary>
         /// Total levelized operation expenditures per supply technology
         /// </summary>
+        [JsonProperty]
         public double[] SupplyOpexLev { get; private set; }
         /// <summary>
         /// Time-resolved (hourly for a year) OPEX per technology
         /// </summary>
+        [JsonProperty]
         public double[][] SupplyOpexHourly { get; private set; }
         /// <summary>
         /// Operation schedule per technology and hour. Unit defined in 'SupplyOperationUnit'
         /// </summary>
+        [JsonProperty]
         public double[][] SupplyOperationHourly { get; private set; }
         /// <summary>
         /// Operation schedule per technology and month. Unit defined in 'SupplyOperationUnit'
         /// </summary>
+        [JsonProperty]
         public double[][] SupplyOperationMonthly { get; private set; }
         /// <summary>
         /// Defining unit of operation per technology, e.g. "kWh", "Wh", ...
         /// </summary>
+        [JsonProperty]
         public string[] SupplyOperationUnit { get; private set; }
         #endregion
 
 
         #region Geometry
+        [JsonProperty]
         public rg.Mesh SkyViewFactors { get; private set; }
+        [JsonProperty]
         public rg.Curve[] SkySunPath { get; private set; }
+        [JsonProperty]
         public rg.Mesh[] IrradiationSurfaces { get; private set; }
         #endregion
 
@@ -155,22 +203,27 @@ namespace Hive.IO.Results
         /// <summary>
         /// Building object that contains geometric, construction, energy demand, cost (not operational), and LCA (not operational) information 
         /// </summary>
+        [JsonProperty]
         public Building.Building Building { get; private set; }
         /// <summary>
         /// Energy conversion technologies (e.g. boiler, PV, heatpump, etc.). Include operation schedules, operational LCA, embodied LCA of technologies, and operational and investment cost of technologies
         /// </summary>
+        [JsonProperty]
         public List<ConversionTech> ConversionTechnologies { get; private set; }
         /// <summary>
         /// Heat and Cooling emitters of the building
         /// </summary>
+        [JsonProperty]
         public List<Emitter> Emitters { get; private set; }
         /// <summary>
         /// Final output energy streams to meet building energy demands
         /// </summary>
+        [JsonProperty]
         public List<Carrier> OutputEnergyStreams { get; private set; }
         /// <summary>
         /// Initial input energy streams into the system. That might include Grid Electricity, Solar Potentials, District Heating, ...
         /// </summary>
+        [JsonProperty]
         public List<Carrier> InputEnergyStreams { get; private set; }
 
         #endregion

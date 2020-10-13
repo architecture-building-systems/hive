@@ -124,6 +124,7 @@
     <Compile Include="GhDistributors\GhSIA.cs" />
     <Compile Include="GhDistributors\GhSolarSimulation.cs" />
     <Compile Include="GhDistributors\GhSolarTech.cs" />
+    <Compile Include="GhInputOutput\GhResultsParameter.cs" />
     <Compile Include="GhMergers\GhChiller.cs" />
     <Compile Include="GhMergers\GhCHP.cs" />
     <Compile Include="GhMergers\GhCoolingExchanger.cs" />
