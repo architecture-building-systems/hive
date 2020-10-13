@@ -85,7 +85,7 @@
             <Label Grid.Row="5" Grid.Column="1">(CHF)</Label>
         </Grid>
         <TextBox Grid.Row="1" Grid.Column="0" TextWrapping="Wrap" Text="{Binding Description, Mode=OneWay}"/>
-            <Label Grid.Row="1" Grid.Column="1">Technology Image</Label>
-        <Label Grid.Row="1" Grid.Column="2">Project example Image</Label>
+        <Image Grid.Row="1" Grid.Column="1" Source="{Binding TechnologyImage, Mode=OneWay}" />
+        <Label Grid.Row="1" Grid.Column="2"></Label>
     </Grid>
 </UserControl>

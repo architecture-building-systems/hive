@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
+using System.Windows.Media.Imaging;
 using Hive.IO.EnergySystems;
 using Hive.IO.Resources;
+using OxyPlot.Reporting;
 using Rhino.Geometry;
 
 namespace Hive.IO.Forms
@@ -176,6 +179,11 @@ namespace Hive.IO.Forms
         }
 
         public string Description => IsSurfaceTech ? ModuleType.Description : Defaults[Name].Description;
+
+        public ImageSource TechnologyImage => IsSurfaceTech
+            ? new BitmapImage(new Uri(
+                $"pack://application:,,,/Hive.IO,Culture=neutral,PublicKeyToken=null;component/Resources/EnergySystems/{ModuleType.Name}.jpg"))
+            : null;
 
         public double Area
         {

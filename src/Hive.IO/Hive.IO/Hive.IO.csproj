@@ -259,6 +259,16 @@
   <ItemGroup>
     <None Include="Resources\tesseract.png" />
   </ItemGroup>
+  <ItemGroup />
+  <ItemGroup>
+    <Resource Include="Resources\EnergySystems\CdTe.jpg" />
+    <Resource Include="Resources\EnergySystems\HIT.jpg" />
+    <Resource Include="Resources\EnergySystems\CIGS.jpg" />
+    <Resource Include="Resources\EnergySystems\flat_plate.jpg" />
+    <Resource Include="Resources\EnergySystems\Monocristalline.jpg" />
+    <Resource Include="Resources\EnergySystems\Polycristalline.jpg" />
+    <Resource Include="Resources\EnergySystems\vacume_tube.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
