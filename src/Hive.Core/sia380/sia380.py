@@ -193,7 +193,6 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         t_A[i] *= days_per_month[i] / 365.0
 
     win_areas = [x for (x, y) in zip(surface_areas, surface_type) if y != "opaque"]
-    # Q_s_per_surface = surface_irradiance.data   # workaround, because grasshopper components can't read jagged arrays - they are converted into separate lists
     Q_s_jagged = tree_to_jagged_monthly(run_obstructed_simulation, srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, win_areas)
     Q_s_per_surface = transpose_jagged_2D_array(Q_s_jagged)
 
