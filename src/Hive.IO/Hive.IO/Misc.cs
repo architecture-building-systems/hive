@@ -38,6 +38,11 @@ namespace Hive.IO
 
         public static double[] GetAverageMonthlyValue(double[] annualTimeSeries)
         {
+            if (annualTimeSeries == null)
+            {
+                return new double[Misc.MonthsPerYear];
+            }
+
             double[] monthlyTimeSeries = new double[Misc.MonthsPerYear];
             if (annualTimeSeries.Length == Misc.HoursPerYear)
             {
