@@ -181,7 +181,8 @@ namespace Hive.IO.Forms
         public string Description => IsSurfaceTech ? ModuleType.Description : Defaults[Name].Description;
 
         public ImageSource TechnologyImage => IsSurfaceTech
-            ? new BitmapImage(new Uri($"pack://application:,,,/Resources/EnergySystems/{ModuleType.Name}.jpg")) 
+            ? new BitmapImage(new Uri(
+                $"pack://application:,,,/Hive.IO,Culture=neutral,PublicKeyToken=null;component/Resources/EnergySystems/{ModuleType.Name}.jpg"))
             : null;
 
         public double Area
