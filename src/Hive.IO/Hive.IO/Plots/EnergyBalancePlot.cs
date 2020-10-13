@@ -22,7 +22,10 @@ namespace Hive.IO.Plots
             Color.FromArgb(255, 216, 0), // solar gains
             Color.FromArgb(181, 43, 40), // internal gains
             Color.FromArgb(204, 128, 28), // primary energy
-            Color.FromArgb(242, 153, 35) // renewable energy
+            Color.FromArgb(242, 153, 35), // renewable energy
+            Color.FromArgb(59, 88, 166), // Ventilation gains
+            Color.FromArgb(120, 138, 163), // Envelope gains
+            Color.FromArgb(153, 179, 214), // Windows gains
         };
 
         private static readonly Color[] LossesColors =
@@ -43,7 +46,10 @@ namespace Hive.IO.Plots
             "Solar gains",
             "Internal gains",
             "Primary energy",
-            "Renewable energy"
+            "Renewable energy",
+            "Ventilation gains",
+            "Envelope gains",
+            "Windows gains"
         };
 
         private static readonly string[] EnergyOutStrings =
@@ -90,7 +96,10 @@ namespace Hive.IO.Plots
                 results.SolarGains,
                 results.InternalGains,
                 results.PrimaryEnergy,
-                results.RenewableEnergy
+                results.RenewableEnergy,
+                results.VentilationGains,
+                results.EnvelopeGains,
+                results.WindowsGains
             };
             var losses = new[]
             {
