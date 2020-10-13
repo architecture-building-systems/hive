@@ -175,6 +175,8 @@ namespace Hive.IO.Forms
             }
         }
 
+        public string Description => IsSurfaceTech ? ModuleType.Description : Defaults[Name].Description;
+
         public double Area
         {
             get { return SelectedSurfaces.Sum(sm => sm.Area); }
@@ -411,6 +413,7 @@ namespace Hive.IO.Forms
         public double SpecificCapitalCost;
         public double SpecificEmbodiedEmissions;
         public double HeatToPowerRatio; // only CHP
+        public string Description;
     }
 
     public struct ModuleTypeRecord
@@ -421,5 +424,6 @@ namespace Hive.IO.Forms
         public double ThermalEfficiency;
         public double SpecificCapitalCost;
         public double SpecificEmbodiedEmissions;
+        public string Description;
     }
 }

@@ -4,7 +4,7 @@
     xmlns:forms="clr-namespace:Hive.IO.Forms"
     Title="hizard | Systems"
     x:Class="Hive.IO.Forms.EnergySystemsInput"
-    Width="989.094" Height="589.124" WindowStyle="ToolWindow" ContentRendered="Window_ContentRendered">
+    Width="989.094" Height="722.724" WindowStyle="ToolWindow" ContentRendered="Window_ContentRendered">
     <Window.DataContext>
         <forms:EnergySystemsInputViewModel />
     </Window.DataContext>
