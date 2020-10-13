@@ -61,7 +61,7 @@ namespace Hive.IO.Plots
             set => _normalized = value;
         }
 
-        public Kpi CurrentKpi { get; private set; } = Kpi.Energy;
+        public Kpi CurrentKpi { get; private set; } = Kpi.None; // FIXME: use this for amr plots:  Kpi.Energy;
 
         private string Category => _currentPanel.Category;
 
@@ -130,7 +130,7 @@ namespace Hive.IO.Plots
             {
                 // _panelFactory = CreatePerformancePanel; // FIXME @chris change this back when ready for amr plots
                 _panelFactory = CreateSystemsPanel; // link to next panel in list
-                CurrentKpi = Kpi.Energy;
+                // CurrentKpi = Kpi.Energy;  // FIXME @chris uncomment this to add amr plots back
             };
 
             var mbSvD = _otherSubcategory == OtherSubcategory.SvD ? new BlackMenuButton("SvD") : new MenuButton("SvD");
