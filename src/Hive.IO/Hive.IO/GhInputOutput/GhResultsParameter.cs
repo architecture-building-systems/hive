@@ -31,6 +31,8 @@ namespace Hive.IO.GhInputOutput
         {
         }
 
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
+
         public override Guid ComponentGuid => new Guid("4056dfe8-5fdc-48e9-999c-20faa8b20eba");
 
         protected override GH_GetterResult Prompt_Singular(ref ResultsDataType value)
