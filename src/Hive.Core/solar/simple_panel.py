@@ -30,15 +30,17 @@ def main(tilt, azimuth, DHI, DNI, latitude, longitude, solarazi, solaralti, Aw, 
         sunvectors = sm.SunVector.Create8760SunVectors(longitude, latitude, year, System.Array[float](solarazi), System.Array[float](solaralti))
 
     # shifting list of sunvectors according to timezone, so it matches weather file data
-    if timezone != 0:
-        copy_array = []
-        shifted_indices = range(0, horizon)
-        shifted_indices = shifted_indices[(timezone*-1):] + shifted_indices[:(timezone*-1)]
-        for i in range(0, horizon):
-            copy_array.append(sunvectors[i])
-        for i in range(0, horizon):
-            sunvectors[i] = copy_array[shifted_indices[i]]
+    # if timezone != 0:
+    #     copy_array = []
+    #     shifted_indices = range(0, horizon)
+    #     shifted_indices = shifted_indices[(timezone*-1):] + shifted_indices[:(timezone*-1)]
+    #     for i in range(0, horizon):
+    #         copy_array.append(sunvectors[i])
+    #     for i in range(0, horizon):
+    #         sunvectors[i] = copy_array[shifted_indices[i]]
 
+    if timezone != 0:
+        sm.SunVector.ShiftSunVectorsByTimezone(sunvectors, timezone)
 
     # dummy variables, won't be used in this simplified calculation
     coord = [sm.Sensorpoints.p3d()] * 1

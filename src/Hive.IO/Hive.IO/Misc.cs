@@ -195,7 +195,12 @@ namespace Hive.IO
 
             double azimuthValue = Vector3d.VectorAngle(new Vector3d(normal.X, normal.Y, 0), new Vector3d(0, 1, 0), vnormal);
             double azimuth = azimuthValue * (180 / Math.PI);
+
             double area = AreaMassProperties.Compute(x.Faces[0]).Area;
+
+            if (azimuth is Double.NaN) azimuth = 0;
+            if (tilt is Double.NaN) tilt = 0;
+            if (area is Double.NaN) area = 0;
 
             return new double[3] { tilt, azimuth, area };
         }
