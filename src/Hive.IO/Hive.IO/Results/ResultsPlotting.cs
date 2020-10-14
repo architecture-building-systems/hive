@@ -38,7 +38,7 @@ namespace Hive.IO.Results
         public double[] EmbodiedEmissionsSystemsMonthly(bool normalized)
         {
             // FIXME: plug in real values here...
-            double dummy = 200.0;
+            double dummy = 0.0;
             double[] result = new double[12].Select(r => dummy).ToArray();
             return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
         }
@@ -47,7 +47,7 @@ namespace Hive.IO.Results
         public double[] OperationEmissionsBuildingsMonthly(bool normalized)
         {
             // FIXME: plug in real values here...
-            double dummy = 300.0;
+            double dummy = 0.0;
             double[] result = new double[12].Select(r => dummy).ToArray();
             return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
 
@@ -57,7 +57,7 @@ namespace Hive.IO.Results
         public double[] OperationEmissionsSystemsMonthly(bool normalized)
         {
             // FIXME: plug in real values here...
-            double dummy = 400.0;
+            double dummy = 0.0;
             double[] result = new double[12].Select(r => dummy).ToArray();
             return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
         }
@@ -77,8 +77,8 @@ namespace Hive.IO.Results
         public double[] EmbodiedCostsBuildingsMonthly(bool normalized)
         {
             // FIXME: plug in real values here...
-            double dummy = 110.0;
-            double[] result = new double[12].Select(r => dummy).ToArray();
+            double totalContructionCosts = this.Results.TotalConstructionCost;
+            double[] result = new double[Misc.MonthsPerYear].Select(r => totalContructionCosts / Misc.MonthsPerYear).ToArray();
             return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
         }
 
@@ -87,7 +87,7 @@ namespace Hive.IO.Results
         public double[] EmbodiedCostsSystemsMonthly(bool normalized)
         {
             // FIXME: plug in real values here...
-            double dummy = 220.0;
+            double dummy = 0.0;
             double[] result = new double[12].Select(r => dummy).ToArray();
             return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
         }
@@ -96,7 +96,7 @@ namespace Hive.IO.Results
         public double[] OperationCostsBuildingsMonthly(bool normalized)
         {
             // FIXME: plug in real values here...
-            double dummy = 330.0;
+            double dummy = 0.0;
             double[] result = new double[12].Select(r => dummy).ToArray();
             return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
 
@@ -105,7 +105,7 @@ namespace Hive.IO.Results
         public double[] OperationCostsSystemsMonthly(bool normalized)
         {
             // FIXME: plug in real values here...
-            double dummy = 440.0;
+            double dummy = 0.0;
             double[] result = new double[12].Select(r => dummy).ToArray();
             return normalized ? result.Select(r => r / TotalFloorArea).ToArray() : result;
 

@@ -106,6 +106,10 @@ namespace Hive.IO.Results
 
         #endregion
 
+        #region Total Costs
+        [JsonProperty]
+        public double TotalConstructionCost { get; private set; }
+        #endregion
 
         #region Zone-wise loads
         [JsonProperty]
@@ -279,6 +283,7 @@ namespace Hive.IO.Results
         {
             this.TotalFloorArea = GetTotalFloorArea(building);
             this.TotalEmbodiedConstructionEmissions = GetTotalEmbodiedConstructionEmissions(building);
+            this.TotalConstructionCost = GetTotalConstructionCost(building);
 
             this.TotalFinalHeatingMonthly = GetTotalMonthlyFinalLoads(building, "heating");
             this.TotalFinalDomesticHotWaterMonthly = GetTotalMonthlyFinalLoads(building, "dhw");
@@ -653,6 +658,15 @@ namespace Hive.IO.Results
                 foreach (var component in zone.SurfaceComponents)
                     totalCo2 += component.TotalCo2;
             return totalCo2;
+        }
+
+        public static double GetTotalConstructionCost(Building.Building building)
+        {
+            double totalCost = 0.0;
+            foreach (var zone in building.Zones)
+                foreach (var component in zone.SurfaceComponents)
+                    totalCost += component.TotalCost;
+            return totalCost;
         }
 
         public static double[] GetTotalMonthlyFinalLoads(Building.Building building, string loadType)
