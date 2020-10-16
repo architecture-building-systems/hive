@@ -178,7 +178,7 @@ namespace Hive.IO.Plots
                     case OtherSubcategory.GvL:
                         return new EnergyBalancePlot();
                     case OtherSubcategory.Sol:
-                        return new IrradiationOnWindowsPlot();
+                        return new SolarGainsPerWindowPlot();
                     default:
                         return new EnergyBalancePlot();
                 }

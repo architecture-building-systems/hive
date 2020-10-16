@@ -7,7 +7,7 @@ using OxyPlot.Series;
 
 namespace Hive.IO.Plots
 {
-    public class IrradiationOnWindowsPlot : OxyPlotBase
+    public class SolarGainsPerWindowPlot : OxyPlotBase
     {
         private static readonly List<OxyColor> Colors = Enumerable.Range(0, 8).Select(i => OxyColor.FromRgb(
             (byte) (235 - i * 5),
@@ -17,7 +17,7 @@ namespace Hive.IO.Plots
 
         protected override PlotModel CreatePlotModel(ResultsPlotting results)
         {
-            var model = new PlotModel {Title = "Total Irradiation (kWh)"};
+            var model = new PlotModel {Title = "Solar Gains per Window (kWh)"};
 
             // add the data
             var i = 0;
