@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Hive.IO;
 using Hive.IO.EnergySystems;
-using Hive.IO.Resources;
+using Hive.IO.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Hive.IO.Forms;
-using Hive.IO.Resources;
+using Hive.IO.Util;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace UnitTests

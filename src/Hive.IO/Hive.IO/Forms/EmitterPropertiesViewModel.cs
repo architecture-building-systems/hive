@@ -4,7 +4,7 @@ using System.Linq;
 using System.Windows;
 using System.Windows.Media;
 using Hive.IO.EnergySystems;
-using Hive.IO.Resources;
+using Hive.IO.Util;
 
 namespace Hive.IO.Forms
 {

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
-using Hive.IO.Resources;
+using Hive.IO.Util;
 using Newtonsoft.Json;
 
 namespace Hive.IO.Building
