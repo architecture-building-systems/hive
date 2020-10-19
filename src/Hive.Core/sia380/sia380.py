@@ -1,7 +1,7 @@
 # coding=utf-8
 """
 Monthly heating, cooling and electricity demand calculation according to SIA 380.
-Variables names according to SIA 380.
+Equations from 'Interaktion Struktu, Klima und Wärmebedarf_HS20.xlsx', 19.10.2020
 
 heating and cooling demand: SIA 380.1
 thermal balance depends on individual surfaces, i.e. each building surface (both transparent and opaque) can have
@@ -216,7 +216,6 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
     Q_Cool = [0.0] * months_per_year
     Q_Elec = [0.0] * months_per_year
 
-
     Phi_P_tot = Phi_P * floor_area
     Phi_L_tot = Phi_L * floor_area
     Phi_A_tot = Phi_A * floor_area
@@ -274,34 +273,47 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         # gamma = (Q_i[month] + Q_s[month]) / (Q_T[month] + Q_V[month])
 
         # usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
-        eta_g_lb = calc_eta_g(Q_T_lb, Q_V_lb, gamma_lb, tau)
-        eta_g_ub = calc_eta_g(Q_T_ub, Q_V_ub, gamma_ub, tau)
+        eta_g_lb_heating = calc_eta_g(gamma_lb, tau, False)
+        eta_g_ub_heating = calc_eta_g(gamma_ub, tau, False)
+        eta_g_lb_cooling = calc_eta_g(gamma_lb, tau, True)
+        eta_g_ub_cooling = calc_eta_g(gamma_ub, tau, True)
 
         # heating demand (Heizwärmebedarf), Q_H
-        demand_ub = Q_T_ub + Q_V_ub - eta_g_ub * (Q_i[month] + Q_s[month])
-        demand_lb = Q_T_lb + Q_V_lb - eta_g_lb * (Q_i[month] + Q_s[month])
+        Q_H_ub = Q_T_ub + Q_V_ub - eta_g_ub_heating * (Q_i[month] + Q_s[month])
+        if Q_H_ub < 0:
+            Q_H_ub = 0
+        Q_H_lb = Q_T_lb + Q_V_lb - eta_g_lb_heating * (Q_i[month] + Q_s[month])
+        if Q_H_lb < 0:
+            Q_H_lb = 0
+
+        # cooling demand (Kältebedarf), Q_K
+        Q_K_ub = Q_i[month] + Q_s[month] - eta_g_ub_cooling * (Q_T_ub + Q_V_ub)
+        if Q_K_ub < 0:
+            Q_K_ub = 0
+        Q_K_lb = Q_i[month] + Q_s[month] - eta_g_lb_cooling * (Q_T_lb + Q_V_lb)
+        if Q_K_lb < 0:
+            Q_K_lb = 0
+
         eta_g = 0.0
-        if abs(demand_lb) < abs(demand_ub):
+        if abs(Q_H_lb) < abs(Q_H_ub):
             Q_T[month] = Q_T_lb
             QT_opaque[month] = sum(QT_op_per_srf_this_month_lb)
             QT_transparent[month] = sum(QT_tr_per_srf_this_month_lb)
             Q_V[month] = Q_V_lb
-            eta_g = eta_g_lb
+            eta_g = eta_g_lb_heating
         else:
             Q_T[month] = Q_T_ub
             QT_opaque[month] = sum(QT_op_per_srf_this_month_ub)
             QT_transparent[month] = sum(QT_tr_per_srf_this_month_ub)
             Q_V[month] = Q_V_ub
-            eta_g = eta_g_ub
+            eta_g = eta_g_ub_heating
 
-        Q_i_eta_g[month] = Q_i[month] * eta_g
+        Q_i_eta_g[month] = Q_i[month] * eta_g   # I'm doing this because that is how it's done for heating demand calculation. If I took Q_i directly, losses wouldn't sum up with demands. but we have a different case with cooling... what now
         Q_s_eta_g[month] = Q_s[month] * eta_g
         demand = Q_T[month] + Q_V[month] - (Q_i_eta_g[month] + Q_s_eta_g[month])
-        if demand > 0:
-            Q_Heat[month] = demand
-        else:
-            Q_Cool[month] = demand
 
+        Q_Heat[month] = min(Q_H_lb, Q_H_ub)
+        Q_Cool[month] = min(Q_K_lb, Q_K_ub)
         Q_Elec[month] = Phi_L_tot * t_L[month] + Phi_A_tot * t_A[month]   # lighting and utility loads. simplification, because utility and lighting have efficiencies (inefficiencies are heat loads). I would need to know that to get full electricity loads
 
     Q_s_tree = th.list_to_tree(Q_s_jagged, source=[0, 0])
@@ -312,15 +324,16 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
            [x / tokWh for x in Q_s_eta_g], [x / tokWh for x in QT_opaque], [x / tokWh for x in QT_transparent], Q_s_tree
 
 
-def calc_eta_g(Q_T_month, Q_V_month, gamma, tau):
-    # usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
-    if Q_T_month + Q_V_month < 0:
-        eta_g = 0
-    elif gamma == 1:
-        eta_g = (1 + tau / 5) / (2 + tau / 15)
+# usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
+def calc_eta_g(gamma, tau, cooling):
+    if gamma < 0.0:
+        eta_g = 1.0
     else:
-        a = 1 + tau / 15
-        eta_g = (1 - gamma ** a) / (1 - gamma ** (a + 1))
+        a = 1.0 + tau / 15.0
+        if cooling:
+            eta_g = (1 - gamma ** (-a)) / (1 - gamma ** (-(a+1)))
+        else:
+            eta_g = (1 - gamma ** a) / (1 - gamma ** (a + 1))
     return eta_g
 
 
