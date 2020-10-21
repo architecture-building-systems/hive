@@ -286,7 +286,6 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         gamma_lb_heating_no_hr = (Q_i[month] + Q_s[month]) / (Q_T_lb + Q_V_lb_heating_no_heat_recovery)
         gamma_ub_cooling_no_hr = (Q_i[month] + Q_s[month]) / (Q_T_ub + Q_V_ub_cooling_no_heat_recovery)
         gamma_lb_cooling_no_hr = (Q_i[month] + Q_s[month]) / (Q_T_ub + Q_V_lb_cooling_no_heat_recovery)
-        # gamma = (Q_i[month] + Q_s[month]) / (Q_T[month] + Q_V[month])
 
         # usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
         eta_g_lb_heating = calc_eta_g(gamma_lb_heating, tau, False)
@@ -303,102 +302,60 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         Q_H_lb = Q_T_lb + Q_V_lb_heating - eta_g_lb_heating * (Q_i[month] + Q_s[month])
         Q_H_ub_no_hr = Q_T_ub + Q_V_ub_heating_no_heat_recovery - eta_g_ub_heating_no_hr * (Q_i[month] + Q_s[month])
         Q_H_lb_no_hr = Q_T_lb + Q_V_lb_heating_no_heat_recovery - eta_g_lb_heating_no_hr * (Q_i[month] + Q_s[month])
-        Q_H_flags = [True] * simulation_cases
         if Q_H_ub < 0:
             Q_H_ub = 0
-            Q_H_flags[0] = False
         if Q_H_lb < 0:
             Q_H_lb = 0
-            Q_H_flags[1] = False
         if Q_H_ub_no_hr < 0:
             Q_H_ub_no_hr = 0
-            Q_H_flags[2] = False
         if Q_H_lb_no_hr < 0:
             Q_H_lb_no_hr = 0
-            Q_H_flags[3] = False
 
         # cooling demand (Kältebedarf), Q_K
         Q_K_lb = Q_i[month] + Q_s[month] - eta_g_lb_cooling * (Q_T_lb + Q_V_lb_cooling)
         Q_K_ub = Q_i[month] + Q_s[month] - eta_g_ub_cooling * (Q_T_ub + Q_V_ub_cooling)
         Q_K_lb_no_hr = Q_i[month] + Q_s[month] - eta_g_lb_cooling_no_hr * (Q_T_lb + Q_V_lb_cooling_no_heat_recovery)
         Q_K_ub_no_hr = Q_i[month] + Q_s[month] - eta_g_ub_cooling_no_hr * (Q_T_ub + Q_V_ub_cooling_no_heat_recovery)
-        Q_K_flags = [True] * simulation_cases
         if Q_K_lb < 0:
             Q_K_lb = 0
-            Q_K_flags[0] = False
         if Q_K_ub < 0:
             Q_K_ub = 0
-            Q_K_flags[1] = False
         if Q_K_lb_no_hr < 0:
             Q_K_lb_no_hr = 0
-            Q_K_flags[2] = False
         if Q_K_ub_no_hr < 0:
             Q_K_ub_no_hr = 0
-            Q_K_flags[3] = False
 
         Q_H_list = [Q_H_lb, Q_H_ub, Q_H_lb_no_hr, Q_H_ub_no_hr]
         Q_K_list = [Q_K_lb, Q_K_ub, Q_K_lb_no_hr, Q_K_ub_no_hr]
         Q_H = min(Q_H_list)   # take smaller value of both comfort set points
-        Q_K = min(Q_K_list) * -1    # make cooling negative for subtracting Q_H from Q_K, see following lines...
+        Q_K = min(Q_K_list) * -1    # make cooling negative 
         Q_H_index = Q_H_list.index(min(Q_H_list))
         Q_K_index = Q_K_list.index(min(Q_K_list))
 
-        demand = Q_K + Q_H  # sometimes we have both cooling and heating. so subtract one from another
-        if demand < 0:
-            Q_Cool[month] = demand * -1
+
+        # either subtract heating from cooling, but then also account for that in losses/gains by subtracting those too
+        # or just take the higher load of both and then take the corresponding losses/gains
+        # demand = Q_K + Q_H  # sometimes we have both cooling and heating. so subtract one from another
+        # if demand < 0:
+        #     Q_Cool[month] = demand * -1
+        #     Q_Heat[month] = 0
+        # else:
+        #     Q_Cool[month] = 0
+        #     Q_Heat[month] = demand
+        if abs(Q_K) > Q_H:
+            demand = Q_K
+            Q_Cool[month] = Q_K
             Q_Heat[month] = 0
         else:
+            demand = Q_H
             Q_Cool[month] = 0
-            Q_Heat[month] = demand
+            Q_Heat[month] = Q_H
+
         Q_Elec[month] = Phi_L_tot * t_L[month] + Phi_A_tot * t_A[month]   # lighting and utility loads. simplification, because utility and lighting have efficiencies (inefficiencies are heat loads). I would need to know that to get full electricity loads
 
-        # # identifying the case and storing gains and losses for the Sankey Gains vs Losses Diagram
-        # # effective gains and losses. just need to do this if Sankey diagram consider building thermal latency
-        # Q_T_heating_list = [Q_T_lb, Q_T_ub, Q_T_lb, Q_T_ub]
-        # Q_T_cooling_list = [Q_T_lb * eta_g_lb_cooling, Q_T_ub * eta_g_ub_cooling, Q_T_lb * eta_g_lb_cooling_no_hr, Q_T_ub * eta_g_ub_cooling_no_hr]
-        #
-        # sum_QT_op_lb = sum(QT_op_per_srf_this_month_lb)
-        # sum_QT_op_ub = sum(QT_op_per_srf_this_month_ub)
-        # sum_QT_tr_lb = sum(QT_tr_per_srf_this_month_lb)
-        # sum_QT_tr_ub = sum(QT_tr_per_srf_this_month_ub)
-        # QT_opaque_heating_list = [sum_QT_op_lb, sum_QT_op_ub, sum_QT_op_lb, sum_QT_op_ub]
-        # QT_transparent_heating_list = [sum_QT_tr_lb, sum_QT_tr_ub, sum_QT_tr_lb, sum_QT_tr_ub]
-        # QT_opaque_cooling_list = [sum_QT_op_lb * eta_g_lb_cooling, sum_QT_op_ub * eta_g_ub_cooling, sum_QT_op_lb * eta_g_lb_cooling_no_hr, sum_QT_op_ub * eta_g_ub_cooling_no_hr]
-        # QT_transparent_cooling_list = [sum_QT_tr_lb * eta_g_lb_cooling, sum_QT_tr_ub * eta_g_ub_cooling, sum_QT_tr_lb * eta_g_lb_cooling_no_hr, sum_QT_tr_ub * eta_g_ub_cooling_no_hr]
-        #
-        # Q_V_heating_list = [Q_V_lb_heating, Q_V_ub_heating, Q_V_lb_heating_no_heat_recovery, Q_V_ub_heating_no_heat_recovery]
-        # Q_V_cooling_list = [Q_V_lb_cooling * eta_g_lb_cooling, Q_V_ub_cooling * eta_g_ub_cooling, Q_V_lb_cooling_no_heat_recovery * eta_g_lb_cooling_no_hr, Q_V_ub_cooling_no_heat_recovery * eta_g_ub_cooling_no_hr]
-        #
-        # Q_i_heating_list = [eta_g_lb_heating, eta_g_ub_heating, eta_g_lb_heating_no_hr, eta_g_ub_heating_no_hr]
-        # Q_s_heating_list = [eta_g_lb_heating, eta_g_ub_heating, eta_g_lb_heating_no_hr, eta_g_ub_heating_no_hr]
-        # Q_i_cooling_list = [Q_i[month]] * simulation_cases
-        # Q_s_cooling_list = [Q_s[month]] * simulation_cases
-        # for i in range(simulation_cases):
-        #     Q_i_heating_list[i] *= Q_i[month]
-        #     Q_s_heating_list[i] *= Q_s[month]
-        #
-        # Q_T_heating = Q_T_heating_list[Q_H_index] * Q_H_flags[Q_H_index]
-        # QT_opaque_heating = QT_opaque_heating_list[Q_H_index] * Q_H_flags[Q_H_index]
-        # QT_transparent_heating = QT_transparent_heating_list[Q_H_index] * Q_H_flags[Q_H_index]
-        # Q_V_heating = Q_V_heating_list[Q_H_index] * Q_H_flags[Q_H_index]
-        # Q_i_heating = Q_i_heating_list[Q_H_index] * Q_H_flags[Q_H_index]
-        # Q_s_heating = Q_s_heating_list[Q_H_index] * Q_H_flags[Q_H_index]
-        #
-        # Q_T_cooling = Q_T_cooling_list[Q_K_index] * Q_K_flags[Q_K_index] * -1
-        # QT_opaque_cooling = QT_opaque_cooling_list[Q_K_index] * Q_K_flags[Q_K_index] * -1
-        # QT_transparent_cooling = QT_transparent_cooling_list[Q_K_index] * Q_K_flags[Q_K_index] * -1
-        # Q_V_cooling = Q_V_cooling_list[Q_K_index] * Q_K_flags[Q_K_index] * -1
-        # Q_i_cooling = Q_i_cooling_list[Q_K_index] * Q_K_flags[Q_K_index] * -1
-        # Q_s_cooling = Q_s_cooling_list[Q_K_index] * Q_K_flags[Q_K_index] * -1
-        #
-        # # subtract Q_... for cooling from heating...
-        # Q_T_out[month] = (Q_T_cooling + Q_T_heating)
-        # QT_opaque_out[month] = (QT_opaque_cooling + QT_opaque_heating)
-        # QT_transparent_out[month] = (QT_transparent_cooling + QT_transparent_heating)
-        # Q_V_out[month] = (Q_V_cooling + Q_V_heating)
-        # Q_i_out[month] = abs(Q_i_cooling + Q_i_heating)
-        # Q_s_out[month] = abs(Q_s_cooling + Q_s_heating)
 
+        # Q_i, Q_s are * with eta_rec in heating case
+        # Q_T, Q_V are * with eta_rec in cooling case
         sum_QT_op_lb = sum(QT_op_per_srf_this_month_lb) # index 0 or 2
         sum_QT_op_ub = sum(QT_op_per_srf_this_month_ub) # index 1 or 3
         sum_QT_tr_lb = sum(QT_tr_per_srf_this_month_lb)
@@ -409,19 +366,23 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         QT_transparent_list = [sum_QT_tr_lb, sum_QT_tr_ub, sum_QT_tr_lb, sum_QT_tr_ub]
         Q_V_heating_list = [Q_V_lb_heating, Q_V_ub_heating, Q_V_lb_heating_no_heat_recovery, Q_V_ub_heating_no_heat_recovery]
         Q_V_cooling_list = [Q_V_lb_cooling, Q_V_ub_cooling, Q_V_lb_cooling_no_heat_recovery, Q_V_ub_cooling_no_heat_recovery]
+        eta_rec_heating_list = [eta_g_lb_heating, eta_g_ub_heating, eta_g_lb_heating_no_hr, eta_g_ub_heating_no_hr]
+        eta_rec_cooling_list = [eta_g_lb_cooling, eta_g_ub_cooling, eta_g_lb_cooling_no_hr, eta_g_ub_cooling_no_hr]
 
-        if demand < 0:
-            Q_T_out[month] = Q_T_list[Q_K_index]
-            QT_opaque_out[month] = QT_opaque_list[Q_K_index]
-            QT_transparent_out[month] = QT_transparent_list[Q_K_index]
-            Q_V_out[month] = Q_V_cooling_list[Q_K_index]
-        else:
+        if demand < 0:  # cooling
+            Q_T_out[month] = Q_T_list[Q_K_index] * eta_rec_cooling_list[Q_K_index]
+            QT_opaque_out[month] = QT_opaque_list[Q_K_index] * eta_rec_cooling_list[Q_K_index]
+            QT_transparent_out[month] = QT_transparent_list[Q_K_index] * eta_rec_cooling_list[Q_K_index]
+            Q_V_out[month] = Q_V_cooling_list[Q_K_index] * eta_rec_cooling_list[Q_K_index]
+            Q_i_out[month] = Q_i[month]
+            Q_s_out[month] = Q_s[month]
+        else:   # heating
             Q_T_out[month] = Q_T_list[Q_H_index]
             QT_opaque_out[month] = QT_opaque_list[Q_H_index]
             QT_transparent_out[month] = QT_transparent_list[Q_H_index]
             Q_V_out[month] = Q_V_heating_list[Q_H_index]
-        Q_i_out[month] = Q_i[month]
-        Q_s_out[month] = Q_s[month]
+            Q_i_out[month] = Q_i[month] * eta_rec_heating_list[Q_H_index]
+            Q_s_out[month] = Q_s[month] * eta_rec_heating_list[Q_H_index]
 
 
     Q_s_tree = th.list_to_tree(Q_s_jagged, source=[0, 0])   # import ghpythonlib.treehelpers as th
