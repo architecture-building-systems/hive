@@ -226,13 +226,21 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         Vdot_e = Vdot_e_spec * floor_area
         Vdot_inf = Vdot_inf_spec * floor_area
         Vdot_th = Vdot_e * (1 - eta_rec) + Vdot_inf
+        Vdot_th_no_heat_recovery = Vdot_e + Vdot_inf
 
         # Ventilation heat loss coefficient (Lüftungs-Wärmetransferkoeffizient), H_V
         H_V = Vdot_th/3600 * rho * c_p
+        H_V_no_heat_recovery = Vdot_th_no_heat_recovery/3600 * rho * c_p
 
         # Ventilation losses (Lüftungswärmeverluste), Q_V
-        Q_V_ub = H_V * (setpoints_ub[month] - T_e[month]) * t[month]
-        Q_V_lb = H_V * (setpoints_lb[month] - T_e[month]) * t[month]
+        Q_V_ub_heating = H_V * (setpoints_ub[month] - T_e[month]) * t[month]
+        Q_V_lb_heating = H_V * (setpoints_lb[month] - T_e[month]) * t[month]
+        Q_V_ub_cooling = H_V * (setpoints_ub[month] - T_e[month]) * t[month]
+        Q_V_lb_cooling = H_V * (setpoints_lb[month] - T_e[month]) * t[month]
+        Q_V_ub_heating_no_heat_recovery = H_V_no_heat_recovery * (setpoints_ub[month] - T_e[month]) * t[month]
+        Q_V_lb_heating_no_heat_recovery = H_V_no_heat_recovery * (setpoints_lb[month] - T_e[month]) * t[month]
+        Q_V_ub_cooling_no_heat_recovery = H_V_no_heat_recovery * (setpoints_ub[month] - T_e[month]) * t[month]
+        Q_V_lb_cooling_no_heat_recovery = H_V_no_heat_recovery * (setpoints_lb[month] - T_e[month]) * t[month]
         # Q_V[month] = H_V * (T_i[month] - T_e[month]) * t[month]
 
         # Internal loads (interne Wärmeeinträge)
@@ -268,52 +276,81 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         Q_s[month] = sum(Q_s_per_surface[month])
 
         # Heatgains/-losses ratio (Wärmeeintrag/-verlust Verhältnis), gamma
-        gamma_ub = (Q_i[month] + Q_s[month]) / (Q_T_ub + Q_V_ub)
-        gamma_lb = (Q_i[month] + Q_s[month]) / (Q_T_lb + Q_V_lb)
+        gamma_ub_heating = (Q_i[month] + Q_s[month]) / (Q_T_ub + Q_V_ub_heating)
+        gamma_lb_heating = (Q_i[month] + Q_s[month]) / (Q_T_lb + Q_V_lb_heating)
+        gamma_ub_cooling = (Q_i[month] + Q_s[month]) / (Q_T_ub + Q_V_ub_cooling)
+        gamma_lb_cooling = (Q_i[month] + Q_s[month]) / (Q_T_ub + Q_V_lb_cooling)
+        gamma_ub_heating_no_hr = (Q_i[month] + Q_s[month]) / (Q_T_ub + Q_V_ub_heating_no_heat_recovery)
+        gamma_lb_heating_no_hr = (Q_i[month] + Q_s[month]) / (Q_T_lb + Q_V_lb_heating_no_heat_recovery)
+        gamma_ub_cooling_no_hr = (Q_i[month] + Q_s[month]) / (Q_T_ub + Q_V_ub_cooling_no_heat_recovery)
+        gamma_lb_cooling_no_hr = (Q_i[month] + Q_s[month]) / (Q_T_ub + Q_V_lb_cooling_no_heat_recovery)
         # gamma = (Q_i[month] + Q_s[month]) / (Q_T[month] + Q_V[month])
 
         # usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
-        eta_g_lb_heating = calc_eta_g(gamma_lb, tau, False)
-        eta_g_ub_heating = calc_eta_g(gamma_ub, tau, False)
-        eta_g_lb_cooling = calc_eta_g(gamma_lb, tau, True)
-        eta_g_ub_cooling = calc_eta_g(gamma_ub, tau, True)
+        eta_g_lb_heating = calc_eta_g(gamma_lb_heating, tau, False)
+        eta_g_ub_heating = calc_eta_g(gamma_ub_heating, tau, False)
+        eta_g_lb_cooling = calc_eta_g(gamma_lb_cooling, tau, True)
+        eta_g_ub_cooling = calc_eta_g(gamma_ub_cooling, tau, True)
+        eta_g_lb_heating_no_hr = calc_eta_g(gamma_lb_heating_no_hr, tau, False)
+        eta_g_ub_heating_no_hr = calc_eta_g(gamma_ub_heating_no_hr, tau, False)
+        eta_g_lb_cooling_no_hr = calc_eta_g(gamma_lb_cooling_no_hr, tau, True)
+        eta_g_ub_cooling_no_hr = calc_eta_g(gamma_ub_cooling_no_hr, tau, True)
 
         # heating demand (Heizwärmebedarf), Q_H
-        Q_H_ub = Q_T_ub + Q_V_ub - eta_g_ub_heating * (Q_i[month] + Q_s[month])
+        Q_H_ub = Q_T_ub + Q_V_ub_heating - eta_g_ub_heating * (Q_i[month] + Q_s[month])
+        Q_H_lb = Q_T_lb + Q_V_lb_heating - eta_g_lb_heating * (Q_i[month] + Q_s[month])
         if Q_H_ub < 0:
             Q_H_ub = 0
-        Q_H_lb = Q_T_lb + Q_V_lb - eta_g_lb_heating * (Q_i[month] + Q_s[month])
         if Q_H_lb < 0:
             Q_H_lb = 0
+        Q_H_ub_no_hr = Q_T_ub + Q_V_ub_heating_no_heat_recovery - eta_g_ub_heating_no_hr * (Q_i[month] + Q_s[month])
+        Q_H_lb_no_hr = Q_T_lb + Q_V_lb_heating_no_heat_recovery - eta_g_lb_heating_no_hr * (Q_i[month] + Q_s[month])
+        if Q_H_ub_no_hr < 0:
+            Q_H_ub_no_hr = 0
+        if Q_H_lb_no_hr < 0:
+            Q_H_lb_no_hr = 0
 
         # cooling demand (Kältebedarf), Q_K
-        Q_K_ub = Q_i[month] + Q_s[month] - eta_g_ub_cooling * (Q_T_ub + Q_V_ub)
+        Q_K_ub = Q_i[month] + Q_s[month] - eta_g_ub_cooling * (Q_T_ub + Q_V_ub_cooling)
+        Q_K_lb = Q_i[month] + Q_s[month] - eta_g_lb_cooling * (Q_T_lb + Q_V_lb_cooling)
         if Q_K_ub < 0:
             Q_K_ub = 0
-        Q_K_lb = Q_i[month] + Q_s[month] - eta_g_lb_cooling * (Q_T_lb + Q_V_lb)
         if Q_K_lb < 0:
             Q_K_lb = 0
+        Q_K_ub_no_hr = Q_i[month] + Q_s[month] - eta_g_ub_cooling_no_hr * (Q_T_ub + Q_V_ub_cooling_no_heat_recovery)
+        Q_K_lb_no_hr = Q_i[month] + Q_s[month] - eta_g_lb_cooling_no_hr * (Q_T_lb + Q_V_lb_cooling_no_heat_recovery)
+        if Q_K_ub_no_hr < 0:
+            Q_K_ub_no_hr = 0
+        if Q_K_lb_no_hr < 0:
+            Q_K_lb_no_hr = 0
 
         eta_g = 0.0
         if abs(Q_H_lb) < abs(Q_H_ub):
             Q_T[month] = Q_T_lb
             QT_opaque[month] = sum(QT_op_per_srf_this_month_lb)
             QT_transparent[month] = sum(QT_tr_per_srf_this_month_lb)
-            Q_V[month] = Q_V_lb
+            Q_V[month] = Q_V_lb_heating
             eta_g = eta_g_lb_heating
         else:
             Q_T[month] = Q_T_ub
             QT_opaque[month] = sum(QT_op_per_srf_this_month_ub)
             QT_transparent[month] = sum(QT_tr_per_srf_this_month_ub)
-            Q_V[month] = Q_V_ub
+            Q_V[month] = Q_V_ub_heating
             eta_g = eta_g_ub_heating
 
         Q_i_eta_g[month] = Q_i[month] * eta_g   # I'm doing this because that is how it's done for heating demand calculation. If I took Q_i directly, losses wouldn't sum up with demands. but we have a different case with cooling... what now
         Q_s_eta_g[month] = Q_s[month] * eta_g
-        demand = Q_T[month] + Q_V[month] - (Q_i_eta_g[month] + Q_s_eta_g[month])
 
-        Q_Heat[month] = min(Q_H_lb, Q_H_ub)
-        Q_Cool[month] = min(Q_K_lb, Q_K_ub)
+        Q_H = min(Q_H_lb, Q_H_ub, Q_H_lb_no_hr, Q_H_ub_no_hr)   # take smaller value of both comfort set points
+        Q_K = min(Q_K_lb, Q_K_ub, Q_K_lb_no_hr, Q_K_ub_no_hr) * -1  # make cooling negative for subtracting Q_H from Q_K, see following lines...
+        demand = Q_K + Q_H  # sometimes we have both cooling and heating. so subtract one from another
+        if demand < 0:
+            Q_Cool[month] = demand * -1
+            Q_Heat[month] = 0
+        else:
+            Q_Cool[month] = 0
+            Q_Heat[month] = demand
+
         Q_Elec[month] = Phi_L_tot * t_L[month] + Phi_A_tot * t_A[month]   # lighting and utility loads. simplification, because utility and lighting have efficiencies (inefficiencies are heat loads). I would need to know that to get full electricity loads
 
     Q_s_tree = th.list_to_tree(Q_s_jagged, source=[0, 0])
