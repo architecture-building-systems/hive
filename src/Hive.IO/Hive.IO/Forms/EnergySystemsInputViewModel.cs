@@ -60,6 +60,15 @@ namespace Hive.IO.Forms
             sm.Connection == null || !sm.Connection.IsSurfaceTech);
 
 
+        /// <summary>
+        /// The list of surfaces that came from Meshes - these are either free surfaces or those
+        /// connected to form-defined surfaceTech. We also make sure that SurfaceViewModels connected
+        /// to non-surface-tech are included. (this happens when the type of technology is changed...)
+        /// </summary>
+        public IEnumerable<SurfaceViewModel> MeshSurfaces =>
+            Surfaces.Where(sm => sm.Connection == null || !sm.Connection.IsParametricDefined || !sm.Connection.IsSurfaceTech);
+
+
         public ObservableCollection<SurfaceViewModel> Surfaces { get; set; }
 
         public IEnumerable<SurfaceViewModel> SurfacesForConversion(ConversionTechPropertiesViewModel vm)
