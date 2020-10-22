@@ -6,21 +6,27 @@ using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Hive.IO.EnergySystems;
 using Hive.IO.Resources;
+using Newtonsoft.Json;
 using Rhino.Geometry;
 
 namespace Hive.IO.Forms
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class ConversionTechPropertiesViewModel : ViewModelBase
     {
-        private static Dictionary<string, ConversionTechDefaults> _defaults;
+        private static Dictionary<string, ConversionTechDefaults> _defaults;  // JsonResource backing field
 
-        private static Dictionary<string, List<ModuleTypeRecord>> _moduleTypesCatalog;
-        private IEnumerable<SurfaceViewModel> _availableSurfaces;
+        private static Dictionary<string, List<ModuleTypeRecord>> _moduleTypesCatalog;  // JsonResource backing field
 
+        private IEnumerable<SurfaceViewModel> _availableSurfaces;  // injected at runtime when selection of TechGrid changes
+
+        [JsonProperty]
         private string _endUse;
 
+        [JsonProperty]
         private string _name;
 
+        [JsonProperty]
         private string _source;
 
         public ConversionTechPropertiesViewModel()
@@ -233,12 +239,25 @@ namespace Hive.IO.Forms
 
         #region properties
 
+        [JsonProperty]
         private double _efficiency;
+
+        [JsonProperty]
         private double _capacity;
+
+        [JsonProperty]
         private double _specificCapitalCost;
+
+        [JsonProperty]
         private double _specificEmbodiedEmissions;
+
+        [JsonProperty]
         private double _heatToPowerRatio;
+
+        [JsonProperty]
         private double _distributionLosses;
+
+        [JsonProperty]
         private ModuleTypeRecord _moduleType;
 
         #endregion
@@ -397,9 +416,13 @@ namespace Hive.IO.Forms
         #endregion
     }
 
+    [JsonObject(MemberSerialization.OptIn)]
     public class SurfaceViewModel : ViewModelBase
     {
+        [JsonProperty]
         public string Name { get; set; }
+
+        [JsonProperty]
         public double Area { get; set; }
 
         public Mesh Mesh { get; set; }
