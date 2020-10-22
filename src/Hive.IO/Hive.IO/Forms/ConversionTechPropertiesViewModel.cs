@@ -1,13 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Hive.IO.EnergySystems;
 using Hive.IO.Resources;
-using OxyPlot.Reporting;
 using Rhino.Geometry;
 
 namespace Hive.IO.Forms
@@ -89,7 +87,7 @@ namespace Hive.IO.Forms
             get => $"{_specificCapitalCost:0.00}";
             set
             {
-                SetWithColors(ref _specificCapitalCost, ParseDouble(value, _specificCapitalCost)); 
+                SetWithColors(ref _specificCapitalCost, ParseDouble(value, _specificCapitalCost));
                 RaisePropertyChangedEvent("CapitalCost");
             }
         }
@@ -299,7 +297,6 @@ namespace Hive.IO.Forms
             CompareFontWeight(_distributionLosses, Defaults[Name].DistributionLosses);
 
         public FontWeight EfficiencyFontWeight => CompareFontWeight(_efficiency, Defaults[Name].Efficiency);
-
 
         #endregion
 
