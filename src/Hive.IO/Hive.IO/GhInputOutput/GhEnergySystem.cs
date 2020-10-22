@@ -94,29 +94,8 @@ namespace Hive.IO.GhInputOutput
             var emitterProperties = new List<EmitterProperties>();
             DA.GetDataList(2, emitterProperties);
 
-
-            // To do Daren: coding
-            // To do Amr: UI/UX design
-            // when opening the form, the user can select certain surfaces and change them to ST, GC, PVT, or PV individually
-
-
             var conversionTech = new List<ConversionTech>();
 
-
-            //if (meshList.Count > 0)
-            //{
-            //    foreach (Mesh mesh in meshList)
-            //    {
-            //        if (Form_SystemType == "pv") 
-            //            conversionTechnologies.Add(new Photovoltaic(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_pv_eff));
-            //        else if (Form_SystemType == "pvt") 
-            //            conversionTechnologies.Add(new PVT(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_pv_eff, Form_thermal_eff));
-            //        else if (Form_SystemType == "st") 
-            //            conversionTechnologies.Add(new SolarThermal(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_thermal_eff));
-            //        else 
-            //            conversionTechnologies.Add(new GroundCollector(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name)); // Form_thermal_eff, 
-            //    }
-            //}
             if (solarTechProperties.Count > 0)
                 foreach (var solarProperties in solarTechProperties)
                     if (solarProperties.Type == "PV")
@@ -293,7 +272,7 @@ namespace Hive.IO.GhInputOutput
             {
                 if (oldMeshes.Any(svm => svm.Mesh == m))
                 {
-                    // mesh was input in last SolvInstance too, just keep it
+                    // mesh was input in last SolveInstance too, just keep it
                     var surface = oldMeshes.First(svm => svm.Mesh == m);
                     surface.Name = $"srf{surfaceIndex++}";
                     _viewModel.Surfaces.Add(surface);
