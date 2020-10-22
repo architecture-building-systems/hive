@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using GH_IO.Serialization;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
@@ -193,7 +194,7 @@ namespace Hive.IO.GhInputOutput
             }
 
             // remove parametrically defined conversion technologies and emitters - they'll be added below anyway
-            var oldMeshes = _viewModel.Surfaces.Where(s => s.Connection == null || !s.Connection.IsParametricDefined).ToArray();
+            var oldMeshes = _viewModel.MeshSurfaces.ToArray();
             var formDefinedConversionTech = _viewModel.ConversionTechnologies.Where(ct => !ct.IsParametricDefined).ToArray();
             var formDefinedEmitters = _viewModel.Emitters.Where(e => !e.IsParametricDefined).ToArray();
             _viewModel.ConversionTechnologies.Clear();
@@ -202,6 +203,31 @@ namespace Hive.IO.GhInputOutput
             
 
             var surfaceIndex = 0;
+
+            // was the list of meshes changed since the last SolveInstance?
+            foreach (var m in meshes)
+            {
+                if (oldMeshes.Any(svm => svm.Mesh == m))
+                {
+                    // mesh was input in last SolveInstance too, just keep it
+                    var surface = oldMeshes.First(svm => svm.Mesh == m);
+                    surface.Name = $"srf{surfaceIndex++}";
+                    _viewModel.Surfaces.Add(surface);
+                }
+                else
+                {
+                    // mesh is a newly added mesh
+                    var surface = new SurfaceViewModel
+                    {
+                        Area = AreaMassProperties.Compute(m).Area,
+                        Name = $"srf{surfaceIndex++}",
+                        Mesh = m
+                    };
+                    _viewModel.Surfaces.Add(surface);
+                }
+            }
+
+
             foreach (var ct in conversionTechnologies)
             {
                 var ctvm = new ConversionTechPropertiesViewModel();
@@ -267,29 +293,6 @@ namespace Hive.IO.GhInputOutput
                 _viewModel.ConversionTechnologies.Add(ctvm);
             }
 
-            // was the list of meshes changed since the last SolveInstance?
-            foreach (var m in meshes)
-            {
-                if (oldMeshes.Any(svm => svm.Mesh == m))
-                {
-                    // mesh was input in last SolveInstance too, just keep it
-                    var surface = oldMeshes.First(svm => svm.Mesh == m);
-                    surface.Name = $"srf{surfaceIndex++}";
-                    _viewModel.Surfaces.Add(surface);
-                }
-                else
-                {
-                    // mesh is a newly added mesh
-                    var surface = new SurfaceViewModel
-                    {
-                        Area = AreaMassProperties.Compute(m).Area,
-                        Name = $"srf{surfaceIndex++}",
-                        Mesh = m
-                    };
-                    _viewModel.Surfaces.Add(surface);
-                }
-            }
-            
 
             foreach (var emitter in emitters)
             {
@@ -316,8 +319,8 @@ namespace Hive.IO.GhInputOutput
         }
 
         /// <summary>
-        ///     Read out the results from the ViewModel. These include the originally (unmodified)
-        ///     parametric inputs as created in SolveInstance.
+        /// Read out the results from the ViewModel. These include the originally (unmodified)
+        /// parametric inputs as created in SolveInstance.
         /// </summary>
         /// <returns></returns>
         private List<object> ReadViewModel()
@@ -398,13 +401,56 @@ namespace Hive.IO.GhInputOutput
         }
 
         /// <summary>
-        ///     Input changed, delete the viewModel.
+        /// Input changed, delete the viewModel.
         /// </summary>
         protected override void ValuesChanged()
         {
             _viewModel = null;
             base.ValuesChanged();
         }
+
+        #region reading / writing state to the document
+        /// <summary>
+        /// When writing state to the document, we have to take special care of the
+        /// following properties of the EnergySystemsInputViewModel:
+        ///
+        /// - some of the conversion technologies and emitters are parametrically defined. we don't want to save these, as
+        ///   they can't be changed by the form anyway...
+        /// - meshes. how to handle meshes? note, also, that they end up as surfaces with names.
+        ///
+        /// I think, instead of saving a whole EnergySystemsInputViewModel, we're going to save:
+        ///
+        /// - a list of form-defined ConversionTechPropertiesViewModel
+        /// - a list of form-defined emitters
+        /// - a list of surfaces, with .Mesh set to null but the name showing the index in the mesh list.
+        ///
+        /// CreateViewModel and ReadViewModel need to be aware of this. 
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <returns></returns>
+        public override bool Write(GH_IWriter writer)
+        {
+            if (_viewModel == null)
+            {
+                // CreateViewModel has never been called - no need to write anything, as user has never made any changes
+                return base.Write(writer);
+            }
+
+            // collect the data we want to store
+            var meshes = _viewModel.MeshSurfaces.ToArray();
+            var formDefinedConversionTech = _viewModel.ConversionTechnologies.Where(ct => !ct.IsParametricDefined).ToArray();
+            var formDefinedEmitters = _viewModel.Emitters.Where(e => !e.IsParametricDefined).ToArray();
+            return base.Write(writer);
+
+            // write out the data - but don't write out the mesh objects themselves...
+            
+        }
+
+        public override bool Read(GH_IReader reader)
+        {
+            return base.Read(reader);
+        }
+        #endregion reading / writing state to the document
 
 
         #region GhEnergySystemAttributes
