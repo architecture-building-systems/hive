@@ -1,12 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using GH_IO.Serialization;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
 using Hive.IO.Building;
 using Hive.IO.Forms;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Rhino;
 using rg = Rhino.Geometry;
 
 namespace Hive.IO.GhInputOutput
@@ -18,9 +22,66 @@ namespace Hive.IO.GhInputOutput
               "Hive.IO.Building input, representing the building geometry, as well as thermal and construction properties.",
               "[hive]", "IO")
         {
+            // NOTE: Will be overwritten in Read() and SolveInstance
+            _buildingInputState = new BuildingInputState(Sia2024Record.First(), null, true);
         }
 
+        private static readonly ITraceWriter TraceWriter = new MemoryTraceWriter();
+        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
+        {
+            ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
+            TypeNameHandling = TypeNameHandling.All,
+            TraceWriter = TraceWriter
+        };
+
         private BuildingInputState _buildingInputState;
+        
+        /// <summary>
+        /// Save BuildingInputState to the document.
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <returns></returns>
+        public override bool Write(GH_IWriter writer)
+        {
+            if (_buildingInputState == null)
+            {
+                return false;
+            }
+
+            if (!_buildingInputState.IsEditable)
+            {
+                // don't bother writing down parametric input
+                return false;
+            }
+
+            try
+            {
+                writer.SetString("SiaRoom", JsonConvert.SerializeObject(_buildingInputState.SiaRoom, Formatting.Indented, JsonSerializerSettings));
+                return base.Write(writer);
+            }
+            catch (Exception ex)
+            {
+                RhinoApp.WriteLine($"GhBuilding.Write() failed!! {ex}");
+                Message = "Failed to write state to Document";
+                return false;
+            }
+        }
+
+        public override bool Read(GH_IReader reader)
+        {
+            try
+            {
+                var json = reader.GetString("SiaRoom");
+                _buildingInputState.SiaRoom = JsonConvert.DeserializeObject<Sia2024RecordEx>(json, JsonSerializerSettings);
+                
+            }
+            catch (Exception ex)
+            {
+                // let's not worry too much about not being able to read the state...
+                Message = "Failed to read state from Document";
+            }
+            return base.Read(reader);
+        }
 
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)

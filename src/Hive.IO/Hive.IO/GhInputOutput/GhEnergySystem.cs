@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows.Forms;
+using GH_IO.Serialization;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
@@ -11,6 +12,8 @@ using Grasshopper.Kernel.Types;
 using Hive.IO.EnergySystems;
 using Hive.IO.Forms;
 using Hive.IO.GhParametricInputs;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
 using Rhino.Geometry;
 
 //using Newtonsoft.Json;
@@ -94,29 +97,8 @@ namespace Hive.IO.GhInputOutput
             var emitterProperties = new List<EmitterProperties>();
             DA.GetDataList(2, emitterProperties);
 
-
-            // To do Daren: coding
-            // To do Amr: UI/UX design
-            // when opening the form, the user can select certain surfaces and change them to ST, GC, PVT, or PV individually
-
-
             var conversionTech = new List<ConversionTech>();
 
-
-            //if (meshList.Count > 0)
-            //{
-            //    foreach (Mesh mesh in meshList)
-            //    {
-            //        if (Form_SystemType == "pv") 
-            //            conversionTechnologies.Add(new Photovoltaic(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_pv_eff));
-            //        else if (Form_SystemType == "pvt") 
-            //            conversionTechnologies.Add(new PVT(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_pv_eff, Form_thermal_eff));
-            //        else if (Form_SystemType == "st") 
-            //            conversionTechnologies.Add(new SolarThermal(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name, Form_thermal_eff));
-            //        else 
-            //            conversionTechnologies.Add(new GroundCollector(Form_pv_cost, Form_pv_co2, mesh, Form_pv_name)); // Form_thermal_eff, 
-            //    }
-            //}
             if (solarTechProperties.Count > 0)
                 foreach (var solarProperties in solarTechProperties)
                     if (solarProperties.Type == "PV")
@@ -169,15 +151,11 @@ namespace Hive.IO.GhInputOutput
             {
                 Emitter emitter;
                 if (emProp.IsRadiation)
-                {
                     emitter = new Radiator(emProp.InvestmentCost, emProp.EmbodiedEmissions, emProp.IsHeating,
                         emProp.IsCooling, emProp.SupplyTemperature, emProp.ReturnTemperature);
-                }
                 else
-                {
                     emitter = new AirDiffuser(emProp.InvestmentCost, emProp.EmbodiedEmissions, emProp.IsHeating,
                         emProp.IsCooling, emProp.SupplyTemperature, emProp.ReturnTemperature);
-                }
                 emitter.SetEmitterName(emProp.Name);
                 emitters.Add(emitter);
             }
@@ -187,10 +165,6 @@ namespace Hive.IO.GhInputOutput
 
             // the result might be changed by opening the form,
             // so we need to create it based on the view model (the result of the form)
-            //var result = ComputeResults(_viewModel);
-
-
-            // compute the results
             var result = ReadViewModel();
             DA.SetDataList(0, result);
         }
@@ -213,16 +187,54 @@ namespace Hive.IO.GhInputOutput
                 _viewModel.Emitters.Clear();
             }
 
+            // figure out which of the surfaces are from meshes... at the same time, if they came from Read(), hook them 
+            // up to a mesh in meshes, in the same order
+            var meshSurfaces = _viewModel.MeshSurfaces.ToArray();
+            if (meshSurfaces.Length > 0 && meshSurfaces[0].Mesh == null)
+            {
+                // last operation was Read(), we need to hook up the meshes properly
+                for (var meshIndex = 0; meshIndex < meshSurfaces.Length; meshIndex++)
+                {
+                    var surface = meshSurfaces[meshIndex];
+                    surface.Mesh = meshes.ElementAt(meshIndex);
+                }
+            }
+
             // remove parametrically defined conversion technologies and emitters - they'll be added below anyway
-            var oldMeshes = _viewModel.Surfaces.Where(s => s.Connection == null || !s.Connection.IsParametricDefined).ToArray();
-            var formDefinedConversionTech = _viewModel.ConversionTechnologies.Where(ct => !ct.IsParametricDefined).ToArray();
+            var formDefinedConversionTech =
+                _viewModel.ConversionTechnologies.Where(ct => !ct.IsParametricDefined).ToArray();
             var formDefinedEmitters = _viewModel.Emitters.Where(e => !e.IsParametricDefined).ToArray();
             _viewModel.ConversionTechnologies.Clear();
             _viewModel.Emitters.Clear();
             _viewModel.Surfaces.Clear();
-            
+
 
             var surfaceIndex = 0;
+
+            // was the list of meshes changed since the last SolveInstance?
+            foreach (var m in meshes)
+            {
+                if (meshSurfaces.Any(svm => svm.Mesh == m))
+                {
+                    // mesh was input in last SolveInstance too, just keep it
+                    var surface = meshSurfaces.First(svm => svm.Mesh == m);
+                    surface.Name = $"srf{surfaceIndex++}";
+                    _viewModel.Surfaces.Add(surface);
+                }
+                else
+                {
+                    // mesh is a newly added mesh
+                    var surface = new SurfaceViewModel
+                    {
+                        Area = AreaMassProperties.Compute(m).Area,
+                        Name = $"srf{surfaceIndex++}",
+                        Mesh = m
+                    };
+                    _viewModel.Surfaces.Add(surface);
+                }
+            }
+
+
             foreach (var ct in conversionTechnologies)
             {
                 var ctvm = new ConversionTechPropertiesViewModel();
@@ -279,38 +291,14 @@ namespace Hive.IO.GhInputOutput
                         ctvm.SetProperties(exchanger);
                         break;
                 }
+
                 _viewModel.ConversionTechnologies.Add(ctvm);
             }
 
             foreach (var ctvm in formDefinedConversionTech)
-            {
                 // add user (form) defined conversion technologies back to the list
                 _viewModel.ConversionTechnologies.Add(ctvm);
-            }
 
-            // was the list of meshes changed since the last SolveInstance?
-            foreach (var m in meshes)
-            {
-                if (oldMeshes.Any(svm => svm.Mesh == m))
-                {
-                    // mesh was input in last SolvInstance too, just keep it
-                    var surface = oldMeshes.First(svm => svm.Mesh == m);
-                    surface.Name = $"srf{surfaceIndex++}";
-                    _viewModel.Surfaces.Add(surface);
-                }
-                else
-                {
-                    // mesh is a newly added mesh
-                    var surface = new SurfaceViewModel
-                    {
-                        Area = AreaMassProperties.Compute(m).Area,
-                        Name = $"srf{surfaceIndex++}",
-                        Mesh = m
-                    };
-                    _viewModel.Surfaces.Add(surface);
-                }
-            }
-            
 
             foreach (var emitter in emitters)
             {
@@ -326,14 +314,13 @@ namespace Hive.IO.GhInputOutput
                         epvm.SetProperties(radiator);
                         break;
                 }
+
                 _viewModel.Emitters.Add(epvm);
             }
 
             foreach (var evm in formDefinedEmitters)
-            {
                 // add user (form) defined emitters back to the list
                 _viewModel.Emitters.Add(evm);
-            }
         }
 
         /// <summary>
@@ -345,7 +332,6 @@ namespace Hive.IO.GhInputOutput
         {
             var result = new List<object>();
             foreach (var ct in _viewModel.ConversionTechnologies)
-            {
                 if (ct.IsParametricDefined)
                 {
                     result.Add(ct.ConversionTech);
@@ -362,39 +348,46 @@ namespace Hive.IO.GhInputOutput
                     {
                         case "Photovoltaic (PV)":
                             foreach (var sm in ct.SelectedSurfaces)
-                                result.Add(new Photovoltaic(specificCapitalCost, specificEmbodiedEmissions, sm.Mesh, "FIXME: PV",
+                                result.Add(new Photovoltaic(specificCapitalCost, specificEmbodiedEmissions, sm.Mesh,
+                                    "FIXME: PV",
                                     efficiency));
                             break;
                         case "Solar Thermal (ST)":
                             foreach (var sm in ct.SelectedSurfaces)
-                                result.Add(new SolarThermal(specificCapitalCost, specificEmbodiedEmissions, sm.Mesh, "FIXME: ST",
+                                result.Add(new SolarThermal(specificCapitalCost, specificEmbodiedEmissions, sm.Mesh,
+                                    "FIXME: ST",
                                     efficiency));
                             break;
                         case "Boiler (Gas)":
-                            result.Add(new GasBoiler(specificCapitalCost, specificEmbodiedEmissions, capacity, efficiency));
+                            result.Add(new GasBoiler(specificCapitalCost, specificEmbodiedEmissions, capacity,
+                                efficiency));
                             break;
                         case "CHP":
-                            result.Add(new CombinedHeatPower(specificCapitalCost, specificEmbodiedEmissions, capacity, heatToPowerRatio,
+                            result.Add(new CombinedHeatPower(specificCapitalCost, specificEmbodiedEmissions, capacity,
+                                heatToPowerRatio,
                                 efficiency));
                             break;
                         case "Chiller (Electricity)":
-                            result.Add(new Chiller(specificCapitalCost, specificEmbodiedEmissions, capacity, efficiency));
+                            result.Add(
+                                new Chiller(specificCapitalCost, specificEmbodiedEmissions, capacity, efficiency));
                             break;
                         case "ASHP (Electricity)":
-                            result.Add(new AirSourceHeatPump(specificCapitalCost, specificEmbodiedEmissions, capacity, efficiency));
+                            result.Add(new AirSourceHeatPump(specificCapitalCost, specificEmbodiedEmissions, capacity,
+                                efficiency));
                             break;
                         case "Heat Exchanger":
-                            result.Add(new HeatCoolingExchanger(specificCapitalCost, specificEmbodiedEmissions, capacity, distributionLosses));
+                            result.Add(new HeatCoolingExchanger(specificCapitalCost, specificEmbodiedEmissions,
+                                capacity, distributionLosses));
                             break;
                         case "Cooling Exchanger":
-                            result.Add(new HeatCoolingExchanger(specificCapitalCost, specificEmbodiedEmissions, capacity, distributionLosses,
+                            result.Add(new HeatCoolingExchanger(specificCapitalCost, specificEmbodiedEmissions,
+                                capacity, distributionLosses,
                                 false, true));
                             break;
                         default:
                             throw new Exception($"Don't know how to read {ct.Name}");
                     }
                 }
-            }
 
             foreach (var emitter in _viewModel.Emitters)
             {
@@ -402,30 +395,153 @@ namespace Hive.IO.GhInputOutput
                 var specificEmbodiedEmissions = double.Parse(emitter.SpecificEmbodiedEmissions);
                 var inletTemperature = double.Parse(emitter.SupplyTemperature);
                 var returnTemperature = double.Parse(emitter.ReturnTemperature);
-                
+
                 switch (emitter.Name)
                 {
                     case "Radiator":
-                        result.Add(new Radiator(specificInvestmentCost, specificEmbodiedEmissions, emitter.IsHeating, emitter.IsCooling,
+                        result.Add(new Radiator(specificInvestmentCost, specificEmbodiedEmissions, emitter.IsHeating,
+                            emitter.IsCooling,
                             inletTemperature, returnTemperature));
                         break;
                     case "Air diffuser":
-                        result.Add(new AirDiffuser(specificInvestmentCost, specificEmbodiedEmissions, emitter.IsHeating, emitter.IsCooling,
+                        result.Add(new AirDiffuser(specificInvestmentCost, specificEmbodiedEmissions, emitter.IsHeating,
+                            emitter.IsCooling,
                             inletTemperature, returnTemperature));
                         break;
                 }
             }
+
             return result;
+        }
+        #region reading / writing state to the document
+
+        private static readonly ITraceWriter TraceWriter = new MemoryTraceWriter();
+
+        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
+        {
+            ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
+            TypeNameHandling = TypeNameHandling.All,
+            TraceWriter = TraceWriter
+        };
+
+        /// <summary>
+        ///     When writing state to the document, we have to take special care of the
+        ///     following properties of the EnergySystemsInputViewModel:
+        ///     - some of the conversion technologies and emitters are parametrically defined. we don't want to save these, as
+        ///     they can't be changed by the form anyway...
+        ///     - meshes. how to handle meshes? note, also, that they end up as surfaces with names.
+        ///     I think, instead of saving a whole EnergySystemsInputViewModel, we're going to save:
+        ///     - a list of form-defined ConversionTechPropertiesViewModel
+        ///     - a list of form-defined emitters
+        ///     - a list of surfaces, with .Mesh set to null but the name showing the index in the mesh list.
+        ///     CreateViewModel and ReadViewModel need to be aware of this.
+        /// </summary>
+        /// <param name="writer"></param>
+        /// <returns></returns>
+        public override bool Write(GH_IWriter writer)
+        {
+            if (_viewModel == null)
+                // CreateViewModel has never been called - no need to write anything, as user has never made any changes
+                return base.Write(writer);
+
+            // collect the data we want to store
+            var meshes = _viewModel.MeshSurfaces.ToArray();
+            var formDefinedConversionTech =
+                _viewModel.ConversionTechnologies.Where(ct => !ct.IsParametricDefined).ToArray();
+            var formDefinedEmitters = _viewModel.Emitters.Where(e => !e.IsParametricDefined).ToArray();
+
+
+            // write out data - but don't write out the mesh objects themselves... (this is handled by JsonConvert - we use the OptIn 
+            // method for serializing properties and just leave out the mesh objects)
+            writer.SetString("meshes",
+                JsonConvert.SerializeObject(meshes, Formatting.Indented, JsonSerializerSettings));
+            writer.SetString("conversions",
+                JsonConvert.SerializeObject(formDefinedConversionTech, Formatting.Indented, JsonSerializerSettings));
+            writer.SetString("emitters",
+                JsonConvert.SerializeObject(formDefinedEmitters, Formatting.Indented, JsonSerializerSettings));
+
+            // write out connection between meshes and conversion tech - needs to be re-assembled later in Read()
+            var meshConnections = new Dictionary<int, int>();
+            for (var meshIndex = 0; meshIndex < meshes.Length; meshIndex++)
+            {
+                var mesh = meshes[meshIndex];
+                if (mesh.Connection != null)
+                {
+                    // NOTE: mesh.Connection is guaranteed to be connected to an object in formDefinedConversionTech
+                    var ctIndex = Array.IndexOf(formDefinedConversionTech, mesh.Connection);
+                    meshConnections[meshIndex] = ctIndex;
+                }
+            }
+            writer.SetString("meshConnections", 
+                JsonConvert.SerializeObject(meshConnections, Formatting.Indented, JsonSerializerSettings));
+
+            return base.Write(writer);
         }
 
         /// <summary>
-        ///     Input changed, delete the viewModel.
+        /// Read in the form-defined conversion technologies and emitters.
         /// </summary>
-        protected override void ValuesChanged()
+        /// <param name="reader"></param>
+        /// <returns></returns>
+        public override bool Read(GH_IReader reader)
         {
-            _viewModel = null;
-            base.ValuesChanged();
+            // the _viewModel is for null, so let's create a new one - note that it will
+            // be updated in CreateViewModel - we're just going to set up some stuff to be ready...
+            _viewModel = new EnergySystemsInputViewModel();
+            _viewModel.ConversionTechnologies.Clear();
+            _viewModel.Surfaces.Clear();
+            _viewModel.Emitters.Clear();
+
+            // read in the form-defined stuff
+            try
+            {
+                var meshesJson = reader.GetString("meshes");
+                var meshes = JsonConvert.DeserializeObject<SurfaceViewModel[]>(meshesJson, JsonSerializerSettings);
+
+                var conversionsJson = reader.GetString("conversions");
+                var conversions =
+                    JsonConvert.DeserializeObject<ConversionTechPropertiesViewModel[]>(conversionsJson, JsonSerializerSettings);
+
+                var emittersJson = reader.GetString("emitters");
+                var emitters =
+                    JsonConvert.DeserializeObject<EmitterPropertiesViewModel[]>(emittersJson, JsonSerializerSettings);
+
+                var meshConnectionsJson = reader.GetString("meshConnections");
+                var meshConnections =
+                    JsonConvert.DeserializeObject<Dictionary<int, int>>(meshConnectionsJson, JsonSerializerSettings);
+
+                // connect the meshes to the conversion technologies
+                foreach (var meshIndex in meshConnections.Keys)
+                {
+                    meshes[meshIndex].Connection = conversions[meshConnections[meshIndex]];
+                }
+
+                // add everything to the _viewModel
+                foreach (var mesh in meshes)
+                {
+                    _viewModel.Surfaces.Add(mesh);
+                }
+
+                foreach (var conversion in conversions)
+                {
+                    _viewModel.ConversionTechnologies.Add(conversion);
+                }
+
+                foreach (var emitter in emitters)
+                {
+                    _viewModel.Emitters.Add(emitter);
+                }
+            }
+            catch (Exception ex)
+            {
+                // let's not worry too much about not being able to read the state...
+                Message = $"Failed to read state from Document: {ex.Message}";
+            }
+
+            return base.Read(reader);
         }
+
+        #endregion reading / writing state to the document
 
 
         #region GhEnergySystemAttributes
