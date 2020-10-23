@@ -8,7 +8,7 @@
   "components": [
     {
       "class-name": "SimplePanel",
-      "name": "Solar Potentials Unobstructed Hive",
+      "name": "Solar Potentials Unobstructed",
       "abbreviation": "SolarPotentialsUnobstructed",
       "description": "Calculates solar irradiance on an unobstructed plane, using GhSolar.gha and SolarModel.dll (https://github.com/christophwaibel/GH_Solar_V2)",
       "category": "[hive]",

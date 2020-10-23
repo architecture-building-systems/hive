@@ -9,8 +9,8 @@
     {
       "class-name": "EPW",
       "name": "EPW reader",
-      "abbreviation": "epw-reader",
-      "description": "Reading epw weather files, given a local path",
+      "abbreviation": "EpwReader",
+      "description": "Reading .epw weather files, given a local path",
       "category": "[hive]",
       "subcategory": "Misc",
       "id": "56f34cc1-0ee0-4104-85cc-4b4f9179d75e",
