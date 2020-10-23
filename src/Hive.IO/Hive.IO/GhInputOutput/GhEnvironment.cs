@@ -11,7 +11,7 @@ namespace Hive.IO.GhInputOutput
     {
         public GhEnvironment()
           : base("Input Environment Hive", "HiveInputEnvironment",
-              "Hive.IO.Environment input, describing the environment of a building.",
+              "Hive Environment input to define the environment of a building, specifically energy potentials, obstacles (such as adjacent buildings to topography), as well as the weather file.",
               "[hive]", "IO")
         {
         }

@@ -19,7 +19,7 @@ namespace Hive.IO.GhInputOutput
     {
         public GhBuilding()
           : base("Input Building Hive", "HiveInputBuilding",
-              "Hive.IO.Building input, representing the building geometry, as well as thermal and construction properties.",
+              "Hive Building input component and form to define building geometry (zone, floors and windows), as well as thermal, ventilation and construction properties. The form opens with a double click onto the component.",
               "[hive]", "IO")
         {
             // NOTE: Will be overwritten in Read() and SolveInstance

@@ -49,7 +49,7 @@ namespace Hive.IO.GhParametricInputs
         /// </summary>
         public GhConversionTech()
           : base("Parametric Input EnergySystems Hive", "HiveParaInEnSys",
-              "Description",
+              "Parametric inputs for Hive Energy Systems for, e.g., optimization work flows or sensitivity analysis. This component will overwrite the settings in the Hive Energy Systems Input Component when connected.",
               "[hive]", "IO")
         {
         }

@@ -12,7 +12,7 @@ namespace Hive.IO.GhInputOutput
     {
 
         public GhVisualizer() : base("Results Visualizer Hive", "HiveResultsVisualizer",
-            "Hive Visualizer for simulation results",
+            "Hive Visualizer for plotting graphs of Hive simulation results",
             "[hive]", "IO", GH_ParamAccess.item)
         {
             Results = new ResultsPlotting(new Results.Results());
