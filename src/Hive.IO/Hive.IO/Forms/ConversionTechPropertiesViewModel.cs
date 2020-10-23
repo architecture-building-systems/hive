@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Hive.IO.EnergySystems;
-using Hive.IO.Resources;
+using Hive.IO.Util;
 using Newtonsoft.Json;
 using Rhino.Geometry;
 

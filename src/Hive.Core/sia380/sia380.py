@@ -1,7 +1,7 @@
 # coding=utf-8
 """
 Monthly heating, cooling and electricity demand calculation according to SIA 380.
-Variables names according to SIA 380.
+Equations from 'Interaktion Struktu, Klima und Wärmebedarf_HS20.xlsx', 19.10.2020
 
 heating and cooling demand: SIA 380.1
 thermal balance depends on individual surfaces, i.e. each building surface (both transparent and opaque) can have
@@ -14,6 +14,7 @@ electricity demand: currently simply by using sqm and internal loads for lightin
 
 from __future__ import division
 import math
+import sys
 import ghpythonlib.treehelpers as th
 
 def cleanDictForNaN(d):
@@ -192,6 +193,9 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         t_L[i] *= days_per_month[i] / 365.0
         t_A[i] *= days_per_month[i] / 365.0
 
+    # formatting the grasshopper tree that contains solar irradiation time series for each window
+    # could be changed later to also include solar irradiation on opaque surfaces...
+    # ...would need to be adapted in the 'for surface in range(num_surfaces):' loop as well then
     win_areas = [x for (x, y) in zip(surface_areas, surface_type) if y != "opaque"]
     Q_s_jagged = tree_to_jagged_monthly(run_obstructed_simulation, srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, win_areas)
     Q_s_per_surface = transpose_jagged_2D_array(Q_s_jagged)
@@ -205,36 +209,47 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
     # preAllocate arrays. its a bit faster than .append (https://levelup.gitconnected.com/faster-lists-in-python-4c4287502f0a)
     Q_i = [0.0] * months_per_year
     Q_s = [0.0] * months_per_year
-    Q_i_eta_g = [0.0] * months_per_year
-    Q_s_eta_g = [0.0] * months_per_year
-    Q_V = [0.0] * months_per_year
-    Q_T = [0.0] * months_per_year
-    QT_opaque = [0.0] * months_per_year
-    QT_transparent = [0.0] * months_per_year
+    Q_i_out = [0.0] * months_per_year
+    Q_s_out = [0.0] * months_per_year
+    Q_V_out = [0.0] * months_per_year
+    Q_T_out = [0.0] * months_per_year
+    QT_opaque_out = [0.0] * months_per_year
+    QT_transparent_out = [0.0] * months_per_year
 
     Q_Heat = [0.0] * months_per_year
     Q_Cool = [0.0] * months_per_year
     Q_Elec = [0.0] * months_per_year
 
-
     Phi_P_tot = Phi_P * floor_area
     Phi_L_tot = Phi_L * floor_area
     Phi_A_tot = Phi_A * floor_area
 
-    # For each month, compute:
+    # For each month, compute gains and losses of the zone
+    # for some variables, we compute upper and lower bounds (subscripts ub & lb)
+    # furthermore, cooling and heating demand requires us to compute certain variables differently.
+    # See equation sheet 'EK1_Formelsammlung_HS20.pdf'
     for month in range(months_per_year):
         # External air flowrate (thermisch wirksamer Aussenluftvolumenstrom)
         Vdot_e = Vdot_e_spec * floor_area
         Vdot_inf = Vdot_inf_spec * floor_area
-        Vdot_th = Vdot_e * (1 - eta_rec) + Vdot_inf
+        Vdot_th = Vdot_e * (1.0 - eta_rec) + Vdot_inf
+        Vdot_th_no_heat_recovery = Vdot_e + Vdot_inf
 
         # Ventilation heat loss coefficient (Lüftungs-Wärmetransferkoeffizient), H_V
-        H_V = Vdot_th/3600 * rho * c_p
+        H_V = Vdot_th/3600.0 * rho * c_p
+        H_V_no_heat_recovery = Vdot_th_no_heat_recovery/3600.0 * rho * c_p
 
-        # Ventilation losses (Lüftungswärmeverluste), Q_V
-        Q_V_ub = H_V * (setpoints_ub[month] - T_e[month]) * t[month]
-        Q_V_lb = H_V * (setpoints_lb[month] - T_e[month]) * t[month]
-        # Q_V[month] = H_V * (T_i[month] - T_e[month]) * t[month]
+        # Ventilation losses (Lüftungswärmeverluste), Q_V = H_V * (T_i - T_e) * t
+        # we compute with and without heat recovery, ub and lb, and take the respectively best (lowest demand)
+        # this assumes, the ventilation system operates ideally and does not, for example, keep warm air in summer
+        Q_V_ub_heating = H_V * (setpoints_ub[month] - T_e[month]) * t[month]
+        Q_V_lb_heating = H_V * (setpoints_lb[month] - T_e[month]) * t[month]
+        Q_V_ub_cooling = H_V * (setpoints_ub[month] - T_e[month]) * t[month]
+        Q_V_lb_cooling = H_V * (setpoints_lb[month] - T_e[month]) * t[month]
+        Q_V_ub_heating_no_heat_recovery = H_V_no_heat_recovery * (setpoints_ub[month] - T_e[month]) * t[month]
+        Q_V_lb_heating_no_heat_recovery = H_V_no_heat_recovery * (setpoints_lb[month] - T_e[month]) * t[month]
+        Q_V_ub_cooling_no_heat_recovery = H_V_no_heat_recovery * (setpoints_ub[month] - T_e[month]) * t[month]
+        Q_V_lb_cooling_no_heat_recovery = H_V_no_heat_recovery * (setpoints_lb[month] - T_e[month]) * t[month]
 
         # Internal loads (interne Wärmeeinträge)
         Q_i[month] = Phi_P_tot * t_P[month] + Phi_L_tot * t_L[month] + Phi_A_tot * t_A[month]
@@ -245,10 +260,8 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         QT_tr_per_srf_this_month_ub = []
         QT_tr_per_srf_this_month_lb = []
 
+        # transmission heat losses, Q_T, per surface, both transparent and opaque
         for surface in range(num_surfaces):
-            # solar gains (solare Wärmeeinträge), Q_s, (PER SURFACE)
-            # unobstructed or obstructed, both using SolarModel.dll and GHSolar.gha
-
             # Transmission heat transfer coefficient (Transmissions-Wärmetransferkoeffizient), H_T, (PER SURFACE)
             if(surface_type[surface] == "opaque"):
                 H_T = surface_areas[surface] * U_op
@@ -266,61 +279,157 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         Q_T_ub = sum(Q_T_per_surfaces_this_month_ub)
         Q_T_lb = sum(Q_T_per_surfaces_this_month_lb)
 
-        Q_s[month] = sum(Q_s_per_surface[month])
+        # solar gains (solare Wärmeeinträge), Q_s, (PER SURFACE)
+        # unobstructed or obstructed, both using SolarModel.dll and GHSolar.gha
+        Q_s[month] = sum(Q_s_per_surface[month])    # currently, only transparent surfaces
 
         # Heatgains/-losses ratio (Wärmeeintrag/-verlust Verhältnis), gamma
-        gamma_ub = (Q_i[month] + Q_s[month]) / (Q_T_ub + Q_V_ub)
-        gamma_lb = (Q_i[month] + Q_s[month]) / (Q_T_lb + Q_V_lb)
-        # gamma = (Q_i[month] + Q_s[month]) / (Q_T[month] + Q_V[month])
+        # calculating for different cases, heating / cooling, upper / lower bounds, with / without heat recovery
+        gamma_ub_heating = calc_gamma(Q_i[month], Q_s[month], Q_T_ub, Q_V_ub_heating)
+        gamma_lb_heating = calc_gamma(Q_i[month], Q_s[month], Q_T_lb, Q_V_lb_heating)
+        gamma_ub_cooling = calc_gamma(Q_i[month], Q_s[month], Q_T_ub, Q_V_ub_cooling)
+        gamma_lb_cooling = calc_gamma(Q_i[month], Q_s[month], Q_T_lb, Q_V_lb_cooling)
+        gamma_ub_heating_no_hr = calc_gamma(Q_i[month], Q_s[month], Q_T_ub, Q_V_ub_heating_no_heat_recovery)
+        gamma_lb_heating_no_hr = calc_gamma(Q_i[month], Q_s[month], Q_T_lb, Q_V_lb_heating_no_heat_recovery)
+        gamma_ub_cooling_no_hr = calc_gamma(Q_i[month], Q_s[month], Q_T_ub, Q_V_ub_cooling_no_heat_recovery)
+        gamma_lb_cooling_no_hr = calc_gamma(Q_i[month], Q_s[month], Q_T_lb, Q_V_lb_cooling_no_heat_recovery)
 
         # usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
-        eta_g_lb = calc_eta_g(Q_T_lb, Q_V_lb, gamma_lb, tau)
-        eta_g_ub = calc_eta_g(Q_T_ub, Q_V_ub, gamma_ub, tau)
+        eta_g_lb_heating = calc_eta_g(gamma_lb_heating, tau, False)
+        eta_g_ub_heating = calc_eta_g(gamma_ub_heating, tau, False)
+        eta_g_lb_cooling = calc_eta_g(gamma_lb_cooling, tau, True)
+        eta_g_ub_cooling = calc_eta_g(gamma_ub_cooling, tau, True)
+        eta_g_lb_heating_no_hr = calc_eta_g(gamma_lb_heating_no_hr, tau)
+        eta_g_ub_heating_no_hr = calc_eta_g(gamma_ub_heating_no_hr, tau)
+        eta_g_lb_cooling_no_hr = calc_eta_g(gamma_lb_cooling_no_hr, tau, True)
+        eta_g_ub_cooling_no_hr = calc_eta_g(gamma_ub_cooling_no_hr, tau, True)
 
         # heating demand (Heizwärmebedarf), Q_H
-        demand_ub = Q_T_ub + Q_V_ub - eta_g_ub * (Q_i[month] + Q_s[month])
-        demand_lb = Q_T_lb + Q_V_lb - eta_g_lb * (Q_i[month] + Q_s[month])
-        eta_g = 0.0
-        if abs(demand_lb) < abs(demand_ub):
-            Q_T[month] = Q_T_lb
-            QT_opaque[month] = sum(QT_op_per_srf_this_month_lb)
-            QT_transparent[month] = sum(QT_tr_per_srf_this_month_lb)
-            Q_V[month] = Q_V_lb
-            eta_g = eta_g_lb
-        else:
-            Q_T[month] = Q_T_ub
-            QT_opaque[month] = sum(QT_op_per_srf_this_month_ub)
-            QT_transparent[month] = sum(QT_tr_per_srf_this_month_ub)
-            Q_V[month] = Q_V_ub
-            eta_g = eta_g_ub
+        # calculating different cases, lower/upper bounds (lb/ub), with/without heat recovery (hr)
+        Q_H_ub = Q_T_ub + Q_V_ub_heating - eta_g_ub_heating * (Q_i[month] + Q_s[month])
+        Q_H_lb = Q_T_lb + Q_V_lb_heating - eta_g_lb_heating * (Q_i[month] + Q_s[month])
+        Q_H_ub_no_hr = Q_T_ub + Q_V_ub_heating_no_heat_recovery - eta_g_ub_heating_no_hr * (Q_i[month] + Q_s[month])
+        Q_H_lb_no_hr = Q_T_lb + Q_V_lb_heating_no_heat_recovery - eta_g_lb_heating_no_hr * (Q_i[month] + Q_s[month])
+        Q_H_ub, Q_H_lb, Q_H_ub_no_hr, Q_H_lb_no_hr = negatives_to_zero([Q_H_ub, Q_H_lb, Q_H_ub_no_hr, Q_H_lb_no_hr])
 
-        Q_i_eta_g[month] = Q_i[month] * eta_g
-        Q_s_eta_g[month] = Q_s[month] * eta_g
-        demand = Q_T[month] + Q_V[month] - (Q_i_eta_g[month] + Q_s_eta_g[month])
-        if demand > 0:
-            Q_Heat[month] = demand
+        # cooling demand (Kältebedarf), Q_K
+        # calculating different cases, lower/upper bounds (lb/ub), with/without heat recovery (hr)
+        Q_K_lb = Q_i[month] + Q_s[month] - eta_g_lb_cooling * (Q_T_lb + Q_V_lb_cooling)
+        Q_K_ub = Q_i[month] + Q_s[month] - eta_g_ub_cooling * (Q_T_ub + Q_V_ub_cooling)
+        Q_K_lb_no_hr = Q_i[month] + Q_s[month] - eta_g_lb_cooling_no_hr * (Q_T_lb + Q_V_lb_cooling_no_heat_recovery)
+        Q_K_ub_no_hr = Q_i[month] + Q_s[month] - eta_g_ub_cooling_no_hr * (Q_T_ub + Q_V_ub_cooling_no_heat_recovery)
+        Q_K_lb, Q_K_ub, Q_K_lb_no_hr, Q_K_ub_no_hr = negatives_to_zero([Q_K_lb, Q_K_ub, Q_K_lb_no_hr, Q_K_ub_no_hr])
+
+        # take smaller value of both comfort set points and remember the index
+        Q_H, Q_H_index = min_and_index(Q_H_lb, Q_H_ub, Q_H_lb_no_hr, Q_H_ub_no_hr)
+        Q_K, Q_K_index = min_and_index(Q_K_lb, Q_K_ub, Q_K_lb_no_hr, Q_K_ub_no_hr)
+        Q_K *= -1.0     # make cooling negative
+
+        # either subtract heating from cooling, but then also account for that in losses/gains by subtracting those too
+        # or just take the higher load of both and then take the corresponding losses/gains
+        # demand = Q_K + Q_H  # sometimes we have both cooling and heating. so subtract one from another
+        # if demand < 0:
+        #     Q_Cool[month] = demand * -1
+        #     Q_Heat[month] = 0
+        # else:
+        #     Q_Cool[month] = 0
+        #     Q_Heat[month] = demand
+        if abs(Q_K) > Q_H:
+            demand = Q_K
+            Q_Cool[month] = Q_K
+            Q_Heat[month] = 0.0
         else:
-            Q_Cool[month] = demand
+            demand = Q_H
+            Q_Cool[month] = 0.0
+            Q_Heat[month] = Q_H
 
         Q_Elec[month] = Phi_L_tot * t_L[month] + Phi_A_tot * t_A[month]   # lighting and utility loads. simplification, because utility and lighting have efficiencies (inefficiencies are heat loads). I would need to know that to get full electricity loads
 
-    Q_s_tree = th.list_to_tree(Q_s_jagged, source=[0, 0])
+
+        # Q_i, Q_s are * with eta_rec in heating case
+        # Q_T, Q_V are * with eta_rec in cooling case
+        sum_QT_op_lb = sum(QT_op_per_srf_this_month_lb) # index 0 or 2
+        sum_QT_op_ub = sum(QT_op_per_srf_this_month_ub) # index 1 or 3
+        sum_QT_tr_lb = sum(QT_tr_per_srf_this_month_lb)
+        sum_QT_tr_ub = sum(QT_tr_per_srf_this_month_ub)
+
+        Q_T_list = [Q_T_lb, Q_T_ub, Q_T_lb, Q_T_ub]
+        QT_opaque_list = [sum_QT_op_lb, sum_QT_op_ub, sum_QT_op_lb, sum_QT_op_ub]
+        QT_transparent_list = [sum_QT_tr_lb, sum_QT_tr_ub, sum_QT_tr_lb, sum_QT_tr_ub]
+        Q_V_heating_list = [Q_V_lb_heating, Q_V_ub_heating, Q_V_lb_heating_no_heat_recovery, Q_V_ub_heating_no_heat_recovery]
+        Q_V_cooling_list = [Q_V_lb_cooling, Q_V_ub_cooling, Q_V_lb_cooling_no_heat_recovery, Q_V_ub_cooling_no_heat_recovery]
+        eta_rec_heating_list = [eta_g_lb_heating, eta_g_ub_heating, eta_g_lb_heating_no_hr, eta_g_ub_heating_no_hr]
+        eta_rec_cooling_list = [eta_g_lb_cooling, eta_g_ub_cooling, eta_g_lb_cooling_no_hr, eta_g_ub_cooling_no_hr]
+
+        if demand < 0:  # cooling
+            Q_T_out[month] = Q_T_list[Q_K_index] * eta_rec_cooling_list[Q_K_index]
+            QT_opaque_out[month] = QT_opaque_list[Q_K_index] * eta_rec_cooling_list[Q_K_index]
+            QT_transparent_out[month] = QT_transparent_list[Q_K_index] * eta_rec_cooling_list[Q_K_index]
+            Q_V_out[month] = Q_V_cooling_list[Q_K_index] * eta_rec_cooling_list[Q_K_index]
+            Q_i_out[month] = Q_i[month]
+            Q_s_out[month] = Q_s[month]
+        else:   # heating
+            Q_T_out[month] = Q_T_list[Q_H_index]
+            QT_opaque_out[month] = QT_opaque_list[Q_H_index]
+            QT_transparent_out[month] = QT_transparent_list[Q_H_index]
+            Q_V_out[month] = Q_V_heating_list[Q_H_index]
+            Q_i_out[month] = Q_i[month] * eta_rec_heating_list[Q_H_index]
+            Q_s_out[month] = Q_s[month] * eta_rec_heating_list[Q_H_index]
+
+
+    Q_s_tree = th.list_to_tree(Q_s_jagged, source=[0, 0])   # import ghpythonlib.treehelpers as th
 
     tokWh = 1000.0
     return [x / tokWh for x in Q_Heat], [x / tokWh for x in Q_Cool], [x / tokWh for x in Q_Elec], \
-           [x / tokWh for x in Q_T], [x / tokWh for x in Q_V], [x / tokWh for x in Q_i_eta_g], \
-           [x / tokWh for x in Q_s_eta_g], [x / tokWh for x in QT_opaque], [x / tokWh for x in QT_transparent], Q_s_tree
+           [x / tokWh for x in Q_T_out], [x / tokWh for x in Q_V_out], [x / tokWh for x in Q_i_out], \
+           [x / tokWh for x in Q_s_out], [x / tokWh for x in QT_opaque_out], [x / tokWh for x in QT_transparent_out], Q_s_tree
 
 
-def calc_eta_g(Q_T_month, Q_V_month, gamma, tau):
-    # usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
-    if Q_T_month + Q_V_month < 0:
-        eta_g = 0
-    elif gamma == 1:
-        eta_g = (1 + tau / 5) / (2 + tau / 15)
+def min_and_index(*sequence):
+    min_value = min(sequence)
+    index = sequence.index(min_value)
+    return min_value, index
+
+
+def negatives_to_zero(values):
+    new_values = []
+    for value in values:
+        if value < 0.0:
+            new_values.append(0.0)
+        else:
+            new_values.append(value)
+    return new_values
+
+
+def calc_gamma(Q_i, Q_s, Q_T, Q_V):
+    """
+    Wärmeeintrag/-verlust Verhältnis. Ratio of gains and losses of a zone
+    :param Q_i: internal gains
+    :param Q_s: solar gains
+    :param Q_T: transmission heat losses
+    :param Q_V: ventilation heat losses
+    :return: float. ratio of gains and losses
+    """
+    return (Q_i + Q_s) / (Q_T + Q_V)
+
+
+# usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
+def calc_eta_g(gamma, tau, cooling=False):
+    """
+    Ausnutzungsgrad für Wärmegewinne/-verluste. A variable that describes thermal losses/gains of a zone
+    :param gamma: Wärmeeintrag/-verlust Verhältnis. Ratio between gains and losses (Q_i + Q_s) / (Q_T + Q_V)
+    :param tau: Zeitkonstante. Time constant of the zone, describing thermal latency (C * A) / ( H_T + H_V). Or coefficients from SIA 2024
+    :param cooling: Boolean to indicate whether this function should return eta_g for the cooling case. Default is False
+    :return: float. Value for the degree of thermal losses/gains of a zone
+    """
+    if gamma < 0.0:
+        eta_g = 1.0
     else:
-        a = 1 + tau / 15
-        eta_g = (1 - gamma ** a) / (1 - gamma ** (a + 1))
+        a = 1.0 + tau / 15.0
+        if cooling:
+            eta_g = (1.0 - gamma ** (-a)) / (1.0 - gamma ** (-(a+1.0)))
+        else:
+            eta_g = (1.0 - gamma ** a) / (1.0 - gamma ** (a + 1.0))
     return eta_g
 
 

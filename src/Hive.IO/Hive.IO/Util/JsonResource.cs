@@ -3,7 +3,7 @@ using System.IO;
 using System.Reflection;
 using Newtonsoft.Json;
 
-namespace Hive.IO.Resources
+namespace Hive.IO.Util
 {
     /// <summary>
     ///     A helper class for de-serializing JSON resource files from the assembly.

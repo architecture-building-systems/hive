@@ -145,8 +145,9 @@
     <Compile Include="GhInputOutput\GhBuilding.cs" />
     <Compile Include="GhDistributors\GhMainDistributor.cs" />
     <Compile Include="GhInputOutput\GhVisualizerAttributes.cs" />
-    <Compile Include="GhInputOutput\HiveIOInfo.cs" />
-    <Compile Include="Misc.cs" />
+    <Compile Include="Util\HiveCategoryIcon.cs" />
+    <Compile Include="Util\HiveIOInfo.cs" />
+    <Compile Include="Util\Misc.cs" />
     <Compile Include="GhInputOutput\GhEnergySystem.cs" />
     <Compile Include="Plots\AmrPlotBase.cs" />
     <Compile Include="Plots\AmrPlotStyle.cs" />

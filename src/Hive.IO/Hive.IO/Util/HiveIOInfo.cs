@@ -2,10 +2,12 @@
 using System.Drawing;
 using Grasshopper.Kernel;
 
-namespace Hive.IO.GhInputOutput
+namespace Hive.IO
 {
     public class HiveIOInfo : GH_AssemblyInfo
     {
+        public HiveIOInfo(){}
+
         public override string Name
         {
             get
@@ -53,14 +55,5 @@ namespace Hive.IO.GhInputOutput
                 return "";
             }
         }
-    }
-}
-public class HiveCategoryIcon : GH_AssemblyPriority
-{
-    public override GH_LoadingInstruction PriorityLoad()
-    {
-        Grasshopper.Instances.ComponentServer.AddCategoryIcon("[hive]", Hive.IO.Properties.Resources.Hive_Logo);
-        Grasshopper.Instances.ComponentServer.AddCategorySymbolName("[hive]", 'H');
-        return GH_LoadingInstruction.Proceed;
     }
 }
