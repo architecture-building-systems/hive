@@ -16,12 +16,12 @@ namespace Hive.IO.GhMergers
         public GhHeatPump()
           : base("Merger AirSourceHeatPump Hive", "HiveMergerASHP",
               "Description",
-              "[hive]", "IO")
+              "[hive]", "IO-Core")
         {
         }
 
 
-        public override GH_Exposure Exposure => GH_Exposure.quinary;
+        public override GH_Exposure Exposure => GH_Exposure.tertiary;
 
 
         /// <summary>

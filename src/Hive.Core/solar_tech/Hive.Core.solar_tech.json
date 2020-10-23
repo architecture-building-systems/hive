@@ -1,10 +1,10 @@
 {
-  "name": "solar-tech",
+  "name": "Hive.Core.solar_tech",
   "description": "Solar technologies",
   "version": "0.1",
   "author": "christophwaibel",
   "id": "2a2178f1-08f7-4f68-afc9-0845516aba8e",
-  "include-files": ["simple_pv.py", "noct_pv.py", "simple_solar_thermal.py", "sum_over_timeperiod.py", "solar_thermal_timeresolved.py", "solar_tech_set_outputs.py"],
+  "include-files": ["simple_pv.py", "noct_pv.py", "simple_solar_thermal.py", "sum_over_timeperiod.py", "solar_thermal_timeresolved.py", "solar_tech_set_outputs.py", "performance_ratio.py", "orientation_factor.py"],
   "components": [
     {
       "class-name": "SummarizeYield",
@@ -12,7 +12,7 @@
       "abbreviation": "sum-yield",
       "description": "Summarize the PV yield per specified time period, e.g. monthly, daily, or entire year.",
       "category": "[hive]",
-      "subcategory": "solartech",
+      "subcategory": "Solar",
       "id": "9d0764bf-ebc8-4d61-92a7-8c6e7297def9",
       "icon": "sum_over_timeperiod.png",
       "main-module": "sum_over_timeperiod",
@@ -31,7 +31,7 @@
       "abbreviation": "SimpleST",
       "description": "Calculates total yield from Solar thermal collector, using simplified equation Q_th = G * F_F * A * eta_K * R_V, from the lecture Energy and Climate Systems.",
       "category": "[hive]",
-      "subcategory": "solartech",
+      "subcategory": "Solar",
       "id": "b1ddb905-855d-4997-b22b-e33aa58e7ab8",
       "icon": "simple_solar_thermal.png",
       "main-module": "simple_solar_thermal",
@@ -53,7 +53,7 @@
       "abbreviation": "ST-tr",
       "description": "Calculates heating energy from a Solar Thermal collector, time resolved, in [kWh]. Also outputs its efficiency.",
       "category": "[hive]",
-      "subcategory": "solartech",
+      "subcategory": "Solar",
       "id": "694bc052-0bc9-44ca-82a9-dfdf591665b4",
       "icon": "solar_thermal_timeresolved.png",
       "main-module": "solar_thermal_timeresolved",
@@ -77,7 +77,7 @@
       "abbreviation": "noct-pv",
       "description": "A PV calculation tool according to Nominal Operating Cell Temperature method Eqt. A.10 in doi: 10.1016/j.apenergy.2019.03.177",
       "category": "[hive]",
-      "subcategory": "solartech",
+      "subcategory": "Solar",
       "id": "05dca691-8d6b-455c-a8d4-3cf0c98eaf7e",
       "icon": "noct_pv.png",
       "main-module": "noct_pv",
@@ -103,7 +103,7 @@
       "abbreviation": "SimplePV",
       "description": "Calculates total PV electricity generation, using simplified equation E_PV = G * F_F * A * eta_PV * PR, from the lecture Energy and Climate Systems.",
       "category": "[hive]",
-      "subcategory": "solartech",
+      "subcategory": "Solar",
       "id": "49efa3bc-c59f-4b77-9adb-761e45f67aea",
       "icon": "simple_pv.png",
       "main-module": "simple_pv",
@@ -125,7 +125,7 @@
       "abbreviation": "SolarTechSetOutputs",
       "description": "Sets time-resolved output energy generation of surface based solar technologies (PV, PVT, ST, Ground collector). PV calculated according to Nominal Operating Cell Temperature method Eqt. A.10 in doi: 10.1016/j.apenergy.2019.03.177",
       "category": "[hive]",
-      "subcategory": "solartech",
+      "subcategory": "Solar",
       "id": "ff10e3a1-9a9c-434c-9ccd-ad7816eb0466",
       "icon": "solar_tech_set_outputs.png",
       "main-module": "solar_tech_set_outputs",
@@ -140,6 +140,55 @@
       "outputs": [
         {"name": "Hive.IO.EnergySystems.SurfaceBased", "nick-name": "SrfTech", "type": "generic", "description": "Hive.IO.EnergySystems.SurfaceBased objects (.Photovoltaic, .SolarThermal, .GroundCollector, .PVT) infused with input and output energy carriers (i.e. solar potentials and output energy generated)."}
       ]
+    },
+    {
+      "class-name": "OrientationFactor",
+      "name": "OrientationFactor",
+      "abbreviation": "orfac",
+      "description": "Orientation factor of surace",
+      "category": "[hive]",
+      "subcategory": "Solar",
+      "id": "dfde3d64-e63d-4715-a6b9-b045920d8c97",
+      "icon": "orientation_factor.png",
+      "main-module": "orientation_factor",
+      "inputs": [
+        {"name": "G_flat", "nick-name": "G_flat", "type": "float", "description": "Global irradiation, i.e. on the flat, in [kWh/m2]"},
+        {"name": "G_angled", "nick-name": "G_angled", "type": "float", "description": "Irradiation on an angle in [kWh/m2]"}
+      ],
+      "outputs": [
+        {"name": "OF", "nick-name": "OF", "type": "float", "description": "Orientation factor as a fraction [0.0, >1.0]"}
+      ]
+    },
+    {
+      "class-name": "PerformanceRatio",
+      "name": "PerformanceRatio",
+      "abbreviation": "perfrat",
+      "description": "Some options for performance ratios",
+      "category": "[hive]",
+      "subcategory": "Solar",
+      "id": "6ff9899d-64a9-46ef-817c-f1521fa605e1",
+      "icon": "performance_ratio.png",
+      "main-module": "performance_ratio",
+      "main-function": "get_performance_ratio",
+      "inputs": [
+        {"type": "json", "name": "performance_scenario", "nick-name": "perf_ratio", "default": "<add scenario>", "description": "Scenario for performance ratio, like dirty roof, clean facade, shaded roof, etc"}
+      ],
+      "outputs": [
+        {"type": "string", "name": "output", "nick-name": "o", "description": "Performance ratio of surface"}
+      ]
+    }
+  ],
+  "parameters": [
+    {
+      "class-name": "PerformanceRatioList",
+      "name": "PerformanceRatio",
+      "abbreviation": "prl",
+      "description": "A list of performance ratios",
+      "category": "[hive]",
+      "subcategory": "Solar",
+      "id": "f39f9eae-f665-4356-b4ba-4f9db73197ea",
+      "parameter-type": "ValueList",
+      "csv": "performance_ratio.csv"
     }
   ]
 }

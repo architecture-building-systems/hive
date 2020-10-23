@@ -13,12 +13,12 @@ namespace Hive.IO.GhDistributors
           : base("Distributor SolarTech Hive", "HiveDistSolarTech",
               "Distributor for Solar technologies." +
                 "\nOutputs relevant parameters for Solar Energy Generation calculations (PV, ST, PVT, GC).",
-              "[hive]", "IO")
+              "[hive]", "IO-Core")
         {
         }
 
 
-        public override GH_Exposure Exposure => GH_Exposure.quarternary;
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
 
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)

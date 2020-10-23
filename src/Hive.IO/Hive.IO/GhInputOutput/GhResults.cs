@@ -14,11 +14,11 @@ namespace Hive.IO.GhInputOutput
         public GhResults()
           : base("Results Hive", "HiveResults",
               "Hive.IO.Results object, containing results of all simulations run within the Mothercell.",
-              "[hive]", "IO")
+              "[hive]", "IO-Core")
         {
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.senary;
+        public override GH_Exposure Exposure => GH_Exposure.quarternary;
 
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)

@@ -1,16 +1,16 @@
 {
-  "name": "solar",
+  "name": "Hive.Core.solar",
   "description": "Solar irradiance simulation on external surfaces",
   "version": "0.1",
   "author": "christophwaibel",
   "id": "3b4dd266-f7e0-4614-aef5-cadf1e3319d2",
-  "include-files": ["simple_panel.py", "performance_ratio.py", "orientation_factor.py"],
+  "include-files": ["simple_panel.py"],
   "components": [
     {
       "class-name": "SimplePanel",
-      "name": "SimplePanel",
-      "abbreviation": "SimplePanel",
-      "description": "Calculates solar irradiance on an unobstructed external surface",
+      "name": "Solar Potentials Unobstructed Hive",
+      "abbreviation": "SolarPotentialsUnobstructed",
+      "description": "Calculates solar irradiance on an unobstructed plane, using GhSolar.gha and SolarModel.dll (https://github.com/christophwaibel/GH_Solar_V2)",
       "category": "[hive]",
       "subcategory": "Solar",
       "id": "880708bb-5f9d-4dbc-8fb9-db44e90f0290",
@@ -31,55 +31,6 @@
       "outputs": [
         {"name": "annual potential", "nick-name": "annual", "type": "float", "description": "annual hourly solar irradiance [Wh/m²] of panel"}
       ]
-    },
-    {
-      "class-name": "OrientationFactor",
-      "name": "OrientationFactor",
-      "abbreviation": "orfac",
-      "description": "Orientation factor of surace",
-      "category": "[hive]",
-      "subcategory": "solar",
-      "id": "dfde3d64-e63d-4715-a6b9-b045920d8c97",
-      "icon": "orientation_factor.png",
-      "main-module": "orientation_factor",
-      "inputs": [
-        {"name": "G_flat", "nick-name": "G_flat", "type": "float", "description": "Global irradiation, i.e. on the flat, in [kWh/m2]"},
-        {"name": "G_angled", "nick-name": "G_angled", "type": "float", "description": "Irradiation on an angle in [kWh/m2]"}
-      ],
-      "outputs": [
-        {"name": "OF", "nick-name": "OF", "type": "float", "description": "Orientation factor as a fraction [0.0, >1.0]"}
-      ]
-    },
-    {
-      "class-name": "PerformanceRatio",
-      "name": "PerformanceRatio",
-      "abbreviation": "perfrat",
-      "description": "Some options for performance ratios",
-      "category": "[hive]",
-      "subcategory": "solar",
-      "id": "6ff9899d-64a9-46ef-817c-f1521fa605e1",
-      "icon": "performance_ratio.png",
-      "main-module": "performance_ratio",
-      "main-function": "get_performance_ratio",
-      "inputs": [
-        {"type": "json", "name": "performance_scenario", "nick-name": "perf_ratio", "default": "<add scenario>", "description": "Scenario for performance ratio, like dirty roof, clean facade, shaded roof, etc"}
-      ],
-      "outputs": [
-        {"type": "string", "name": "output", "nick-name": "o", "description": "Performance ratio of surface"}
-      ]
-    }
-  ],
-  "parameters": [
-    {
-      "class-name": "PerformanceRatioList",
-      "name": "PerformanceRatio",
-      "abbreviation": "prl",
-      "description": "A list of performance ratios",
-      "category": "[hive]",
-      "subcategory": "solar",
-      "id": "f39f9eae-f665-4356-b4ba-4f9db73197ea",
-      "parameter-type": "ValueList",
-      "csv": "performance_ratio.csv"
     }
   ]
 }

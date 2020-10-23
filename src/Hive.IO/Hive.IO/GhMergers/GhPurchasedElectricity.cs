@@ -15,11 +15,11 @@ namespace Hive.IO.GhMergers
         public GhPurchasedElectricity()
           : base("Merger ElectricalSubstation Hive", "HiveMergerSubstation",
               "Description",
-              "[hive]", "IO")
+              "[hive]", "IO-Core")
         {
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.quinary;
+        public override GH_Exposure Exposure => GH_Exposure.tertiary;
 
         /// <summary>
         /// Registers all the input parameters for this component.

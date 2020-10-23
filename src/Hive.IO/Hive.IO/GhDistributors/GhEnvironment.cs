@@ -8,11 +8,11 @@ namespace Hive.IO.GhDistributors
         public GhEnvironment()
           : base("Distributor Environment Hive", "HiveDistEnvironment",
               "Environment distributor. Reads in an Hive.IO.Environment object and outputs the filepath of the .epw, as well as energy potentials as list of EnergyCarriers",
-              "[hive]", "IO")
+              "[hive]", "IO-Core")
         {
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.quarternary;
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {

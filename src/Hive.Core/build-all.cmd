@@ -5,12 +5,12 @@ REM (this assumes the IronPython installation folder and also the path to honey-
 SET IPY=C:\Program Files\IronPython 2.7\ipy.exe
 SET HB=%USERPROFILE%\Documents\GitHub\honey-badger\honey-badger.py
 
-"%IPY%" "%HB%" -i combustion\combustion.json
-"%IPY%" "%HB%" -i cooling\cooling.json
-"%IPY%" "%HB%" -i epw_reader\epw_reader.json
-"%IPY%" "%HB%" -i heatpumps\heatpumps.json
-"%IPY%" "%HB%" -i sia380\sia380.json
-"%IPY%" "%HB%" -i solar\solar.json
-"%IPY%" "%HB%" -i solar_tech\solar_technologies.json
+"%IPY%" "%HB%" -i epw_reader\Hive.Core.epw_reader.json
+"%IPY%" "%HB%" -i sia380\Hive.Core.sia380.json
+"%IPY%" "%HB%" -i solar\Hive.Core.solar.json
+"%IPY%" "%HB%" -i solar_tech\Hive.Core.solar_tech.json
+"%IPY%" "%HB%" -i combustion\Hive.Core.combustion.json
+"%IPY%" "%HB%" -i cooling\Hive.Core.cooling.json
+"%IPY%" "%HB%" -i heatpumps\Hive.Core.heatpumps.json
 
 pause

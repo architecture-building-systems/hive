@@ -1,5 +1,5 @@
 {
-  "name": "epw-reader",
+  "name": "Hive.Core.epw_reader",
   "description": "Import and read epw weather files",
   "version": "0.2",
   "author": "christophwaibel",
@@ -12,7 +12,7 @@
       "abbreviation": "epw-reader",
       "description": "Reading epw weather files, given a local path",
       "category": "[hive]",
-      "subcategory": "epw",
+      "subcategory": "Misc",
       "id": "56f34cc1-0ee0-4104-85cc-4b4f9179d75e",
       "icon": "epw_reader.png",
       "main-module": "epw_reader",
