@@ -1,28 +1,32 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using Hive.IO.EnergySystems;
-using Hive.IO.Resources;
-using OxyPlot.Reporting;
+using Hive.IO.Util;
+using Newtonsoft.Json;
 using Rhino.Geometry;
 
 namespace Hive.IO.Forms
 {
+    [JsonObject(MemberSerialization.OptIn)]
     public class ConversionTechPropertiesViewModel : ViewModelBase
     {
-        private static Dictionary<string, ConversionTechDefaults> _defaults;
+        private static Dictionary<string, ConversionTechDefaults> _defaults;  // JsonResource backing field
 
-        private static Dictionary<string, List<ModuleTypeRecord>> _moduleTypesCatalog;
-        private IEnumerable<SurfaceViewModel> _availableSurfaces;
+        private static Dictionary<string, List<ModuleTypeRecord>> _moduleTypesCatalog;  // JsonResource backing field
 
+        private IEnumerable<SurfaceViewModel> _availableSurfaces;  // injected at runtime when selection of TechGrid changes
+
+        [JsonProperty]
         private string _endUse;
 
+        [JsonProperty]
         private string _name;
 
+        [JsonProperty]
         private string _source;
 
         public ConversionTechPropertiesViewModel()
@@ -89,7 +93,7 @@ namespace Hive.IO.Forms
             get => $"{_specificCapitalCost:0.00}";
             set
             {
-                SetWithColors(ref _specificCapitalCost, ParseDouble(value, _specificCapitalCost)); 
+                SetWithColors(ref _specificCapitalCost, ParseDouble(value, _specificCapitalCost));
                 RaisePropertyChangedEvent("CapitalCost");
             }
         }
@@ -235,12 +239,25 @@ namespace Hive.IO.Forms
 
         #region properties
 
+        [JsonProperty]
         private double _efficiency;
+
+        [JsonProperty]
         private double _capacity;
+
+        [JsonProperty]
         private double _specificCapitalCost;
+
+        [JsonProperty]
         private double _specificEmbodiedEmissions;
+
+        [JsonProperty]
         private double _heatToPowerRatio;
+
+        [JsonProperty]
         private double _distributionLosses;
+
+        [JsonProperty]
         private ModuleTypeRecord _moduleType;
 
         #endregion
@@ -299,7 +316,6 @@ namespace Hive.IO.Forms
             CompareFontWeight(_distributionLosses, Defaults[Name].DistributionLosses);
 
         public FontWeight EfficiencyFontWeight => CompareFontWeight(_efficiency, Defaults[Name].Efficiency);
-
 
         #endregion
 
@@ -400,9 +416,13 @@ namespace Hive.IO.Forms
         #endregion
     }
 
+    [JsonObject(MemberSerialization.OptIn)]
     public class SurfaceViewModel : ViewModelBase
     {
+        [JsonProperty]
         public string Name { get; set; }
+
+        [JsonProperty]
         public double Area { get; set; }
 
         public Mesh Mesh { get; set; }
