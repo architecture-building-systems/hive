@@ -12,11 +12,11 @@ namespace Hive.IO.GhDistributors
         public GhSIA()
           : base("Distributor SIARoom Hive", "HiveDistSIARoom",
               "Sia 2024 distributor that reads in an Hive.IO.Building object and outputs its Sia 2024 room definition.",
-              "[hive]", "IO")
+              "[hive]", "IO-Core")
         {
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.quarternary;
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {

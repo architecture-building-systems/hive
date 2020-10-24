@@ -13,12 +13,12 @@ namespace Hive.IO.GhDistributors
         public GhConversionTech()
           : base("Distributor ConversionTech Hive", "HiveDistConversionTech",
               "Distributor for Hive.IO.EnergySystems.ConversionTech",
-              "[hive]", "IO")
+              "[hive]", "IO-Core")
         {
         }
 
 
-        public override GH_Exposure Exposure => GH_Exposure.quarternary;
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
 
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)

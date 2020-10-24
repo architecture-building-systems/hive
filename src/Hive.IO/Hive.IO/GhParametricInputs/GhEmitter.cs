@@ -25,7 +25,7 @@ namespace Hive.IO.GhParametricInputs
         /// </summary>
         public GhEmitter()
           : base("Parametric Input Emitter Hive", "HiveParaInEmitter",
-              "Heat/Cold Emitter Design Inputs (radiator, floor heating, ...).",
+              "Parametric inputs for Hive Emitter Systems for, e.g., optimization work flows or sensitivity analysis. This component will overwrite the settings in the Hive Energy Systems Input Component when connected.",
               "[hive]", "IO")
         {
         }

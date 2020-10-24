@@ -12,8 +12,8 @@ namespace Hive.IO.GhInputOutput
 {
     public class GhResultsParameter : GH_PersistentParam<ResultsDataType>
     {
-        public GhResultsParameter() : base("HiveResultsParameter", "HiveResults",
-            "A parameter for Hive.IO.Results.Results objects",
+        public GhResultsParameter() : base("Results Parameter Hive", "HiveResultsParameter",
+            "A parameter to save (internalize) Hive Results objects",
             "[hive]", "IO")
         {
         }

@@ -12,12 +12,12 @@ namespace Hive.IO.GhDistributors
         public GhSolarSimulation()
           : base("Distributor Solar Simulation Hive", "HiveDistSolarSimu",
               "Distributor for 'GHSolar' solar simulations (github/christophwaibel/GH_Solar_V2). Reads in and outputs all relevant geometric, geographic and climatic information necessary for solar simulations.",
-              "[hive]", "IO")
+              "[hive]", "IO-Core")
         {
         }
 
 
-        public override GH_Exposure Exposure => GH_Exposure.quarternary;
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {

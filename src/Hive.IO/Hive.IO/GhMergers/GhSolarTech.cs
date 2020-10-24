@@ -18,12 +18,12 @@ namespace Hive.IO.GhMergers
         public GhSolarTech()
           : base("Merger SolarTech Hive", "HiveMergerSolarTech",
               "Description",
-              "[hive]", "IO")
+              "[hive]", "IO-Core")
         {
         }
 
 
-        public override GH_Exposure Exposure => GH_Exposure.quinary;
+        public override GH_Exposure Exposure => GH_Exposure.tertiary;
 
 
         /// <summary>

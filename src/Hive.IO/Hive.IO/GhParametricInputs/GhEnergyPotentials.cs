@@ -12,8 +12,8 @@ namespace Hive.IO.GhParametricInputs
         /// Initializes a new instance of the GhParametricInputEnergyPotentials class.
         /// </summary>
         public GhEnergyPotentials()
-          : base("Parametric Input Energy Potantials Hive", "HiveParaInPotentials",
-              "Description",
+          : base("Parametric Input Energy Potentials Hive", "HiveParaInPotentials",
+              "Parametric inputs for Hive Energy Potentials for, e.g., optimization work flows or sensitivity analysis. This component will overwrite the settings in the Hive Environment Input Component when connected.",
               "[hive]", "IO")
         {
         }

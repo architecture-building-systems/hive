@@ -11,12 +11,13 @@ namespace Hive.IO.GhDistributors
     {
         public GhMainDistributor()
           : base("Main Distributor Hive", "HiveDistributor",
-              "The Hive.IO.Distributor collects all Hive Inputs from outside the Mothercell (the simulation core) and outputs them individually according to their class type, ready for deployment.",
-              "[hive]", "IO")
+              "The Distributor collects all Hive inputs from outside the the simulation core and outputs them individually according to their class type. " +
+              "The function of this component is that the user can simply input all hive input objects into the same node without bothering about their formats.",
+              "[hive]", "IO-Core")
         {
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.quarternary;
+        public override GH_Exposure Exposure => GH_Exposure.primary;
 
 
         /// <summary>
@@ -24,19 +25,29 @@ namespace Hive.IO.GhDistributors
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Hive Input Objects", "Hive Input Objects", "Hive Input Objects, all comes in here", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Hive Inputs", "HiveInputs", "Hive Input Objects (Building, Energy Systems, Environment)", GH_ParamAccess.list);
         }
 
         /// <summary>
-        /// Output data that needs to be distributed within the mothercell to each respective simulation/calculation component
+        /// Output data that needs to be distributed within the simulation core to each respective simulation/calculation component
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Hive.IO.Building", "Building", "Hive.IO.Building from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Hive.IO.Environment", "Environment", "Hive.IO.Environment from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Hive.IO.EnergySystems.SurfaceBasedTech", "SurfaceBasedTech", "Hive.IO.EnergySystem. Photovoltaic; .SolarThermal; .PVT; .GroundCollector objects from outside the Mothercell, ready to be deployed into the core.", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Hive.IO.EnergySystems.ConversionTech", "ConversionTech", "Hive.IO.EnergySystem.ConversionTech; AirSourceHeatPump, Chillers, CHP, Boilers, etc.", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Hive.IO.EnergySystems.Emitter", "Emitter", "Hive.IO.EnergySystems.Emitter; Floor heating, radiator, etc.", GH_ParamAccess.list); // should be a list, even for a single zone (different cooling and heating emitter, e.g.). but how to know, which emitter goes to which simulation model?
+            pManager.AddGenericParameter("Hive Building", "Building", 
+                "Hive Building from outside the simulation core, ready to be deployed into the core.", 
+                GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive Environment", "Environment", 
+                "Hive Environment from outside the simulation core, ready to be deployed into the core.", 
+                GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive EnergySystems SurfaceBasedTech", 
+                "SurfaceBasedTech", "Hive surface based technologies (Photovoltaic, Solar Thermal, hybrid PVT, solar ground collector) from outside the simulation core, ready to be deployed into the core.", 
+                GH_ParamAccess.list);
+            pManager.AddGenericParameter("Hive EnergySystems ConversionTech", 
+                "ConversionTech", "Hive conversion technologies (air source heat pump, chillers, combined heat and power, boiler, etc.) from outside the simulation core, ready to be deployed into the core.", 
+                GH_ParamAccess.list);
+            pManager.AddGenericParameter("Hive EnergySystems Emitter", "Emitter", 
+                "Hive emitters (floor heating, radiator, air diffuser, etc.) from outside the simulation core, ready to be deployed into the core.", 
+                GH_ParamAccess.list); // should be a list, even for a single zone (different cooling and heating emitter, e.g.). FIXME: but how to know, which emitter goes to which simulation model?
         }
 
 

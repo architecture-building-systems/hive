@@ -14,12 +14,12 @@ namespace Hive.IO.GhMergers
         public GhChiller()
           : base("Merger Chiller Hive", "HiveMergerChiller",
               "Description",
-              "[hive]", "IO")
+              "[hive]", "IO-Core")
         {
         }
 
 
-        public override GH_Exposure Exposure => GH_Exposure.quinary;
+        public override GH_Exposure Exposure => GH_Exposure.tertiary;
 
 
         /// <summary>

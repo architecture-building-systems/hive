@@ -11,7 +11,7 @@ namespace Hive.IO.GhInputOutput
     {
         public GhEnvironment()
           : base("Input Environment Hive", "HiveInputEnvironment",
-              "Hive.IO.Environment input, describing the environment of a building.",
+              "Hive Environment input to define the environment of a building, specifically energy potentials, obstacles (such as adjacent buildings to topography), as well as the weather file.",
               "[hive]", "IO")
         {
         }
@@ -19,17 +19,21 @@ namespace Hive.IO.GhInputOutput
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("EPW Path", "epwPath", "epwPath", GH_ParamAccess.item);
-            pManager.AddMeshParameter("Obstacles Geometry", "ObstMesh", "Mesh geometries of any adjacent obstacles, such as buildings, trees, etc.", GH_ParamAccess.list);
+            pManager.AddTextParameter("Epw Path", "Epw", "Local path to an .epw weather file.", GH_ParamAccess.item);
+            pManager.AddMeshParameter("Obstacle geometries", "Obstacles", "(Optional input) Mesh geometries of any adjacent obstacles, such as buildings, trees, etc.", GH_ParamAccess.list);
             pManager[1].Optional = true;
-            pManager.AddGenericParameter("Potentials", "Potentials", "Energy potentials of the site, of type <EnergyPotentialsProperties>.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Potentials", "Potentials", 
+                "(Optional input) An <EnergyPotentialsProperties> input from a Hive Parametric Input Energy Potentials component that defines the energy potentials of the site. If no input is given, default values are assumed.", 
+                GH_ParamAccess.item);
             pManager[2].Optional = true;
         }
 
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Hive.IO.Environment", "HiveIOEnv", "Hive.IO.Environment, containing geometric, geographic and climate information of the buildings's environment.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive Environment", "Environment", 
+                "Creates an Environment definition of type <Hive.IO.Environment.Environment> that contains geometric, geographic, climate, and energy potentials information of the building's environment.", 
+                GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
