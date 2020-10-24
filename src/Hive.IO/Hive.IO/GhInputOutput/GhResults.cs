@@ -13,7 +13,7 @@ namespace Hive.IO.GhInputOutput
 
         public GhResults()
           : base("Results Hive", "HiveResults",
-              "Hive.IO.Results object, containing results of all simulations run within the Mothercell.",
+              "Hive Results of type <Hive.IO.Results.Results>, containing all simulation results from within the simulation core.",
               "[hive]", "IO-Core")
         {
         }
