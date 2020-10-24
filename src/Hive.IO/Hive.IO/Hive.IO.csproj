@@ -204,9 +204,6 @@
     <None Include="Resources\IO_Solartech_.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IO_Visualizer.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\IO_Environment.png" />
   </ItemGroup>
   <ItemGroup>
@@ -260,7 +257,6 @@
   <ItemGroup>
     <None Include="Resources\tesseract.png" />
   </ItemGroup>
-  <ItemGroup />
   <ItemGroup>
     <Resource Include="Resources\EnergySystems\CdTe.jpg" />
     <Resource Include="Resources\EnergySystems\HIT.jpg" />
@@ -269,6 +265,15 @@
     <Resource Include="Resources\EnergySystems\Monocristalline.jpg" />
     <Resource Include="Resources\EnergySystems\Polycristalline.jpg" />
     <Resource Include="Resources\EnergySystems\vacume_tube.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IO_Results_Param .png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IO_Results_Param.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IO_Visualizer.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

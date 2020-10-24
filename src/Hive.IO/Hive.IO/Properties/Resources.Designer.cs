@@ -105,6 +105,16 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap IO_Results_Param {
+            get {
+                object obj = ResourceManager.GetObject("IO_Results_Param", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap IO_Solartech {
             get {
                 object obj = ResourceManager.GetObject("IO_Solartech", resourceCulture);
