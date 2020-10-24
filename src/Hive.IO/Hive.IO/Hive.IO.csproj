@@ -260,7 +260,9 @@
   <ItemGroup>
     <None Include="Resources\tesseract.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\IO_Results_Param.png" />
+  </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\EnergySystems\CdTe.jpg" />
     <Resource Include="Resources\EnergySystems\HIT.jpg" />

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.IO;
 using GH_IO.Serialization;
 using Grasshopper.Kernel;
@@ -35,6 +36,8 @@ namespace Hive.IO.GhInputOutput
 
         public override Guid ComponentGuid => new Guid("4056dfe8-5fdc-48e9-999c-20faa8b20eba");
 
+        protected override Bitmap Icon => Properties.Resources.IO_Results_Param;
+
         protected override GH_GetterResult Prompt_Singular(ref ResultsDataType value)
         {
             throw new NotImplementedException();
@@ -45,6 +48,7 @@ namespace Hive.IO.GhInputOutput
             throw new NotImplementedException();
         }
     }
+
 
     public class ResultsDataType : GH_Goo<Results.Results>
     {
