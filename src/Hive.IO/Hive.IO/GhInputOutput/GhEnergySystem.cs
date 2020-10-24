@@ -39,23 +39,23 @@ namespace Hive.IO.GhInputOutput
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("SolarTechProperties", "SolarTechProperties",
-                "List of SolarTechProperties describing solar technologies. Could also be just a mesh, in which case technology properties will be set via the form",
+            pManager.AddGenericParameter("Mesh / Solar Technology Properties", "Mesh/SolarTechProperties",
+                "(Optional input) Either mesh objects that represent photovoltaic panels, or SolarTechProperties from the Hive Parametric Input SolarTech component. If mesh objects are provided, they need to be assigned to a PV technology via the form (double click onto this component).",
                 GH_ParamAccess.list);
             pManager[0].Optional = true;
-            pManager.AddGenericParameter("ConversionTechProperties", "ConversionTechProperties",
-                "ConversionTechProperties describing all other used conversion technologies (ASHP, boiler, CHP, etc",
+            pManager.AddGenericParameter("Conversion Technology Properties", "ConversionTechProperties",
+                "(Optional input) ConversionTechProperties from the Hive Parametric Input ConversionTech component. If no input is provided, energy systems need to be defined via the form (double click onto this component).",
                 GH_ParamAccess.item);
             pManager[1].Optional = true;
-            pManager.AddGenericParameter("EmitterProperties", "EmitterProperties",
-                "EmitterProperties describing emitter properties", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Emitter Properties", "EmitterProperties",
+                "(Optional input) EmitterProperties from the Hive Parametric Input Emitter component. If no input is provided, emitter systems need to be defined via the form (double click onto this component).", GH_ParamAccess.list);
             pManager[2].Optional = true;
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Energy Systems", "EnergySystems",
-                "Building Energy Systems of type <Hive.IO.EnergySystems.>, such as Emitters, ConversionTech, SolarTech, etc.",
+            pManager.AddGenericParameter("Hive Energy Systems", "EnergySystems",
+                "A List of Hive Energy Systems objects of type <Hive.IO.EnergySystems.>, such as Emitters, ConversionTech, SolarTech, etc.",
                 GH_ParamAccess.list);
         }
 

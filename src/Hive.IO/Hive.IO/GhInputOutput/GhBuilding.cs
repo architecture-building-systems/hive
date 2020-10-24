@@ -86,30 +86,32 @@ namespace Hive.IO.GhInputOutput
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            // NOTE! the descriptions are not fully accurate for the current Hive version. Zone Brep currently only takes one zone (in future it should take multiple zones), and SIARoom should also take multiple rooms in future, one for each zone).
-            pManager.AddBrepParameter("Zone Brep Geometries", "ZoneBreps", "Zone geometries as Breps." +
-                "\nStrict conditions: Must be a closed Polysurface." +
-                "\nOptional conditions (necessary for EnergyPlus): (i) Linearity of edges, (ii) convexity, (iii) planarity of faces.", GH_ParamAccess.item);
-            pManager.AddSurfaceParameter("Windows Surfaces", "WinSrfs", "Windows surfaces that lie on a zone Brep." +
-                "\nStrict conditions: (i) Windows must not intersect and (ii) Windows must lie entirely on a Brep face." +
-                "\nOptional input.", GH_ParamAccess.list);
+            // FIXME: Should take multiple zones in the future
+            pManager.AddBrepParameter("Zone geometry", "ZoneGeometry", 
+                "Zone geometry as closed Polysurface. Strict conditions: Geometry must be closed, linear and planar.", 
+                GH_ParamAccess.item);
+            pManager.AddSurfaceParameter("Windows surfaces", "WindowsSrfs",
+                "(Optional input) Windows surfaces of the zone. Strict conditions: (i) Windows must not intersect and (ii) Windows must lie entirely on any of the zone geometry faces.", 
+                GH_ParamAccess.list);
             pManager[1].Optional = true;
-            pManager.AddSurfaceParameter("Additional floor surfaces", "FloorSrfs", "Additional floor surface that must lie within the zone Brep", GH_ParamAccess.list);
+            pManager.AddSurfaceParameter("Additional floor surfaces", "FloorSrfs",
+                "(Optional input) Additional floor surfaces that must lie within the zone geometry. The ground floor is included by default and does not need to be provided separately.", 
+                GH_ParamAccess.list);
             pManager[2].Optional = true;
-            pManager.AddTextParameter("SIA2024 Room", "SiaRoom", "SIA 2024 Room definition." +
-                "\nMust be a string containing information about the zone (internal loads, construction, etc)." +
-                "\nMust be in the correct format as defined in the Hive SIA 2024 Rooms list component." +
-                "\nOptional input.", GH_ParamAccess.item);
+            pManager.AddTextParameter("SIA 2024 Room", "SiaRoom", 
+                "(Optional input) SIA 2024 Room definition. Must be a string containing information about the zone (internal loads, construction, etc). " +
+                "Furthermore, it must be in the correct format as defined in the Hive SIA 2024 Rooms list component. If no input is provided, the zone needs to be defined via the form (double click onto this component).", 
+                GH_ParamAccess.item);
             pManager[3].Optional = true;
         }
 
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            // NOTE! description not accurate, zone adjacencies not implemented yet.
-            pManager.AddGenericParameter("Hive.IO.Building", "HiveIOBldg", "Creates an instance of a Hive.IO.Building." +
-                "\nIt contains all geometric information, such as zone definitions and windows, as well as thermal and construction properties." +
-                "\nThe object will also contain surface and zone adjacencies.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive Building", "Building", 
+                "Creates a Building object of type <Hive.IO.Building.Building>. " +
+                "It contains all geometric information, such as windows and opaque surfaces, as well as thermal and construction properties.", 
+                GH_ParamAccess.item);
         }
 
 
