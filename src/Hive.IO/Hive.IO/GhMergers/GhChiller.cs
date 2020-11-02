@@ -30,7 +30,7 @@ namespace Hive.IO.GhMergers
             pManager.AddGenericParameter("Air", "Air", "Air energy carrier from weather file", GH_ParamAccess.item);
             pManager.AddGenericParameter("Electricity", "Electricity", "Electricity", GH_ParamAccess.item);
             pManager.AddNumberParameter("coolingGenerated", "coolingGenerated", "coolingGenerated (kWh)", GH_ParamAccess.list);
-            pManager.AddNumberParameter("condenserTemp", "condenserTemp", "on coil condenserTemp for water output. necessary to know for COP calculation", GH_ParamAccess.list);
+            pManager.AddNumberParameter("supplyTemp", "supplyTemp", "supply temperature (cold reservoir)", GH_ParamAccess.list);
             pManager.AddBooleanParameter("simpleMode?", "simpleMode?", "simpleMode?", GH_ParamAccess.item, true);
 
             pManager.AddGenericParameter("Chiller", "Chiller", "Hive.IO.EnergySystems.Chiller", GH_ParamAccess.item);
