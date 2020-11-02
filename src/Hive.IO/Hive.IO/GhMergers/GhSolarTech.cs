@@ -163,22 +163,11 @@ namespace Hive.IO.GhMergers
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return null;
-            }
-        }
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.IOCore_Mergerelectricalsustation;
 
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("bffaaabf-85f2-4374-b593-ca11f25a6a11"); }
-        }
+        public override Guid ComponentGuid => new Guid("bffaaabf-85f2-4374-b593-ca11f25a6a11");
     }
 }

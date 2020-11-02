@@ -105,6 +105,56 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap IO_Para_Inputen {
+            get {
+                object obj = ResourceManager.GetObject("IO_Para_Inputen", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IO_Para_Inputenergyemitter {
+            get {
+                object obj = ResourceManager.GetObject("IO_Para_Inputenergyemitter", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IO_Para_Inputensys {
+            get {
+                object obj = ResourceManager.GetObject("IO_Para_Inputensys", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IO_Para_Inputenvpot {
+            get {
+                object obj = ResourceManager.GetObject("IO_Para_Inputenvpot", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IO_Para_InputSIAroom {
+            get {
+                object obj = ResourceManager.GetObject("IO_Para_InputSIAroom", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap IO_Results_Param {
             get {
                 object obj = ResourceManager.GetObject("IO_Results_Param", resourceCulture);
@@ -128,6 +178,106 @@ namespace Hive.IO.Properties {
         internal static System.Drawing.Bitmap IO_Visualizer {
             get {
                 object obj = ResourceManager.GetObject("IO_Visualizer", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IOCore_Distensys {
+            get {
+                object obj = ResourceManager.GetObject("IOCore_Distensys", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IOCore_Distenv {
+            get {
+                object obj = ResourceManager.GetObject("IOCore_Distenv", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IOCore_Distributorergyemitter {
+            get {
+                object obj = ResourceManager.GetObject("IOCore_Distributorergyemitter", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IOCore_DistSIAroom {
+            get {
+                object obj = ResourceManager.GetObject("IOCore_DistSIAroom", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IOCore_DistSolarsym {
+            get {
+                object obj = ResourceManager.GetObject("IOCore_DistSolarsym", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IOCore_Mergerchiller {
+            get {
+                object obj = ResourceManager.GetObject("IOCore_Mergerchiller", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IOCore_Mergercombinedheatpower {
+            get {
+                object obj = ResourceManager.GetObject("IOCore_Mergercombinedheatpower", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IOCore_Mergercoolingexchanger {
+            get {
+                object obj = ResourceManager.GetObject("IOCore_Mergercoolingexchanger", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IOCore_Mergerelectricalsustation {
+            get {
+                object obj = ResourceManager.GetObject("IOCore_Mergerelectricalsustation", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IOCore_Mergerheatpump {
+            get {
+                object obj = ResourceManager.GetObject("IOCore_Mergerheatpump", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

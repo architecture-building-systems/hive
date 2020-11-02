@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Windows;
 using Grasshopper.Kernel;
 
 
@@ -198,15 +199,7 @@ namespace Hive.IO.GhParametricInputs
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return null;
-            }
-        }
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.IO_Para_Inputenvpot;
 
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
