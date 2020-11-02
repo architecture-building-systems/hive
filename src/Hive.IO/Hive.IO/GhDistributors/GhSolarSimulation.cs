@@ -131,23 +131,12 @@ namespace Hive.IO.GhDistributors
         }
 
 
-       
 
 
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return null;
-            }
-        }
+
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.IOCore_DistSolarsym;
 
 
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("12d66e12-f837-44c9-9bad-de7e245134bb"); }
-        }
+        public override Guid ComponentGuid => new Guid("12d66e12-f837-44c9-9bad-de7e245134bb");
     }
 }
