@@ -96,16 +96,6 @@ Section "Base Installation" Base_Installation_Section
     File "..\src\Hive.Core\cooling\_build\Hive.Core.cooling.ghpy"
     File "..\src\Hive.Core\heatpumps\_build\Hive.Core.heatpumps.ghpy"
 
-    File "honey-badger-runtime.dll"    
-
-    ;Create uninstaller
-    WriteUninstaller "$INSTDIR\Uninstall_Hive.exe"
-
-SectionEnd
-
-Section "Uninstall"
-  
-  SetOutPath $TEMP
-  Delete /REBOOTOK "$INSTDIR\Uninstall_Hive.exe"
+    File "honey-badger-runtime.dll"        
 
 SectionEnd
