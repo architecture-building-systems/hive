@@ -32,18 +32,10 @@ namespace Hive.IO.Plots
             var demandElectricity = new ColumnSeries
             {
                 ItemsSource = results.TotalElectricityMonthly.Select(demand => new ColumnItem { Value = demand }),
-                Title = " Electricity",
+                Title = " Grid Electricity",
                 FillColor = ElectricityColor
             };
             model.Series.Add(demandElectricity);
-
-            var demandDhw = new ColumnSeries
-            {
-                ItemsSource = results.TotalDomesticHotWaterMonthly.Select(demand => new ColumnItem { Value = demand }),
-                Title = " DWH",
-                FillColor = DhwColor,
-            };
-            model.Series.Add(demandDhw);
 
             model.Axes.Add(new LinearAxis
             {
