@@ -51,7 +51,7 @@
             <TextBox Grid.Row="1" Grid.Column="1" Text="{Binding Efficiency}" IsEnabled="False" />
             <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">Specific Embodied Emissions</Label>
             <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding SpecificEmbodiedEmissions}"
-                     IsEnabled="{Binding IsEditable}"
+                     IsEnabled="False"
                      Foreground="{Binding SpecificEmbodiedEmissionsBrush}"
                      FontWeight="{Binding SpecificEmbodiedEmissionsFontWeight}" />
             <Label Grid.Row="3" Grid.Column="1">(kgCO₂/m²)</Label>
@@ -76,7 +76,7 @@
             <TextBox Grid.Row="1" Grid.Column="0" Text="{Binding SurfaceTechCapacity, Mode=OneWay, StringFormat=0.00}" IsEnabled="False" />
             <Label Grid.Row="1" Grid.Column="1">(kWp)</Label>
             <Label Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2">Specific Capital Cost</Label>
-            <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding SpecificCapitalCost}" IsEnabled="{Binding IsEditable}"
+            <TextBox Grid.Row="3" Grid.Column="0" Text="{Binding SpecificCapitalCost}" IsEnabled="False"
                      Foreground="{Binding SpecificCapitalCostBrush}"
                      FontWeight="{Binding SpecificCapitalCostFontWeight}" />
             <Label Grid.Row="3" Grid.Column="1">(CHF/m²)</Label>
