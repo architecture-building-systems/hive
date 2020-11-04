@@ -64,9 +64,10 @@ namespace Hive.IO.EnergySystems
 
             for (int t = 0; t < horizon; t++)
             {
-                double COP = this.EtaRef * (tempColdHorizon[t] / (tempWarmHorizon[t] - tempColdHorizon[t]));
+                double COP = this.EtaRef * ((tempColdHorizon[t] + Misc.Kelvin) / ((tempWarmHorizon[t] + Misc.Kelvin) - (tempColdHorizon[t] + Misc.Kelvin)));
                 base.COP[t] = COP;
                 elecConsumed[t] = coolingGenerated[t] / COP;
+                if (elecConsumed[t] < 0.0) elecConsumed[t] = 0.0;
             }
 
             Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor, electricityIn.PrimaryEnergyFactor);
@@ -85,10 +86,10 @@ namespace Hive.IO.EnergySystems
         /// Also, this equation is actually for air con, but we are creating a Water carrier as output here
         /// </summary>
         /// <param name="electricityIn">Empty electricity carrier, i.e. no information yet how much is consumed. Will be computed here and be infused into this.InputCarrier</param>
-        /// <param name="airIn"></param>
+        /// <param name="airIn">also uses as on-coil temperature (air entering evaporator)</param>
         /// <param name="coolingGenerated"></param>
-        /// <param name="tempCondenser"></param>
-        public void SetInputOutput(Electricity electricityIn, Air airIn, double[] coolingGenerated, double[] tempCondenser)
+        /// <param name="supplyTemp"></param>
+        public void SetInputOutput(Electricity electricityIn, Air airIn, double[] coolingGenerated, double[] supplyTemp)
         {
             int horizon = coolingGenerated.Length;
             base.COP = new double[horizon];
@@ -113,9 +114,10 @@ namespace Hive.IO.EnergySystems
 
             for (int t = 0; t < horizon; t++)
             {
-                double COP = (638.95 - 4.238 * (airTemp[t] + Misc.Kelvin)) / (100.0 + 3.534 * (airTemp[t] + Misc.Kelvin));
+                double COP = (638.95 - 4.238 * airTemp[t]) / (100.0 + 3.534 * airTemp[t]);  // this equation must be in degree C
                 base.COP[t] = COP;
                 elecConsumed[t] = coolingGenerated[t] / COP;
+                if (elecConsumed[t] < 0.0) elecConsumed[t] = 0.0;
             }
 
             this.AmbientAir = new Air(horizon, null, null, null, airTemp); // how would I know air energy? i'd need that for exergy calculation?
@@ -124,7 +126,7 @@ namespace Hive.IO.EnergySystems
             base.InputCarrier = electricityConsumedCarrier;
 
             base.OutputCarriers = new Carrier[1];
-            base.OutputCarriers[0] = new Water(horizon, coolingGenerated, null, null, tempCondenser, 1.0);
+            base.OutputCarriers[0] = new Water(horizon, coolingGenerated, null, null, supplyTemp, 1.0);
         }
     }
 
@@ -176,6 +178,7 @@ namespace Hive.IO.EnergySystems
                 double COP = this.EtaRef * ((tempWarmHorizon[t] + Misc.Kelvin) / ((tempWarmHorizon[t] + Misc.Kelvin) - (tempColdHorizon[t] + Misc.Kelvin)));
                 base.COP[t] = COP;
                 elecConsumed[t] = heatingGenerated[t] / COP;
+                if (elecConsumed[t] < 0.0) elecConsumed[t] = 0.0;
             }
 
             Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor, electricityIn.PrimaryEnergyFactor);
@@ -225,6 +228,7 @@ namespace Hive.IO.EnergySystems
                 double COP = pi1 * Math.Exp(pi2 * ((supplyTemp[t] + Misc.Kelvin) - (airTemp[t] + Misc.Kelvin))) + pi3 * Math.Exp(pi4 * ((supplyTemp[t] + Misc.Kelvin) - (airTemp[t] + Misc.Kelvin)));
                 base.COP[t] = COP;
                 elecConsumed[t] = heatingGenerated[t] / COP;
+                if (elecConsumed[t] < 0.0) elecConsumed[t] = 0.0;
             }
 
             Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor, electricityIn.PrimaryEnergyFactor);
