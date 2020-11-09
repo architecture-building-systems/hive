@@ -124,8 +124,14 @@
   <data name="Hive_Logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Hive_Logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="IOCore_Distensys" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IOCore_Distensys.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="IOCore_Distconvtech" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IOCore_Distconvtech.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IOCore_Distenergyemitter" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IOCore_Distenergyemitter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IOCore_Distenergysystems" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IOCore_Distenergysystems.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="IOCore_Distenv" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IOCore_Distenv.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -136,8 +142,11 @@
   <data name="IOCore_DistSIAroom" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IOCore_DistSIAroom.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="IOCore_DistSolarsym" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IOCore_DistSolarsym.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="IOCore_DistSolarsim" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IOCore_DistSolarsim.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IOCore_Distsolartech" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IOCore_Distsolartech.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="IOCore_Mergerchiller" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IOCore_Mergerchiller.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -148,14 +157,29 @@
   <data name="IOCore_Mergercoolingexchanger" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IOCore_Mergercoolingexchanger.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="IOCore_Mergerelectricalsustation" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IOCore_Mergerelectricalsustation.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="IOCore_Mergerelectricalstation" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IOCore_Mergerelectricalstation.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="IOCore_Mergerheatpump" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IOCore_Mergerheatpump.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="IOCore_Mergersolartech" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IOCore_Mergersolartech.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IOCore_Merger_Gasboiler" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IOCore_Merger_Gasboiler.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="IO_Building" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IO_Building.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IO_CoreDistributor" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IO_CoreDistributor.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IO_CoreMerger" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IO_CoreMerger.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IO_Energysytems" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IO_Energysytems.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="IO_Environment" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IO_Environment.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -166,14 +190,14 @@
   <data name="IO_Para_Inputenergyemitter" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IO_Para_Inputenergyemitter.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="IO_Para_Inputensys" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\IO_Para_Inputensys.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="IO_Para_Inputenvpot" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IO_Para_Inputenvpot.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="IO_Para_InputSIAroom" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IO_Para_InputSIAroom.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IO_Para_InputSolarTech" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\IO_Para_Inputensys.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="IO_Results_Param" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IO_Results_Param.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -192,8 +216,5 @@
   </data>
   <data name="st_efficiency" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\st_efficiency.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="tesseract" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\tesseract.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>

@@ -65,7 +65,7 @@ namespace Hive.IO.GhMergers
         /// <summary>
         /// Provides an Icon for the component.
         /// </summary>
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.IOCore_Mergerelectricalsustation;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.IOCore_Mergerelectricalstation;
 
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
