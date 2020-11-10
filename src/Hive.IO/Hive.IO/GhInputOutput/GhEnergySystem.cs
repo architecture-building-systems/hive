@@ -12,6 +12,7 @@ using Grasshopper.Kernel.Types;
 using Hive.IO.EnergySystems;
 using Hive.IO.Forms;
 using Hive.IO.GhParametricInputs;
+using Hive.IO.Properties;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Serialization;
 using Rhino.Geometry;
@@ -32,7 +33,7 @@ namespace Hive.IO.GhInputOutput
         }
 
 
-        protected override Bitmap Icon => Properties.Resources.IO_Solartech;
+        protected override Bitmap Icon => Resources.IO_Energysytems;
 
 
         public override Guid ComponentGuid => new Guid("59389231-9a1b-4732-99dd-2bdda6b78bb8");
@@ -48,7 +49,8 @@ namespace Hive.IO.GhInputOutput
                 GH_ParamAccess.item);
             pManager[1].Optional = true;
             pManager.AddGenericParameter("Emitter Properties", "EmitterProperties",
-                "(Optional input) EmitterProperties from the Hive Parametric Input Emitter component. If no input is provided, emitter systems need to be defined via the form (double click onto this component).", GH_ParamAccess.list);
+                "(Optional input) EmitterProperties from the Hive Parametric Input Emitter component. If no input is provided, emitter systems need to be defined via the form (double click onto this component).",
+                GH_ParamAccess.list);
             pManager[2].Optional = true;
         }
 
@@ -189,14 +191,12 @@ namespace Hive.IO.GhInputOutput
             // up to a mesh in meshes, in the same order
             var meshSurfaces = _viewModel.MeshSurfaces.ToArray();
             if (meshSurfaces.Length > 0 && meshSurfaces[0].Mesh == null)
-            {
                 // last operation was Read(), we need to hook up the meshes properly
                 for (var meshIndex = 0; meshIndex < meshSurfaces.Length; meshIndex++)
                 {
                     var surface = meshSurfaces[meshIndex];
                     surface.Mesh = meshes.ElementAt(meshIndex);
                 }
-            }
 
             // remove parametrically defined conversion technologies and emitters - they'll be added below anyway
             var formDefinedConversionTech =
@@ -211,7 +211,6 @@ namespace Hive.IO.GhInputOutput
 
             // was the list of meshes changed since the last SolveInstance?
             foreach (var m in meshes)
-            {
                 if (meshSurfaces.Any(svm => svm.Mesh == m))
                 {
                     // mesh was input in last SolveInstance too, just keep it
@@ -230,7 +229,6 @@ namespace Hive.IO.GhInputOutput
                     };
                     _viewModel.Surfaces.Add(surface);
                 }
-            }
 
 
             foreach (var ct in conversionTechnologies)
@@ -345,12 +343,14 @@ namespace Hive.IO.GhInputOutput
                     switch (ct.Name)
                     {
                         case "Photovoltaic (PV)":
+                            ct.AvailableSurfaces = _viewModel.SurfacesForConversion(ct);
                             foreach (var sm in ct.SelectedSurfaces)
                                 result.Add(new Photovoltaic(specificCapitalCost, specificEmbodiedEmissions, sm.Mesh,
                                     "FIXME: PV",
                                     efficiency));
                             break;
                         case "Solar Thermal (ST)":
+                            ct.AvailableSurfaces = _viewModel.SurfacesForConversion(ct);
                             foreach (var sm in ct.SelectedSurfaces)
                                 result.Add(new SolarThermal(specificCapitalCost, specificEmbodiedEmissions, sm.Mesh,
                                     "FIXME: ST",
@@ -411,6 +411,7 @@ namespace Hive.IO.GhInputOutput
 
             return result;
         }
+
         #region reading / writing state to the document
 
         private static readonly ITraceWriter TraceWriter = new MemoryTraceWriter();
@@ -470,14 +471,15 @@ namespace Hive.IO.GhInputOutput
                     meshConnections[meshIndex] = ctIndex;
                 }
             }
-            writer.SetString("meshConnections", 
+
+            writer.SetString("meshConnections",
                 JsonConvert.SerializeObject(meshConnections, Formatting.Indented, JsonSerializerSettings));
 
             return base.Write(writer);
         }
 
         /// <summary>
-        /// Read in the form-defined conversion technologies and emitters.
+        ///     Read in the form-defined conversion technologies and emitters.
         /// </summary>
         /// <param name="reader"></param>
         /// <returns></returns>
@@ -498,7 +500,8 @@ namespace Hive.IO.GhInputOutput
 
                 var conversionsJson = reader.GetString("conversions");
                 var conversions =
-                    JsonConvert.DeserializeObject<ConversionTechPropertiesViewModel[]>(conversionsJson, JsonSerializerSettings);
+                    JsonConvert.DeserializeObject<ConversionTechPropertiesViewModel[]>(conversionsJson,
+                        JsonSerializerSettings);
 
                 var emittersJson = reader.GetString("emitters");
                 var emitters =
@@ -510,25 +513,14 @@ namespace Hive.IO.GhInputOutput
 
                 // connect the meshes to the conversion technologies
                 foreach (var meshIndex in meshConnections.Keys)
-                {
                     meshes[meshIndex].Connection = conversions[meshConnections[meshIndex]];
-                }
 
                 // add everything to the _viewModel
-                foreach (var mesh in meshes)
-                {
-                    _viewModel.Surfaces.Add(mesh);
-                }
+                foreach (var mesh in meshes) _viewModel.Surfaces.Add(mesh);
 
-                foreach (var conversion in conversions)
-                {
-                    _viewModel.ConversionTechnologies.Add(conversion);
-                }
+                foreach (var conversion in conversions) _viewModel.ConversionTechnologies.Add(conversion);
 
-                foreach (var emitter in emitters)
-                {
-                    _viewModel.Emitters.Add(emitter);
-                }
+                foreach (var emitter in emitters) _viewModel.Emitters.Add(emitter);
             }
             catch (Exception ex)
             {

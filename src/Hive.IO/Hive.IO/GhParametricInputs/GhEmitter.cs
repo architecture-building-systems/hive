@@ -97,9 +97,6 @@ namespace Hive.IO.GhParametricInputs
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
         /// </summary>
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("7766d14d-fa68-42d1-86ec-51d28892c265"); }
-        }
+        public override Guid ComponentGuid => new Guid("7766d14d-fa68-42d1-86ec-51d28892c265");
     }
 }

@@ -181,6 +181,7 @@
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
+      <SubType>Designer</SubType>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -195,16 +196,10 @@
     <None Include="Resources\st_efficiency.csv" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IO_Building.png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\IO_Environment_.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IO_Solartech_.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IO_Environment.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IO_Solartech.png" />
@@ -255,9 +250,6 @@
     </Page>
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\tesseract.png" />
-  </ItemGroup>
-  <ItemGroup>
     <Resource Include="Resources\EnergySystems\CdTe.jpg" />
     <Resource Include="Resources\EnergySystems\HIT.jpg" />
     <Resource Include="Resources\EnergySystems\CIGS.jpg" />
@@ -267,13 +259,40 @@
     <Resource Include="Resources\EnergySystems\vacume_tube.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IO_Results_Param .png" />
-  </ItemGroup>
-  <ItemGroup>
     <None Include="Resources\IO_Results_Param.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IO_Visualizer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IO_Para_Inputensys.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IOCore_Distributorergyemitter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IOCore_DistSolarsym.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IOCore_Mergerelectricalsustation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IOCore_Distensys.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IO_Building.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IO_CoreDistributor.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IO_CoreMerger.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IO_Energysytems.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IO_Environment.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IO_Para_Inputen.png" />
@@ -282,43 +301,55 @@
     <None Include="Resources\IO_Para_Inputenergyemitter.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IO_Para_Inputensys.png" />
+    <None Include="Resources\IO_Para_Inputenvpot.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IO_Para_InputSIAroom.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IOCore_Distributorergyemitter.png" />
+    <None Include="Resources\IOCore_Distconvtech.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IOCore_DistSIAroom.png" />
+    <None Include="Resources\IOCore_Distenergyemitter.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IOCore_DistSolarsym.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IOCore_Mergerchiller.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IOCore_Mergercoolingexchanger.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IOCore_Mergerelectricalsustation.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IOCore_Mergerheatpump.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IO_Para_Inputenvpot.png" />
+    <None Include="Resources\IOCore_Distenergysystems.png" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IOCore_Distenv.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\IOCore_DistSIAroom.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IOCore_DistSolarsim.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IOCore_Distsolartech.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IOCore_Merger_Gasboiler.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IOCore_Mergerchiller.png" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include="Resources\IOCore_Mergercombinedheatpower.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IOCore_Distensys.png" />
+    <None Include="Resources\IOCore_Mergercoolingexchanger.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IOCore_Mergerelectricalstation.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IOCore_Mergerheatpump.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IOCore_Mergersolartech.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\IO_Para_InputSolarTech.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 

@@ -4,6 +4,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using Hive.IO.EnergySystems;
+using Hive.IO.Properties;
 using Rhino.Geometry;
 
 namespace Hive.IO.GhInputOutput
@@ -240,13 +241,7 @@ namespace Hive.IO.GhInputOutput
 
 
 
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                return null;
-            }
-        }
+        protected override System.Drawing.Bitmap Icon => Resources.IO_CoreMerger;
 
 
         public override Guid ComponentGuid
