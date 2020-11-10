@@ -104,7 +104,7 @@ namespace Hive.IO.GhDistributors
             DA.SetDataList(4, emitters);
         }
 
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.tesseract;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.IO_CoreDistributor;
 
         public override Guid ComponentGuid => new Guid("8757ee6f-03c4-4f5e-ac6d-db04b4d20297");
     }
