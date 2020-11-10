@@ -9,7 +9,8 @@ namespace Hive.IO.Plots
 {
     public class SolarGainsPerWindowPlot : OxyPlotBase
     {
-        private static readonly List<OxyColor> Colors = Enumerable.Range(0, 8).Select(i => OxyColor.FromRgb(
+        private const int MaxColors = 8;
+        private static readonly List<OxyColor> Colors = Enumerable.Range(0, MaxColors).Select(i => OxyColor.FromRgb(
             (byte) (235 - i * 5),
             (byte) (255 - i * 25),
             (byte) (140 - i * 20)
@@ -27,7 +28,7 @@ namespace Hive.IO.Plots
                 {
                     ItemsSource = windowIrradiation.Select(x => new ColumnItem {Value = x}),
                     IsStacked = true,
-                    FillColor = Colors[i],
+                    FillColor = Colors[i % MaxColors],
                     Title = $" Win{i:00}",
                     LabelFormatString = "{0:0}",
                     LabelPlacement = LabelPlacement.Middle

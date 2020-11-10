@@ -134,7 +134,7 @@ namespace Hive.IO.GhDistributors
 
 
 
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.IOCore_DistSolarsym;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.IOCore_DistSolarsim;
 
 
         public override Guid ComponentGuid => new Guid("12d66e12-f837-44c9-9bad-de7e245134bb");
