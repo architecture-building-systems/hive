@@ -76,18 +76,9 @@ namespace Hive.IO.GhInputOutput
         }
 
 
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                return Hive.IO.Properties.Resources.IO_Environment;
-            }
-        }
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.IO_Environment;
 
 
-        public override Guid ComponentGuid
-        {
-            get { return new Guid("c11567a1-b864-4e4e-a192-24bb487a4bac"); }
-        }
+        public override Guid ComponentGuid => new Guid("c11567a1-b864-4e4e-a192-24bb487a4bac");
     }
 }
