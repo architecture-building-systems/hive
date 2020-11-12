@@ -18,7 +18,7 @@ namespace Hive.IO.Forms
             {
                 new ConversionTechPropertiesViewModel
                 {
-                    Name = "Photovoltaic (PV)",
+                    Name = "Photovoltaic (PV)"
                 },
                 new ConversionTechPropertiesViewModel
                 {
@@ -30,11 +30,11 @@ namespace Hive.IO.Forms
             {
                 new EmitterPropertiesViewModel
                 {
-                    Name = "Radiator",
+                    Name = "Radiator"
                 },
                 new EmitterPropertiesViewModel
                 {
-                    Name = "Air diffuser",
+                    Name = "Air diffuser"
                 }
             };
 
@@ -61,12 +61,13 @@ namespace Hive.IO.Forms
 
 
         /// <summary>
-        /// The list of surfaces that came from Meshes - these are either free surfaces or those
-        /// connected to form-defined surfaceTech. We also make sure that SurfaceViewModels connected
-        /// to non-surface-tech are included. (this happens when the type of technology is changed...)
+        ///     The list of surfaces that came from Meshes - these are either free surfaces or those
+        ///     connected to form-defined surfaceTech. We also make sure that SurfaceViewModels connected
+        ///     to non-surface-tech are included. (this happens when the type of technology is changed...)
         /// </summary>
         public IEnumerable<SurfaceViewModel> MeshSurfaces =>
-            Surfaces.Where(sm => sm.Connection == null || !sm.Connection.IsParametricDefined || !sm.Connection.IsSurfaceTech);
+            Surfaces.Where(sm =>
+                sm.Connection == null || !sm.Connection.IsParametricDefined || !sm.Connection.IsSurfaceTech);
 
 
         public ObservableCollection<SurfaceViewModel> Surfaces { get; set; }
@@ -74,7 +75,8 @@ namespace Hive.IO.Forms
         public IEnumerable<SurfaceViewModel> SurfacesForConversion(ConversionTechPropertiesViewModel vm)
         {
             return Surfaces.Where(
-                sm => sm.Connection == null || sm.Connection == vm || !sm.Connection.IsSurfaceTech);
+                sm => sm.Connection == null || sm.Connection == vm || !sm.Connection.IsSurfaceTech ||
+                      !ConversionTechnologies.Contains(sm.Connection));
         }
     }
 }
