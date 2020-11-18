@@ -45,13 +45,13 @@ namespace Hive.IO.GhInputOutput
         {
             if (_buildingInputState == null)
             {
-                return false;
+                return base.Write(writer);
             }
 
             if (!_buildingInputState.IsEditable)
             {
                 // don't bother writing down parametric input
-                return false;
+                return base.Write(writer);
             }
 
             try
@@ -63,7 +63,7 @@ namespace Hive.IO.GhInputOutput
             {
                 RhinoApp.WriteLine($"GhBuilding.Write() failed!! {ex}");
                 Message = "Failed to write state to Document";
-                return false;
+                return base.Write(writer);
             }
         }
 
