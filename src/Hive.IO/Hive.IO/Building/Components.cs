@@ -188,6 +188,19 @@ namespace Hive.IO.Building
         }
         [JsonConstructor] 
         protected Wall() { }
+
+        public override void ApplySia2024Construction(Sia2024Record siaRoom)
+        {
+
+            OpaqueConstruction opaqueConstruction = new OpaqueConstruction("SIA2024_Opaque")
+            {
+                UValue = siaRoom.UValueWalls
+            };
+            this.SpecificCo2 = siaRoom.EmissionsWalls;
+            this.SpecificCost = siaRoom.CostWalls;
+            this.Construction = opaqueConstruction;
+        }
+
     }
 
 
@@ -203,6 +216,19 @@ namespace Hive.IO.Building
         }
         [JsonConstructor] 
         protected Roof() { }
+
+        public override void ApplySia2024Construction(Sia2024Record siaRoom)
+        {
+
+            OpaqueConstruction opaqueConstruction = new OpaqueConstruction("SIA2024_Opaque")
+            {
+                UValue = siaRoom.UValueRoofs
+            };
+            this.SpecificCo2 = siaRoom.EmissionsRoofs;
+            this.SpecificCost = siaRoom.CostRoofs;
+            this.Construction = opaqueConstruction;
+        }
+
     }
 
 
@@ -233,6 +259,19 @@ namespace Hive.IO.Building
         }
         [JsonConstructor] 
         protected Floor() { }
+
+        public override void ApplySia2024Construction(Sia2024Record siaRoom)
+        {
+
+            OpaqueConstruction opaqueConstruction = new OpaqueConstruction("SIA2024_Opaque")
+            {
+                UValue = siaRoom.UValueFloors
+            };
+            this.SpecificCo2 = siaRoom.EmissionsFloors;
+            this.SpecificCost = siaRoom.CostFloors;
+            this.Construction = opaqueConstruction;
+        }
+
     }
 
 
