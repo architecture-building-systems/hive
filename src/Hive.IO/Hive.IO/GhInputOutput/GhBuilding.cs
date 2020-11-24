@@ -138,15 +138,32 @@ namespace Hive.IO.GhInputOutput
 
         public void ShowUiClicked(object sender, EventArgs e)
         {
+            RhinoApp.WriteLine("GhBuilding.ShowUIClick - ENTERED");
             if (_buildingInputState == null)
             {
+                RhinoApp.WriteLine("GhBuilding.ShowUIClick - _buildingInputState == null");
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Building input state not set");
                 return;
             }
+            RhinoApp.WriteLine("GhBuilding.ShowUIClick - _buildingInputState != null");
             var form = new BuildingInput(_buildingInputState);
-            form.ShowDialog();
+            RhinoApp.WriteLine("GhBuilding.ShowUIClick - form created");
+            try
+            {
+                RhinoApp.WriteLine("GhBuilding.ShowUIClick - before form.ShowDialog()");
+                form.ShowDialog();
+                RhinoApp.WriteLine("GhBuilding.ShowUIClick - after form.ShowDialog()");
+            }
+            catch (Exception exception)
+            {
+                RhinoApp.WriteLine($"GhBuilding.ShowUIClick - exception: {exception}");
+                throw;
+            }
+            RhinoApp.WriteLine("GhBuilding.ShowUIClick - form.ShowDialog() returned");
             _buildingInputState.SiaRoom = form.State.SiaRoom; // copy over the results (might have changed)
+            RhinoApp.WriteLine("GhBuilding.ShowUIClick - form.State.SiaRoom saved");
             ExpireSolution(true);
+            RhinoApp.WriteLine("GhBuilding.ShowUIClick - END");
         }
 
 
