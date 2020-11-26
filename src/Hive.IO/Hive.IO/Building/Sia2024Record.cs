@@ -70,7 +70,7 @@ namespace Hive.IO.Building
     ///     Describes a SIA 2024 room and can load / save this information to JSON.
     /// </summary>
     public class Sia2024Record
-    {
+    { 
         private static Sia2024RecordEx[] _records;
 
         private static Dictionary<Tuple<string, string, string>, Sia2024RecordEx> _recordLookup;
@@ -101,6 +101,72 @@ namespace Hive.IO.Building
         public double UValueTransparent; // U-Wert Fenster
         public double WindowFrameReduction; // Abminderungsfaktor fuer Fensterrahmen
 
+        // as per #466, allow Sia2024Record to have separate values for walls, floors, roofs. Fall back to the Opaque values
+        private double? _uValueFloors = null;
+        private double? _costFloors = null;
+        private double? _emissionsFloors = null;
+
+        private double? _uValueRoofs = null;
+        private double? _costRoofs = null;
+        private double? _emissionsRoofs = null;
+
+        private double? _uValueWalls = null;
+        private double? _costWalls = null;
+        private double? _emissionsWalls = null;
+
+        public double UValueFloors
+        {
+            get => _uValueFloors ?? UValueOpaque;
+            set => _uValueFloors = value;
+        }
+
+        public double CostFloors
+        {
+            get => _costFloors ?? OpaqueCost;
+            set => _costFloors = value;
+        }
+
+        public double EmissionsFloors
+        {
+            get => _emissionsFloors ?? OpaqueEmissions;
+            set => _emissionsFloors = value;
+        }
+
+        public double UValueRoofs
+        {
+            get => _uValueRoofs ?? UValueOpaque;
+            set => _uValueRoofs = value;
+        }
+
+        public double CostRoofs
+        {
+            get => _costRoofs ?? OpaqueCost;
+            set => _costRoofs = value;
+        }
+
+        public double EmissionsRoofs
+        {
+            get => _emissionsRoofs ?? OpaqueEmissions;
+            set => _emissionsRoofs = value;
+        }
+
+        public double UValueWalls
+        {
+            get => _uValueWalls ?? UValueOpaque;
+            set => _uValueWalls = value;
+        }
+
+        public double CostWalls
+        {
+            get => _costWalls ?? OpaqueCost;
+            set => _costWalls = value;
+        }
+
+        public double EmissionsWalls
+        {
+            get => _emissionsWalls ?? OpaqueEmissions;
+            set => _emissionsWalls = value;
+        }
 
         /// <summary>
         ///     Serialize to JSON - using the interchange format used in the Hive.Core components.
@@ -135,7 +201,17 @@ namespace Hive.IO.Building
                 {"Kosten opake Bauteile", OpaqueCost},
                 {"Kosten transparente Bauteile", TransparentCost},
                 {"Emissionen opake Bauteile", OpaqueEmissions},
-                {"Emissionen transparente Bauteile", TransparentEmissions}
+                {"Emissionen transparente Bauteile", TransparentEmissions},
+
+                {"U-Wert Boeden", UValueFloors },
+                {"U-Wert Daecher", UValueRoofs },
+                {"U-Wert Walls", UValueWalls },
+                {"Kosten Boeden", CostFloors},
+                {"Kosten Daecher", CostRoofs },
+                {"Kosten Waende", CostWalls },
+                {"Emissionen Boeden", EmissionsFloors },
+                {"Emissionen Daecher", EmissionsRoofs },
+                {"Emissionen Waende", EmissionsWalls }
             };
             return JsonConvert.SerializeObject(result);
         }
@@ -143,6 +219,8 @@ namespace Hive.IO.Building
         public static Sia2024Record FromJson(string json)
         {
             var d = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+            Func<string, double?> readValueOrNull = key => d.ContainsKey(key) ? (double?) d[key] : null;
+
             return new Sia2024Record
             {
                 RoomType = d["description"] as string,
@@ -170,7 +248,19 @@ namespace Hive.IO.Building
                 OpaqueCost = (double) d["Kosten opake Bauteile"],
                 TransparentCost = (double) d["Kosten transparente Bauteile"],
                 OpaqueEmissions = (double) d["Emissionen opake Bauteile"],
-                TransparentEmissions = (double) d["Emissionen transparente Bauteile"]
+                TransparentEmissions = (double) d["Emissionen transparente Bauteile"],
+
+                _uValueFloors = readValueOrNull("U-Wert Boeden"),
+                _uValueRoofs = readValueOrNull("U-Wert Daecher"),
+                _uValueWalls = readValueOrNull("U-Wert Waende"),
+
+                _costFloors = readValueOrNull("Kosten Boeden"),
+                _costRoofs = readValueOrNull("Kosten Daecher"),
+                _costWalls = readValueOrNull("Kosten Waende"),
+
+                _emissionsFloors = readValueOrNull("Emissionen Boeden"),
+                _emissionsRoofs = readValueOrNull("Emissionen Daecher"),
+                _emissionsWalls = readValueOrNull("Emissionen Waende"),
             };
         }
 
