@@ -132,22 +132,22 @@
                     <Label Grid.Row="2" Grid.Column="0">U-value (W/m²K)</Label>
                     <TextBox Name="WallUValue" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"
                              TextAlignment="Right"
-                             Text="{Binding Path=State.UValueOpaque}"
+                             Text="{Binding Path=State.UValueWalls}"
                              IsEnabled="{Binding Path=State.IsEditable}" 
-                             Foreground="{Binding Path=State.UValueOpaqueBrush}"
-                             FontWeight="{Binding Path=State.UValueOpaqueFontWeight}"/>
+                             Foreground="{Binding Path=State.UValueWallsBrush}"
+                             FontWeight="{Binding Path=State.UValueWallsFontWeight}"/>
                     <Label Grid.Row="3" Grid.Column="0">Emissions (kgCO2/m²)</Label>
                     <TextBox Name="WallEmissions" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"
                              TextAlignment="Right" IsEnabled="{Binding Path=State.IsEditable}"
-                             Text="{Binding Path=State.OpaqueEmissions}" 
-                             Foreground="{Binding Path=State.OpaqueEmissionsBrush}"
-                             FontWeight="{Binding Path=State.OpaqueEmissionsFontWeight}"/>
+                             Text="{Binding Path=State.EmissionsWalls}" 
+                             Foreground="{Binding Path=State.EmissionsWallsBrush}"
+                             FontWeight="{Binding Path=State.EmissionsWallsFontWeight}"/>
                     <Label Grid.Row="4" Grid.Column="0">Cost (CHF/m²)</Label>
                     <TextBox Name="WallCost" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center"
                              TextAlignment="Right" IsEnabled="{Binding Path=State.IsEditable}"
-                             Text="{Binding Path=State.OpaqueCost}" 
-                             Foreground="{Binding Path=State.OpaqueCostBrush}"
-                             FontWeight="{Binding Path=State.OpaqueCostFontWeight}"/>
+                             Text="{Binding Path=State.CostWalls}" 
+                             Foreground="{Binding Path=State.CostWallsBrush}"
+                             FontWeight="{Binding Path=State.CostWallsFontWeight}"/>
                     <Image Name="WallImage" Grid.Row="5" Grid.ColumnSpan="2" Grid.Column="0" />
                 </Grid>
                 <Grid Grid.Row="0" Grid.Column="2">
@@ -170,23 +170,23 @@
                     <TextBox Name="FloorUValue" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"
                              TextAlignment="Right"
                              IsEnabled="{Binding Path=State.IsEditable}"
-                             Text="{Binding Path=State.UValueOpaque}" 
-                             Foreground="{Binding Path=State.UValueOpaqueBrush}"
-                             FontWeight="{Binding Path=State.UValueOpaqueFontWeight}"/>
+                             Text="{Binding Path=State.UValueFloors}" 
+                             Foreground="{Binding Path=State.UValueFloorsBrush}"
+                             FontWeight="{Binding Path=State.UValueFloorsFontWeight}"/>
                     <Label Grid.Row="3" Grid.Column="0">Emissions (kgCO2/m²)</Label>
                     <TextBox Name="FloorEmissions" Grid.Row="3" Grid.Column="1" VerticalAlignment="Center"
                              TextAlignment="Right"
                              IsEnabled="{Binding Path=State.IsEditable}"
-                             Text="{Binding Path=State.OpaqueEmissions}" 
-                             Foreground="{Binding Path=State.OpaqueEmissionsBrush}"
-                             FontWeight="{Binding Path=State.OpaqueEmissionsFontWeight}"/>
+                             Text="{Binding Path=State.EmissionsFloors}" 
+                             Foreground="{Binding Path=State.EmissionsFloorsBrush}"
+                             FontWeight="{Binding Path=State.EmissionsFloorsFontWeight}"/>
                     <Label Grid.Row="4" Grid.Column="0">Cost (CHF/m²)</Label>
                     <TextBox Name="FloorCost" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center"
                              TextAlignment="Right"
                              IsEnabled="{Binding Path=State.IsEditable}"
-                             Text="{Binding Path=State.OpaqueCost}" 
-                             Foreground="{Binding Path=State.OpaqueCostBrush}"
-                             FontWeight="{Binding Path=State.OpaqueCostFontWeight}"/>
+                             Text="{Binding Path=State.CostFloors}" 
+                             Foreground="{Binding Path=State.CostFloorsBrush}"
+                             FontWeight="{Binding Path=State.CostFloorsFontWeight}"/>
                     <Image Name="FloorImage" Grid.Row="5" Grid.ColumnSpan="2" Grid.Column="0" />
                 </Grid>
                 <Grid Grid.Row="1" Grid.Column="0" Grid.ColumnSpan="2">
@@ -272,23 +272,23 @@
                     <TextBox Name="RoofUValue" Grid.Row="2" Grid.Column="1" VerticalAlignment="Center"
                              TextAlignment="Right"
                              IsEnabled="{Binding Path=State.IsEditable}"
-                             Text="{Binding Path=State.UValueOpaque}" 
-                             Foreground="{Binding Path=State.UValueOpaqueBrush}"
-                             FontWeight="{Binding Path=State.UValueOpaqueFontWeight}"/>
+                             Text="{Binding Path=State.UValueRoofs}" 
+                             Foreground="{Binding Path=State.UValueRoofsBrush}"
+                             FontWeight="{Binding Path=State.UValueRoofsFontWeight}"/>
                     <Label Grid.Row="3" Grid.Column="0">Emissions (kgCO2/m²)</Label>
                     <TextBox Name="RoofEmissions" Grid.Row="3" Grid.Column="1" VerticalAlignment="Bottom"
                              TextAlignment="Right"
                              IsEnabled="{Binding Path=State.IsEditable}"
-                             Text="{Binding Path=State.OpaqueEmissions}"
-                             Foreground="{Binding Path=State.OpaqueEmissionsBrush}"
-                             FontWeight="{Binding Path=State.OpaqueEmissionsFontWeight}"/>
+                             Text="{Binding Path=State.EmissionsRoofs}"
+                             Foreground="{Binding Path=State.EmissionsRoofsBrush}"
+                             FontWeight="{Binding Path=State.EmissionsRoofsFontWeight}"/>
                     <Label Grid.Row="4" Grid.Column="0">Cost (CHF/m²)</Label>
                     <TextBox Name="RoofCost" Grid.Row="4" Grid.Column="1" VerticalAlignment="Center"
                              TextAlignment="Right"
                              IsEnabled="{Binding Path=State.IsEditable}"
-                             Text="{Binding Path=State.OpaqueCost}" 
-                             Foreground="{Binding Path=State.OpaqueCostBrush}"
-                             FontWeight="{Binding Path=State.OpaqueCostFontWeight}"/>
+                             Text="{Binding Path=State.CostRoofs}" 
+                             Foreground="{Binding Path=State.CostRoofsBrush}"
+                             FontWeight="{Binding Path=State.CostRoofsFontWeight}"/>
                     <Image Name="RoofImage" Grid.Row="5" Grid.ColumnSpan="2" Grid.Column="0" />
                 </Grid>
             </Grid>

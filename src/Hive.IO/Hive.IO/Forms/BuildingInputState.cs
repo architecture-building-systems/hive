@@ -83,7 +83,6 @@ namespace Hive.IO.Forms
 
                 var properties = new[]
                 {
-                    "UValueOpaque",
                     "UValueTransparent",
                     "GValue",
                     "GValueTotal",
@@ -98,10 +97,18 @@ namespace Hive.IO.Forms
                     "OccupantYearlyHours",
                     "LightingYearlyHours",
                     "EquipmentYearlyHours",
-                    "OpaqueCost",
                     "TransparentCost",
-                    "OpaqueEmissions",
-                    "TransparentEmissions"
+                    "TransparentEmissions",
+
+                    "UValueFloors",
+                    "UValueRoofs",
+                    "UValueWalls",
+                    "CostFloors",
+                    "CostRoofs",
+                    "CostWalls",
+                    "EmissionsFloors",
+                    "EmissionsRoofs",
+                    "EmissionsWalls"
                 };
                 foreach (var property in properties)
                 {
@@ -277,14 +284,14 @@ namespace Hive.IO.Forms
             }
         }
 
-        public string UValueOpaque
+        public string UValueFloors
         {
-            get => $"{_siaRoom.UValueOpaque:0.00}";
+            get => $"{_siaRoom.UValueFloors:0.00}";
             set
             {
                 try
                 {
-                    _siaRoom.UValueOpaque = double.Parse(value);
+                    _siaRoom.UValueFloors = double.Parse(value);
                 }
                 catch (FormatException)
                 {
@@ -294,6 +301,43 @@ namespace Hive.IO.Forms
                 RaisePropertyChangedEventEx();
             }
         }
+
+        public string UValueRoofs
+        {
+            get => $"{_siaRoom.UValueRoofs:0.00}";
+            set
+            {
+                try
+                {
+                    _siaRoom.UValueRoofs = double.Parse(value);
+                }
+                catch (FormatException)
+                {
+                    // don't update the value                    
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
+        public string UValueWalls
+        {
+            get => $"{_siaRoom.UValueWalls:0.00}";
+            set
+            {
+                try
+                {
+                    _siaRoom.UValueWalls = double.Parse(value);
+                }
+                catch (FormatException)
+                {
+                    // don't update the value                    
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
 
         public string UValueTransparent
         {
@@ -533,14 +577,48 @@ namespace Hive.IO.Forms
             }
         }
 
-        public string OpaqueCost
+        public string CostFloors
         {
-            get => $"{_siaRoom.OpaqueCost:0.00}";
+            get => $"{_siaRoom.CostFloors:0.00}";
             set
             {
                 try
                 {
-                    _siaRoom.OpaqueCost = double.Parse(value);
+                    _siaRoom.CostFloors = double.Parse(value);
+                }
+                catch (FormatException)
+                {
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
+        public string CostRoofs
+        {
+            get => $"{_siaRoom.CostRoofs:0.00}";
+            set
+            {
+                try
+                {
+                    _siaRoom.CostRoofs = double.Parse(value);
+                }
+                catch (FormatException)
+                {
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
+        public string CostWalls
+        {
+            get => $"{_siaRoom.CostWalls:0.00}";
+            set
+            {
+                try
+                {
+                    _siaRoom.CostWalls = double.Parse(value);
                 }
                 catch (FormatException)
                 {
@@ -567,14 +645,48 @@ namespace Hive.IO.Forms
             }
         }
 
-        public string OpaqueEmissions
+        public string EmissionsFloors
         {
-            get => $"{_siaRoom.OpaqueEmissions:0.00}";
+            get => $"{_siaRoom.EmissionsFloors:0.00}";
             set
             {
                 try
                 {
-                    _siaRoom.OpaqueEmissions = double.Parse(value);
+                    _siaRoom.EmissionsFloors = double.Parse(value);
+                }
+                catch (FormatException)
+                {
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
+        public string EmissionsRoofs
+        {
+            get => $"{_siaRoom.EmissionsRoofs:0.00}";
+            set
+            {
+                try
+                {
+                    _siaRoom.EmissionsRoofs = double.Parse(value);
+                }
+                catch (FormatException)
+                {
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
+        public string EmissionsWalls
+        {
+            get => $"{_siaRoom.EmissionsWalls:0.00}";
+            set
+            {
+                try
+                {
+                    _siaRoom.EmissionsWalls = double.Parse(value);
                 }
                 catch (FormatException)
                 {
@@ -613,7 +725,7 @@ namespace Hive.IO.Forms
             return Math.Abs(a - b) < 0.001;
         }
 
-        private bool Modified([CallerMemberName] string callerMemberName = null)
+        private bool ModifiedField([CallerMemberName] string callerMemberName = null)
         {
             var member = callerMemberName.Replace("Brush", "").Replace("FontWeight", "");
             var fieldInfo = typeof(Sia2024RecordEx).GetField(member);
@@ -621,26 +733,43 @@ namespace Hive.IO.Forms
                 (double) fieldInfo.GetValue(Sia2024Record.Lookup(_siaRoom)));
         }
 
-        public Brush RoomConstantBrush => Modified() ? _modifiedBrush : _normalBrush;
-        public Brush UValueOpaqueBrush => Modified() ? _modifiedBrush : _normalBrush;
-        public Brush UValueTransparentBrush => Modified() ? _modifiedBrush : _normalBrush;
-        public Brush GValueBrush => Modified() ? _modifiedBrush : _normalBrush;
-        public Brush GValueTotalBrush => Modified() ? _modifiedBrush : _normalBrush;
-        public Brush ShadingSetpointBrush => Modified() ? _modifiedBrush : _normalBrush;
-        public Brush WindowFrameReductionBrush => Modified() ? _modifiedBrush : _normalBrush;
-        public Brush AirChangeRateBrush => Modified() ? _modifiedBrush : _normalBrush;
-        public Brush InfiltrationBrush => Modified() ? _modifiedBrush : _normalBrush;
-        public Brush HeatRecoveryBrush => Modified() ? _modifiedBrush : _normalBrush;
-        public Brush OccupantLoadsBrush => Modified() ? _modifiedBrush : _normalBrush;
-        public Brush LightingLoadsBrush => Modified() ? _modifiedBrush : _normalBrush;
-        public Brush EquipmentLoadsBrush => Modified() ? _modifiedBrush : _normalBrush;
-        public Brush OccupantYearlyHoursBrush => Modified() ? _modifiedBrush : _normalBrush;
-        public Brush LightingYearlyHoursBrush => Modified() ? _modifiedBrush : _normalBrush;
-        public Brush EquipmentYearlyHoursBrush => Modified() ? _modifiedBrush : _normalBrush;
-        public Brush OpaqueCostBrush => Modified() ? _modifiedBrush : _normalBrush;
-        public Brush TransparentCostBrush => Modified() ? _modifiedBrush : _normalBrush;
-        public Brush OpaqueEmissionsBrush => Modified() ? _modifiedBrush : _normalBrush;
-        public Brush TransparentEmissionsBrush => Modified() ? _modifiedBrush : _normalBrush;
+        private bool ModifiedProperty([CallerMemberName] string callerMemberName = null)
+        {
+            var member = callerMemberName.Replace("Brush", "").Replace("FontWeight", "");
+            var propertyInfo = typeof(Sia2024RecordEx).GetProperty(member);
+            return !AreEqual((double) propertyInfo.GetValue(_siaRoom),
+                (double) propertyInfo.GetValue(Sia2024Record.Lookup(_siaRoom)));
+        }
+
+        public Brush RoomConstantBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush UValueFloorsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
+        public Brush UValueRoofsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
+        public Brush UValueWallsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
+
+        public Brush UValueTransparentBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush GValueBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush GValueTotalBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush ShadingSetpointBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush WindowFrameReductionBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush AirChangeRateBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush InfiltrationBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush HeatRecoveryBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush OccupantLoadsBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush LightingLoadsBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush EquipmentLoadsBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush OccupantYearlyHoursBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush LightingYearlyHoursBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush EquipmentYearlyHoursBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush CostFloorsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
+        public Brush CostRoofsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
+        public Brush CostWallsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
+
+        public Brush TransparentCostBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush EmissionsFloorsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
+        public Brush EmissionsRoofsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
+        public Brush EmissionsWallsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
+
+        public Brush TransparentEmissionsBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
 
         #endregion colors
 
@@ -649,26 +778,32 @@ namespace Hive.IO.Forms
         private readonly FontWeight _normalFontWeight = FontWeights.Normal;
         private readonly FontWeight _modifiedFontWeight = FontWeights.Bold;
 
-        public FontWeight RoomConstantFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
-        public FontWeight UValueOpaqueFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
-        public FontWeight UValueTransparentFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
-        public FontWeight GValueFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
-        public FontWeight GValueTotalFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
-        public FontWeight ShadingSetpointFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
-        public FontWeight WindowFrameReductionFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
-        public FontWeight AirChangeRateFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
-        public FontWeight InfiltrationFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
-        public FontWeight HeatRecoveryFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
-        public FontWeight OccupantLoadsFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
-        public FontWeight LightingLoadsFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
-        public FontWeight EquipmentLoadsFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
-        public FontWeight OccupantYearlyHoursFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
-        public FontWeight LightingYearlyHoursFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
-        public FontWeight EquipmentYearlyHoursFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
-        public FontWeight OpaqueCostFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
-        public FontWeight TransparentCostFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
-        public FontWeight OpaqueEmissionsFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
-        public FontWeight TransparentEmissionsFontWeight => Modified() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight RoomConstantFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight UValueFloorsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight UValueRoofsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight UValueWallsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight UValueTransparentFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight GValueFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight GValueTotalFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight ShadingSetpointFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight WindowFrameReductionFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight AirChangeRateFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight InfiltrationFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight HeatRecoveryFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight OccupantLoadsFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight LightingLoadsFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight EquipmentLoadsFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight OccupantYearlyHoursFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight LightingYearlyHoursFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight EquipmentYearlyHoursFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight CostFloorsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight CostRoofsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight CostWallsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight TransparentCostFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight EmissionsFloorsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight EmissionsRoofsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight EmissionsWallsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight TransparentEmissionsFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
 
         #endregion fontweights
     }
