@@ -219,17 +219,6 @@ namespace Hive.IO.Results
         /// </summary>
         [JsonProperty]
         public List<Emitter> Emitters { get; private set; }
-        /// <summary>
-        /// Final output energy streams to meet building energy demands
-        /// </summary>
-        [JsonProperty]
-        public List<Carrier> OutputEnergyStreams { get; private set; }
-        /// <summary>
-        /// Initial input energy streams into the system. That might include Grid Electricity, Solar Potentials, District Heating, ...
-        /// </summary>
-        [JsonProperty]
-        public List<Carrier> InputEnergyStreams { get; private set; }
-
         #endregion
 
 
@@ -277,9 +266,7 @@ namespace Hive.IO.Results
         /// <param name="building"></param>
         /// <param name="conversionTech"></param>
         /// <param name="emitters"></param>
-        /// <param name="outputEnergy"></param>
-        /// <param name="inputEnergy"></param>
-        public Results(Building.Building building, List<ConversionTech> conversionTech, List<Emitter> emitters, List<Carrier> outputEnergy, List<Carrier> inputEnergy)
+        public Results(Building.Building building, List<ConversionTech> conversionTech, List<Emitter> emitters)
         {
             this.TotalFloorArea = GetTotalFloorArea(building);
             this.TotalEmbodiedConstructionEmissions = GetTotalEmbodiedConstructionEmissions(building);
@@ -329,8 +316,6 @@ namespace Hive.IO.Results
             this.Building = building;
             this.ConversionTechnologies = conversionTech;
             this.Emitters = emitters;
-            this.OutputEnergyStreams = outputEnergy;
-            this.InputEnergyStreams = inputEnergy;
         }
 
 
