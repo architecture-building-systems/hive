@@ -5,6 +5,7 @@ using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
+using Hive.IO.Forms;
 using Hive.IO.Plots;
 using Hive.IO.Results;
 
@@ -126,6 +127,16 @@ namespace Hive.IO.GhInputOutput
                 }
 
             return base.RespondToMouseDown(sender, e);
+        }
+
+        public override GH_ObjectResponse RespondToMouseDoubleClick(GH_Canvas sender, GH_CanvasMouseEvent e)
+        {
+            // show properties dialog
+            var propertiesDialog = new VisualizerPlotProperties();
+            propertiesDialog.PlotParameters = Owner.PlotProperties;
+            propertiesDialog.ShowDialog();
+
+            return base.RespondToMouseDoubleClick(sender, e);
         }
 
         protected override void Render(GH_Canvas canvas, Graphics graphics, GH_CanvasChannel channel)
