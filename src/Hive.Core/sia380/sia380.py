@@ -197,8 +197,13 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
     # could be changed later to also include solar irradiation on opaque surfaces...
     # ...would need to be adapted in the 'for surface in range(num_surfaces):' loop as well then
     win_areas = [x for (x, y) in zip(surface_areas, surface_type) if y != "opaque"]
-    Q_s_jagged = tree_to_jagged_monthly(run_obstructed_simulation, srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, win_areas)
-    Q_s_per_surface = transpose_jagged_2D_array(Q_s_jagged)
+    Q_s_jagged = None
+    if (srf_irrad_obstr_tree.Branch(0).Count == 0 and srf_irrad_unobstr_tree.BranchCount == 0):
+        Q_s_per_surface = [[0.0] for x in range(months_per_year)]
+    else:
+        Q_s_jagged = tree_to_jagged_monthly(run_obstructed_simulation, srf_irrad_obstr_tree, srf_irrad_unobstr_tree,
+                                            g_value, g_value_total, setpoint_shading, win_areas)
+        Q_s_per_surface = transpose_jagged_2D_array(Q_s_jagged)
 
     # assign room properties to individual surfaces
     #    surface_type = ["opaque", "opaque", "transp", "transp"]
@@ -377,7 +382,10 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
             Q_s_out[month] = Q_s[month] * eta_rec_heating_list[Q_H_index]
 
 
-    Q_s_tree = th.list_to_tree(Q_s_jagged, source=[0, 0])   # import ghpythonlib.treehelpers as th
+    if Q_s_jagged != None:
+        Q_s_tree = th.list_to_tree(Q_s_jagged, source=[0, 0])   # import ghpythonlib.treehelpers as th
+    else:
+        Q_s_tree = None
 
     tokWh = 1000.0
     return [x / tokWh for x in Q_Heat], [x / tokWh for x in Q_Cool], [x / tokWh for x in Q_Elec], \
