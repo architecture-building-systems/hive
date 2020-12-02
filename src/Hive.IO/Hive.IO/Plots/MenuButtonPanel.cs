@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
@@ -24,14 +25,15 @@ namespace Hive.IO.Plots
 
         public string Category => _menuButtons.First().Text.Substring(0, 1);
 
-        public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
+        public void Render(ResultsPlotting results, Dictionary<string, string> plotParameters, Graphics graphics,
+            RectangleF bounds)
         {
             var x = bounds.X + Spacer;
             var y = bounds.Y + bounds.Height / 2 - SideLength / 2;
 
             foreach (var mb in _menuButtons)
             {
-                mb.Render(results, graphics, new RectangleF(x, y, SideLength, SideLength));
+                mb.Render(results, plotParameters, graphics, new RectangleF(x, y, SideLength, SideLength));
                 x += SideLength + Spacer;
             }
         }

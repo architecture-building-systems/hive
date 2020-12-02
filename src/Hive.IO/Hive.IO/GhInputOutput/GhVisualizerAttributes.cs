@@ -169,7 +169,7 @@ namespace Hive.IO.GhInputOutput
 
         public void RenderPlot(Graphics graphics)
         {
-            _plotSelector.RenderCurrentPlot(Owner.Results, graphics, PlotBounds);
+            _plotSelector.RenderCurrentPlot(Owner.Results, Owner.PlotProperties, graphics, PlotBounds);
         }
 
         private void RenderCapsule(Graphics graphics)

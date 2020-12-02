@@ -25,7 +25,7 @@ namespace Hive.IO.Plots
             Color.FromArgb(242, 153, 35), // renewable energy
             Color.FromArgb(59, 88, 166), // Ventilation gains
             Color.FromArgb(120, 138, 163), // Envelope gains
-            Color.FromArgb(153, 179, 214), // Windows gains
+            Color.FromArgb(153, 179, 214) // Windows gains
         };
 
         private static readonly Color[] LossesColors =
@@ -83,7 +83,8 @@ namespace Hive.IO.Plots
             }
         }
 
-        public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
+        public void Render(ResultsPlotting results, Dictionary<string, string> plotParameters, Graphics graphics,
+            RectangleF bounds)
         {
             _bounds = bounds;
             var houseBounds =
