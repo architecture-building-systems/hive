@@ -16,7 +16,7 @@ namespace Hive.IO.Plots
             (byte) (140 - i * 20)
         )).ToList();
 
-        protected override PlotModel CreatePlotModel(ResultsPlotting results)
+        protected override PlotModel CreatePlotModel(ResultsPlotting results, Dictionary<string, string> plotParameters)
         {
             var model = new PlotModel {Title = "Solar Gains per Window (kWh)"};
 

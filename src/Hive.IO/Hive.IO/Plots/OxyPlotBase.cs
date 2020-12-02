@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Linq;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Hive.IO.Results;
@@ -23,6 +25,7 @@ namespace Hive.IO.Plots
         private Bitmap _bitmapCache;
         private RectangleF _bounds;
         private int _lastPlotHeight;
+        private string _lastPlotParameters;
         private int _lastPlotWidth;
 
         public void Render(ResultsPlotting results, Dictionary<string, string> plotParameters, Graphics graphics,
@@ -33,15 +36,16 @@ namespace Hive.IO.Plots
             var plotWidth = (int) bounds.Width;
             var plotHeight = (int) bounds.Height;
 
-            var bitmap = IsBitmapCacheStillValid(plotWidth, plotHeight)
+            var bitmap = IsBitmapCacheStillValid(plotWidth, plotHeight, plotParameters)
                 ? _bitmapCache
-                : RenderToBitmap(results, plotWidth, plotHeight);
+                : RenderToBitmap(results, plotWidth, plotHeight, plotParameters);
 
             graphics.DrawImage(bitmap, bounds.Location.X, bounds.Location.Y, bounds.Width, bounds.Height);
 
             // save cache for next call
             _lastPlotWidth = plotWidth;
             _lastPlotHeight = plotHeight;
+            _lastPlotParameters = StringifyPlotParameters(plotParameters);
             _bitmapCache = bitmap;
         }
 
@@ -59,10 +63,22 @@ namespace Hive.IO.Plots
             _bitmapCache = null;
         }
 
-        private Bitmap RenderToBitmap(ResultsPlotting results, int plotWidth, int plotHeight)
+        /// <summary>
+        ///     We only really need to know if the plot parameters changed for caching purposes,
+        ///     not what the real value is...
+        /// </summary>
+        /// <param name="plotParameters"></param>
+        /// <returns></returns>
+        private string StringifyPlotParameters(Dictionary<string, string> plotParameters)
+        {
+            return string.Join("|", plotParameters.Keys.OrderBy(s => s).Select(s => plotParameters[s]));
+        }
+
+        private Bitmap RenderToBitmap(ResultsPlotting results, int plotWidth, int plotHeight,
+            Dictionary<string, string> plotParameters)
         {
             Bitmap bitmap;
-            var model = CreatePlotModel(results);
+            var model = CreatePlotModel(results, plotParameters);
             var pngExporter = new PngExporter
             {
                 Width = plotWidth,
@@ -73,11 +89,27 @@ namespace Hive.IO.Plots
             return bitmap;
         }
 
-        protected abstract PlotModel CreatePlotModel(ResultsPlotting results);
+        protected abstract PlotModel CreatePlotModel(ResultsPlotting results, Dictionary<string, string> plotParameters);
 
-        private bool IsBitmapCacheStillValid(int plotWidth, int plotHeight)
+        private bool IsBitmapCacheStillValid(int plotWidth, int plotHeight, Dictionary<string, string> plotParameters)
         {
-            return !(_bitmapCache is null) && plotWidth == _lastPlotWidth && plotHeight == _lastPlotHeight;
+            return !(_bitmapCache is null) && plotWidth == _lastPlotWidth && plotHeight == _lastPlotHeight &&
+                   StringifyPlotParameters(plotParameters) == _lastPlotParameters;
+        }
+    }
+
+    public static class StringDictionaryExtensions
+    {
+        public static double? ReadDouble(this Dictionary<string, string> plotParameters, string key)
+        {
+            try
+            {
+                return double.Parse(plotParameters[key]);
+            }
+            catch (Exception)
+            {
+                return null;
+            }
         }
     }
 }
