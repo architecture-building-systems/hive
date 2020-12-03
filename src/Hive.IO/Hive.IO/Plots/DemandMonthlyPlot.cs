@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Hive.IO.Results;
 using OxyPlot;
 using OxyPlot.Axes;
@@ -8,7 +9,7 @@ namespace Hive.IO.Plots
 {
     public class DemandMonthlyPlot : OxyPlotBase
     {
-        protected override PlotModel CreatePlotModel(ResultsPlotting results)
+        protected override PlotModel CreatePlotModel(ResultsPlotting results, Dictionary<string, string> plotParameters)
         {
             const int months = 12;
             var model = new PlotModel { Title = "Energy demand (Total Monthly)" };
@@ -37,12 +38,24 @@ namespace Hive.IO.Plots
             };
             model.Series.Add(demandElectricity);
 
-            model.Axes.Add(new LinearAxis
+            var axis = new LinearAxis
             {
                 Position = AxisPosition.Left,
                 Key = "Demand",
-                Title = "kWh"
-            });
+                Title = "kWh",
+            };
+            var axisMinimum = plotParameters.ReadDouble("EnergyDemandMonthly-Axis-Minimum");
+            if (axisMinimum.HasValue)
+            {
+                axis.Minimum = axisMinimum.Value;
+            }
+
+            var axisMaximum = plotParameters.ReadDouble("EnergyDemandMonthly-Axis-Maximum");
+            if (axisMaximum.HasValue)
+            {
+                axis.Maximum = axisMaximum.Value;
+            }
+            model.Axes.Add(axis);
 
             model.Axes.Add(new CategoryAxis
             {

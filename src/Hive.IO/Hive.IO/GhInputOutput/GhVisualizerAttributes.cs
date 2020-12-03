@@ -5,8 +5,10 @@ using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Attributes;
+using Hive.IO.Forms;
 using Hive.IO.Plots;
 using Hive.IO.Results;
+using Rhino;
 
 namespace Hive.IO.GhInputOutput
 {
@@ -128,6 +130,19 @@ namespace Hive.IO.GhInputOutput
             return base.RespondToMouseDown(sender, e);
         }
 
+        public override GH_ObjectResponse RespondToMouseDoubleClick(GH_Canvas sender, GH_CanvasMouseEvent e)
+        {
+            // show properties dialog
+            var propertiesDialog = new VisualizerPlotProperties();
+            propertiesDialog.PlotParameters = Owner.PlotProperties;
+            propertiesDialog.ShowDialog();
+
+            Owner.ExpirePreview(true);
+            Owner.ExpireSolution(true);
+
+            return GH_ObjectResponse.Release;
+        }
+
         protected override void Render(GH_Canvas canvas, Graphics graphics, GH_CanvasChannel channel)
         {
             if (channel == GH_CanvasChannel.Wires && Owner.SourceCount > 0)
@@ -169,7 +184,7 @@ namespace Hive.IO.GhInputOutput
 
         public void RenderPlot(Graphics graphics)
         {
-            _plotSelector.RenderCurrentPlot(Owner.Results, graphics, PlotBounds);
+            _plotSelector.RenderCurrentPlot(Owner.Results, Owner.PlotProperties, graphics, PlotBounds);
         }
 
         private void RenderCapsule(Graphics graphics)

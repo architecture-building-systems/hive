@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
@@ -257,13 +258,13 @@ namespace Hive.IO.Plots
 
         public void RenderMenuPanel(ResultsPlotting results, Graphics graphics, RectangleF bounds)
         {
-            _currentPanel.Render(results, graphics, bounds);
+            _currentPanel.Render(results, null, graphics, bounds);
         }
 
-        public void RenderCurrentPlot(ResultsPlotting results, Graphics graphics, RectangleF bounds)
+        public void RenderCurrentPlot(ResultsPlotting results, Dictionary<string, string> plotProperties, Graphics graphics, RectangleF bounds)
         {
             var plot = SelectCurrentPlot(results);
-            plot.Render(results, graphics, bounds);
+            plot.Render(results, plotProperties, graphics, bounds);
         }
 
         private void CycleResolution(object sender, EventArgs e)

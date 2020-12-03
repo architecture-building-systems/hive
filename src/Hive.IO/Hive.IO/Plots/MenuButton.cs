@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
@@ -35,7 +36,7 @@ namespace Hive.IO.Plots
 
         public string Text { get; }
 
-        public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
+        public void Render(ResultsPlotting results, Dictionary<string, string> plotParameters, Graphics graphics, RectangleF bounds)
         {
             _bounds = bounds;
 

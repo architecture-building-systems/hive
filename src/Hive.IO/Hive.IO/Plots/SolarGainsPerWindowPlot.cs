@@ -16,7 +16,7 @@ namespace Hive.IO.Plots
             (byte) (140 - i * 20)
         )).ToList();
 
-        protected override PlotModel CreatePlotModel(ResultsPlotting results)
+        protected override PlotModel CreatePlotModel(ResultsPlotting results, Dictionary<string, string> plotParameters)
         {
             var model = new PlotModel {Title = "Solar Gains per Window (kWh)"};
 
@@ -37,12 +37,24 @@ namespace Hive.IO.Plots
             }
 
             // add the axes
-            model.Axes.Add(new LinearAxis
+            var axis = new LinearAxis
             {
                 Position = AxisPosition.Left,
                 Key = "Irradiation",
                 Title = "kWh"
-            });
+            };
+            var axisMinimum = plotParameters.ReadDouble("SolarGains-Axis-Minimum");
+            if (axisMinimum.HasValue)
+            {
+                axis.Minimum = axisMinimum.Value;
+            }
+
+            var axisMaximum = plotParameters.ReadDouble("SolarGains-Axis-Maximum");
+            if (axisMaximum.HasValue)
+            {
+                axis.Maximum = axisMaximum.Value;
+            }
+            model.Axes.Add(axis);
 
             model.Axes.Add(new CategoryAxis
             {

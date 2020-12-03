@@ -205,7 +205,16 @@ namespace Hive.IO.GhInputOutput
                 List<GH_Number> numbers = iQsPerWin[path];
                 QsPerWindow[i] = new double[numbers.Count];
                 for (int u = 0; u < numbers.Count; u++)
-                    QsPerWindow[i][u] = (double)numbers[u].Value / 1000.0;
+                {
+                    try
+                    {
+                        QsPerWindow[i][u] = (double)numbers[u].Value / 1000.0;
+                    }
+                    catch
+                    {
+                        QsPerWindow[i][u] = 0.0;
+                    }
+                }
             }
 
 
