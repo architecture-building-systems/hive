@@ -8,6 +8,7 @@ using Grasshopper.Kernel.Attributes;
 using Hive.IO.Forms;
 using Hive.IO.Plots;
 using Hive.IO.Results;
+using Rhino;
 
 namespace Hive.IO.GhInputOutput
 {
@@ -136,7 +137,10 @@ namespace Hive.IO.GhInputOutput
             propertiesDialog.PlotParameters = Owner.PlotProperties;
             propertiesDialog.ShowDialog();
 
-            return base.RespondToMouseDoubleClick(sender, e);
+            Owner.ExpirePreview(true);
+            Owner.ExpireSolution(true);
+
+            return GH_ObjectResponse.Release;
         }
 
         protected override void Render(GH_Canvas canvas, Graphics graphics, GH_CanvasChannel channel)

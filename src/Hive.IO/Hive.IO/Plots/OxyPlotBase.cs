@@ -7,6 +7,7 @@ using Grasshopper.GUI.Canvas;
 using Hive.IO.Results;
 using OxyPlot;
 using OxyPlot.WindowsForms;
+using Rhino;
 
 namespace Hive.IO.Plots
 {
