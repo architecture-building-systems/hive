@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Hive.IO.Results;
 using OxyPlot;
 using OxyPlot.Axes;
@@ -8,7 +9,7 @@ namespace Hive.IO.Plots
 {
     public class DemandMonthlyNormalizedPlot: OxyPlotBase
     {
-        protected override PlotModel CreatePlotModel(ResultsPlotting results)
+        protected override PlotModel CreatePlotModel(ResultsPlotting results, Dictionary<string, string> plotParameters)
         {
             const int months = 12;
             var model = new PlotModel { Title = "Energy demand (Normalized Monthly)" };

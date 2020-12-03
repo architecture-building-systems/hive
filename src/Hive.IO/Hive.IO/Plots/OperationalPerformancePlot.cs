@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
@@ -19,18 +20,17 @@ namespace Hive.IO.Plots
         public Kpi Kpi;
     }
 
-    public class OperationalPerformancePlot: IVisualizerControl
+    public class OperationalPerformancePlot : IVisualizerControl
     {
-        public event EventHandler OnClicked;
-
-        private readonly Font _standardFont;
         private readonly Font _boldFont;
         private readonly float _penWidth;
         private readonly KpiPlotProperties _properties;
+
+        private readonly Font _standardFont;
         private RectangleF _bounds = RectangleF.Empty;
 
         /// <summary>
-        /// Draw a square box with data inside and a unit string above.
+        ///     Draw a square box with data inside and a unit string above.
         /// </summary>
         /// <param name="properties">KpiPlotProperties to use for this plot</param>
         public OperationalPerformancePlot(KpiPlotProperties properties)
@@ -43,22 +43,20 @@ namespace Hive.IO.Plots
 
         public Kpi Kpi => _properties.Kpi;
 
-        private String UnitText => Normalized ? _properties.NormalizedUnitText : _properties.UnitText;
+        private string UnitText => Normalized ? _properties.NormalizedUnitText : _properties.UnitText;
 
         public bool Normalized { get; set; }
 
-        private String Data(ResultsPlotting results)
-        {
-            var value = _properties.Data(results, Normalized);
-            return $"{value:F1}";
-        }
-
-        public void Render(ResultsPlotting results, Graphics graphics, RectangleF bounds)
+        public void Render(ResultsPlotting results, Dictionary<string, string> plotParameters, Graphics graphics,
+            RectangleF bounds)
         {
             Render(results, graphics, bounds, false);
         }
 
-        public bool Contains(PointF location) => _bounds.Contains(location);
+        public bool Contains(PointF location)
+        {
+            return _bounds.Contains(location);
+        }
 
         public void Clicked(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
@@ -66,10 +64,18 @@ namespace Hive.IO.Plots
             sender.Invalidate();
         }
 
+        public event EventHandler OnClicked;
+
+        private string Data(ResultsPlotting results)
+        {
+            var value = _properties.Data(results, Normalized);
+            return $"{value:F1}";
+        }
+
         /// <summary>
-        /// Draw a box with some text
-        /// The bold text (Data) goes bang in the middle, centered vertically and horizontally.
-        /// The standard text (Unit) goes in the lower part, bang in the middle, centered horizontally
+        ///     Draw a box with some text
+        ///     The bold text (Data) goes bang in the middle, centered vertically and horizontally.
+        ///     The standard text (Unit) goes in the lower part, bang in the middle, centered horizontally
         /// </summary>
         /// <param name="results"></param>
         /// <param name="graphics"></param>
@@ -86,10 +92,7 @@ namespace Hive.IO.Plots
             var box = new RectangleF(bounds.Location, bounds.Size);
             box.Inflate(-_penWidth / 2, -_penWidth / 2); // make sure lines fit _inside_ box
             graphics.DrawRectangle(pen, box.Left, box.Top, box.Width, box.Height);
-            if (!Normalized)
-            {
-                graphics.FillRectangle(new SolidBrush(_properties.Color), box);
-            }
+            if (!Normalized) graphics.FillRectangle(new SolidBrush(_properties.Color), box);
 
             if (selected)
             {
@@ -98,13 +101,13 @@ namespace Hive.IO.Plots
                 selectionBounds.Height = _penWidth;
                 graphics.FillRectangle(new SolidBrush(Color.Black), selectionBounds);
             }
-           
+
 
             // center data in the box
             var data = Data(results);
             var dataSize = GH_FontServer.MeasureString(data, _boldFont);
             var dataX = bounds.Left + (bounds.Width - dataSize.Width) / 2;
-            var dataY = bounds.Top + bounds.Height / 2 - (float)dataSize.Height / 2;
+            var dataY = bounds.Top + bounds.Height / 2 - (float) dataSize.Height / 2;
             graphics.DrawString(data, _boldFont, brush, dataX, dataY);
             // center unit below data
             var unitX = bounds.Left + (bounds.Width - GH_FontServer.StringWidth(UnitText, _standardFont)) / 2;

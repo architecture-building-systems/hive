@@ -1,9 +1,15 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
+using GH_IO.Serialization;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
+using Hive.IO.Building;
 using Hive.IO.Results;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Serialization;
+using Rhino;
 
 namespace Hive.IO.GhInputOutput
 {
@@ -16,10 +22,12 @@ namespace Hive.IO.GhInputOutput
             "[hive]", "IO", GH_ParamAccess.item)
         {
             Results = new ResultsPlotting(new Results.Results());
+            PlotProperties = new Dictionary<string, string>();  // see Read / Write
         }
 
-        public ResultsPlotting Results { get; private set; }
+        public Dictionary<string, string> PlotProperties { get; private set; }
 
+        public ResultsPlotting Results { get; private set; }
 
         public override GH_ParamKind Kind => GH_ParamKind.floating;
 
@@ -59,6 +67,47 @@ namespace Hive.IO.GhInputOutput
             VisualizerAttributes.NewData(Results);
         }
 
+        #region PlotProperties
+        private static readonly ITraceWriter TraceWriter = new MemoryTraceWriter();
+        private static readonly JsonSerializerSettings JsonSerializerSettings = new JsonSerializerSettings
+        {
+            ConstructorHandling = ConstructorHandling.AllowNonPublicDefaultConstructor,
+            TypeNameHandling = TypeNameHandling.All,
+            TraceWriter = TraceWriter
+        };
+
+        public override bool Read(GH_IReader reader)
+        {
+            try
+            {
+                var json = reader.GetString("PlotProperties");
+                PlotProperties = JsonConvert.DeserializeObject<Dictionary<string, string>>(json, JsonSerializerSettings);
+
+            }
+            catch (Exception ex)
+            {
+                // let's not worry too much about not being able to read the state...
+                RhinoApp.Write($"GhVisualizer.Read: Could not read PlotProperties {ex}");
+                PlotProperties = new Dictionary<string, string>();
+            }
+            return base.Read(reader);
+        }
+
+        public override bool Write(GH_IWriter writer)
+        {
+            try
+            {
+                writer.SetString("PlotProperties", JsonConvert.SerializeObject(PlotProperties, Formatting.Indented, JsonSerializerSettings));
+                return base.Write(writer);
+            }
+            catch (Exception ex)
+            {
+                // let's not freak out - this probably never happens anyway
+                RhinoApp.Write($"GhVisualizer.Write: Could not write PlotProperties {ex}");
+                return base.Write(writer);
+            }
+        }
+        #endregion PlotProperties
 
         public override void CreateAttributes()
         {
