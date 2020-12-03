@@ -64,7 +64,7 @@ namespace Hive.IO.GhInputOutput
 
             // 20, 21, 22, 23, 24
             pManager.AddNumberParameter("Q_T_opaque", "Q_T_opaque", "transmission heat losses from opaque construction", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Q_T_transparent", "Q_T_transparent", "Q_T_transparent", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Q_T_transparent", "Q_T_transparent", "transmission heat losses from transparent construction", GH_ParamAccess.list);
             pManager.AddNumberParameter("Q_V", "Q_V", "ventilation heat losses", GH_ParamAccess.list);
             pManager.AddNumberParameter("Q_i", "Q_i", "Internal gains", GH_ParamAccess.list);
             pManager.AddNumberParameter("Q_s", "Q_s", "Solar heat gains", GH_ParamAccess.list);
