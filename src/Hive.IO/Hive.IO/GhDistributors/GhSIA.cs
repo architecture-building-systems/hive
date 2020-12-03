@@ -11,7 +11,7 @@ namespace Hive.IO.GhDistributors
     {
         public GhSIA()
           : base("Distributor SIARoom Hive", "HiveDistSIARoom",
-              "Sia 2024 distributor that reads in an Hive.IO.Building object and outputs its Sia 2024 room definition.",
+              "Sia (Schweizerischer Ingenieur- und Architektenverein) 2024 distributor that reads in a Hive Building of type <Hive.IO.Building.Building> and outputs its SIA 2024 room definition.",
               "[hive]", "IO-Core")
         {
         }
@@ -20,19 +20,18 @@ namespace Hive.IO.GhDistributors
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Hive.IO.Building", "HiveIOBldg", "Reads in an Hive.IO.Building object.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive Building", "Building", "Reads in a Hive Building.", GH_ParamAccess.item);
         }
 
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            // NOTE! descriptions not accurate. Currently, Hive only supports one zone and one room definition.
-            pManager.AddNumberParameter("Zone Areas", "ZoneAreas", "Floor areas in [m²] of all zone of the building.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Zone Areas", "ZoneAreas", "Floor areas in [m²] of all zones of the building.", GH_ParamAccess.list);
             pManager.AddNumberParameter("Windows Areas", "WinAreas", "All window areas in [m²] of the building.", GH_ParamAccess.list);
-            pManager.AddNumberParameter("External Surfaces Areas", "ExtSrfAreas", "ExtSrfAreas", GH_ParamAccess.list);
+            pManager.AddNumberParameter("External Surfaces Areas", "ExtSrfAreas", "Surface areas of the building that are exposed to the environment (external)", GH_ParamAccess.list);
             pManager.AddTextParameter("SIA 2024 Room", "SiaRoom", "SIA 2024 room definitions for each zone.", GH_ParamAccess.item);
-            pManager.AddNumberParameter("AllExtSrfAreas", "AllExtSrfAreas", "All external surface areas", GH_ParamAccess.list);
-            pManager.AddTextParameter("Surface Type", "SrfType", "External Surface type, 'opaque' or 'transp'", GH_ParamAccess.list);
+            pManager.AddNumberParameter("All External Surface Areas", "AllExtSrfAreas", "All external surface areas, including opaque and transparent (windows) surfaces.", GH_ParamAccess.list);
+            pManager.AddTextParameter("Surface Type", "SrfType", "External surface type: 'opaque' or 'transp'.", GH_ParamAccess.list);
         }
 
 
