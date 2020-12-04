@@ -13,8 +13,8 @@ namespace Hive.IO.GhMergers
         /// Initializes a new instance of the GhGridSubstation class.
         /// </summary>
         public GhPurchasedElectricity()
-          : base("Merger ElectricalSubstation Hive", "HiveMergerSubstation",
-              "Description",
+          : base("Merger Direct Electricity Hive", "HiveMergerDirectElectricity",
+              "Hive Merger for Direct Electricity, e.g. an electrical substation, or the connection from the grid to the building (<Hive.IO.EnergySystems.DirectElectricity>). It merges all kinds of data together to update the electricity grid connection with information on consumed energy, cost, operational schedule, etc. that have been computed in other components.",
               "[hive]", "IO-Core")
         {
         }
@@ -26,11 +26,11 @@ namespace Hive.IO.GhMergers
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("GridElectricity", "GridElectricity", "GridElectricity, as <Electricity>", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Electricity Carrier", "Electricity", "Electricity energy carrier, e.g. from an electricity grid.", GH_ParamAccess.item);
 
-            pManager.AddNumberParameter("elecPurchased", "elecPurchased", "elecDemand that will be purchased from the grid", GH_ParamAccess.list);
-            
-            pManager.AddGenericParameter("DirectElectricity", "DirectElectricity", "DirectElectricity", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Electricity Purchased", "elecPurchased", "Purchased electricity time series (kWh). Either annual hourly( 8760), or monthly (12) time series.", GH_ParamAccess.list);
+
+            pManager.AddGenericParameter("Direct Electricity", "DirectElectricity", "Direct Electricity of type <Hive.IO.EnergySystems.DirectElectricity>, e.g. an electrical substation, or the connection between the electricity grid and the building.", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace Hive.IO.GhMergers
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("DirectElectricity", "DirectElectricity", "DirectElectricity, 'fake' conversion tech 'infused' with elecConsumed from the grid (input carrier) and provided into the building (output carrier), and operational cost and emissions (input carrier)", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Direct Electricity", "DirectElectricity", "DirectElectricity, 'fake' conversion tech (the connection from the building to the electricity grid) 'infused' with elecConsumed from the grid (input carrier) and provided into the building (output carrier), and operational cost and emissions (input carrier)", GH_ParamAccess.item);
         }
 
         /// <summary>

@@ -12,7 +12,7 @@ namespace Hive.IO.GhDistributors
     {
         public GhConversionTech()
           : base("Distributor ConversionTech Hive", "HiveDistConversionTech",
-              "Distributor for Hive.IO.EnergySystems.ConversionTech",
+              "Distributor for Hive conversion technologies",
               "[hive]", "IO-Core")
         {
         }
@@ -23,18 +23,18 @@ namespace Hive.IO.GhDistributors
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Hive.IO.EnergySystem.ConversionTech", "ConversionTech", "Hive.IO.EnergySystem.ConversionTech; Boiler, ASHP, CHP, chiller, etc.", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Conversion Technologies", "ConversionTech", "Hive conversion technologies of type <Hive.IO.EnergySystems.ConversionTech>. Includes Boiler, ASHP, CHP, chiller, etc.", GH_ParamAccess.list);
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Hive.IO.EnergySystem.AirSourceHeatPump", "AirSourceHeatPump", "Hive.IO.EnergySystems.AirSourceHeatPump", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Hive.IO.EnergySystem.Chiller", "Chiller", "Hive.IO.EnergySystems.Chiller", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Hive.IO.EnergySystems.Boiler", "Boiler", "Hive.IO.EnergySystems.Boiler", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Hive.IO.EnergySystems.CombinedHeatPowert", "CHP", "Hive.IO.EnergySystems.CombinedHeatPower", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Hive.IO.EnergySystems.HeatExchanger", "HX", "Hive.IO.EnergySystems.HeatCoolExchanger, this one here is heat exchanger", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Hive.IO.EnergySystems.CoolExchanger", "CX", "Hive.IO.EnergySystems.HeatCoolExchanger, this one here is cooling exchanger", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Hive.IO.EnergySystem.DirectElectricity", "DirectElectricity", "Hive.IO.EnergySystems.DirectElectricity", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Air Source Heat Pump", "AirSourceHeatPump", "Hive Air Source Heat Pump (ASHP)", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Chiller", "Chiller", "Hive Chiller", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Boiler", "Boiler", "Hive Boiler", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Combined Heat and Power", "CHP", "Hive Combined Heat and Power (CHP)", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Heat Exchanger", "HX", "Hive heat exchanger of type <Hive.IO.EnergySystems.HeatCoolExchanger>", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Cold Exchanger", "CX", "Hive cold exchanger of type <Hive.IO.EnergySystems.HeatCoolExchanger>", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Direct Electricity", "DirectElectricity", "Hive Direct Electricity, e.g. an electrical substation", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)

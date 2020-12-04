@@ -23,7 +23,7 @@ namespace Hive.IO.GhDistributors
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Hive.IO.EnergySystems.SurfaceBased", "HiveIOEnSysSrf", "Reads in Hive.IO.EnergySystems.SurfaceBased objects (Photovoltaic, GroundCollector, SolarThermal, PVT).", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Hive SurfaceBasedTech", "SurfaceBasedTech", "Reads in Hive SurfaceBasedTech (Photovoltaic, GroundCollector, SolarThermal, PVT).", GH_ParamAccess.list);
 
             for (int i=0; i<pManager.ParamCount; i++)
                 pManager[i].Optional = true;
@@ -33,17 +33,17 @@ namespace Hive.IO.GhDistributors
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             //0, 1
-            pManager.AddNumberParameter("Efficiency PV", "eta_PV", "Efficiency [0, 1] of Photovoltaic (PV) systems.", GH_ParamAccess.list);    // could have different technologies
-            pManager.AddNumberParameter("PV Areas", "PVAreas", "Surface areas of the PV panels.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Efficiency Photovoltaic", "eta_PV", "Efficiency [0, 1] of Photovoltaic (PV) systems.", GH_ParamAccess.list);    // could have different technologies
+            pManager.AddNumberParameter("Photovoltaic Areas", "PVAreas", "Surface areas of the PV panels.", GH_ParamAccess.list);
 
             // 2, 3
-            pManager.AddNumberParameter("Efficiency ST", "eta_ST", "Efficiency [0, 1] of Solar Thermal (ST) systems.", GH_ParamAccess.list);
-            pManager.AddNumberParameter("ST Areas", "STAreas", "Surface areas of the ST panels.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Efficiency Solar Thermal", "eta_ST", "Efficiency [0, 1] of Solar Thermal (ST) systems.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Solar Thermal Areas", "STAreas", "Surface areas of the Solar Thermal (ST) panels.", GH_ParamAccess.list);
 
             // 4, 5, 6
-            pManager.AddNumberParameter("Electric Efficiency PVT", "eta_PVT_el", "Electric efficiency [0, 1] of hybrid PVT systems.", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Thermal Efficiency PVT", "eta_PVT_th", "Thermal efficiency [0, 1] of hybrid PVT systems.", GH_ParamAccess.list);
-            pManager.AddNumberParameter("PVT Areas", "PVTAreas", "Surface areas of the PVT panels.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Electric Efficiency hybrid PVT", "eta_PVT_el", "Electric efficiency [0, 1] of the hybrid photovoltaic and solar thermal (PVT) systems.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Thermal Efficiency hybrid PVT", "eta_PVT_th", "Thermal efficiency [0, 1] of the hybrid photovoltaic and solar thermal (PVT) systems.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Hybrid PVT Areas", "PVTAreas", "Surface areas of the hybrid photovoltaic and solar thermal (PVT) panels.", GH_ParamAccess.list);
         }
 
 

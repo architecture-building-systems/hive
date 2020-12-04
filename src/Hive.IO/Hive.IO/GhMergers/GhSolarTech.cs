@@ -17,7 +17,7 @@ namespace Hive.IO.GhMergers
         /// </summary>
         public GhSolarTech()
           : base("Merger SolarTech Hive", "HiveMergerSolarTech",
-              "Description",
+              "Hive Merger for Solar Technologies (<Hive.IO.EnergySystems.SurfaceBased>), such as PV, PVT, ST, or GroundCollector. It merges all kinds of data together to update the Solar Technology with information on consumed energy, cost, operational schedule, etc. that have been computed in other components.",
               "[hive]", "IO-Core")
         {
         }
@@ -31,17 +31,17 @@ namespace Hive.IO.GhMergers
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddMatrixParameter("I_hourlyM", "I_hourlyM", "I_hourly from GHSolar_CResults as Rhino.Geometry.Matrix. Solar potential results from GHSolar (https://github.com/christophwaibel/GH_Solar_V2) yearly hourly simulations", GH_ParamAccess.list);
+            pManager.AddMatrixParameter("I_hourlyM", "I_hourlyM", "'I_hourly' from 'GHSolar_CResults' as <Rhino.Geometry.Matrix>. Solar potential results from GHSolar (https://github.com/christophwaibel/GH_Solar_V2) annual hourly simulations", GH_ParamAccess.list);
             pManager[0].Optional = true;
 
-            pManager.AddGenericParameter("SolarTech", "SolarTech", "Hive.IO.EnergySystems.SurfaceBasedTech, such as PV, PVT, Solar Thermal, Ground Collector", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Air", "Air", "Hive.IO.EnergySystems.Air carrier, containing ambient air temperature", GH_ParamAccess.item);
-            pManager.AddNumberParameter("SupplyTemp", "SupplyTemp", "SupplyTemp from Hive.IO.EnergySystems.Emitter", GH_ParamAccess.list);
-            pManager.AddNumberParameter("ReturnTemp", "ReturnTemp", "ReturnTemp from Hive.IO.EnergySystems.Emitter", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Solar Technologies", "SolarTech", "Hive.IO.EnergySystems.SurfaceBasedTech, such as PV, PVT, Solar Thermal, Ground Collector", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Air Carrier", "Air", "Air energy carrier from weather file", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Supply Temperature", "supplyTemp", "Time series of the supply temperature (warm reservoir). For thermal systems only.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Return Temperature", "returnTemp", "Time series of the return temperature (cold reservoir). For thermal systems only.", GH_ParamAccess.list);
 
-            pManager.AddBooleanParameter("SimpleMode", "SimpleMode", "SimpleMode for efficiency calculations, i.e. not depending on ambient air temperature", GH_ParamAccess.item, false);
+            pManager.AddBooleanParameter("SimpleMode?", "SimpleMode?", "Simple mode for efficiency calculations, i.e. not depending on ambient air temperature. If 'False', following models are used: For PV, the 'Nominal Operating Cell Temperature' method (10.1016/j.apenergy.2019.03.177); for Solar Thermal, the Hotel-Whillier Bliss method (10.1016/j.apenergy.2016.07.055).", GH_ParamAccess.item, false);
 
-            pManager.AddNumberParameter("I_hourly", "I_hourly", "Tree of I_hourly lists. Only used, if no Matrix of solar results (shaded simulations) is provided. Solar potential results yearly hourly simulations", GH_ParamAccess.tree);
+            pManager.AddNumberParameter("I_hourly", "I_hourly", "Tree of I_hourly (annual hourly solar irradiation) lists. Only used, if no Matrix of solar results (shaded simulations) is provided.", GH_ParamAccess.tree);
         }
 
         /// <summary>
@@ -49,7 +49,7 @@ namespace Hive.IO.GhMergers
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("SolarTech", "SolarTech", "Hive.IO.EnergySystems.SurfaceBasedTech (PV, PVT, ST, GC), infused with output energy", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Solar Technologies", "SolarTech", "Hive Solar Technologies of type <Hive.IO.EnergySystems.SurfaceBasedTech>, such as PV, PVT, ST, Ground Collector, infused with information on output energy, operational schedules, etc.", GH_ParamAccess.list);
         }
 
         /// <summary>

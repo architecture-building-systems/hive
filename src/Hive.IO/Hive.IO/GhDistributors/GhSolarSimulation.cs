@@ -11,7 +11,7 @@ namespace Hive.IO.GhDistributors
     {
         public GhSolarSimulation()
           : base("Distributor Solar Simulation Hive", "HiveDistSolarSimu",
-              "Distributor for 'GHSolar' solar simulations (github/christophwaibel/GH_Solar_V2). Reads in and outputs all relevant geometric, geographic and climatic information necessary for solar simulations.",
+              "Distributor for 'GHSolar' solar simulations (github/christophwaibel/GH_Solar_V2). Reads in and outputs all relevant geometric, geographic and climatic information necessary for solar simulations. Model is explained in 10.1016/j.solener.2017.10.054 and is based on the Perez solar model. ",
               "[hive]", "IO-Core")
         {
         }
@@ -21,9 +21,9 @@ namespace Hive.IO.GhDistributors
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Hive.IO.Building", "HiveIOBldg", "Reads in an Hive.IO.Building object.", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Hive.IO.EnergySystem.SurfaceBased", "HiveIOEnSysSrf", "Reads in Hive.IO.EnergySystem .Photovoltaic; .SolarThermal; .PVT; .GroundCollector objects.", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Hive.IO.Environment", "HiveIOEnv", "Reads in an Hive.IO.Environment object.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive Building", "Building", "Reads in a Hive Building.", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive Solar Technologies", "SurfaceBasedTech", "Reads in Hive SuraceBasedTech (Photovoltaic, SolarThermal, PVT, GroundCollector).", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Hive Environment", "Environment", "Reads in a Hive Environment.", GH_ParamAccess.item);
         }
 
 
@@ -33,14 +33,14 @@ namespace Hive.IO.GhDistributors
             pManager.AddPointParameter("Building Centroid", "BldCentroid", "Centroid of the building bounding box.", GH_ParamAccess.item); // 1
             pManager.AddBrepParameter("External Surfaces", "ExtSrfs", "External Surfaces of the building that have access to the outside (i.e. are not internal walls).", GH_ParamAccess.list); // 2
             pManager.AddBrepParameter("Window Geometries", "WinBreps", "All window Brep geometries of the building.", GH_ParamAccess.list); // 3
-            pManager.AddNumberParameter("Window Tilt", "WinTilt", "Tilt angles of windows, in deg", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Window Azimuth", "WinAzi", "Azimuth angles of windows, in deg", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Window Areas", "WinArea", "Window areas, in sqm", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Window Tilt", "WinTilt", "Tilt angles of windows, in [deg]", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Window Azimuth", "WinAzi", "Azimuth angles of windows, in [deg]", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Window Areas", "WinArea", "Window areas, in [m²]", GH_ParamAccess.list);
 
-            pManager.AddMeshParameter("Solar Tech Mesh", "SolarMesh", "Mesh geometries for Hive.IO.EnergySystems.SurfaceBased technologies (Photovoltaic, PVT, Solar thermal, ground collectors).", GH_ParamAccess.list); // 7
-            pManager.AddNumberParameter("Solar Tech Tilt", "SolarTechTilt", "Tilt angles of solar tech surfaces, in deg", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Solar Tech Azimuth", "SolarTechAzimuth", "Azimuth angles of solar tech surfaces, in deg", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Solar Tech Area", "SolarTechArea", "Area of solar tech surfaces, in sqm", GH_ParamAccess.list);
+            pManager.AddMeshParameter("Solar Tech Mesh", "SolarMesh", "Mesh geometries for Hive SurfaceBased technologies (Photovoltaic, PVT, Solar thermal, ground collectors).", GH_ParamAccess.list); // 7
+            pManager.AddNumberParameter("Solar Tech Tilt", "SolarTechTilt", "Tilt angles of solar tech surfaces, in [deg]", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Solar Tech Azimuth", "SolarTechAzimuth", "Azimuth angles of solar tech surfaces, in [deg]", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Solar Tech Area", "SolarTechArea", "Area of solar tech surfaces, in [m²]", GH_ParamAccess.list);
         }
 
 
