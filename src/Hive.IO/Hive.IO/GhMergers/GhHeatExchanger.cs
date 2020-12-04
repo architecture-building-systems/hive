@@ -14,7 +14,7 @@ namespace Hive.IO.GhMergers
         /// </summary>
         public GhHeatExchanger()
           : base("Merger HeatExchanger Hive", "HiveMergerHX",
-              "Description",
+              "Hive Merger for a Heat Exchanger (<Hive.IO.EnergySystems.HeatCoolingExchanger>). It merges all kinds of data together to update the Heat Exchanger with information on consumed energy, cost, operational schedule, etc. that have been computed in other components.",
               "[hive]", "IO-Core")
         {
         }
@@ -28,13 +28,13 @@ namespace Hive.IO.GhMergers
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("DistrictHeating", "DistrictHeating", "DistrictHeating, as <Water>", GH_ParamAccess.item);
+            pManager.AddGenericParameter("District Heating Carrier", "DistrictHeating", "District Heating as <Hive.IO.EnergySystems.Water> energy carrier that is used as input fluid for this heat exchanger.", GH_ParamAccess.item);
 
-            pManager.AddNumberParameter("heatDemand", "heatDemand", "heatDemand", GH_ParamAccess.list);
-            pManager.AddNumberParameter("suppTemp", "suppTemp", "suppTemp", GH_ParamAccess.list);
-            pManager.AddNumberParameter("returnTemp", "returnTemp", "returnTemp", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Heating Generated", "heatGenerated", "Time series of heating energy generated (kWh). Either annual hourly( 8760), or monthly (12) time series.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Supply Temperature", "supplyTemp", "Time series of the supply temperature (warm reservoir).", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Return Temperature", "returnTemp", "Time series of the return temperature (cold reservoir).", GH_ParamAccess.list);
 
-            pManager.AddGenericParameter("HeatExchanger", "HeatExchanger", "HeatExchanger", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive Heat Exchanger", "HeatingExchanger", "Hive Heating Exchanger (<Hive.IO.EnergySystems.HeatHeatExchanger>) that will be infused with information from above inputs.", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -42,7 +42,7 @@ namespace Hive.IO.GhMergers
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("HeatExchanger", "HeatExchanger", "HeatExchanger, infused with heatingConsumed and 'generated' and operational cost and emissions", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive Heat Exchanger", "HeatExchanger", "Hive Heat Exchanger with infused data about consumed energy, operational schedule, etc.", GH_ParamAccess.item);
         }
 
         /// <summary>

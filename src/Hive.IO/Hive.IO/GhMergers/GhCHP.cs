@@ -13,7 +13,7 @@ namespace Hive.IO.GhMergers
         /// </summary>
         public GhCHP()
           : base("Merger CHP Hive", "HiveMergerCHP",
-              "Description",
+              "Hive Merger for a Combined Heat and Power (CHP) (<Hive.IO.EnergySystems.CombinedHeatPower>). It merges all kinds of data together to update the CHP with information on consumed energy, cost, operational schedule, etc. that have been computed in other components.",
               "[hive]", "IO-Core")
         {
         }
@@ -27,12 +27,12 @@ namespace Hive.IO.GhMergers
         /// </summary>
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("Gas", "Gas", "Gas", GH_ParamAccess.item);
-            pManager.AddNumberParameter("energyDemand", "energyDemand", "energyDemand (kWh). Can be electricity (default) or heating", GH_ParamAccess.list);
-            pManager.AddBooleanParameter("IsHeatingDemand?", "IsHeatingDemand?", "IsHeatingDemand?", GH_ParamAccess.item, false);
-            pManager.AddNumberParameter("suppTemp", "suppTemp", "suppTemp for water output. necessary to know for COP calculation", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Gas Carrier", "Gas", "Gas energy carrier (e.g. from a gas grid) that is used as fuel for this CHP.", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Energy Generated", "energyGenerated", "Generated heating or electricity energy time series (kWh). By default it is electricity. Either annual hourly( 8760), or monthly (12) time series.", GH_ParamAccess.list);
+            pManager.AddBooleanParameter("IsHeatingGenerated?", "IsHeatingGenerated?", "Is the 'energyGenerated' input parameter heating energy? If 'False', it will be assumed as electricity instead.", GH_ParamAccess.item, false);
+            pManager.AddNumberParameter("Supply Temperature", "suppTemp", "Supply temperature time series of the heated water from the CHP. Used to calculate COP (Coefficient of Performance) of the CHP.", GH_ParamAccess.list);
 
-            pManager.AddGenericParameter("Hive.IO.CombinedHeatPower", "CombinedHeatPower", "CombinedHeatPower", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive Combined Heat and Power", "CombinedHeatPower", "Hive Combined Heat and Power (CHP) (<Hive.IO.EnergySystems.CombinedHeatPower>) that will be infused with information from above inputs. ", GH_ParamAccess.item);
         }
 
         /// <summary>
@@ -40,7 +40,7 @@ namespace Hive.IO.GhMergers
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("Hive.IO.CombinedHeatPower", "CombinedHeatPower", "CombinedHeatPower", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Hive Combined Heat and Power", "CombinedHeatPower", "Hive CHP with infused data about consumed energy, operational schedule, etc.", GH_ParamAccess.item);
         }
 
         /// <summary>
