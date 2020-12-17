@@ -130,6 +130,34 @@ namespace Hive.IO.GhInputOutput
             return base.RespondToMouseDown(sender, e);
         }
 
+        private bool _mouseOverPlot;
+        public override GH_ObjectResponse RespondToMouseMove(GH_Canvas sender, GH_CanvasMouseEvent e)
+        {
+            bool plotBoundContains = PlotBounds.Contains(e.CanvasLocation);
+            if (_mouseOverPlot != plotBoundContains)
+            {
+                Owner.ExpirePreview(true);
+                Owner.ExpireSolution(true);
+            }
+
+            _mouseOverPlot = plotBoundContains;
+            Rhino.RhinoApp.WriteLine($"mouse over plot: {_mouseOverPlot}");
+
+            return base.RespondToMouseMove(sender,e);
+        }
+
+        public void RenderPlot(Graphics graphics)
+        {
+            _plotSelector.RenderCurrentPlot(Owner.Results, Owner.PlotProperties, graphics, PlotBounds);
+            if (_mouseOverPlot)
+            {
+                Pen pen = new Pen(Color.Black, 10.0f);
+                graphics.DrawRectangleF(pen, PlotBounds);
+                Rhino.RhinoApp.WriteLine("pen drawn....");
+            }
+        }
+
+
         public override GH_ObjectResponse RespondToMouseDoubleClick(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
             // if double click is not on plot region, we make a normal single click
@@ -188,11 +216,6 @@ namespace Hive.IO.GhInputOutput
                 kpi.Render(Owner.Results, graphics, bounds, _plotSelector.CurrentKpi == kpi.Kpi);
                 bounds.Offset(-(plotWidth + Padding), 0);
             }
-        }
-
-        public void RenderPlot(Graphics graphics)
-        {
-            _plotSelector.RenderCurrentPlot(Owner.Results, Owner.PlotProperties, graphics, PlotBounds);
         }
 
         private void RenderCapsule(Graphics graphics)
