@@ -132,6 +132,13 @@ namespace Hive.IO.GhInputOutput
 
         public override GH_ObjectResponse RespondToMouseDoubleClick(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
+            // if double click is not on plot region, we make a normal single click
+            if (!PlotBounds.Contains(e.CanvasLocation))
+            {
+                RespondToMouseDown(sender, e);
+                return GH_ObjectResponse.Handled; // tell GH that it doesnt need to do anything else
+            }
+
             // show properties dialog
             var propertiesDialog = new VisualizerPlotProperties();
             propertiesDialog.PlotParameters = Owner.PlotProperties;
@@ -154,6 +161,7 @@ namespace Hive.IO.GhInputOutput
             Render(graphics);
         }
 
+        // separate Render without GH stuff, so we can do TestVisualizer project
         public void Render(Graphics graphics)
         {
             graphics.FillRectangle(new SolidBrush(Color.White), InnerBounds);
