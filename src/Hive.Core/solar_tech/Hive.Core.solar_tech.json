@@ -166,7 +166,8 @@
       "subcategory": "Solar",
       "id": "f39f9eae-f665-4356-b4ba-4f9db73197ea",
       "parameter-type": "ValueList",
-      "csv": "performance_ratio.csv"
+      "csv": "performance_ratio.csv",
+      "icon": "ListPerformanceRatio.png"
     }
   ]
 }
