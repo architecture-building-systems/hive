@@ -1,4 +1,7 @@
-﻿namespace Hive.IO.Forms
+﻿using System.Windows.Forms;
+using Hive.IO.Building;
+
+namespace Hive.IO.Forms
 {
     partial class BuildingInputForm
     {
@@ -331,7 +334,7 @@
             // label3
             // 
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(13, 101);
+            this.label3.Location = new System.Drawing.Point(13, 100);
             this.label3.Name = "label3";
             this.label3.Size = new System.Drawing.Size(210, 32);
             this.label3.TabIndex = 3;
@@ -362,7 +365,7 @@
             this.cboBuildingQuality.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cboBuildingQuality.FormattingEnabled = true;
-            this.cboBuildingQuality.Location = new System.Drawing.Point(503, 104);
+            this.cboBuildingQuality.Location = new System.Drawing.Point(503, 103);
             this.cboBuildingQuality.Name = "cboBuildingQuality";
             this.cboBuildingQuality.Size = new System.Drawing.Size(484, 39);
             this.cboBuildingQuality.TabIndex = 6;
@@ -420,6 +423,7 @@
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Name = "BuildingInputForm";
             this.Text = "hizard | Building";
+            this.Load += new System.EventHandler(this.BuildingInputForm_Load);
             this.tabControl.ResumeLayout(false);
             this.tabSIA.ResumeLayout(false);
             this.tableLayoutSiaMain.ResumeLayout(false);

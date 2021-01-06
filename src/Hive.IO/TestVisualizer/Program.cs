@@ -31,7 +31,7 @@ namespace TestVisualizer
         {
             var state = new BuildingInputState(Sia2024Record.First(), null, true);
             var form = new BuildingInputForm();
-            form.ShowDialog();
+            form.ShowDialog(state);
         }
 
 
