@@ -577,6 +577,8 @@ namespace Hive.IO.Forms
             this.txtWallUValue.Name = "txtWallUValue";
             this.txtWallUValue.Size = new System.Drawing.Size(140, 38);
             this.txtWallUValue.TabIndex = 5;
+            this.txtWallUValue.Tag = "UValueWalls";
+            this.txtWallUValue.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
             // txtWallEmissions
             // 
@@ -586,6 +588,8 @@ namespace Hive.IO.Forms
             this.txtWallEmissions.Name = "txtWallEmissions";
             this.txtWallEmissions.Size = new System.Drawing.Size(140, 38);
             this.txtWallEmissions.TabIndex = 6;
+            this.txtWallEmissions.Tag = "EmissionsWalls";
+            this.txtWallEmissions.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
             // txtWallCost
             // 
@@ -595,6 +599,8 @@ namespace Hive.IO.Forms
             this.txtWallCost.Name = "txtWallCost";
             this.txtWallCost.Size = new System.Drawing.Size(140, 38);
             this.txtWallCost.TabIndex = 7;
+            this.txtWallCost.Tag = "CostWalls";
+            this.txtWallCost.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
             // tableLayoutEnvelopeFloor
             // 
@@ -685,6 +691,8 @@ namespace Hive.IO.Forms
             this.txtFloorUValue.Name = "txtFloorUValue";
             this.txtFloorUValue.Size = new System.Drawing.Size(140, 38);
             this.txtFloorUValue.TabIndex = 5;
+            this.txtFloorUValue.Tag = "UValueFloors";
+            this.txtFloorUValue.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
             // txtFloorEmissions
             // 
@@ -694,6 +702,8 @@ namespace Hive.IO.Forms
             this.txtFloorEmissions.Name = "txtFloorEmissions";
             this.txtFloorEmissions.Size = new System.Drawing.Size(140, 38);
             this.txtFloorEmissions.TabIndex = 6;
+            this.txtFloorEmissions.Tag = "EmissionsFloors";
+            this.txtFloorEmissions.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
             // txtFloorCost
             // 
@@ -703,6 +713,8 @@ namespace Hive.IO.Forms
             this.txtFloorCost.Name = "txtFloorCost";
             this.txtFloorCost.Size = new System.Drawing.Size(140, 38);
             this.txtFloorCost.TabIndex = 7;
+            this.txtFloorCost.Tag = "CostFloors";
+            this.txtFloorCost.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
             // tableLayoutEnvelopeWindow
             // 
@@ -800,6 +812,8 @@ namespace Hive.IO.Forms
             this.txtWindowUValue.Name = "txtWindowUValue";
             this.txtWindowUValue.Size = new System.Drawing.Size(140, 38);
             this.txtWindowUValue.TabIndex = 5;
+            this.txtWindowUValue.Tag = "UValueTransparent";
+            this.txtWindowUValue.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
             // txtWindowGValue
             // 
@@ -809,6 +823,8 @@ namespace Hive.IO.Forms
             this.txtWindowGValue.Name = "txtWindowGValue";
             this.txtWindowGValue.Size = new System.Drawing.Size(140, 38);
             this.txtWindowGValue.TabIndex = 6;
+            this.txtWindowGValue.Tag = "GValue";
+            this.txtWindowGValue.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
             // txtWindowEmissions
             // 
@@ -818,6 +834,8 @@ namespace Hive.IO.Forms
             this.txtWindowEmissions.Name = "txtWindowEmissions";
             this.txtWindowEmissions.Size = new System.Drawing.Size(140, 38);
             this.txtWindowEmissions.TabIndex = 7;
+            this.txtWindowEmissions.Tag = "TransparentEmissions";
+            this.txtWindowEmissions.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
             // tableLayoutEnvelopeRoof
             // 
@@ -908,6 +926,8 @@ namespace Hive.IO.Forms
             this.txtRoofUValue.Name = "txtRoofUValue";
             this.txtRoofUValue.Size = new System.Drawing.Size(140, 38);
             this.txtRoofUValue.TabIndex = 5;
+            this.txtRoofUValue.Tag = "UValueRoofs";
+            this.txtRoofUValue.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
             // txtRoofEmissions
             // 
@@ -917,6 +937,8 @@ namespace Hive.IO.Forms
             this.txtRoofEmissions.Name = "txtRoofEmissions";
             this.txtRoofEmissions.Size = new System.Drawing.Size(140, 38);
             this.txtRoofEmissions.TabIndex = 6;
+            this.txtRoofEmissions.Tag = "EmissionsRoofs";
+            this.txtRoofEmissions.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
             // txtRoofCost
             // 
@@ -926,6 +948,8 @@ namespace Hive.IO.Forms
             this.txtRoofCost.Name = "txtRoofCost";
             this.txtRoofCost.Size = new System.Drawing.Size(140, 38);
             this.txtRoofCost.TabIndex = 7;
+            this.txtRoofCost.Tag = "CostRoofs";
+            this.txtRoofCost.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
             // label29
             // 
@@ -945,6 +969,8 @@ namespace Hive.IO.Forms
             this.txtWindowCost.Name = "txtWindowCost";
             this.txtWindowCost.Size = new System.Drawing.Size(140, 38);
             this.txtWindowCost.TabIndex = 9;
+            this.txtWindowCost.Tag = "TransparentCost";
+            this.txtWindowCost.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
             // label30
             // 
@@ -964,6 +990,8 @@ namespace Hive.IO.Forms
             this.txtWindowGValueTotal.Name = "txtWindowGValueTotal";
             this.txtWindowGValueTotal.Size = new System.Drawing.Size(140, 38);
             this.txtWindowGValueTotal.TabIndex = 11;
+            this.txtWindowGValueTotal.Tag = "GValueTotal";
+            this.txtWindowGValueTotal.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
             // label31
             // 
@@ -983,6 +1011,8 @@ namespace Hive.IO.Forms
             this.txtWindowShadingSetpoint.Name = "txtWindowShadingSetpoint";
             this.txtWindowShadingSetpoint.Size = new System.Drawing.Size(140, 38);
             this.txtWindowShadingSetpoint.TabIndex = 13;
+            this.txtWindowShadingSetpoint.Tag = "ShadingSetpoint";
+            this.txtWindowShadingSetpoint.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
             // BuildingInputForm
             // 

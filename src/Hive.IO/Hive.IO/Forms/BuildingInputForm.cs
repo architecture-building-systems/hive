@@ -9,6 +9,12 @@ using FontStyle = System.Drawing.FontStyle;
 
 namespace Hive.IO.Forms
 {
+    /// <summary>
+    /// Note on implementation: This form was originally a WPF Form using BuildingInputSate as a ViewModel.
+    /// We ran into problems on some computers (see issue #500) and re-wrote the form in Windows.Forms. The ViewModel
+    /// is still used, thought the I didn't hook up the PropertyChangedEvents - instead, we do this manually. So when
+    /// viewing the ViewModel, don't worry too much about calls to RaisePropertyChanged* etc.
+    /// </summary>
     public partial class BuildingInputForm : Form
     {
         private BuildingInputState _state = new BuildingInputState(Sia2024Record.First(), null, true);
@@ -107,37 +113,41 @@ namespace Hive.IO.Forms
         private void UpdateEnvironmentTab()
         {
             cboWallTemplate.Enabled = false;
-            UpdateTextBox(txtWallUValue, "UValueWalls");
-            UpdateTextBox(txtWallEmissions, "EmissionsWalls");
-            UpdateTextBox(txtWallCost, "CostWalls");
+            UpdateTextBox(txtWallUValue);
+            UpdateTextBox(txtWallEmissions);
+            UpdateTextBox(txtWallCost);
 
             cboFloorTemplate.Enabled = false;
-            UpdateTextBox(txtFloorUValue, "UValueFloors");
-            UpdateTextBox(txtFloorEmissions, "EmissionsFloors");
-            UpdateTextBox(txtFloorCost, "CostFloors");
+            UpdateTextBox(txtFloorUValue);
+            UpdateTextBox(txtFloorEmissions);
+            UpdateTextBox(txtFloorCost);
 
             cboWindowTemplate.Enabled = false;
-            UpdateTextBox(txtWindowUValue, "UValueTransparent");
-            UpdateTextBox(txtWindowGValue, "GValue");
-            UpdateTextBox(txtWindowEmissions, "TransparentEmissions");
-            UpdateTextBox(txtWindowCost, "TransparentCost");
-            UpdateTextBox(txtWindowGValueTotal, "GValueTotal");
-            UpdateTextBox(txtWindowShadingSetpoint, "ShadingSetpoint");
+            UpdateTextBox(txtWindowUValue);
+            UpdateTextBox(txtWindowGValue);
+            UpdateTextBox(txtWindowEmissions);
+            UpdateTextBox(txtWindowCost);
+            UpdateTextBox(txtWindowGValueTotal);
+            UpdateTextBox(txtWindowShadingSetpoint);
 
             cboRoofTemplate.Enabled = false;
-            UpdateTextBox(txtRoofUValue, "UValueRoofs");
-            UpdateTextBox(txtRoofEmissions, "EmissionsRoofs");
-            UpdateTextBox(txtRoofCost, "CostRoofs");
+            UpdateTextBox(txtRoofUValue);
+            UpdateTextBox(txtRoofEmissions);
+            UpdateTextBox(txtRoofCost);
         }
 
         /// <summary>
         /// Use Reflection to update the textbox values based on the current state,
         /// including font weight and text color.
+        ///
+        /// Note that the ViewModel (BuildingInputState) was originally written for WPF, so we need to convert the
+        /// FontWeight and SolidColorBrush to the Windows.Forms world.
         /// </summary>
         /// <param name="textBox"></param>
         /// <param name="stateProperty"></param>
-        private void UpdateTextBox(TextBox textBox, string stateProperty)
+        private void UpdateTextBox(TextBox textBox)
         {
+            var stateProperty = textBox.Tag.ToString();
             textBox.Text = _state.GetType().GetProperty(stateProperty).GetValue(_state) as string;
 
             var fontWeight = (FontWeight) _state.GetType().GetProperty(stateProperty + "FontWeight").GetValue(_state);
@@ -150,6 +160,27 @@ namespace Hive.IO.Forms
                 solidBrush.Color.G,
                 solidBrush.Color.B);
             textBox.ForeColor = foreColor;
+        }
+
+        /// <summary>
+        /// The text in a textbox was changed - each textbox hooked up with this handler needs to have
+        /// the "Tag" property set to the name of the corresponding BuildingInputSate property.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void TextBox_TextChanged(object sender, System.ComponentModel.CancelEventArgs e)
+        {
+            if (_rendering)
+            {
+                return;
+            }
+
+            var textBox = (TextBox) sender;
+            var stateProperty = textBox.Tag.ToString();
+
+            _state.GetType().GetProperty(stateProperty).SetValue(_state, textBox.Text);
+
+            RenderState();
         }
     }
 }
