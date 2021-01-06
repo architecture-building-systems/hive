@@ -17,8 +17,8 @@ namespace TestVisualizer
             var currentDomain = AppDomain.CurrentDomain;
             currentDomain.AssemblyResolve += LoadRhinoLibraries;
 
-            // ShowBuildingInputDialog();
-            ShowEnergySystemsDialog();
+            ShowBuildingInputDialog();
+            // ShowEnergySystemsDialog();
         }
 
         private static void ShowEnergySystemsDialog()
@@ -30,7 +30,8 @@ namespace TestVisualizer
         private static void ShowBuildingInputDialog()
         {
             var state = new BuildingInputState(Sia2024Record.First(), null, true);
-            new BuildingInput(state).ShowDialog();
+            var form = new BuildingInputForm();
+            form.ShowDialog();
         }
 
 
