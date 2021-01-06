@@ -89,6 +89,12 @@
     <Compile Include="Forms\BuildingInput.xaml.cs">
       <DependentUpon>BuildingInput.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Forms\BuildingInputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\BuildingInputForm.Designer.cs">
+      <DependentUpon>BuildingInputForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\BuildingInputState.cs" />
     <Compile Include="Forms\EmitterPropertiesView.xaml.cs">
       <DependentUpon>EmitterPropertiesView.xaml</DependentUpon>
@@ -184,6 +190,9 @@
     <Compile Include="Util\JsonResource.cs" />
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Include="Forms\BuildingInputForm.resx">
+      <DependentUpon>BuildingInputForm.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\VisualizerPlotProperties.resx">
       <DependentUpon>VisualizerPlotProperties.cs</DependentUpon>
     </EmbeddedResource>
