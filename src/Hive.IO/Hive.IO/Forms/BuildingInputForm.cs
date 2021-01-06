@@ -45,6 +45,7 @@ namespace Hive.IO.Forms
                 UpdateSiaPropertiesPanel();
                 UpdateEnvironmentTab();
                 UpdateInternalGainsTab();
+                UpdateVentilationTab();
             }
             finally
             {
@@ -147,6 +148,13 @@ namespace Hive.IO.Forms
             UpdateTextBox(txtEquipmentYearlyHours);
         }
 
+        private void UpdateVentilationTab()
+        {
+            UpdateTextBox(txtAirChangeRate);
+            UpdateTextBox(txtInfiltration);
+            UpdateTextBox(txtHeatRecovery);
+        }
+
         /// <summary>
         /// Use Reflection to update the textbox values based on the current state,
         /// including font weight and text color.
@@ -171,6 +179,8 @@ namespace Hive.IO.Forms
                 solidBrush.Color.G,
                 solidBrush.Color.B);
             textBox.ForeColor = foreColor;
+
+            textBox.Enabled = _state.IsEditable;
         }
 
         /// <summary>
