@@ -1,7 +1,11 @@
 ﻿using System;
+using System.Drawing;
 using System.Linq;
+using System.Windows;
 using System.Windows.Forms;
+using System.Windows.Media;
 using Hive.IO.Building;
+using FontStyle = System.Drawing.FontStyle;
 
 namespace Hive.IO.Forms
 {
@@ -33,6 +37,7 @@ namespace Hive.IO.Forms
                 _rendering = true;
                 UpdateSiaComboBoxes();
                 UpdateSiaPropertiesPanel();
+                UpdateEnvironmentTab();
             }
             finally
             {
@@ -97,6 +102,54 @@ namespace Hive.IO.Forms
 
             _state.Quality = cboBuildingQuality.SelectedItem as string;
             RenderState();
+        }
+
+        private void UpdateEnvironmentTab()
+        {
+            cboWallTemplate.Enabled = false;
+            UpdateTextBox(txtWallUValue, "UValueWalls");
+            UpdateTextBox(txtWallEmissions, "EmissionsWalls");
+            UpdateTextBox(txtWallCost, "CostWalls");
+
+            cboFloorTemplate.Enabled = false;
+            UpdateTextBox(txtFloorUValue, "UValueFloors");
+            UpdateTextBox(txtFloorEmissions, "EmissionsFloors");
+            UpdateTextBox(txtFloorCost, "CostFloors");
+
+            cboWindowTemplate.Enabled = false;
+            UpdateTextBox(txtWindowUValue, "UValueTransparent");
+            UpdateTextBox(txtWindowGValue, "GValue");
+            UpdateTextBox(txtWindowEmissions, "TransparentEmissions");
+            UpdateTextBox(txtWindowCost, "TransparentCost");
+            UpdateTextBox(txtWindowGValueTotal, "GValueTotal");
+            UpdateTextBox(txtWindowShadingSetpoint, "ShadingSetpoint");
+
+            cboRoofTemplate.Enabled = false;
+            UpdateTextBox(txtRoofUValue, "UValueRoofs");
+            UpdateTextBox(txtRoofEmissions, "EmissionsRoofs");
+            UpdateTextBox(txtRoofCost, "CostRoofs");
+        }
+
+        /// <summary>
+        /// Use Reflection to update the textbox values based on the current state,
+        /// including font weight and text color.
+        /// </summary>
+        /// <param name="textBox"></param>
+        /// <param name="stateProperty"></param>
+        private void UpdateTextBox(TextBox textBox, string stateProperty)
+        {
+            textBox.Text = _state.GetType().GetProperty(stateProperty).GetValue(_state) as string;
+
+            var fontWeight = (FontWeight) _state.GetType().GetProperty(stateProperty + "FontWeight").GetValue(_state);
+            textBox.Font = new Font(textBox.Font, fontWeight == FontWeights.Bold? FontStyle.Bold: FontStyle.Regular);
+
+            var solidBrush = (SolidColorBrush) _state.GetType().GetProperty(stateProperty + "Brush").GetValue(_state);
+            var foreColor = System.Drawing.Color.FromArgb(
+                solidBrush.Color.A, 
+                solidBrush.Color.R, 
+                solidBrush.Color.G,
+                solidBrush.Color.B);
+            textBox.ForeColor = foreColor;
         }
     }
 }
