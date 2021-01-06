@@ -344,31 +344,37 @@ namespace Hive.IO.Forms
             // 
             this.cboBuildingUseType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboBuildingUseType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboBuildingUseType.FormattingEnabled = true;
             this.cboBuildingUseType.Location = new System.Drawing.Point(503, 13);
             this.cboBuildingUseType.Name = "cboBuildingUseType";
             this.cboBuildingUseType.Size = new System.Drawing.Size(484, 39);
             this.cboBuildingUseType.TabIndex = 4;
+            this.cboBuildingUseType.SelectedIndexChanged += new System.EventHandler(this.cboBuildingUseType_SelectedIndexChanged);
             // 
             // cboRoomType
             // 
             this.cboRoomType.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboRoomType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboRoomType.FormattingEnabled = true;
             this.cboRoomType.Location = new System.Drawing.Point(503, 58);
             this.cboRoomType.Name = "cboRoomType";
             this.cboRoomType.Size = new System.Drawing.Size(484, 39);
             this.cboRoomType.TabIndex = 5;
+            this.cboRoomType.SelectedIndexChanged += new System.EventHandler(this.cboRoomType_SelectedIndexChanged);
             // 
             // cboBuildingQuality
             // 
             this.cboBuildingQuality.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboBuildingQuality.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboBuildingQuality.FormattingEnabled = true;
             this.cboBuildingQuality.Location = new System.Drawing.Point(503, 103);
             this.cboBuildingQuality.Name = "cboBuildingQuality";
             this.cboBuildingQuality.Size = new System.Drawing.Size(484, 39);
             this.cboBuildingQuality.TabIndex = 6;
+            this.cboBuildingQuality.SelectedIndexChanged += new System.EventHandler(this.cboBuildingQuality_SelectedIndexChanged);
             // 
             // label4
             // 
