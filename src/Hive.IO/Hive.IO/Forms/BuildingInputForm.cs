@@ -44,6 +44,7 @@ namespace Hive.IO.Forms
                 UpdateSiaComboBoxes();
                 UpdateSiaPropertiesPanel();
                 UpdateEnvironmentTab();
+                UpdateInternalGainsTab();
             }
             finally
             {
@@ -134,6 +135,16 @@ namespace Hive.IO.Forms
             UpdateTextBox(txtRoofUValue);
             UpdateTextBox(txtRoofEmissions);
             UpdateTextBox(txtRoofCost);
+        }
+
+        private void UpdateInternalGainsTab()
+        {
+            UpdateTextBox(txtOccupantLoads);
+            UpdateTextBox(txtOccupantYearlyHours);
+            UpdateTextBox(txtLightingLoads);
+            UpdateTextBox(txtLightingYearlyHours);
+            UpdateTextBox(txtEquipmentLoads);
+            UpdateTextBox(txtEquipmentYearlyHours);
         }
 
         /// <summary>

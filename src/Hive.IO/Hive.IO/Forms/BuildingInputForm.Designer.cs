@@ -103,17 +103,32 @@ namespace Hive.IO.Forms
             this.txtWindowGValueTotal = new System.Windows.Forms.TextBox();
             this.label31 = new System.Windows.Forms.Label();
             this.txtWindowShadingSetpoint = new System.Windows.Forms.TextBox();
+            this.tableLayoutInternalGains = new System.Windows.Forms.TableLayoutPanel();
+            this.label33 = new System.Windows.Forms.Label();
+            this.label32 = new System.Windows.Forms.Label();
+            this.label34 = new System.Windows.Forms.Label();
+            this.label35 = new System.Windows.Forms.Label();
+            this.label36 = new System.Windows.Forms.Label();
+            this.label37 = new System.Windows.Forms.Label();
+            this.txtOccupantLoads = new System.Windows.Forms.TextBox();
+            this.txtOccupantYearlyHours = new System.Windows.Forms.TextBox();
+            this.txtLightingLoads = new System.Windows.Forms.TextBox();
+            this.txtLightingYearlyHours = new System.Windows.Forms.TextBox();
+            this.txtEquipmentLoads = new System.Windows.Forms.TextBox();
+            this.txtEquipmentYearlyHours = new System.Windows.Forms.TextBox();
             this.tabControl.SuspendLayout();
             this.tabSIA.SuspendLayout();
             this.tableLayoutSiaMain.SuspendLayout();
             this.panelSiaProperties.SuspendLayout();
             this.tableLayoutSiaProperties.SuspendLayout();
             this.tabENV.SuspendLayout();
+            this.tabIG.SuspendLayout();
             this.tableLayoutEnvelopeMain.SuspendLayout();
             this.tableLayoutEnvelopeWall.SuspendLayout();
             this.tableLayoutEnvelopeFloor.SuspendLayout();
             this.tableLayoutEnvelopeWindow.SuspendLayout();
             this.tableLayoutEnvelopeRoof.SuspendLayout();
+            this.tableLayoutInternalGains.SuspendLayout();
             this.SuspendLayout();
             // 
             // tabControl
@@ -452,6 +467,7 @@ namespace Hive.IO.Forms
             // 
             // tabIG
             // 
+            this.tabIG.Controls.Add(this.tableLayoutInternalGains);
             this.tabIG.Location = new System.Drawing.Point(10, 48);
             this.tabIG.Name = "tabIG";
             this.tabIG.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
@@ -1014,6 +1030,171 @@ namespace Hive.IO.Forms
             this.txtWindowShadingSetpoint.Tag = "ShadingSetpoint";
             this.txtWindowShadingSetpoint.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
+            // tableLayoutInternalGains
+            // 
+            this.tableLayoutInternalGains.ColumnCount = 2;
+            this.tableLayoutInternalGains.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutInternalGains.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutInternalGains.Controls.Add(this.label32, 1, 0);
+            this.tableLayoutInternalGains.Controls.Add(this.label33, 0, 0);
+            this.tableLayoutInternalGains.Controls.Add(this.label34, 0, 2);
+            this.tableLayoutInternalGains.Controls.Add(this.label35, 1, 2);
+            this.tableLayoutInternalGains.Controls.Add(this.label36, 0, 4);
+            this.tableLayoutInternalGains.Controls.Add(this.label37, 1, 4);
+            this.tableLayoutInternalGains.Controls.Add(this.txtOccupantLoads, 0, 1);
+            this.tableLayoutInternalGains.Controls.Add(this.txtOccupantYearlyHours, 1, 1);
+            this.tableLayoutInternalGains.Controls.Add(this.txtLightingLoads, 0, 3);
+            this.tableLayoutInternalGains.Controls.Add(this.txtLightingYearlyHours, 1, 3);
+            this.tableLayoutInternalGains.Controls.Add(this.txtEquipmentLoads, 0, 5);
+            this.tableLayoutInternalGains.Controls.Add(this.txtEquipmentYearlyHours, 1, 5);
+            this.tableLayoutInternalGains.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutInternalGains.Location = new System.Drawing.Point(0, 0);
+            this.tableLayoutInternalGains.Name = "tableLayoutInternalGains";
+            this.tableLayoutInternalGains.Padding = new System.Windows.Forms.Padding(10, 20, 10, 10);
+            this.tableLayoutInternalGains.RightToLeft = System.Windows.Forms.RightToLeft.No;
+            this.tableLayoutInternalGains.RowCount = 7;
+            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutInternalGains.Size = new System.Drawing.Size(1006, 1097);
+            this.tableLayoutInternalGains.TabIndex = 0;
+            // 
+            // label33
+            // 
+            this.label33.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label33.AutoSize = true;
+            this.label33.Location = new System.Drawing.Point(13, 30);
+            this.label33.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
+            this.label33.Name = "label33";
+            this.label33.Size = new System.Drawing.Size(487, 32);
+            this.label33.TabIndex = 1;
+            this.label33.Text = "People heat (W/m²)";
+            // 
+            // label32
+            // 
+            this.label32.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label32.AutoSize = true;
+            this.label32.Location = new System.Drawing.Point(506, 30);
+            this.label32.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
+            this.label32.Name = "label32";
+            this.label32.Size = new System.Drawing.Size(487, 32);
+            this.label32.TabIndex = 2;
+            this.label32.Text = "People load hours (h)";
+            // 
+            // label34
+            // 
+            this.label34.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label34.AutoSize = true;
+            this.label34.Location = new System.Drawing.Point(13, 140);
+            this.label34.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
+            this.label34.Name = "label34";
+            this.label34.Size = new System.Drawing.Size(487, 32);
+            this.label34.TabIndex = 3;
+            this.label34.Text = "Light heat (W/m²)";
+            // 
+            // label35
+            // 
+            this.label35.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label35.AutoSize = true;
+            this.label35.Location = new System.Drawing.Point(506, 140);
+            this.label35.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
+            this.label35.Name = "label35";
+            this.label35.Size = new System.Drawing.Size(487, 32);
+            this.label35.TabIndex = 4;
+            this.label35.Text = "Light load hours (h)";
+            // 
+            // label36
+            // 
+            this.label36.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label36.AutoSize = true;
+            this.label36.Location = new System.Drawing.Point(13, 250);
+            this.label36.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
+            this.label36.Name = "label36";
+            this.label36.Size = new System.Drawing.Size(487, 32);
+            this.label36.TabIndex = 5;
+            this.label36.Text = "Equipment heat (W/m²)";
+            // 
+            // label37
+            // 
+            this.label37.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label37.AutoSize = true;
+            this.label37.Location = new System.Drawing.Point(506, 250);
+            this.label37.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
+            this.label37.Name = "label37";
+            this.label37.Size = new System.Drawing.Size(487, 32);
+            this.label37.TabIndex = 6;
+            this.label37.Text = "Equipment load hours";
+            // 
+            // txtOccupantLoads
+            // 
+            this.txtOccupantLoads.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtOccupantLoads.Location = new System.Drawing.Point(50, 82);
+            this.txtOccupantLoads.Margin = new System.Windows.Forms.Padding(40, 10, 40, 10);
+            this.txtOccupantLoads.Name = "txtOccupantLoads";
+            this.txtOccupantLoads.Size = new System.Drawing.Size(413, 38);
+            this.txtOccupantLoads.TabIndex = 7;
+            this.txtOccupantLoads.Tag = "OccupantLoads";
+            this.txtOccupantLoads.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
+            // 
+            // txtOccupantYearlyHours
+            // 
+            this.txtOccupantYearlyHours.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtOccupantYearlyHours.Location = new System.Drawing.Point(543, 82);
+            this.txtOccupantYearlyHours.Margin = new System.Windows.Forms.Padding(40, 10, 40, 10);
+            this.txtOccupantYearlyHours.Name = "txtOccupantYearlyHours";
+            this.txtOccupantYearlyHours.Size = new System.Drawing.Size(413, 38);
+            this.txtOccupantYearlyHours.TabIndex = 8;
+            this.txtOccupantYearlyHours.Tag = "OccupantYearlyHours";
+            this.txtOccupantYearlyHours.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
+            // 
+            // txtLightingLoads
+            // 
+            this.txtLightingLoads.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtLightingLoads.Location = new System.Drawing.Point(50, 192);
+            this.txtLightingLoads.Margin = new System.Windows.Forms.Padding(40, 10, 40, 10);
+            this.txtLightingLoads.Name = "txtLightingLoads";
+            this.txtLightingLoads.Size = new System.Drawing.Size(413, 38);
+            this.txtLightingLoads.TabIndex = 9;
+            this.txtLightingLoads.Tag = "LightingLoads";
+            this.txtLightingLoads.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
+            // 
+            // txtLightingYearlyHours
+            // 
+            this.txtLightingYearlyHours.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtLightingYearlyHours.Location = new System.Drawing.Point(543, 192);
+            this.txtLightingYearlyHours.Margin = new System.Windows.Forms.Padding(40, 10, 40, 10);
+            this.txtLightingYearlyHours.Name = "txtLightingYearlyHours";
+            this.txtLightingYearlyHours.Size = new System.Drawing.Size(413, 38);
+            this.txtLightingYearlyHours.TabIndex = 10;
+            this.txtLightingYearlyHours.Tag = "LightingYearlyHours";
+            this.txtLightingYearlyHours.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
+            // 
+            // txtEquipmentLoads
+            // 
+            this.txtEquipmentLoads.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtEquipmentLoads.Location = new System.Drawing.Point(50, 302);
+            this.txtEquipmentLoads.Margin = new System.Windows.Forms.Padding(40, 10, 40, 10);
+            this.txtEquipmentLoads.Name = "txtEquipmentLoads";
+            this.txtEquipmentLoads.Size = new System.Drawing.Size(413, 38);
+            this.txtEquipmentLoads.TabIndex = 11;
+            this.txtEquipmentLoads.Tag = "EquipmentLoads";
+            this.txtEquipmentLoads.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
+            // 
+            // txtEquipmentYearlyHours
+            // 
+            this.txtEquipmentYearlyHours.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtEquipmentYearlyHours.Location = new System.Drawing.Point(543, 302);
+            this.txtEquipmentYearlyHours.Margin = new System.Windows.Forms.Padding(40, 10, 40, 10);
+            this.txtEquipmentYearlyHours.Name = "txtEquipmentYearlyHours";
+            this.txtEquipmentYearlyHours.Size = new System.Drawing.Size(413, 38);
+            this.txtEquipmentYearlyHours.TabIndex = 12;
+            this.txtEquipmentYearlyHours.Tag = "EquipmentYearlyHours";
+            this.txtEquipmentYearlyHours.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
+            // 
             // BuildingInputForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
@@ -1033,6 +1214,7 @@ namespace Hive.IO.Forms
             this.tableLayoutSiaProperties.ResumeLayout(false);
             this.tableLayoutSiaProperties.PerformLayout();
             this.tabENV.ResumeLayout(false);
+            this.tabIG.ResumeLayout(false);
             this.tableLayoutEnvelopeMain.ResumeLayout(false);
             this.tableLayoutEnvelopeWall.ResumeLayout(false);
             this.tableLayoutEnvelopeWall.PerformLayout();
@@ -1042,6 +1224,8 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeWindow.PerformLayout();
             this.tableLayoutEnvelopeRoof.ResumeLayout(false);
             this.tableLayoutEnvelopeRoof.PerformLayout();
+            this.tableLayoutInternalGains.ResumeLayout(false);
+            this.tableLayoutInternalGains.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -1120,5 +1304,18 @@ namespace Hive.IO.Forms
         private TextBox txtFloorUValue;
         private TextBox txtFloorEmissions;
         private TextBox txtFloorCost;
+        private TableLayoutPanel tableLayoutInternalGains;
+        private Label label32;
+        private Label label33;
+        private Label label34;
+        private Label label35;
+        private Label label36;
+        private Label label37;
+        private TextBox txtOccupantLoads;
+        private TextBox txtOccupantYearlyHours;
+        private TextBox txtLightingLoads;
+        private TextBox txtLightingYearlyHours;
+        private TextBox txtEquipmentLoads;
+        private TextBox txtEquipmentYearlyHours;
     }
 }
