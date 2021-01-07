@@ -86,9 +86,6 @@
     <Compile Include="Forms\AshpProperties.xaml.cs">
       <DependentUpon>AshpProperties.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Forms\BuildingInput.xaml.cs">
-      <DependentUpon>BuildingInput.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Forms\BuildingInputForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -227,10 +224,6 @@
   </ItemGroup>
   <ItemGroup>
     <Page Include="Forms\AshpProperties.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Forms\BuildingInput.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
