@@ -60,14 +60,17 @@ namespace Hive.IO.Forms
             cboBuildingUseType.Items.Clear();
             cboBuildingUseType.Items.AddRange(_state.BuildingUseTypes.ToArray<object>());
             cboBuildingUseType.SelectedItem = _state.BuildingUseType;
+            cboBuildingUseType.Enabled = _state.IsEditable;
 
             cboRoomType.Items.Clear();
             cboRoomType.Items.AddRange(_state.RoomTypes.ToArray<object>());
             cboRoomType.SelectedItem = _state.RoomType;
+            cboRoomType.Enabled = _state.IsEditable;
 
             cboBuildingQuality.Items.Clear();
             cboBuildingQuality.Items.AddRange(_state.Qualities.ToArray<object>());
             cboBuildingQuality.SelectedItem = _state.Quality;
+            cboBuildingQuality.Enabled = _state.IsEditable;
         }
 
         private void UpdateSiaPropertiesPanel()

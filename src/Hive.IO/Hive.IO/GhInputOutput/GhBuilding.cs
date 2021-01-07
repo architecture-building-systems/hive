@@ -179,6 +179,7 @@ namespace Hive.IO.GhInputOutput
                 try
                 {
                     siaRoom = Sia2024RecordEx.FromJson(json);
+                    Message = "";
                 }
                 catch (Exception e)
                 {
