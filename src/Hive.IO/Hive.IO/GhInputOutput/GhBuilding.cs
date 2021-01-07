@@ -143,9 +143,14 @@ namespace Hive.IO.GhInputOutput
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Error, "Building input state not set");
                 return;
             }
-            var form = new BuildingInput(_buildingInputState);
-            form.ShowDialog();
-            _buildingInputState.SiaRoom = form.State.SiaRoom; // copy over the results (might have changed)
+
+            var form = new BuildingInputForm();
+            form.ShowDialog(_buildingInputState);
+
+            // NOTE: actually, I don't think this is necessary, since the state is never reset in the dialog...
+            _buildingInputState.SiaRoom = form.State.SiaRoom; // copy over the results (might have changed) 
+
+            // make sure down-river components get new output
             ExpireSolution(true);
         }
 
@@ -168,7 +173,30 @@ namespace Hive.IO.GhInputOutput
             string json = null;
             var parametricSiaRoomSpecified = da.GetData(3, ref json);
 
-            var siaRoom = parametricSiaRoomSpecified ? Sia2024RecordEx.FromJson(json) : SiaRoomFromBuildingInputState();
+            Sia2024RecordEx siaRoom;
+            if (parametricSiaRoomSpecified)
+            {
+                try
+                {
+                    siaRoom = Sia2024RecordEx.FromJson(json);
+                }
+                catch (Exception e)
+                {
+                    var message = $"ERROR invalid SIA Room input: {e.Message}";
+                    RhinoApp.WriteLine(message);
+                    Message = message;
+
+
+                    siaRoom = Sia2024Record.First();
+                    siaRoom.Quality = "<Custom>";
+                    siaRoom.BuildingUseType = "<Custom>";
+                }
+            }
+            else
+            {
+                siaRoom = SiaRoomFromBuildingInputState();
+            }
+            
             var zone = CreateZone(siaRoom, zoneBrep, windows, floors);
 
             // BuildingInput form modifies the SiaRoom property, use that. it also uses editable to decide if parametric input was given...

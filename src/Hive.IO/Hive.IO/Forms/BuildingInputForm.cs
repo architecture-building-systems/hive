@@ -20,6 +20,8 @@ namespace Hive.IO.Forms
         private BuildingInputState _state = new BuildingInputState(Sia2024Record.First(), null, true);
         private bool _rendering = false;
 
+        public BuildingInputState State => _state;
+
         public DialogResult ShowDialog(BuildingInputState state)
         {
             _state = state;
@@ -168,19 +170,21 @@ namespace Hive.IO.Forms
         {
             var stateProperty = textBox.Tag.ToString();
             textBox.Text = _state.GetType().GetProperty(stateProperty).GetValue(_state) as string;
-
-            var fontWeight = (FontWeight) _state.GetType().GetProperty(stateProperty + "FontWeight").GetValue(_state);
-            textBox.Font = new Font(textBox.Font, fontWeight == FontWeights.Bold? FontStyle.Bold: FontStyle.Regular);
-
-            var solidBrush = (SolidColorBrush) _state.GetType().GetProperty(stateProperty + "Brush").GetValue(_state);
-            var foreColor = System.Drawing.Color.FromArgb(
-                solidBrush.Color.A, 
-                solidBrush.Color.R, 
-                solidBrush.Color.G,
-                solidBrush.Color.B);
-            textBox.ForeColor = foreColor;
-
             textBox.Enabled = _state.IsEditable;
+
+            if (_state.IsEditable)
+            {
+                var fontWeight = (FontWeight) _state.GetType().GetProperty(stateProperty + "FontWeight").GetValue(_state);
+                textBox.Font = new Font(textBox.Font, fontWeight == FontWeights.Bold? FontStyle.Bold: FontStyle.Regular);
+
+                var solidBrush = (SolidColorBrush) _state.GetType().GetProperty(stateProperty + "Brush").GetValue(_state);
+                var foreColor = System.Drawing.Color.FromArgb(
+                    solidBrush.Color.A, 
+                    solidBrush.Color.R, 
+                    solidBrush.Color.G,
+                    solidBrush.Color.B);
+                textBox.ForeColor = foreColor;
+            }
         }
 
         /// <summary>
