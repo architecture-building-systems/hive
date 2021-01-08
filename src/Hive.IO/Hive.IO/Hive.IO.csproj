@@ -97,6 +97,12 @@
       <DependentUpon>EmitterPropertiesView.xaml</DependentUpon>
     </Compile>
     <Compile Include="Forms\EmitterPropertiesViewModel.cs" />
+    <Compile Include="Forms\EnergySystemsInputForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Include="Forms\EnergySystemsInputForm.Designer.cs">
+      <DependentUpon>EnergySystemsInputForm.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\HeatExchangerProperties.xaml.cs">
       <DependentUpon>HeatExchangerProperties.xaml</DependentUpon>
     </Compile>
@@ -189,6 +195,9 @@
   <ItemGroup>
     <EmbeddedResource Include="Forms\BuildingInputForm.resx">
       <DependentUpon>BuildingInputForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\EnergySystemsInputForm.resx">
+      <DependentUpon>EnergySystemsInputForm.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\VisualizerPlotProperties.resx">
       <DependentUpon>VisualizerPlotProperties.cs</DependentUpon>
