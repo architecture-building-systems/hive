@@ -17,14 +17,13 @@ namespace Hive.IO.Forms
     /// </summary>
     public partial class BuildingInputForm : Form
     {
-        private BuildingInputState _state = new BuildingInputState(Sia2024Record.First(), null, true);
         private bool _rendering = false;
 
-        public BuildingInputState State => _state;
+        public BuildingInputState State { get; private set; } = new BuildingInputState(Sia2024Record.First(), null, true);
 
         public DialogResult ShowDialog(BuildingInputState state)
         {
-            _state = state;
+            State = state;
             return ShowDialog();
         }
 
@@ -58,30 +57,30 @@ namespace Hive.IO.Forms
         private void UpdateSiaComboBoxes()
         {
             cboBuildingUseType.Items.Clear();
-            cboBuildingUseType.Items.AddRange(_state.BuildingUseTypes.ToArray<object>());
-            cboBuildingUseType.SelectedItem = _state.BuildingUseType;
-            cboBuildingUseType.Enabled = _state.IsEditable;
+            cboBuildingUseType.Items.AddRange(State.BuildingUseTypes.ToArray<object>());
+            cboBuildingUseType.SelectedItem = State.BuildingUseType;
+            cboBuildingUseType.Enabled = State.IsEditable;
 
             cboRoomType.Items.Clear();
-            cboRoomType.Items.AddRange(_state.RoomTypes.ToArray<object>());
-            cboRoomType.SelectedItem = _state.RoomType;
-            cboRoomType.Enabled = _state.IsEditable;
+            cboRoomType.Items.AddRange(State.RoomTypes.ToArray<object>());
+            cboRoomType.SelectedItem = State.RoomType;
+            cboRoomType.Enabled = State.IsEditable;
 
             cboBuildingQuality.Items.Clear();
-            cboBuildingQuality.Items.AddRange(_state.Qualities.ToArray<object>());
-            cboBuildingQuality.SelectedItem = _state.Quality;
-            cboBuildingQuality.Enabled = _state.IsEditable;
+            cboBuildingQuality.Items.AddRange(State.Qualities.ToArray<object>());
+            cboBuildingQuality.SelectedItem = State.Quality;
+            cboBuildingQuality.Enabled = State.IsEditable;
         }
 
         private void UpdateSiaPropertiesPanel()
         {
-            txtFloorArea.Text = _state.FloorArea;
-            txtWallArea.Text = _state.ZoneWallArea;
-            txtWinArea.Text = _state.ZoneWindowArea;
-            txtRoofArea.Text = _state.ZoneRoofArea;
+            txtFloorArea.Text = State.FloorArea;
+            txtWallArea.Text = State.ZoneWallArea;
+            txtWinArea.Text = State.ZoneWindowArea;
+            txtRoofArea.Text = State.ZoneRoofArea;
 
-            txtHeatingSetPoint.Text = _state.HeatingSetpoint;
-            txtCoolingSetPoint.Text = _state.CoolingSetpoint;
+            txtHeatingSetPoint.Text = State.HeatingSetpoint;
+            txtCoolingSetPoint.Text = State.CoolingSetpoint;
         }
 
         private void cboBuildingUseType_SelectedIndexChanged(object sender, EventArgs e)
@@ -91,7 +90,7 @@ namespace Hive.IO.Forms
                 return;
             }
 
-            _state.BuildingUseType = cboBuildingUseType.SelectedItem as string;
+            State.BuildingUseType = cboBuildingUseType.SelectedItem as string;
             RenderState();
         }
 
@@ -102,7 +101,7 @@ namespace Hive.IO.Forms
                 return;
             }
 
-            _state.RoomType = cboRoomType.SelectedItem as string;
+            State.RoomType = cboRoomType.SelectedItem as string;
             RenderState();
         }
 
@@ -113,7 +112,7 @@ namespace Hive.IO.Forms
                 return;
             }
 
-            _state.Quality = cboBuildingQuality.SelectedItem as string;
+            State.Quality = cboBuildingQuality.SelectedItem as string;
             RenderState();
         }
 
@@ -172,15 +171,15 @@ namespace Hive.IO.Forms
         private void UpdateTextBox(TextBox textBox)
         {
             var stateProperty = textBox.Tag.ToString();
-            textBox.Text = _state.GetType().GetProperty(stateProperty).GetValue(_state) as string;
-            textBox.Enabled = _state.IsEditable;
+            textBox.Text = State.GetType().GetProperty(stateProperty).GetValue(State) as string;
+            textBox.Enabled = State.IsEditable;
 
-            if (_state.IsEditable)
+            if (State.IsEditable)
             {
-                var fontWeight = (FontWeight) _state.GetType().GetProperty(stateProperty + "FontWeight").GetValue(_state);
+                var fontWeight = (FontWeight) State.GetType().GetProperty(stateProperty + "FontWeight").GetValue(State);
                 textBox.Font = new Font(textBox.Font, fontWeight == FontWeights.Bold? FontStyle.Bold: FontStyle.Regular);
 
-                var solidBrush = (SolidColorBrush) _state.GetType().GetProperty(stateProperty + "Brush").GetValue(_state);
+                var solidBrush = (SolidColorBrush) State.GetType().GetProperty(stateProperty + "Brush").GetValue(State);
                 var foreColor = System.Drawing.Color.FromArgb(
                     solidBrush.Color.A, 
                     solidBrush.Color.R, 
@@ -206,7 +205,7 @@ namespace Hive.IO.Forms
             var textBox = (TextBox) sender;
             var stateProperty = textBox.Tag.ToString();
 
-            _state.GetType().GetProperty(stateProperty).SetValue(_state, textBox.Text);
+            State.GetType().GetProperty(stateProperty).SetValue(State, textBox.Text);
 
             RenderState();
         }
