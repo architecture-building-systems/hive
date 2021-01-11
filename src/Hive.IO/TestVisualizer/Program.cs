@@ -17,14 +17,15 @@ namespace TestVisualizer
             var currentDomain = AppDomain.CurrentDomain;
             currentDomain.AssemblyResolve += LoadRhinoLibraries;
 
-            ShowBuildingInputDialog();
-            // ShowEnergySystemsDialog();
+            // ShowBuildingInputDialog();
+            ShowEnergySystemsDialog();
         }
 
         private static void ShowEnergySystemsDialog()
         {
-            var form = new EnergySystemsInput();
-            form.ShowDialog();
+            var state = new EnergySystemsInputViewModel();
+            var form = new EnergySystemsInputForm();
+            form.ShowDialog(state);
         }
 
         private static void ShowBuildingInputDialog()
