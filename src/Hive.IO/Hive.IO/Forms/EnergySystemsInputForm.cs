@@ -28,13 +28,16 @@ namespace Hive.IO.Forms
             gridConversion.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "Source",
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+                FillWeight = 0.2f,
                 DataPropertyName = "Source",
+                ReadOnly = true
             });
             var conversionColumn = new DataGridViewComboBoxColumn()
             {
                 Name = "Conversion",
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+                FillWeight = 0.6f,
                 DataPropertyName = "Name",
             };
             conversionColumn.Items.AddRange(ConversionTechPropertiesViewModel.AllNames.ToArray<object>());
@@ -43,8 +46,10 @@ namespace Hive.IO.Forms
             {
                 Name = "EndUse",
                 HeaderText = "End Use",
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.AllCells,
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+                FillWeight = 0.2f,
                 DataPropertyName = "EndUse",
+                ReadOnly = true
             });
         }
     }
