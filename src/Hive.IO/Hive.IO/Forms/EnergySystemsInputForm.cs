@@ -1,4 +1,6 @@
-﻿using System.Linq;
+﻿using System;
+using System.ComponentModel;
+using System.Linq;
 using System.Windows.Forms;
 
 namespace Hive.IO.Forms
@@ -11,6 +13,7 @@ namespace Hive.IO.Forms
         }
 
         private bool _rendering = false;
+        private bool _updatingGrid = false;
 
         public EnergySystemsInputViewModel State { get; private set; } = new EnergySystemsInputViewModel();
 
@@ -22,7 +25,7 @@ namespace Hive.IO.Forms
 
         private void EnergySystemsInputForm_Load(object sender, System.EventArgs e)
         {
-            gridConversion.DataSource = State.ConversionTechnologies;
+            gridConversion.DataSource = new BindingList<ConversionTechPropertiesViewModel>(State.ConversionTechnologies);
             gridConversion.AutoGenerateColumns = false;
             gridConversion.Columns.Clear();
             gridConversion.Columns.Add(new DataGridViewTextBoxColumn()
@@ -40,7 +43,7 @@ namespace Hive.IO.Forms
                 FillWeight = 0.6f,
                 DataPropertyName = "Name",
             };
-            conversionColumn.Items.AddRange(ConversionTechPropertiesViewModel.AllNames.ToArray<object>());
+            // conversionColumn.Items.AddRange(ConversionTechPropertiesViewModel.AllNames.ToArray<object>());
             gridConversion.Columns.Add(conversionColumn);
             gridConversion.Columns.Add(new DataGridViewTextBoxColumn()
             {
@@ -51,6 +54,48 @@ namespace Hive.IO.Forms
                 DataPropertyName = "EndUse",
                 ReadOnly = true
             });
+
+            UpdateEditableForRows();
+        }
+
+        /// <summary>
+        /// Make sure the "editable" property is set correctly for each row. In effect, that
+        /// means setting DataGridViewComboBoxCell.Items
+        /// </summary>
+        private void UpdateEditableForRows()
+        {
+            foreach (var row in gridConversion.Rows.Cast<DataGridViewRow>())
+            {
+                var conversionTech = row.DataBoundItem as ConversionTechPropertiesViewModel;
+                var nameCell = (DataGridViewComboBoxCell) row.Cells[1];
+
+                try
+                {
+                    _updatingGrid = true;
+                    nameCell.Items.Clear();
+                }
+                finally
+                {
+                    _updatingGrid = false;
+                }
+                
+                nameCell.Items.AddRange(conversionTech?.ValidNames.ToArray<object>() ?? ConversionTechPropertiesViewModel.AllNames.ToArray<object>());
+
+                nameCell.ReadOnly = conversionTech?.IsParametricDefined ?? false;
+            }
+        }
+
+        private void gridConversion_DataError(object sender, DataGridViewDataErrorEventArgs e)
+        {
+            if (_updatingGrid)
+            {
+                return;
+            }
+        }
+
+        private void gridConversion_DataBindingComplete(object sender, DataGridViewBindingCompleteEventArgs e)
+        {
+            UpdateEditableForRows();
         }
     }
 }

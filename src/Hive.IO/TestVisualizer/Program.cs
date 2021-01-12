@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using Hive.IO.Building;
+using Hive.IO.EnergySystems;
 using Hive.IO.Forms;
 
 namespace TestVisualizer
@@ -24,6 +25,13 @@ namespace TestVisualizer
         private static void ShowEnergySystemsDialog()
         {
             var state = new EnergySystemsInputViewModel();
+            var boiler = new ConversionTechPropertiesViewModel()
+            {
+                Name = "Boiler (Gas)",
+            };
+            boiler.SetProperties(new GasBoiler(20.0, 20.0, 20.0, 20.0));
+            state.ConversionTechnologies.Add(boiler);
+
             var form = new EnergySystemsInputForm();
             form.ShowDialog(state);
         }
