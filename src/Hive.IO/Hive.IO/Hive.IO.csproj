@@ -67,7 +67,9 @@
       <HintPath>C:\Program Files\Rhino 6\Plug-ins\Grasshopper\GH_IO.dll</HintPath>
       <Private>False</Private>
     </Reference>
+    <Reference Include="UIAutomationProvider" />
     <Reference Include="WindowsBase" />
+    <Reference Include="WindowsFormsIntegration" />
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Building\Building.cs" />
@@ -93,6 +95,18 @@
       <DependentUpon>BuildingInputForm.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\BuildingInputState.cs" />
+    <Compile Include="Forms\Controls\ChillerProperties.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Controls\ChillerProperties.Designer.cs">
+      <DependentUpon>ChillerProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Controls\ConversionTechPropertiesBase.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Controls\ConversionTechPropertiesBase.Designer.cs">
+      <DependentUpon>ConversionTechPropertiesBase.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\EmitterPropertiesView.xaml.cs">
       <DependentUpon>EmitterPropertiesView.xaml</DependentUpon>
     </Compile>
@@ -195,6 +209,12 @@
   <ItemGroup>
     <EmbeddedResource Include="Forms\BuildingInputForm.resx">
       <DependentUpon>BuildingInputForm.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Controls\ChillerProperties.resx">
+      <DependentUpon>ChillerProperties.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Controls\ConversionTechPropertiesBase.resx">
+      <DependentUpon>ConversionTechPropertiesBase.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\EnergySystemsInputForm.resx">
       <DependentUpon>EnergySystemsInputForm.cs</DependentUpon>
@@ -371,6 +391,7 @@
   <ItemGroup>
     <None Include="Resources\IO_Para_InputSolarTech.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

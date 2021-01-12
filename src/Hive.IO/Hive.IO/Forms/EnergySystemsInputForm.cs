@@ -100,5 +100,16 @@ namespace Hive.IO.Forms
         {
             UpdateEditableForRows();
         }
+
+        private void gridConversion_SelectionChanged(object sender, EventArgs e)
+        {
+            if (gridConversion.CurrentRow.DataBoundItem == null)
+            {
+                return;
+            }
+
+            var conversionTech = (ConversionTechPropertiesViewModel) gridConversion.CurrentRow.DataBoundItem;
+
+        }
     }
 }

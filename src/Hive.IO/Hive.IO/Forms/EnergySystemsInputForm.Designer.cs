@@ -36,6 +36,7 @@
             this.Conversion = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.EndUse = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabEmission = new System.Windows.Forms.TabPage();
+            this.conversionTechPropertiesBase1 = new Hive.IO.Forms.Controls.ConversionTechPropertiesBase();
             this.tabControl.SuspendLayout();
             this.tabConversion.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
@@ -51,7 +52,7 @@
             this.tabControl.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(3237, 1679);
+            this.tabControl.Size = new System.Drawing.Size(1482, 967);
             this.tabControl.TabIndex = 0;
             // 
             // tabConversion
@@ -61,7 +62,7 @@
             this.tabConversion.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.tabConversion.Name = "tabConversion";
             this.tabConversion.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.tabConversion.Size = new System.Drawing.Size(3217, 1621);
+            this.tabConversion.Size = new System.Drawing.Size(1462, 909);
             this.tabConversion.TabIndex = 0;
             this.tabConversion.Text = "Conversion";
             this.tabConversion.UseVisualStyleBackColor = true;
@@ -71,14 +72,15 @@
             this.tableLayoutPanel1.ColumnCount = 1;
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel1.Controls.Add(this.gridConversion, 0, 0);
+            this.tableLayoutPanel1.Controls.Add(this.conversionTechPropertiesBase1, 0, 1);
             this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel1.Location = new System.Drawing.Point(8, 7);
             this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 40F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 60F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(3201, 1607);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1446, 895);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // gridConversion
@@ -98,10 +100,12 @@
             this.gridConversion.Name = "gridConversion";
             this.gridConversion.RowHeadersVisible = false;
             this.gridConversion.RowHeadersWidth = 102;
-            this.gridConversion.Size = new System.Drawing.Size(3185, 628);
+            this.gridConversion.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.gridConversion.Size = new System.Drawing.Size(1430, 628);
             this.gridConversion.TabIndex = 0;
             this.gridConversion.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.gridConversion_DataBindingComplete);
             this.gridConversion.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.gridConversion_DataError);
+            this.gridConversion.SelectionChanged += new System.EventHandler(this.gridConversion_SelectionChanged);
             // 
             // Source
             // 
@@ -132,16 +136,25 @@
             this.tabEmission.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.tabEmission.Name = "tabEmission";
             this.tabEmission.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.tabEmission.Size = new System.Drawing.Size(3217, 1621);
+            this.tabEmission.Size = new System.Drawing.Size(1462, 909);
             this.tabEmission.TabIndex = 1;
             this.tabEmission.Text = "Emission";
             this.tabEmission.UseVisualStyleBackColor = true;
+            // 
+            // conversionTechPropertiesBase1
+            // 
+            this.conversionTechPropertiesBase1.Conversion = null;
+            this.conversionTechPropertiesBase1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.conversionTechPropertiesBase1.Location = new System.Drawing.Point(3, 645);
+            this.conversionTechPropertiesBase1.Name = "conversionTechPropertiesBase1";
+            this.conversionTechPropertiesBase1.Size = new System.Drawing.Size(1440, 247);
+            this.conversionTechPropertiesBase1.TabIndex = 1;
             // 
             // EnergySystemsInputForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(3237, 1679);
+            this.ClientSize = new System.Drawing.Size(1482, 967);
             this.Controls.Add(this.tabControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
@@ -166,5 +179,6 @@
         private System.Windows.Forms.DataGridViewTextBoxColumn Source;
         private System.Windows.Forms.DataGridViewComboBoxColumn Conversion;
         private System.Windows.Forms.DataGridViewTextBoxColumn EndUse;
+        private Controls.ConversionTechPropertiesBase conversionTechPropertiesBase1;
     }
 }
