@@ -76,7 +76,7 @@ namespace Hive.IO.Forms.Controls
             textBox.Text = Conversion.GetType().GetProperty(property).GetValue(Conversion) as string;
             textBox.Enabled = Conversion.IsEditable;
 
-            if (Conversion.IsEditable)
+            if (Conversion.IsEditable && Conversion.GetType().GetProperty(property + "FontWeight") != null)
             {
                 var fontWeight =
                     (FontWeight) Conversion.GetType().GetProperty(property + "FontWeight").GetValue(Conversion);
@@ -91,6 +91,11 @@ namespace Hive.IO.Forms.Controls
                     solidBrush.Color.G,
                     solidBrush.Color.B);
                 textBox.ForeColor = foreColor;
+            }
+            else
+            {
+                // this value is never editable, that's why it doesn't have a "FontWeight"
+                textBox.Enabled = false;
             }
         }
 

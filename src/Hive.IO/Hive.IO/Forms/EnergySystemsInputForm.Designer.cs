@@ -30,16 +30,16 @@
         {
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabConversion = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
+            this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
             this.gridConversion = new System.Windows.Forms.DataGridView();
             this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Conversion = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.EndUse = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabEmission = new System.Windows.Forms.TabPage();
-            this.conversionTechPropertiesBase1 = new Hive.IO.Forms.Controls.ConversionTechPropertiesBase();
+            this.ConversionProperties = new Hive.IO.Forms.Controls.ConversionTechPropertiesBase();
             this.tabControl.SuspendLayout();
             this.tabConversion.SuspendLayout();
-            this.tableLayoutPanel1.SuspendLayout();
+            this.tableLayoutPanelMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridConversion)).BeginInit();
             this.SuspendLayout();
             // 
@@ -57,7 +57,7 @@
             // 
             // tabConversion
             // 
-            this.tabConversion.Controls.Add(this.tableLayoutPanel1);
+            this.tabConversion.Controls.Add(this.tableLayoutPanelMain);
             this.tabConversion.Location = new System.Drawing.Point(10, 48);
             this.tabConversion.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.tabConversion.Name = "tabConversion";
@@ -67,21 +67,21 @@
             this.tabConversion.Text = "Conversion";
             this.tabConversion.UseVisualStyleBackColor = true;
             // 
-            // tableLayoutPanel1
+            // tableLayoutPanelMain
             // 
-            this.tableLayoutPanel1.ColumnCount = 1;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.Controls.Add(this.gridConversion, 0, 0);
-            this.tableLayoutPanel1.Controls.Add(this.conversionTechPropertiesBase1, 0, 1);
-            this.tableLayoutPanel1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel1.Location = new System.Drawing.Point(8, 7);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.RowCount = 2;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1446, 895);
-            this.tableLayoutPanel1.TabIndex = 0;
+            this.tableLayoutPanelMain.ColumnCount = 1;
+            this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutPanelMain.Controls.Add(this.gridConversion, 0, 0);
+            this.tableLayoutPanelMain.Controls.Add(this.ConversionProperties, 0, 1);
+            this.tableLayoutPanelMain.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutPanelMain.Location = new System.Drawing.Point(8, 7);
+            this.tableLayoutPanelMain.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.tableLayoutPanelMain.Name = "tableLayoutPanelMain";
+            this.tableLayoutPanelMain.RowCount = 2;
+            this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutPanelMain.Size = new System.Drawing.Size(1446, 895);
+            this.tableLayoutPanelMain.TabIndex = 0;
             // 
             // gridConversion
             // 
@@ -141,14 +141,14 @@
             this.tabEmission.Text = "Emission";
             this.tabEmission.UseVisualStyleBackColor = true;
             // 
-            // conversionTechPropertiesBase1
+            // ConversionProperties
             // 
-            this.conversionTechPropertiesBase1.Conversion = null;
-            this.conversionTechPropertiesBase1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.conversionTechPropertiesBase1.Location = new System.Drawing.Point(3, 645);
-            this.conversionTechPropertiesBase1.Name = "conversionTechPropertiesBase1";
-            this.conversionTechPropertiesBase1.Size = new System.Drawing.Size(1440, 247);
-            this.conversionTechPropertiesBase1.TabIndex = 1;
+            this.ConversionProperties.Conversion = null;
+            this.ConversionProperties.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ConversionProperties.Location = new System.Drawing.Point(3, 645);
+            this.ConversionProperties.Name = "ConversionProperties";
+            this.ConversionProperties.Size = new System.Drawing.Size(1440, 247);
+            this.ConversionProperties.TabIndex = 1;
             // 
             // EnergySystemsInputForm
             // 
@@ -163,7 +163,7 @@
             this.Load += new System.EventHandler(this.EnergySystemsInputForm_Load);
             this.tabControl.ResumeLayout(false);
             this.tabConversion.ResumeLayout(false);
-            this.tableLayoutPanel1.ResumeLayout(false);
+            this.tableLayoutPanelMain.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridConversion)).EndInit();
             this.ResumeLayout(false);
 
@@ -174,11 +174,11 @@
         private System.Windows.Forms.TabControl tabControl;
         private System.Windows.Forms.TabPage tabConversion;
         private System.Windows.Forms.TabPage tabEmission;
-        private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutPanelMain;
         private System.Windows.Forms.DataGridView gridConversion;
         private System.Windows.Forms.DataGridViewTextBoxColumn Source;
         private System.Windows.Forms.DataGridViewComboBoxColumn Conversion;
         private System.Windows.Forms.DataGridViewTextBoxColumn EndUse;
-        private Controls.ConversionTechPropertiesBase conversionTechPropertiesBase1;
+        private Controls.ConversionTechPropertiesBase ConversionProperties;
     }
 }

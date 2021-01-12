@@ -108,8 +108,15 @@ namespace Hive.IO.Forms
                 return;
             }
 
-            var conversionTech = (ConversionTechPropertiesViewModel) gridConversion.CurrentRow.DataBoundItem;
+            tableLayoutPanelMain.Controls.Remove(ConversionProperties);
 
+            ConversionProperties = new Controls.ChillerProperties
+            {
+                Dock = System.Windows.Forms.DockStyle.Fill,
+                Conversion = (ConversionTechPropertiesViewModel) gridConversion.CurrentRow.DataBoundItem
+            };
+            tableLayoutPanelMain.Controls.Add(ConversionProperties, 0, 1);
+            Update();
         }
     }
 }
