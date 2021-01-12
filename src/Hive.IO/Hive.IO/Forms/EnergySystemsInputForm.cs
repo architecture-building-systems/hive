@@ -13,7 +13,7 @@ namespace Hive.IO.Forms
         }
 
         private bool _rendering = false;
-        private bool _updatingGrid = false;
+        private bool _updatingGrid;
 
         public EnergySystemsInputViewModel State { get; private set; } = new EnergySystemsInputViewModel();
 
@@ -82,6 +82,9 @@ namespace Hive.IO.Forms
                 nameCell.Items.AddRange(conversionTech?.ValidNames.ToArray<object>() ?? ConversionTechPropertiesViewModel.AllNames.ToArray<object>());
 
                 nameCell.ReadOnly = conversionTech?.IsParametricDefined ?? false;
+                nameCell.DisplayStyle = conversionTech == null || conversionTech.IsEditable
+                    ? DataGridViewComboBoxDisplayStyle.DropDownButton
+                    : DataGridViewComboBoxDisplayStyle.Nothing;
             }
         }
 
