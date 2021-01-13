@@ -113,11 +113,23 @@
     <Compile Include="Forms\Controls\ConversionTechPropertiesBase.Designer.cs">
       <DependentUpon>ConversionTechPropertiesBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Controls\GasBoilerProperties.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Controls\GasBoilerProperties.Designer.cs">
+      <DependentUpon>GasBoilerProperties.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Controls\HeatExchangerProperties.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Forms\Controls\HeatExchangerProperties.Designer.cs">
       <DependentUpon>HeatExchangerProperties.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Controls\SurfaceTechnologyProperties.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Controls\SurfaceTechnologyProperties.Designer.cs">
+      <DependentUpon>SurfaceTechnologyProperties.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\EmitterPropertiesView.xaml.cs">
       <DependentUpon>EmitterPropertiesView.xaml</DependentUpon>
@@ -230,6 +242,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Controls\ConversionTechPropertiesBase.resx">
       <DependentUpon>ConversionTechPropertiesBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Controls\GasBoilerProperties.resx">
+      <DependentUpon>GasBoilerProperties.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Controls\HeatExchangerProperties.resx">
       <DependentUpon>HeatExchangerProperties.cs</DependentUpon>

@@ -126,17 +126,21 @@ namespace Hive.IO.Forms
             Update();
         }
 
+        /// <summary>
+        /// This dictionary is used to select which control to display the conversion tech's properties
+        /// in based on the value of ConversionTechPropertiesViewModel.Name.
+        /// </summary>
         private static readonly Dictionary<string, Func<ConversionTechPropertiesBase>> ConversionPropertiesFactory 
             = new Dictionary<string, Func<ConversionTechPropertiesBase>>
         {
-            {"Photovoltaic (PV)", () => new Controls.ChillerProperties()},
-            {"Solar Thermal (ST)", () => new Controls.ChillerProperties()},
-            {"Boiler (Gas)", () => new Controls.ChillerProperties()},
+            {"Photovoltaic (PV)", () => new Controls.SurfaceTechnologyProperties()},
+            {"Solar Thermal (ST)", () => new Controls.SurfaceTechnologyProperties()}, // same as PV...
+            {"Boiler (Gas)", () => new Controls.GasBoilerProperties()},
             {"CHP", () => new Controls.ChpProperties()},
             {"Chiller (Electricity)", () => new Controls.ChillerProperties()},
-            {"ASHP (Electricity)", () => new Controls.ChillerProperties()},
+            {"ASHP (Electricity)", () => new Controls.ChillerProperties()},  // same as Chiller...
             {"Heat Exchanger", () => new Controls.HeatExchangerProperties()},
-            {"Cooling Exchanger", () => new Controls.ChillerProperties() }
+            {"Cooling Exchanger", () => new Controls.HeatExchangerProperties() } // same as Heat Exchanger...
         };
     }
 }
