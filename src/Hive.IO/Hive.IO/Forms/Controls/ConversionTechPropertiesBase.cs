@@ -106,7 +106,7 @@ namespace Hive.IO.Forms.Controls
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void TextBox_TextChanged(object sender, CancelEventArgs e)
+        public void TextBox_Validating(object sender, CancelEventArgs e)
         {
             if (_rendering) return;
 

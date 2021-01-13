@@ -101,11 +101,23 @@
     <Compile Include="Forms\Controls\ChillerProperties.Designer.cs">
       <DependentUpon>ChillerProperties.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Controls\ChpProperties.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Controls\ChpProperties.Designer.cs">
+      <DependentUpon>ChpProperties.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Controls\ConversionTechPropertiesBase.cs">
       <SubType>UserControl</SubType>
     </Compile>
     <Compile Include="Forms\Controls\ConversionTechPropertiesBase.Designer.cs">
       <DependentUpon>ConversionTechPropertiesBase.cs</DependentUpon>
+    </Compile>
+    <Compile Include="Forms\Controls\HeatExchangerProperties.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Controls\HeatExchangerProperties.Designer.cs">
+      <DependentUpon>HeatExchangerProperties.cs</DependentUpon>
     </Compile>
     <Compile Include="Forms\EmitterPropertiesView.xaml.cs">
       <DependentUpon>EmitterPropertiesView.xaml</DependentUpon>
@@ -213,8 +225,14 @@
     <EmbeddedResource Include="Forms\Controls\ChillerProperties.resx">
       <DependentUpon>ChillerProperties.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Controls\ChpProperties.resx">
+      <DependentUpon>ChpProperties.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\Controls\ConversionTechPropertiesBase.resx">
       <DependentUpon>ConversionTechPropertiesBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Controls\HeatExchangerProperties.resx">
+      <DependentUpon>HeatExchangerProperties.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\EnergySystemsInputForm.resx">
       <DependentUpon>EnergySystemsInputForm.cs</DependentUpon>

@@ -34,6 +34,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.BackColor = System.Drawing.SystemColors.Window;
             this.Name = "ConversionTechPropertiesBase";
             this.Size = new System.Drawing.Size(734, 388);
             this.ResumeLayout(false);

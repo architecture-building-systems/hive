@@ -1,7 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
+using Hive.IO.Forms.Controls;
 
 namespace Hive.IO.Forms
 {
@@ -101,6 +103,11 @@ namespace Hive.IO.Forms
             UpdateEditableForRows();
         }
 
+        /// <summary>
+        /// Switch out the control used to display the conversion tech properties.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
         private void gridConversion_SelectionChanged(object sender, EventArgs e)
         {
             if (gridConversion.CurrentRow.DataBoundItem == null)
@@ -110,13 +117,26 @@ namespace Hive.IO.Forms
 
             tableLayoutPanelMain.Controls.Remove(ConversionProperties);
 
-            ConversionProperties = new Controls.ChillerProperties
-            {
-                Dock = System.Windows.Forms.DockStyle.Fill,
-                Conversion = (ConversionTechPropertiesViewModel) gridConversion.CurrentRow.DataBoundItem
-            };
+            var conversionTech = (ConversionTechPropertiesViewModel) gridConversion.CurrentRow.DataBoundItem;
+            ConversionProperties = ConversionPropertiesFactory[conversionTech.Name]();
+            ConversionProperties.Dock = DockStyle.Fill;
+            ConversionProperties.Conversion = conversionTech;
+            
             tableLayoutPanelMain.Controls.Add(ConversionProperties, 0, 1);
             Update();
         }
+
+        private static readonly Dictionary<string, Func<ConversionTechPropertiesBase>> ConversionPropertiesFactory 
+            = new Dictionary<string, Func<ConversionTechPropertiesBase>>
+        {
+            {"Photovoltaic (PV)", () => new Controls.ChillerProperties()},
+            {"Solar Thermal (ST)", () => new Controls.ChillerProperties()},
+            {"Boiler (Gas)", () => new Controls.ChillerProperties()},
+            {"CHP", () => new Controls.ChpProperties()},
+            {"Chiller (Electricity)", () => new Controls.ChillerProperties()},
+            {"ASHP (Electricity)", () => new Controls.ChillerProperties()},
+            {"Heat Exchanger", () => new Controls.HeatExchangerProperties()},
+            {"Cooling Exchanger", () => new Controls.ChillerProperties() }
+        };
     }
 }

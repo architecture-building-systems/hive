@@ -1,10 +1,18 @@
-﻿using OxyPlot.Series;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Drawing;
+using System.Data;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using System.Windows.Forms;
 
 namespace Hive.IO.Forms.Controls
 {
-    public partial class ChillerProperties : ConversionTechPropertiesBase
+    public partial class ChpProperties : ConversionTechPropertiesBase
     {
-        public ChillerProperties()
+        public ChpProperties()
         {
             InitializeComponent();
         }

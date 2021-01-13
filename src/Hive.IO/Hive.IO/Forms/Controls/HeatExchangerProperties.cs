@@ -1,10 +1,8 @@
-﻿using OxyPlot.Series;
-
-namespace Hive.IO.Forms.Controls
+﻿namespace Hive.IO.Forms.Controls
 {
-    public partial class ChillerProperties : ConversionTechPropertiesBase
+    public partial class HeatExchangerProperties : ConversionTechPropertiesBase
     {
-        public ChillerProperties()
+        public HeatExchangerProperties()
         {
             InitializeComponent();
         }
