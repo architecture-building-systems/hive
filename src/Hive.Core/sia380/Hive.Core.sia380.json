@@ -14,7 +14,7 @@
       "category": "[hive]",
       "subcategory": "Demand",
       "id": "01457f8e-80d7-4186-856d-ddaf1d896218",
-      "icon": "sia380.png",
+      "icon": "demand_energydemand.png",
       "main-module": "sia380",
       "main-function": "main",
       "inputs": [
@@ -53,7 +53,7 @@
       "category": "[hive]",
       "subcategory": "Demand",
       "id": "83d5d815-a306-4555-81f8-887132d0711f",
-      "icon": "adaptive_comfort.png",
+      "icon": "demand_adaptivecomfort.png",
       "main-module": "adaptive_comfort",
       "main-function": "adaptive_comfort",
       "inputs": [
@@ -75,7 +75,7 @@
       "category": "[hive]",
       "subcategory": "Demand",
       "id": "99dd97f1-b633-44e9-866c-6b6dc3bb8ae0",
-      "icon": "sia2024_room_reader.png",
+      "icon": "demand_SIAroomreader.png",
       "main-module": "sia2024_room_reader",
       "main-function": "read_room",
       "inputs": [
@@ -114,7 +114,7 @@
       "category": "[hive]",
       "subcategory": "Demand",
       "id": "51596454-227f-404e-8f07-76eef9beaa09",
-      "icon": "sia2024_room_creator.png",
+      "icon": "demand_SIAroomcreater.png",
       "main-module": "sia2024_room_creator",
       "main-function": "main",
       "inputs": [
@@ -158,7 +158,7 @@
       "id": "8903e11e-abba-4318-a9b2-6728e2999652",
       "parameter-type": "ValueList",
       "csv": "..\\..\\Hive.IO\\Hive.IO\\Resources\\201008_SIA2024_Raumdaten_Standardwert.csv",
-      "icon": "ListBuildingtype_standard.png"
+      "icon": "demand_ListBuildingtype_standard.png"
     },
     {
       "class-name": "Sia2024RoomList_Existing",
@@ -170,7 +170,7 @@
       "id": "fb83131c-5b8d-4432-8bba-5991bd4b3309",
       "parameter-type": "ValueList",
       "csv": "..\\..\\Hive.IO\\Hive.IO\\Resources\\201008_SIA2024_Raumdaten_Bestand.csv",
-      "icon": "ListBuildingtype_ex.png"
+      "icon": "demand_ListBuildingtype_ex.png"
     },
     {
       "class-name": "Sia2024RoomList_Ideal",
@@ -182,7 +182,7 @@
       "id": "772400f7-ee9a-4e53-b33d-bf0d676f4249",
       "parameter-type": "ValueList",
       "csv": "..\\..\\Hive.IO\\Hive.IO\\Resources\\201008_SIA2024_Raumdaten_Zielwert.csv",
-      "icon": "ListBuildingtype_ideal.png"
+      "icon": "demand_ListBuildingtype_ideal.png"
     }
   ]
 }

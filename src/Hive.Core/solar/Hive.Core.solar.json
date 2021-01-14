@@ -14,7 +14,7 @@
       "category": "[hive]",
       "subcategory": "Solar",
       "id": "880708bb-5f9d-4dbc-8fb9-db44e90f0290",
-      "icon": "simple_panel.png",
+      "icon": "solar_potentialsunobs.png",
       "main-module": "simple_panel",
       "inputs": [
         {"name": "tilt", "nick-name": "tilt", "type": "float", "description": "Panel tilt in degree"},
