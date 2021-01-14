@@ -249,6 +249,9 @@
     <EmbeddedResource Include="Forms\Controls\HeatExchangerProperties.resx">
       <DependentUpon>HeatExchangerProperties.cs</DependentUpon>
     </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Controls\SurfaceTechnologyProperties.resx">
+      <DependentUpon>SurfaceTechnologyProperties.cs</DependentUpon>
+    </EmbeddedResource>
     <EmbeddedResource Include="Forms\EnergySystemsInputForm.resx">
       <DependentUpon>EnergySystemsInputForm.cs</DependentUpon>
     </EmbeddedResource>

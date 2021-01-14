@@ -24,7 +24,7 @@ namespace Hive.IO.Forms.Controls
             InitializeComponent();
         }
 
-        public ConversionTechPropertiesViewModel Conversion
+        public virtual ConversionTechPropertiesViewModel Conversion
         {
             get => _conversion;
             set
@@ -72,6 +72,11 @@ namespace Hive.IO.Forms.Controls
         /// <param name="textBox"></param>
         private void UpdateTextBox(TextBox textBox)
         {
+            if (textBox.Tag == null)
+            {
+                return;
+            }
+
             var property = textBox.Tag.ToString();
             textBox.Text = Conversion.GetType().GetProperty(property).GetValue(Conversion) as string;
             textBox.Enabled = Conversion.IsEditable;
