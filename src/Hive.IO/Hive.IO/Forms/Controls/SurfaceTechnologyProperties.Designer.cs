@@ -229,6 +229,7 @@
             this.cboModuleType.Name = "cboModuleType";
             this.cboModuleType.Size = new System.Drawing.Size(235, 39);
             this.cboModuleType.TabIndex = 10;
+            this.cboModuleType.SelectedIndexChanged += new System.EventHandler(this.cboModuleType_SelectedIndexChanged);
             // 
             // tableLayoutPanel3
             // 

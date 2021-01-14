@@ -70,7 +70,7 @@ namespace Hive.IO.Forms.Controls
         ///     so we need to convert the FontWeight and SolidColorBrush to the Windows.Forms world.
         /// </summary>
         /// <param name="textBox"></param>
-        private void UpdateTextBox(TextBox textBox)
+        protected void UpdateTextBox(TextBox textBox)
         {
             if (textBox.Tag == null)
             {
