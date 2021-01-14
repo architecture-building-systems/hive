@@ -105,7 +105,7 @@
       "category": "[hive]",
       "subcategory": "Solar",
       "id": "49efa3bc-c59f-4b77-9adb-761e45f67aea",
-      "icon": "solar_AvergePVyield.png",
+      "icon": "solar_AverageTimeSeries.png",
       "main-module": "simple_pv",
       "main-function": "simple_pv",
       "inputs": [

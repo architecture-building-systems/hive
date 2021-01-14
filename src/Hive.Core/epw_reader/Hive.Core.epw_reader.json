@@ -14,7 +14,7 @@
       "category": "[hive]",
       "subcategory": "Misc",
       "id": "56f34cc1-0ee0-4104-85cc-4b4f9179d75e",
-      "icon": "demandEPW.png",
+      "icon": "epw_reader.png",
       "main-module": "epw_reader",
       "main-function": "main",
       "inputs": [

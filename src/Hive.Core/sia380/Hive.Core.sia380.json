@@ -14,7 +14,7 @@
       "category": "[hive]",
       "subcategory": "Demand",
       "id": "01457f8e-80d7-4186-856d-ddaf1d896218",
-      "icon": "demandenergydemand.png",
+      "icon": "demand_energydemand.png",
       "main-module": "sia380",
       "main-function": "main",
       "inputs": [

@@ -215,16 +215,6 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap IOCore_Distenergyemitter {
-            get {
-                object obj = ResourceManager.GetObject("IOCore_Distenergyemitter", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap IOCore_Distenergysystems {
             get {
                 object obj = ResourceManager.GetObject("IOCore_Distenergysystems", resourceCulture);
@@ -238,16 +228,6 @@ namespace Hive.IO.Properties {
         internal static System.Drawing.Bitmap IOCore_Distenv {
             get {
                 object obj = ResourceManager.GetObject("IOCore_Distenv", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
-        internal static System.Drawing.Bitmap IOCore_Distributorergyemitter {
-            get {
-                object obj = ResourceManager.GetObject("IOCore_Distributorergyemitter", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
