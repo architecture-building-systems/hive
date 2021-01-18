@@ -379,6 +379,7 @@
             // lstAvailableSurfaces
             // 
             this.tableLayoutPanel4.SetColumnSpan(this.lstAvailableSurfaces, 2);
+            this.lstAvailableSurfaces.DisplayMember = "Name";
             this.lstAvailableSurfaces.Dock = System.Windows.Forms.DockStyle.Fill;
             this.lstAvailableSurfaces.FormattingEnabled = true;
             this.lstAvailableSurfaces.ItemHeight = 31;
@@ -388,6 +389,7 @@
             this.lstAvailableSurfaces.Size = new System.Drawing.Size(657, 444);
             this.lstAvailableSurfaces.TabIndex = 0;
             this.lstAvailableSurfaces.Tag = "AvailableSurfaces";
+            this.lstAvailableSurfaces.ValueMember = "Name";
             // 
             // label13
             // 

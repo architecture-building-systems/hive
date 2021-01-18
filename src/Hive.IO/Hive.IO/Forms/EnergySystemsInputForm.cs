@@ -27,7 +27,6 @@ namespace Hive.IO.Forms
 
         private void EnergySystemsInputForm_Load(object sender, System.EventArgs e)
         {
-            gridConversion.DataSource = new BindingList<ConversionTechPropertiesViewModel>(State.ConversionTechnologies);
             gridConversion.AutoGenerateColumns = false;
             gridConversion.Columns.Clear();
             gridConversion.Columns.Add(new DataGridViewTextBoxColumn()
@@ -56,7 +55,7 @@ namespace Hive.IO.Forms
                 DataPropertyName = "EndUse",
                 ReadOnly = true
             });
-
+            gridConversion.DataSource = new BindingList<ConversionTechPropertiesViewModel>(State.ConversionTechnologies);
             UpdateEditableForRows();
         }
 
@@ -118,6 +117,11 @@ namespace Hive.IO.Forms
             tableLayoutPanelMain.Controls.Remove(ConversionProperties);
 
             var conversionTech = (ConversionTechPropertiesViewModel) gridConversion.CurrentRow.DataBoundItem;
+
+            // figure out which surfaces can be used for this conversion (used by surface-based conversions...)
+            conversionTech.AvailableSurfaces = State.SurfacesForConversion(conversionTech);
+
+            // select the correct user control to display the conversion's properties
             ConversionProperties = ConversionPropertiesFactory[conversionTech.Name]();
             ConversionProperties.Dock = DockStyle.Fill;
             ConversionProperties.Conversion = conversionTech;

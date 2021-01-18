@@ -18,7 +18,7 @@ namespace TestVisualizer
             var currentDomain = AppDomain.CurrentDomain;
             currentDomain.AssemblyResolve += LoadRhinoLibraries;
 
-            // ShowBuildingInputDialog();
+            //ShowBuildingInputDialog();
             ShowEnergySystemsDialog();
         }
 
