@@ -75,7 +75,7 @@ namespace Hive.IO.GhInputOutput
                 _buildingInputState.SiaRoom = JsonConvert.DeserializeObject<Sia2024RecordEx>(json, JsonSerializerSettings);
                 
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // let's not worry too much about not being able to read the state...
                 Message = "Failed to read state from Document";

@@ -13,7 +13,7 @@
         /// </summary>
         /// <param name="sender"></param>
         /// <param name="e"></param>
-        private void Validating(object sender, System.ComponentModel.CancelEventArgs e)
+        private new void Validating(object sender, System.ComponentModel.CancelEventArgs e)
         {
             TextBox_Validating(sender, e);
         }

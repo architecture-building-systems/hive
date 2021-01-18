@@ -390,6 +390,7 @@
             this.lstAvailableSurfaces.TabIndex = 0;
             this.lstAvailableSurfaces.Tag = "AvailableSurfaces";
             this.lstAvailableSurfaces.ValueMember = "Name";
+            this.lstAvailableSurfaces.SelectedIndexChanged += new System.EventHandler(this.lstAvailableSurfaces_SelectedIndexChanged);
             // 
             // label13
             // 

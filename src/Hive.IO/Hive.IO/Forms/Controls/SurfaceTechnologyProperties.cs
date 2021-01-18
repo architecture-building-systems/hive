@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
@@ -23,6 +24,7 @@ namespace Hive.IO.Forms.Controls
                 lblDescription.Text = Conversion.ModuleType.Description;
                 UpdateAvailableSurfaces();
                 UpdateModuleTypesList();
+                UpdateArea();
             }
         }
 
@@ -84,6 +86,22 @@ namespace Hive.IO.Forms.Controls
             lblDescription.Text = Conversion.ModuleType.Description;
 
             foreach (var textBox in GetAll(this, typeof(TextBox)).Cast<TextBox>()) UpdateTextBox(textBox);
+        }
+
+        private void lstAvailableSurfaces_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_initializingControls)
+            {
+                return;
+            }
+
+            Conversion.SelectedSurfaces = new List<SurfaceViewModel>(lstAvailableSurfaces.SelectedItems.Cast<SurfaceViewModel>());
+            UpdateArea();
+        }
+
+        private void UpdateArea()
+        {
+            txtArea.Text = $"{Conversion.Area:0.00}";
         }
     }
 }
