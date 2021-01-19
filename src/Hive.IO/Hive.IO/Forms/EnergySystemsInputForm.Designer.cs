@@ -35,8 +35,8 @@
             this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Conversion = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.EndUse = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.ConversionProperties = new Hive.IO.Forms.Controls.ConversionTechPropertiesBase();
             this.tabEmission = new System.Windows.Forms.TabPage();
+            this.ConversionProperties = new Hive.IO.Forms.Controls.ConversionTechPropertiesBase();
             this.tabControl.SuspendLayout();
             this.tabConversion.SuspendLayout();
             this.tableLayoutPanelMain.SuspendLayout();
@@ -103,6 +103,8 @@
             this.gridConversion.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.gridConversion.Size = new System.Drawing.Size(2029, 283);
             this.gridConversion.TabIndex = 0;
+            this.gridConversion.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridConversion_CellValueChanged);
+            this.gridConversion.CurrentCellDirtyStateChanged += new System.EventHandler(this.gridConversion_CurrentCellDirtyStateChanged);
             this.gridConversion.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.gridConversion_DataBindingComplete);
             this.gridConversion.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.gridConversion_DataError);
             this.gridConversion.SelectionChanged += new System.EventHandler(this.gridConversion_SelectionChanged);
@@ -130,16 +132,6 @@
             this.EndUse.ReadOnly = true;
             this.EndUse.Width = 250;
             // 
-            // ConversionProperties
-            // 
-            this.ConversionProperties.BackColor = System.Drawing.SystemColors.Window;
-            this.ConversionProperties.Conversion = null;
-            this.ConversionProperties.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ConversionProperties.Location = new System.Drawing.Point(3, 300);
-            this.ConversionProperties.Name = "ConversionProperties";
-            this.ConversionProperties.Size = new System.Drawing.Size(2039, 688);
-            this.ConversionProperties.TabIndex = 1;
-            // 
             // tabEmission
             // 
             this.tabEmission.Location = new System.Drawing.Point(10, 48);
@@ -150,6 +142,16 @@
             this.tabEmission.TabIndex = 1;
             this.tabEmission.Text = "Emission";
             this.tabEmission.UseVisualStyleBackColor = true;
+            // 
+            // ConversionProperties
+            // 
+            this.ConversionProperties.BackColor = System.Drawing.SystemColors.Window;
+            this.ConversionProperties.Conversion = null;
+            this.ConversionProperties.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.ConversionProperties.Location = new System.Drawing.Point(3, 300);
+            this.ConversionProperties.Name = "ConversionProperties";
+            this.ConversionProperties.Size = new System.Drawing.Size(2039, 688);
+            this.ConversionProperties.TabIndex = 1;
             // 
             // EnergySystemsInputForm
             // 

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using System.Windows.Forms;
+using Hive.IO.Building;
 using Hive.IO.Forms.Controls;
 
 namespace Hive.IO.Forms
@@ -146,5 +147,39 @@ namespace Hive.IO.Forms
             {"Heat Exchanger", () => new Controls.HeatExchangerProperties()},
             {"Cooling Exchanger", () => new Controls.HeatExchangerProperties() } // same as Heat Exchanger...
         };
+
+
+        /// <summary>
+        /// See here for how to catch changes to the combobox edit in the grid: https://stackoverflow.com/a/21321724/2260
+        ///
+        /// This raises gridConversion_CellValueChanged, which in turn ends the edit and also calls
+        /// gridConversion_SelectionChanged to update the properties control.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private void gridConversion_CurrentCellDirtyStateChanged(object sender, EventArgs e)
+        {
+            if (gridConversion.IsCurrentCellDirty)
+            {
+                gridConversion.CommitEdit(DataGridViewDataErrorContexts.Commit);
+            }
+        }
+
+        private void gridConversion_CellValueChanged(object sender, DataGridViewCellEventArgs e)
+        {
+            if (e.RowIndex < 0)
+            {
+                return;
+            }
+
+            if (e.ColumnIndex != 1)
+            {
+                return;
+            }
+
+            gridConversion.EndEdit();
+            gridConversion.InvalidateRow(e.RowIndex);
+            gridConversion_SelectionChanged(sender, e);
+        }
     }
 }
