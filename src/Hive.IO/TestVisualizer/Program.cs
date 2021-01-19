@@ -32,6 +32,14 @@ namespace TestVisualizer
             boiler.SetProperties(new GasBoiler(20.0, 20.0, 20.0, 20.0));
             state.ConversionTechnologies.Add(boiler);
 
+            var radiator = new EmitterPropertiesViewModel()
+            {
+                Name = "Radiator",
+            };
+            radiator.SetProperties(new Radiator(12, 13, true, false, 45, 50));
+            state.Emitters.Add(radiator);
+
+
             var form = new EnergySystemsInputForm();
             form.ShowDialog(state);
         }

@@ -120,10 +120,7 @@ namespace Hive.IO.Forms
         public string Capacity
         {
             get => $"{_capacity:0.00}";
-            set
-            {
-                _capacity= ParseDouble(value, _capacity);
-            }
+            set => _capacity= ParseDouble(value, _capacity);
         }
 
         public string SpecificCapitalCost

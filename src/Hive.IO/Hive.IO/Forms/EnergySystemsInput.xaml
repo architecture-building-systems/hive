@@ -100,12 +100,13 @@
                     <RowDefinition Height="3*" />
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="84*" />
+                    <ColumnDefinition Width="14*" />
+                    <ColumnDefinition Width="70*"/>
                     <ColumnDefinition Width="161*"/>
                     <ColumnDefinition Width="489*" />
                     <ColumnDefinition Width="245*" />
                 </Grid.ColumnDefinitions>
-                <ScrollViewer Grid.Row="0" Grid.ColumnSpan="4">
+                <ScrollViewer Grid.Row="0" Grid.ColumnSpan="5" Margin="0,0,-0.2,0.2">
                     <DataGrid Name="EmitterGrid" ItemsSource="{Binding EmitterPropertiesView, Mode=OneWay}"
                               CanUserDeleteRows="True"
                               AutoGenerateColumns="False" CanUserAddRows="True" SelectionMode="Single"
@@ -142,9 +143,8 @@
                         </DataGrid.Columns>
                     </DataGrid>
                 </ScrollViewer>
-                <ContentPresenter Name="EmitterPropertiesView" Content="{Binding Path=EmitterPropertiesView.CurrentItem}"
-                                  Grid.Row="1" Grid.ColumnSpan="4"
-                                  Grid.Column="0" ContentTemplate="{StaticResource EmitterPropertiesView}" />
+                <ContentPresenter Name="EmitterPropertiesView" Content="{Binding Path=EmitterPropertiesView.CurrentItem}" Grid.ColumnSpan="5"
+                                  Grid.Column="0" ContentTemplate="{StaticResource EmitterPropertiesView}" Margin="0,267,-0.2,0.4" Grid.RowSpan="2" />
             </Grid>
 
         </TabItem>

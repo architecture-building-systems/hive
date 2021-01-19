@@ -113,6 +113,12 @@
     <Compile Include="Forms\Controls\ConversionTechPropertiesBase.Designer.cs">
       <DependentUpon>ConversionTechPropertiesBase.cs</DependentUpon>
     </Compile>
+    <Compile Include="Forms\Controls\EmitterProperties.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Include="Forms\Controls\EmitterProperties.Designer.cs">
+      <DependentUpon>EmitterProperties.cs</DependentUpon>
+    </Compile>
     <Compile Include="Forms\Controls\GasBoilerProperties.cs">
       <SubType>UserControl</SubType>
     </Compile>
@@ -242,6 +248,9 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Controls\ConversionTechPropertiesBase.resx">
       <DependentUpon>ConversionTechPropertiesBase.cs</DependentUpon>
+    </EmbeddedResource>
+    <EmbeddedResource Include="Forms\Controls\EmitterProperties.resx">
+      <DependentUpon>EmitterProperties.cs</DependentUpon>
     </EmbeddedResource>
     <EmbeddedResource Include="Forms\Controls\GasBoilerProperties.resx">
       <DependentUpon>GasBoilerProperties.cs</DependentUpon>

@@ -35,12 +35,21 @@
             this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Conversion = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.EndUse = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.tabEmission = new System.Windows.Forms.TabPage();
             this.ConversionProperties = new Hive.IO.Forms.Controls.ConversionTechPropertiesBase();
+            this.tabEmission = new System.Windows.Forms.TabPage();
+            this.tableLayoutEmission = new System.Windows.Forms.TableLayoutPanel();
+            this.gridEmission = new System.Windows.Forms.DataGridView();
+            this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.emitterProperties = new Hive.IO.Forms.Controls.EmitterProperties();
             this.tabControl.SuspendLayout();
             this.tabConversion.SuspendLayout();
             this.tableLayoutPanelMain.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.gridConversion)).BeginInit();
+            this.tabEmission.SuspendLayout();
+            this.tableLayoutEmission.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.gridEmission)).BeginInit();
             this.SuspendLayout();
             // 
             // tabControl
@@ -106,7 +115,7 @@
             this.gridConversion.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridConversion_CellValueChanged);
             this.gridConversion.CurrentCellDirtyStateChanged += new System.EventHandler(this.gridConversion_CurrentCellDirtyStateChanged);
             this.gridConversion.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.gridConversion_DataBindingComplete);
-            this.gridConversion.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.gridConversion_DataError);
+            this.gridConversion.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridView_DataError);
             this.gridConversion.SelectionChanged += new System.EventHandler(this.gridConversion_SelectionChanged);
             // 
             // Source
@@ -132,17 +141,6 @@
             this.EndUse.ReadOnly = true;
             this.EndUse.Width = 250;
             // 
-            // tabEmission
-            // 
-            this.tabEmission.Location = new System.Drawing.Point(10, 48);
-            this.tabEmission.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.tabEmission.Name = "tabEmission";
-            this.tabEmission.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.tabEmission.Size = new System.Drawing.Size(2061, 1005);
-            this.tabEmission.TabIndex = 1;
-            this.tabEmission.Text = "Emission";
-            this.tabEmission.UseVisualStyleBackColor = true;
-            // 
             // ConversionProperties
             // 
             this.ConversionProperties.BackColor = System.Drawing.SystemColors.Window;
@@ -152,6 +150,93 @@
             this.ConversionProperties.Name = "ConversionProperties";
             this.ConversionProperties.Size = new System.Drawing.Size(2039, 688);
             this.ConversionProperties.TabIndex = 1;
+            // 
+            // tabEmission
+            // 
+            this.tabEmission.Controls.Add(this.tableLayoutEmission);
+            this.tabEmission.Location = new System.Drawing.Point(10, 48);
+            this.tabEmission.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.tabEmission.Name = "tabEmission";
+            this.tabEmission.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.tabEmission.Size = new System.Drawing.Size(2061, 1005);
+            this.tabEmission.TabIndex = 1;
+            this.tabEmission.Text = "Emission";
+            this.tabEmission.UseVisualStyleBackColor = true;
+            // 
+            // tableLayoutEmission
+            // 
+            this.tableLayoutEmission.ColumnCount = 1;
+            this.tableLayoutEmission.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutEmission.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutEmission.Controls.Add(this.gridEmission, 0, 0);
+            this.tableLayoutEmission.Controls.Add(this.emitterProperties, 0, 1);
+            this.tableLayoutEmission.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tableLayoutEmission.Location = new System.Drawing.Point(8, 7);
+            this.tableLayoutEmission.Name = "tableLayoutEmission";
+            this.tableLayoutEmission.RowCount = 2;
+            this.tableLayoutEmission.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
+            this.tableLayoutEmission.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
+            this.tableLayoutEmission.Size = new System.Drawing.Size(2045, 991);
+            this.tableLayoutEmission.TabIndex = 0;
+            // 
+            // gridEmission
+            // 
+            this.gridEmission.AllowUserToResizeColumns = false;
+            this.gridEmission.AllowUserToResizeRows = false;
+            this.gridEmission.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
+            this.gridEmission.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
+            this.dataGridViewTextBoxColumn1,
+            this.dataGridViewComboBoxColumn1,
+            this.dataGridViewTextBoxColumn2});
+            this.gridEmission.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.gridEmission.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
+            this.gridEmission.Location = new System.Drawing.Point(8, 7);
+            this.gridEmission.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.gridEmission.MultiSelect = false;
+            this.gridEmission.Name = "gridEmission";
+            this.gridEmission.RowHeadersVisible = false;
+            this.gridEmission.RowHeadersWidth = 102;
+            this.gridEmission.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
+            this.gridEmission.Size = new System.Drawing.Size(2029, 283);
+            this.gridEmission.TabIndex = 1;
+            this.gridEmission.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridEmission_CellValueChanged);
+            this.gridEmission.CurrentCellDirtyStateChanged += new System.EventHandler(this.gridEmission_CurrentCellDirtyStateChanged);
+            this.gridEmission.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.gridEmission_DataBindingComplete);
+            this.gridEmission.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridView_DataError);
+            this.gridEmission.SelectionChanged += new System.EventHandler(this.gridEmission_SelectionChanged);
+            // 
+            // dataGridViewTextBoxColumn1
+            // 
+            this.dataGridViewTextBoxColumn1.HeaderText = "Source";
+            this.dataGridViewTextBoxColumn1.MinimumWidth = 12;
+            this.dataGridViewTextBoxColumn1.Name = "dataGridViewTextBoxColumn1";
+            this.dataGridViewTextBoxColumn1.ReadOnly = true;
+            this.dataGridViewTextBoxColumn1.Width = 250;
+            // 
+            // dataGridViewComboBoxColumn1
+            // 
+            this.dataGridViewComboBoxColumn1.HeaderText = "Conversion";
+            this.dataGridViewComboBoxColumn1.MinimumWidth = 12;
+            this.dataGridViewComboBoxColumn1.Name = "dataGridViewComboBoxColumn1";
+            this.dataGridViewComboBoxColumn1.Width = 250;
+            // 
+            // dataGridViewTextBoxColumn2
+            // 
+            this.dataGridViewTextBoxColumn2.HeaderText = "EndUse";
+            this.dataGridViewTextBoxColumn2.MinimumWidth = 12;
+            this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
+            this.dataGridViewTextBoxColumn2.ReadOnly = true;
+            this.dataGridViewTextBoxColumn2.Width = 250;
+            // 
+            // emitterProperties
+            // 
+            this.emitterProperties.BackColor = System.Drawing.SystemColors.Window;
+            this.emitterProperties.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.emitterProperties.Emitter = null;
+            this.emitterProperties.Location = new System.Drawing.Point(3, 300);
+            this.emitterProperties.Name = "emitterProperties";
+            this.emitterProperties.Size = new System.Drawing.Size(2039, 688);
+            this.emitterProperties.TabIndex = 2;
             // 
             // EnergySystemsInputForm
             // 
@@ -168,6 +253,9 @@
             this.tabConversion.ResumeLayout(false);
             this.tableLayoutPanelMain.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.gridConversion)).EndInit();
+            this.tabEmission.ResumeLayout(false);
+            this.tableLayoutEmission.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.gridEmission)).EndInit();
             this.ResumeLayout(false);
 
         }
@@ -183,5 +271,11 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn Conversion;
         private System.Windows.Forms.DataGridViewTextBoxColumn EndUse;
         private Controls.ConversionTechPropertiesBase ConversionProperties;
+        private System.Windows.Forms.TableLayoutPanel tableLayoutEmission;
+        private System.Windows.Forms.DataGridView gridEmission;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
+        private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn1;
+        private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
+        private Controls.EmitterProperties emitterProperties;
     }
 }
