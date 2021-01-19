@@ -136,9 +136,11 @@
             // 
             this.txtEfficiency.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtEfficiency.Enabled = false;
             this.txtEfficiency.Location = new System.Drawing.Point(398, 55);
             this.txtEfficiency.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
             this.txtEfficiency.Name = "txtEfficiency";
+            this.txtEfficiency.ReadOnly = true;
             this.txtEfficiency.Size = new System.Drawing.Size(67, 38);
             this.txtEfficiency.TabIndex = 2;
             this.txtEfficiency.Tag = "Efficiency";
@@ -191,9 +193,11 @@
             // 
             this.txtSpecificEmbodiedEmissions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSpecificEmbodiedEmissions.Enabled = false;
             this.txtSpecificEmbodiedEmissions.Location = new System.Drawing.Point(398, 113);
             this.txtSpecificEmbodiedEmissions.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
             this.txtSpecificEmbodiedEmissions.Name = "txtSpecificEmbodiedEmissions";
+            this.txtSpecificEmbodiedEmissions.ReadOnly = true;
             this.txtSpecificEmbodiedEmissions.Size = new System.Drawing.Size(67, 38);
             this.txtSpecificEmbodiedEmissions.TabIndex = 7;
             this.txtSpecificEmbodiedEmissions.Tag = "SpecificEmbodiedEmissions";
@@ -205,6 +209,7 @@
             this.txtEmbodiedEmissions.Location = new System.Drawing.Point(398, 171);
             this.txtEmbodiedEmissions.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
             this.txtEmbodiedEmissions.Name = "txtEmbodiedEmissions";
+            this.txtEmbodiedEmissions.ReadOnly = true;
             this.txtEmbodiedEmissions.Size = new System.Drawing.Size(67, 38);
             this.txtEmbodiedEmissions.TabIndex = 8;
             this.txtEmbodiedEmissions.Tag = "EmbodiedEmissions";
@@ -286,6 +291,7 @@
             this.txtCapacity.Location = new System.Drawing.Point(300, 10);
             this.txtCapacity.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
             this.txtCapacity.Name = "txtCapacity";
+            this.txtCapacity.ReadOnly = true;
             this.txtCapacity.Size = new System.Drawing.Size(190, 38);
             this.txtCapacity.TabIndex = 2;
             this.txtCapacity.Tag = "SurfaceTechCapacity";
@@ -338,9 +344,11 @@
             // 
             this.txtSpecificCapitalCost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSpecificCapitalCost.Enabled = false;
             this.txtSpecificCapitalCost.Location = new System.Drawing.Point(300, 68);
             this.txtSpecificCapitalCost.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
             this.txtSpecificCapitalCost.Name = "txtSpecificCapitalCost";
+            this.txtSpecificCapitalCost.ReadOnly = true;
             this.txtSpecificCapitalCost.Size = new System.Drawing.Size(190, 38);
             this.txtSpecificCapitalCost.TabIndex = 7;
             this.txtSpecificCapitalCost.Tag = "SpecificCapitalCost";
@@ -352,6 +360,7 @@
             this.txtCapitalCost.Location = new System.Drawing.Point(300, 126);
             this.txtCapitalCost.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
             this.txtCapitalCost.Name = "txtCapitalCost";
+            this.txtCapitalCost.ReadOnly = true;
             this.txtCapitalCost.Size = new System.Drawing.Size(190, 38);
             this.txtCapitalCost.TabIndex = 8;
             this.txtCapitalCost.Tag = "CapitalCost";

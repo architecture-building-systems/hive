@@ -77,8 +77,9 @@ namespace Hive.IO.Forms.Controls
                 return;
             }
 
+            UpdateTextBoxText(textBox);
+
             var property = textBox.Tag.ToString();
-            textBox.Text = Conversion.GetType().GetProperty(property).GetValue(Conversion) as string;
             textBox.Enabled = Conversion.IsEditable;
 
             if (Conversion.IsEditable && Conversion.GetType().GetProperty(property + "FontWeight") != null)
@@ -102,6 +103,16 @@ namespace Hive.IO.Forms.Controls
                 // this value is never editable, that's why it doesn't have a "FontWeight"
                 textBox.Enabled = false;
             }
+        }
+
+        protected void UpdateTextBoxText(TextBox textBox)
+        {
+            if (textBox.Tag is null)
+            {
+                return;
+            }
+            var property = textBox.Tag.ToString();
+            textBox.Text = Conversion.GetType().GetProperty(property).GetValue(Conversion) as string;
         }
 
 
