@@ -379,9 +379,9 @@
             this.tableLayoutPanel4.Margin = new System.Windows.Forms.Padding(3, 3, 30, 3);
             this.tableLayoutPanel4.Name = "tableLayoutPanel4";
             this.tableLayoutPanel4.RowCount = 3;
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
             this.tableLayoutPanel4.Size = new System.Drawing.Size(636, 945);
             this.tableLayoutPanel4.TabIndex = 5;
             // 
@@ -395,7 +395,7 @@
             this.lstAvailableSurfaces.Location = new System.Drawing.Point(3, 3);
             this.lstAvailableSurfaces.Name = "lstAvailableSurfaces";
             this.lstAvailableSurfaces.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
-            this.lstAvailableSurfaces.Size = new System.Drawing.Size(657, 444);
+            this.lstAvailableSurfaces.Size = new System.Drawing.Size(657, 264);
             this.lstAvailableSurfaces.TabIndex = 0;
             this.lstAvailableSurfaces.Tag = "AvailableSurfaces";
             this.lstAvailableSurfaces.ValueMember = "Name";
@@ -404,7 +404,7 @@
             // label13
             // 
             this.label13.AutoSize = true;
-            this.label13.Location = new System.Drawing.Point(3, 450);
+            this.label13.Location = new System.Drawing.Point(3, 270);
             this.label13.Name = "label13";
             this.label13.Size = new System.Drawing.Size(75, 32);
             this.label13.TabIndex = 1;
@@ -414,7 +414,7 @@
             // 
             this.txtArea.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtArea.Location = new System.Drawing.Point(84, 453);
+            this.txtArea.Location = new System.Drawing.Point(84, 273);
             this.txtArea.Name = "txtArea";
             this.txtArea.Size = new System.Drawing.Size(576, 38);
             this.txtArea.TabIndex = 2;
@@ -425,10 +425,10 @@
             this.lblDescription.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.tableLayoutPanel4.SetColumnSpan(this.lblDescription, 2);
             this.lblDescription.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.lblDescription.Location = new System.Drawing.Point(3, 504);
+            this.lblDescription.Location = new System.Drawing.Point(3, 324);
             this.lblDescription.Margin = new System.Windows.Forms.Padding(3, 10, 3, 10);
             this.lblDescription.Name = "lblDescription";
-            this.lblDescription.Size = new System.Drawing.Size(657, 431);
+            this.lblDescription.Size = new System.Drawing.Size(657, 611);
             this.lblDescription.TabIndex = 3;
             this.lblDescription.Text = "lblDescription";
             // 

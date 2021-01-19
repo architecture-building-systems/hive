@@ -61,7 +61,7 @@
             this.tabControl.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(2081, 1063);
+            this.tabControl.Size = new System.Drawing.Size(2243, 1031);
             this.tabControl.TabIndex = 0;
             // 
             // tabConversion
@@ -158,7 +158,7 @@
             this.tabEmission.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
             this.tabEmission.Name = "tabEmission";
             this.tabEmission.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.tabEmission.Size = new System.Drawing.Size(2061, 1005);
+            this.tabEmission.Size = new System.Drawing.Size(2223, 973);
             this.tabEmission.TabIndex = 1;
             this.tabEmission.Text = "Emission";
             this.tabEmission.UseVisualStyleBackColor = true;
@@ -176,7 +176,7 @@
             this.tableLayoutEmission.RowCount = 2;
             this.tableLayoutEmission.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tableLayoutEmission.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
-            this.tableLayoutEmission.Size = new System.Drawing.Size(2045, 991);
+            this.tableLayoutEmission.Size = new System.Drawing.Size(2207, 959);
             this.tableLayoutEmission.TabIndex = 0;
             // 
             // gridEmission
@@ -197,7 +197,7 @@
             this.gridEmission.RowHeadersVisible = false;
             this.gridEmission.RowHeadersWidth = 102;
             this.gridEmission.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.gridEmission.Size = new System.Drawing.Size(2029, 283);
+            this.gridEmission.Size = new System.Drawing.Size(2191, 273);
             this.gridEmission.TabIndex = 1;
             this.gridEmission.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridEmission_CellValueChanged);
             this.gridEmission.CurrentCellDirtyStateChanged += new System.EventHandler(this.gridEmission_CurrentCellDirtyStateChanged);
@@ -233,16 +233,16 @@
             this.emitterProperties.BackColor = System.Drawing.SystemColors.Window;
             this.emitterProperties.Dock = System.Windows.Forms.DockStyle.Fill;
             this.emitterProperties.Emitter = null;
-            this.emitterProperties.Location = new System.Drawing.Point(3, 300);
+            this.emitterProperties.Location = new System.Drawing.Point(3, 290);
             this.emitterProperties.Name = "emitterProperties";
-            this.emitterProperties.Size = new System.Drawing.Size(2039, 688);
+            this.emitterProperties.Size = new System.Drawing.Size(2201, 666);
             this.emitterProperties.TabIndex = 2;
             // 
             // EnergySystemsInputForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2081, 1063);
+            this.ClientSize = new System.Drawing.Size(2243, 1031);
             this.Controls.Add(this.tabControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
