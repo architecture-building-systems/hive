@@ -33,7 +33,7 @@
       "category": "[hive]",
       "subcategory": "Solar",
       "id": "b1ddb905-855d-4997-b22b-e33aa58e7ab8",
-      "icon": "simple_solar_thermal.png",
+      "icon": "solar_solarthermal.png",
       "main-module": "simple_solar_thermal",
       "main-function": "simple_solar_thermal",
       "inputs": [
