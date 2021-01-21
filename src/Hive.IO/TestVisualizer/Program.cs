@@ -2,6 +2,7 @@
 using System.IO;
 using System.Reflection;
 using Hive.IO.Building;
+using Hive.IO.EnergySystems;
 using Hive.IO.Forms;
 
 namespace TestVisualizer
@@ -17,20 +18,37 @@ namespace TestVisualizer
             var currentDomain = AppDomain.CurrentDomain;
             currentDomain.AssemblyResolve += LoadRhinoLibraries;
 
-            // ShowBuildingInputDialog();
+            //ShowBuildingInputDialog();
             ShowEnergySystemsDialog();
         }
 
         private static void ShowEnergySystemsDialog()
         {
-            var form = new EnergySystemsInput();
-            form.ShowDialog();
+            var state = new EnergySystemsInputViewModel();
+            var boiler = new ConversionTechPropertiesViewModel()
+            {
+                Name = "Boiler (Gas)",
+            };
+            boiler.SetProperties(new GasBoiler(20.0, 20.0, 20.0, 20.0));
+            state.ConversionTechnologies.Add(boiler);
+
+            var radiator = new EmitterPropertiesViewModel()
+            {
+                Name = "Radiator",
+            };
+            radiator.SetProperties(new Radiator(12, 13, true, false, 45, 50));
+            state.Emitters.Add(radiator);
+
+
+            var form = new EnergySystemsInputForm();
+            form.ShowDialog(state);
         }
 
         private static void ShowBuildingInputDialog()
         {
             var state = new BuildingInputState(Sia2024Record.First(), null, true);
-            new BuildingInput(state).ShowDialog();
+            var form = new BuildingInputForm();
+            form.ShowDialog(state);
         }
 
 

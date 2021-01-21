@@ -38,7 +38,7 @@ namespace Hive.IO.Forms
             {
                 if (AllNames.Contains(value))
                 {
-                    Set(ref _name, value);
+                    _name = value;
                     AssignDefaults();
                 }
                 else
@@ -63,8 +63,6 @@ namespace Hive.IO.Forms
             _isRadiation = defaults.IsRadiation;
             _isHeating = defaults.IsHeating;
             _isCooling = defaults.IsCooling;
-
-            RaisePropertyChangedEvent(null);
         }
 
         public void SetProperties(Emitter emitter)
@@ -110,34 +108,25 @@ namespace Hive.IO.Forms
         public string SupplyTemperature
         {
             get => $"{_supplyTemperature:0.00}";
-            set => SetWithColors(ref _supplyTemperature, ParseDouble(value, _supplyTemperature));
+            set => _supplyTemperature = ParseDouble(value, _supplyTemperature);
         }
 
         public string ReturnTemperature
         {
             get => $"{_returnTemperature:0.00}";
-            set => SetWithColors(ref _returnTemperature, ParseDouble(value, _returnTemperature));
+            set => _returnTemperature = ParseDouble(value, _returnTemperature);
         }
 
         public string Capacity
         {
             get => $"{_capacity:0.00}";
-            set
-            {
-                SetWithColors(ref _capacity, ParseDouble(value, _capacity)); 
-                RaisePropertyChangedEvent("EmbodiedEmissions");
-                RaisePropertyChangedEvent("CapitalCost");
-            }
+            set => _capacity= ParseDouble(value, _capacity);
         }
 
         public string SpecificCapitalCost
         {
             get => $"{_specificCapitalCost:0.00}";
-            set
-            {
-                SetWithColors(ref _specificCapitalCost, ParseDouble(value, _specificCapitalCost)); 
-                RaisePropertyChangedEvent("CapitalCost");
-            }
+            set => _specificCapitalCost = ParseDouble(value, _specificCapitalCost);
         }
 
 
@@ -146,8 +135,7 @@ namespace Hive.IO.Forms
             get => $"{_specificEmbodiedEmissions:0.00}";
             set
             {
-                SetWithColors(ref _specificEmbodiedEmissions, ParseDouble(value, _specificEmbodiedEmissions)); 
-                RaisePropertyChangedEvent("EmbodiedEmissions");
+                _specificEmbodiedEmissions= ParseDouble(value, _specificEmbodiedEmissions); 
             }
         }
 
@@ -157,25 +145,25 @@ namespace Hive.IO.Forms
         public bool IsAir
         {
             get => _isAir;
-            set => SetWithColors(ref _isAir, value);
+            set => _isAir= value;
         }
 
         public bool IsRadiation
         {
             get => _isRadiation;
-            set => SetWithColors(ref _isRadiation, value);
+            set => _isRadiation= value;
         }
 
         public bool IsCooling
         {
             get => _isCooling;
-            set => SetWithColors(ref _isCooling, value);
+            set => _isCooling= value;
         }
 
         public bool IsHeating
         {
             get => _isHeating;
-            set => SetWithColors(ref _isHeating, value);
+            set => _isHeating= value;
         }
 
         #region FontWeights and Colors
