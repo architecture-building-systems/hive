@@ -21,6 +21,7 @@ def cleanDictForNaN(d):
     # a = d.values()
     # b = d.keys()
     for i in d:
+        if isinstance(d[i],str): continue
         if math.isnan(d[i]) or d[i] == "NaN":
             d[i] = 0.0
 
@@ -28,19 +29,25 @@ def cleanDictForNaN(d):
 
 
 def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_areas, surface_type,
-         srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, run_obstructed_simulation):
+         srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, run_obstructed_simulation, hourly):
     '''
     Computes monthly heating, cooling and electricity demand for a thermal zone, based on SIA 380.1
     :param room_properties: room properties in json format
     :param floor_area: Floor area of the room in m2
-    :param T_e: monthly average ambient air temperature in degree Celsius
-    :param T_i: Temperature setpoints
+    :param T_e: monthly average or hourly ambient air temperature in degree Celsius
     :param setpoints_ub: Upper bound for temperature setpoints
     :param setpoints_lb: Lower bound for temperature setpoints
     :param surface_areas: building surface areas that are used for fabric gains/losses computation
     :param surface_type: indicator if this surface is transparent or not. if yes, it will be assigned the transparent construction from room properties. 'opaque' for opaque or 'transp' for transparent
-    :param surface_irradiance: monthly solar irradiation in W/m2 per building surface. Jagged array [months_per_year][num_srfs]. Must be in correct order with the next 2 parameters 'surface_areas' and 'surface_is_transparent'
-    :return: Monthly cooling, heating and electricity loads for a thermal zone
+    :param srf_irrad_obstr_tree: monthly or hourly solar irradiation in W/m2 per building surface. Jagged array [months_per_year][num_srfs] or [hours_per_year][num_srfs]. Must be in correct order with the next 2 parameters 'surface_areas' and 'surface_is_transparent'
+    TODO :param srf_irrad_unobstr_tree: monthly or hourly solar irradiation in W/m2 per building surface. Jagged array [months_per_year][num_srfs] or [hours_per_year][num_srfs]. Must be in correct order with the next 2 parameters 'surface_areas' and 'surface_is_transparent'
+    :param g_value: G value of windows.
+    :param g_value_total: G value total including sunscreen ('Sonnenschutz') of windows
+    :param setpoint_shading: Shading setpoint for activating sunscreen of windows, in W/m^2
+    :param run_obstructed_simulation: Boolean to indicate if an obstructed solar simulation is conducted. True if yes.
+    :param hourly: Boolean to indicate if hourly values should be returned instead of monthly. True if yes.
+   
+    :return: Monthly or hourly cooling, heating and electricity loads for a thermal zone
     '''
 
     """
@@ -162,11 +169,28 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
 
     rho = 1.2       # Luftdichte in kg/m^3
     c_p = 1005      # Spez. Wärmekapazität Luft in J/(kgK)
-    hours_per_day = 24
     months_per_year = 12
+    hours_per_year = 8760  # no leap year    
+    hours_per_day = 24
     days_per_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-    t = [(hours_per_day * days) for days in days_per_month]   # length of calculation period (hours per month) [h]
+    hours_per_month = [(hours_per_day * days) for days in days_per_month]   # length of calculation period (hours per month) [h]
+    
+    # Assert inputs monthly or hourly based on toggle
+    input_size = hours_per_year if hourly else months_per_year
+    assert len(T_e) == input_size, "Length of 'T_e' (Ambient temperature) was %d but should be %d." % (len(T_e), input_size)
+    # TODO get average temp here instead of in epw reader?
+    
+    # Adjust setpoints to hourly as assumed given monthly for now.
+    # TODO assume hourly setpoints
+    if hourly:
+        for i in range(days_per_month):
+            setpoints_ub[i] = [setpoints_ub[i]] * hours_per_month[i]
+            setpoints_lb[i] = [setpoints_ub[i]] * hours_per_month[i]
 
+    # TODO probs bad practice
+    assert len(setpoints_ub), "Length of 'setpoints_ub' (Setpoints upper bound) was %d but should be %d." % (len(T_e), input_size)
+    assert len(setpoints_lb), "Length of 'setpoints_lb' (Setpoints lower bound) was %d but should be %d." % (len(T_e), input_size)
+    
     # read room properties from sia2024
     room_properties = cleanDictForNaN(room_properties)
 
@@ -183,15 +207,24 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
     Phi_P = room_properties["Waermeeintragsleistung Personen (bei 24.0 deg C, bzw. 70 W)"]
     Phi_L = room_properties["Waermeeintragsleistung der Raumbeleuchtung"]
     Phi_A = room_properties["Waermeeintragsleistung der Geraete"]
-    t_P = [room_properties["Vollaststunden pro Jahr (Personen)"]] * 12
-    t_L = [room_properties["Jaehrliche Vollaststunden der Raumbeleuchtung"]] * 12
-    t_A = [room_properties["Jaehrliche Vollaststunden der Geraete"]] * 12
 
-    # transforming daily sia2024 data to monthly
-    for i in range(len(days_per_month)):
-        t_P[i] *= days_per_month[i] / 365.0
-        t_L[i] *= days_per_month[i] / 365.0
-        t_A[i] *= days_per_month[i] / 365.0
+
+    if hourly:
+        #TODO average out the vollaststunden.... but better to determine based on SIA 2024 schedules from type
+        t_P = [room_properties["Vollaststunden pro Jahr (Personen)"] / float(hours_per_year)] * hours_per_year
+        t_L = [room_properties["Jaehrliche Vollaststunden der Raumbeleuchtung"] / float(hours_per_year)] * hours_per_year
+        t_A = [room_properties["Jaehrliche Vollaststunden der Geraete"] / float(hours_per_year)] * hours_per_year
+    else:
+        t_P = [room_properties["Vollaststunden pro Jahr (Personen)"]] * 12
+        t_L = [room_properties["Jaehrliche Vollaststunden der Raumbeleuchtung"]] * 12
+        t_A = [room_properties["Jaehrliche Vollaststunden der Geraete"]] * 12
+        # transforming daily sia2024 data to monthly
+        for i in range(len(days_per_month)):
+            t_P[i] *= days_per_month[i] / 365.0
+            t_L[i] *= days_per_month[i] / 365.0
+            t_A[i] *= days_per_month[i] / 365.0
+
+    timesteps = hours_per_year if hourly else months_per_year  
 
     # formatting the grasshopper tree that contains solar irradiation time series for each window
     # could be changed later to also include solar irradiation on opaque surfaces...
@@ -199,9 +232,10 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
     win_areas = [x for (x, y) in zip(surface_areas, surface_type) if y != "opaque"]
     Q_s_jagged = None
     if (srf_irrad_obstr_tree.Branch(0).Count == 0 and srf_irrad_unobstr_tree.BranchCount == 0):
-        Q_s_per_surface = [[0.0] for x in range(months_per_year)]
+        Q_s_per_surface = [[0.0]] * timesteps
     else:
-        Q_s_jagged = tree_to_jagged_monthly(run_obstructed_simulation, srf_irrad_obstr_tree, srf_irrad_unobstr_tree,
+        func = tree_to_jagged_hourly if hourly else tree_to_jagged_monthly
+        Q_s_jagged = func(run_obstructed_simulation, srf_irrad_obstr_tree, srf_irrad_unobstr_tree,
                                             g_value, g_value_total, setpoint_shading, win_areas)
         Q_s_per_surface = transpose_jagged_2D_array(Q_s_jagged)
 
@@ -209,21 +243,21 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
     #    surface_type = ["opaque", "opaque", "transp", "transp"]
     #    surface_areas = [44.0, 62.3, 4.0, 5.2]
     num_surfaces = len(surface_type)
-
+    
     # calculations from Illias Excel sheet:
     # preAllocate arrays. its a bit faster than .append (https://levelup.gitconnected.com/faster-lists-in-python-4c4287502f0a)
-    Q_i = [0.0] * months_per_year
-    Q_s = [0.0] * months_per_year
-    Q_i_out = [0.0] * months_per_year
-    Q_s_out = [0.0] * months_per_year
-    Q_V_out = [0.0] * months_per_year
-    Q_T_out = [0.0] * months_per_year
-    QT_opaque_out = [0.0] * months_per_year
-    QT_transparent_out = [0.0] * months_per_year
+    Q_i = [0.0] * timesteps
+    Q_s = [0.0] * timesteps
+    Q_i_out = [0.0] * timesteps
+    Q_s_out = [0.0] * timesteps
+    Q_V_out = [0.0] * timesteps
+    Q_T_out = [0.0] * timesteps
+    QT_opaque_out = [0.0] * timesteps
+    QT_transparent_out = [0.0] * timesteps
 
-    Q_Heat = [0.0] * months_per_year
-    Q_Cool = [0.0] * months_per_year
-    Q_Elec = [0.0] * months_per_year
+    Q_Heat = [0.0] * timesteps
+    Q_Cool = [0.0] * timesteps
+    Q_Elec = [0.0] * timesteps
 
     Phi_P_tot = Phi_P * floor_area
     Phi_L_tot = Phi_L * floor_area
@@ -233,7 +267,8 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
     # for some variables, we compute upper and lower bounds (subscripts ub & lb)
     # furthermore, cooling and heating demand requires us to compute certain variables differently.
     # See equation sheet 'EK1_Formelsammlung_HS20.pdf'
-    for month in range(months_per_year):
+    for t in range(hours_per_year if hourly else months_per_year):
+        multiplier = 1 if hourly else hours_per_month[t]
         # External air flowrate (thermisch wirksamer Aussenluftvolumenstrom)
         Vdot_e = Vdot_e_spec * floor_area
         Vdot_inf = Vdot_inf_spec * floor_area
@@ -247,17 +282,17 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         # Ventilation losses (Lüftungswärmeverluste), Q_V = H_V * (T_i - T_e) * t
         # we compute with and without heat recovery, ub and lb, and take the respectively best (lowest demand)
         # this assumes, the ventilation system operates ideally and does not, for example, keep warm air in summer
-        Q_V_ub_heating = H_V * (setpoints_ub[month] - T_e[month]) * t[month]
-        Q_V_lb_heating = H_V * (setpoints_lb[month] - T_e[month]) * t[month]
-        Q_V_ub_cooling = H_V * (setpoints_ub[month] - T_e[month]) * t[month]
-        Q_V_lb_cooling = H_V * (setpoints_lb[month] - T_e[month]) * t[month]
-        Q_V_ub_heating_no_heat_recovery = H_V_no_heat_recovery * (setpoints_ub[month] - T_e[month]) * t[month]
-        Q_V_lb_heating_no_heat_recovery = H_V_no_heat_recovery * (setpoints_lb[month] - T_e[month]) * t[month]
-        Q_V_ub_cooling_no_heat_recovery = H_V_no_heat_recovery * (setpoints_ub[month] - T_e[month]) * t[month]
-        Q_V_lb_cooling_no_heat_recovery = H_V_no_heat_recovery * (setpoints_lb[month] - T_e[month]) * t[month]
+        Q_V_ub_heating = H_V * (setpoints_ub[t] - T_e[t]) * multiplier
+        Q_V_lb_heating = H_V * (setpoints_lb[t] - T_e[t]) * multiplier
+        Q_V_ub_cooling = H_V * (setpoints_ub[t] - T_e[t]) * multiplier
+        Q_V_lb_cooling = H_V * (setpoints_lb[t] - T_e[t]) * multiplier
+        Q_V_ub_heating_no_heat_recovery = H_V_no_heat_recovery * (setpoints_ub[t] - T_e[t]) * multiplier
+        Q_V_lb_heating_no_heat_recovery = H_V_no_heat_recovery * (setpoints_lb[t] - T_e[t]) * multiplier
+        Q_V_ub_cooling_no_heat_recovery = H_V_no_heat_recovery * (setpoints_ub[t] - T_e[t]) * multiplier
+        Q_V_lb_cooling_no_heat_recovery = H_V_no_heat_recovery * (setpoints_lb[t] - T_e[t]) * multiplier
 
         # Internal loads (interne Wärmeeinträge)
-        Q_i[month] = Phi_P_tot * t_P[month] + Phi_L_tot * t_L[month] + Phi_A_tot * t_A[month]
+        Q_i[t] = Phi_P_tot * t_P[t] + Phi_L_tot * t_L[t] + Phi_A_tot * t_A[t]
         Q_T_per_surfaces_this_month_ub = [0.0] * num_surfaces
         Q_T_per_surfaces_this_month_lb = [0.0] * num_surfaces
         QT_op_per_srf_this_month_ub = []
@@ -270,34 +305,34 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
             # Transmission heat transfer coefficient (Transmissions-Wärmetransferkoeffizient), H_T, (PER SURFACE)
             if(surface_type[surface] == "opaque"):
                 H_T = surface_areas[surface] * U_op
-                QT_op_per_srf_this_month_ub.append(H_T * (setpoints_ub[month] - T_e[month]) * t[month])
-                QT_op_per_srf_this_month_lb.append(H_T * (setpoints_lb[month] - T_e[month]) * t[month])
+                QT_op_per_srf_this_month_ub.append(H_T * (setpoints_ub[t] - T_e[t]) * multiplier)
+                QT_op_per_srf_this_month_lb.append(H_T * (setpoints_lb[t] - T_e[t]) * multiplier)
             else:
                 H_T = surface_areas[surface] * U_w
-                QT_tr_per_srf_this_month_ub.append(H_T * (setpoints_ub[month] - T_e[month]) * t[month])
-                QT_tr_per_srf_this_month_lb.append(H_T * (setpoints_lb[month] - T_e[month]) * t[month])
+                QT_tr_per_srf_this_month_ub.append(H_T * (setpoints_ub[t] - T_e[t]) * multiplier)
+                QT_tr_per_srf_this_month_lb.append(H_T * (setpoints_lb[t] - T_e[t]) * multiplier)
 
             # Transmission losses (Transmissionswärmeverluste), Q_T, (PER SURFACE, because function of H_T)
-            Q_T_per_surfaces_this_month_ub[surface] = H_T * (setpoints_ub[month] - T_e[month]) * t[month]
-            Q_T_per_surfaces_this_month_lb[surface] = H_T * (setpoints_lb[month] - T_e[month]) * t[month]
+            Q_T_per_surfaces_this_month_ub[surface] = H_T * (setpoints_ub[t] - T_e[t]) * multiplier
+            Q_T_per_surfaces_this_month_lb[surface] = H_T * (setpoints_lb[t] - T_e[t]) * multiplier
 
         Q_T_ub = sum(Q_T_per_surfaces_this_month_ub)
         Q_T_lb = sum(Q_T_per_surfaces_this_month_lb)
 
         # solar gains (solare Wärmeeinträge), Q_s, (PER SURFACE)
         # unobstructed or obstructed, both using SolarModel.dll and GHSolar.gha
-        Q_s[month] = sum(Q_s_per_surface[month])    # currently, only transparent surfaces
+        Q_s[t] = sum(Q_s_per_surface[t])    # currently, only transparent surfaces
 
         # Heatgains/-losses ratio (Wärmeeintrag/-verlust Verhältnis), gamma
         # calculating for different cases, heating / cooling, upper / lower bounds, with / without heat recovery
-        gamma_ub_heating = calc_gamma(Q_i[month], Q_s[month], Q_T_ub, Q_V_ub_heating)
-        gamma_lb_heating = calc_gamma(Q_i[month], Q_s[month], Q_T_lb, Q_V_lb_heating)
-        gamma_ub_cooling = calc_gamma(Q_i[month], Q_s[month], Q_T_ub, Q_V_ub_cooling)
-        gamma_lb_cooling = calc_gamma(Q_i[month], Q_s[month], Q_T_lb, Q_V_lb_cooling)
-        gamma_ub_heating_no_hr = calc_gamma(Q_i[month], Q_s[month], Q_T_ub, Q_V_ub_heating_no_heat_recovery)
-        gamma_lb_heating_no_hr = calc_gamma(Q_i[month], Q_s[month], Q_T_lb, Q_V_lb_heating_no_heat_recovery)
-        gamma_ub_cooling_no_hr = calc_gamma(Q_i[month], Q_s[month], Q_T_ub, Q_V_ub_cooling_no_heat_recovery)
-        gamma_lb_cooling_no_hr = calc_gamma(Q_i[month], Q_s[month], Q_T_lb, Q_V_lb_cooling_no_heat_recovery)
+        gamma_ub_heating = calc_gamma(Q_i[t], Q_s[t], Q_T_ub, Q_V_ub_heating)
+        gamma_lb_heating = calc_gamma(Q_i[t], Q_s[t], Q_T_lb, Q_V_lb_heating)
+        gamma_ub_cooling = calc_gamma(Q_i[t], Q_s[t], Q_T_ub, Q_V_ub_cooling)
+        gamma_lb_cooling = calc_gamma(Q_i[t], Q_s[t], Q_T_lb, Q_V_lb_cooling)
+        gamma_ub_heating_no_hr = calc_gamma(Q_i[t], Q_s[t], Q_T_ub, Q_V_ub_heating_no_heat_recovery)
+        gamma_lb_heating_no_hr = calc_gamma(Q_i[t], Q_s[t], Q_T_lb, Q_V_lb_heating_no_heat_recovery)
+        gamma_ub_cooling_no_hr = calc_gamma(Q_i[t], Q_s[t], Q_T_ub, Q_V_ub_cooling_no_heat_recovery)
+        gamma_lb_cooling_no_hr = calc_gamma(Q_i[t], Q_s[t], Q_T_lb, Q_V_lb_cooling_no_heat_recovery)
 
         # usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
         eta_g_lb_heating = calc_eta_g(gamma_lb_heating, tau, False)
@@ -311,18 +346,18 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
 
         # heating demand (Heizwärmebedarf), Q_H
         # calculating different cases, lower/upper bounds (lb/ub), with/without heat recovery (hr)
-        Q_H_ub = Q_T_ub + Q_V_ub_heating - eta_g_ub_heating * (Q_i[month] + Q_s[month])
-        Q_H_lb = Q_T_lb + Q_V_lb_heating - eta_g_lb_heating * (Q_i[month] + Q_s[month])
-        Q_H_ub_no_hr = Q_T_ub + Q_V_ub_heating_no_heat_recovery - eta_g_ub_heating_no_hr * (Q_i[month] + Q_s[month])
-        Q_H_lb_no_hr = Q_T_lb + Q_V_lb_heating_no_heat_recovery - eta_g_lb_heating_no_hr * (Q_i[month] + Q_s[month])
+        Q_H_ub = Q_T_ub + Q_V_ub_heating - eta_g_ub_heating * (Q_i[t] + Q_s[t])
+        Q_H_lb = Q_T_lb + Q_V_lb_heating - eta_g_lb_heating * (Q_i[t] + Q_s[t])
+        Q_H_ub_no_hr = Q_T_ub + Q_V_ub_heating_no_heat_recovery - eta_g_ub_heating_no_hr * (Q_i[t] + Q_s[t])
+        Q_H_lb_no_hr = Q_T_lb + Q_V_lb_heating_no_heat_recovery - eta_g_lb_heating_no_hr * (Q_i[t] + Q_s[t])
         Q_H_ub, Q_H_lb, Q_H_ub_no_hr, Q_H_lb_no_hr = negatives_to_zero([Q_H_ub, Q_H_lb, Q_H_ub_no_hr, Q_H_lb_no_hr])
 
         # cooling demand (Kältebedarf), Q_K
         # calculating different cases, lower/upper bounds (lb/ub), with/without heat recovery (hr)
-        Q_K_lb = Q_i[month] + Q_s[month] - eta_g_lb_cooling * (Q_T_lb + Q_V_lb_cooling)
-        Q_K_ub = Q_i[month] + Q_s[month] - eta_g_ub_cooling * (Q_T_ub + Q_V_ub_cooling)
-        Q_K_lb_no_hr = Q_i[month] + Q_s[month] - eta_g_lb_cooling_no_hr * (Q_T_lb + Q_V_lb_cooling_no_heat_recovery)
-        Q_K_ub_no_hr = Q_i[month] + Q_s[month] - eta_g_ub_cooling_no_hr * (Q_T_ub + Q_V_ub_cooling_no_heat_recovery)
+        Q_K_lb = Q_i[t] + Q_s[t] - eta_g_lb_cooling * (Q_T_lb + Q_V_lb_cooling)
+        Q_K_ub = Q_i[t] + Q_s[t] - eta_g_ub_cooling * (Q_T_ub + Q_V_ub_cooling)
+        Q_K_lb_no_hr = Q_i[t] + Q_s[t] - eta_g_lb_cooling_no_hr * (Q_T_lb + Q_V_lb_cooling_no_heat_recovery)
+        Q_K_ub_no_hr = Q_i[t] + Q_s[t] - eta_g_ub_cooling_no_hr * (Q_T_ub + Q_V_ub_cooling_no_heat_recovery)
         Q_K_lb, Q_K_ub, Q_K_lb_no_hr, Q_K_ub_no_hr = negatives_to_zero([Q_K_lb, Q_K_ub, Q_K_lb_no_hr, Q_K_ub_no_hr])
 
         # take smaller value of both comfort set points and remember the index
@@ -341,14 +376,14 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         #     Q_Heat[month] = demand
         if abs(Q_K) > Q_H:
             demand = Q_K
-            Q_Cool[month] = Q_K
-            Q_Heat[month] = 0.0
+            Q_Cool[t] = Q_K
+            Q_Heat[t] = 0.0
         else:
             demand = Q_H
-            Q_Cool[month] = 0.0
-            Q_Heat[month] = Q_H
+            Q_Cool[t] = 0.0
+            Q_Heat[t] = Q_H
 
-        Q_Elec[month] = Phi_L_tot * t_L[month] + Phi_A_tot * t_A[month]   # lighting and utility loads. simplification, because utility and lighting have efficiencies (inefficiencies are heat loads). I would need to know that to get full electricity loads
+        Q_Elec[t] = Phi_L_tot * t_L[t] + Phi_A_tot * t_A[t]   # lighting and utility loads. simplification, because utility and lighting have efficiencies (inefficiencies are heat loads). I would need to know that to get full electricity loads
 
 
         # Q_i, Q_s are * with eta_rec in heating case
@@ -367,19 +402,19 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         eta_rec_cooling_list = [eta_g_lb_cooling, eta_g_ub_cooling, eta_g_lb_cooling_no_hr, eta_g_ub_cooling_no_hr]
 
         if demand < 0:  # cooling
-            Q_T_out[month] = Q_T_list[Q_K_index] * eta_rec_cooling_list[Q_K_index]
-            QT_opaque_out[month] = QT_opaque_list[Q_K_index] * eta_rec_cooling_list[Q_K_index]
-            QT_transparent_out[month] = QT_transparent_list[Q_K_index] * eta_rec_cooling_list[Q_K_index]
-            Q_V_out[month] = Q_V_cooling_list[Q_K_index] * eta_rec_cooling_list[Q_K_index]
-            Q_i_out[month] = Q_i[month]
-            Q_s_out[month] = Q_s[month]
+            Q_T_out[t] = Q_T_list[Q_K_index] * eta_rec_cooling_list[Q_K_index]
+            QT_opaque_out[t] = QT_opaque_list[Q_K_index] * eta_rec_cooling_list[Q_K_index]
+            QT_transparent_out[t] = QT_transparent_list[Q_K_index] * eta_rec_cooling_list[Q_K_index]
+            Q_V_out[t] = Q_V_cooling_list[Q_K_index] * eta_rec_cooling_list[Q_K_index]
+            Q_i_out[t] = Q_i[t]
+            Q_s_out[t] = Q_s[t]
         else:   # heating
-            Q_T_out[month] = Q_T_list[Q_H_index]
-            QT_opaque_out[month] = QT_opaque_list[Q_H_index]
-            QT_transparent_out[month] = QT_transparent_list[Q_H_index]
-            Q_V_out[month] = Q_V_heating_list[Q_H_index]
-            Q_i_out[month] = Q_i[month] * eta_rec_heating_list[Q_H_index]
-            Q_s_out[month] = Q_s[month] * eta_rec_heating_list[Q_H_index]
+            Q_T_out[t] = Q_T_list[Q_H_index]
+            QT_opaque_out[t] = QT_opaque_list[Q_H_index]
+            QT_transparent_out[t] = QT_transparent_list[Q_H_index]
+            Q_V_out[t] = Q_V_heating_list[Q_H_index]
+            Q_i_out[t] = Q_i[t] * eta_rec_heating_list[Q_H_index]
+            Q_s_out[t] = Q_s[t] * eta_rec_heating_list[Q_H_index]
 
 
     if Q_s_jagged != None:
@@ -503,6 +538,9 @@ def tree_to_jagged_monthly(run_obstr, tree_obstr, tree_unobstr, g_value, g_value
 
     return Q_array
 
+def tree_to_jagged_hourly():
+    raise NotImplementedError()
+
 def transpose_jagged_2D_array(array):
     transposed_array = []
     len_d1 = len(array)
@@ -566,8 +604,18 @@ if __name__ == "__main__":
             Q_s_per_surface[i] = [x * 1000 for x in Q_s_per_surface[i]]  # converting from kWh/m2 into Wh/m2
         Q_s_per_surface = list(map(list, zip(*Q_s_per_surface)))  # transposing
         jaggeddata = Jagged(Q_s_per_surface)
+        g_value = 0.5
+        g_value_total = 0.14
+        setpoint_shading = 200 # W/m2
 
-        [Q_Heat, Q_Cool, Q_Elec, Q_T, Q_V, Q_i, Q_s, _, _] = main(room_properties, floor_area, T_e, T_i, setpoints_ub, setpoints_lb, surface_areas, surface_type, jaggeddata)
+        [Q_Heat, Q_Cool, Q_Elec, Q_T, Q_V, Q_i, Q_s, _, _] = main(room_properties, floor_area,
+                                                                  T_e, 
+                                                                  setpoints_ub, setpoints_lb, 
+                                                                  surface_areas, surface_type, 
+                                                                  [], jaggeddata,
+                                                                  g_value, g_value_total,
+                                                                  setpoint_shading,
+                                                                  True, False)
         print(Q_Heat)
         print(Q_Cool)
         print(Q_Elec)

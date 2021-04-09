@@ -1,7 +1,6 @@
 # coding=utf-8
 
 from __future__ import division
-import math
 
 
 def adaptive_comfort(T_m):
