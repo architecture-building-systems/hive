@@ -15,7 +15,22 @@ electricity demand: currently simply by using sqm and internal loads for lightin
 from __future__ import division
 import math
 import sys
-import ghpythonlib.treehelpers as th
+
+# if(__debug__):
+#     import clr
+#     clr.AddReference(r"C:\Program Files\Rhino 6\Plug-ins\Grasshopper\Grasshopper.dll")
+#     clr.AddReference(r"C:\Program Files\Rhino 6\System\RhinoCommon.dll")
+#     import Grasshopper
+#     # from Grasshopper import DataTree
+# else:
+# import ghpythonlib.treehelpers as th
+
+# Constants
+MONTHS_PER_YEAR = 12
+HOURS_PER_YEAR = 8760  # no leap year    
+HOURS_PER_DAY = 24
+DAYS_PER_MONTH = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
+HOURS_PER_MONTH = [(HOURS_PER_DAY * days) for days in DAYS_PER_MONTH]   # length of calculation period (hours per month) [h]
 
 def cleanDictForNaN(d):
     # a = d.values()
@@ -39,10 +54,10 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
     :param setpoints_lb: Lower bound for temperature setpoints
     :param surface_areas: building surface areas that are used for fabric gains/losses computation
     :param surface_type: indicator if this surface is transparent or not. if yes, it will be assigned the transparent construction from room properties. 'opaque' for opaque or 'transp' for transparent
-    :param srf_irrad_obstr_tree: monthly or hourly solar irradiation in W/m2 per building surface. Jagged array [months_per_year][num_srfs] or [hours_per_year][num_srfs]. Must be in correct order with the next 2 parameters 'surface_areas' and 'surface_is_transparent'
-    TODO :param srf_irrad_unobstr_tree: monthly or hourly solar irradiation in W/m2 per building surface. Jagged array [months_per_year][num_srfs] or [hours_per_year][num_srfs]. Must be in correct order with the next 2 parameters 'surface_areas' and 'surface_is_transparent'
+    :param srf_irrad_obstr_tree: hourly solar irradiation in W/m2 per building surface. Jagged array [months_per_year][num_srfs] or [hours_per_year][num_srfs]. Must be in correct order with the next 2 parameters 'surface_areas' and 'surface_is_transparent'
+    TODO :param srf_irrad_unobstr_tree: hourly solar irradiation in W/m2 per building surface. Jagged array [months_per_year][num_srfs] or [hours_per_year][num_srfs]. Must be in correct order with the next 2 parameters 'surface_areas' and 'surface_is_transparent'
     :param g_value: G value of windows.
-    :param g_value_total: G value total including sunscreen ('Sonnenschutz') of windows
+    :param g_value_total: G value total including sunscreen ('Sonnenschutz') of windows (TODO rename this param?)
     :param setpoint_shading: Shading setpoint for activating sunscreen of windows, in W/m^2
     :param run_obstructed_simulation: Boolean to indicate if an obstructed solar simulation is conducted. True if yes.
     :param hourly: Boolean to indicate if hourly values should be returned instead of monthly. True if yes.
@@ -169,28 +184,50 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
 
     rho = 1.2       # Luftdichte in kg/m^3
     c_p = 1005      # Spez. Wärmekapazität Luft in J/(kgK)
-    months_per_year = 12
-    hours_per_year = 8760  # no leap year    
-    hours_per_day = 24
-    days_per_month = [31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31]
-    hours_per_month = [(hours_per_day * days) for days in days_per_month]   # length of calculation period (hours per month) [h]
+   
+    # TODO Adjust setpoints to hourly as assumed given monthly for now.
+    if hourly:
+        setpoints_ub_tmp = []
+        setpoints_lb_tmp = []
+        for i in range(MONTHS_PER_YEAR):
+            setpoints_ub_tmp.extend([setpoints_ub[i]] * HOURS_PER_MONTH[i])
+            setpoints_lb_tmp.extend([setpoints_lb[i]] * HOURS_PER_MONTH[i])
+        setpoints_ub = setpoints_ub_tmp
+        setpoints_lb = setpoints_lb_tmp
+        del setpoints_ub_tmp
+        del setpoints_lb_tmp
+        
+        # ONLY FOR DEBUG hallucinate hourly T_e
+        if (__debug__):
+            import datatree as dt
+            srf_irrad_obstr_tree_tmp = dt.DataTree([[]]*srf_irrad_obstr_tree.BranchCount)
+            srf_irrad_unobstr_tree_tmp = dt.DataTree([[]]*srf_irrad_unobstr_tree.BranchCount)
+            
+            T_e_tmp = []
+            bs_multiplier = list(range(-6,6))+list(range(-6,6))[::-1]
+            
+            for i in range(MONTHS_PER_YEAR):
+                T_e_day = [T_e[i] + a for a in bs_multiplier]
+                srf_irrad_obstr_tree_day = [srf_irrad_obstr_tree.Branch(j)[i] + 100*a for a in bs_multiplier for j in range(srf_irrad_obstr_tree_tmp.BranchCount)]
+                srf_irrad_unobstr_tree_day = [srf_irrad_unobstr_tree.Branch(j)[i] + 100*a for a in bs_multiplier for j in range(srf_irrad_unobstr_tree_tmp.BranchCount)]
+                for _ in range(DAYS_PER_MONTH[i]):
+                    T_e_tmp.extend(T_e_day)
+                    [srf_irrad_obstr_tree_tmp.Branch(j).extend(srf_irrad_obstr_tree_day) for j in range(srf_irrad_obstr_tree_tmp.BranchCount)]
+                    [srf_irrad_unobstr_tree_tmp.Branch(j).extend(srf_irrad_unobstr_tree_day) for j in range(srf_irrad_unobstr_tree_tmp.BranchCount)]
+            T_e = T_e_tmp
+            srf_irrad_obstr_tree = srf_irrad_obstr_tree_tmp
+            srf_irrad_unobstr_tree = srf_irrad_unobstr_tree_tmp
+            del T_e_tmp
+            del srf_irrad_obstr_tree_tmp
+            del srf_irrad_unobstr_tree_tmp
     
     # Assert inputs monthly or hourly based on toggle
-    input_size = hours_per_year if hourly else months_per_year
+    input_size = HOURS_PER_YEAR if hourly else MONTHS_PER_YEAR
+    # TODO probs not very pythonic
+    assert len(setpoints_ub) == input_size, "Length of 'setpoints_ub' (Setpoints upper bound) was %d but should be %d." % (len(setpoints_ub), input_size)
+    assert len(setpoints_lb) == input_size, "Length of 'setpoints_lb' (Setpoints lower bound) was %d but should be %d." % (len(setpoints_lb), input_size)
     assert len(T_e) == input_size, "Length of 'T_e' (Ambient temperature) was %d but should be %d." % (len(T_e), input_size)
-    # TODO get average temp here instead of in epw reader?
-    
-    # Adjust setpoints to hourly as assumed given monthly for now.
-    # TODO assume hourly setpoints
-    if hourly:
-        for i in range(days_per_month):
-            setpoints_ub[i] = [setpoints_ub[i]] * hours_per_month[i]
-            setpoints_lb[i] = [setpoints_ub[i]] * hours_per_month[i]
 
-    # TODO probs bad practice
-    assert len(setpoints_ub), "Length of 'setpoints_ub' (Setpoints upper bound) was %d but should be %d." % (len(T_e), input_size)
-    assert len(setpoints_lb), "Length of 'setpoints_lb' (Setpoints lower bound) was %d but should be %d." % (len(T_e), input_size)
-    
     # read room properties from sia2024
     room_properties = cleanDictForNaN(room_properties)
 
@@ -211,33 +248,37 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
 
     if hourly:
         #TODO average out the vollaststunden.... but better to determine based on SIA 2024 schedules from type
-        t_P = [room_properties["Vollaststunden pro Jahr (Personen)"] / float(hours_per_year)] * hours_per_year
-        t_L = [room_properties["Jaehrliche Vollaststunden der Raumbeleuchtung"] / float(hours_per_year)] * hours_per_year
-        t_A = [room_properties["Jaehrliche Vollaststunden der Geraete"] / float(hours_per_year)] * hours_per_year
+        t_P = [room_properties["Vollaststunden pro Jahr (Personen)"] / float(HOURS_PER_YEAR)] * HOURS_PER_YEAR
+        t_L = [room_properties["Jaehrliche Vollaststunden der Raumbeleuchtung"] / float(HOURS_PER_YEAR)] * HOURS_PER_YEAR
+        t_A = [room_properties["Jaehrliche Vollaststunden der Geraete"] / float(HOURS_PER_YEAR)] * HOURS_PER_YEAR
     else:
         t_P = [room_properties["Vollaststunden pro Jahr (Personen)"]] * 12
         t_L = [room_properties["Jaehrliche Vollaststunden der Raumbeleuchtung"]] * 12
         t_A = [room_properties["Jaehrliche Vollaststunden der Geraete"]] * 12
         # transforming daily sia2024 data to monthly
-        for i in range(len(days_per_month)):
-            t_P[i] *= days_per_month[i] / 365.0
-            t_L[i] *= days_per_month[i] / 365.0
-            t_A[i] *= days_per_month[i] / 365.0
+        for i in range(len(DAYS_PER_MONTH)):
+            t_P[i] *= DAYS_PER_MONTH[i] / 365.0
+            t_L[i] *= DAYS_PER_MONTH[i] / 365.0
+            t_A[i] *= DAYS_PER_MONTH[i] / 365.0
 
-    timesteps = hours_per_year if hourly else months_per_year  
+    timesteps = HOURS_PER_YEAR if hourly else MONTHS_PER_YEAR  
 
     # formatting the grasshopper tree that contains solar irradiation time series for each window
     # could be changed later to also include solar irradiation on opaque surfaces...
     # ...would need to be adapted in the 'for surface in range(num_surfaces):' loop as well then
     win_areas = [x for (x, y) in zip(surface_areas, surface_type) if y != "opaque"]
-    Q_s_jagged = None
+    Q_s_per_surface = None
+    
+    # TODO assert at least one branch in srf_irrad_obstr_tree?
+    
     if (srf_irrad_obstr_tree.Branch(0).Count == 0 and srf_irrad_unobstr_tree.BranchCount == 0):
-        Q_s_per_surface = [[0.0]] * timesteps
+        Q_s_per_timestep = [[0.0]] * timesteps
     else:
-        func = tree_to_jagged_hourly if hourly else tree_to_jagged_monthly
-        Q_s_jagged = func(run_obstructed_simulation, srf_irrad_obstr_tree, srf_irrad_unobstr_tree,
-                                            g_value, g_value_total, setpoint_shading, win_areas)
-        Q_s_per_surface = transpose_jagged_2D_array(Q_s_jagged)
+        Q_s_per_surface = calculate_Q_s(run_obstructed_simulation, srf_irrad_obstr_tree, srf_irrad_unobstr_tree,
+                                            g_value, g_value_total, 
+                                            setpoint_shading, win_areas,
+                                            hourly=hourly)
+        Q_s_per_timestep = transpose_jagged_2D_array(Q_s_per_surface)
 
     # assign room properties to individual surfaces
     #    surface_type = ["opaque", "opaque", "transp", "transp"]
@@ -267,8 +308,8 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
     # for some variables, we compute upper and lower bounds (subscripts ub & lb)
     # furthermore, cooling and heating demand requires us to compute certain variables differently.
     # See equation sheet 'EK1_Formelsammlung_HS20.pdf'
-    for t in range(hours_per_year if hourly else months_per_year):
-        multiplier = 1 if hourly else hours_per_month[t]
+    for t in range(HOURS_PER_YEAR if hourly else MONTHS_PER_YEAR):
+        multiplier = 1 if hourly else HOURS_PER_MONTH[t]
         # External air flowrate (thermisch wirksamer Aussenluftvolumenstrom)
         Vdot_e = Vdot_e_spec * floor_area
         Vdot_inf = Vdot_inf_spec * floor_area
@@ -321,7 +362,7 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
 
         # solar gains (solare Wärmeeinträge), Q_s, (PER SURFACE)
         # unobstructed or obstructed, both using SolarModel.dll and GHSolar.gha
-        Q_s[t] = sum(Q_s_per_surface[t])    # currently, only transparent surfaces
+        Q_s[t] = sum(Q_s_per_timestep[t])    # currently, only transparent surfaces
 
         # Heatgains/-losses ratio (Wärmeeintrag/-verlust Verhältnis), gamma
         # calculating for different cases, heating / cooling, upper / lower bounds, with / without heat recovery
@@ -417,16 +458,18 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
             Q_s_out[t] = Q_s[t] * eta_rec_heating_list[Q_H_index]
 
 
-    if Q_s_jagged != None:
-        Q_s_tree = th.list_to_tree(Q_s_jagged, source=[0, 0])   # import ghpythonlib.treehelpers as th
+    if Q_s_per_surface != None:
+        Q_s_tree = th.list_to_tree(Q_s_per_surface, source=[0, 0])   # import ghpythonlib.treehelpers as th
     else:
         Q_s_tree = None
 
-    tokWh = 1000.0
-    return [x / tokWh for x in Q_Heat], [x / tokWh for x in Q_Cool], [x / tokWh for x in Q_Elec], \
-           [x / tokWh for x in Q_T_out], [x / tokWh for x in Q_V_out], [x / tokWh for x in Q_i_out], \
-           [x / tokWh for x in Q_s_out], [x / tokWh for x in QT_opaque_out], [x / tokWh for x in QT_transparent_out], Q_s_tree
+    return toKwh(Q_Heat), toKwh(Q_Cool), toKwh(Q_Elec), \
+           toKwh(Q_T_out), toKwh(Q_V_out), toKwh(Q_i_out), \
+           toKwh(Q_s_out), toKwh(QT_opaque_out), toKwh(QT_transparent_out), \
+           Q_s_tree
 
+def toKwh(Q):
+    return [x / 1000.0 for x in Q]
 
 def min_and_index(*sequence):
     min_value = min(sequence)
@@ -476,70 +519,46 @@ def calc_eta_g(gamma, tau, cooling=False):
     return eta_g
 
 
-def tree_to_jagged_monthly(run_obstr, tree_obstr, tree_unobstr, g_value, g_value_total, setpoint, win_areas):
-    # sia2024: 200 W/m2. but maybe should be if srf_irrad > 200 W/m2 && Troom > 22?
-    #
-    # c# code
-    # private void RunScript(DataTree < double > G, double g, ref object Q_s)
-    # {
-    #       int winCount = G.BranchCount;
-    #       double[][] Q_array = new double[12][];
-    #       for (int j = 0; j < G.Branch(0).Count; j++)
-    #           Q_array[j] = new double[G.BranchCount];
-    #       DataTree < double > doubleTree = new DataTree < double > ();
-    #       for (int i = 0; i < G.BranchCount; i++)
-    #       {
-    #           for (int j = 0; j < G.Branch(i).Count; ++j) // should be 12, 1 for each month of the year
-    #           {
-    #               GH_Path path = new GH_Path(i, j);
-    #               double irrad = G.Branch(i)[j] * g;
-    #               doubleTree.Add(irrad, path);
-    #
-    #               Q_array[j][i] = irrad * 1000;
-    #            }
-    #       }
-    #       jagged jag = new jagged();
-    #       jag.data = Q_array;
-    #
-    #       Q_s = jag;
-    # }
-    #
-    # public struct jagged
-    # {
-    #     public double[][] data;
-    # }
-    def get_monthly_average(annual_timeseries):
-        dayspermonth = [31.0, 28.0, 31.0, 30.0, 31.0, 30.0, 31.0, 31.0, 30.0, 31.0, 30.0, 31.0]
-        months = 12
-        hour_per_day = 24
+def calculate_Q_s(run_obstr, tree_obstr, tree_unobstr,
+                       g_value, g_value_total,
+                       setpoint,
+                       win_areas,
+                       hourly=False):
+    def get_monthly_average(annual_timeseries): # TODO sum or average?
         monthly_list = []
-        for month in range(months):
-            start_hour = int(hour_per_day * sum(dayspermonth[0:month]))
-            end_hour = int(hour_per_day * sum(dayspermonth[0:month + 1]))
-            monthly_list.append(sum(annual_timeseries[start_hour:end_hour]))
+        for month in range(MONTHS_PER_YEAR):
+            start_hour = int(HOURS_PER_DAY * sum(DAYS_PER_MONTH[0:month]))
+            end_hour = int(HOURS_PER_DAY * sum(DAYS_PER_MONTH[0:month + 1]))
+            monthly_list.append(sum(annual_timeseries[start_hour:end_hour])) # TODO getting sum here?
         return monthly_list
-
+  
     tree = tree_obstr
     if run_obstr == False:
         tree = tree_unobstr
+        
+    # tree._branches = [[10.0]*8760]*5
+    # hourly=False
 
     Q_array = []
     for i in range(tree.BranchCount):
         row = []
-        for j in range(tree.Branch(i).Count):
-            irrad = tree.Branch(i)[j] / win_areas[i]    # calculating per W/m2 for shading control
+        win_area = win_areas[i] 
+        branch = tree.Branch(i)
+        for j in range(len(branch)): # DEBUG
+        # for j in range(branch.Count):
+            irrad = branch[j] / win_area   # calculating per W/m2 for shading control
             if irrad > setpoint:
                 irrad *= g_value_total
             else:
                 irrad *= g_value
-            row.append(irrad * win_areas[i])    # calculating back to total irradiance of entire surface
-        monthly_row = get_monthly_average(row)
-        Q_array.append(monthly_row)
+            row.append(irrad * win_area)    # calculating back to total irradiance of entire surface
+        
+        if hourly:
+            Q_array.append(row)
+        else:
+            Q_array.append(get_monthly_average(row))
 
     return Q_array
-
-def tree_to_jagged_hourly():
-    raise NotImplementedError()
 
 def transpose_jagged_2D_array(array):
     transposed_array = []
@@ -553,8 +572,6 @@ def transpose_jagged_2D_array(array):
         transposed_array.append(transposed_row)
 
     return transposed_array
-
-
 
 
 if __name__ == "__main__":
@@ -589,7 +606,7 @@ if __name__ == "__main__":
         floor_area = 200.0
         T_e = [0.416398, 1.714286, 6.138038, 8.964167, 14.281048, 17.462361, 18.399328, 18.784946, 13.954167, 9.874059, 3.974583, 1.593683]
         T_i = [21.0] * 12
-        setpoints_ub = [25] * 12
+        setpoints_ub = [20,21,22,23,24,25,25,24,23,22,21,20]
         setpoints_lb = [18] * 12
         surface_areas = [30, 30, 3.0, 3.0, 3.0, 536.124969 - 69]
         surface_type = ["transp", "transp", "transp", "transp", "transp", "opaque"]
@@ -602,20 +619,25 @@ if __name__ == "__main__":
         Q_s_per_surface[5] = [0.0] * 12
         for i in range(len(Q_s_per_surface)):
             Q_s_per_surface[i] = [x * 1000 for x in Q_s_per_surface[i]]  # converting from kWh/m2 into Wh/m2
-        Q_s_per_surface = list(map(list, zip(*Q_s_per_surface)))  # transposing
-        jaggeddata = Jagged(Q_s_per_surface)
+        # Q_s_per_surface = list(map(list, zip(*Q_s_per_surface)))  # transposing
+        # jaggeddata = Jagged(Q_s_per_surface)
+        import datatree as dt
+        srf_irrad_obstr_tree = dt.DataTree([Q_s_per_surface[5]])
+        srf_irrad_unobstr_tree = dt.DataTree(Q_s_per_surface[0:5])
+        # jaggeddata = dt.DataTree(Q_s_per_surface)
         g_value = 0.5
         g_value_total = 0.14
         setpoint_shading = 200 # W/m2
+        
 
         [Q_Heat, Q_Cool, Q_Elec, Q_T, Q_V, Q_i, Q_s, _, _] = main(room_properties, floor_area,
                                                                   T_e, 
                                                                   setpoints_ub, setpoints_lb, 
                                                                   surface_areas, surface_type, 
-                                                                  [], jaggeddata,
+                                                                  srf_irrad_obstr_tree, srf_irrad_unobstr_tree,
                                                                   g_value, g_value_total,
                                                                   setpoint_shading,
-                                                                  True, False)
+                                                                  True, hourly=True)
         print(Q_Heat)
         print(Q_Cool)
         print(Q_Elec)
