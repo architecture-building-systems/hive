@@ -58,7 +58,7 @@
       "main-module": "adaptive_comfort",
       "main-function": "adaptive_comfort",
       "inputs": [
-        {"type": "float", "name": "Air temperature", "nick-name": "T_m", "description": "Average ambient air temperature in °C.", "access": "list"}
+        {"type": "float", "name": "Air temperature", "nick-name": "T_e", "description": "Average ambient air temperature in °C, either hourly or averaged monthly.", "access": "list"}
       ],
       "outputs": [
         {"type": "float", "name": "Thermal comfort", "nick-name": "T_n", "description": "Mean adaptive thermal comfort temperature in °C.", "access": "list"},
