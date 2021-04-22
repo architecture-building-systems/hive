@@ -179,7 +179,7 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
     rho = 1.2       # Luftdichte in kg/m^3
     c_p = 1005      # Spez. Wärmekapazität Luft in J/(kgK)
    
-    # TODO Adjust setpoints to hourly as assumed given monthly for now.
+    # IF setpoints given monthly for hourly simulation, they stay the same for entire month regardless of T_e.
     if hourly and len(setpoints_lb) == len(setpoints_ub) == MONTHS_PER_YEAR:  
         print("WARNING: The setpoints are provided monthly so will not vary on an hourly basis.")
         setpoints_ub_tmp = []
@@ -246,8 +246,9 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
     #    surface_areas = [44.0, 62.3, 4.0, 5.2]
     num_surfaces = len(surface_type)
     
+    # Average out the hours of occupancy, lighting, appliances
     if hourly:
-        #TODO average out the vollaststunden.... but better to determine based on SIA 2024 schedules from type
+        #TODO Determine based on SIA 2024 schedules from type
         t_P = [room_properties["Vollaststunden pro Jahr (Personen)"] / float(HOURS_PER_YEAR)] * HOURS_PER_YEAR
         t_L = [room_properties["Jaehrliche Vollaststunden der Raumbeleuchtung"] / float(HOURS_PER_YEAR)] * HOURS_PER_YEAR
         t_A = [room_properties["Jaehrliche Vollaststunden der Geraete"] / float(HOURS_PER_YEAR)] * HOURS_PER_YEAR
@@ -269,7 +270,6 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
     win_areas = [x for (x, y) in zip(surface_areas, surface_type) if y != "opaque"]
     Q_s_tr_per_surface = None
     
-    # TODO assert at least one branch in srf_irrad_obstr_tree?
     if (srf_irrad_obstr_tree.Branch(0).Count == 0 and srf_irrad_unobstr_tree.BranchCount == 0):
         num_surfaces_tr = len([s for s in surface_type if s=="transp"])
         Q_s_tr_per_surface = [[0.0]*num_surfaces_tr] * time_range
@@ -497,7 +497,7 @@ def calc_eta_g(gamma, tau, cooling=False):
     """
     if gamma < 0.0:
         eta_g = 1.0
-    elif gamma == 1.0: # TODO check norms, probably rarely happens anyways?
+    elif gamma == 1.0: # TODO check SIA 380 norms 3.5.6.2, probably rarely happens anyways?
         a = 1.0 + tau / 15.0
         if cooling:
             eta_g = a / (a + 1.0)
