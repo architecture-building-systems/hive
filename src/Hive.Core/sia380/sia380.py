@@ -15,7 +15,7 @@ electricity demand: currently simply by using sqm and internal loads for lightin
 from __future__ import division
 import math
 
-# import ghpythonlib.treehelpers as th
+import ghpythonlib.treehelpers as th
 
 # Constants
 MONTHS_PER_YEAR = 12
@@ -30,7 +30,7 @@ def cleanDictForNaN(d):
     # a = d.values()
     # b = d.keys()
     for i in d:
-        if isinstance(d[i],str): continue
+        # if isinstance(d[i],str): continue
         if math.isnan(d[i]) or d[i] == "NaN":
             d[i] = 0.0
 
@@ -193,30 +193,30 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         del setpoints_lb_tmp
         
         # ONLY FOR DEBUG hallucinate hourly T_e
-        if (__debug__):
-            import datatree as dt
-            srf_irrad_obstr_tree_tmp = dt.DataTree([[]]*srf_irrad_obstr_tree.BranchCount)
-            srf_irrad_unobstr_tree_tmp = dt.DataTree([[]]*srf_irrad_unobstr_tree.BranchCount)
+        # if (__debug__):
+        #     import datatree as dt
+        #     srf_irrad_obstr_tree_tmp = dt.DataTree([[]]*srf_irrad_obstr_tree.BranchCount)
+        #     srf_irrad_unobstr_tree_tmp = dt.DataTree([[]]*srf_irrad_unobstr_tree.BranchCount)
             
-            T_e_tmp = []
-            bs_multiplier = list(range(-6,6))+list(range(-6,6))[::-1]
+        #     T_e_tmp = []
+        #     bs_multiplier = list(range(-6,6))+list(range(-6,6))[::-1]
             
-            for i in range(MONTHS_PER_YEAR):
-                T_e_day = [T_e[i] + a for a in bs_multiplier]
-                srf_irrad_obstr_tree_day = [[srf_irrad_obstr_tree.Branch(j)[i]/DAYS_PER_MONTH[i] + 100*a for a in bs_multiplier] for j in range(srf_irrad_obstr_tree_tmp.BranchCount)]
-                srf_irrad_unobstr_tree_day = [[srf_irrad_unobstr_tree.Branch(j)[i]/DAYS_PER_MONTH[i] + 100*a for a in bs_multiplier] for j in range(srf_irrad_unobstr_tree_tmp.BranchCount)]
-                for _ in range(DAYS_PER_MONTH[i]):
-                    T_e_tmp.extend(T_e_day)
-                    for i, b in enumerate(srf_irrad_obstr_tree_tmp.Branches):
-                        b.extend(srf_irrad_obstr_tree_day[i])
-                    for i, b in enumerate(srf_irrad_unobstr_tree_tmp.Branches):
-                        b.extend(srf_irrad_unobstr_tree_day[i])
-            T_e = T_e_tmp
-            srf_irrad_obstr_tree = srf_irrad_obstr_tree_tmp
-            srf_irrad_unobstr_tree = srf_irrad_unobstr_tree_tmp
-            del T_e_tmp
-            del srf_irrad_obstr_tree_tmp
-            del srf_irrad_unobstr_tree_tmp
+        #     for i in range(MONTHS_PER_YEAR):
+        #         T_e_day = [T_e[i] + a for a in bs_multiplier]
+        #         srf_irrad_obstr_tree_day = [[srf_irrad_obstr_tree.Branch(j)[i]/DAYS_PER_MONTH[i] + 100*a for a in bs_multiplier] for j in range(srf_irrad_obstr_tree_tmp.BranchCount)]
+        #         srf_irrad_unobstr_tree_day = [[srf_irrad_unobstr_tree.Branch(j)[i]/DAYS_PER_MONTH[i] + 100*a for a in bs_multiplier] for j in range(srf_irrad_unobstr_tree_tmp.BranchCount)]
+        #         for _ in range(DAYS_PER_MONTH[i]):
+        #             T_e_tmp.extend(T_e_day)
+        #             for i, b in enumerate(srf_irrad_obstr_tree_tmp.Branches):
+        #                 b.extend(srf_irrad_obstr_tree_day[i])
+        #             for i, b in enumerate(srf_irrad_unobstr_tree_tmp.Branches):
+        #                 b.extend(srf_irrad_unobstr_tree_day[i])
+        #     T_e = T_e_tmp
+        #     srf_irrad_obstr_tree = srf_irrad_obstr_tree_tmp
+        #     srf_irrad_unobstr_tree = srf_irrad_unobstr_tree_tmp
+        #     del T_e_tmp
+        #     del srf_irrad_obstr_tree_tmp
+        #     del srf_irrad_unobstr_tree_tmp
     
     # Assert inputs monthly or hourly based on toggle
     input_size = HOURS_PER_YEAR if hourly else MONTHS_PER_YEAR
@@ -393,18 +393,12 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         Q_K_ub_no_hr = Q_i[t] + Q_s[t] - eta_g_ub_cooling_no_hr * (Q_T_ub + Q_V_ub_no_heat_recovery)
         Q_K_lb_no_hr = Q_i[t] + Q_s[t] - eta_g_lb_cooling_no_hr * (Q_T_lb + Q_V_lb_no_heat_recovery) # TODO why do we need this?
         Q_K_ub, Q_K_lb, Q_K_ub_no_hr, Q_K_lb_no_hr = negatives_to_zero([Q_K_ub, Q_K_lb, Q_K_ub_no_hr, Q_K_lb_no_hr]) # TODO why do we need this?
-        
-        # TODO is this ever the case?
-        if Q_K_ub > Q_K_lb:
-            print(Q_K_ub, " > ", Q_K_lb, "at time ", t)
 
         # take smaller value of both comfort set points and remember the index
         Q_H, Q_H_index = min_and_index(Q_H_lb, Q_H_ub, Q_H_lb_no_hr, Q_H_ub_no_hr)
         Q_K, Q_K_index = min_and_index(Q_K_lb, Q_K_ub, Q_K_lb_no_hr, Q_K_ub_no_hr)
         Q_K *= -1.0     # make cooling negative
 
-        if t==4500:
-            pass
         # either subtract heating from cooling, but then also account for that in losses/gains by subtracting those too
         # or just take the higher load of both and then take the corresponding losses/gains
         # demand = Q_K + Q_H  # sometimes we have both cooling and heating. so subtract one from another
@@ -459,15 +453,15 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
             Q_s_out[t] = Q_s[t] * eta_rec_heating_list[Q_H_index]
 
 
-    # if Q_s_tr_per_surface != None:
-    #     Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface, source=[0, 0])   # import ghpythonlib.treehelpers as th
-    # else:
-    #     Q_s_tr_tree = None
+    if Q_s_tr_per_surface != None:
+        Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface, source=[0, 0])   # import ghpythonlib.treehelpers as th
+    else:
+        Q_s_tr_tree = None
 
     return toKwh(Q_Heat), toKwh(Q_Cool), toKwh(Q_Elec), \
            toKwh(Q_T_out), toKwh(Q_V_out), toKwh(Q_i_out), \
            toKwh(Q_s_out), toKwh(Q_T_opaque_out), toKwh(Q_T_transparent_out), \
-        #    Q_s_tr_tree
+           Q_s_tr_tree
 
 def toKwh(Q):
     return [x / 1000.0 for x in Q]
@@ -540,8 +534,8 @@ def calculate_Q_s(run_obstr, tree_obstr, tree_unobstr,
         row = []
         win_area = win_areas[i] 
         branch = tree.Branch(i)
-        for j in range(len(branch)): # DEBUG
-        # for j in range(branch.Count):
+        # for j in range(len(branch)): # DEBUG
+        for j in range(branch.Count):
             irrad = branch[j] / win_area   # calculating per W/m2 for shading control
             if irrad > setpoint:
                 irrad *= g_value_total
