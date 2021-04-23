@@ -322,38 +322,38 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         # this assumes, the ventilation system operates ideally and does not, for example, keep warm air in summer
         Q_V_ub = H_V * (setpoints_ub[t] - T_e[t]) * num_timesteps
         Q_V_lb = H_V * (setpoints_lb[t] - T_e[t]) * num_timesteps
-        Q_V_ub_no_heat_recovery = H_V_no_heat_recovery * (setpoints_ub[t] - T_e[t]) * num_timesteps
-        Q_V_lb_no_heat_recovery = H_V_no_heat_recovery * (setpoints_lb[t] - T_e[t]) * num_timesteps
+        Q_V_ub_no_hr = H_V_no_heat_recovery * (setpoints_ub[t] - T_e[t]) * num_timesteps
+        Q_V_lb_no_hr = H_V_no_heat_recovery * (setpoints_lb[t] - T_e[t]) * num_timesteps
 
         # Internal loads (interne Wärmeeinträge)
         # Q_i = Phi_P * t_P + Phi_L * t_L + Phi_A * t_A
         Q_i[t] = Phi_P * t_P[t] + Phi_L * t_L[t] + Phi_A * t_A[t]
 
-        # Transmission heat losses, Q_T, per surface, both transparent and opaque
+        # Transmission heat losses, Q_T, both transparent and opaque
         Q_T_ub = 0.0
         Q_T_lb = 0.0
-        Q_T_op_per_surface_ub = []
-        Q_T_op_per_surface_lb = []
-        Q_T_tr_per_surface_ub = []
-        Q_T_tr_per_surface_lb = []
+        Q_T_op_ub = 0.0
+        Q_T_op_lb = 0.0
+        Q_T_tr_ub = 0.0
+        Q_T_tr_lb = 0.0
         
         deltaT_ub = (setpoints_ub[t] - T_e[t]) * num_timesteps
         deltaT_lb = (setpoints_lb[t] - T_e[t]) * num_timesteps
             
         for surface in range(num_surfaces):
-            # Transmission heat transfer coefficient (Transmissions-Wärmetransferkoeffizient), H_T, (PER SURFACE)            
+            # Transmission heat transfer coefficient (Transmissions-Wärmetransferkoeffizient), H_T     #TODO       
             if surface_type[surface] == "opaque":
                 H_T = surface_areas[surface] * U_value_opaque
-                Q_T_op_per_surface_ub.append(H_T * deltaT_ub)
-                Q_T_op_per_surface_lb.append(H_T * deltaT_lb)
+                Q_T_op_ub += H_T * deltaT_ub
+                Q_T_op_lb += H_T * deltaT_lb
             else:
                 H_T = surface_areas[surface] * U_value_transparent
-                Q_T_tr_per_surface_ub.append(H_T * deltaT_ub)
-                Q_T_tr_per_surface_lb.append(H_T * deltaT_lb)
+                Q_T_tr_ub += H_T * deltaT_ub
+                Q_T_tr_lb += H_T * deltaT_lb
 
-            # Transmission losses (Transmissionswärmeverluste), Q_T, (PER SURFACE, because function of H_T)
-            Q_T_ub += H_T * deltaT_ub
-            Q_T_lb += H_T * deltaT_lb
+        # Transmission losses (Transmissionswärmeverluste), Q_T, upper and lower bounds for all surfaces
+        Q_T_ub = Q_T_tr_ub + Q_T_op_ub
+        Q_T_lb = Q_T_tr_lb + Q_T_op_lb
         
         # solar gains (solare Wärmeeinträge), Q_s, (PER SURFACE)
         # unobstructed or obstructed, both using SolarModel.dll and GHSolar.gha
@@ -364,40 +364,31 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         # calculating for different cases, heating / cooling, upper / lower bounds, with / without heat recovery
         gamma_ub = calc_gamma(Q_i[t], Q_s[t], Q_T_ub, Q_V_ub)
         gamma_lb = calc_gamma(Q_i[t], Q_s[t], Q_T_lb, Q_V_lb)
-        gamma_ub_no_hr = calc_gamma(Q_i[t], Q_s[t], Q_T_ub, Q_V_ub_no_heat_recovery)
-        gamma_lb_no_hr = calc_gamma(Q_i[t], Q_s[t], Q_T_lb, Q_V_lb_no_heat_recovery)
+        gamma_ub_no_hr = calc_gamma(Q_i[t], Q_s[t], Q_T_ub, Q_V_ub_no_hr)
+        gamma_lb_no_hr = calc_gamma(Q_i[t], Q_s[t], Q_T_lb, Q_V_lb_no_hr)
 
         # usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
-        eta_g_ub_heating = calc_eta_g(gamma_ub, tau)  # TODO why do we need this?
-        eta_g_lb_heating = calc_eta_g(gamma_lb, tau)
-        eta_g_ub_cooling = calc_eta_g(gamma_ub, tau, cooling=True) 
-        eta_g_lb_cooling = calc_eta_g(gamma_lb, tau, cooling=True) # TODO why do we need this?
-        eta_g_ub_heating_no_hr = calc_eta_g(gamma_ub_no_hr, tau) # TODO why do we need this?
-        eta_g_lb_heating_no_hr = calc_eta_g(gamma_lb_no_hr, tau)
-        eta_g_ub_cooling_no_hr = calc_eta_g(gamma_ub_no_hr, tau, cooling=True)
-        eta_g_lb_cooling_no_hr = calc_eta_g(gamma_lb_no_hr, tau, cooling=True) # TODO why do we need this?
+        eta_g_heating = calc_eta_g(gamma_lb, tau)
+        eta_g_cooling = calc_eta_g(gamma_ub, tau, cooling=True) 
+        eta_g_heating_no_hr = calc_eta_g(gamma_lb_no_hr, tau)
+        eta_g_cooling_no_hr = calc_eta_g(gamma_ub_no_hr, tau, cooling=True)
  
         # heating demand (Heizwärmebedarf), Q_H
         # Q_H = Q_T + Q_V - eta_g * (Q_i + Q_s)
-        # calculating different cases, lower/upper bounds (lb/ub), with/without heat recovery (hr)
-        Q_H_ub = Q_T_ub + Q_V_ub - eta_g_ub_heating * (Q_i[t] + Q_s[t]) # TODO why do we need this?
-        Q_H_lb = Q_T_lb + Q_V_lb - eta_g_lb_heating * (Q_i[t] + Q_s[t])
-        Q_H_ub_no_hr = Q_T_ub + Q_V_ub_no_heat_recovery - eta_g_ub_heating_no_hr * (Q_i[t] + Q_s[t]) # TODO why do we need this?
-        Q_H_lb_no_hr = Q_T_lb + Q_V_lb_no_heat_recovery - eta_g_lb_heating_no_hr * (Q_i[t] + Q_s[t])
-        Q_H_ub, Q_H_lb, Q_H_ub_no_hr, Q_H_lb_no_hr = negatives_to_zero([Q_H_ub, Q_H_lb, Q_H_ub_no_hr, Q_H_lb_no_hr])
-
+        # calculating different cases with/without heat recovery (hr)
+        Q_H = Q_T_lb + Q_V_lb - eta_g_heating * (Q_i[t] + Q_s[t])
+        Q_H_no_hr = Q_T_lb + Q_V_lb_no_hr - eta_g_heating_no_hr * (Q_i[t] + Q_s[t])
+        Q_H, Q_H_no_hr = negatives_to_zero([Q_H, Q_H_no_hr])
+        
         # cooling demand (Kältebedarf), Q_K
-        # calculating different cases, lower/upper bounds (lb/ub), with/without heat recovery (hr)
-        Q_K_ub = Q_i[t] + Q_s[t] - eta_g_ub_cooling * (Q_T_ub + Q_V_ub)
-        Q_K_lb = Q_i[t] + Q_s[t] - eta_g_lb_cooling * (Q_T_lb + Q_V_lb) # TODO why do we need this?
-        Q_K_ub_no_hr = Q_i[t] + Q_s[t] - eta_g_ub_cooling_no_hr * (Q_T_ub + Q_V_ub_no_heat_recovery)
-        Q_K_lb_no_hr = Q_i[t] + Q_s[t] - eta_g_lb_cooling_no_hr * (Q_T_lb + Q_V_lb_no_heat_recovery) # TODO why do we need this?
-        Q_K_ub, Q_K_lb, Q_K_ub_no_hr, Q_K_lb_no_hr = negatives_to_zero([Q_K_ub, Q_K_lb, Q_K_ub_no_hr, Q_K_lb_no_hr]) # TODO why do we need this?
+        # calculating different cases with/without heat recovery (hr)
+        Q_K = Q_i[t] + Q_s[t] - eta_g_cooling * (Q_T_ub + Q_V_ub)
+        Q_K_no_hr = Q_i[t] + Q_s[t] - eta_g_cooling_no_hr * (Q_T_ub + Q_V_ub_no_hr)
+        Q_K, Q_K_no_hr = negatives_to_zero([Q_K, Q_K_no_hr])
 
         # take smaller value of both comfort set points and remember the index
-        Q_H, Q_H_index = min_and_index(Q_H_lb, Q_H_ub, Q_H_lb_no_hr, Q_H_ub_no_hr)
-        Q_K, Q_K_index = min_and_index(Q_K_lb, Q_K_ub, Q_K_lb_no_hr, Q_K_ub_no_hr)
-        Q_K *= -1.0     # make cooling negative
+        Q_H, Q_H_index = min_and_index(Q_H, Q_H_no_hr)
+        Q_K, Q_K_index = min_and_index(Q_K, Q_K_no_hr)
 
         # either subtract heating from cooling, but then also account for that in losses/gains by subtracting those too
         # or just take the higher load of both and then take the corresponding losses/gains
@@ -408,49 +399,37 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         # else:
         #     Q_Cool[month] = 0
         #     Q_Heat[month] = demand
-        if abs(Q_K) > Q_H:
-            demand = Q_K
-            Q_Cool[t] = Q_K
+        if Q_K > Q_H: # cooling
+            # make cooling negative
+            Q_Cool[t] = -Q_K
             Q_Heat[t] = 0.0
-        else:
-            demand = Q_H
+            
+            with_hr = Q_K_index == 0
+            eta_g = eta_g_cooling if with_hr else eta_g_cooling_no_hr
+            
+            Q_T_out[t] = Q_T_ub * eta_g
+            Q_T_opaque_out[t] = Q_T_op_ub * eta_g
+            Q_T_transparent_out[t] = Q_T_tr_ub * eta_g
+            Q_V_out[t] = (Q_V_ub if with_hr else Q_V_ub_no_hr) * eta_g
+            Q_i_out[t] = Q_i[t]
+            Q_s_out[t] = Q_s[t]
+        else: # heating
             Q_Cool[t] = 0.0
             Q_Heat[t] = Q_H
+            
+            with_hr = Q_H_index == 0
+            eta_g = eta_g_heating if with_hr else eta_g_heating_no_hr
 
+            Q_T_out[t] = Q_T_lb
+            Q_T_opaque_out[t] = Q_T_op_lb
+            Q_T_transparent_out[t] = Q_T_tr_lb
+            Q_V_out[t] = (Q_V_lb if with_hr else Q_V_lb_no_hr)
+            Q_i_out[t] = Q_i[t] * eta_g
+            Q_s_out[t] = Q_s[t] * eta_g
+            
         # TODO lighting and utility loads. simplification, because utility and lighting have efficiencies (inefficiencies are heat loads). 
         # Need efficiency or electricity use separately
         Q_Elec[t] = Phi_L * t_L[t] + Phi_A * t_A[t]   
-
-        # Q_i, Q_s are * with eta_rec in heating case
-        # Q_T, Q_V are * with eta_rec in cooling case
-        Q_T_op_lb = sum(Q_T_op_per_surface_lb) # index 0 or 2
-        Q_T_op_ub = sum(Q_T_op_per_surface_ub) # index 1 or 3
-        Q_T_tr_lb = sum(Q_T_tr_per_surface_lb)
-        Q_T_tr_ub = sum(Q_T_tr_per_surface_ub)
-
-        # Create lists in form lb, ub, lb_no_heat_recovery, ub_no_heat_recovery
-        Q_T_list = [Q_T_lb, Q_T_ub, Q_T_lb, Q_T_ub]
-        Q_T_opaque_list = [Q_T_op_lb, Q_T_op_ub, Q_T_op_lb, Q_T_op_ub]
-        Q_T_transparent_list = [Q_T_tr_lb, Q_T_tr_ub, Q_T_tr_lb, Q_T_tr_ub]
-        Q_V_heating_list = [Q_V_lb, Q_V_ub, Q_V_lb_no_heat_recovery, Q_V_ub_no_heat_recovery]
-        Q_V_cooling_list = [Q_V_lb, Q_V_ub, Q_V_lb_no_heat_recovery, Q_V_ub_no_heat_recovery]
-        eta_rec_heating_list = [eta_g_lb_heating, eta_g_ub_heating, eta_g_lb_heating_no_hr, eta_g_ub_heating_no_hr]
-        eta_rec_cooling_list = [eta_g_lb_cooling, eta_g_ub_cooling, eta_g_lb_cooling_no_hr, eta_g_ub_cooling_no_hr]
-
-        if demand < 0:  # cooling
-            Q_T_out[t] = Q_T_list[Q_K_index] * eta_rec_cooling_list[Q_K_index]
-            Q_T_opaque_out[t] = Q_T_opaque_list[Q_K_index] * eta_rec_cooling_list[Q_K_index]
-            Q_T_transparent_out[t] = Q_T_transparent_list[Q_K_index] * eta_rec_cooling_list[Q_K_index]
-            Q_V_out[t] = Q_V_cooling_list[Q_K_index] * eta_rec_cooling_list[Q_K_index]
-            Q_i_out[t] = Q_i[t]
-            Q_s_out[t] = Q_s[t]
-        else:   # heating
-            Q_T_out[t] = Q_T_list[Q_H_index]
-            Q_T_opaque_out[t] = Q_T_opaque_list[Q_H_index]
-            Q_T_transparent_out[t] = Q_T_transparent_list[Q_H_index]
-            Q_V_out[t] = Q_V_heating_list[Q_H_index]
-            Q_i_out[t] = Q_i[t] * eta_rec_heating_list[Q_H_index]
-            Q_s_out[t] = Q_s[t] * eta_rec_heating_list[Q_H_index]
 
 
     if Q_s_tr_per_surface != None:
@@ -497,7 +476,7 @@ def calc_eta_g(gamma, tau, cooling=False):
     """
     if gamma < 0.0:
         eta_g = 1.0
-    elif gamma == 1.0: # TODO check SIA 380 norms 3.5.6.2, probably rarely happens anyways?
+    elif gamma == 1.0:
         a = 1.0 + tau / 15.0
         if cooling:
             eta_g = a / (a + 1.0)
