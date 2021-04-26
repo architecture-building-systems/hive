@@ -1,13 +1,14 @@
 # coding=utf-8
 
 from __future__ import division
-import math
 
+MONTHS_IN_YEAR = 12
+HOURS_IN_YEAR = 8760
 
-def adaptive_comfort(T_m):
+def adaptive_comfort(T):
     '''
     Computes adaptive thermal comfort according to Thermal Comfort - PLEA Notes 3. Auliciems and Szokolay 2007
-    :param T_m: Average monthly ambient temperature in deg C
+    :param T_m: Ambient temperature in deg C, either averaged monthly or hourly
     :return: Monthly adaptive thermal comfort temperature T_n, as well as upper and lower bound for 80 and 90 % acceptance
     '''
 
@@ -16,7 +17,9 @@ def adaptive_comfort(T_m):
     # where T_n is adaptive thermal comfort temperature and T_m is mean monthly ambient temp
     # for 90% acceptability limits, T_n +/- 2.5 K, for 80 % T_n +/- 3.5 K
 
-    setpoints = [21.5 + 0.11 * t for t in T_m]
+    assert len(T) == MONTHS_IN_YEAR or len(T) == HOURS_IN_YEAR, "Only hourly or monthly averaged temperatures are supported."
+    
+    setpoints = [21.5 + 0.11 * t for t in T]
     setpoints_ub_80 = [sp + 3.5 for sp in setpoints]
     setpoints_lb_80 = [sp - 3.5 for sp in setpoints]
     setpoints_ub_90 = [sp + 2.5 for sp in setpoints]

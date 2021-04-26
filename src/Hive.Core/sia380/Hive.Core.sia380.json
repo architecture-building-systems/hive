@@ -10,7 +10,7 @@
       "class-name": "Sia380",
       "name": "Building demand SIA 380",
       "abbreviation": "Sia380",
-      "description": "Monthly heating, cooling and electricity demand calculation based on SIA 380",
+      "description": "Heating, cooling and electricity demand calculation based on SIA 380",
       "category": "[hive]",
       "subcategory": "Demand",
       "id": "01457f8e-80d7-4186-856d-ddaf1d896218",
@@ -20,36 +20,37 @@
       "inputs": [
         {"type": "json", "name": "Room properties", "nick-name": "RoomProperties", "description": "Room properties as json. Could be from SIA 2024, or custom. It needs to follow the hive sia2024-json syntax", "access": "item"},
         {"type": "float", "name": "Floor area", "nick-name": "FloorArea", "description": "Floor area of the zone in m^2.", "access": "item"},
-        {"type": "float", "name": "Monthly air temperature", "nick-name": "T_e", "description": "Average monthly ambient air temperature in °C.", "access": "list"},
-        {"type": "float", "name": "Monthly setpoints upper bounds", "nick-name": "SetpointsUB", "description": "Monthly room temperature setpoints in °C (upper bound).", "access": "list"},
-        {"type": "float", "name": "Monthly setpoints lower bounds", "nick-name": "SetpointsLB", "description": "Monthly room temperature setpoints in °C (lower bound).", "access": "list"},
+        {"type": "float", "name": "Air temperature", "nick-name": "T_e", "description": "Average ambient air temperature in °C.", "access": "list"},
+        {"type": "float", "name": "Setpoints upper bounds", "nick-name": "SetpointsUB", "description": "Room temperature setpoints in °C (upper bound).", "access": "list"},
+        {"type": "float", "name": "Setpoints lower bounds", "nick-name": "SetpointsLB", "description": "Room temperature setpoints in °C (lower bound).", "access": "list"},
         {"type": "float", "name": "Envelope surface areas", "nick-name": "SurfaceAreas", "description": "Envelope surface areas of all external room surfaces in m^2.", "access": "list"},
         {"type": "string", "name": "Envelope surface types", "nick-name": "SurfaceTypes", "description": "Envelope surface types of all external room surfaces. Either 'opaque' or 'transp'.", "access": "list"},
-        {"type": "generic", "name": "Monthly surface irradiation", "nick-name": "Q_s_tree", "description": "Monthly surface irradiation per transparent surface. Grasshopper tree, with each branch representing a transparent surface and containing 8760 timeseries of solar irradiation in Wh.", "access": "tree"},
-        {"type": "generic", "name": "Monthly surface irradiation unobstructed", "nick-name": "Q_s_tree_unobstructed", "description": "Monthly unobstructed surface irradiation per surface. This tree is used, if the obstructed data (parameter above) is null. Grasshopper tree, same as parameter above.", "access": "tree"},
+        {"type": "generic", "name": "Surface irradiation", "nick-name": "Q_s_tree", "description": "Surface irradiation per transparent surface. Grasshopper tree, with each branch representing a transparent surface and containing 8760 timeseries of solar irradiation in Wh.", "access": "tree"},
+        {"type": "generic", "name": "Surface irradiation unobstructed", "nick-name": "Q_s_tree_unobstructed", "description": "Unobstructed surface irradiation per surface. This tree is used, if the obstructed data (parameter above) is null. Grasshopper tree, same as parameter above.", "access": "tree"},
         {"type": "float", "name": "G value", "nick-name": "gValue", "description": "G value of windows", "access": "item"},
         {"type": "float", "name": "G value with sunscreen", "nick-name": "gValueTotal", "description": "G value total including sunscreen ('Sonnenschutz') of windows", "access": "item"},
         {"type": "float", "name": "Setpoint sunscreen", "nick-name": "SetpointSunscreen", "description": "Shading setpoint for activating sunscreen of windows, in W/m^2", "access": "item"},
-        {"type": "float", "name": "Run obstructed solar simulation?", "nick-name": "RunObstructed?", "description": "Boolean to indicate if an obstructed solar simulation is conducted. True if yes.", "access": "item"}
+        {"type": "float", "name": "Run obstructed solar simulation?", "nick-name": "RunObstructed?", "description": "Boolean to indicate if an obstructed solar simulation is conducted. True if yes.", "access": "item"},
+        {"type": "boolean", "name": "Hourly?", "nick-name": "HourlyOrMonthly", "description": "Boolean to indicate if to run monthly or hourly simulations. True if hourly.", "access": "item"}
       ],
       "outputs": [
-        {"type": "float", "name": "Monthly heating demand", "nick-name": "Q_Heat", "description": "Monthly heating loads of a zone in kWh.", "access": "list"},
-        {"type": "float", "name": "Monthly cooling demand", "nick-name": "Q_Cool", "description": "Monthly cooling loads of a zone in kWh.", "access": "list"},
-        {"type": "float", "name": "Monthly electricity demand", "nick-name": "Q_Elec", "description": "Monthly electricity loads of a zone in kWh.", "access": "list"},
-        {"type": "float", "name": "Monthly transmission heat losses", "nick-name": "Q_T", "description": "Monthly transmission heat losses of a zone in kWh.", "access": "list"},
-        {"type": "float", "name": "Monthly ventilation heat losses", "nick-name": "Q_V", "description": "Monthly ventilation heat losses of a zone in kWh.", "access": "list"},
-        {"type": "float", "name": "Monthly internal gains", "nick-name": "Q_i", "description": "Monthly internal gains of a zone in kWh.", "access": "list"},
-        {"type": "float", "name": "Monthly solar gains", "nick-name": "Q_s", "description": "Monthly solar gains of a zone in kWh.", "access": "list"},
-        {"type": "float", "name": "Monthly transmission heat losses of opaque surfaces", "nick-name": "Q_T_opaque", "description": "Monthly transmission heat losses through opaque envelope surfaces in kWh", "access": "list"},
-        {"type": "float", "name": "Monthly transmission heat losses of transparent surfaces", "nick-name": "Q_T_transp", "description": "Monthly transmission heat losses through transparent envelope surfaces in kWh", "access": "list"},
-        {"type": "float", "name": "Monthly solar gains per transparent surface", "nick-name": "Q_s_per_window", "description": "Monthly solar gains per transparent surface (window). Grasshopper tree with each branch representing one window and containing a timeseries of monthly irradiation values in kWh.", "access":  "tree"}
+        {"type": "float", "name": "Heating demand", "nick-name": "Q_Heat", "description": "Heating loads of a zone in kWh.", "access": "list"},
+        {"type": "float", "name": "Cooling demand", "nick-name": "Q_Cool", "description": "Cooling loads of a zone in kWh.", "access": "list"},
+        {"type": "float", "name": "Electricity demand", "nick-name": "Q_Elec", "description": "Electricity loads of a zone in kWh.", "access": "list"},
+        {"type": "float", "name": "Transmission heat losses", "nick-name": "Q_T", "description": "Transmission heat losses of a zone in kWh.", "access": "list"},
+        {"type": "float", "name": "Ventilation heat losses", "nick-name": "Q_V", "description": "Ventilation heat losses of a zone in kWh.", "access": "list"},
+        {"type": "float", "name": "Internal gains", "nick-name": "Q_i", "description": "Internal gains of a zone in kWh.", "access": "list"},
+        {"type": "float", "name": "Solar gains", "nick-name": "Q_s", "description": "Solar gains of a zone in kWh.", "access": "list"},
+        {"type": "float", "name": "Transmission heat losses of opaque surfaces", "nick-name": "Q_T_opaque", "description": "Transmission heat losses through opaque envelope surfaces in kWh", "access": "list"},
+        {"type": "float", "name": "Transmission heat losses of transparent surfaces", "nick-name": "Q_T_transp", "description": "Transmission heat losses through transparent envelope surfaces in kWh", "access": "list"},
+        {"type": "float", "name": "Solar gains per transparent surface", "nick-name": "Q_s_per_window", "description": "Solar gains per transparent surface (window). Grasshopper tree with each branch representing one window and containing a timeseries of irradiation values in kWh.", "access":  "tree"}
       ]
     },
     {
       "class-name": "AdaptiveComfort",
       "name": "Adaptive Comfort",
       "abbreviation": "AdaptiveComfort",
-      "description": "Monthly adaptive thermal comfort temperature as a function of ambient air temperature. Source: PLEA Notes 3 - Thermal Comfort. Auliciems and Szokolay 2007.",
+      "description": "Adaptive thermal comfort temperature as a function of ambient air temperature. Source: PLEA Notes 3 - Thermal Comfort. Auliciems and Szokolay 2007.",
       "category": "[hive]",
       "subcategory": "Demand",
       "id": "83d5d815-a306-4555-81f8-887132d0711f",
@@ -57,14 +58,14 @@
       "main-module": "adaptive_comfort",
       "main-function": "adaptive_comfort",
       "inputs": [
-        {"type": "float", "name": "Monthly air temperature", "nick-name": "T_m", "description": "Average monthly ambient air temperature in °C.", "access": "list"}
+        {"type": "float", "name": "Air temperature", "nick-name": "T_e", "description": "Average ambient air temperature in °C, either hourly or averaged monthly.", "access": "list"}
       ],
       "outputs": [
-        {"type": "float", "name": "Monthly thermal comfort", "nick-name": "T_n", "description": "Monthly mean adaptive thermal comfort temperature in °C.", "access": "list"},
-        {"type": "float", "name": "Monthly comfort, 80% upper bound", "nick-name": "T_n80ub", "description": "Monthly adaptive thermal comfort temperature in °C (upper bound of 80% acceptance).", "access": "list"},
-        {"type": "float", "name": "Monthly comfort, 80% lower bound", "nick-name": "T_n80lb", "description": "Monthly adaptive thermal comfort temperature in °C (lower bound of 80% acceptance).", "access": "list"},
-        {"type": "float", "name": "Monthly comfort, 90% upper bound", "nick-name": "T_n90ub", "description": "Monthly adaptive thermal comfort temperature in °C (upper bound of 90% acceptance).", "access": "list"},
-        {"type": "float", "name": "Monthly comfort, 90% lower bound", "nick-name": "T_n90lb", "description": "Monthly adaptive thermal comfort temperature in °C (lower bound of 90% acceptance).", "access": "list"}
+        {"type": "float", "name": "Thermal comfort", "nick-name": "T_n", "description": "Mean adaptive thermal comfort temperature in °C.", "access": "list"},
+        {"type": "float", "name": "Comfort, 80% upper bound", "nick-name": "T_n80ub", "description": "Adaptive thermal comfort temperature in °C (upper bound of 80% acceptance).", "access": "list"},
+        {"type": "float", "name": "Comfort, 80% lower bound", "nick-name": "T_n80lb", "description": "Adaptive thermal comfort temperature in °C (lower bound of 80% acceptance).", "access": "list"},
+        {"type": "float", "name": "Comfort, 90% upper bound", "nick-name": "T_n90ub", "description": "Adaptive thermal comfort temperature in °C (upper bound of 90% acceptance).", "access": "list"},
+        {"type": "float", "name": "Comfort, 90% lower bound", "nick-name": "T_n90lb", "description": "Adaptive thermal comfort temperature in °C (lower bound of 90% acceptance).", "access": "list"}
       ]
     },
     {
