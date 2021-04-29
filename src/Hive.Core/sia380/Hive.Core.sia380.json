@@ -20,9 +20,9 @@
       "inputs": [
         {"type": "json", "name": "Room properties", "nick-name": "RoomProperties", "description": "Room properties as json. Could be from SIA 2024, or custom. It needs to follow the hive sia2024-json syntax", "access": "item"},
         {"type": "float", "name": "Floor area", "nick-name": "FloorArea", "description": "Floor area of the zone in m^2.", "access": "item"},
-        {"type": "float", "name": "Air temperature", "nick-name": "T_e", "description": "Average ambient air temperature in °C.", "access": "list"},
-        {"type": "float", "name": "Setpoints upper bounds", "nick-name": "SetpointsUB", "description": "Room temperature setpoints in °C (upper bound).", "access": "list"},
-        {"type": "float", "name": "Setpoints lower bounds", "nick-name": "SetpointsLB", "description": "Room temperature setpoints in °C (lower bound).", "access": "list"},
+        {"type": "float", "name": "Air temperature", "nick-name": "T_e", "description": "Hourly ambient air temperature in °C.", "access": "list"},
+        {"type": "float", "name": "Setpoints upper bounds", "nick-name": "SetpointsUB", "description": "Hourly room temperature setpoints in °C (upper bound).", "access": "list"},
+        {"type": "float", "name": "Setpoints lower bounds", "nick-name": "SetpointsLB", "description": "Hourly room temperature setpoints in °C (lower bound).", "access": "list"},
         {"type": "float", "name": "Envelope surface areas", "nick-name": "SurfaceAreas", "description": "Envelope surface areas of all external room surfaces in m^2.", "access": "list"},
         {"type": "string", "name": "Envelope surface types", "nick-name": "SurfaceTypes", "description": "Envelope surface types of all external room surfaces. Either 'opaque' or 'transp'.", "access": "list"},
         {"type": "generic", "name": "Surface irradiation", "nick-name": "Q_s_tree", "description": "Surface irradiation per transparent surface. Grasshopper tree, with each branch representing a transparent surface and containing 8760 timeseries of solar irradiation in Wh.", "access": "tree"},
@@ -31,7 +31,7 @@
         {"type": "float", "name": "G value with sunscreen", "nick-name": "gValueTotal", "description": "G value total including sunscreen ('Sonnenschutz') of windows", "access": "item"},
         {"type": "float", "name": "Setpoint sunscreen", "nick-name": "SetpointSunscreen", "description": "Shading setpoint for activating sunscreen of windows, in W/m^2", "access": "item"},
         {"type": "float", "name": "Run obstructed solar simulation?", "nick-name": "RunObstructed?", "description": "Boolean to indicate if an obstructed solar simulation is conducted. True if yes.", "access": "item"},
-        {"type": "boolean", "name": "Hourly?", "nick-name": "HourlyOrMonthly", "description": "Boolean to indicate if to run monthly or hourly simulations. True if hourly.", "access": "item"}
+        {"type": "boolean", "name": "Run Hourly?", "nick-name": "RunHourly?", "description": "Boolean to indicate if to run monthly or hourly simulations. True if hourly.", "access": "item"}
       ],
       "outputs": [
         {"type": "float", "name": "Heating demand", "nick-name": "Q_Heat", "description": "Heating loads of a zone in kWh.", "access": "list"},
