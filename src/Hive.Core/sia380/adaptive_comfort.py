@@ -38,13 +38,8 @@ def adaptive_comfort(T):
 
 
 if __name__ == "__main__":
-    import time
-    start = time.time()
     T_m = [-4.0, 1.0, 4.4, 6.6, 14.0, 25.0, 18.0, 10.0, 5.0, 1.0, 0.0, -0.4]
     [sp, ub80, lb80, ub90, lb90] = adaptive_comfort(T_m)
-    end = time.time()
-
-    print("time ", end-start)
 
     print(sp)
     print(ub80)
