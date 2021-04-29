@@ -1,0 +1,69 @@
+$id: http://example.com/example.json
+$schema: http://json-schema.org/draft-07/schema
+description: The root schema comprises the entire JSON document.
+
+definitions:
+  Tagesprofil:
+    type: array
+    items:
+      maximum: 1.0
+      minimum: 0.0
+      type: number
+    maxItems: 24
+    minItems: 24
+type: array
+items:
+  type: object
+  anyOf:
+    - type: object
+      properties:
+        Schedules:
+          properties:
+            Geräte:
+              properties:
+                TagesProfil:
+                  $ref: "#/definitions/Tagesprofil"
+              required:
+                - TagesProfil
+              type: object
+            Personen:
+              properties:
+                Tagesprofil:
+                  $ref: "#/definitions/Tagesprofil"
+                Jahresprofil:
+                  description: Monthly indication of how often schedule applies.
+                  items:
+                    maximum: 1.0
+                    minimum: 0.0
+                    type: number
+                  maxItems: 12
+                  minItems: 12
+                  type: array
+                Nutzungstage pro Jahr:
+                  maximum: 365
+                  minimum: 0
+                  type: integer
+                Ruhetage pro Woche:
+                  maximum: 7
+                  minimum: 0
+                  type: integer
+              required:
+                - Ruhetage pro Woche
+                - Nutzungstage pro Jahr
+                - Tagesprofil
+                - Jahresprofil
+              type: object
+          required:
+            - Personen
+            - Geräte
+          type: object
+        Type:
+          type: 
+            - string
+            - array
+          items:
+            type: string
+          
+      required:
+        - Type
+        - Schedules
