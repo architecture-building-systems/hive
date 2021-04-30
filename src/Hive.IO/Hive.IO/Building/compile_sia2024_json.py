@@ -1,18 +1,10 @@
-"""
-Read in these three files (located in hive/src/Hive.IO/Hive.IO/Resources)
-
-- 200108_SIA2024_Raumdaten_Bestand.csv
-- 200108_SIA2024_Raumdaten_Standardwert.csv
-- 200108_SIA2024_Raumdaten_Zielwert.csv
-
-and save them to a json format as a single file (adding a field "Quality" and "BuildingUseType"). This file
-will be added as a resource to `Hive.IO.dll` that can then be read with `Hive.IO.Building.Sia2024Record`.
-"""
-from __future__ import print_function
+from __future__ import print_function, with_statement
 
 import os
 import csv
 import json
+
+from yaml.loader import FullLoader
 
 # map the csv header names to Sia2024Record names...
 # (try to keep them as similar as possible)
@@ -62,7 +54,18 @@ building_use_type_map = {
     12: "Diverses"
 }
 
-def main():
+def room_properties():
+    """
+    Read in these three files (located in hive/src/Hive.IO/Hive.IO/Resources)
+
+    - 200108_SIA2024_Raumdaten_Bestand.csv
+    - 200108_SIA2024_Raumdaten_Standardwert.csv
+    - 200108_SIA2024_Raumdaten_Zielwert.csv
+
+    and save them to a json format as a single file (adding a field "Quality" and "BuildingUseType"). This file
+    will be added as a resource to `Hive.IO.dll` that can then be read with `Hive.IO.Building.Sia2024Record`.
+    """
+    
     file_template = "201008_SIA2024_Raumdaten_{quality}.csv"
     folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Resources")) 
     #folder = "C:\\users\\chwaibel\\documents\\github\\Hive\\src\\Hive.IO\\Hive.IO\\Resources"
@@ -87,9 +90,35 @@ def main():
     with open(out_file, "w") as fp:
         json.dump(records, fp, indent=4, encoding="utf8")
 
-                
+def room_schedules():
+    """
+    Compiles the SIA 2024 schedules from yaml into a single JSON
+    Validate with the schedules schema.
+    In YAMl because easier to write than JSON....
+    """
+    import yaml
+    from jsonschema import validate
+
+    # Get the schedules yaml
+    file_name = "schedules.sia2024.yaml"
+    file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Resources", file_name)) 
+    assert os.path.exists(file_path)
+    with open(file_path, "r") as fp:
+        schedules = yaml.load(fp, Loader=FullLoader)
         
-
-
+    # Validate yaml
+    file_name_schema = "sia2024.yaml"
+    file_path_schema = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Schemas", file_name_schema)) 
+    with open(file_path_schema, "r") as fp:
+        schema = yaml.load(fp, Loader=FullLoader)
+    validate(schedules, schema)
+    
+    # Dump as json
+    out_file = os.path.join(os.path.dirname(__file__), "sia2024_schedules.json")
+    with open(out_file, "w") as fp:
+        json.dump(schedules, fp, indent=4, encoding="utf8")
+        
+        
 if __name__ == '__main__':
-    main()
+    # room_properties()
+    room_schedules()

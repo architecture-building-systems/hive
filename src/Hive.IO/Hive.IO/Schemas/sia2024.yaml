@@ -19,7 +19,7 @@ items:
       properties:
         Schedules:
           properties:
-            Geräte:
+            Geraete:
               properties:
                 TagesProfil:
                   $ref: "#/definitions/Tagesprofil"
@@ -55,7 +55,7 @@ items:
               type: object
           required:
             - Personen
-            - Geräte
+            - Geraete
           type: object
         Type:
           type: 
