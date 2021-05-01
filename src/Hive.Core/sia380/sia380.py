@@ -15,7 +15,7 @@ electricity demand: currently simply by using sqm and internal loads for lightin
 from __future__ import division
 import math
 
-import ghpythonlib.treehelpers as th
+# import ghpythonlib.treehelpers as th
 
 # Constants
 MONTHS_PER_YEAR = 12
@@ -30,18 +30,19 @@ def cleanDictForNaN(d):
     # a = d.values()
     # b = d.keys()
     for i in d:
-        # if isinstance(d[i],str): continue
+        if isinstance(d[i],str): continue
         if math.isnan(d[i]) or d[i] == "NaN":
             d[i] = 0.0
 
     return d
 
 
-def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_areas, surface_type,
+def main(room_properties, room_schedules, floor_area, T_e, setpoints_ub, setpoints_lb, surface_areas, surface_type,
          srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, run_obstructed_simulation, hourly):
     '''
     Computes monthly heating, cooling and electricity demand for a thermal zone, based on SIA 380.1
     :param room_properties: room properties in json format
+    :param room_schedules: room schedules in json format
     :param floor_area: Floor area of the room in m2
     :param T_e: monthly average or hourly ambient air temperature in degree Celsius
     :param setpoints_ub: Upper bound for temperature setpoints
@@ -193,30 +194,30 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         del setpoints_lb_tmp
         
         # ONLY FOR DEBUG hallucinate hourly T_e
-        # if (__debug__):
-        #     import datatree as dt
-        #     srf_irrad_obstr_tree_tmp = dt.DataTree([[]]*srf_irrad_obstr_tree.BranchCount)
-        #     srf_irrad_unobstr_tree_tmp = dt.DataTree([[]]*srf_irrad_unobstr_tree.BranchCount)
+        if (__debug__):
+            import datatree as dt
+            srf_irrad_obstr_tree_tmp = dt.DataTree([[]]*srf_irrad_obstr_tree.BranchCount)
+            srf_irrad_unobstr_tree_tmp = dt.DataTree([[]]*srf_irrad_unobstr_tree.BranchCount)
             
-        #     T_e_tmp = []
-        #     bs_multiplier = list(range(-6,6))+list(range(-6,6))[::-1]
+            T_e_tmp = []
+            bs_multiplier = list(range(-6,6))+list(range(-6,6))[::-1]
             
-        #     for i in range(MONTHS_PER_YEAR):
-        #         T_e_day = [T_e[i] + a for a in bs_multiplier]
-        #         srf_irrad_obstr_tree_day = [[srf_irrad_obstr_tree.Branch(j)[i]/DAYS_PER_MONTH[i] + 100*a for a in bs_multiplier] for j in range(srf_irrad_obstr_tree_tmp.BranchCount)]
-        #         srf_irrad_unobstr_tree_day = [[srf_irrad_unobstr_tree.Branch(j)[i]/DAYS_PER_MONTH[i] + 100*a for a in bs_multiplier] for j in range(srf_irrad_unobstr_tree_tmp.BranchCount)]
-        #         for _ in range(DAYS_PER_MONTH[i]):
-        #             T_e_tmp.extend(T_e_day)
-        #             for i, b in enumerate(srf_irrad_obstr_tree_tmp.Branches):
-        #                 b.extend(srf_irrad_obstr_tree_day[i])
-        #             for i, b in enumerate(srf_irrad_unobstr_tree_tmp.Branches):
-        #                 b.extend(srf_irrad_unobstr_tree_day[i])
-        #     T_e = T_e_tmp
-        #     srf_irrad_obstr_tree = srf_irrad_obstr_tree_tmp
-        #     srf_irrad_unobstr_tree = srf_irrad_unobstr_tree_tmp
-        #     del T_e_tmp
-        #     del srf_irrad_obstr_tree_tmp
-        #     del srf_irrad_unobstr_tree_tmp
+            for i in range(MONTHS_PER_YEAR):
+                T_e_day = [T_e[i] + a for a in bs_multiplier]
+                srf_irrad_obstr_tree_day = [[srf_irrad_obstr_tree.Branch(j)[i]/DAYS_PER_MONTH[i] + 100*a for a in bs_multiplier] for j in range(srf_irrad_obstr_tree_tmp.BranchCount)]
+                srf_irrad_unobstr_tree_day = [[srf_irrad_unobstr_tree.Branch(j)[i]/DAYS_PER_MONTH[i] + 100*a for a in bs_multiplier] for j in range(srf_irrad_unobstr_tree_tmp.BranchCount)]
+                for _ in range(DAYS_PER_MONTH[i]):
+                    T_e_tmp.extend(T_e_day)
+                    for i, b in enumerate(srf_irrad_obstr_tree_tmp.Branches):
+                        b.extend(srf_irrad_obstr_tree_day[i])
+                    for i, b in enumerate(srf_irrad_unobstr_tree_tmp.Branches):
+                        b.extend(srf_irrad_unobstr_tree_day[i])
+            T_e = T_e_tmp
+            srf_irrad_obstr_tree = srf_irrad_obstr_tree_tmp
+            srf_irrad_unobstr_tree = srf_irrad_unobstr_tree_tmp
+            del T_e_tmp
+            del srf_irrad_obstr_tree_tmp
+            del srf_irrad_unobstr_tree_tmp
     
     # Assert inputs monthly or hourly based on toggle
     input_size = HOURS_PER_YEAR if hourly else MONTHS_PER_YEAR
@@ -226,7 +227,7 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
 
     # read room properties from sia2024
     room_properties = cleanDictForNaN(room_properties)
-
+    
     # f_sh = 0.9  # sia2024, p.12, 1.3.1.9 Reduktion solare Wärmeeinträge
     # theta_i_summer = room_properties["Raumlufttemperatur Auslegung Kuehlung (Sommer)"]
     # theta_i_winter = room_properties["Raumlufttemperatur Auslegung Heizen (Winter)"]
@@ -249,9 +250,11 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
     # Average out the hours of occupancy, lighting, appliances
     if hourly:
         #TODO Determine based on SIA 2024 schedules from type
-        t_P = [room_properties["Vollaststunden pro Jahr (Personen)"] / float(HOURS_PER_YEAR)] * HOURS_PER_YEAR
-        t_L = [room_properties["Jaehrliche Vollaststunden der Raumbeleuchtung"] / float(HOURS_PER_YEAR)] * HOURS_PER_YEAR
-        t_A = [room_properties["Jaehrliche Vollaststunden der Geraete"] / float(HOURS_PER_YEAR)] * HOURS_PER_YEAR
+        # t_P = [room_properties["Vollaststunden pro Jahr (Personen)"] / float(HOURS_PER_YEAR)] * HOURS_PER_YEAR
+        # t_L = [room_properties["Jaehrliche Vollaststunden der Raumbeleuchtung"] / float(HOURS_PER_YEAR)] * HOURS_PER_YEAR
+        # t_A = [room_properties["Jaehrliche Vollaststunden der Geraete"] / float(HOURS_PER_YEAR)] * HOURS_PER_YEAR
+        # Create hourly schedules from SIA 2024
+        t_P, t_A, t_L = setup_schedules(room_schedules)
     else:
         t_P = [room_properties["Vollaststunden pro Jahr (Personen)"]] * MONTHS_PER_YEAR
         t_L = [room_properties["Jaehrliche Vollaststunden der Raumbeleuchtung"]] * MONTHS_PER_YEAR
@@ -546,6 +549,20 @@ def transpose_jagged_2D_array(array):
     return transposed_array
 
 
+def setup_schedules(room_schedules):
+    _, P_schedule, G_schedule, L_schedule = room_schedules
+    
+    YEAR_INTIAL_WEEKDAY = 0    
+    365 - room_schedules['OccupancySchedule']['DaysOffPerWeek'] * 52 == room_schedules['OccupancySchedule']['DaysUsedPerYear']
+    
+    # TODO assert props, expand daily profiles and yearly to hourly timeseries
+    
+    def setup_occupancy():
+        room_schedules['OccupancySchedule']
+    
+    
+    return P_schedule, G_schedule, L_schedule
+
 if __name__ == "__main__":
     class Jagged:
         def __init__(self, data):
@@ -573,6 +590,87 @@ if __name__ == "__main__":
             "Gesamtenergiedurchlassgrad Verglasung": 0.5,
             "Temperatur-Aenderungsgrad der Waermerueckgewinnung": 0.7,
             "Aussenluft-Volumenstrom (pro NGF)": 0.6
+        }
+        
+        room_schedules = {
+            "RoomType": "1.1 Wohnen Mehrfamilienhaus", 
+            "LightingSchedule": {
+                "HoursPerNight": 3, 
+                "HoursPerDay": 4
+            }, 
+            "OccupancySchedule": {
+                "YearlyProfile": [
+                    0.8, 
+                    0.8, 
+                    0.8, 
+                    0.8, 
+                    0.8, 
+                    0.8, 
+                    0.8, 
+                    0.8, 
+                    0.8, 
+                    0.8, 
+                    0.8, 
+                    0.8
+                ], 
+                "DailyProfile": [
+                    1.0, 
+                    1.0, 
+                    1.0, 
+                    1.0, 
+                    1.0, 
+                    1.0, 
+                    0.6, 
+                    0.4, 
+                    0, 
+                    0, 
+                    0, 
+                    0, 
+                    0.8, 
+                    0.4, 
+                    0, 
+                    0, 
+                    0, 
+                    0.4, 
+                    0.8, 
+                    0.8, 
+                    0.8, 
+                    1.0, 
+                    1.0, 
+                    1.0
+                ], 
+                "DaysOffPerWeek": 0, 
+                "DaysUsedPerYear": 365
+            }, 
+            "DevicesSchedule": {
+                "DailyProfile": [
+                    0.1, 
+                    0.1, 
+                    0.1, 
+                    0.1, 
+                    0.1, 
+                    0.2, 
+                    0.8, 
+                    0.2, 
+                    0.1, 
+                    0.1, 
+                    0.1, 
+                    0.1, 
+                    0.8, 
+                    0.2, 
+                    0.1, 
+                    0.1, 
+                    0.1, 
+                    0.2, 
+                    0.8, 
+                    1.0, 
+                    0.2, 
+                    0.2, 
+                    0.2, 
+                    0.1
+                ], 
+                "LoadWhenUnoccupied": 0.1
+            }
         }
 
         floor_area = 200.0
@@ -602,7 +700,7 @@ if __name__ == "__main__":
         setpoint_shading = 200 # W/m2
         
 
-        [Q_Heat, Q_Cool, Q_Elec, Q_T, Q_V, Q_i, Q_s, _, _] = main(room_properties, floor_area,
+        [Q_Heat, Q_Cool, Q_Elec, Q_T, Q_V, Q_i, Q_s, _, _] = main(room_properties, room_schedules, floor_area,
                                                                   T_e, 
                                                                   setpoints_ub, setpoints_lb, 
                                                                   surface_areas, surface_type, 
