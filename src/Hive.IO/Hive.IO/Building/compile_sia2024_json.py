@@ -100,18 +100,31 @@ def room_schedules():
     from jsonschema import validate
 
     # Get the schedules yaml
-    file_name = "schedules.sia2024.yaml"
+    file_name = "sia2024_schedules.yaml"
     file_path = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Resources", file_name)) 
     assert os.path.exists(file_path)
     with open(file_path, "r") as fp:
         schedules = yaml.load(fp, Loader=FullLoader)
         
     # Validate yaml
-    file_name_schema = "sia2024.yaml"
+    file_name_schema = "sia2024_schedules_schema.yaml"
     file_path_schema = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Schemas", file_name_schema)) 
+    assert os.path.exists(file_path_schema)
     with open(file_path_schema, "r") as fp:
         schema = yaml.load(fp, Loader=FullLoader)
     validate(schedules, schema)
+    
+    # One schedule set per type
+    for i in range(len(schedules))[::-1]:
+        schedule = schedules[i]
+        if isinstance(schedule['RoomType'], list):
+            room_types = schedules.pop(i)['RoomType']
+            for room_type in room_types:
+                schedule['RoomType'] = room_type
+                schedules.append(dict(schedule))
+    
+    # Resort the keys as in SIA 2024
+    schedules.sort(key=lambda k: float(k['RoomType'].split(' ')[0]))
     
     # Dump as json
     out_file = os.path.join(os.path.dirname(__file__), "sia2024_schedules.json")

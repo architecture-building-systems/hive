@@ -1,0 +1,88 @@
+$id: http://example.com/example.json
+$schema: http://json-schema.org/draft-07/schema
+description: The root schema comprises the entire JSON document.
+
+definitions:
+  Multiplier:
+    type: number
+    minimum: 0.0
+    maximum: 1.0
+  DailyProfile:
+    description: Tagesprofil.
+    type: array
+    items:
+      $ref: "#/definitions/Multiplier"
+    maxItems: 24
+    minItems: 24
+type: array
+items:
+  type: object
+  anyOf:
+    - type: object
+      properties:
+        DevicesSchedule:
+          description: Geraete
+          properties:
+            DailyProfile:
+              $ref: "#/definitions/DailyProfile"
+            LoadWhenUnoccupied:
+              $ref: "#/definitions/Multiplier"
+          required:
+            - DailyProfile
+            - LoadWhenUnoccupied
+          type: object
+        OccupancySchedule:
+          properties:
+            DailyProfile:
+              $ref: "#/definitions/DailyProfile"
+            YearlyProfile:
+              description: Monthly indication of how often schedule applies. SIA 2024 - Jahresprofil.
+              items:
+                $ref: "#/definitions/Multiplier"
+              maxItems: 12
+              minItems: 12
+              type: array
+            DaysUsedPerYear:
+              description: Nutzungstage pro Jahr
+              maximum: 365
+              minimum: 0
+              type: integer
+            DaysOffPerWeek:
+              description: Ruhetage pro Woche
+              maximum: 7
+              minimum: 0
+              type: integer
+          required:
+            - DaysOffPerWeek
+            - DaysUsedPerYear
+            - DailyProfile
+            - YearlyProfile
+          type: object
+        LightingSchedule:
+          description: Beleuchtung
+          properties:
+            HoursPerDay:
+              description: Nutzungsstunden pro Tag
+              type: number
+              minimum: 0
+              maximum: 11
+            HoursPerNight:
+              description: Nutzungsstunden pro Nacht
+              type: number
+              minimum: 0
+              maximum: 13
+          required:
+            - HoursPerDay
+            - HoursPerNight
+        RoomType:
+          type: 
+            - string
+            - array
+          items:
+            type: string
+          
+      required:
+        - RoomType
+        - OccupancySchedule
+        - DevicesSchedule
+        - LightingSchedule
