@@ -177,27 +177,6 @@ def main(room_properties, room_schedules, floor_area, T_e, setpoints_ub, setpoin
         - ...   ...:
         _____________________________________________________________________________________
     """
-
-    rho = 1.2       # Luftdichte in kg/m^3
-    c_p = 1005      # Spez. Wärmekapazität Luft in J/(kgK)
-   
-    # Assert inputs hourly
-    assert len(setpoints_ub) == HOURS_PER_YEAR, "'setpoints_ub' (Setpoints upper bound) must be hourly. Length was %d." % (len(setpoints_ub))
-    assert len(setpoints_lb) == HOURS_PER_YEAR, "'setpoints_lb' (Setpoints lower bound) must be hourly. Length was %d." % (len(setpoints_lb))
-    assert len(T_e) == HOURS_PER_YEAR, "'T_e' (Ambient temperature) must be hourly. Length was %d." % (len(T_e))
-   
-    # IF setpoints given monthly for hourly simulation, they stay the same for entire month regardless of T_e.
-    # if hourly and len(setpoints_lb) == len(setpoints_ub) == MONTHS_PER_YEAR:  
-    #     print("WARNING: The setpoints are provided monthly so will not vary on an hourly basis.")
-    #     setpoints_ub_tmp = []
-    #     setpoints_lb_tmp = []
-    #     for i in range(MONTHS_PER_YEAR):
-    #         setpoints_ub_tmp.extend([setpoints_ub[i]] * HOURS_PER_MONTH[i])
-    #         setpoints_lb_tmp.extend([setpoints_lb[i]] * HOURS_PER_MONTH[i])
-    #     setpoints_ub = setpoints_ub_tmp
-    #     setpoints_lb = setpoints_lb_tmp
-    #     del setpoints_ub_tmp
-    #     del setpoints_lb_tmp
         
     # ONLY FOR DEBUG hallucinate hourly T_e
     # if hourly and __debug__:
@@ -238,11 +217,19 @@ def main(room_properties, room_schedules, floor_area, T_e, setpoints_ub, setpoin
     #     del srf_irrad_obstr_tree_tmp
     #     del srf_irrad_unobstr_tree_tmp
     
-    # Assert inputs monthly or hourly based on toggle
-    input_size = HOURS_PER_YEAR if hourly else MONTHS_PER_YEAR
-    assert len(setpoints_ub) == HOURS_PER_YEAR, "Length of 'setpoints_ub' (Setpoints upper bound) was %d but should be %d." % (len(setpoints_ub), HOURS_PER_YEAR)
-    assert len(setpoints_lb) == HOURS_PER_YEAR, "Length of 'setpoints_lb' (Setpoints lower bound) was %d but should be %d." % (len(setpoints_lb), HOURS_PER_YEAR)
-    assert len(T_e) == HOURS_PER_YEAR, "Length of 'T_e' (Ambient temperature) was %d but should be %d." % (len(T_e), HOURS_PER_YEAR)
+    rho = 1.2       # Luftdichte in kg/m^3
+    c_p = 1005      # Spez. Wärmekapazität Luft in J/(kgK)
+   
+    # Assert inputs hourly
+    assert len(setpoints_ub) == HOURS_PER_YEAR, "'setpoints_ub' (Setpoints upper bound) must be hourly. Length was %d." % (len(setpoints_ub))
+    assert len(setpoints_lb) == HOURS_PER_YEAR, "'setpoints_lb' (Setpoints lower bound) must be hourly. Length was %d." % (len(setpoints_lb))
+    assert len(T_e) == HOURS_PER_YEAR, "'T_e' (Ambient temperature) must be hourly. Length was %d." % (len(T_e))
+   
+    # IF setpoints given monthly for hourly simulation, they stay the same for entire month regardless of T_e.
+    if not hourly:
+        setpoints_ub = get_monthly_avg(setpoints_ub)
+        setpoints_lb = get_monthly_avg(setpoints_lb)
+        T_e = get_monthly_avg(T_e)
 
     # read room properties from sia2024
     room_properties = cleanDictForNaN(room_properties)
