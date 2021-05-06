@@ -68,30 +68,33 @@ namespace Hive.IO.GhDistributors
 
             foreach (GH_ObjectWrapper hiveInput in inputObjects)
             {
-                if (hiveInput.Value is Photovoltaic)
-                    srfBasedTech.Add(hiveInput.Value as Photovoltaic);
-                else if (hiveInput.Value is SolarThermal)
-                    srfBasedTech.Add(hiveInput.Value as SolarThermal);
-                else if (hiveInput.Value is PVT)
-                    srfBasedTech.Add(hiveInput.Value as PVT);
-                else if (hiveInput.Value is GroundCollector)
-                    srfBasedTech.Add(hiveInput.Value as GroundCollector);
-                else if (hiveInput.Value is AirSourceHeatPump)
-                    conversionTech.Add(hiveInput.Value as AirSourceHeatPump);
-                else if (hiveInput.Value is Chiller)
-                    conversionTech.Add(hiveInput.Value as Chiller);
-                else if (hiveInput.Value is GasBoiler)
-                    conversionTech.Add(hiveInput.Value as GasBoiler);
-                else if (hiveInput.Value is CombinedHeatPower)
-                    conversionTech.Add(hiveInput.Value as CombinedHeatPower);
-                else if (hiveInput.Value is HeatCoolingExchanger)
-                    conversionTech.Add(hiveInput.Value as HeatCoolingExchanger);
-                else if (hiveInput.Value is Building.Building)
-                    building = hiveInput.Value as Building.Building;
-                else if (hiveInput.Value is Environment.Environment)
-                    environment = hiveInput.Value as Environment.Environment;
-                else if (hiveInput.Value is Emitter)
-                    emitters.Add(hiveInput.Value as Emitter);
+                switch (hiveInput.Value)
+                {
+                    case Photovoltaic valuePV:                      
+                        srfBasedTech.Add(valuePV); break;
+                    case SolarThermal valueST:                      
+                        srfBasedTech.Add(valueST); break;
+                    case PVT valuePVT:                              
+                        srfBasedTech.Add(valuePVT); break;
+                    case GroundCollector valueGC:                   
+                        srfBasedTech.Add(valueGC); break;
+                    case AirSourceHeatPump valueASHP:               
+                        conversionTech.Add(valueASHP); break;
+                    case Chiller valueChiller:                       
+                        conversionTech.Add(valueChiller); break;
+                    case GasBoiler valueGasBoiler:                  
+                        conversionTech.Add(valueGasBoiler); break;
+                    case CombinedHeatPower valueCHP:                
+                        conversionTech.Add(valueCHP); break;
+                    case HeatCoolingExchanger valueHCE:             
+                        conversionTech.Add(valueHCE); break;
+                    case Building.Building valueBuilding:          
+                        building = valueBuilding; break;
+                    case Environment.Environment valueEnvironment:  
+                        environment = valueEnvironment; break;
+                    case Emitter valueEmitter:                      
+                        emitters.Add(valueEmitter); break;
+                }
             }
 
             //if (building != null) Rhino.RhinoApp.WriteLine("Building '{0}' read successfully", building.Type.ToString());

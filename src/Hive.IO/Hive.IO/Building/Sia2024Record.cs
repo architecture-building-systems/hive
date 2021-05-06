@@ -218,7 +218,7 @@ namespace Hive.IO.Building
 
         public static Sia2024Record FromJson(string json)
         {
-            var d = JsonConvert.DeserializeObject<Dictionary<string, object>>(json);
+            var d = JsonConvert.DeserializeObject<Dictionary<string, object>>(json); // TODO why not deserialise to Sia2024Record with JsonProperty name set to german keys?
             Func<string, double?> readValueOrNull = key => d.ContainsKey(key) ? (double?) d[key] : null;
 
             return new Sia2024Record
