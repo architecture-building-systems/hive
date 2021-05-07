@@ -178,6 +178,9 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
 
     rho = 1.2       # Luftdichte in kg/m^3
     c_p = 1005      # Spez. Wärmekapazität Luft in J/(kgK)
+    
+    setback_ub = 3  # TODO input param? adaptive as well?
+    setback_lb = 3  # TODO input param? adaptive as well?
    
     # Assert inputs hourly
     assert len(setpoints_ub) == HOURS_PER_YEAR, "'setpoints_ub' (Setpoints upper bound) must be hourly. Length was %d." % (len(setpoints_ub))
@@ -284,15 +287,22 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
     # See equation sheet 'EK1_Formelsammlung_HS20.pdf'
     for t in range(HOURS_PER_YEAR if hourly else MONTHS_PER_YEAR):
         num_timesteps = 1 if hourly else HOURS_PER_MONTH[t]
+        
+        T_setpoint_ub = setpoints_ub[t]
+        T_setpoint_lb = setpoints_lb[t]
+        
+        if t_P[t] == 0.0:
+            T_setpoint_ub += setback_ub
+            T_setpoint_lb -= setback_lb
 
         # Ventilation losses (Lüftungswärmeverluste)
         # Q_V = H_V * (T_i - T_e) * t
         # we compute with and without heat recovery, ub and lb, and take the respectively best (lowest demand)
         # this assumes, the ventilation system operates ideally and does not, for example, keep warm air in summer
-        Q_V_ub = H_V * (setpoints_ub[t] - T_e[t]) * num_timesteps
-        Q_V_lb = H_V * (setpoints_lb[t] - T_e[t]) * num_timesteps
-        Q_V_ub_no_hr = H_V_no_heat_recovery * (setpoints_ub[t] - T_e[t]) * num_timesteps
-        Q_V_lb_no_hr = H_V_no_heat_recovery * (setpoints_lb[t] - T_e[t]) * num_timesteps
+        Q_V_ub = H_V * (T_setpoint_ub - T_e[t]) * num_timesteps
+        Q_V_lb = H_V * (T_setpoint_lb - T_e[t]) * num_timesteps
+        Q_V_ub_no_hr = H_V_no_heat_recovery * (T_setpoint_ub - T_e[t]) * num_timesteps
+        Q_V_lb_no_hr = H_V_no_heat_recovery * (T_setpoint_lb - T_e[t]) * num_timesteps
 
         # Internal loads (interne Wärmeeinträge)
         # Q_i = Phi_P * t_P + Phi_L * t_L + Phi_A * t_A
@@ -306,8 +316,8 @@ def main(room_properties, floor_area, T_e, setpoints_ub, setpoints_lb, surface_a
         Q_T_tr_ub = 0.0
         Q_T_tr_lb = 0.0
         
-        deltaT_ub = (setpoints_ub[t] - T_e[t]) * num_timesteps
-        deltaT_lb = (setpoints_lb[t] - T_e[t]) * num_timesteps
+        deltaT_ub = (T_setpoint_ub - T_e[t]) * num_timesteps
+        deltaT_lb = (T_setpoint_lb - T_e[t]) * num_timesteps
             
         for surface in range(num_surfaces):
             # Transmission heat transfer coefficient (Transmissions-Wärmetransferkoeffizient), H_T     #TODO       
