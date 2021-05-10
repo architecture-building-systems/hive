@@ -1,0 +1,2433 @@
+- RoomType: 1.1 Wohnen Mehrfamilienhaus
+
+  OccupancySchedule:
+    DaysOffPerWeek: 0
+    DaysUsedPerYear: 365
+    DailyProfile:
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 0.6
+      - 0.4
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.8
+      - 0.4
+      - 0
+      - 0
+      - 0
+      - 0.4
+      - 0.8
+      - 0.8
+      - 0.8
+      - 1.0
+      - 1.0
+      - 1.0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.2
+      - 0.8
+      - 0.2
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.8
+      - 0.2
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.2
+      - 0.8
+      - 1.0
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 4
+    HoursPerNight: 3
+- RoomType: 1.2 Wohnen Einfamilienhaus
+
+  OccupancySchedule:
+    DaysOffPerWeek: 0
+    DaysUsedPerYear: 365
+    DailyProfile:
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 0.6
+      - 0.4
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.8
+      - 0.4
+      - 0
+      - 0
+      - 0
+      - 0.4
+      - 0.8
+      - 0.8
+      - 0.8
+      - 1.0
+      - 1.0
+      - 1.0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.2
+      - 0.8
+      - 0.2
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.8
+      - 0.2
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.2
+      - 0.8
+      - 1.0
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 4
+    HoursPerNight: 3
+- RoomType: 2.1 Hotelzimmer
+
+  OccupancySchedule:
+    DaysOffPerWeek: 0
+    DaysUsedPerYear: 365
+    DailyProfile:
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 0.8
+      - 0.4
+      - 0.2
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.4
+      - 0.6
+      - 0.8
+      - 0.8
+      - 1.0
+      - 1.0
+    YearlyProfile:
+      - 0.7
+      - 0.7
+      - 0.7
+      - 0.7
+      - 0.7
+      - 0.7
+      - 0.7
+      - 0.7
+      - 0.7
+      - 0.7
+      - 0.7
+      - 0.7
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.2
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.2
+      - 0.4
+      - 0.8
+      - 0.2
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.2
+      - 0.4
+      - 1.0
+      - 0.6
+      - 0.4
+      - 0.2
+      - 0.2
+  LightingSchedule:
+    HoursPerDay: 3
+    HoursPerNight: 3
+- RoomType: 2.2 Empfang, Lobby
+
+  OccupancySchedule:
+    DaysOffPerWeek: 0
+    DaysUsedPerYear: 365
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.1
+      - 0.1
+      - 0.5
+      - 1.0
+      - 1.0
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 1.0
+      - 1.0
+      - 1.0
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.1
+    YearlyProfile:
+      - 0.7
+      - 0.7
+      - 0.7
+      - 0.7
+      - 0.7
+      - 0.7
+      - 0.7
+      - 0.7
+      - 0.7
+      - 0.7
+      - 0.7
+      - 0.7
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.5
+      - 1.0
+      - 1.0
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 1.0
+      - 1.0
+      - 1.0
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 9
+- RoomType: 3.1 Einzel-, Gruppenbuero
+
+  OccupancySchedule:
+    DaysOffPerWeek: 2
+    DaysUsedPerYear: 261
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.6
+      - 1.0
+      - 1.0
+      - 0.8
+      - 0.4
+      - 0.6
+      - 1.0
+      - 0.8
+      - 0.6
+      - 0.2
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.2
+      - 0.6
+      - 0.8
+      - 1.0
+      - 0.8
+      - 0.4
+      - 0.6
+      - 1.0
+      - 0.8
+      - 0.6
+      - 0.2
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 0
+- RoomType: 3.2 Grossraumbuero
+
+  OccupancySchedule:
+    DaysOffPerWeek: 2
+    DaysUsedPerYear: 261
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.6
+      - 1.0
+      - 1.0
+      - 0.8
+      - 0.4
+      - 0.6
+      - 1.0
+      - 0.8
+      - 0.6
+      - 0.2
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.2
+      - 0.6
+      - 0.8
+      - 1.0
+      - 0.8
+      - 0.4
+      - 0.6
+      - 1.0
+      - 0.8
+      - 0.6
+      - 0.2
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 0
+- RoomType: 3.3 Sitzungszimmer
+
+  OccupancySchedule:
+    DaysOffPerWeek: 2
+    DaysUsedPerYear: 261
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.6
+      - 1.0
+      - 0.4
+      - 0
+      - 0
+      - 0.6
+      - 1.0
+      - 0.4
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.6
+      - 1.0
+      - 0.4
+      - 0.1
+      - 0.1
+      - 0.6
+      - 1.0
+      - 0.4
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 6
+    HoursPerNight: 0
+- RoomType: 3.4 Schalterhalle, Empfang
+
+  OccupancySchedule:
+    DaysOffPerWeek: 2
+    DaysUsedPerYear: 261
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.6
+      - 1.0
+      - 1.0
+      - 0.8
+      - 0.4
+      - 0.6
+      - 1.0
+      - 0.8
+      - 0.6
+      - 0.2
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.2
+      - 0.6
+      - 0.8
+      - 1.0
+      - 0.8
+      - 0.4
+      - 0.6
+      - 1.0
+      - 0.8
+      - 0.6
+      - 0.2
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 0
+- RoomType:
+  - 4.1 Schulzimmer
+  - 4.4 Hoehrsaal
+  - 4.5 Schulfachraum
+
+  OccupancySchedule:
+    DaysOffPerWeek: 2
+    DaysUsedPerYear: 261
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.4
+      - 0.6
+      - 1.0
+      - 1.0
+      - 0.8
+      - 0.2
+      - 0.6
+      - 1.0
+      - 0.8
+      - 0.8
+      - 0.4
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.6
+      - 0.9
+      - 0.6
+      - 0.8
+      - 1.0
+      - 0
+      - 0.6
+      - 1.0
+      - 0.6
+      - 0.9
+      - 0.6
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.4
+      - 0.6
+      - 0.8
+      - 1.0
+      - 0.8
+      - 0.2
+      - 0.6
+      - 1.0
+      - 0.8
+      - 0.8
+      - 0.4
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 0
+- RoomType:
+  - 4.2 Lehrerzimmer
+  - 4.3 Bibliothek
+
+  OccupancySchedule:
+    DaysOffPerWeek: 2
+    DaysUsedPerYear: 261
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 1.0
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.6
+      - 0.9
+      - 0.6
+      - 0.8
+      - 1.0
+      - 0
+      - 0.6
+      - 1.0
+      - 0.6
+      - 0.9
+      - 0.6
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 1.0
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 0
+- RoomType: 5.1 Lebensmittelverkauf
+
+  OccupancySchedule:
+    DaysOffPerWeek: 1
+    DaysUsedPerYear: 313
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.6
+      - 0.6
+      - 0.6
+      - 0.4
+      - 0.4
+      - 0.6
+      - 1.0
+      - 0.6
+      - 0.4
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.2
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 2
+
+- RoomType: 5.2 Fachgeschaeft
+
+  OccupancySchedule:
+    DaysOffPerWeek: 1
+    DaysUsedPerYear: 313
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.6
+      - 0.6
+      - 0.6
+      - 0.4
+      - 0.4
+      - 0.6
+      - 1.0
+      - 0.6
+      - 0.4
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 2
+
+- RoomType: 5.3 Verkauf Moebel, Bau, Garten
+
+  OccupancySchedule:
+    DaysOffPerWeek: 1
+    DaysUsedPerYear: 313
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.6
+      - 0.6
+      - 0.6
+      - 0.4
+      - 0.4
+      - 0.6
+      - 1.0
+      - 0.6
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 1
+- RoomType: 6.1 Restaurant
+
+  OccupancySchedule:
+    DaysOffPerWeek: 1
+    DaysUsedPerYear: 313
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.6
+      - 1.0
+      - 0.6
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.2
+      - 0.6
+      - 1.0
+      - 0.2
+      - 0.2
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.6
+      - 1.0
+      - 1.0
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.4
+      - 0.4
+      - 0.6
+      - 1.0
+      - 0.8
+      - 0.4
+  LightingSchedule:
+    HoursPerDay: 6
+    HoursPerNight: 6
+- RoomType: 6.2 Selbstbedienungsrestaurant
+
+  OccupancySchedule:
+    DaysOffPerWeek: 1
+    DaysUsedPerYear: 313
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.4
+      - 0.2
+      - 0.4
+      - 1.0
+      - 0.4
+      - 0.2
+      - 0.4
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.6
+      - 1.0
+      - 1.0
+      - 0.8
+      - 0.4
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 7
+    HoursPerNight: 0
+- RoomType: 6.3 Kueche zu Restaurant
+
+  OccupancySchedule:
+    DaysOffPerWeek: 1
+    DaysUsedPerYear: 313
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.4
+      - 0.6
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.6
+      - 0.4
+      - 0
+      - 0
+      - 0.4
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.4
+      - 0.2
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.4
+      - 0.6
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.6
+      - 0.4
+      - 0.1
+      - 0.1
+      - 0.4
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.4
+      - 0.2
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 8
+    HoursPerNight: 5
+- RoomType: 6.4 Kueche zu Selbstbedienungsrestaurant
+
+  OccupancySchedule:
+    DaysOffPerWeek: 1
+    DaysUsedPerYear: 313
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.4
+      - 0.4
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.6
+      - 0.4
+      - 0.2
+      - 0.2
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.4
+      - 0.4
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.6
+      - 0.4
+      - 0.2
+      - 0.2
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 9
+    HoursPerNight: 0
+- RoomType: 7.1 Vorstellungsraum
+
+  OccupancySchedule:
+    DaysOffPerWeek: 1
+    DaysUsedPerYear: 313
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.6
+      - 0.6
+      - 0.6
+      - 0.6
+      - 0.6
+      - 0.6
+      - 1.0
+      - 1.0
+      - 1.0
+      - 0.6
+      - 0.2
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.2
+      - 0.6
+      - 0.6
+      - 0.6
+      - 0.6
+      - 0.6
+      - 0.6
+      - 1.0
+      - 1.0
+      - 1.0
+      - 0.6
+      - 0.2
+  LightingSchedule:
+    HoursPerDay: 6
+    HoursPerNight: 6
+- RoomType:
+  - 7.2 Mehrzweckhalle
+  - 7.3 Ausstellungshalle
+
+  OccupancySchedule:
+    DaysOffPerWeek: 1
+    DaysUsedPerYear: 313
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.6
+      - 1.0
+      - 1.0
+      - 0.2
+      - 0.2
+      - 1.0
+      - 1.0
+      - 0.6
+      - 0.6
+      - 0.6
+      - 0.6
+      - 1.0
+      - 1.0
+      - 0.6
+      - 0.2
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.2
+      - 0.6
+      - 1.0
+      - 1.0
+      - 0.2
+      - 0.2
+      - 1.0
+      - 1.0
+      - 0.6
+      - 0.6
+      - 0.6
+      - 0.6
+      - 1.0
+      - 1.0
+      - 0.6
+      - 0.2
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 5
+- RoomType: 8.1 Bettenzimmer
+
+  OccupancySchedule:
+    DaysOffPerWeek: 0
+    DaysUsedPerYear: 365
+    DailyProfile:
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.2
+    DailyProfile:
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.8
+      - 0.6
+      - 0.4
+      - 0.2
+      - 0.2
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 3
+- RoomType: 8.2 Stationszimmer
+
+  OccupancySchedule:
+    DaysOffPerWeek: 0
+    DaysUsedPerYear: 365
+    DailyProfile:
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.4
+      - 1.0
+      - 0.6
+      - 0.6
+      - 0.6
+      - 0.6
+      - 1.0
+      - 0.6
+      - 0.6
+      - 0.6
+      - 0.6
+      - 1.0
+      - 0.4
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.4
+      - 1.0
+      - 0.6
+      - 0.6
+      - 0.6
+      - 0.6
+      - 1.0
+      - 0.6
+      - 0.6
+      - 0.6
+      - 0.6
+      - 1.0
+      - 0.4
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 13
+- RoomType: 8.3 Behandlungsraum
+
+  OccupancySchedule:
+    DaysOffPerWeek: 1
+    DaysUsedPerYear: 313
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.6
+      - 1.0
+      - 1.0
+      - 0.8
+      - 0.4
+      - 0.6
+      - 1.0
+      - 0.8
+      - 0.6
+      - 0.2
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.2
+      - 0.6
+      - 0.8
+      - 1.0
+      - 0.8
+      - 0.4
+      - 0.6
+      - 1.0
+      - 0.8
+      - 0.6
+      - 0.2
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 0
+- RoomType: 9.1 Produktion (grobe Arbeit)
+
+  OccupancySchedule:
+    DaysOffPerWeek: 2
+    DaysUsedPerYear: 261
+    DailyProfile:
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.5
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.8
+      - 1.0
+      - 0.5
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.2
+      - 0.2
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.2
+    DailyProfile:
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.5
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.8
+      - 1.0
+      - 0.5
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.2
+      - 0.2
+
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 13
+- RoomType:
+  - 9.2 Produktion (feine Arbeit)
+  - 9.3 Laborraum
+
+  OccupancySchedule:
+    DaysOffPerWeek: 2
+    DaysUsedPerYear: 261
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.6
+      - 1.0
+      - 1.0
+      - 0.8
+      - 0.4
+      - 0.6
+      - 1.0
+      - 0.8
+      - 0.6
+      - 0.2
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.2
+    DailyProfile:
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.6
+      - 1.0
+      - 1.0
+      - 0.8
+      - 0.4
+      - 0.6
+      - 1.0
+      - 0.8
+      - 0.6
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 0
+- RoomType: 10.1 Lagerhalle
+
+  OccupancySchedule:
+    DaysOffPerWeek: 2
+    DaysUsedPerYear: 261
+    DailyProfile:
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.5
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.8
+      - 1.0
+      - 0.5
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.2
+      - 0.2
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.5
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.8
+      - 1.0
+      - 0.5
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.5
+      - 0.2
+      - 0.2
+
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 13
+- RoomType: 11.1 Turnhalle
+
+  OccupancySchedule:
+    DaysOffPerWeek: 2
+    DaysUsedPerYear: 261
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.5
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.8
+      - 0
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.8
+      - 0.5
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.5
+      - 0.5
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.6
+      - 0.9
+      - 0.6
+      - 0.8
+      - 1.0
+      - 0
+      - 0.6
+      - 1.0
+      - 0.6
+      - 0.9
+      - 0.6
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.5
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.8
+      - 1.0
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.8
+      - 0.5
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.5
+      - 0.5
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 10
+    HoursPerNight: 5
+- RoomType:
+  - 11.2 Fitnessraum
+  - 11.3 Schwimmhalle
+
+  OccupancySchedule:
+    DaysOffPerWeek: 1
+    DaysUsedPerYear: 313
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.5
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.8
+      - 0
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.8
+      - 0.5
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.5
+      - 0.5
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.5
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.8
+      - 1.0
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.8
+      - 0.5
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.5
+      - 0.5
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 10
+    HoursPerNight: 5
+
+- RoomType:
+  - 12.1 Verkehrsflaeche
+  - 12.3 Treppenhaus
+  - 12.4 Nebenraum
+  OccupancySchedule:
+    DaysOffPerWeek: 0
+    DaysUsedPerYear: 365
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.2
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 2
+
+- RoomType: 12.2 Verkehrsflaeche 24 h
+  OccupancySchedule:
+    DaysOffPerWeek: 0
+    DaysUsedPerYear: 365
+    DailyProfile:
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.2
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 13
+
+- RoomType: 12.5 Kueche, Teekueche
+
+  OccupancySchedule:
+    DaysOffPerWeek: 2
+    DaysUsedPerYear: 261
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.4
+      - 0.8
+      - 1.0
+      - 0.8
+      - 0.4
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.4
+      - 0.8
+      - 1.0
+      - 0.8
+      - 0.4
+      - 0.2
+      - 0.2
+      - 0.2
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 0
+
+- RoomType:
+  - 12.6 WC, Bad, Dusche
+  - 12.7 WC
+  - 12.8 Garderobe, Dusche
+
+  OccupancySchedule:
+    DaysOffPerWeek: 2
+    DaysUsedPerYear: 261
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.4
+      - 0.6
+      - 0.8
+      - 0.8
+      - 0.4
+      - 0.6
+      - 0.8
+      - 0.8
+      - 0.4
+      - 0.2
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 0
+
+- RoomType: 12.11 Kuehlraum
+
+  OccupancySchedule:
+    DaysOffPerWeek: 2
+    DaysUsedPerYear: 261
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 0.4
+    DailyProfile:
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.8
+      - 1.0
+      - 1.0
+      - 0.6
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+      - 0.4
+  LightingSchedule:
+    HoursPerDay: 0
+    HoursPerNight: 0
+- RoomType: 12.12 Serverraum
+
+  OccupancySchedule:
+    DaysOffPerWeek: 0
+    DaysUsedPerYear: 365
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.4
+      - 0.6
+      - 0.8
+      - 0.8
+      - 0.4
+      - 0.6
+      - 0.8
+      - 0.8
+      - 0.4
+      - 0.2
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DevicesSchedule:
+    LoadWhenUnoccupied: 1.0
+    DailyProfile:
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+      - 1.0
+  LightingSchedule:
+    HoursPerDay: 0
+    HoursPerNight: 0

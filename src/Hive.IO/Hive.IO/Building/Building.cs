@@ -64,9 +64,9 @@ namespace Hive.IO.Building
             //    Transmissivity = siaRoom.GValue
             //};
 
-            foreach(Zone zone in zones)
+            foreach (Zone zone in zones)
             {
-                foreach(Component component in zone.SurfaceComponents)
+                foreach (Component component in zone.SurfaceComponents)
                 {
                     component.ApplySia2024Construction(siaRoom);
                 }
