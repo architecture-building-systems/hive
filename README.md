@@ -17,5 +17,7 @@ Furthermore, (C) example Grasshopper files (.gh) can be found in the [Exercises 
 ## Info around Hive
 
 [ETH Teaching Fair](https://learning-teaching-fair.ethz.ch/project/energy-and-climate-systems-iii/)
+
 [A/S Website](https://systems.arch.ethz.ch/demonstrators/hive)
+
 [ETH Energy Blog](https://blogs.ethz.ch/energy/smart-grids/)
