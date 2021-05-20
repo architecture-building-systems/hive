@@ -13,3 +13,11 @@ Hive consists of (A) individual Grasshopper components and (B) a GH-Cluster comp
 Furthermore, (C) example Grasshopper files (.gh) can be found in the [Exercises folder](https://github.com/architecture-building-systems/hive/tree/master/GrasshopperExamples)
 
 ![Hive Architecture](https://github.com/architecture-building-systems/hive/blob/master/repository_files/00_Hive_Architecture.jpg)
+
+## Info around Hive
+
+[ETH Teaching Fair](https://learning-teaching-fair.ethz.ch/project/energy-and-climate-systems-iii/)
+
+[A/S Website](https://systems.arch.ethz.ch/demonstrators/hive)
+
+[ETH Energy Blog](https://blogs.ethz.ch/energy/smart-grids/)

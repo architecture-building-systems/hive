@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Web.Script.Serialization;
 using System.Windows.Documents;
 using Grasshopper.Kernel;
@@ -32,6 +33,7 @@ namespace Hive.IO.GhDistributors
             pManager.AddTextParameter("SIA 2024 Room", "SiaRoom", "SIA 2024 room definitions for each zone.", GH_ParamAccess.item);
             pManager.AddNumberParameter("All External Surface Areas", "AllExtSrfAreas", "All external surface areas, including opaque and transparent (windows) surfaces.", GH_ParamAccess.list);
             pManager.AddTextParameter("Surface Type", "SrfType", "External surface type: 'opaque' or 'transp'.", GH_ParamAccess.list);
+            pManager.AddTextParameter("SUA 2024 Schedules", "SiaRoomSchedules", "Schedules for occupancy and devices (lighting TBD).", GH_ParamAccess.item);
         }
 
 
@@ -48,6 +50,7 @@ namespace Hive.IO.GhDistributors
             var srfTypes = new List<string>();
             string opaque = "opaque";
             string transp = "transp";
+            var zones_schedules = new List<Sia2024Schedule>();
 
             for (int i = 0; i < zoneCount; i++)
             {
@@ -96,6 +99,8 @@ namespace Hive.IO.GhDistributors
                 //// TO DO: only if the surface below is air, like an overhanging floor / cantilever. work with IxExternal
                 //foreach (BuildingComponents.Floor floor in zone.Floors)
                 //    extSrfAreas[i] += floor.Area;
+
+                zones_schedules.Add(zone.Schedules);
             }
 
 
@@ -107,9 +112,10 @@ namespace Hive.IO.GhDistributors
             DA.SetDataList(0, zoneAreas);
             DA.SetDataList(1, windowAreas);
             DA.SetDataList(2, extSrfAreas);
-            DA.SetData(3, building.SIA2024.ToJson());
+            DA.SetData(3, building.SIA2024.ToJson()); // single zone
             DA.SetDataList(4, allSrfAreas);
             DA.SetDataList(5, srfTypes);
+            DA.SetData(6, Sia2024Schedules.ToJson(zones_schedules[0].RoomType)); // single zone
         }
 
 
