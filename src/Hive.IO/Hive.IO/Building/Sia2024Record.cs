@@ -31,6 +31,8 @@ namespace Hive.IO.Building
             RoomConstant = room.RoomConstant;
             CoolingSetpoint = room.CoolingSetpoint;
             HeatingSetpoint = room.HeatingSetpoint;
+            CoolingSetback = room.CoolingSetback;
+            HeatingSetback = room.HeatingSetback;
             FloorArea = room.FloorArea;
             EnvelopeArea = room.EnvelopeArea;
             GlazingRatio = room.GlazingRatio;
@@ -76,6 +78,7 @@ namespace Hive.IO.Building
         private static Dictionary<Tuple<string, string, string>, Sia2024RecordEx> _recordLookup;
         public double AirChangeRate; // Aussenluft-Volumenstrom (pro NGF)
         public double CoolingSetpoint; // Raumlufttemperatur Auslegung Kuehlung (Sommer)
+        public double CoolingSetback; // TODO Raumlufttemperatur Auslegung Kuehlung (Sommer)
         public double EnvelopeArea; // Thermische Gebaeudehuellflaeche
         public double EquipmentLoads; // Waermeeintragsleistung der Geraete
         public double EquipmentYearlyHours; // Jaehrliche Vollaststunden der Geraete
@@ -85,6 +88,7 @@ namespace Hive.IO.Building
         public double GValueTotal; // Gesamtenergiedurchlassgrad Verglasung und Sonnenschutz
         public double ShadingSetpoint; // shading setpoint in W/m^2 at which GValueTotal is used instead of GValue
         public double HeatingSetpoint; // Raumlufttemperatur Auslegung Heizen (Winter)
+        public double HeatingSetback; // TODO Raumlufttemperatur Auslegung Heizen (Winter)
         public double HeatRecovery; // Temperatur-Aenderungsgrad der Waermerueckgewinnung
         public double Infiltration; // Aussenluft-Volumenstrom durch Infiltration
         public double LightingLoads; // Waermeeintragsleistung der Raumbeleuchtung
