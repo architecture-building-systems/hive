@@ -81,6 +81,8 @@ namespace Hive.IO.Forms
 
             txtHeatingSetPoint.Text = State.HeatingSetpoint;
             txtCoolingSetPoint.Text = State.CoolingSetpoint;
+            txtHeatingSetback.Text = State.HeatingSetback;
+            txtCoolingSetback.Text = State.CoolingSetback;
         }
 
         private void cboBuildingUseType_SelectedIndexChanged(object sender, EventArgs e)
@@ -208,6 +210,37 @@ namespace Hive.IO.Forms
             State.GetType().GetProperty(stateProperty).SetValue(State, textBox.Text);
 
             RenderState();
+        }
+
+        private void adaptiveComfortCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            if (this.checkBoxAdaptiveComfort.Checked)
+            {
+                if (this.cboBuildingUseType.Text == "Spital")
+                {
+                    ToolTip tp = new ToolTip();
+                    tp.InitialDelay = 100;
+                    tp.Show($"Warning: Adaptive Comfort is likely not appropriate for building type {this.cboBuildingUseType.Text}", (CheckBox)sender); // Message of the toolTip and to what control to appear.
+                }
+                this.txtHeatingSetPoint.Enabled = false;
+                this.txtCoolingSetPoint.Enabled = false;
+                this.txtHeatingSetback.Enabled = false;
+                this.txtCoolingSetback.Enabled = false;
+            }
+            else
+            {
+                this.txtHeatingSetPoint.Enabled = true;
+                this.txtCoolingSetPoint.Enabled = true;
+                this.txtHeatingSetback.Enabled = true;
+                this.txtCoolingSetback.Enabled = true;
+            }
+        }
+
+        private void toolTip_Draw(object sender, DrawToolTipEventArgs e)
+        {
+            e.DrawBackground();
+            e.DrawBorder();
+            e.DrawText();
         }
     }
 }

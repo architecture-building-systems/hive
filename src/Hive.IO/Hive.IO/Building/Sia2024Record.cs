@@ -231,6 +231,8 @@ namespace Hive.IO.Building
                 RoomConstant = (double) d["Zeitkonstante"],
                 CoolingSetpoint = (double) d["Raumlufttemperatur Auslegung Kuehlung (Sommer)"],
                 HeatingSetpoint = (double) d["Raumlufttemperatur Auslegung Heizen (Winter)"],
+                CoolingSetback = (double)d["Raumlufttemperatur Auslegung Kuehlung (Sommer) - Absenktemperatur"],
+                HeatingSetback = (double)d["Raumlufttemperatur Auslegung Heizen (Winter) - Absenktemperatur"],
                 FloorArea = (double) d["Nettogeschossflaeche"],
                 EnvelopeArea = (double) d["Thermische Gebaeudehuellflaeche"],
                 GlazingRatio = (double) d["Glasanteil"],

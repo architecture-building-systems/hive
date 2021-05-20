@@ -77,6 +77,8 @@ namespace Hive.IO.Forms
                 RaisePropertyChangedEvent(nameof(RoomConstant));
                 RaisePropertyChangedEvent(nameof(CoolingSetpoint));
                 RaisePropertyChangedEvent(nameof(HeatingSetpoint));
+                RaisePropertyChangedEvent(nameof(CoolingSetback));
+                RaisePropertyChangedEvent(nameof(HeatingSetback));
                 RaisePropertyChangedEvent(nameof(FloorArea));
                 RaisePropertyChangedEvent(nameof(EnvelopeArea));
                 RaisePropertyChangedEvent(nameof(GlazingRatio));
@@ -224,6 +226,40 @@ namespace Hive.IO.Forms
                 try
                 {
                     _siaRoom.HeatingSetpoint = double.Parse(value);
+                }
+                catch
+                {
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
+        public string CoolingSetback
+        {
+            get => $"{_siaRoom.CoolingSetback:0.00}";
+            set
+            {
+                try
+                {
+                    _siaRoom.CoolingSetback = double.Parse(value);
+                }
+                catch
+                {
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
+        public string HeatingSetback
+        {
+            get => $"{_siaRoom.HeatingSetback:0.00}";
+            set
+            {
+                try
+                {
+                    _siaRoom.HeatingSetback = double.Parse(value);
                 }
                 catch
                 {
