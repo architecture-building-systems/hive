@@ -61,6 +61,436 @@ namespace Hive.IO.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _1_1_Wohnen_Mehrfamilienhaus {
+            get {
+                object obj = ResourceManager.GetObject("1.1 Wohnen Mehrfamilienhaus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _1_2_Wohnen_Einfamilienhaus {
+            get {
+                object obj = ResourceManager.GetObject("1.2 Wohnen Einfamilienhaus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _10_1_Lagerhalle {
+            get {
+                object obj = ResourceManager.GetObject("10.1 Lagerhalle", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _11_1_Turnhalle {
+            get {
+                object obj = ResourceManager.GetObject("11.1 Turnhalle", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _11_2_Fitnessraum {
+            get {
+                object obj = ResourceManager.GetObject("11.2 Fitnessraum", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _11_3_Schwimmhalle {
+            get {
+                object obj = ResourceManager.GetObject("11.3 Schwimmhalle", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _12_1_Verkehrsflaeche {
+            get {
+                object obj = ResourceManager.GetObject("12.1 Verkehrsflaeche", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _12_11_Kuehlraum {
+            get {
+                object obj = ResourceManager.GetObject("12.11 Kuehlraum", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _12_12_Serverraum {
+            get {
+                object obj = ResourceManager.GetObject("12.12 Serverraum", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _12_2_Verkehrsflaeche_24_h {
+            get {
+                object obj = ResourceManager.GetObject("12.2 Verkehrsflaeche 24 h", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _12_3_Treppenhaus {
+            get {
+                object obj = ResourceManager.GetObject("12.3 Treppenhaus", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _12_4_Nebenraum {
+            get {
+                object obj = ResourceManager.GetObject("12.4 Nebenraum", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _12_5_Kueche__Teekueche {
+            get {
+                object obj = ResourceManager.GetObject("12.5 Kueche, Teekueche", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _12_6_WC__Bad__Dusche {
+            get {
+                object obj = ResourceManager.GetObject("12.6 WC, Bad, Dusche", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _12_7_WC {
+            get {
+                object obj = ResourceManager.GetObject("12.7 WC", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _12_8_Garderobe__Dusche {
+            get {
+                object obj = ResourceManager.GetObject("12.8 Garderobe, Dusche", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _2_1_Hotelzimmer {
+            get {
+                object obj = ResourceManager.GetObject("2.1 Hotelzimmer", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _2_2_Empfang__Lobby {
+            get {
+                object obj = ResourceManager.GetObject("2.2 Empfang, Lobby", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _3_1_Einzel___Gruppenbuero {
+            get {
+                object obj = ResourceManager.GetObject("3.1 Einzel-, Gruppenbuero", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _3_2_Grossraumbuero {
+            get {
+                object obj = ResourceManager.GetObject("3.2 Grossraumbuero", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _3_3_Sitzungszimmer {
+            get {
+                object obj = ResourceManager.GetObject("3.3 Sitzungszimmer", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _3_4_Schalterhalle__Empfang {
+            get {
+                object obj = ResourceManager.GetObject("3.4 Schalterhalle, Empfang", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _4_1_Schulzimmer {
+            get {
+                object obj = ResourceManager.GetObject("4.1 Schulzimmer", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _4_2_Lehrerzimmer {
+            get {
+                object obj = ResourceManager.GetObject("4.2 Lehrerzimmer", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _4_3_Bibliothek {
+            get {
+                object obj = ResourceManager.GetObject("4.3 Bibliothek", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _4_4_Hoehrsaal {
+            get {
+                object obj = ResourceManager.GetObject("4.4 Hoehrsaal", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _4_5_Schulfachraum {
+            get {
+                object obj = ResourceManager.GetObject("4.5 Schulfachraum", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _5_1_Lebensmittelverkauf {
+            get {
+                object obj = ResourceManager.GetObject("5.1 Lebensmittelverkauf", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _5_2_Fachgeschaeft {
+            get {
+                object obj = ResourceManager.GetObject("5.2 Fachgeschaeft", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _5_3_Verkauf_Moebel__Bau__Garten {
+            get {
+                object obj = ResourceManager.GetObject("5.3 Verkauf Moebel, Bau, Garten", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _6_1_Restaurant {
+            get {
+                object obj = ResourceManager.GetObject("6.1 Restaurant", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _6_2_Selbstbedienungsrestaurant {
+            get {
+                object obj = ResourceManager.GetObject("6.2 Selbstbedienungsrestaurant", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _6_3_Kueche_zu_Restaurant {
+            get {
+                object obj = ResourceManager.GetObject("6.3 Kueche zu Restaurant", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _6_4_Kueche_zu_Selbstbedienungsrestaurant {
+            get {
+                object obj = ResourceManager.GetObject("6.4 Kueche zu Selbstbedienungsrestaurant", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _7_1_Vorstellungsraum {
+            get {
+                object obj = ResourceManager.GetObject("7.1 Vorstellungsraum", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _7_2_Mehrzweckhalle {
+            get {
+                object obj = ResourceManager.GetObject("7.2 Mehrzweckhalle", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _7_3_Ausstellungshalle {
+            get {
+                object obj = ResourceManager.GetObject("7.3 Ausstellungshalle", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _8_1_Bettenzimmer {
+            get {
+                object obj = ResourceManager.GetObject("8.1 Bettenzimmer", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _8_2_Stationszimmer {
+            get {
+                object obj = ResourceManager.GetObject("8.2 Stationszimmer", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _8_3_Behandlungsraum {
+            get {
+                object obj = ResourceManager.GetObject("8.3 Behandlungsraum", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _9_1_Produktion__grobe_Arbeit_ {
+            get {
+                object obj = ResourceManager.GetObject("9.1 Produktion (grobe Arbeit)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _9_2_Produktion__feine_Arbeit_ {
+            get {
+                object obj = ResourceManager.GetObject("9.2 Produktion (feine Arbeit)", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap _9_3_Laborraum {
+            get {
+                object obj = ResourceManager.GetObject("9.3 Laborraum", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to GC tech,electric efficiency,thermal efficiency,cost per m2,life cycle GHG factor kgCO2eq per m2
         ///GC_cheap,0.0,0.1,300.0,1.0
         ///GC_normal,0.0,0.2,400.0,2.0

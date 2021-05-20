@@ -372,7 +372,135 @@
   <ItemGroup>
     <None Include="Resources\IO_Para_InputSolarTech.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\Schedules\1.1 Wohnen Mehrfamilienhaus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\1.2 Wohnen Einfamilienhaus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\2.1 Hotelzimmer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\2.2 Empfang, Lobby.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\3.1 Einzel-, Gruppenbuero.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\3.2 Grossraumbuero.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\3.3 Sitzungszimmer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\3.4 Schalterhalle, Empfang.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\4.1 Schulzimmer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\4.2 Lehrerzimmer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\4.3 Bibliothek.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\4.4 Hoehrsaal.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\4.5 Schulfachraum.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\5.1 Lebensmittelverkauf.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\5.2 Fachgeschaeft.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\5.3 Verkauf Moebel, Bau, Garten.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\6.1 Restaurant.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\6.2 Selbstbedienungsrestaurant.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\6.3 Kueche zu Restaurant.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\6.4 Kueche zu Selbstbedienungsrestaurant.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\7.1 Vorstellungsraum.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\7.2 Mehrzweckhalle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\7.3 Ausstellungshalle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\8.1 Bettenzimmer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\8.2 Stationszimmer.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\8.3 Behandlungsraum.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\9.1 Produktion %28grobe Arbeit%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\9.2 Produktion %28feine Arbeit%29.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\9.3 Laborraum.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\10.1 Lagerhalle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\11.1 Turnhalle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\11.2 Fitnessraum.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\11.3 Schwimmhalle.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\12.1 Verkehrsflaeche.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\12.2 Verkehrsflaeche 24 h.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\12.3 Treppenhaus.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\12.4 Nebenraum.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\12.5 Kueche, Teekueche.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\12.6 WC, Bad, Dusche.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\12.7 WC.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\12.8 Garderobe, Dusche.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\12.11 Kuehlraum.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\Schedules\12.12 Serverraum.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
