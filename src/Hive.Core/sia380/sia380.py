@@ -39,7 +39,8 @@ def cleanDictForNaN(d):
 
 
 def main(room_properties, room_schedules, floor_area, T_e, setpoints_ub, setpoints_lb, surface_areas, surface_type,
-         srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, run_obstructed_simulation, hourly):
+         srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, 
+         run_obstructed_simulation, hourly, use_adaptive_comfort):
     '''
     Computes monthly heating, cooling and electricity demand for a thermal zone, based on SIA 380.1
     :param room_properties: room properties in json format
@@ -57,6 +58,7 @@ def main(room_properties, room_schedules, floor_area, T_e, setpoints_ub, setpoin
     :param setpoint_shading: Shading setpoint for activating sunscreen of windows, in W/m^2
     :param run_obstructed_simulation: Boolean to indicate if an obstructed solar simulation is conducted. True if yes.
     :param hourly: Boolean to indicate if hourly values should be returned instead of monthly. True if yes.
+    :param use_adaptive_comfort: Boolean to indicate if adaptive comfort should be used instead of fixed setpoints. True if yes. Defaults to yes if setpoints_ub and setpoints_lb are null.
    
     :return: Monthly or hourly cooling, heating and electricity loads for a thermal zone
     '''
@@ -224,22 +226,24 @@ def main(room_properties, room_schedules, floor_area, T_e, setpoints_ub, setpoin
     setback_lb = 3  # TODO input param? adaptive as well?
    
     # Assert inputs hourly
-    assert len(setpoints_ub) == HOURS_PER_YEAR, "'setpoints_ub' (Setpoints upper bound) must be hourly. Length was %d." % (len(setpoints_ub))
-    assert len(setpoints_lb) == HOURS_PER_YEAR, "'setpoints_lb' (Setpoints lower bound) must be hourly. Length was %d." % (len(setpoints_lb))
+    adaptive_comfort = use_adaptive_comfort or (setpoints_ub is None and setpoints_lb is None) 
+    
+    if adaptive_comfort:
+        assert len(setpoints_ub) == HOURS_PER_YEAR, "'setpoints_ub' (Setpoints upper bound) must be hourly. Length was %d." % (len(setpoints_ub))
+        assert len(setpoints_lb) == HOURS_PER_YEAR, "'setpoints_lb' (Setpoints lower bound) must be hourly. Length was %d." % (len(setpoints_lb))
     assert len(T_e) == HOURS_PER_YEAR, "'T_e' (Ambient temperature) must be hourly. Length was %d." % (len(T_e))
    
     # IF setpoints given monthly for hourly simulation, they stay the same for entire month regardless of T_e.
     if not hourly:
-        setpoints_ub = get_monthly_avg(setpoints_ub)
-        setpoints_lb = get_monthly_avg(setpoints_lb)
+        if adaptive_comfort:
+            setpoints_ub = get_monthly_avg(setpoints_ub)
+            setpoints_lb = get_monthly_avg(setpoints_lb)
         T_e = get_monthly_avg(T_e)
 
     # read room properties from sia2024
     room_properties = cleanDictForNaN(room_properties)
     
     # f_sh = 0.9  # sia2024, p.12, 1.3.1.9 Reduktion solare Wärmeeinträge
-    # theta_i_summer = room_properties["Raumlufttemperatur Auslegung Kuehlung (Sommer)"]
-    # theta_i_winter = room_properties["Raumlufttemperatur Auslegung Heizen (Winter)"]
     # g = room_properties["Gesamtenergiedurchlassgrad Verglasung"]
     tau = room_properties["Zeitkonstante"]
     U_value_opaque = room_properties["U-Wert opake Bauteile"]
@@ -258,7 +262,7 @@ def main(room_properties, room_schedules, floor_area, T_e, setpoints_ub, setpoin
     
     # Average out the hours of occupancy, lighting, appliances
     if hourly:
-        t_P, t_A, t_L = get_hourly_schedules(room_schedules)
+        t_P, t_A, t_L, t_S = get_hourly_schedules(room_schedules)
     else:
         t_P = [room_properties["Vollaststunden pro Jahr (Personen)"]] * MONTHS_PER_YEAR
         t_L = [room_properties["Jaehrliche Vollaststunden der Raumbeleuchtung"]] * MONTHS_PER_YEAR
@@ -270,7 +274,34 @@ def main(room_properties, room_schedules, floor_area, T_e, setpoints_ub, setpoin
             t_A[i] *= DAYS_PER_MONTH[i] / DAYS_PER_YEAR
 
     time_range = HOURS_PER_YEAR if hourly else MONTHS_PER_YEAR  
-
+    
+    # Use fixed setpoints / setbacks from room properties if no adaptive comfort
+    if not adaptive_comfort:
+        setpoint_ub = room_properties["Raumlufttemperatur Auslegung Kuehlung (Sommer)"]
+        setpoint_lb = room_properties["Raumlufttemperatur Auslegung Heizen (Winter)"]
+        
+        if hourly:
+            setpoints_ub = []
+            setpoints_lb = []
+            setback_ub = room_properties["Raumlufttemperatur Auslegung Kuehlung (Sommer) - Absenktemperatur"]
+            setback_lb = room_properties["Raumlufttemperatur Auslegung Heizen (Winter) - Absenktemperatur"]
+            
+            for day in range(DAYS_PER_YEAR):
+                for hour in range(HOURS_PER_DAY):
+                    if t_S[hour] == 1:
+                        setpoints_ub.append(setpoint_ub)
+                        setpoints_ub.append(setpoint_lb)
+                    elif t_S[hour] == 0.5:
+                        setpoints_ub.append(setback_ub)
+                        setpoints_lb.append(setback_lb)
+                    else:
+                        # TODO should be NaN?
+                        setpoints_ub.append(setback_ub)
+                        setpoints_lb.append(setback_lb)
+        else:
+            setpoints_ub = [setpoint_ub] * MONTHS_PER_YEAR
+            setpoints_lb = [setpoint_lb] * MONTHS_PER_YEAR
+            
     # formatting the grasshopper tree that contains solar irradiation time series for each window
     # could be changed later to also include solar irradiation on opaque surfaces...
     # ...would need to be adapted in the 'for surface in range(num_surfaces):' loop as well then
@@ -578,60 +609,64 @@ def get_hourly_schedules(room_schedules):
     P_schedule = room_schedules['OccupancySchedule']
     A_schedule = room_schedules['DevicesSchedule']
     L_schedule = room_schedules['LightingSchedule']
+    S_schedule = room_schedules['SetpointSchedule']
 
     YEAR_INTIAL_WEEKDAY = 0  # indexed on 1
-    HOUR_DAY_START = 8 # inclusive, from SIA 2024 corrected from 7h
-    HOUR_DAY_END = 19 # exclusive, from SIA 2024 corrected from 18h
+    # HOUR_DAY_START = 8 # inclusive, from SIA 2024 corrected from 7h
+    # HOUR_DAY_END = 19 # exclusive, from SIA 2024 corrected from 18h
 
     # Other asserts are captured in schema validation
     assert 365 - P_schedule['DaysOffPerWeek'] * 52 == P_schedule['DaysUsedPerYear']
 
-    def get_daily_lighting_occupied():
-        # light hours = occupancy hours when light hours > 0
-        n_day = L_schedule['HoursPerDay']
-        n_night = L_schedule['HoursPerNight']
+    # def get_daily_lighting_occupied():
+    #     # light hours = occupancy hours when light hours > 0
+    #     n_day = L_schedule['HoursPerDay']
+    #     n_night = L_schedule['HoursPerNight']
 
-        # Night hours (when lighting is activated during night)
-        # are filled first from 19h to 24h, 
-        # and, if extra, starting from 7h and moving backwards to 0h
-        # The index tracks until when in the evening the night hours
-        idx_night_start = HOURS_PER_DAY - 1 \
-            if n_night > HOURS_PER_DAY - HOUR_DAY_END \
-            else HOUR_DAY_END + n_night - 1
+    #     # Night hours (when lighting is activated during night)
+    #     # are filled first from 19h to 24h, 
+    #     # and, if extra, starting from 7h and moving backwards to 0h
+    #     # The index tracks until when in the evening the night hours
+    #     idx_night_start = HOURS_PER_DAY - 1 \
+    #         if n_night > HOURS_PER_DAY - HOUR_DAY_END \
+    #         else HOUR_DAY_END + n_night - 1
         
-        L_daily_occupied = [0.0] * 24
-        for hour, occupancy in reversed(list(enumerate(P_schedule['DailyProfile']))):
-            if occupancy > 0.0: # if occupied
-                if hour >= HOUR_DAY_START - 1 and hour < HOUR_DAY_END-1: # if during day
-                    if n_day > 0: # if lighting hours left to allocate
-                        L_daily_occupied[hour] = 1.0
-                        n_day -= 1
-                else: # during night
-                    if n_night > 0 and hour < idx_night_start: # if lighting hours left to allocate
-                        L_daily_occupied[hour] = 1.0
-                        n_night -= 1
-        return L_daily_occupied
+    #     L_daily_occupied = [0.0] * 24
+    #     for hour, occupancy in reversed(list(enumerate(P_schedule['DailyProfile']))):
+    #         if occupancy > 0.0: # if occupied
+    #             if hour >= HOUR_DAY_START - 1 and hour < HOUR_DAY_END-1: # if during day
+    #                 if n_day > 0: # if lighting hours left to allocate
+    #                     L_daily_occupied[hour] = 1.0
+    #                     n_day -= 1
+    #             else: # during night
+    #                 if n_night > 0 and hour < idx_night_start: # if lighting hours left to allocate
+    #                     L_daily_occupied[hour] = 1.0
+    #                     n_night -= 1
+    #     return L_daily_occupied
     
     P_daily_occupied = P_schedule['DailyProfile']
     A_daily_occupied = A_schedule['DailyProfile']
-    L_daily_occupied = get_daily_lighting_occupied()
+    L_daily_occupied = L_schedule['DailyProfile']
+    S_daily_occupied = S_schedule['DailyProfile']
     
-    P_daily_unoccupied  = [0.0] * HOURS_PER_DAY
-    A_daily_unoccupied  = [A_schedule['LoadWhenUnoccupied']] * HOURS_PER_DAY
-    L_daily_unoccupied  = [0.0] * HOURS_PER_DAY
+    P_daily_unoccupied  = [P_schedule['Default']] * HOURS_PER_DAY
+    A_daily_unoccupied  = [A_schedule['Default']] * HOURS_PER_DAY
+    L_daily_unoccupied  = [L_schedule['Default']] * HOURS_PER_DAY
+    S_daily_unoccupied  = [S_schedule['Default']] * HOURS_PER_DAY
     
-
-    weekdays_on = DAYS_PER_WEEK - P_schedule['DaysOffPerWeek']
+    weekdays_on = DAYS_PER_WEEK - room_schedules['DaysOffPerWeek']
     weekday = YEAR_INTIAL_WEEKDAY
     # TODO assert props, expand daily profiles and yearly to hourly timeseries
     P_hourly = []
     A_hourly = []
     L_hourly = []
+    S_hourly = []
+    
     for month, month_days in enumerate(DAYS_PER_MONTH):
         # TODO assumes days off / holidays all at once rather 
         # than peppered through month. More appropriate for schools / summer / winter
         # but not really for national holidays...
-        days_on = int(month_days * P_schedule['YearlyProfile'][month])
+        days_on = int(month_days * room_schedules['YearlyProfile'][month])
 
         for day in range(month_days):
             if weekday == DAYS_PER_WEEK:
@@ -642,15 +677,17 @@ def get_hourly_schedules(room_schedules):
                 P_hourly.extend(P_daily_unoccupied)
                 A_hourly.extend(A_daily_unoccupied)
                 L_hourly.extend(L_daily_unoccupied) 
+                S_hourly.extend(S_daily_unoccupied)
             else: # occupied
                 P_hourly.extend(P_daily_occupied)
                 A_hourly.extend(A_daily_occupied)
-                L_hourly.extend(L_daily_occupied)          
+                L_hourly.extend(L_daily_occupied)      
+                S_hourly.extend(S_daily_occupied)
 
             weekday += 1
 
 
-    return P_hourly, A_hourly, L_hourly
+    return P_hourly, A_hourly, L_hourly, S_hourly        
 
 
 if __name__ == "__main__":

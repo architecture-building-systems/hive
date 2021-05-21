@@ -33,7 +33,7 @@ namespace Hive.IO.GhDistributors
             pManager.AddTextParameter("SIA 2024 Room", "SiaRoom", "SIA 2024 room definitions for each zone.", GH_ParamAccess.item);
             pManager.AddNumberParameter("All External Surface Areas", "AllExtSrfAreas", "All external surface areas, including opaque and transparent (windows) surfaces.", GH_ParamAccess.list);
             pManager.AddTextParameter("Surface Type", "SrfType", "External surface type: 'opaque' or 'transp'.", GH_ParamAccess.list);
-            pManager.AddTextParameter("SUA 2024 Schedules", "SiaRoomSchedules", "Schedules for occupancy and devices (lighting TBD).", GH_ParamAccess.item);
+            pManager.AddTextParameter("SUA Room Schedules", "SiaRoomSchedules", "Schedules for occupancy, devices, lighting, amd setpoints.", GH_ParamAccess.item);
         }
 
 
@@ -50,7 +50,7 @@ namespace Hive.IO.GhDistributors
             var srfTypes = new List<string>();
             string opaque = "opaque";
             string transp = "transp";
-            var zones_schedules = new List<Sia2024Schedule>();
+            var zones_schedules = new List<ZoneSchedules>();
 
             for (int i = 0; i < zoneCount; i++)
             {

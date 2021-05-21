@@ -139,7 +139,7 @@ namespace Hive.IO.Building
         ///// Schedules that define annual hourly internal loads schedules
         ///// </summary>
         //[JsonProperty]
-        public Sia2024Schedule Schedules;
+        public ZoneSchedules Schedules;
 
         #endregion
 

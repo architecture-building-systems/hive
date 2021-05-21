@@ -14,32 +14,35 @@ namespace Hive.IO.Building
     /// </summary>
     //[JsonProperty]
     //public StructSchedules Schedules;
-    public class Sia2024Schedule
+    public class ZoneSchedules
     {
         public string RoomType { get; set; }
+        /// <summary>
+        /// Multiplier of how many days (0=no days, 1=all days) to apply the daily profile per month over the year (length=12).
+        /// </summary>
+        public double[] YearlyProfile { get; set; }
+        /// <summary>
+        /// Days per week when schedule applies. From SIA 2024.
+        /// </summary>
+        public int DaysOffPerWeek { get; set; }
+        /// <summary>
+        /// Days used in the year considering days off per week. From SIA 2024.
+        /// </summary>
+        public int DaysUsedPerYear { get; set; }
         public OccupancySchedule OccupancySchedule { get; set; }
         public DevicesSchedule DevicesSchedule { get; set; }
         public LightingSchedule LightingSchedule { get; set; }
+        public SetpointSchedule SetpointSchedule { get; set; }
     }
 
     public struct OccupancySchedule
     {
         /// <summary>
-        /// Days per week when schedule applies.
-        /// </summary>
-        public int DaysOffPerWeek { get; set; }
-        /// <summary>
-        /// Days per year when schedule applies. Probably not needed here
-        /// </summary>
-        public int DaysUsedPerYear { get; set; }
-        /// <summary>
-        /// Multiplier of how many days (0=no days, 1=all days) to apply the daily profile per month over the year (length=12).
+        /// Multiplier of how many days (0=no days, 1=all days) to apply the daily profile
+        /// per month over the year (length=12). From SIA 2024.
         /// </summary>
         public double[] DailyProfile { get; set; }
-        /// <summary>
-        /// Multiplier of how many days (0=no days, 1=all days) to apply the daily profile per month over the year (length=12).
-        /// </summary>
-        public double[] YearlyProfile { get; set; }
+        public double Default => 0.0;
     }
 
     /// <summary>
@@ -48,47 +51,49 @@ namespace Hive.IO.Building
     public struct DevicesSchedule
     {
         /// <summary>
-        /// Multiplier of how many days (0=no days, 1=all days) to apply the daily profile per month over the year (length=12).
+        /// Multiplier of how many days (0=no days, 1=all days) to apply the daily profile 
+        /// per month over the year (length=12). From SIA 2024.
         /// </summary>
         public double[] DailyProfile { get; set; }
 
         /// <summary>
-        /// Mutliplier (0 to 1) when no occupancy.
+        /// Mutliplier (0 to 1) when no occupancy. From SIA 2024 Load When Unoccupied.
         /// </summary>
-        public double LoadWhenUnoccupied { get; set; }
+        public double Default { get; set; }
 
     }
 
     public struct LightingSchedule
     {
-        /// <summary>
-        /// Number of hours on between 7-18h. SIA2024: Nutzungsstunden pro Tag
-        /// </summary>
-        public int HoursPerDay { get; set; }
-        /// <summary>
-        /// Number of hours on between 18h-7h. SIA2024: Nutzungsstunden pro Nacht
-        /// </summary>
-        public int HoursPerNight { get; set; }
+        public double[] DailyProfile { get; set; }
+        public double Default => 0;
 
+    }
 
-        // TODO Korrekturfaktor für Präsenzregelung
+    /// <summary>
+    /// Like Eplus (?) setpoint schedules: 1.0 = setpoint, 0.5 = setback, 0.0 = none.
+    /// </summary>
+    public struct SetpointSchedule
+    {
+        public double[] DailyProfile { get; set; }
+        public double Default => 0.5; 
     }
 
     public static class Sia2024Schedules
     {
-        private static Sia2024Schedule[] _records;
-        private static Dictionary<string, Sia2024Schedule> _recordLookup;
+        private static ZoneSchedules[] _records;
+        private static Dictionary<string, ZoneSchedules> _recordLookup;
 
-        private static Sia2024Schedule[] ReadRecords()
+        private static ZoneSchedules[] ReadRecords()
         {
             return JsonResource.ReadRecords("Hive.IO.Building.sia2024_schedules.json", ref _records);
         }
 
-        public static Sia2024Schedule Lookup(string roomType)
+        public static ZoneSchedules Lookup(string roomType)
         {
             if (_recordLookup == null)
             {
-                _recordLookup = new Dictionary<string, Sia2024Schedule>();
+                _recordLookup = new Dictionary<string, ZoneSchedules>();
                 foreach (var record in ReadRecords())
                     _recordLookup.Add(record.RoomType, record);
             }

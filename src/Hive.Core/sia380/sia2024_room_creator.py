@@ -5,7 +5,9 @@ import math
 import json
 
 
-def main(description, room_constant, cooling_setpoint, heating_setpoint, floor_area, envelope_area, glazing_ratio,
+def main(description, room_constant, 
+         cooling_setpoint, heating_setpoint, cooling_setback, heating_setback,
+         floor_area, envelope_area, glazing_ratio,
          u_value_opaque, u_value_transparent, g_value, windows_frame_reduction,
          air_change_rate, infiltration, heat_recovery,
          occupant_loads, lighting_loads, equipment_loads,
@@ -18,6 +20,8 @@ def main(description, room_constant, cooling_setpoint, heating_setpoint, floor_a
     :param room_constant: 'Zeitkonstante', integer, in hours?
     :param cooling_setpoint: 'Raumlufttemperatur Auslegung Kuehlung (Sommer)', float, in deg. C
     :param heating_setpoint: 'Raumlufttemperatur Auslegung Heizen (Winter)', float, in deg. C
+    :param cooling_setback: 'Raumlufttemperatur Auslegung Kuehlung (Sommer) - Absenktemperatur', float, in deg. C
+    :param heating_setback: 'Raumlufttemperatur Auslegung Heizen (Winter) - Absenktemperatur', float, in deg. C
     :param floor_area: 'Nettogeschossflaeche', float, in square meters
     :param envelope_area: 'Thermische Gebaeudehuellflaeche', float, in square meters
     :param glazing_ratio: 'Glasanteil', float, in %
@@ -46,6 +50,8 @@ def main(description, room_constant, cooling_setpoint, heating_setpoint, floor_a
     sia_room["Zeitkonstante"] = room_constant
     sia_room["Raumlufttemperatur Auslegung Kuehlung (Sommer)"] = cooling_setpoint
     sia_room["Raumlufttemperatur Auslegung Heizen (Winter)"] = heating_setpoint
+    sia_room["Raumlufttemperatur Auslegung Kuehlung (Sommer) - Absenketemperatur"] = cooling_setback
+    sia_room["Raumlufttemperatur Auslegung Heizen (Winter) - Absenketemperatur"] = heating_setback
     sia_room["Nettogeschossflaeche"] = floor_area
     sia_room["Thermische Gebaeudehuellflaeche"] = envelope_area
     sia_room["Glasanteil"] = glazing_ratio
