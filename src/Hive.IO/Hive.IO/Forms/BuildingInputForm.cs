@@ -212,16 +212,35 @@ namespace Hive.IO.Forms
             RenderState();
         }
 
+        // not pretty... TODO
+        private bool ShouldSetpointsBeAdaptive(string room_type)
+            => !new[] {
+                    "9.3 Laborraum",
+                    "11.2 Fitnessraum",
+                    "11.3 Schwimmhalle",
+                    "12.11 Kuehlraum",
+                    "12.12 Serverraum"
+            }.Contains(room_type);
+
+        private ToolTip toolTipAdaptiveComfort = new ToolTip() { InitialDelay = 100};
+        
+        private const string toolTipAdaptiveComfortInfoMessage = "Adaptive Comfort adjusts setpoints dynamically" +
+                "based on ambient temperature \nand assumptions about metabolic rates and clothing factors.";
+        private string toolTipAdaptiveComfortWarningMessage(string roomType) =>
+            toolTipAdaptiveComfortInfoMessage +
+                "\n\nWARNING: Adaptive Comfort is likely not appropriate \n" +
+                $"for room type {roomType}";
+
         private void adaptiveComfortCheck_CheckedChanged(object sender, EventArgs e)
         {
             if (this.checkBoxAdaptiveComfort.Checked)
             {
-                if (this.cboBuildingUseType.Text == "Spital")
+                var toolTipMessage = toolTipAdaptiveComfortInfoMessage;
+                if (!ShouldSetpointsBeAdaptive(this.cboRoomType.Text))
                 {
-                    ToolTip tp = new ToolTip();
-                    tp.InitialDelay = 100;
-                    tp.Show($"Warning: Adaptive Comfort is likely not appropriate for building type {this.cboBuildingUseType.Text}", (CheckBox)sender); // Message of the toolTip and to what control to appear.
+                    toolTipMessage = toolTipAdaptiveComfortWarningMessage(this.cboBuildingUseType.Text);
                 }
+                toolTipAdaptiveComfort.Show(toolTipMessage, (CheckBox)sender);
                 this.txtHeatingSetPoint.Enabled = false;
                 this.txtCoolingSetPoint.Enabled = false;
                 this.txtHeatingSetback.Enabled = false;
@@ -234,13 +253,8 @@ namespace Hive.IO.Forms
                 this.txtHeatingSetback.Enabled = true;
                 this.txtCoolingSetback.Enabled = true;
             }
-        }
 
-        private void toolTip_Draw(object sender, DrawToolTipEventArgs e)
-        {
-            e.DrawBackground();
-            e.DrawBorder();
-            e.DrawText();
+            RenderState();
         }
     }
 }

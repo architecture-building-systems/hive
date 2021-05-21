@@ -424,6 +424,7 @@ namespace Hive.IO.Forms
             // 
             // txtHeatingSetback
             // 
+            this.txtHeatingSetback.Enabled = false;
             this.txtHeatingSetback.Location = new System.Drawing.Point(354, 96);
             this.txtHeatingSetback.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.txtHeatingSetback.Name = "txtHeatingSetback";
@@ -432,6 +433,7 @@ namespace Hive.IO.Forms
             // 
             // txtCoolingSetback
             // 
+            this.txtCoolingSetback.Enabled = false;
             this.txtCoolingSetback.Location = new System.Drawing.Point(354, 128);
             this.txtCoolingSetback.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.txtCoolingSetback.Name = "txtCoolingSetback";

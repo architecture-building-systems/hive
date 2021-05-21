@@ -11,7 +11,9 @@ from yaml.loader import FullLoader
 header_map = {    
     "Zeitkonstante": "RoomConstant",
     "Raumlufttemperatur Auslegung Kuehlung (Sommer)": "CoolingSetpoint",
+    "Raumlufttemperatur Auslegung Kuehlung (Sommer) - Absenktemperatur": "CoolingSetback",
     "Raumlufttemperatur Auslegung Heizen (Winter)": "HeatingSetpoint",
+    "Raumlufttemperatur Auslegung Heizen (Winter) - Absenktemperatur": "HeatingSetback",
     "Nettogeschossflaeche": "FloorArea",
     "Thermische Gebaeudehuellflaeche": "EnvelopeArea",
     "Glasanteil": "GlazingRatio",
@@ -87,8 +89,8 @@ def room_properties():
                         record[header_map[f]] = 0.0
                 records.append(record)
     out_file = os.path.join(os.path.dirname(__file__), "sia2024_room_data.json")
-    with open(out_file, "w") as fp:
-        json.dump(records, fp, indent=4, encoding="utf8")
+    with open(out_file, "w", encoding='utf8') as fp:
+        json.dump(records, fp, indent=4)
 
 def room_schedules():
     """
@@ -133,5 +135,5 @@ def room_schedules():
         
         
 if __name__ == '__main__':
-    # room_properties()
+    room_properties()
     room_schedules()
