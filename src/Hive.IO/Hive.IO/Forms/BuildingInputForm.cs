@@ -74,7 +74,7 @@ namespace Hive.IO.Forms
 
         private void UpdateSiaPropertiesPanel()
         {
-            txtFloorArea.Text = State.FloorArea;
+            txtFloorArea.Text = State.ZoneFloorArea;
             txtWallArea.Text = State.ZoneWallArea;
             txtWinArea.Text = State.ZoneWindowArea;
             txtRoofArea.Text = State.ZoneRoofArea;
