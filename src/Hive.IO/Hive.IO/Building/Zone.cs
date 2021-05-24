@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
-using Rhino.Render.DataSources;
 using rg = Rhino.Geometry;
 
 namespace Hive.IO.Building
@@ -370,8 +368,7 @@ namespace Hive.IO.Building
             
 
             // check, if floor is detected
-            if (this.Floors.Length <= 0)
-                this.IsFloorExist = false;
+            this.IsFloorExist = this.Floors.Length <= 0;
 
             // check window surfaces. Also assign them as subsurface to a wall
             if (windowSrfs != null && windowSrfs.Length > 0)
