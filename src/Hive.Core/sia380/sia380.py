@@ -273,6 +273,7 @@ def main(room_properties, room_schedules, floor_area, T_e, setpoints_ub, setpoin
     # ...would need to be adapted in the 'for surface in range(num_surfaces):' loop as well then
     win_areas = [x for (x, y) in zip(surface_areas, surface_type) if y != "opaque"]
     Q_s_tr_per_surface = None
+    Q_s_tr_per_surface_jagged = None
     
     if (srf_irrad_obstr_tree.Branch(0).Count == 0 and srf_irrad_unobstr_tree.BranchCount == 0):
         num_surfaces_tr = len([s for s in surface_type if s=="transp"])
