@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
 using rg = Rhino.Geometry;
 
@@ -42,6 +41,7 @@ namespace Hive.IO.Building
         /// fix the horizon to one year, hourly
         /// </summary>
         private const int _horizon = 8760;
+        private const int _HoursPerDay = 24;
         #endregion
 
 
@@ -68,21 +68,78 @@ namespace Hive.IO.Building
         [JsonProperty]
         public StructInternalLoads InternalLoads;
 
-        /// <summary>
-        /// Time-resolved schedules, values are [0, 1].
-        /// Value of 1 indicates full load as defined in this.InternalLoads
-        /// </summary>
-        public struct StructSchedules
-        {
-            public double[] Occupants;
-            public double[] Devices;
-            public double[] Lighting;
-        }
-        /// <summary>
-        /// Schedules that define annual hourly internal loads schedules
-        /// </summary>
-        [JsonProperty]
-        public StructSchedules Schedule;
+        ///// <summary>
+        ///// From SIA 2024 Ruhetage pro Woche, Nutzungstage pro Jahr, TagesProfil, Jahresprofil
+        ///// </summary>
+        //public struct OccupancySchedule
+        //{
+        //    /// <summary>
+        //    /// Days per week when schedule applies.
+        //    /// </summary>
+        //    public int DaysOffPerWeek { get; set; }
+        //    /// <summary>
+        //    /// Days per year when schedule applies. Probably not needed here
+        //    /// </summary>
+        //    public int DaysUsedPerYear { get; set; }
+        //    /// <summary>
+        //    /// Multiplier of how many days (0=no days, 1=all days) to apply the daily profile per month over the year (length=12).
+        //    /// </summary>
+        //    public double[] DailyProfile { get; set; }
+        //    /// <summary>
+        //    /// Multiplier of how many days (0=no days, 1=all days) to apply the daily profile per month over the year (length=12).
+        //    /// </summary>
+        //    public double[] YearlyProfile { get; set; }
+        //}
+
+        ///// <summary>
+        ///// From SIA 2024 Geräte TagesProfil
+        ///// </summary>
+        //public struct DevicesSchedule
+        //{
+        //    /// <summary>
+        //    /// Multiplier of how many days (0=no days, 1=all days) to apply the daily profile per month over the year (length=12).
+        //    /// </summary>
+        //    public double[] DailyProfile { get; set; }
+
+        //    /// <summary>
+        //    /// Mutliplier (0 to 1) when no occupancy.
+        //    /// </summary>
+        //    public double[] LoadWhenUnoccupied { get; set; }
+
+        //}
+
+        //public struct LightingSchedule
+        //{
+        //    /// <summary>
+        //    /// Number of hours on between 7-18h. SIA2024: Nutzungsstunden pro Tag
+        //    /// </summary>
+        //    public double HoursPerDay { get; set; }
+        //    /// <summary>
+        //    /// Number of hours on between 18h-7h. SIA2024: Nutzungsstunden pro Nacht
+        //    /// </summary>
+        //    public double HoursPerNight { get; set; }
+
+
+        //    // TODO Korrekturfaktor für Präsenzregelung
+        //}
+
+
+        ///// <summary>
+        ///// Time-resolved schedules, values are [0, 1].
+        ///// Value of 1 indicates full load as defined in this.InternalLoads
+        ///// </summary>
+        //public struct StructSchedules
+        //{
+        //    public OccupancySchedule Occupancy;
+        //    public DevicesSchedule Devices;
+        //    public LightingSchedule Lighting;
+        //}
+        ///// <summary>
+        ///// Schedules that define annual hourly internal loads schedules
+        ///// </summary>
+        //[JsonProperty]
+        public Sia2024Schedule Schedules;
+
         #endregion
 
 
@@ -221,8 +278,16 @@ namespace Hive.IO.Building
         /// </summary>
         [JsonProperty]
         public bool IsWindowsNoSelfIntersect { get; private set; }
+        /// <summary>
+        /// For additional floor surfaces, they have to be within the volume
+        /// </summary>
         [JsonProperty]
         public bool IsFloorInZone { get; private set; }
+        /// <summary>
+        /// Checking if a floor has been detected. No load simulations possible without floor.
+        /// </summary>
+        [JsonProperty]
+        public bool IsFloorExist { get; private set; }
         [JsonProperty]
         public string ErrorText { get; private set; }
         #endregion
@@ -231,7 +296,7 @@ namespace Hive.IO.Building
         protected Zone()
         {
             // only for use in deserialization
-        } 
+        }
 
         #region Constructor
         /// <summary>
@@ -239,16 +304,24 @@ namespace Hive.IO.Building
         /// </summary>
         /// <param name="zone_geometry">Brep geometry. Must be closed, linear and convex.</param>
         /// <param name="index">Unique identifier</param>
-        /// <param name="name">Zone name, e.g. kitchen 1</param>
-        public Zone(rg.Brep zone_geometry, int index, double tolerance, string name, rg.BrepFace[] windowSrfs = null, rg.BrepFace[] floorSrfs = null, rg.BrepFace[] shadingSrfs = null)
+        /// <param name="tolerance"></param>
+        /// <param name="roomType">Zone name, e.g. kitchen 1</param>
+        /// <param name="windowSrfs"></param>
+        /// <param name="floorSrfs"></param>
+        /// <param name="shadingSrfs"></param>
+        public Zone(rg.Brep zone_geometry, int index, double tolerance, string roomType, rg.BrepFace[] windowSrfs = null, rg.BrepFace[] floorSrfs = null, rg.BrepFace[] shadingSrfs = null)
         {
+            if (zone_geometry == null)
+            {
+                throw new NullReferenceException("Zone BREP cannot be null.");
+            }
             this.ZoneGeometry = zone_geometry;
             this.Index = index;
             this.Tolerance = tolerance;
 
             // check if floor is in zone
             var floorList = new List<rg.BrepFace>();
-            if (floorSrfs.Length > 0)
+            if (floorSrfs != null && floorSrfs.Length > 0)
             {
                 foreach (var floor in floorSrfs)
                 {
@@ -266,14 +339,17 @@ namespace Hive.IO.Building
             this.IsWindowsOnZone = true; // zone might have no windows. so default is true
             this.IsWindowsNoSelfIntersect = true;
             this.IsFloorInZone = true;
+            this.IsFloorExist = true;
 
             this.IsClosed = CheckClosedness(this.ZoneGeometry);
+
             if (this.IsClosed)
             {
                 this.IsLinear = CheckLinearity(this.ZoneGeometry);
                 this.IsPlanar = CheckPlanarity(this.ZoneGeometry);
                 this.IsConvex = CheckConvexity(this.ZoneGeometry, this.Tolerance);
             }
+
 
             // identify building components based on their surface angles
             Tuple<Wall[], Ceiling[], Roof[], Floor[], Window[], Shading[]> tuple = IdentifyComponents(zone_geometry, windowSrfs, shadingSrfs);
@@ -289,41 +365,36 @@ namespace Hive.IO.Building
                 this.Floors[i] = new Floor(floorList[i - mainFloors]);
             this.Windows = tuple.Item5;
             this.ShadingDevices = tuple.Item6;
+            
+
+            // check, if floor is detected
+            this.IsFloorExist = this.Floors.Length <= 0;
 
             // check window surfaces. Also assign them as subsurface to a wall
-            if (windowSrfs.Length > 0)
+            if (windowSrfs != null && windowSrfs.Length > 0)
             {
                 this.IsWindowsOnZone = CheckWindowsOnZone(this.ZoneGeometry, windowSrfs, this.Tolerance);
                 this.IsWindowsNoSelfIntersect = CheckWindowsSelfIntersect(windowSrfs, this.Tolerance);
             }
 
-
-
-
-
             this.IsValidEPlus = CheckValidity(this.IsClosed, this.IsConvex, this.IsLinear, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsNoSelfIntersect);
-            this.IsValid = (this.IsClosed && this.IsWindowsOnZone && this.IsWindowsNoSelfIntersect) ? true : false;
-            this.ErrorText = String.Format("IsLinear: {0} \n " + "IsConvex: {1} \n " + "IsClosed: {2} \n " + "IsPlanar: {3} \n " + "IsWindowsOnZone: {4} \n " + "IsWindowsSelfIntersect: {5} \n" + "IsFloorInZone: {6}", this.IsLinear, this.IsConvex, this.IsClosed, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsNoSelfIntersect, this.IsFloorInZone);
+            this.IsValid = (this.IsClosed && this.IsWindowsOnZone && this.IsWindowsNoSelfIntersect && this.IsFloorExist) ? true : false;
+            this.ErrorText = String.Format("Edges are linear: {0} \n " + "Zone is convex: {1} \n " + "Zone geometry is a closed polysurface: {2} \n " + "Zone surfaces are planar: {3} \n " 
+                                           + "Windows lie on zone surfaces: {4} \n " + "Windows have no self intersection: {5} \n " 
+                                           + "Additional floor surfaces lie within zone geometry: {6} \n " + "Floor surface detected: {7}", 
+                this.IsLinear, this.IsConvex, this.IsClosed, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsNoSelfIntersect, this.IsFloorInZone, this.IsFloorExist);
 
             // define standard building physical properties upon inizialization. 
             // Can be changed later via Windows Form
+
             if (this.IsValid)
             {
                 this.Volume = zone_geometry.GetVolume();
-                this.Name = name;
+                this.Name = roomType;
                 this.InternalLoads.Occupants = 16.0;
                 this.InternalLoads.Lighting = 4.0;
                 this.InternalLoads.Devices = 3.0;
-                this.Schedule.Occupants = new double[_horizon];
-                this.Schedule.Lighting = new double[_horizon];
-                this.Schedule.Devices = new double[_horizon];
-                // windows form with interface to change schedules for workdays and weekends / holidays?
-                for (int i = 0; i < _horizon; i++)
-                {
-                    this.Schedule.Occupants[i] = 1.0;
-                    this.Schedule.Lighting[i] = 1.0;
-                    this.Schedule.Devices[i] = 1.0;
-                }
+                this.Schedules = Sia2024Schedules.Lookup(roomType);
             }
         }
         #endregion

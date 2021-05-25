@@ -69,9 +69,8 @@ namespace Hive.IO.GhInputOutput
 
         private void ShowForm()
         {
-            var form = new EnergySystemsInput();
-            form.DataContext = _viewModel;
-            form.ShowDialog();
+            var form = new EnergySystemsInputForm();
+            form.ShowDialog(_viewModel);
             ExpireSolution(true);
         }
 

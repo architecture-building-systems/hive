@@ -49,7 +49,7 @@ namespace Hive.IO.Forms
             {
                 if (AllNames.Contains(value))
                 {
-                    Set(ref _name, value);
+                    _name = value;
                     AssignDefaults();
                 }
                 else
@@ -62,19 +62,19 @@ namespace Hive.IO.Forms
         public string Source
         {
             get => _source;
-            set => Set(ref _source, value);
+            set => _source = value;
         }
 
         public string EndUse
         {
             get => _endUse;
-            set => Set(ref _endUse, value);
+            set => _endUse = value;
         }
 
         public string Efficiency
         {
             get => $"{_efficiency:0.00}";
-            set => SetWithColors(ref _efficiency, ParseDouble(value, _efficiency));
+            set => _efficiency = ParseDouble(value, _efficiency);
         }
 
         public string Capacity
@@ -82,20 +82,14 @@ namespace Hive.IO.Forms
             get => $"{_capacity:0.00}";
             set
             {
-                SetWithColors(ref _capacity, ParseDouble(value, _capacity));
-                RaisePropertyChangedEvent("CapitalCost");
-                RaisePropertyChangedEvent("EmbodiedEmissions");
+                _capacity = ParseDouble(value, _capacity);
             }
         }
 
         public string SpecificCapitalCost
         {
             get => $"{_specificCapitalCost:0.00}";
-            set
-            {
-                SetWithColors(ref _specificCapitalCost, ParseDouble(value, _specificCapitalCost));
-                RaisePropertyChangedEvent("CapitalCost");
-            }
+            set => _specificCapitalCost = ParseDouble(value, _specificCapitalCost);
         }
 
         public string SpecificEmbodiedEmissions
@@ -103,21 +97,20 @@ namespace Hive.IO.Forms
             get => $"{_specificEmbodiedEmissions:0.00}";
             set
             {
-                SetWithColors(ref _specificEmbodiedEmissions, ParseDouble(value, _specificEmbodiedEmissions));
-                RaisePropertyChangedEvent("EmbodiedEmissions");
+                _specificEmbodiedEmissions = ParseDouble(value, _specificEmbodiedEmissions);
             }
         }
 
         public string HeatToPowerRatio
         {
             get => $"{_heatToPowerRatio:0.00}";
-            set => SetWithColors(ref _heatToPowerRatio, ParseDouble(value, _heatToPowerRatio));
+            set => _heatToPowerRatio = ParseDouble(value, _heatToPowerRatio);
         }
 
         public string DistributionLosses
         {
             get => $"{_distributionLosses:0.00}";
-            set => SetWithColors(ref _distributionLosses, ParseDouble(value, _distributionLosses));
+            set => _distributionLosses =  ParseDouble(value, _distributionLosses);
         }
 
 
@@ -129,17 +122,13 @@ namespace Hive.IO.Forms
         public IEnumerable<SurfaceViewModel> AvailableSurfaces
         {
             get => _availableSurfaces;
-            set => Set(ref _availableSurfaces, value);
+            set => _availableSurfaces = value;
         }
 
         public IEnumerable<SurfaceViewModel> SelectedSurfaces
         {
             get => _availableSurfaces?.Where(sm => sm.Connection == this) ?? new List<SurfaceViewModel>();
-            set
-            {
-                SelectSurfaces(value);
-                RaisePropertyChangedEvent();
-            }
+            set => SelectSurfaces(value);
         }
 
         public IEnumerable<ModuleTypeRecord> ModuleTypes
@@ -175,9 +164,6 @@ namespace Hive.IO.Forms
 
                     _specificCapitalCost = _moduleType.SpecificCapitalCost;
                     _specificEmbodiedEmissions = _moduleType.SpecificEmbodiedEmissions;
-
-                    // make sure everyone knows about this!
-                    RaisePropertyChangedEvent(null);
                 }
             }
         }
@@ -228,7 +214,6 @@ namespace Hive.IO.Forms
                     ? ModuleTypesCatalog[Name].First()
                     : new ModuleTypeRecord {Name = "<custom>"};
 
-            RaisePropertyChangedEvent(null);
         }
 
         private void SelectSurfaces(IEnumerable<SurfaceViewModel> surfaces)

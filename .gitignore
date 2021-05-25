@@ -137,4 +137,7 @@ Release/
 _ReSharper.*
 *.resharper
 Ankh.NoLoad
+
+
+src/Hive.IO/packages/
 .vscode/settings.json
