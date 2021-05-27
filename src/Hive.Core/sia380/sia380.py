@@ -448,8 +448,8 @@ def main(room_properties, room_schedules, floor_area, T_e, setpoints_ub, setpoin
 
 
     if Q_s_tr_per_surface_jagged != None:
-        # Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged, source=[0, 0])   # import ghpythonlib.treehelpers as th
-        Q_s_tr_tree = Q_s_tr_per_surface_jagged # DEBUG
+        Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged, source=[0, 0])   # import ghpythonlib.treehelpers as th
+        # Q_s_tr_tree = Q_s_tr_per_surface_jagged # DEBUG
     else:
         Q_s_tr_tree = None
 

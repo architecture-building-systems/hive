@@ -184,6 +184,8 @@ namespace Hive.IO.Building
                 {"Zeitkonstante", RoomConstant},
                 {"Raumlufttemperatur Auslegung Kuehlung (Sommer)", CoolingSetpoint},
                 {"Raumlufttemperatur Auslegung Heizen (Winter)", HeatingSetpoint},
+                {"Raumlufttemperatur Auslegung Kuehlung (Sommer) - Absenktemperatur", CoolingSetback},
+                {"Raumlufttemperatur Auslegung Heizen (Winter) - Absenktemperatur", HeatingSetback},
                 {"Nettogeschossflaeche", FloorArea},
                 {"Thermische Gebaeudehuellflaeche", EnvelopeArea},
                 {"Glasanteil", GlazingRatio},

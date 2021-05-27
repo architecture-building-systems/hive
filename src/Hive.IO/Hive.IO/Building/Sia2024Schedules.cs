@@ -76,7 +76,7 @@ namespace Hive.IO.Building
     public struct SetpointSchedule
     {
         public double[] DailyProfile { get; set; }
-        public double Default => 0.5; 
+        public double Default => 0; 
     }
 
     public static class Sia2024Schedules
