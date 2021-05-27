@@ -60,40 +60,34 @@ def room_schedules():
     schedules_sia2024.sort(key=lambda k: float(k['RoomType'].split(' ')[0]))
 
     # Generate schedules
-    schedules = get_hourly_schedules(schedules_sia2024)
+    schedules_all = []
+    for s in schedules_sia2024:
+        schedules_all.append(get_daily_schedules(s))
 
     # Dump as json
     out_file = os.path.join(os.path.dirname(
         __file__), "sia2024_schedules.json")
-    with open(out_file, "w") as fp:
-        json.dump(schedules, fp, indent=4, encoding="utf8")
+    with open(out_file, "w", encoding="utf8") as fp:
+        json.dump(schedules_all, fp, indent=4)
 
 
-def get_hourly_schedules(room_schedules):
+def get_daily_schedules(room_schedules):
     """
-    Converts the encoded schedules for occupancy, devices, and lighting into hourly schedules.
-    :param: The schedules JSON.
-    :returns: Hourly schedules for occupancy (P), devices (A), and lighting (L)
+    Converts the encoded schedules for occupancy, devices, and lighting into hourly schedule.
+    :param: The SIA 2024 schedules JSON.
+    :returns: Daily schedules for occupancy, devices, lighting, setpoints
     """
-    schedules = {
-        'RoomType': '',
-        'YearlyProfile': [],
-        'DaysOffPerWeek': 0,
-        'OccupancySchedule': {'DailyProfile': [], 'Default': 0},
-    }
 
     occupancy_schedule = room_schedules['OccupancySchedule']
     devices_schedule = room_schedules['DevicesSchedule']
     lighting_schedule = room_schedules['LightingSchedule']
-    setpoint_schedule = room_schedules['SetpointSchedule']
 
-    YEAR_INTIAL_WEEKDAY = 0  # indexed on 1
     HOUR_DAY_START = 8  # inclusive, from SIA 2024 corrected from 7h
     HOUR_DAY_END = 19  # exclusive, from SIA 2024 corrected from 18h
 
     # Other asserts are captured in schema validation
-    assert 365 - room_schedules['DaysOffPerWeek'] * \
-        52 == room_schedules['DaysUsedPerYear']
+    assert 365 - occupancy_schedule['DaysOffPerWeek'] * \
+        52 == occupancy_schedule['DaysUsedPerYear']
 
     def get_daily_lighting_occupied():
         # light hours = occupancy hours when light hours > 0
@@ -120,69 +114,204 @@ def get_hourly_schedules(room_schedules):
                         L_daily_occupied[hour] = 1.0
                         n_night -= 1
         return L_daily_occupied
-    
-    def get_daily_setpoint_occupied():
+
+    def get_daily_setpoint_occupied(lighting_daily):
         S_daily_occupied = [0.0] * HOURS_PER_DAY
-        
-        pre_occupied_hours = 2
-        for hour, occupancy in reversed(list(enumerate(occupancy_schedule['DailyProfile']))):
-            if occupancy > 0.0:
-                pre_occupied_hours = 2
+
+        before_occupied_hours = 0
+        for hour, (occupancy, lighting) in reversed(list(enumerate(zip(occupancy_schedule['DailyProfile'], lighting_daily)))):
+            # if occupied and lit (people are active)
+            if occupancy > 0.0 and lighting > 0.0:
+                # 2h before occupied we want the setpoint to preheat/cool space
+                before_occupied_hours = 2
                 S_daily_occupied[hour] = 1.0
-            elif pre_occupied_hours > 0:
+            elif before_occupied_hours > 0:  # use the setpoint within 2h before occupied
                 S_daily_occupied[hour] = 1.0
-                pre_occupied_hours -= 1
-            else:
+                before_occupied_hours -= 1
+            else:  # use setback
                 S_daily_occupied[hour] = 0.5
-                
+
         return S_daily_occupied
-    
 
     O_daily_occupied = occupancy_schedule['DailyProfile']
     D_daily_occupied = devices_schedule['DailyProfile']
     L_daily_occupied = get_daily_lighting_occupied()
-    S_daily_occupied = get_daily_setpoint_occupied()
+    S_daily_occupied = get_daily_setpoint_occupied(L_daily_occupied)
 
-    O_daily_unoccupied = [0.0] * HOURS_PER_DAY
-    D_daily_unoccupied = [devices_schedule['LoadWhenUnoccupied']] * HOURS_PER_DAY
-    L_daily_unoccupied = [0.0] * HOURS_PER_DAY
-    S_daily_unoccupied = [0.5] * HOURS_PER_DAY
-
-    weekdays_on = DAYS_PER_WEEK - room_schedules['DaysOffPerWeek']
-    weekday = YEAR_INTIAL_WEEKDAY
-    # TODO assert props, expand daily profiles and yearly to hourly timeseries
-    
-    P_hourly = []
-    A_hourly = []
-    L_hourly = []
-    S_hourly = []
-    
-    for month, month_days in enumerate(DAYS_PER_MONTH):
-        # TODO assumes days off / holidays all at once rather
-        # than peppered through month. More appropriate for schools / summer / winter
-        # but not really for national holidays...
-        days_on = int(month_days * room_schedules['YearlyProfile'][month])
-
-        for day in range(month_days):
-            if weekday == DAYS_PER_WEEK:
-                weekday = 0
-            skip = weekday >= weekdays_on or day > days_on
-
-            if skip: # unoccupied
-                P_hourly.extend(O_daily_unoccupied)
-                A_hourly.extend(D_daily_unoccupied)
-                L_hourly.extend(L_daily_unoccupied)
-                S_hourly.extend(S_daily_unoccupied)
-            else:    # occupied
-                P_hourly.extend(O_daily_occupied)
-                A_hourly.extend(D_daily_occupied)
-                L_hourly.extend(L_daily_occupied)
-                S_hourly.extend(S_daily_occupied)
-
-            weekday += 1
-
-    return P_hourly, A_hourly, L_hourly, S_hourly
+    return {
+        "RoomType": room_schedules["RoomType"],
+        "YearlyProfile": occupancy_schedule["YearlyProfile"],
+        "DaysOffPerWeek": occupancy_schedule["DaysOffPerWeek"],
+        "DaysUsedPerYear": occupancy_schedule["DaysUsedPerYear"],
+        "LightingSchedule": {
+            "DailyProfile": L_daily_occupied,
+            "Default": 0.0
+        },
+        "OccupancySchedule": {
+            "DailyProfile": O_daily_occupied,
+            "Default": 0.0
+        },
+        "DeviceSchedule": {
+            "DailyProfile": D_daily_occupied,
+            "Default": devices_schedule['LoadWhenUnoccupied']
+        },
+        "SetpointSchedule": {
+            "DailyProfile": S_daily_occupied,
+            "Default": 0.0
+        }
+    }
 
 
 if __name__ == '__main__':
     room_schedules()
+
+    # TEST
+    # expected = {
+    #     "RoomType": "1.1 Wohnen Mehrfamilienhaus",
+    #     "YearlyProfile": [
+    #         0.8,
+    #         0.8,
+    #         0.8,
+    #         0.8,
+    #         0.8,
+    #         0.8,
+    #         0.8,
+    #         0.8,
+    #         0.8,
+    #         0.8,
+    #         0.8,
+    #         0.8
+    #     ],
+    #     "DaysOffPerWeek": 0,
+    #     "DaysUsedPerYear": 365,
+    #     "LightingSchedule": {
+    #         "DailyProfile": [
+    # 			0.0,
+    # 			0.0,
+    # 			0.0,
+    # 			0.0,
+    # 			0.0,
+    # 			0.0,
+    # 			0.0,
+    # 			1.0,
+    # 			0.0,
+    # 			0.0,
+    # 			0.0,
+    # 			0.0,
+    # 			1.0,
+    # 			1.0,
+    # 			0.0,
+    # 			0.0,
+    # 			0.0,
+    # 			1.0,
+    # 			1.0,
+    # 			1.0,
+    # 			1.0,
+    # 			0.0,
+    # 			0.0,
+    # 			0.0,
+    #         ],
+    #         "Default": 0.0
+    #     },
+    #     "OccupancySchedule": {
+    #         "DailyProfile": [
+    #             1.0,
+    #             1.0,
+    #             1.0,
+    #             1.0,
+    #             1.0,
+    #             1.0,
+    #             0.6,
+    #             0.4,
+    #             0,
+    #             0,
+    #             0,
+    #             0,
+    #             0.8,
+    #             0.4,
+    #             0,
+    #             0,
+    #             0,
+    #             0.4,
+    #             0.8,
+    #             0.8,
+    #             0.8,
+    #             1.0,
+    #             1.0,
+    #             1.0
+    #         ],
+    #         "Default": 0.0
+    #     },
+    #     "DeviceSchedule": {
+    #         "DailyProfile": [
+    #             0.1,
+    #             0.1,
+    #             0.1,
+    #             0.1,
+    #             0.1,
+    #             0.2,
+    #             0.8,
+    #             0.2,
+    #             0.1,
+    #             0.1,
+    #             0.1,
+    #             0.1,
+    #             0.8,
+    #             0.2,
+    #             0.1,
+    #             0.1,
+    #             0.1,
+    #             0.2,
+    #             0.8,
+    #             1.0,
+    #             0.2,
+    #             0.2,
+    #             0.2,
+    #             0.1
+    #         ],
+    #         "Default": 0.1
+    #     },
+    #     "SetpointSchedule": {
+    #         "DailyProfile": [
+    #             0.5,
+    #             0.5,
+    #             0.5,
+    #             0.5,
+    #             0.5,
+    #             1.0,
+    #             1.0,
+    #             1.0,
+    #             0.5,
+    #             0.5,
+    #             1.0,
+    #             1.0,
+    #             1.0,
+    #             1.0,
+    #             0.5,
+    #             1.0,
+    #             1.0,
+    #             1.0,
+    #             1.0,
+    #             1.0,
+    #             1.0,
+    #             0.5,
+    #             0.5,
+    #             0.5
+    #         ],
+    #         "Default": 0.0
+    #     }
+    # }
+
+    # out_file = os.path.join(os.path.dirname(__file__), "sia2024_schedules.json")
+    # with open(out_file, "r", encoding="utf8") as fp:
+    #     actual = json.loads(fp.read())[0]
+
+    # assert actual == expected
+
+    # Printing helpers
+    # [print(t) for t in list(zip(actual['DeviceSchedule']['DailyProfile'],
+    #                             actual['OccupancySchedule']['DailyProfile'],
+    #                             actual['LightingSchedule']['DailyProfile'],
+    #                             actual['SetpointSchedule']['DailyProfile'], ))]
+
+    # [print(t) for t in zip(expected['SetpointSchedule']['DailyProfile'],actual['SetpointSchedule']['DailyProfile'])]

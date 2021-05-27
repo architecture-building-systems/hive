@@ -30,7 +30,7 @@ namespace Hive.IO.Building
         /// </summary>
         public int DaysUsedPerYear { get; set; }
         public OccupancySchedule OccupancySchedule { get; set; }
-        public DevicesSchedule DevicesSchedule { get; set; }
+        public DeviceSchedule DeviceSchedule { get; set; }
         public LightingSchedule LightingSchedule { get; set; }
         public SetpointSchedule SetpointSchedule { get; set; }
     }
@@ -48,7 +48,7 @@ namespace Hive.IO.Building
     /// <summary>
     /// From SIA 2024 Geräte TagesProfil
     /// </summary>
-    public struct DevicesSchedule
+    public struct DeviceSchedule
     {
         /// <summary>
         /// Multiplier of how many days (0=no days, 1=all days) to apply the daily profile 
