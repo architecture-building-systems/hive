@@ -69,76 +69,9 @@ namespace Hive.IO.Building
         [JsonProperty]
         public StructInternalLoads InternalLoads;
 
-        ///// <summary>
-        ///// From SIA 2024 Ruhetage pro Woche, Nutzungstage pro Jahr, TagesProfil, Jahresprofil
-        ///// </summary>
-        //public struct OccupancySchedule
-        //{
-        //    /// <summary>
-        //    /// Days per week when schedule applies.
-        //    /// </summary>
-        //    public int DaysOffPerWeek { get; set; }
-        //    /// <summary>
-        //    /// Days per year when schedule applies. Probably not needed here
-        //    /// </summary>
-        //    public int DaysUsedPerYear { get; set; }
-        //    /// <summary>
-        //    /// Multiplier of how many days (0=no days, 1=all days) to apply the daily profile per month over the year (length=12).
-        //    /// </summary>
-        //    public double[] DailyProfile { get; set; }
-        //    /// <summary>
-        //    /// Multiplier of how many days (0=no days, 1=all days) to apply the daily profile per month over the year (length=12).
-        //    /// </summary>
-        //    public double[] YearlyProfile { get; set; }
-        //}
-
-        ///// <summary>
-        ///// From SIA 2024 Geräte TagesProfil
-        ///// </summary>
-        //public struct DevicesSchedule
-        //{
-        //    /// <summary>
-        //    /// Multiplier of how many days (0=no days, 1=all days) to apply the daily profile per month over the year (length=12).
-        //    /// </summary>
-        //    public double[] DailyProfile { get; set; }
-
-        //    /// <summary>
-        //    /// Mutliplier (0 to 1) when no occupancy.
-        //    /// </summary>
-        //    public double[] LoadWhenUnoccupied { get; set; }
-
-        //}
-
-        //public struct LightingSchedule
-        //{
-        //    /// <summary>
-        //    /// Number of hours on between 7-18h. SIA2024: Nutzungsstunden pro Tag
-        //    /// </summary>
-        //    public double HoursPerDay { get; set; }
-        //    /// <summary>
-        //    /// Number of hours on between 18h-7h. SIA2024: Nutzungsstunden pro Nacht
-        //    /// </summary>
-        //    public double HoursPerNight { get; set; }
-
-
-        //    // TODO Korrekturfaktor für Präsenzregelung
-        //}
-
-
-        ///// <summary>
-        ///// Time-resolved schedules, values are [0, 1].
-        ///// Value of 1 indicates full load as defined in this.InternalLoads
-        ///// </summary>
-        //public struct StructSchedules
-        //{
-        //    public OccupancySchedule Occupancy;
-        //    public DevicesSchedule Devices;
-        //    public LightingSchedule Lighting;
-        //}
-        ///// <summary>
-        ///// Schedules that define annual hourly internal loads schedules
-        ///// </summary>
-        //[JsonProperty]
+        /// <summary>
+        /// Processed schedules from SIA 2024.
+        /// </summary>
         public ZoneSchedules Schedules;
 
         #endregion
@@ -218,6 +151,12 @@ namespace Hive.IO.Building
         public double [] ConsumedElectricityMonthly { get; set; } // set in GhResults... FIX ME
         [JsonProperty]
         public double [] ConsumedHeatingMonthly { get; set; } // same
+
+        /// <summary>
+        /// Determines if adaptive comfort should be used instead of setpoints from SIA 2024.
+        /// </summary>
+        public bool RunAdaptiveComfort { get; set; }
+
         #endregion
 
 

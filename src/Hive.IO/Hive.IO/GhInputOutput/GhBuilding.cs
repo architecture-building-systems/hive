@@ -197,7 +197,7 @@ namespace Hive.IO.GhInputOutput
             {
                 siaRoom = SiaRoomFromBuildingInputState();
             }
-            
+
             var zone = CreateZone(siaRoom, zoneBrep, windows, floors);
 
             // BuildingInput form modifies the SiaRoom property, use that. it also uses editable to decide if parametric input was given...
@@ -244,6 +244,8 @@ namespace Hive.IO.GhInputOutput
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, zone.ErrorText);
             }
+
+            zone.RunAdaptiveComfort = _buildingInputState.RunAdaptiveComfort;
 
             return zone;
         }

@@ -79,6 +79,7 @@ namespace Hive.IO.Forms
                 RaisePropertyChangedEvent(nameof(HeatingSetpoint));
                 RaisePropertyChangedEvent(nameof(CoolingSetback));
                 RaisePropertyChangedEvent(nameof(HeatingSetback));
+                RaisePropertyChangedEvent(nameof(RunAdaptiveComfort));
                 RaisePropertyChangedEvent(nameof(FloorArea));
                 RaisePropertyChangedEvent(nameof(EnvelopeArea));
                 RaisePropertyChangedEvent(nameof(GlazingRatio));
@@ -179,6 +180,19 @@ namespace Hive.IO.Forms
                 RaiseAllPropertiesChangedEvent();
             }
         }
+
+        #region zone properties
+
+        public bool RunAdaptiveComfort
+        {
+            get => _zone.RunAdaptiveComfort;
+            set
+            {
+                _zone.RunAdaptiveComfort = value;
+                RaisePropertyChangedEvent();
+            }
+        }
+        #endregion
 
         #endregion comboboxes
 
@@ -750,6 +764,8 @@ namespace Hive.IO.Forms
         }
 
         #endregion sia2024 properties
+
+
 
         #region colors
 

@@ -83,6 +83,8 @@ namespace Hive.IO.Forms
             txtCoolingSetPoint.Text = State.CoolingSetpoint;
             txtHeatingSetback.Text = State.HeatingSetback;
             txtCoolingSetback.Text = State.CoolingSetback;
+
+            checkBoxAdaptiveComfort.Checked = State.RunAdaptiveComfort;
         }
 
         private void cboBuildingUseType_SelectedIndexChanged(object sender, EventArgs e)
@@ -233,26 +235,28 @@ namespace Hive.IO.Forms
 
         private void adaptiveComfortCheck_CheckedChanged(object sender, EventArgs e)
         {
-            if (this.checkBoxAdaptiveComfort.Checked)
+            if (checkBoxAdaptiveComfort.Checked)
             {
                 var toolTipMessage = toolTipAdaptiveComfortInfoMessage;
-                if (!ShouldSetpointsBeAdaptive(this.cboRoomType.Text))
+                if (!ShouldSetpointsBeAdaptive(cboRoomType.Text))
                 {
-                    toolTipMessage = toolTipAdaptiveComfortWarningMessage(this.cboBuildingUseType.Text);
+                    toolTipMessage = toolTipAdaptiveComfortWarningMessage(cboBuildingUseType.Text);
                 }
                 toolTipAdaptiveComfort.Show(toolTipMessage, (CheckBox)sender);
-                this.txtHeatingSetPoint.Enabled = false;
-                this.txtCoolingSetPoint.Enabled = false;
-                this.txtHeatingSetback.Enabled = false;
-                this.txtCoolingSetback.Enabled = false;
+                txtHeatingSetPoint.Enabled = false;
+                txtCoolingSetPoint.Enabled = false;
+                txtHeatingSetback.Enabled = false;
+                txtCoolingSetback.Enabled = false;
             }
             else
             {
-                this.txtHeatingSetPoint.Enabled = true;
-                this.txtCoolingSetPoint.Enabled = true;
-                this.txtHeatingSetback.Enabled = true;
-                this.txtCoolingSetback.Enabled = true;
+                txtHeatingSetPoint.Enabled = true;
+                txtCoolingSetPoint.Enabled = true;
+                txtHeatingSetback.Enabled = true;
+                txtCoolingSetback.Enabled = true;
             }
+
+            State.RunAdaptiveComfort = checkBoxAdaptiveComfort.Checked;
 
             RenderState();
         }
