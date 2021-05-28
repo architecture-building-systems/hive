@@ -29,8 +29,11 @@ def main(inlet_temp, ambient_temp, FRtaualpha, FRUL, irradiance, surface_area):
     heating = [0.0] * horizon
 
     for i in range(horizon):
-        eta_temp = FRtaualpha - ((FRUL * (inlet_temp[i] - ambient_temp[i])) / irradiance[i])
-        eta[i] = max(0, eta_temp)
+        if (irradiance[i] > 0.0):
+            eta_temp = FRtaualpha - ((FRUL * (inlet_temp[i] - ambient_temp[i])) / irradiance[i])
+            eta[i] = max(0, eta_temp)
+        else:
+            eta[i] = 0.0
         heating[i] = (irradiance[i] * eta[i] * surface_area) / 1000.0
 
     return heating, eta
