@@ -31,7 +31,7 @@ def cleanDictForNaN(d):
     # a = d.values()
     # b = d.keys()
     for i in d:
-        if isinstance(d[i],str): continue
+        # if isinstance(d[i],str): continue
         if math.isnan(d[i]) or d[i] == "NaN":
             d[i] = 0.0
 
