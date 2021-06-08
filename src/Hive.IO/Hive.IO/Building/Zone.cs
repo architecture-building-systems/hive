@@ -368,7 +368,7 @@ namespace Hive.IO.Building
             
 
             // check, if floor is detected
-            this.IsFloorExist = this.Floors.Length <= 0;
+            this.IsFloorExist = !(this.Floors.Length <= 0);
 
             // check window surfaces. Also assign them as subsurface to a wall
             if (windowSrfs != null && windowSrfs.Length > 0)
