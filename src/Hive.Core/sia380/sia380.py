@@ -31,7 +31,7 @@ def cleanDictForNaN(d):
     # a = d.values()
     # b = d.keys()
     for i in d:
-        if isinstance(d[i],str): continue
+        # if isinstance(d[i],str): continue
         if math.isnan(d[i]) or d[i] == "NaN":
             d[i] = 0.0
 
@@ -274,6 +274,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     # ...would need to be adapted in the 'for surface in range(num_surfaces):' loop as well then
     win_areas = [x for (x, y) in zip(surface_areas, surface_type) if y != "opaque"]
     Q_s_tr_per_surface = None
+    Q_s_tr_per_surface_jagged = None
     
     if (srf_irrad_obstr_tree.Branch(0).Count == 0 and srf_irrad_unobstr_tree.BranchCount == 0):
         num_surfaces_tr = len([s for s in surface_type if s=="transp"])

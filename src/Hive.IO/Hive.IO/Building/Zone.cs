@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Runtime.CompilerServices;
 using Newtonsoft.Json;
 using rg = Rhino.Geometry;
 
@@ -218,8 +217,16 @@ namespace Hive.IO.Building
         /// </summary>
         [JsonProperty]
         public bool IsWindowsNoSelfIntersect { get; private set; }
+        /// <summary>
+        /// For additional floor surfaces, they have to be within the volume
+        /// </summary>
         [JsonProperty]
         public bool IsFloorInZone { get; private set; }
+        /// <summary>
+        /// Checking if a floor has been detected. No load simulations possible without floor.
+        /// </summary>
+        [JsonProperty]
+        public bool IsFloorExist { get; private set; }
         [JsonProperty]
         public string ErrorText { get; private set; }
         #endregion
@@ -271,6 +278,7 @@ namespace Hive.IO.Building
             this.IsWindowsOnZone = true; // zone might have no windows. so default is true
             this.IsWindowsNoSelfIntersect = true;
             this.IsFloorInZone = true;
+            this.IsFloorExist = true;
 
             this.IsClosed = CheckClosedness(this.ZoneGeometry);
 
@@ -298,6 +306,9 @@ namespace Hive.IO.Building
             this.ShadingDevices = tuple.Item6;
             
 
+            // check, if floor is detected
+            this.IsFloorExist = !(this.Floors.Length <= 0);
+
             // check window surfaces. Also assign them as subsurface to a wall
             if (windowSrfs != null && windowSrfs.Length > 0)
             {
@@ -306,8 +317,11 @@ namespace Hive.IO.Building
             }
 
             this.IsValidEPlus = CheckValidity(this.IsClosed, this.IsConvex, this.IsLinear, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsNoSelfIntersect);
-            this.IsValid = (this.IsClosed && this.IsWindowsOnZone && this.IsWindowsNoSelfIntersect) ? true : false;
-            this.ErrorText = String.Format("IsLinear: {0} \n " + "IsConvex: {1} \n " + "IsClosed: {2} \n " + "IsPlanar: {3} \n " + "IsWindowsOnZone: {4} \n " + "IsWindowsSelfIntersect: {5} \n" + "IsFloorInZone: {6}", this.IsLinear, this.IsConvex, this.IsClosed, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsNoSelfIntersect, this.IsFloorInZone);
+            this.IsValid = (this.IsClosed && this.IsWindowsOnZone && this.IsWindowsNoSelfIntersect && this.IsFloorExist) ? true : false;
+            this.ErrorText = String.Format("Edges are linear: {0} \n " + "Zone is convex: {1} \n " + "Zone geometry is a closed polysurface: {2} \n " + "Zone surfaces are planar: {3} \n " 
+                                           + "Windows lie on zone surfaces: {4} \n " + "Windows have no self intersection: {5} \n " 
+                                           + "Additional floor surfaces lie within zone geometry: {6} \n " + "Floor surface detected: {7}", 
+                this.IsLinear, this.IsConvex, this.IsClosed, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsNoSelfIntersect, this.IsFloorInZone, this.IsFloorExist);
 
             // define standard building physical properties upon inizialization. 
             // Can be changed later via Windows Form
