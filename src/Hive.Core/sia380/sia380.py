@@ -339,9 +339,11 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
                        t_P, t_A, t_L,
                        Phi_P, Phi_A, Phi_L,
                        Q_s_tr_per_surface,
-                       num_timesteps=1, eta_g_t=None, only_return_eta_g=False):
+                       run_hourly=False, eta_g_t=None, only_return_eta_g=False):
         """
         """
+        
+        num_timesteps = 1 if run_hourly else HOURS_PER_MONTH[t]
 
         # Ventilation losses (Lüftungswärmeverluste)
         # Q_V = H_V * (T_i - T_e) * t
@@ -477,7 +479,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
                                 t_P, t_A, t_L,
                                 Phi_P, Phi_A, Phi_L,
                                 Q_s_tr_per_surface,
-                                num_timesteps=HOURS_PER_MONTH[month], 
+                                run_hourly=False, 
                                 only_return_eta_g=True)
             
             for hour in range(HOURS_PER_MONTH[month]):
@@ -487,9 +489,9 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
                                 t_P_hourly, t_A_hourly, t_L_hourly,
                                 Phi_P_hourly, Phi_A_hourly, Phi_L_hourly,
                                 Q_s_tr_per_surface_hourly,
-                                num_timesteps=1, 
+                                run_hourly=True, 
                                 eta_g_t=eta_g_t)
-            end_hour = int(hour)
+            end_hour += HOURS_PER_MONTH[month]
         else:
             # Calculate only monthly heat flows and demands
             calculate_step(month,
@@ -497,20 +499,16 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
                             t_P, t_A, t_L,
                             Phi_P, Phi_A, Phi_L,
                             Q_s_tr_per_surface,
-                            num_timesteps=HOURS_PER_MONTH[month])
+                            run_hourly=False)
 
-    if hourly:
-        if Q_s_tr_per_surface_jagged_hourly != None:
-            # Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged_hourly, source=[0, 0])   # import ghpythonlib.treehelpers as th
-            Q_s_tr_tree = Q_s_tr_per_surface_jagged_hourly # DEBUG
-        else:
-            Q_s_tr_tree = None
+    if hourly and Q_s_tr_per_surface_jagged_hourly != None:
+        Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged_hourly, source=[0, 0])   # import ghpythonlib.treehelpers as th
+        # Q_s_tr_tree = Q_s_tr_per_surface_jagged_hourly # DEBUG
+    elif not hourly and Q_s_tr_per_surface_jagged != None:
+        Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged, source=[0, 0])   # import ghpythonlib.treehelpers as th
+        # Q_s_tr_tree = Q_s_tr_per_surface_jagged # DEBUG
     else:
-        if Q_s_tr_per_surface_jagged != None:
-            # Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged, source=[0, 0])   # import ghpythonlib.treehelpers as th
-            Q_s_tr_tree = Q_s_tr_per_surface_jagged # DEBUG
-        else:
-            Q_s_tr_tree = None
+        Q_s_tr_tree = None
 
     return toKwh(Q_Heat), toKwh(Q_Cool), toKwh(Q_Elec), \
            toKwh(Q_T_out), toKwh(Q_V_out), toKwh(Q_i_out), \
@@ -944,8 +942,8 @@ if __name__ == "__main__":
         # Assert
         
         for r in results_no_solar:
-            if hourly: assert len(r) == HOURS_PER_YEAR, f"{len(r)} != {HOURS_PER_YEAR}"
-            else: assert len(r) == MONTHS_PER_YEAR, f"{len(r)} != {MONTHS_PER_YEAR}"
+            if hourly: assert len(r) == HOURS_PER_YEAR, "%s != %s".format(len(r), HOURS_PER_YEAR)
+            else: assert len(r) == MONTHS_PER_YEAR, "%s != %s".format(len(r), MONTHS_PER_YEAR)
         # print(Q_Heat)
         # print(Q_Cool)
         # print(Q_Elec)
