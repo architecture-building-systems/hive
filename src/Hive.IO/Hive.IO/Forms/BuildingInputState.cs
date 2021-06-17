@@ -17,14 +17,14 @@ namespace Hive.IO.Forms
     {
         private bool _editable;
         private Sia2024RecordEx _siaRoom;
-        private readonly Zone _zone;
+        private Zone _zone;
 
 
         public BuildingInputState(Sia2024RecordEx room, Zone zone, bool editable)
         {
             _siaRoom = room.Clone();
             _editable = editable;
-            _zone = zone;
+            _zone = zone.Clone();
         }
 
         public Sia2024RecordEx SiaRoom
@@ -33,6 +33,16 @@ namespace Hive.IO.Forms
             set
             {
                 _siaRoom = value;
+                RaiseAllPropertiesChangedEvent();
+            }
+        }
+
+        public Zone Zone
+        {
+            get => _zone;
+            set
+            {
+                _zone = value;
                 RaiseAllPropertiesChangedEvent();
             }
         }

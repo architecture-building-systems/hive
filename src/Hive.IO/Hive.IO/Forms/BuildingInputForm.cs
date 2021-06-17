@@ -19,7 +19,7 @@ namespace Hive.IO.Forms
     {
         private bool _rendering = false;
 
-        public BuildingInputState State { get; private set; } = new BuildingInputState(Sia2024Record.First(), null, true);
+        public BuildingInputState State { get; private set; } = new BuildingInputState(Sia2024Record.First(), new Zone(), true);
 
         public DialogResult ShowDialog(BuildingInputState state)
         {

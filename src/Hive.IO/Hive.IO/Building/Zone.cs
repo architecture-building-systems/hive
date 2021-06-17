@@ -232,7 +232,7 @@ namespace Hive.IO.Building
         #endregion
 
         [JsonConstructor]
-        protected Zone()
+        internal Zone()
         {
             // only for use in deserialization
         }
@@ -396,6 +396,12 @@ namespace Hive.IO.Building
 
 
         #region internalMethods
+
+        public Zone Clone()
+        {
+            return MemberwiseClone() as Zone;
+        }
+
 
         private static bool CheckFloorInZone(rg.Brep zone, rg.BrepFace floor)
         {

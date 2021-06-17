@@ -23,7 +23,7 @@ namespace Hive.IO.GhInputOutput
               "[hive]", "IO")
         {
             // NOTE: Will be overwritten in Read() and SolveInstance
-            _buildingInputState = new BuildingInputState(Sia2024Record.First(), null, true);
+            _buildingInputState = new BuildingInputState(Sia2024Record.First(), new Zone(), true);
         }
 
         private static readonly ITraceWriter TraceWriter = new MemoryTraceWriter();
@@ -149,6 +149,7 @@ namespace Hive.IO.GhInputOutput
 
             // NOTE: actually, I don't think this is necessary, since the state is never reset in the dialog...
             _buildingInputState.SiaRoom = form.State.SiaRoom; // copy over the results (might have changed) 
+            _buildingInputState.Zone = form.State.Zone; // copy over the results (might have changed) 
 
             // make sure down-river components get new output
             ExpireSolution(true);
@@ -203,7 +204,7 @@ namespace Hive.IO.GhInputOutput
             // BuildingInput form modifies the SiaRoom property, use that. it also uses editable to decide if parametric input was given...
             _buildingInputState = new BuildingInputState(siaRoom, zone, !parametricSiaRoomSpecified);
 
-            var building = CreateBuilding(_buildingInputState.SiaRoom, zone);
+            var building = CreateBuilding(_buildingInputState.SiaRoom, _buildingInputState.Zone);
             da.SetData(0, building);
         }
 
