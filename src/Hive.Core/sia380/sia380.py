@@ -31,7 +31,7 @@ def cleanDictForNaN(d):
     # a = d.values()
     # b = d.keys()
     for i in d:
-        # if isinstance(d[i],str): continue
+        # if isinstance(d[i],str): continue # DEBUG
         if math.isnan(d[i]) or d[i] == "NaN":
             d[i] = 0.0
 
@@ -345,30 +345,28 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
         """
         
         num_timesteps = 1 if run_hourly else HOURS_PER_MONTH[t]
+        
+        deltaT_ub = (T_i_ub[t] - T_e[t]) * num_timesteps
+        deltaT_lb = (T_i_lb[t] - T_e[t]) * num_timesteps
 
         # Ventilation losses (Lüftungswärmeverluste)
         # Q_V = H_V * (T_i - T_e) * t
         # we compute with and without heat recovery, ub and lb, and take the respectively best (lowest demand)
         # this assumes, the ventilation system operates ideally and does not, for example, keep warm air in summer
-        Q_V_ub = H_V * (T_i_ub[t] - T_e[t]) * num_timesteps
-        Q_V_lb = H_V * (T_i_lb[t] - T_e[t]) * num_timesteps
-        Q_V_ub_no_hr = H_V_no_heat_recovery * (T_i_ub[t] - T_e[t]) * num_timesteps
-        Q_V_lb_no_hr = H_V_no_heat_recovery * (T_i_lb[t] - T_e[t]) * num_timesteps
+        Q_V_ub = H_V * deltaT_ub
+        Q_V_lb = H_V * deltaT_lb
+        Q_V_ub_no_hr = H_V_no_heat_recovery * deltaT_ub
+        Q_V_lb_no_hr = H_V_no_heat_recovery * deltaT_lb
 
         # Internal loads (interne Wärmeeinträge)
         # Q_i = Phi_P * t_P + Phi_L * t_L + Phi_A * t_A
         Q_i = Phi_P * t_P[t] + Phi_L * t_L[t] + Phi_A * t_A[t]
 
         # Transmission heat losses, Q_T, both transparent and opaque
-        Q_T_ub = 0.0
-        Q_T_lb = 0.0
         Q_T_op_ub = 0.0
         Q_T_op_lb = 0.0
         Q_T_tr_ub = 0.0
         Q_T_tr_lb = 0.0
-        
-        deltaT_ub = (T_i_ub[t] - T_e[t]) * num_timesteps
-        deltaT_lb = (T_i_lb[t] - T_e[t]) * num_timesteps
             
         for surface in range(num_surfaces):
             # Transmission heat transfer coefficient (Transmissions-Wärmetransferkoeffizient), H_T      
@@ -465,6 +463,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
                 
             # TODO lighting and utility loads. simplification, because utility and lighting have efficiencies (inefficiencies are heat loads). 
             # Need efficiency or electricity use separately
+            # use sia380 reduction factors?
             Q_Elec[t] = Phi_L * t_L[t] + Phi_A * t_A[t]   
 
     # For each month, compute gains and losses of the zone
