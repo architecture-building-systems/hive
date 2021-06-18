@@ -193,30 +193,30 @@ namespace Hive.IO.Building
         /// in kWh per month
         /// </summary>
         [JsonProperty]
-        public double[] HeatingLoadsMonthly { get; private set; }
+        public double[] HeatingLoads { get; private set; }
         /// <summary>
         /// in kWh per month
         /// </summary>
         [JsonProperty]
-        public double[] DHWLoadsMonthly { get; private set; }
+        public double[] DHWLoads { get; private set; }
         /// <summary>
         /// in kWh per month
         /// </summary>
         [JsonProperty]
-        public double[] CoolingLoadsMonthly { get; private set; }
+        public double[] CoolingLoads { get; private set; }
         /// <summary>
         /// in kWh per month
         /// </summary>
         [JsonProperty]
-        public double[] ElectricityLoadsMonthly { get; private set; }
+        public double[] ElectricityLoads { get; private set; }
 
         /// <summary>
         /// Differs from ElectricityLoadsMonthly, which can be negative (surplus electricity from e.g. PV). ConsumedElectricityMonthly is what we really consume in the zone
         /// </summary>
         [JsonProperty]
-        public double [] ConsumedElectricityMonthly { get; set; } // set in GhResults... FIX ME
+        public double [] ConsumedElectricity { get; set; } // set in GhResults... FIX ME
         [JsonProperty]
-        public double [] ConsumedHeatingMonthly { get; set; } // same
+        public double [] ConsumedHeating { get; set; } // same
         #endregion
 
 
@@ -423,22 +423,26 @@ namespace Hive.IO.Building
         /// <param name="dhwLoads"></param>
         /// <param name="coolingLoads"></param>
         /// <param name="electricityLoads"></param>
-        public void SetEnergyDemandsMonthly(double[] heatingLoads, double[] dhwLoads, double[] coolingLoads, double[] electricityLoads)
+        public void SetEnergyDemands(double[] heatingLoads, double[] dhwLoads, double[] coolingLoads, double[] electricityLoads)
         {
-            this.HeatingLoadsMonthly = new double[Misc.MonthsPerYear];
-            this.DHWLoadsMonthly = new double[Misc.MonthsPerYear];
-            this.CoolingLoadsMonthly = new double[Misc.MonthsPerYear];
-            this.ElectricityLoadsMonthly = new double[Misc.MonthsPerYear];
+            int horizon = new List<int> { heatingLoads.Length, dhwLoads.Length, coolingLoads.Length, electricityLoads.Length }.Min();
 
-            heatingLoads.CopyTo(this.HeatingLoadsMonthly, 0);
-            dhwLoads.CopyTo(this.DHWLoadsMonthly, 0);
-            coolingLoads.CopyTo(this.CoolingLoadsMonthly, 0);
-            electricityLoads.CopyTo(this.ElectricityLoadsMonthly, 0);
+            this.HeatingLoads = new double[horizon];
+            this.DHWLoads = new double[horizon];
+            this.CoolingLoads = new double[horizon];
+            this.ElectricityLoads = new double[horizon];
+
+            heatingLoads.CopyTo(this.HeatingLoads, 0);
+            dhwLoads.CopyTo(this.DHWLoads, 0);
+            coolingLoads.CopyTo(this.CoolingLoads, 0);
+            electricityLoads.CopyTo(this.ElectricityLoads, 0);
         }
 
 
         public void SetLossesAndGains(double[] Qt_opaque, double [] Qt_transparent, double[] Qv, double[] Qi, double[] Qs)
         {
+
+            // GENERIC HOURLY OR MONTHLY
             this.OpaqueTransmissionHeatLosses = new double[Misc.MonthsPerYear];
             this.TransparentTransmissionHeatLosses = new double[Misc.MonthsPerYear];
             this.VentilationHeatLosses = new double[Misc.MonthsPerYear];

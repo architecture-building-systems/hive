@@ -526,7 +526,7 @@ namespace Hive.IO.Results
 
             for (int i = 0; i < totalHeatLoads.Length; i++)
                 foreach (var zone in building.Zones)
-                    totalHeatLoads[i] += zone.ConsumedHeatingMonthly[i];
+                    totalHeatLoads[i] += zone.ConsumedHeating[i];
 
             foreach(var tech in conversionTech)
             {
@@ -581,7 +581,7 @@ namespace Hive.IO.Results
             {
                 for (int i = 0; i < result.Length; i++)
                 {
-                    result[i] += zone.ConsumedElectricityMonthly[i];
+                    result[i] += zone.ConsumedElectricity[i];
                 }
             }
 
@@ -665,16 +665,16 @@ namespace Hive.IO.Results
                     switch (loadType)
                     {
                         case "cooling":
-                            totalLoads[m] += zone.CoolingLoadsMonthly[m];
+                            totalLoads[m] += zone.CoolingLoads[m];
                             break;
                         case "heating":
-                            totalLoads[m] += zone.HeatingLoadsMonthly[m];
+                            totalLoads[m] += zone.HeatingLoads[m];
                             break;
                         case "dhw":
-                            totalLoads[m] += zone.DHWLoadsMonthly[m];
+                            totalLoads[m] += zone.DHWLoads[m];
                             break;
                         case "electricity":
-                            totalLoads[m] += zone.ElectricityLoadsMonthly[m];
+                            totalLoads[m] += zone.ElectricityLoads[m];
                             break;
                     }
                 }

@@ -28,52 +28,45 @@ namespace Hive.IO.GhInputOutput
             // TO DO: list of lists? each zone has demand and you could have multiple zones here
 
             // 0, 1, 2, 3
-            pManager.AddNumberParameter("Cooling Monthly", "ClgMonthly", "Monthly cooling energy demand in [kWh]. List with 12 elements.", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Heating Monthly", "HtgMonthly", "Monthly heating energy in [kWh]. List with 12 elements.", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Electricity Monthly", "ElecMonthly", "Monthly electricity demand in [kWh]. List with 12 elements.", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Domestic Hot Water Monthly", "DHWMonthly", "Monthly domestic hot water demand in [kWh]. List with 12 elements.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Cooling Load", "Clg", "Cooling load in [kWh]. List with either montly [12] or hourly [8760].", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Space Heating Load", "Htg", "Space Heating load in [kWh]. List with either montly [12] or hourly [8760].", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Electricity Load", "Elec", "Electricity load in [kWh]. List with either montly [12] or hourly [8760].", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Domestic Hot Water Load", "DHW", "Domestic hot water load in [kWh]. List with either montly [12] or hourly [8760].", GH_ParamAccess.list);
 
             // 4, 5, 6, 7
-            pManager.AddNumberParameter("Cooling Hourly", "ClgHourly", "Hourly cooling energy demand in [kWh]. List with 8760 elements.", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Heating Hourly", "HtgHourly", "Hourly heating energy demand in [kWh]. List with 8760 elements.", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Electricity Hourly", "ElecHourly", "Hourly electricity demand in [kWh]. List with 8760 elements.", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Domestic Hot Water Hourly", "DHWHourly", "Hourly domestic hot water demand in [kWh]. List with 8760 elements.", GH_ParamAccess.list);
-
-            // 8, 9, 10, 11
             pManager.AddNumberParameter("Supply System Capacities", "SupSysCap", "Capacities of the energy supply system technologies.", GH_ParamAccess.list);
             pManager.AddTextParameter("Supply System Names", "SupSysNames", "Names of the energy supply system technologies.", GH_ParamAccess.list);
             pManager.AddNumberParameter("Operation Monthly", "OpMonthly", "Monthly operation schedules of the energy supply systems in [kWh/month].", GH_ParamAccess.tree);
             pManager.AddNumberParameter("Operation Hourly", "OpHourly", "Hourly operation schedules of the energy supply systems in [kWh].", GH_ParamAccess.tree);
 
-            // 12, 13
+            // 8, 9
             pManager.AddBooleanParameter("Supply System Suitability", "SupSysSuit", "Suitability of supply system for electricity, heating and cooling generation.", GH_ParamAccess.tree);
             pManager.AddTextParameter("Supply System Units", "SupSysUnits", "Unit of the supply system capacity / operation.", GH_ParamAccess.list);
 
-            // 14, 15, 16
+            // 10, 11, 12
             pManager.AddMeshParameter("Solar Irradiated Surfaces", "SolSrfs", "Mesh surfaces whose vertices are colored according to their solar exposure in [kWh/year]", GH_ParamAccess.list);
             pManager.AddMeshParameter("Sky View Factor", "ViewFactor", "Sky dome showing view factors.", GH_ParamAccess.item);
             pManager.AddCurveParameter("Sunpath Diagram", "SunPath", "Sunpath diagram for the geographic location of the building.", GH_ParamAccess.list);
 
-
-            // 17
+            // 13
             pManager.AddGenericParameter("Hive Building", "HiveBuilding", "Hive Building <Hive.IO.Building.Building>", GH_ParamAccess.item);
-            // 18
+            // 14
             pManager.AddGenericParameter("Hive ConversionTech", "HiveConversionTech", "Hive Conversion technologies <Hive.IO.EnergySystems.ConversionTech>", GH_ParamAccess.list);
-            // 19
+            // 15
             pManager.AddGenericParameter("Hive Emitters", "HiveEmitters", "Hive emitters <Hive.IO.EnergySystems.Emitter>", GH_ParamAccess.list);
 
-            // 20, 21, 22, 23, 24
+            // 16, 17, 18, 19, 20
             pManager.AddNumberParameter("Q_T_opaque", "Q_T_opaque", "transmission heat losses from opaque construction", GH_ParamAccess.list);
             pManager.AddNumberParameter("Q_T_transparent", "Q_T_transparent", "transmission heat losses from transparent construction", GH_ParamAccess.list);
             pManager.AddNumberParameter("Q_V", "Q_V", "ventilation heat losses", GH_ParamAccess.list);
             pManager.AddNumberParameter("Q_i", "Q_i", "Internal gains", GH_ParamAccess.list);
             pManager.AddNumberParameter("Q_s", "Q_s", "Solar heat gains", GH_ParamAccess.list);
 
-            // 25, 26
+            // 21, 22
             pManager.AddNumberParameter("consumedElec", "consumedElec", "consumedElec. pManager[2] also has generatedElec from e.g. PV. This here is consumed Elec from occupancy (equip & lighting) and systems (HP)", GH_ParamAccess.list);
             pManager.AddNumberParameter("consumedHeat", "consumedHeat", "consumedHeat. same as consumedElec... we could have negative heating loads from solar thermal or CHP", GH_ParamAccess.list);
 
-            // 27
+            // 23
             pManager.AddNumberParameter("Q_s_per_win", "Q_s_per_win", "Solar heat gains per window", GH_ParamAccess.tree);
 
             for (int i = 0; i < pManager.ParamCount; i++)
@@ -92,42 +85,33 @@ namespace Hive.IO.GhInputOutput
             // also sub-GHResults components, like distributor? Or just one massive Results reader?
 
             // input: all kinds of results from the Core 
-            List<double> coolingMonthly = new List<double>();
-            List<double> heatingMonthly = new List<double>();
-            List<double> electricityMonthly = new List<double>();
-            List<double> domesticHotWaterMonthly = new List<double>();
-            DA.GetDataList(0, coolingMonthly);
-            DA.GetDataList(1, heatingMonthly);
-            DA.GetDataList(2, electricityMonthly);
-            DA.GetDataList(3, domesticHotWaterMonthly);
-
-            List<double> coolingHourly = new List<double>();
-            List<double> heatingHourly = new List<double>();
-            List<double> electricityHourly = new List<double>();
-            List<double> domesticHotWaterHourly = new List<double>();
-            DA.GetDataList(4, coolingHourly);
-            DA.GetDataList(5, heatingHourly);
-            DA.GetDataList(6, electricityHourly);
-            DA.GetDataList(7, domesticHotWaterHourly);
+            List<double> cooling = new List<double>();
+            List<double> heating = new List<double>();
+            List<double> electricity = new List<double>();
+            List<double> domesticHotWater = new List<double>();
+            DA.GetDataList(0, cooling);
+            DA.GetDataList(1, heating);
+            DA.GetDataList(2, electricity);
+            DA.GetDataList(3, domesticHotWater);
 
             List<double> supplyCap = new List<double>();
             List<string> supplyNames = new List<string>();
-            DA.GetDataList(8, supplyCap);
-            DA.GetDataList(9, supplyNames);
-            DA.GetDataTree(10, out GH_Structure<GH_Number> supplyOpMonthly);
-            DA.GetDataTree(11, out GH_Structure<GH_Number> supplyOpHourly);
-            DA.GetDataTree(12, out GH_Structure<GH_Boolean> supplySysSuitability);
+            DA.GetDataList(4, supplyCap);
+            DA.GetDataList(5, supplyNames);
+            DA.GetDataTree(6, out GH_Structure<GH_Number> supplyOpMonthly);
+            DA.GetDataTree(7, out GH_Structure<GH_Number> supplyOpHourly);
+            DA.GetDataTree(8, out GH_Structure<GH_Boolean> supplySysSuitability);
 
             List<string> supplyUnits = new List<string>();
-            DA.GetDataList(13, supplyUnits);
+            DA.GetDataList(9, supplyUnits);
 
 
             List<Mesh> irradMesh = new List<Mesh>();
             Mesh viewFactor = null;
             List<Curve> sunPathCrvs = new List<Curve>();
-            DA.GetDataList(14, irradMesh);
-            DA.GetData(15, ref viewFactor);
-            DA.GetDataList(16, sunPathCrvs);
+            DA.GetDataList(10, irradMesh);
+            DA.GetData(11, ref viewFactor);
+            DA.GetDataList(12, sunPathCrvs);
 
 
             // tech types need to be read from the input. how?
@@ -175,29 +159,29 @@ namespace Hive.IO.GhInputOutput
             var emitters = new List<Emitter>();
             var outputEnergies = new List<Carrier>();
             var inputEnergies = new List<Carrier>();
-            DA.GetData(17, ref building);
-            DA.GetDataList(18, conversionTechs);
-            DA.GetDataList(19, emitters);
+            DA.GetData(13, ref building);
+            DA.GetDataList(14, conversionTechs);
+            DA.GetDataList(15, emitters);
 
             var Qt_opaque = new List<double>();
             var Qt_transparent = new List<double>();
             var Qv = new List<double>();
             var Qi = new List<double>();
             var Qs = new List<double>();
-            DA.GetDataList(20, Qt_opaque);
-            DA.GetDataList(21, Qt_transparent);
-            DA.GetDataList(22, Qv);
-            DA.GetDataList(23, Qi);
-            DA.GetDataList(24, Qs);
+            DA.GetDataList(16, Qt_opaque);
+            DA.GetDataList(17, Qt_transparent);
+            DA.GetDataList(18, Qv);
+            DA.GetDataList(19, Qi);
+            DA.GetDataList(20, Qs);
 
             var consumedElec = new List<double>();
             var consumedHeat = new List<double>();
-            DA.GetDataList(25, consumedElec);
-            DA.GetDataList(26, consumedHeat);
+            DA.GetDataList(21, consumedElec);
+            DA.GetDataList(22, consumedHeat);
 
 
             GH_Structure<GH_Number> iQsPerWin;
-            DA.GetDataTree(27, out iQsPerWin);
+            DA.GetDataTree(23, out iQsPerWin);
             double[][] QsPerWindow = new double[iQsPerWin.PathCount][];
             for (int i = 0; i < iQsPerWin.PathCount; i++)
             {
@@ -218,10 +202,10 @@ namespace Hive.IO.GhInputOutput
             }
 
 
-            building.Zones[0].ConsumedElectricityMonthly = consumedElec.ToArray();
-            building.Zones[0].ConsumedHeatingMonthly = consumedHeat.ToArray();
+            building.Zones[0].ConsumedElectricity = consumedElec.ToArray();
+            building.Zones[0].ConsumedHeating = consumedHeat.ToArray();
 
-            building.Zones[0].SetEnergyDemandsMonthly(heatingMonthly.ToArray(), domesticHotWaterMonthly.ToArray(), coolingMonthly.ToArray(), electricityMonthly.ToArray());
+            building.Zones[0].SetEnergyDemands(heating.ToArray(), domesticHotWater.ToArray(), cooling.ToArray(), electricity.ToArray());
             building.Zones[0].SetLossesAndGains(Qt_opaque.ToArray(), Qt_transparent.ToArray(), Qv.ToArray(), Qi.ToArray(), Qs.ToArray());
             building.Zones[0].SetMonthlyWindowIrradiance(QsPerWindow);
 
