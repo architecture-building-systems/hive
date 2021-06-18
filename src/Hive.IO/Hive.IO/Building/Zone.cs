@@ -684,13 +684,11 @@ namespace Hive.IO.Building
                 {
                     rg.Curve[] intersectionCrvs;
                     rg.Point3d[] intersectionPts;
-                    //misses overlaps ?!
-                    //rg.Intersect.Intersection.SurfaceSurface(windows[i], windows[u], tolerance, out intersectionCrvs, out intersectionPts);
                     rg.Intersect.Intersection.BrepSurface(w1, windows[u], tolerance, out intersectionCrvs, out intersectionPts);
-                    if (intersectionPts.Length > 0)
-                        return false;
                     if (intersectionCrvs.Length > 0)
-                        return false;
+                        foreach(var crv in intersectionCrvs)
+                            if (crv.IsClosed)   // they always have to be closed for intersections. otherwise the windows might just be touching
+                                return false;
                 }
             }
             return true;
