@@ -214,9 +214,9 @@ namespace Hive.IO.Building
         /// Differs from ElectricityLoadsMonthly, which can be negative (surplus electricity from e.g. PV). ConsumedElectricityMonthly is what we really consume in the zone
         /// </summary>
         [JsonProperty]
-        public double [] ConsumedElectricity { get; set; } // set in GhResults... FIX ME
+        public double[] ConsumedElectricity { get; set; } // set in GhResults... FIX ME
         [JsonProperty]
-        public double [] ConsumedHeating { get; set; } // same
+        public double[] ConsumedHeating { get; set; } // same
         #endregion
 
 
@@ -224,7 +224,7 @@ namespace Hive.IO.Building
         [JsonProperty]
         public double[] OpaqueTransmissionHeatLosses { get; private set; }
         [JsonProperty]
-        public double [] TransparentTransmissionHeatLosses { get; private set; }
+        public double[] TransparentTransmissionHeatLosses { get; private set; }
         [JsonProperty]
         public double[] VentilationHeatLosses { get; private set; }
         [JsonProperty]
@@ -232,7 +232,7 @@ namespace Hive.IO.Building
         [JsonProperty]
         public double[] SolarGains { get; private set; }
 
-        public double [][] MonthlySolarGainsPerWindow { get; private set; }
+        public double[][] MonthlySolarGainsPerWindow { get; private set; }
         #endregion
 
 
@@ -365,7 +365,7 @@ namespace Hive.IO.Building
                 this.Floors[i] = new Floor(floorList[i - mainFloors]);
             this.Windows = tuple.Item5;
             this.ShadingDevices = tuple.Item6;
-            
+
 
             // check, if floor is detected
             this.IsFloorExist = !(this.Floors.Length <= 0);
@@ -379,9 +379,9 @@ namespace Hive.IO.Building
 
             this.IsValidEPlus = CheckValidity(this.IsClosed, this.IsConvex, this.IsLinear, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsNoSelfIntersect);
             this.IsValid = (this.IsClosed && this.IsWindowsOnZone && this.IsWindowsNoSelfIntersect && this.IsFloorExist) ? true : false;
-            this.ErrorText = String.Format("Edges are linear: {0} \n " + "Zone is convex: {1} \n " + "Zone geometry is a closed polysurface: {2} \n " + "Zone surfaces are planar: {3} \n " 
-                                           + "Windows lie on zone surfaces: {4} \n " + "Windows have no self intersection: {5} \n " 
-                                           + "Additional floor surfaces lie within zone geometry: {6} \n " + "Floor surface detected: {7}", 
+            this.ErrorText = String.Format("Edges are linear: {0} \n " + "Zone is convex: {1} \n " + "Zone geometry is a closed polysurface: {2} \n " + "Zone surfaces are planar: {3} \n "
+                                           + "Windows lie on zone surfaces: {4} \n " + "Windows have no self intersection: {5} \n "
+                                           + "Additional floor surfaces lie within zone geometry: {6} \n " + "Floor surface detected: {7}",
                 this.IsLinear, this.IsConvex, this.IsClosed, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsNoSelfIntersect, this.IsFloorInZone, this.IsFloorExist);
 
             // define standard building physical properties upon inizialization. 
@@ -407,12 +407,19 @@ namespace Hive.IO.Building
         // can't do it yet, because I am losing windows order within the Core
         public void SetMonthlyWindowIrradiance(double[][] Q_s_per_window)
         {
+
             this.MonthlySolarGainsPerWindow = new double[Q_s_per_window.Length][];
             for (int i = 0; i < Q_s_per_window.Length; i++)
             {
-                this.MonthlySolarGainsPerWindow[i] = new double[Q_s_per_window[i].Length];
-                for (int j = 0; j < Q_s_per_window[i].Length; j++)
-                    this.MonthlySolarGainsPerWindow[i][j] = Q_s_per_window[i][j];
+                this.MonthlySolarGainsPerWindow[i] = new double[Misc.MonthsPerYear];
+                double[] solarGains = null;
+                if (Q_s_per_window[i].Length == Misc.HoursPerYear)
+                    solarGains = Misc.GetAverageMonthlyValue(Q_s_per_window[i]);
+                else
+                    solarGains = Q_s_per_window[i];
+
+                for (int j = 0; j < solarGains.Length; j++)
+                    this.MonthlySolarGainsPerWindow[i][j] = solarGains[j];
             }
         }
 
@@ -425,7 +432,7 @@ namespace Hive.IO.Building
         /// <param name="electricityLoads"></param>
         public void SetEnergyDemands(double[] heatingLoads, double[] dhwLoads, double[] coolingLoads, double[] electricityLoads)
         {
-            int horizon = new List<int> { heatingLoads.Length, dhwLoads.Length, coolingLoads.Length, electricityLoads.Length }.Min();
+            int horizon = new List<int> { heatingLoads.Length, dhwLoads.Length, coolingLoads.Length, electricityLoads.Length }.Min(); // should be consistent... and it would still crash a few lines below, if lists not of same length
 
             this.HeatingLoads = new double[horizon];
             this.DHWLoads = new double[horizon];
@@ -439,15 +446,16 @@ namespace Hive.IO.Building
         }
 
 
-        public void SetLossesAndGains(double[] Qt_opaque, double [] Qt_transparent, double[] Qv, double[] Qi, double[] Qs)
+        public void SetLossesAndGains(double[] Qt_opaque, double[] Qt_transparent, double[] Qv, double[] Qi, double[] Qs)
         {
+            int horizon = Qt_opaque.Length; // this assumes all input lists are of same length and either monthly or hourly
 
             // GENERIC HOURLY OR MONTHLY
-            this.OpaqueTransmissionHeatLosses = new double[Misc.MonthsPerYear];
-            this.TransparentTransmissionHeatLosses = new double[Misc.MonthsPerYear];
-            this.VentilationHeatLosses = new double[Misc.MonthsPerYear];
-            this.InternalHeatGains = new double[Misc.MonthsPerYear];
-            this.SolarGains = new double[Misc.MonthsPerYear];
+            this.OpaqueTransmissionHeatLosses = new double[horizon];
+            this.TransparentTransmissionHeatLosses = new double[horizon];
+            this.VentilationHeatLosses = new double[horizon];
+            this.InternalHeatGains = new double[horizon];
+            this.SolarGains = new double[horizon];
 
             Qt_opaque.CopyTo(this.OpaqueTransmissionHeatLosses, 0);
             Qt_transparent.CopyTo(this.TransparentTransmissionHeatLosses, 0);
@@ -608,7 +616,7 @@ namespace Hive.IO.Building
                 }
 
                 rg.AreaMassProperties amp = rg.AreaMassProperties.Compute(curve);
-                if(amp == null)
+                if (amp == null)
                     return false;
                 double curveArea = amp.Area;
 
@@ -657,7 +665,7 @@ namespace Hive.IO.Building
             curveArea = rg.AreaMassProperties.Compute(curve).Area;
             srfArea = rg.AreaMassProperties.Compute(srf).Area;
 
-            
+
             if (Math.Round(curveArea, roundingDecimals) != Math.Round(srfArea, roundingDecimals))
                 return false;
             else
