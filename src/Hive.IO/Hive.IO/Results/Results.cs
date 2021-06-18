@@ -505,7 +505,10 @@ namespace Hive.IO.Results
                 for (int j = 0; j < zone.Windows.Length; j++)
                 {
                     var solarGains = new double[Misc.MonthsPerYear];
-                    zone.MonthlySolarGainsPerWindow[j].CopyTo(solarGains, 0);
+                    if (zone.SolarGainsPerWindow[j].Length == Misc.HoursPerYear)
+                        Misc.GetCumulativeMonthlyValue(zone.SolarGainsPerWindow[j]).CopyTo(solarGains, 0);
+                    else // assumes length is 12 otherwise
+                        zone.SolarGainsPerWindow[j].CopyTo(solarGains, 0);
                     solarGainsList.Add(solarGains);
                 }
             }

@@ -232,7 +232,7 @@ namespace Hive.IO.Building
         [JsonProperty]
         public double[] SolarGains { get; private set; }
 
-        public double[][] MonthlySolarGainsPerWindow { get; private set; }
+        public double[][] SolarGainsPerWindow { get; private set; }
         #endregion
 
 
@@ -405,24 +405,19 @@ namespace Hive.IO.Building
 
         // data should be put into each Window element
         // can't do it yet, because I am losing windows order within the Core
-        // !!! also: Make it consistent with SetEnergyDemands and SetLossesAndGains: Don't assume the horizon and make it generic. Downscaling to monthly (if hourly data provided) should only happen in the Visualizer
-        public void SetMonthlyWindowIrradiance(double[][] Q_s_per_window)
+        public void SetWindowIrradiance(double[][] Q_s_per_window)
         {
+            int horizon = Q_s_per_window[0].Length; // assumes lengths are consistent and either monthly (12) or hourly (8760)
 
-            this.MonthlySolarGainsPerWindow = new double[Q_s_per_window.Length][];
+            this.SolarGainsPerWindow = new double[Q_s_per_window.Length][];
             for (int i = 0; i < Q_s_per_window.Length; i++)
             {
-                this.MonthlySolarGainsPerWindow[i] = new double[Misc.MonthsPerYear];
-                double[] solarGains = null;
-                if (Q_s_per_window[i].Length == Misc.HoursPerYear)
-                    solarGains = Misc.GetCumulativeMonthlyValue(Q_s_per_window[i]);
-                else
-                    solarGains = Q_s_per_window[i];
-
-                for (int j = 0; j < solarGains.Length; j++)
-                    this.MonthlySolarGainsPerWindow[i][j] = solarGains[j];
+                this.SolarGainsPerWindow[i] = new double[horizon];
+                for (int j = 0; j < Q_s_per_window[i].Length; j++)
+                    this.SolarGainsPerWindow[i][j] = Q_s_per_window[i][j];
             }
         }
+
 
         /// <summary>
         /// Setting monthly energy demands of this zone. Loads have to be computed externally, e.g. with Hive.Core SIA380

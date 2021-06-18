@@ -207,7 +207,7 @@ namespace Hive.IO.GhInputOutput
 
             building.Zones[0].SetEnergyDemands(heating.ToArray(), domesticHotWater.ToArray(), cooling.ToArray(), electricity.ToArray());
             building.Zones[0].SetLossesAndGains(Qt_opaque.ToArray(), Qt_transparent.ToArray(), Qv.ToArray(), Qi.ToArray(), Qs.ToArray());
-            building.Zones[0].SetMonthlyWindowIrradiance(QsPerWindow);
+            building.Zones[0].SetWindowIrradiance(QsPerWindow);
 
             // writing data into results object
             Results.Results results = new Results.Results(building, conversionTechs, emitters);
