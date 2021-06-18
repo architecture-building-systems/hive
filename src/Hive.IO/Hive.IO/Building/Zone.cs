@@ -405,6 +405,7 @@ namespace Hive.IO.Building
 
         // data should be put into each Window element
         // can't do it yet, because I am losing windows order within the Core
+        // !!! also: Make it consistent with SetEnergyDemands and SetLossesAndGains: Don't assume the horizon and make it generic. Downscaling to monthly (if hourly data provided) should only happen in the Visualizer
         public void SetMonthlyWindowIrradiance(double[][] Q_s_per_window)
         {
 
