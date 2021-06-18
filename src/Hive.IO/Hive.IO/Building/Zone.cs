@@ -414,7 +414,7 @@ namespace Hive.IO.Building
                 this.MonthlySolarGainsPerWindow[i] = new double[Misc.MonthsPerYear];
                 double[] solarGains = null;
                 if (Q_s_per_window[i].Length == Misc.HoursPerYear)
-                    solarGains = Misc.GetAverageMonthlyValue(Q_s_per_window[i]);
+                    solarGains = Misc.GetCumulativeMonthlyValue(Q_s_per_window[i]);
                 else
                     solarGains = Q_s_per_window[i];
 
