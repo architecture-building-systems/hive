@@ -79,7 +79,7 @@ def get_daily_schedules(room_schedules):
     """
 
     occupancy_schedule = room_schedules['OccupancySchedule']
-    devices_schedule = room_schedules['DevicesSchedule']
+    devices_schedule = room_schedules['DeviceSchedule']
     lighting_schedule = room_schedules['LightingSchedule']
 
     HOUR_DAY_START = 8  # inclusive, from SIA 2024 corrected from 7h

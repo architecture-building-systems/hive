@@ -15,7 +15,7 @@ electricity demand: currently simply by using sqm and internal loads for lightin
 from __future__ import division
 import math
 
-import ghpythonlib.treehelpers as th
+import ghpythonlib.treehelpers as th # DEBUG
 
 # Constants
 MONTHS_PER_YEAR = 12
@@ -26,6 +26,11 @@ HOURS_PER_DAY = 24
 HOURS_PER_MONTH = [(HOURS_PER_DAY * days) for days in DAYS_PER_MONTH]   # length of calculation period (hours per month) [h]
 HOURS_PER_YEAR = 8760  # no leap year    
 SECONDS_PER_HOUR = 3600.0
+
+CELCIUS_TO_KELVIN = 273.15 # [K]
+GRAVITATIONAL_CONSTANT = 9.8 # [m/s^2]
+RHO = 1.2       # Luftdichte in kg/m^3, average as actually dependent on temperature (and more..?)
+C_P = 1005      # Spez. Wärmekapazität Luft in J/(kgK)
 
 def cleanDictForNaN(d):
     # a = d.values()
@@ -180,9 +185,6 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
         _____________________________________________________________________________________
     """
     
-    rho = 1.2       # Luftdichte in kg/m^3
-    c_p = 1005      # Spez. Wärmekapazität Luft in J/(kgK)
-      
     # Assert inputs hourly
     adaptive_comfort = use_adaptive_comfort and (T_i_ub_hourly is not None and T_i_lb_hourly is not None) 
     
@@ -275,9 +277,9 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     win_areas = [x for (x, y) in zip(surface_areas, surface_type) if y != "opaque"]
     Q_s_tr_per_surface = None
     Q_s_tr_per_surface_jagged = None
+    num_surfaces_tr = len([s for s in surface_type if s=="transp"])
     
     if (srf_irrad_obstr_tree.Branch(0).Count == 0 and srf_irrad_unobstr_tree.BranchCount == 0):
-        num_surfaces_tr = len([s for s in surface_type if s=="transp"])
         Q_s_tr_per_surface = [[0.0]*num_surfaces_tr] * MONTHS_PER_YEAR
         Q_s_tr_per_surface_hourly = [[0.0]*num_surfaces_tr] * HOURS_PER_YEAR
     else:
@@ -332,8 +334,17 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
 
     # Ventilation heat loss coefficient (Lüftungs-Wärmetransferkoeffizient), H_V
     # m3/h to m3/s, hence divide by 3600
-    H_V = Vdot_th / SECONDS_PER_HOUR * rho * c_p
-    H_V_no_heat_recovery = Vdot_th_no_heat_recovery / SECONDS_PER_HOUR * rho * c_p
+    H_V = (Vdot_th / SECONDS_PER_HOUR) * RHO * C_P
+    H_V_no_heat_recovery = (Vdot_th_no_heat_recovery / SECONDS_PER_HOUR) * RHO * C_P
+    
+    # Natural ventilation (no infiltration ? TODO)
+    # TODO picks the first window as the window to ventilate. Should be selected by user?
+    window_for_nat_vent_idx = next((i for i, s in enumerate(surface_type) if s == "transp"), None)
+    # TODO assume fixed height of 1.5m as has significant influence on natural ventilation calc.
+    h = 1.5
+    w = surface_areas[window_for_nat_vent_idx] / h
+    # Precalculate constant part to reduce repetitive computation
+    Vdot_nat_vent_constant = calc_natural_ventilation_constant(h, w)
     
     def calculate_step(t, 
                        T_e, T_i_ub, T_i_lb,
@@ -357,6 +368,16 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
         Q_V_lb = H_V * deltaT_lb
         Q_V_ub_no_hr = H_V_no_heat_recovery * deltaT_ub
         Q_V_lb_no_hr = H_V_no_heat_recovery * deltaT_lb
+        
+        # Natural ventilation losses (No infiltration or mechanical)
+        # Calculates natural ventilation, for now based on single rectangular opening in single zone !
+        # V_dot = c_d * H * W * 1/3 * sqrt(g * H * (T_i - T_e)/T_e)
+        # Assumes:
+        #   - Ta and Ti constant  
+        #   - No wind influence (only driven by temperature differences) 
+        #   - Single zone and single sided ventilation
+        Q_V_ub_nat_vent = calc_H_V_nat_vent(T_i_ub[t], T_e[t], Vdot_nat_vent_constant) * deltaT_ub
+        Q_V_lb_nat_vent = calc_H_V_nat_vent(T_i_lb[t], T_e[t], Vdot_nat_vent_constant) * deltaT_lb
 
         # Internal loads (interne Wärmeeinträge)
         # Q_i = Phi_P * t_P + Phi_L * t_L + Phi_A * t_A
@@ -395,34 +416,49 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
             gamma_lb = calc_gamma(Q_i, Q_s, Q_T_lb, Q_V_lb)
             gamma_ub_no_hr = calc_gamma(Q_i, Q_s, Q_T_ub, Q_V_ub_no_hr)
             gamma_lb_no_hr = calc_gamma(Q_i, Q_s, Q_T_lb, Q_V_lb_no_hr)
+            gamma_ub_nat_vent = calc_gamma(Q_i, Q_s, Q_T_ub, Q_V_ub_nat_vent)
+            gamma_lb_nat_vent = calc_gamma(Q_i, Q_s, Q_T_lb, Q_V_lb_nat_vent)
 
             # usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
             eta_g_heating = calc_eta_g(gamma_lb, tau)
             eta_g_cooling = calc_eta_g(gamma_ub, tau, cooling=True) 
             eta_g_heating_no_hr = calc_eta_g(gamma_lb_no_hr, tau)
             eta_g_cooling_no_hr = calc_eta_g(gamma_ub_no_hr, tau, cooling=True)
+            eta_g_heating_nat_vent = calc_eta_g(gamma_lb_nat_vent, tau)
+            eta_g_cooling_nat_vent = calc_eta_g(gamma_ub_nat_vent, tau, cooling=True)
         else:
-            eta_g_heating, eta_g_cooling, eta_g_heating_no_hr, eta_g_cooling_no_hr = eta_g_t
+            eta_g_heating, eta_g_cooling, \
+                eta_g_heating_no_hr, eta_g_cooling_no_hr, \
+                    eta_g_heating_nat_vent, eta_g_cooling_nat_vent, \
+                        = eta_g_t
             
         if only_return_eta_g: 
-            return eta_g_heating, eta_g_cooling, eta_g_heating_no_hr, eta_g_cooling_no_hr
+            return eta_g_heating, eta_g_cooling, \
+                eta_g_heating_no_hr, eta_g_cooling_no_hr, \
+                    eta_g_heating_nat_vent, eta_g_cooling_nat_vent
         else: # calculate demand
+            
             # heating demand (Heizwärmebedarf), Q_H
             # Q_H = Q_T + Q_V - eta_g * (Q_i + Q_s)
-            # calculating different cases with/without heat recovery (hr)
+            # calculating different cases with/without heat recovery, with/without natural ventilation (hr)
             Q_H = Q_T_lb + Q_V_lb - eta_g_heating * (Q_i + Q_s)
             Q_H_no_hr = Q_T_lb + Q_V_lb_no_hr - eta_g_heating_no_hr * (Q_i + Q_s)
-            Q_H, Q_H_no_hr = negatives_to_zero([Q_H, Q_H_no_hr])
+            Q_H_nat_vent = Q_T_lb + Q_V_lb_nat_vent - eta_g_heating_nat_vent * (Q_i + Q_s)
+            Q_H, Q_H_no_hr, Q_H_nat_vent = negatives_to_zero([Q_H, Q_H_no_hr, Q_H_nat_vent])
             
             # cooling demand (Kältebedarf), Q_K
-            # calculating different cases with/without heat recovery (hr)
+            # calculating different cases with/without heat recovery, with/without natural ventilation (hr)
             Q_K = Q_i + Q_s - eta_g_cooling * (Q_T_ub + Q_V_ub)
             Q_K_no_hr = Q_i + Q_s - eta_g_cooling_no_hr * (Q_T_ub + Q_V_ub_no_hr)
-            Q_K, Q_K_no_hr = negatives_to_zero([Q_K, Q_K_no_hr])
+            Q_K_nat_vent = Q_i + Q_s - eta_g_cooling * (Q_T_ub + Q_V_ub_nat_vent)
+            Q_K, Q_K_no_hr, Q_K_nat_vent = negatives_to_zero([Q_K, Q_K_no_hr, Q_K_nat_vent])
 
             # take smaller value of both comfort set points and remember the index
-            Q_H, Q_H_index = min_and_index(Q_H, Q_H_no_hr)
-            Q_K, Q_K_index = min_and_index(Q_K, Q_K_no_hr)
+            Q_H, Q_H_index = min_and_index(Q_H, Q_H_no_hr, Q_H_nat_vent)
+            Q_K, Q_K_index = min_and_index(Q_K, Q_K_no_hr, Q_K_nat_vent)          
+            
+            if Q_K>0.0 and Q_K_index == 2:
+                print(t, " cooled by nat_vent", str(T_e[t]) + " C")
 
             # either subtract heating from cooling, but then also account for that in losses/gains by subtracting those too
             # or just take the higher load of both and then take the corresponding losses/gains
@@ -475,7 +511,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
         if hourly:
             # Get the eta_g for the month
             eta_g_t = calculate_step(month,
-                                T_e, T_i_lb, T_i_ub,
+                                T_e, T_i_ub, T_i_lb,
                                 t_P, t_A, t_L,
                                 Phi_P, Phi_A, Phi_L,
                                 Q_s_tr_per_surface,
@@ -485,7 +521,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
             for hour in range(HOURS_PER_MONTH[month]):
                 # Calculate hourly heat flows and demands for that month
                 calculate_step(hour + end_hour,
-                                T_e_hourly, T_i_lb_hourly, T_i_ub_hourly,
+                                T_e_hourly, T_i_ub_hourly, T_i_lb_hourly,
                                 t_P_hourly, t_A_hourly, t_L_hourly,
                                 Phi_P_hourly, Phi_A_hourly, Phi_L_hourly,
                                 Q_s_tr_per_surface_hourly,
@@ -495,18 +531,18 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
         else:
             # Calculate only monthly heat flows and demands
             calculate_step(month,
-                            T_e, T_i_lb, T_i_ub,
+                            T_e, T_i_ub, T_i_lb,
                             t_P, t_A, t_L,
                             Phi_P, Phi_A, Phi_L,
                             Q_s_tr_per_surface,
                             run_hourly=False)
 
     if hourly and Q_s_tr_per_surface_jagged_hourly != None:
-        Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged_hourly, source=[0, 0])   # import ghpythonlib.treehelpers as th
-        # Q_s_tr_tree = Q_s_tr_per_surface_jagged_hourly # DEBUG
+        # Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged_hourly, source=[0, 0])   # import ghpythonlib.treehelpers as th
+        Q_s_tr_tree = Q_s_tr_per_surface_jagged_hourly # DEBUG
     elif not hourly and Q_s_tr_per_surface_jagged != None:
-        Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged, source=[0, 0])   # import ghpythonlib.treehelpers as th
-        # Q_s_tr_tree = Q_s_tr_per_surface_jagged # DEBUG
+        # Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged, source=[0, 0])   # import ghpythonlib.treehelpers as th
+        Q_s_tr_tree = Q_s_tr_per_surface_jagged # DEBUG
     else:
         Q_s_tr_tree = None
 
@@ -593,6 +629,35 @@ def calculate_Q_s(run_obstr, tree_obstr, tree_unobstr,
             Q_array.append(get_monthly_sum(row))
     
     return Q_array
+
+def calc_natural_ventilation_constant(H,W):
+    """Precalculates the constant part of natural ventilation calc 
+            _______________________________
+    
+    V_dot = c_d * H * W * 1/3 * sqrt(g * H * (T_i - T_e)/T_e)
+            _______________________________
+    
+    c_d = 0.6 (discharge coefficient, value for open doors and windows) [-]
+    g = 9.8 (graviational constant) [m/s^2]
+    
+    :param H: Height of window opening [m]
+    :param W: Width of window opening [m]
+    """
+    return 0.6 * H * W * 0.333333 * math.sqrt(GRAVITATIONAL_CONSTANT * H)
+
+def calc_H_V_nat_vent(T_i, T_e, Vdot_nat_vent_constant):
+    """Calculates the coefficient of natural ventilation H_V_nat_vent
+    
+    V_dot_nat_vent = c_d * H * W * 1/3 * sqrt(g * H * (T_i - T_e)/T_e)
+    H_V_nat_vent = V_dot * rho * c_p
+    
+    rho = 1.2   Specific heat capacity of air   [kg/m^3]
+    c_p = 1000  Average air density             [J/kgK]
+    
+    :param T_i: Indoor temperature [K]
+    :param T_e: Outdoor temperature [K]
+    """
+    return Vdot_nat_vent_constant * math.sqrt(abs(T_i - T_e) / (T_e + CELCIUS_TO_KELVIN)) * RHO * C_P
 
 # UTILS
 
