@@ -192,6 +192,8 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
         assert len(T_i_ub_hourly) == HOURS_PER_YEAR, "'setpoints_ub' (Setpoints upper bound) must be hourly. Length was %d." % (len(T_i_ub_hourly))
         assert len(T_i_lb_hourly) == HOURS_PER_YEAR, "'setpoints_lb' (Setpoints lower bound) must be hourly. Length was %d." % (len(T_i_lb_hourly))
     assert len(T_e_hourly) == HOURS_PER_YEAR, "'T_e' (Ambient temperature) must be hourly. Length was %d." % (len(T_e_hourly))
+    
+    assert srf_irrad_obstr_tree is not None if run_obstructed_simulation else True, "Q_s_tree is None but solar gains set to run using obstructued solar gains."
 
     # read room properties from sia2024
     room_properties = cleanDictForNaN(room_properties)
@@ -274,19 +276,20 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     # formatting the grasshopper tree that contains solar irradiation time series for each window
     # could be changed later to also include solar irradiation on opaque surfaces...
     # ...would need to be adapted in the 'for surface in range(num_surfaces):' loop as well then
-    win_areas = [x for (x, y) in zip(surface_areas, surface_type) if y != "opaque"]
+    windows_areas = [x for (x, y) in zip(surface_areas, surface_type) if y != "opaque"]
+    windows_count = len(windows_areas)
     Q_s_tr_per_surface = None
     Q_s_tr_per_surface_jagged = None
-    num_surfaces_tr = len([s for s in surface_type if s=="transp"])
+    Q_s_tr_per_surface_jagged_hourly = None
     
     if (srf_irrad_obstr_tree.Branch(0).Count == 0 and srf_irrad_unobstr_tree.BranchCount == 0):
-        Q_s_tr_per_surface = [[0.0]*num_surfaces_tr] * MONTHS_PER_YEAR
-        Q_s_tr_per_surface_hourly = [[0.0]*num_surfaces_tr] * HOURS_PER_YEAR
+        Q_s_tr_per_surface = [[0.0]*windows_count] * MONTHS_PER_YEAR
+        Q_s_tr_per_surface_hourly = [[0.0]*windows_count] * HOURS_PER_YEAR
     else:
         # Monthly
         Q_s_tr_per_surface_jagged = calculate_Q_s(run_obstructed_simulation, srf_irrad_obstr_tree, srf_irrad_unobstr_tree,
                                             g_value, g_value_total, 
-                                            setpoint_shading, win_areas,
+                                            setpoint_shading, windows_areas,
                                             hourly=False)
         
         # Transpose to per timestep
@@ -295,7 +298,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
         if hourly:
             Q_s_tr_per_surface_jagged_hourly = calculate_Q_s(run_obstructed_simulation, srf_irrad_obstr_tree, srf_irrad_unobstr_tree,
                                                 g_value, g_value_total, 
-                                                setpoint_shading, win_areas,
+                                                setpoint_shading, windows_areas,
                                                 hourly=True)
             
             # Transpose to per timestep
