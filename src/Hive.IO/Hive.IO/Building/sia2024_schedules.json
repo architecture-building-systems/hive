@@ -1,25 +1,9 @@
 [
     {
         "RoomType": "1.1 Wohnen Mehrfamilienhaus", 
-        "LightingSchedule": {
-            "HoursPerNight": 3, 
-            "HoursPerDay": 4
-        }, 
+        "DaysOffPerWeek": 0, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 1.0, 
                 1.0, 
@@ -45,11 +29,54 @@
                 1.0, 
                 1.0, 
                 1.0
-            ], 
-            "DaysOffPerWeek": 0, 
-            "DaysUsedPerYear": 365
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 365, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -75,31 +102,43 @@
                 0.2, 
                 0.2, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "1.2 Wohnen Einfamilienhaus", 
-        "LightingSchedule": {
-            "HoursPerNight": 3, 
-            "HoursPerDay": 4
-        }, 
+        "DaysOffPerWeek": 0, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 1.0, 
                 1.0, 
@@ -125,11 +164,54 @@
                 1.0, 
                 1.0, 
                 1.0
-            ], 
-            "DaysOffPerWeek": 0, 
-            "DaysUsedPerYear": 365
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 365, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -155,31 +237,43 @@
                 0.2, 
                 0.2, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "2.1 Hotelzimmer", 
-        "LightingSchedule": {
-            "HoursPerNight": 3, 
-            "HoursPerDay": 3
-        }, 
+        "DaysOffPerWeek": 0, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.7, 
-                0.7, 
-                0.7, 
-                0.7, 
-                0.7, 
-                0.7, 
-                0.7, 
-                0.7, 
-                0.7, 
-                0.7, 
-                0.7, 
-                0.7
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 1.0, 
                 1.0, 
@@ -205,11 +299,54 @@
                 0.8, 
                 1.0, 
                 1.0
-            ], 
-            "DaysOffPerWeek": 0, 
-            "DaysUsedPerYear": 365
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 365, 
+        "YearlyProfile": [
+            0.7, 
+            0.7, 
+            0.7, 
+            0.7, 
+            0.7, 
+            0.7, 
+            0.7, 
+            0.7, 
+            0.7, 
+            0.7, 
+            0.7, 
+            0.7
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.2, 
                 0.1, 
@@ -235,31 +372,43 @@
                 0.4, 
                 0.2, 
                 0.2
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "2.2 Empfang, Lobby", 
-        "LightingSchedule": {
-            "HoursPerNight": 9, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 0, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.7, 
-                0.7, 
-                0.7, 
-                0.7, 
-                0.7, 
-                0.7, 
-                0.7, 
-                0.7, 
-                0.7, 
-                0.7, 
-                0.7, 
-                0.7
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -285,11 +434,54 @@
                 0.5, 
                 0.5, 
                 0.1
-            ], 
-            "DaysOffPerWeek": 0, 
-            "DaysUsedPerYear": 365
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 365, 
+        "YearlyProfile": [
+            0.7, 
+            0.7, 
+            0.7, 
+            0.7, 
+            0.7, 
+            0.7, 
+            0.7, 
+            0.7, 
+            0.7, 
+            0.7, 
+            0.7, 
+            0.7
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -315,31 +507,43 @@
                 0.5, 
                 0.5, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "3.1 Einzel-, Gruppenbuero", 
-        "LightingSchedule": {
-            "HoursPerNight": 0, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -365,11 +569,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 2, 
-            "DaysUsedPerYear": 261
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 261, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -395,31 +642,43 @@
                 0.1, 
                 0.1, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "3.2 Grossraumbuero", 
-        "LightingSchedule": {
-            "HoursPerNight": 0, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -445,11 +704,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 2, 
-            "DaysUsedPerYear": 261
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 261, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -475,31 +777,43 @@
                 0.1, 
                 0.1, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "3.3 Sitzungszimmer", 
-        "LightingSchedule": {
-            "HoursPerNight": 0, 
-            "HoursPerDay": 6
-        }, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -525,11 +839,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 2, 
-            "DaysUsedPerYear": 261
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 261, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -555,31 +912,43 @@
                 0.1, 
                 0.1, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "3.4 Schalterhalle, Empfang", 
-        "LightingSchedule": {
-            "HoursPerNight": 0, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -605,11 +974,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 2, 
-            "DaysUsedPerYear": 261
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 261, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -635,31 +1047,43 @@
                 0.1, 
                 0.1, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "4.1 Schulzimmer", 
-        "LightingSchedule": {
-            "HoursPerNight": 0, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.6, 
-                0.9, 
-                0.6, 
-                0.8, 
-                1.0, 
-                0, 
-                0.6, 
-                1.0, 
-                0.6, 
-                0.9, 
-                0.6
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -685,11 +1109,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 2, 
-            "DaysUsedPerYear": 261
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 261, 
+        "YearlyProfile": [
+            0.8, 
+            0.6, 
+            0.9, 
+            0.6, 
+            0.8, 
+            1.0, 
+            0, 
+            0.6, 
+            1.0, 
+            0.6, 
+            0.9, 
+            0.6
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -715,31 +1182,43 @@
                 0.1, 
                 0.1, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "4.2 Lehrerzimmer", 
-        "LightingSchedule": {
-            "HoursPerNight": 0, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.6, 
-                0.9, 
-                0.6, 
-                0.8, 
-                1.0, 
-                0, 
-                0.6, 
-                1.0, 
-                0.6, 
-                0.9, 
-                0.6
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -765,11 +1244,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 2, 
-            "DaysUsedPerYear": 261
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 261, 
+        "YearlyProfile": [
+            0.8, 
+            0.6, 
+            0.9, 
+            0.6, 
+            0.8, 
+            1.0, 
+            0, 
+            0.6, 
+            1.0, 
+            0.6, 
+            0.9, 
+            0.6
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -795,31 +1317,43 @@
                 0.1, 
                 0.1, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "4.3 Bibliothek", 
-        "LightingSchedule": {
-            "HoursPerNight": 0, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.6, 
-                0.9, 
-                0.6, 
-                0.8, 
-                1.0, 
-                0, 
-                0.6, 
-                1.0, 
-                0.6, 
-                0.9, 
-                0.6
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -845,11 +1379,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 2, 
-            "DaysUsedPerYear": 261
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 261, 
+        "YearlyProfile": [
+            0.8, 
+            0.6, 
+            0.9, 
+            0.6, 
+            0.8, 
+            1.0, 
+            0, 
+            0.6, 
+            1.0, 
+            0.6, 
+            0.9, 
+            0.6
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -875,31 +1452,43 @@
                 0.1, 
                 0.1, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "4.4 Hoehrsaal", 
-        "LightingSchedule": {
-            "HoursPerNight": 0, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.6, 
-                0.9, 
-                0.6, 
-                0.8, 
-                1.0, 
-                0, 
-                0.6, 
-                1.0, 
-                0.6, 
-                0.9, 
-                0.6
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -925,11 +1514,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 2, 
-            "DaysUsedPerYear": 261
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 261, 
+        "YearlyProfile": [
+            0.8, 
+            0.6, 
+            0.9, 
+            0.6, 
+            0.8, 
+            1.0, 
+            0, 
+            0.6, 
+            1.0, 
+            0.6, 
+            0.9, 
+            0.6
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -955,31 +1587,43 @@
                 0.1, 
                 0.1, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "4.5 Schulfachraum", 
-        "LightingSchedule": {
-            "HoursPerNight": 0, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.6, 
-                0.9, 
-                0.6, 
-                0.8, 
-                1.0, 
-                0, 
-                0.6, 
-                1.0, 
-                0.6, 
-                0.9, 
-                0.6
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -1005,11 +1649,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 2, 
-            "DaysUsedPerYear": 261
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 261, 
+        "YearlyProfile": [
+            0.8, 
+            0.6, 
+            0.9, 
+            0.6, 
+            0.8, 
+            1.0, 
+            0, 
+            0.6, 
+            1.0, 
+            0.6, 
+            0.9, 
+            0.6
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -1035,31 +1722,43 @@
                 0.1, 
                 0.1, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "5.1 Lebensmittelverkauf", 
-        "LightingSchedule": {
-            "HoursPerNight": 2, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 1, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -1085,11 +1784,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 1, 
-            "DaysUsedPerYear": 313
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 313, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.2, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -1115,31 +1857,43 @@
                 0.1, 
                 0.1, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.2
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "5.2 Fachgeschaeft", 
-        "LightingSchedule": {
-            "HoursPerNight": 2, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 1, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -1165,11 +1919,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 1, 
-            "DaysUsedPerYear": 313
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 313, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -1195,31 +1992,43 @@
                 0.1, 
                 0.1, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "5.3 Verkauf Moebel, Bau, Garten", 
-        "LightingSchedule": {
-            "HoursPerNight": 1, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 1, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -1245,11 +2054,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 1, 
-            "DaysUsedPerYear": 313
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 313, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -1275,31 +2127,43 @@
                 0.1, 
                 0.1, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "6.1 Restaurant", 
-        "LightingSchedule": {
-            "HoursPerNight": 6, 
-            "HoursPerDay": 6
-        }, 
+        "DaysOffPerWeek": 1, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -1325,11 +2189,54 @@
                 1.0, 
                 0.2, 
                 0.2
-            ], 
-            "DaysOffPerWeek": 1, 
-            "DaysUsedPerYear": 313
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 313, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -1355,31 +2262,43 @@
                 1.0, 
                 0.8, 
                 0.4
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "6.2 Selbstbedienungsrestaurant", 
-        "LightingSchedule": {
-            "HoursPerNight": 0, 
-            "HoursPerDay": 7
-        }, 
+        "DaysOffPerWeek": 1, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -1405,11 +2324,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 1, 
-            "DaysUsedPerYear": 313
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 313, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -1435,31 +2397,43 @@
                 0.1, 
                 0.1, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "6.3 Kueche zu Restaurant", 
-        "LightingSchedule": {
-            "HoursPerNight": 5, 
-            "HoursPerDay": 8
-        }, 
+        "DaysOffPerWeek": 1, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -1485,11 +2459,54 @@
                 0.4, 
                 0.2, 
                 0
-            ], 
-            "DaysOffPerWeek": 1, 
-            "DaysUsedPerYear": 313
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 313, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -1515,31 +2532,43 @@
                 0.4, 
                 0.2, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "6.4 Kueche zu Selbstbedienungsrestaurant", 
-        "LightingSchedule": {
-            "HoursPerNight": 0, 
-            "HoursPerDay": 9
-        }, 
+        "DaysOffPerWeek": 1, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -1565,11 +2594,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 1, 
-            "DaysUsedPerYear": 313
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 313, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -1595,31 +2667,43 @@
                 0.1, 
                 0.1, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "7.1 Vorstellungsraum", 
-        "LightingSchedule": {
-            "HoursPerNight": 6, 
-            "HoursPerDay": 6
-        }, 
+        "DaysOffPerWeek": 1, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -1645,11 +2729,54 @@
                 1.0, 
                 0.6, 
                 0.2
-            ], 
-            "DaysOffPerWeek": 1, 
-            "DaysUsedPerYear": 313
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 313, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -1675,31 +2802,43 @@
                 1.0, 
                 0.6, 
                 0.2
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "7.2 Mehrzweckhalle", 
-        "LightingSchedule": {
-            "HoursPerNight": 5, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 1, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -1725,11 +2864,54 @@
                 0.6, 
                 0.2, 
                 0
-            ], 
-            "DaysOffPerWeek": 1, 
-            "DaysUsedPerYear": 313
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 313, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -1755,31 +2937,43 @@
                 0.6, 
                 0.2, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "7.3 Ausstellungshalle", 
-        "LightingSchedule": {
-            "HoursPerNight": 5, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 1, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -1805,11 +2999,54 @@
                 0.6, 
                 0.2, 
                 0
-            ], 
-            "DaysOffPerWeek": 1, 
-            "DaysUsedPerYear": 313
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 313, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -1835,31 +3072,43 @@
                 0.6, 
                 0.2, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "8.1 Bettenzimmer", 
-        "LightingSchedule": {
-            "HoursPerNight": 3, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 0, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 1.0, 
                 1.0, 
@@ -1885,11 +3134,54 @@
                 1.0, 
                 1.0, 
                 1.0
-            ], 
-            "DaysOffPerWeek": 0, 
-            "DaysUsedPerYear": 365
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 365, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.2, 
             "DailyProfile": [
                 0.2, 
                 0.2, 
@@ -1915,31 +3207,43 @@
                 0.4, 
                 0.2, 
                 0.2
-            ], 
-            "LoadWhenUnoccupied": 0.2
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "8.2 Stationszimmer", 
-        "LightingSchedule": {
-            "HoursPerNight": 13, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 0, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0.2, 
                 0.2, 
@@ -1965,11 +3269,54 @@
                 0.2, 
                 0.2, 
                 0.2
-            ], 
-            "DaysOffPerWeek": 0, 
-            "DaysUsedPerYear": 365
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 365, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.2, 
                 0.2, 
@@ -1995,31 +3342,43 @@
                 0.2, 
                 0.2, 
                 0.2
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "8.3 Behandlungsraum", 
-        "LightingSchedule": {
-            "HoursPerNight": 0, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 1, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -2045,11 +3404,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 1, 
-            "DaysUsedPerYear": 313
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 313, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -2075,31 +3477,43 @@
                 0.1, 
                 0.1, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "9.1 Produktion (grobe Arbeit)", 
-        "LightingSchedule": {
-            "HoursPerNight": 13, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0.2, 
                 0.2, 
@@ -2125,11 +3539,54 @@
                 0.5, 
                 0.2, 
                 0.2
-            ], 
-            "DaysOffPerWeek": 2, 
-            "DaysUsedPerYear": 261
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 261, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.2, 
             "DailyProfile": [
                 0.2, 
                 0.2, 
@@ -2155,31 +3612,43 @@
                 0.5, 
                 0.2, 
                 0.2
-            ], 
-            "LoadWhenUnoccupied": 0.2
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "9.2 Produktion (feine Arbeit)", 
-        "LightingSchedule": {
-            "HoursPerNight": 0, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -2205,11 +3674,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 2, 
-            "DaysUsedPerYear": 261
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 261, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.2, 
             "DailyProfile": [
                 0.2, 
                 0.2, 
@@ -2235,31 +3747,43 @@
                 0.2, 
                 0.2, 
                 0.2
-            ], 
-            "LoadWhenUnoccupied": 0.2
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "9.3 Laborraum", 
-        "LightingSchedule": {
-            "HoursPerNight": 0, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -2285,11 +3809,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 2, 
-            "DaysUsedPerYear": 261
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 261, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.2, 
             "DailyProfile": [
                 0.2, 
                 0.2, 
@@ -2315,31 +3882,43 @@
                 0.2, 
                 0.2, 
                 0.2
-            ], 
-            "LoadWhenUnoccupied": 0.2
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "10.1 Lagerhalle", 
-        "LightingSchedule": {
-            "HoursPerNight": 13, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0.2, 
                 0.2, 
@@ -2365,11 +3944,54 @@
                 0.5, 
                 0.2, 
                 0.2
-            ], 
-            "DaysOffPerWeek": 2, 
-            "DaysUsedPerYear": 261
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 261, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.2, 
                 0.2, 
@@ -2395,31 +4017,43 @@
                 0.5, 
                 0.2, 
                 0.2
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "11.1 Turnhalle", 
-        "LightingSchedule": {
-            "HoursPerNight": 5, 
-            "HoursPerDay": 10
-        }, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.6, 
-                0.9, 
-                0.6, 
-                0.8, 
-                1.0, 
-                0, 
-                0.6, 
-                1.0, 
-                0.6, 
-                0.9, 
-                0.6
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -2445,11 +4079,54 @@
                 0.5, 
                 0.5, 
                 0
-            ], 
-            "DaysOffPerWeek": 2, 
-            "DaysUsedPerYear": 261
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 261, 
+        "YearlyProfile": [
+            0.8, 
+            0.6, 
+            0.9, 
+            0.6, 
+            0.8, 
+            1.0, 
+            0, 
+            0.6, 
+            1.0, 
+            0.6, 
+            0.9, 
+            0.6
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -2475,31 +4152,43 @@
                 0.5, 
                 0.5, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "11.2 Fitnessraum", 
-        "LightingSchedule": {
-            "HoursPerNight": 5, 
-            "HoursPerDay": 10
-        }, 
+        "DaysOffPerWeek": 1, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -2525,11 +4214,54 @@
                 0.5, 
                 0.5, 
                 0
-            ], 
-            "DaysOffPerWeek": 1, 
-            "DaysUsedPerYear": 313
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 313, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -2555,31 +4287,43 @@
                 0.5, 
                 0.5, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "11.3 Schwimmhalle", 
-        "LightingSchedule": {
-            "HoursPerNight": 5, 
-            "HoursPerDay": 10
-        }, 
+        "DaysOffPerWeek": 1, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -2605,11 +4349,54 @@
                 0.5, 
                 0.5, 
                 0
-            ], 
-            "DaysOffPerWeek": 1, 
-            "DaysUsedPerYear": 313
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 313, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -2635,31 +4422,43 @@
                 0.5, 
                 0.5, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "12.1 Verkehrsflaeche", 
-        "LightingSchedule": {
-            "HoursPerNight": 2, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 0, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -2685,11 +4484,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 0, 
-            "DaysUsedPerYear": 365
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 365, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -2715,31 +4557,43 @@
                 0, 
                 0, 
                 0
-            ], 
-            "LoadWhenUnoccupied": 0
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "12.11 Kuehlraum", 
-        "LightingSchedule": {
-            "HoursPerNight": 0, 
-            "HoursPerDay": 0
-        }, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -2765,11 +4619,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 2, 
-            "DaysUsedPerYear": 261
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 261, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.4, 
             "DailyProfile": [
                 0.4, 
                 0.4, 
@@ -2795,31 +4692,43 @@
                 0.4, 
                 0.4, 
                 0.4
-            ], 
-            "LoadWhenUnoccupied": 0.4
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "12.12 Serverraum", 
-        "LightingSchedule": {
-            "HoursPerNight": 0, 
-            "HoursPerDay": 0
-        }, 
+        "DaysOffPerWeek": 0, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -2845,11 +4754,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 0, 
-            "DaysUsedPerYear": 365
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 365, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 1.0, 
             "DailyProfile": [
                 1.0, 
                 1.0, 
@@ -2875,31 +4827,43 @@
                 1.0, 
                 1.0, 
                 1.0
-            ], 
-            "LoadWhenUnoccupied": 1.0
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "12.2 Verkehrsflaeche 24 h", 
-        "LightingSchedule": {
-            "HoursPerNight": 13, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 0, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0.2, 
                 0.2, 
@@ -2925,11 +4889,54 @@
                 0.2, 
                 0.2, 
                 0.2
-            ], 
-            "DaysOffPerWeek": 0, 
-            "DaysUsedPerYear": 365
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 365, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -2955,31 +4962,43 @@
                 0, 
                 0, 
                 0
-            ], 
-            "LoadWhenUnoccupied": 0
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "12.3 Treppenhaus", 
-        "LightingSchedule": {
-            "HoursPerNight": 2, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 0, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -3005,11 +5024,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 0, 
-            "DaysUsedPerYear": 365
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 365, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -3035,31 +5097,43 @@
                 0, 
                 0, 
                 0
-            ], 
-            "LoadWhenUnoccupied": 0
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "12.4 Nebenraum", 
-        "LightingSchedule": {
-            "HoursPerNight": 2, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 0, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -3085,11 +5159,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 0, 
-            "DaysUsedPerYear": 365
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 365, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -3115,31 +5232,43 @@
                 0, 
                 0, 
                 0
-            ], 
-            "LoadWhenUnoccupied": 0
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "12.5 Kueche, Teekueche", 
-        "LightingSchedule": {
-            "HoursPerNight": 0, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -3165,11 +5294,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 2, 
-            "DaysUsedPerYear": 261
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 261, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0.1, 
             "DailyProfile": [
                 0.1, 
                 0.1, 
@@ -3195,31 +5367,43 @@
                 0.1, 
                 0.1, 
                 0.1
-            ], 
-            "LoadWhenUnoccupied": 0.1
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "12.6 WC, Bad, Dusche", 
-        "LightingSchedule": {
-            "HoursPerNight": 0, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -3245,11 +5429,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 2, 
-            "DaysUsedPerYear": 261
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 261, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -3275,31 +5502,43 @@
                 0, 
                 0, 
                 0
-            ], 
-            "LoadWhenUnoccupied": 0
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "12.7 WC", 
-        "LightingSchedule": {
-            "HoursPerNight": 0, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -3325,11 +5564,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 2, 
-            "DaysUsedPerYear": 261
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 261, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -3355,31 +5637,43 @@
                 0, 
                 0, 
                 0
-            ], 
-            "LoadWhenUnoccupied": 0
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }, 
     {
         "RoomType": "12.8 Garderobe, Dusche", 
-        "LightingSchedule": {
-            "HoursPerNight": 0, 
-            "HoursPerDay": 11
-        }, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
+            "Default": 0.0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -3405,11 +5699,54 @@
                 0, 
                 0, 
                 0
-            ], 
-            "DaysOffPerWeek": 2, 
-            "DaysUsedPerYear": 261
+            ]
         }, 
-        "DevicesSchedule": {
+        "LightingSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0, 
+                0.0
+            ]
+        }, 
+        "DaysUsedPerYear": 261, 
+        "YearlyProfile": [
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8, 
+            0.8
+        ], 
+        "DeviceSchedule": {
+            "Default": 0, 
             "DailyProfile": [
                 0, 
                 0, 
@@ -3435,8 +5772,36 @@
                 0, 
                 0, 
                 0
-            ], 
-            "LoadWhenUnoccupied": 0
+            ]
+        }, 
+        "SetpointSchedule": {
+            "Default": 0.0, 
+            "DailyProfile": [
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                1.0, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5, 
+                0.5
+            ]
         }
     }
 ]

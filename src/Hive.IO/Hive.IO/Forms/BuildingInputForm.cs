@@ -19,7 +19,7 @@ namespace Hive.IO.Forms
     {
         private bool _rendering = false;
 
-        public BuildingInputState State { get; private set; } = new BuildingInputState(Sia2024Record.First(), null, true);
+        public BuildingInputState State { get; private set; } = new BuildingInputState(Sia2024Record.First(), new Zone(), true);
 
         public DialogResult ShowDialog(BuildingInputState state)
         {
@@ -81,6 +81,10 @@ namespace Hive.IO.Forms
 
             txtHeatingSetPoint.Text = State.HeatingSetpoint;
             txtCoolingSetPoint.Text = State.CoolingSetpoint;
+            txtHeatingSetback.Text = State.HeatingSetback;
+            txtCoolingSetback.Text = State.CoolingSetback;
+
+            checkBoxAdaptiveComfort.Checked = State.RunAdaptiveComfort;
         }
 
         private void cboBuildingUseType_SelectedIndexChanged(object sender, EventArgs e)
@@ -206,6 +210,53 @@ namespace Hive.IO.Forms
             var stateProperty = textBox.Tag.ToString();
 
             State.GetType().GetProperty(stateProperty).SetValue(State, textBox.Text);
+
+            RenderState();
+        }
+
+        // not pretty... TODO
+        private bool ShouldSetpointsBeAdaptive(string room_type)
+            => !new[] {
+                    "9.3 Laborraum",
+                    "11.2 Fitnessraum",
+                    "11.3 Schwimmhalle",
+                    "12.11 Kuehlraum",
+                    "12.12 Serverraum"
+            }.Contains(room_type);
+
+        private ToolTip toolTipAdaptiveComfort = new ToolTip() { InitialDelay = 100};
+        
+        private const string toolTipAdaptiveComfortInfoMessage = "Adaptive Comfort adjusts setpoints dynamically" +
+                "based on ambient temperature \nand assumptions about metabolic rates and clothing factors.";
+        private string toolTipAdaptiveComfortWarningMessage(string roomType) =>
+            toolTipAdaptiveComfortInfoMessage +
+                "\n\nWARNING: Adaptive Comfort is likely not appropriate \n" +
+                $"for room type {roomType}";
+
+        private void adaptiveComfortCheck_CheckedChanged(object sender, EventArgs e)
+        {
+            if (checkBoxAdaptiveComfort.Checked)
+            {
+                var toolTipMessage = toolTipAdaptiveComfortInfoMessage;
+                if (!ShouldSetpointsBeAdaptive(cboRoomType.Text))
+                {
+                    toolTipMessage = toolTipAdaptiveComfortWarningMessage(cboBuildingUseType.Text);
+                }
+                toolTipAdaptiveComfort.Show(toolTipMessage, (CheckBox)sender);
+                txtHeatingSetPoint.Enabled = false;
+                txtCoolingSetPoint.Enabled = false;
+                txtHeatingSetback.Enabled = false;
+                txtCoolingSetback.Enabled = false;
+            }
+            else
+            {
+                txtHeatingSetPoint.Enabled = true;
+                txtCoolingSetPoint.Enabled = true;
+                txtHeatingSetback.Enabled = true;
+                txtCoolingSetback.Enabled = true;
+            }
+
+            State.RunAdaptiveComfort = checkBoxAdaptiveComfort.Checked;
 
             RenderState();
         }

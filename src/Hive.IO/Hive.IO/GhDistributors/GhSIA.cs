@@ -33,7 +33,8 @@ namespace Hive.IO.GhDistributors
             pManager.AddTextParameter("SIA 2024 Room", "SiaRoom", "SIA 2024 room definitions for each zone.", GH_ParamAccess.item);
             pManager.AddNumberParameter("All External Surface Areas", "AllExtSrfAreas", "All external surface areas, including opaque and transparent (windows) surfaces.", GH_ParamAccess.list);
             pManager.AddTextParameter("Surface Type", "SrfType", "External surface type: 'opaque' or 'transp'.", GH_ParamAccess.list);
-            pManager.AddTextParameter("SUA 2024 Schedules", "SiaRoomSchedules", "Schedules for occupancy and devices (lighting TBD).", GH_ParamAccess.item);
+            pManager.AddTextParameter("SUA Room Schedules", "SiaRoomSchedules", "Schedules for occupancy, devices, lighting, amd setpoints.", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Use Adaptive Comfort", "UseAdaptiveComfort", "Determines whether to use adaptive comfort (true) or SIA 2024 setpoints (false)", GH_ParamAccess.item);
         }
 
 
@@ -50,7 +51,7 @@ namespace Hive.IO.GhDistributors
             var srfTypes = new List<string>();
             string opaque = "opaque";
             string transp = "transp";
-            var zones_schedules = new List<Sia2024Schedule>();
+            var zones_schedules = new List<ZoneSchedules>();
 
             for (int i = 0; i < zoneCount; i++)
             {
@@ -115,7 +116,8 @@ namespace Hive.IO.GhDistributors
             DA.SetData(3, building.SIA2024.ToJson()); // single zone
             DA.SetDataList(4, allSrfAreas);
             DA.SetDataList(5, srfTypes);
-            DA.SetData(6, Sia2024Schedules.ToJson(zones_schedules[0].RoomType)); // single zone
+            DA.SetData(6, Sia2024Schedules.ToJson(zones_schedules[0].RoomType)); // single zone !!
+            DA.SetData(7, building.Zones[0].RunAdaptiveComfort); // single zone !!
         }
 
 
