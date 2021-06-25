@@ -2,7 +2,7 @@
 
 @REM Change these paths accordingly
 
-@REM Requires python 3, likely from conda env.
+@REM Requires python 2.7, likely from conda env.
 SET PYTHON=python
 SET IPY=%PROGRAMFILES%\IronPython 2.7.8\ipy.exe
 SET HB=C:\Users\Maxence\Documents\_ETH\2_Jobs\_Hive\honey-badger\honey-badger.py
