@@ -35,3 +35,4 @@ echo Building Installer Setup_Hive.exe...
 cd setup\
 "%MAKENSIS%" hive.nsi
 echo ...Done
+pause

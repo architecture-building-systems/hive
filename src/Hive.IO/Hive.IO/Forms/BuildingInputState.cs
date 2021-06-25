@@ -17,14 +17,14 @@ namespace Hive.IO.Forms
     {
         private bool _editable;
         private Sia2024RecordEx _siaRoom;
-        private readonly Zone _zone;
+        private Zone _zone;
 
 
         public BuildingInputState(Sia2024RecordEx room, Zone zone, bool editable)
         {
             _siaRoom = room.Clone();
             _editable = editable;
-            _zone = zone;
+            _zone = zone.Clone();
         }
 
         public Sia2024RecordEx SiaRoom
@@ -33,6 +33,16 @@ namespace Hive.IO.Forms
             set
             {
                 _siaRoom = value;
+                RaiseAllPropertiesChangedEvent();
+            }
+        }
+
+        public Zone Zone
+        {
+            get => _zone;
+            set
+            {
+                _zone = value;
                 RaiseAllPropertiesChangedEvent();
             }
         }
@@ -77,6 +87,9 @@ namespace Hive.IO.Forms
                 RaisePropertyChangedEvent(nameof(RoomConstant));
                 RaisePropertyChangedEvent(nameof(CoolingSetpoint));
                 RaisePropertyChangedEvent(nameof(HeatingSetpoint));
+                RaisePropertyChangedEvent(nameof(CoolingSetback));
+                RaisePropertyChangedEvent(nameof(HeatingSetback));
+                RaisePropertyChangedEvent(nameof(RunAdaptiveComfort));
                 RaisePropertyChangedEvent(nameof(FloorArea));
                 RaisePropertyChangedEvent(nameof(EnvelopeArea));
                 RaisePropertyChangedEvent(nameof(GlazingRatio));
@@ -178,6 +191,19 @@ namespace Hive.IO.Forms
             }
         }
 
+        #region zone properties
+
+        public bool RunAdaptiveComfort
+        {
+            get => _zone.RunAdaptiveComfort;
+            set
+            {
+                _zone.RunAdaptiveComfort = value;
+                RaisePropertyChangedEvent();
+            }
+        }
+        #endregion
+
         #endregion comboboxes
 
         #region sia2024 properties
@@ -224,6 +250,40 @@ namespace Hive.IO.Forms
                 try
                 {
                     _siaRoom.HeatingSetpoint = double.Parse(value);
+                }
+                catch
+                {
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
+        public string CoolingSetback
+        {
+            get => $"{_siaRoom.CoolingSetback:0.00}";
+            set
+            {
+                try
+                {
+                    _siaRoom.CoolingSetback = double.Parse(value);
+                }
+                catch
+                {
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
+        public string HeatingSetback
+        {
+            get => $"{_siaRoom.HeatingSetback:0.00}";
+            set
+            {
+                try
+                {
+                    _siaRoom.HeatingSetback = double.Parse(value);
                 }
                 catch
                 {
@@ -714,6 +774,8 @@ namespace Hive.IO.Forms
         }
 
         #endregion sia2024 properties
+
+
 
         #region colors
 

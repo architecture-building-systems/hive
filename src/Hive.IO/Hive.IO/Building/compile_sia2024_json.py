@@ -4,14 +4,14 @@ import os
 import csv
 import json
 
-from yaml.loader import FullLoader
-
 # map the csv header names to Sia2024Record names...
 # (try to keep them as similar as possible)
 header_map = {    
     "Zeitkonstante": "RoomConstant",
     "Raumlufttemperatur Auslegung Kuehlung (Sommer)": "CoolingSetpoint",
+    "Raumlufttemperatur Auslegung Kuehlung (Sommer) - Absenktemperatur": "CoolingSetback",
     "Raumlufttemperatur Auslegung Heizen (Winter)": "HeatingSetpoint",
+    "Raumlufttemperatur Auslegung Heizen (Winter) - Absenktemperatur": "HeatingSetback",
     "Nettogeschossflaeche": "FloorArea",
     "Thermische Gebaeudehuellflaeche": "EnvelopeArea",
     "Glasanteil": "GlazingRatio",
