@@ -29,7 +29,9 @@ def room_schedules():
       - fill evening hours from 19h until 24h with number of SIA 2024 lighting hours.
       - if some left over, fill morning hours backing up from 7h to 0h.
     """
-
+    
+    print("Compiling / generating SIA 2024 Schedules...")
+    
     # Get the schedules yaml
     file_name = "sia2024_schedules.yaml"
     file_path = os.path.abspath(os.path.join(
@@ -69,6 +71,8 @@ def room_schedules():
         __file__), "sia2024_schedules.json")
     with open(out_file, "w") as fp:
         json.dump(schedules_all, fp, indent=4, encoding="utf8")
+        
+    print("Done. Saved at {0}".format(out_file))
 
 
 def get_daily_schedules(room_schedules):

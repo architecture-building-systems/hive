@@ -66,6 +66,8 @@ def room_properties():
     will be added as a resource to `Hive.IO.dll` that can then be read with `Hive.IO.Building.Sia2024Record`.
     """
     
+    print("Compiling SIA 2024 Room Properties...")
+    
     file_template = "201008_SIA2024_Raumdaten_{quality}.csv"
     folder = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Resources")) 
     #folder = "C:\\users\\chwaibel\\documents\\github\\Hive\\src\\Hive.IO\\Hive.IO\\Resources"
@@ -89,6 +91,8 @@ def room_properties():
     out_file = os.path.join(os.path.dirname(__file__), "sia2024_room_data.json")
     with open(out_file, "w") as fp:
         json.dump(records, fp, indent=4, encoding="utf8")
+    
+    print("Done. Saved at {0}".format(out_file))
         
 if __name__ == '__main__':
     room_properties()
