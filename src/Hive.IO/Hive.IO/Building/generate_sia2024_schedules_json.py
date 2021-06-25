@@ -67,8 +67,8 @@ def room_schedules():
     # Dump as json
     out_file = os.path.join(os.path.dirname(
         __file__), "sia2024_schedules.json")
-    with open(out_file, "w", encoding="utf8") as fp:
-        json.dump(schedules_all, fp, indent=4)
+    with open(out_file, "w") as fp:
+        json.dump(schedules_all, fp, indent=4, encoding="utf8")
 
 
 def get_daily_schedules(room_schedules):
