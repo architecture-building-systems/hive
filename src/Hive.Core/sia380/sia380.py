@@ -45,7 +45,7 @@ def cleanDictForNaN(d):
 
 def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly, T_i_lb_hourly, surface_areas, surface_type,
          srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, 
-         run_obstructed_simulation, hourly, use_adaptive_comfort):
+         run_obstructed_simulation, hourly, use_adaptive_comfort, use_natural_ventilation):
     '''
     Computes monthly heating, cooling and electricity demand for a thermal zone, based on SIA 380.1
     :param room_properties: room properties in json format
@@ -64,6 +64,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     :param run_obstructed_simulation: Boolean to indicate if an obstructed solar simulation is conducted. True if yes.
     :param hourly: Boolean to indicate if hourly values should be returned instead of monthly. True if yes.
     :param use_adaptive_comfort: Boolean to indicate if adaptive comfort should be used instead of fixed setpoints. True if yes. Defaults to yes if setpoints_ub and setpoints_lb are null.
+    :param use_natural_ventilation: Boolean to indicate if natural ventilation should be considered (True) or not (False).
    
     :return: Monthly or hourly cooling, heating and electricity loads for a thermal zone
     '''
@@ -341,13 +342,17 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     H_V_no_heat_recovery = (Vdot_th_no_heat_recovery / SECONDS_PER_HOUR) * RHO * C_P
     
     # Natural ventilation (no infiltration ? TODO)
-    # TODO picks the first window as the window to ventilate. Should be selected by user?
-    window_for_nat_vent_idx = next((i for i, s in enumerate(surface_type) if s == "transp"), None)
-    # TODO assume fixed height of 1.5m as has significant influence on natural ventilation calc.
-    h = 1.5
-    w = surface_areas[window_for_nat_vent_idx] / h
-    # Precalculate constant part to reduce repetitive computation
-    Vdot_nat_vent_constant = calc_natural_ventilation_constant(h, w)
+    
+    if windows_count > 0:
+        # TODO picks the first window as the window to ventilate. Should be selected by user?
+        window_for_nat_vent_idx = next((i for i, s in enumerate(surface_type) if s == "transp"), None)
+        # TODO assume fixed height of 1.5m as has significant influence on natural ventilation calc.
+        h = 1.5
+        w = surface_areas[window_for_nat_vent_idx] / h
+        # Precalculate constant part to reduce repetitive computation
+        Vdot_nat_vent_constant = calc_natural_ventilation_constant(h, w)
+    else: # no windows
+        Vdot_nat_vent_constant = 0
     
     def calculate_step(t, 
                        T_e, T_i_ub, T_i_lb,
@@ -375,6 +380,8 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
         # Natural ventilation losses (No infiltration or mechanical)
         # Calculates natural ventilation, for now based on single rectangular opening in single zone !
         # V_dot = c_d * H * W * 1/3 * sqrt(g * H * (T_i - T_e)/T_e)
+        # H_V_nat_vent = V_dot * rho * c_p
+        # Q_V_nat_vent = H_V_nat_vent * (T_i - T_e) * t
         # Assumes:
         #   - Ta and Ti constant  
         #   - No wind influence (only driven by temperature differences) 
@@ -453,12 +460,16 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
             # calculating different cases with/without heat recovery, with/without natural ventilation (hr)
             Q_K = Q_i + Q_s - eta_g_cooling * (Q_T_ub + Q_V_ub)
             Q_K_no_hr = Q_i + Q_s - eta_g_cooling_no_hr * (Q_T_ub + Q_V_ub_no_hr)
-            Q_K_nat_vent = Q_i + Q_s - eta_g_cooling * (Q_T_ub + Q_V_ub_nat_vent)
+            Q_K_nat_vent = Q_i + Q_s - eta_g_cooling_nat_vent * (Q_T_ub + Q_V_ub_nat_vent)
             Q_K, Q_K_no_hr, Q_K_nat_vent = negatives_to_zero([Q_K, Q_K_no_hr, Q_K_nat_vent])
 
             # take smaller value of both comfort set points and remember the index
-            Q_H, Q_H_index = min_and_index(Q_H, Q_H_no_hr, Q_H_nat_vent)
-            Q_K, Q_K_index = min_and_index(Q_K, Q_K_no_hr, Q_K_nat_vent)          
+            if use_natural_ventilation:
+                Q_H, Q_H_index = min_and_index(Q_H, Q_H_no_hr, Q_H_nat_vent)
+                Q_K, Q_K_index = min_and_index(Q_K, Q_K_no_hr, Q_K_nat_vent)         
+            else:
+                Q_H, Q_H_index = min_and_index(Q_H, Q_H_no_hr)
+                Q_K, Q_K_index = min_and_index(Q_K, Q_K_no_hr)    
             
             if Q_K>0.0 and Q_K_index == 2:
                 print(t, " cooled by nat_vent", str(T_e[t]) + " C")
@@ -477,26 +488,26 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
                 Q_Cool[t] = -Q_K
                 Q_Heat[t] = 0.0
                 
-                with_hr = Q_K_index == 0
-                eta_g = eta_g_cooling if with_hr else eta_g_cooling_no_hr
-                
+                eta_g = [eta_g_cooling, eta_g_cooling_no_hr, eta_g_cooling_nat_vent][Q_K_index]
+                Q_V = [Q_V_ub, Q_V_ub_no_hr, Q_V_ub_nat_vent][Q_K_index]
+                                
                 Q_T_out[t] = Q_T_ub * eta_g
                 Q_T_opaque_out[t] = Q_T_op_ub * eta_g
                 Q_T_transparent_out[t] = Q_T_tr_ub * eta_g
-                Q_V_out[t] = (Q_V_ub if with_hr else Q_V_ub_no_hr) * eta_g
+                Q_V_out[t] = Q_V * eta_g
                 Q_i_out[t] = Q_i
                 Q_s_out[t] = Q_s
             else: # heating
                 Q_Cool[t] = 0.0
                 Q_Heat[t] = Q_H
                 
-                with_hr = Q_H_index == 0
-                eta_g = eta_g_heating if with_hr else eta_g_heating_no_hr
+                eta_g = [eta_g_heating, eta_g_heating_no_hr, eta_g_heating_nat_vent][Q_H_index]
+                Q_V = [Q_V_lb, Q_V_lb_no_hr, Q_V_lb_nat_vent][Q_H_index]
 
                 Q_T_out[t] = Q_T_lb
                 Q_T_opaque_out[t] = Q_T_op_lb
                 Q_T_transparent_out[t] = Q_T_tr_lb
-                Q_V_out[t] = (Q_V_lb if with_hr else Q_V_lb_no_hr)
+                Q_V_out[t] = Q_V 
                 Q_i_out[t] = Q_i * eta_g
                 Q_s_out[t] = Q_s * eta_g
                 
@@ -541,11 +552,11 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
                             run_hourly=False)
 
     if hourly and Q_s_tr_per_surface_jagged_hourly != None:
-        # Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged_hourly, source=[0, 0])   # import ghpythonlib.treehelpers as th
-        Q_s_tr_tree = Q_s_tr_per_surface_jagged_hourly # DEBUG
+        Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged_hourly, source=[0, 0])   # import ghpythonlib.treehelpers as th
+        # Q_s_tr_tree = Q_s_tr_per_surface_jagged_hourly # DEBUG
     elif not hourly and Q_s_tr_per_surface_jagged != None:
-        # Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged, source=[0, 0])   # import ghpythonlib.treehelpers as th
-        Q_s_tr_tree = Q_s_tr_per_surface_jagged # DEBUG
+        Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged, source=[0, 0])   # import ghpythonlib.treehelpers as th
+        # Q_s_tr_tree = Q_s_tr_per_surface_jagged # DEBUG
     else:
         Q_s_tr_tree = None
 
@@ -640,8 +651,8 @@ def calc_natural_ventilation_constant(H,W):
     V_dot = c_d * H * W * 1/3 * sqrt(g * H * (T_i - T_e)/T_e)
             _______________________________
     
-    c_d = 0.6 (discharge coefficient, value for open doors and windows) [-]
-    g = 9.8 (graviational constant) [m/s^2]
+    c_d = 0.6   [-]         discharge coefficient, value for open doors and windows
+    g = 9.8     [m/s^2]     graviational constant
     
     :param H: Height of window opening [m]
     :param W: Width of window opening [m]
@@ -654,11 +665,11 @@ def calc_H_V_nat_vent(T_i, T_e, Vdot_nat_vent_constant):
     V_dot_nat_vent = c_d * H * W * 1/3 * sqrt(g * H * (T_i - T_e)/T_e)
     H_V_nat_vent = V_dot * rho * c_p
     
-    rho = 1.2   Specific heat capacity of air   [kg/m^3]
-    c_p = 1000  Average air density             [J/kgK]
+    rho = 1.2   [kg/m^3]    Specific heat capacity of air   
+    c_p = 1000  [J/kgK]     Average air density             
     
-    :param T_i: Indoor temperature [K]
-    :param T_e: Outdoor temperature [K]
+    :param T_i: Indoor temperature [C]
+    :param T_e: Outdoor temperature [C]
     """
     return Vdot_nat_vent_constant * math.sqrt(abs(T_i - T_e) / (T_e + CELCIUS_TO_KELVIN)) * RHO * C_P
 
