@@ -68,77 +68,10 @@ namespace Hive.IO.Building
         [JsonProperty]
         public StructInternalLoads InternalLoads;
 
-        ///// <summary>
-        ///// From SIA 2024 Ruhetage pro Woche, Nutzungstage pro Jahr, TagesProfil, Jahresprofil
-        ///// </summary>
-        //public struct OccupancySchedule
-        //{
-        //    /// <summary>
-        //    /// Days per week when schedule applies.
-        //    /// </summary>
-        //    public int DaysOffPerWeek { get; set; }
-        //    /// <summary>
-        //    /// Days per year when schedule applies. Probably not needed here
-        //    /// </summary>
-        //    public int DaysUsedPerYear { get; set; }
-        //    /// <summary>
-        //    /// Multiplier of how many days (0=no days, 1=all days) to apply the daily profile per month over the year (length=12).
-        //    /// </summary>
-        //    public double[] DailyProfile { get; set; }
-        //    /// <summary>
-        //    /// Multiplier of how many days (0=no days, 1=all days) to apply the daily profile per month over the year (length=12).
-        //    /// </summary>
-        //    public double[] YearlyProfile { get; set; }
-        //}
-
-        ///// <summary>
-        ///// From SIA 2024 Geräte TagesProfil
-        ///// </summary>
-        //public struct DevicesSchedule
-        //{
-        //    /// <summary>
-        //    /// Multiplier of how many days (0=no days, 1=all days) to apply the daily profile per month over the year (length=12).
-        //    /// </summary>
-        //    public double[] DailyProfile { get; set; }
-
-        //    /// <summary>
-        //    /// Mutliplier (0 to 1) when no occupancy.
-        //    /// </summary>
-        //    public double[] LoadWhenUnoccupied { get; set; }
-
-        //}
-
-        //public struct LightingSchedule
-        //{
-        //    /// <summary>
-        //    /// Number of hours on between 7-18h. SIA2024: Nutzungsstunden pro Tag
-        //    /// </summary>
-        //    public double HoursPerDay { get; set; }
-        //    /// <summary>
-        //    /// Number of hours on between 18h-7h. SIA2024: Nutzungsstunden pro Nacht
-        //    /// </summary>
-        //    public double HoursPerNight { get; set; }
-
-
-        //    // TODO Korrekturfaktor für Präsenzregelung
-        //}
-
-
-        ///// <summary>
-        ///// Time-resolved schedules, values are [0, 1].
-        ///// Value of 1 indicates full load as defined in this.InternalLoads
-        ///// </summary>
-        //public struct StructSchedules
-        //{
-        //    public OccupancySchedule Occupancy;
-        //    public DevicesSchedule Devices;
-        //    public LightingSchedule Lighting;
-        //}
-        ///// <summary>
-        ///// Schedules that define annual hourly internal loads schedules
-        ///// </summary>
-        //[JsonProperty]
-        public Sia2024Schedule Schedules;
+        /// <summary>
+        /// Processed schedules from SIA 2024.
+        /// </summary>
+        public ZoneSchedules Schedules;
 
         #endregion
 
@@ -193,30 +126,36 @@ namespace Hive.IO.Building
         /// in kWh per month
         /// </summary>
         [JsonProperty]
-        public double[] HeatingLoads { get; private set; }
+        public double[] HeatingLoadsMonthly { get; private set; }
         /// <summary>
         /// in kWh per month
         /// </summary>
         [JsonProperty]
-        public double[] DHWLoads { get; private set; }
+        public double[] DHWLoadsMonthly { get; private set; }
         /// <summary>
         /// in kWh per month
         /// </summary>
         [JsonProperty]
-        public double[] CoolingLoads { get; private set; }
+        public double[] CoolingLoadsMonthly { get; private set; }
         /// <summary>
         /// in kWh per month
         /// </summary>
         [JsonProperty]
-        public double[] ElectricityLoads { get; private set; }
+        public double[] ElectricityLoadsMonthly { get; private set; }
 
         /// <summary>
         /// Differs from ElectricityLoadsMonthly, which can be negative (surplus electricity from e.g. PV). ConsumedElectricityMonthly is what we really consume in the zone
         /// </summary>
         [JsonProperty]
-        public double[] ConsumedElectricity { get; set; } // set in GhResults... FIX ME
+        public double [] ConsumedElectricityMonthly { get; set; } // set in GhResults... FIX ME
         [JsonProperty]
-        public double[] ConsumedHeating { get; set; } // same
+        public double [] ConsumedHeatingMonthly { get; set; } // same
+
+        /// <summary>
+        /// Determines if adaptive comfort should be used instead of setpoints from SIA 2024.
+        /// </summary>
+        public bool RunAdaptiveComfort { get; set; }
+
         #endregion
 
 
@@ -224,7 +163,7 @@ namespace Hive.IO.Building
         [JsonProperty]
         public double[] OpaqueTransmissionHeatLosses { get; private set; }
         [JsonProperty]
-        public double[] TransparentTransmissionHeatLosses { get; private set; }
+        public double [] TransparentTransmissionHeatLosses { get; private set; }
         [JsonProperty]
         public double[] VentilationHeatLosses { get; private set; }
         [JsonProperty]
@@ -232,7 +171,7 @@ namespace Hive.IO.Building
         [JsonProperty]
         public double[] SolarGains { get; private set; }
 
-        public double[][] SolarGainsPerWindow { get; private set; }
+        public double [][] MonthlySolarGainsPerWindow { get; private set; }
         #endregion
 
 
@@ -293,7 +232,7 @@ namespace Hive.IO.Building
         #endregion
 
         [JsonConstructor]
-        protected Zone()
+        internal Zone()
         {
             // only for use in deserialization
         }
@@ -366,7 +305,7 @@ namespace Hive.IO.Building
                 this.Floors[i] = new Floor(floorList[i - mainFloors]);
             this.Windows = tuple.Item5;
             this.ShadingDevices = tuple.Item6;
-
+            
 
             // check, if floor is detected
             this.IsFloorExist = !(this.Floors.Length <= 0);
@@ -406,19 +345,16 @@ namespace Hive.IO.Building
 
         // data should be put into each Window element
         // can't do it yet, because I am losing windows order within the Core
-        public void SetWindowIrradiance(double[][] Q_s_per_window)
+        public void SetMonthlyWindowIrradiance(double[][] Q_s_per_window)
         {
-            int horizon = Q_s_per_window[0].Length; // assumes lengths are consistent and either monthly (12) or hourly (8760)
-
-            this.SolarGainsPerWindow = new double[Q_s_per_window.Length][];
+            this.MonthlySolarGainsPerWindow = new double[Q_s_per_window.Length][];
             for (int i = 0; i < Q_s_per_window.Length; i++)
             {
-                this.SolarGainsPerWindow[i] = new double[horizon];
+                this.MonthlySolarGainsPerWindow[i] = new double[Q_s_per_window[i].Length];
                 for (int j = 0; j < Q_s_per_window[i].Length; j++)
-                    this.SolarGainsPerWindow[i][j] = Q_s_per_window[i][j];
+                    this.MonthlySolarGainsPerWindow[i][j] = Q_s_per_window[i][j];
             }
         }
-
 
         /// <summary>
         /// Setting monthly energy demands of this zone. Loads have to be computed externally, e.g. with Hive.Core SIA380
@@ -427,32 +363,27 @@ namespace Hive.IO.Building
         /// <param name="dhwLoads"></param>
         /// <param name="coolingLoads"></param>
         /// <param name="electricityLoads"></param>
-        public void SetEnergyDemands(double[] heatingLoads, double[] dhwLoads, double[] coolingLoads, double[] electricityLoads)
+        public void SetEnergyDemandsMonthly(double[] heatingLoads, double[] dhwLoads, double[] coolingLoads, double[] electricityLoads)
         {
-            int horizon = new List<int> { heatingLoads.Length, dhwLoads.Length, coolingLoads.Length, electricityLoads.Length }.Min(); // should be consistent... and it would still crash a few lines below, if lists not of same length
+            this.HeatingLoadsMonthly = new double[Misc.MonthsPerYear];
+            this.DHWLoadsMonthly = new double[Misc.MonthsPerYear];
+            this.CoolingLoadsMonthly = new double[Misc.MonthsPerYear];
+            this.ElectricityLoadsMonthly = new double[Misc.MonthsPerYear];
 
-            this.HeatingLoads = new double[horizon];
-            this.DHWLoads = new double[horizon];
-            this.CoolingLoads = new double[horizon];
-            this.ElectricityLoads = new double[horizon];
-
-            heatingLoads.CopyTo(this.HeatingLoads, 0);
-            dhwLoads.CopyTo(this.DHWLoads, 0);
-            coolingLoads.CopyTo(this.CoolingLoads, 0);
-            electricityLoads.CopyTo(this.ElectricityLoads, 0);
+            heatingLoads.CopyTo(this.HeatingLoadsMonthly, 0);
+            dhwLoads.CopyTo(this.DHWLoadsMonthly, 0);
+            coolingLoads.CopyTo(this.CoolingLoadsMonthly, 0);
+            electricityLoads.CopyTo(this.ElectricityLoadsMonthly, 0);
         }
 
 
-        public void SetLossesAndGains(double[] Qt_opaque, double[] Qt_transparent, double[] Qv, double[] Qi, double[] Qs)
+        public void SetLossesAndGains(double[] Qt_opaque, double [] Qt_transparent, double[] Qv, double[] Qi, double[] Qs)
         {
-            int horizon = Qt_opaque.Length; // this assumes all input lists are of same length and either monthly or hourly
-
-            // GENERIC HOURLY OR MONTHLY
-            this.OpaqueTransmissionHeatLosses = new double[horizon];
-            this.TransparentTransmissionHeatLosses = new double[horizon];
-            this.VentilationHeatLosses = new double[horizon];
-            this.InternalHeatGains = new double[horizon];
-            this.SolarGains = new double[horizon];
+            this.OpaqueTransmissionHeatLosses = new double[Misc.MonthsPerYear];
+            this.TransparentTransmissionHeatLosses = new double[Misc.MonthsPerYear];
+            this.VentilationHeatLosses = new double[Misc.MonthsPerYear];
+            this.InternalHeatGains = new double[Misc.MonthsPerYear];
+            this.SolarGains = new double[Misc.MonthsPerYear];
 
             Qt_opaque.CopyTo(this.OpaqueTransmissionHeatLosses, 0);
             Qt_transparent.CopyTo(this.TransparentTransmissionHeatLosses, 0);
@@ -466,6 +397,12 @@ namespace Hive.IO.Building
 
 
         #region internalMethods
+
+        public Zone Clone()
+        {
+            return MemberwiseClone() as Zone;
+        }
+
 
         private static bool CheckFloorInZone(rg.Brep zone, rg.BrepFace floor)
         {
@@ -613,7 +550,7 @@ namespace Hive.IO.Building
                 }
 
                 rg.AreaMassProperties amp = rg.AreaMassProperties.Compute(curve);
-                if (amp == null)
+                if(amp == null)
                     return false;
                 double curveArea = amp.Area;
 
@@ -662,7 +599,7 @@ namespace Hive.IO.Building
             curveArea = rg.AreaMassProperties.Compute(curve).Area;
             srfArea = rg.AreaMassProperties.Compute(srf).Area;
 
-
+            
             if (Math.Round(curveArea, roundingDecimals) != Math.Round(srfArea, roundingDecimals))
                 return false;
             else
