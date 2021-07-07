@@ -202,8 +202,8 @@ namespace Hive.IO.GhInputOutput
             }
 
 
-            building.Zones[0].ConsumedElectricity = consumedElec.ToArray();
-            building.Zones[0].ConsumedHeating = consumedHeat.ToArray();
+            building.Zones[0].ConsumedElectricityMonthly = consumedElec.ToArray();
+            building.Zones[0].ConsumedHeatingMonthly = consumedHeat.ToArray();
 
             building.Zones[0].SetEnergyDemands(heating.ToArray(), domesticHotWater.ToArray(), cooling.ToArray(), electricity.ToArray());
             building.Zones[0].SetLossesAndGains(Qt_opaque.ToArray(), Qt_transparent.ToArray(), Qv.ToArray(), Qi.ToArray(), Qs.ToArray());

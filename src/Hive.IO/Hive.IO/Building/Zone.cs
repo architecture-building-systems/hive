@@ -128,20 +128,41 @@ namespace Hive.IO.Building
         [JsonProperty]
         public double[] HeatingLoadsMonthly { get; private set; }
         /// <summary>
+        /// in kWh per hour
+        /// </summary>
+        [JsonProperty]
+        public double [] HeatingLoadsHourly { get; private set; }
+
+        /// <summary>
         /// in kWh per month
         /// </summary>
         [JsonProperty]
         public double[] DHWLoadsMonthly { get; private set; }
+        /// <summary>
+        /// in kWh per hour
+        /// </summary>
+        [JsonProperty]
+        public double [] DHWLoadsHourly { get; private set; }
         /// <summary>
         /// in kWh per month
         /// </summary>
         [JsonProperty]
         public double[] CoolingLoadsMonthly { get; private set; }
         /// <summary>
+        /// in kWh per hour
+        /// </summary>
+        [JsonProperty]
+        public double [] CoolingLoadsHourly { get; private set; }
+        /// <summary>
         /// in kWh per month
         /// </summary>
         [JsonProperty]
         public double[] ElectricityLoadsMonthly { get; private set; }
+        /// <summary>
+        /// in kWh per hour
+        /// </summary>
+        [JsonProperty]
+        public double [] ElectricityLoadsHourly { get; private set; }
 
         /// <summary>
         /// Differs from ElectricityLoadsMonthly, which can be negative (surplus electricity from e.g. PV). ConsumedElectricityMonthly is what we really consume in the zone
@@ -161,17 +182,29 @@ namespace Hive.IO.Building
 
         #region Losses and Gains
         [JsonProperty]
-        public double[] OpaqueTransmissionHeatLosses { get; private set; }
+        public double[] OpaqueTransmissionHeatLossesMonthly { get; private set; }
         [JsonProperty]
-        public double [] TransparentTransmissionHeatLosses { get; private set; }
+        public double[] OpaqueTransmissionHeatLossesHourly { get; private set; }
         [JsonProperty]
-        public double[] VentilationHeatLosses { get; private set; }
+        public double [] TransparentTransmissionHeatLossesMonthly { get; private set; }
         [JsonProperty]
-        public double[] InternalHeatGains { get; private set; }
+        public double[] TransparentTransmissionHeatLossesHourly { get; private set; }
         [JsonProperty]
-        public double[] SolarGains { get; private set; }
-
-        public double [][] MonthlySolarGainsPerWindow { get; private set; }
+        public double[] VentilationHeatLossesMonthly { get; private set; }
+        [JsonProperty]
+        public double[] VentilationHeatLossesHourly { get; private set; }
+        [JsonProperty]
+        public double[] InternalHeatGainsMonthly { get; private set; }
+        [JsonProperty]
+        public double[] InternalHeatGainsHourly { get; private set; }
+        [JsonProperty]
+        public double[] SolarGainsMonthly { get; private set; }
+        [JsonProperty]
+        public double[] SolarGainsHourly { get; private set; }
+        [JsonProperty]
+        public double [][] SolarGainsPerWindowMonthly { get; private set; }
+        [JsonProperty]
+        public double[][] SolarGainsPerWindowHourly { get; private set; }
         #endregion
 
 
@@ -343,53 +376,152 @@ namespace Hive.IO.Building
         #region Setters
 
 
-        // data should be put into each Window element
-        // can't do it yet, because I am losing windows order within the Core
-        public void SetMonthlyWindowIrradiance(double[][] Q_s_per_window)
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="Q_s_per_window"></param>
+        public void SetWindowIrradiance(double[][] Q_s_per_window)
         {
-            this.MonthlySolarGainsPerWindow = new double[Q_s_per_window.Length][];
+            this.SolarGainsPerWindowMonthly = new double[Q_s_per_window.Length][];
+            this.SolarGainsPerWindowHourly = new double[Q_s_per_window.Length][];
             for (int i = 0; i < Q_s_per_window.Length; i++)
             {
-                this.MonthlySolarGainsPerWindow[i] = new double[Q_s_per_window[i].Length];
-                for (int j = 0; j < Q_s_per_window[i].Length; j++)
-                    this.MonthlySolarGainsPerWindow[i][j] = Q_s_per_window[i][j];
+                this.SolarGainsPerWindowMonthly[i] = new double[Misc.MonthsPerYear];
+                if (Q_s_per_window[i].Length == Misc.HoursPerYear)
+                {
+                    this.SolarGainsPerWindowHourly[i] = new double[Misc.HoursPerYear];
+                    Q_s_per_window[i].CopyTo(this.SolarGainsPerWindowHourly[i],0);
+                    Misc.GetCumulativeMonthlyValue(Q_s_per_window[i]).CopyTo(this.SolarGainsPerWindowMonthly[i],0);
+                }else
+                {
+                    Q_s_per_window[i].CopyTo(this.SolarGainsPerWindowMonthly[i], 0);
+                }
             }
         }
 
+
         /// <summary>
-        /// Setting monthly energy demands of this zone. Loads have to be computed externally, e.g. with Hive.Core SIA380
+        /// Setting energy demands of this zone. Loads have to be computed externally, e.g. with Hive.Core SIA380
         /// </summary>
         /// <param name="heatingLoads"></param>
         /// <param name="dhwLoads"></param>
         /// <param name="coolingLoads"></param>
         /// <param name="electricityLoads"></param>
-        public void SetEnergyDemandsMonthly(double[] heatingLoads, double[] dhwLoads, double[] coolingLoads, double[] electricityLoads)
+        public void SetEnergyDemands(double[] heatingLoads, double[] dhwLoads, double[] coolingLoads, double[] electricityLoads)
         {
             this.HeatingLoadsMonthly = new double[Misc.MonthsPerYear];
             this.DHWLoadsMonthly = new double[Misc.MonthsPerYear];
             this.CoolingLoadsMonthly = new double[Misc.MonthsPerYear];
             this.ElectricityLoadsMonthly = new double[Misc.MonthsPerYear];
 
-            heatingLoads.CopyTo(this.HeatingLoadsMonthly, 0);
-            dhwLoads.CopyTo(this.DHWLoadsMonthly, 0);
-            coolingLoads.CopyTo(this.CoolingLoadsMonthly, 0);
-            electricityLoads.CopyTo(this.ElectricityLoadsMonthly, 0);
+            if (heatingLoads.Length == Misc.HoursPerYear)
+            {
+                this.HeatingLoadsHourly = new double[Misc.HoursPerYear];
+                heatingLoads.CopyTo(this.HeatingLoadsHourly,0);
+                Misc.GetCumulativeMonthlyValue(heatingLoads).CopyTo(this.HeatingLoadsMonthly, 0);
+            }
+            else
+            {
+                heatingLoads.CopyTo(this.HeatingLoadsMonthly, 0);
+            }
+
+            if (dhwLoads.Length == Misc.HoursPerYear)
+            {
+                this.DHWLoadsHourly = new double[Misc.HoursPerYear];
+                dhwLoads.CopyTo(this.DHWLoadsHourly,0);
+                Misc.GetCumulativeMonthlyValue(dhwLoads).CopyTo(this.DHWLoadsMonthly,0);
+            }
+            else
+            {
+                dhwLoads.CopyTo(this.DHWLoadsMonthly, 0);
+            }
+
+            if (coolingLoads.Length == Misc.HoursPerYear)
+            {
+                this.CoolingLoadsHourly=new double[Misc.HoursPerYear];
+                coolingLoads.CopyTo(this.CoolingLoadsHourly,0);
+                Misc.GetCumulativeMonthlyValue(coolingLoads).CopyTo(this.CoolingLoadsMonthly,0);
+            }
+            else
+            {
+                coolingLoads.CopyTo(this.CoolingLoadsMonthly, 0);
+            }
+
+            if (electricityLoads.Length == Misc.HoursPerYear)
+            {
+                this.ElectricityLoadsHourly=new double[Misc.HoursPerYear];
+                electricityLoads.CopyTo(this.ElectricityLoadsHourly,0);
+                Misc.GetCumulativeMonthlyValue(electricityLoads).CopyTo(this.ElectricityLoadsMonthly,0);
+            }
+            else
+            {
+                electricityLoads.CopyTo(this.ElectricityLoadsMonthly, 0);
+            }
         }
 
 
         public void SetLossesAndGains(double[] Qt_opaque, double [] Qt_transparent, double[] Qv, double[] Qi, double[] Qs)
         {
-            this.OpaqueTransmissionHeatLosses = new double[Misc.MonthsPerYear];
-            this.TransparentTransmissionHeatLosses = new double[Misc.MonthsPerYear];
-            this.VentilationHeatLosses = new double[Misc.MonthsPerYear];
-            this.InternalHeatGains = new double[Misc.MonthsPerYear];
-            this.SolarGains = new double[Misc.MonthsPerYear];
+            this.OpaqueTransmissionHeatLossesMonthly = new double[Misc.MonthsPerYear];
+            this.TransparentTransmissionHeatLossesMonthly = new double[Misc.MonthsPerYear];
+            this.VentilationHeatLossesMonthly = new double[Misc.MonthsPerYear];
+            this.InternalHeatGainsMonthly = new double[Misc.MonthsPerYear];
+            this.SolarGainsMonthly = new double[Misc.MonthsPerYear];
 
-            Qt_opaque.CopyTo(this.OpaqueTransmissionHeatLosses, 0);
-            Qt_transparent.CopyTo(this.TransparentTransmissionHeatLosses, 0);
-            Qv.CopyTo(this.VentilationHeatLosses, 0);
-            Qi.CopyTo(this.InternalHeatGains, 0);
-            Qs.CopyTo(this.SolarGains, 0);
+            if (Qt_opaque.Length == Misc.HoursPerYear)
+            {
+                this.OpaqueTransmissionHeatLossesHourly=new double[Misc.HoursPerYear];
+                Qt_opaque.CopyTo(this.OpaqueTransmissionHeatLossesHourly,0);
+                Misc.GetCumulativeMonthlyValue(Qt_opaque).CopyTo(this.OpaqueTransmissionHeatLossesMonthly,0);
+            }
+            else
+            {
+                Qt_opaque.CopyTo(this.OpaqueTransmissionHeatLossesMonthly, 0);
+            }
+
+            if (Qt_transparent.Length == Misc.HoursPerYear)
+            {
+                this.TransparentTransmissionHeatLossesHourly = new double[Misc.HoursPerYear];
+                Qt_transparent.CopyTo(this.TransparentTransmissionHeatLossesHourly,0);
+                Misc.GetCumulativeMonthlyValue(Qt_transparent).CopyTo(this.TransparentTransmissionHeatLossesMonthly,0);
+            }
+            else
+            {
+                Qt_transparent.CopyTo(this.TransparentTransmissionHeatLossesMonthly, 0);
+            }
+
+            if (Qv.Length == Misc.HoursPerYear)
+            {
+                this.VentilationHeatLossesHourly=new double[Misc.HoursPerYear];
+                Qv.CopyTo(this.VentilationHeatLossesHourly,0);
+                Misc.GetCumulativeMonthlyValue(Qv).CopyTo(this.VentilationHeatLossesMonthly,0);
+            }
+            else
+            {
+                Qv.CopyTo(this.VentilationHeatLossesMonthly, 0);
+            }
+
+            if (Qi.Length == Misc.HoursPerYear)
+            {
+                this.InternalHeatGainsHourly=new double[Misc.HoursPerYear];
+                Qi.CopyTo(this.InternalHeatGainsHourly,0);
+                Misc.GetCumulativeMonthlyValue(Qi).CopyTo(this.InternalHeatGainsMonthly,0);
+            }
+            else
+            {
+                Qi.CopyTo(this.InternalHeatGainsMonthly, 0);
+            }
+
+            if (Qs.Length == Misc.HoursPerYear)
+            {
+                this.SolarGainsHourly=new double[Misc.HoursPerYear];
+                Qs.CopyTo(this.SolarGainsHourly,0);
+                Misc.GetCumulativeMonthlyValue(Qs).CopyTo(this.SolarGainsMonthly,0);
+            }
+            else
+            {
+                Qs.CopyTo(this.SolarGainsMonthly, 0);
+            }
         }
 
         #endregion
