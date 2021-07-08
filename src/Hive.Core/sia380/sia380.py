@@ -15,7 +15,7 @@ electricity demand: currently simply by using sqm and internal loads for lightin
 from __future__ import division
 import math
 
-import ghpythonlib.treehelpers as th # DEBUG
+# import ghpythonlib.treehelpers as th # DEBUG
 
 # Constants
 MONTHS_PER_YEAR = 12
@@ -36,7 +36,7 @@ def cleanDictForNaN(d):
     # a = d.values()
     # b = d.keys()
     for i in d:
-        # if isinstance(d[i],str): continue # DEBUG
+        if isinstance(d[i],str) or isinstance(d[i], unicode): continue # DEBUG
         if math.isnan(d[i]) or d[i] == "NaN":
             d[i] = 0.0
 
@@ -273,20 +273,28 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     # Monthly averaged T_e
     T_e = get_monthly_avg(T_e_hourly)
 
-            
+    # Windows
+    windows_areas = [x for (x, y) in zip(surface_areas, surface_type) if y != "opaque"]
+    windows_count = len(windows_areas)
+    
+    
+    # Solar
     # formatting the grasshopper tree that contains solar irradiation time series for each window
     # could be changed later to also include solar irradiation on opaque surfaces...
     # ...would need to be adapted in the 'for surface in range(num_surfaces):' loop as well then
-    windows_areas = [x for (x, y) in zip(surface_areas, surface_type) if y != "opaque"]
-    windows_count = len(windows_areas)
     Q_s_tr_per_surface = None
     Q_s_tr_per_surface_jagged = None
     Q_s_tr_per_surface_jagged_hourly = None
     
-    if (srf_irrad_obstr_tree.Branch(0).Count == 0 and srf_irrad_unobstr_tree.BranchCount == 0):
+    if (windows_count == 0
+        or (srf_irrad_obstr_tree.Branch(0).Count == 0 
+            and srf_irrad_unobstr_tree.BranchCount == 0)):
         Q_s_tr_per_surface = [[0.0]*windows_count] * MONTHS_PER_YEAR
         Q_s_tr_per_surface_hourly = [[0.0]*windows_count] * HOURS_PER_YEAR
     else:
+        assert srf_irrad_unobstr_tree.BranchCount == windows_count, \
+            "The number of branches for the solar radiation tree (%d) does not match the number of windows (%d)" % (srf_irrad_unobstr_tree.BranchCount, windows_count)
+
         # Monthly
         Q_s_tr_per_surface_jagged = calculate_Q_s(run_obstructed_simulation, srf_irrad_obstr_tree, srf_irrad_unobstr_tree,
                                             g_value, g_value_total, 
@@ -303,8 +311,8 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
                                                 hourly=True)
             
             # Transpose to per timestep
-            Q_s_tr_per_surface_hourly = transpose_jagged_2D_array(Q_s_tr_per_surface_jagged_hourly)
-    
+            Q_s_tr_per_surface_hourly = transpose_jagged_2D_array(Q_s_tr_per_surface_jagged_hourly)      
+
     # Outputs
     # calculations from Illias Excel sheet:
     # preAllocate arrays. its a bit faster than .append (https://levelup.gitconnected.com/faster-lists-in-python-4c4287502f0a)
@@ -342,8 +350,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     H_V_no_heat_recovery = (Vdot_th_no_heat_recovery / SECONDS_PER_HOUR) * RHO * C_P
     
     # Natural ventilation (no infiltration ? TODO)
-    
-    if windows_count > 0:
+    if use_natural_ventilation and windows_count > 0:
         # TODO picks the first window as the window to ventilate. Should be selected by user?
         window_for_nat_vent_idx = next((i for i, s in enumerate(surface_type) if s == "transp"), None)
         # TODO assume fixed height of 1.5m as has significant influence on natural ventilation calc.
@@ -552,11 +559,11 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
                             run_hourly=False)
 
     if hourly and Q_s_tr_per_surface_jagged_hourly != None:
-        Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged_hourly, source=[0, 0])   # import ghpythonlib.treehelpers as th
-        # Q_s_tr_tree = Q_s_tr_per_surface_jagged_hourly # DEBUG
+        # Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged_hourly, source=[0, 0])   # import ghpythonlib.treehelpers as th
+        Q_s_tr_tree = Q_s_tr_per_surface_jagged_hourly # DEBUG
     elif not hourly and Q_s_tr_per_surface_jagged != None:
-        Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged, source=[0, 0])   # import ghpythonlib.treehelpers as th
-        # Q_s_tr_tree = Q_s_tr_per_surface_jagged # DEBUG
+        # Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged, source=[0, 0])   # import ghpythonlib.treehelpers as th
+        Q_s_tr_tree = Q_s_tr_per_surface_jagged # DEBUG
     else:
         Q_s_tr_tree = None
 
@@ -628,8 +635,8 @@ def calculate_Q_s(run_obstr, tree_obstr, tree_unobstr,
         row = []
         win_area = win_areas[i] 
         branch = tree.Branch(i)
-        # for j in range(len(branch)): # DEBUG
-        for j in range(branch.Count):
+        for j in range(len(branch)): # DEBUG
+        # for j in range(branch.Count):
             irrad = branch[j] / win_area   # calculating per W/m2 for shading control
             if irrad > setpoint:
                 irrad *= g_value_total
@@ -767,270 +774,22 @@ def get_hourly_schedules(room_schedules):
 
 
 if __name__ == "__main__":
-    class Jagged:
-        def __init__(self, data):
-            self.data = data
 
     def test():
-        
         # Arrange
+        import json
         
-        room_properties = {
-            "description": "1.2 Wohnen Einfamilienhaus",
-            "Raumlufttemperatur Auslegung Heizen (Winter)": 21.0,
-            "Raumlufttemperatur Auslegung Heizen (Winter) - Absenktemperatur": 19.0,
-            "Nettogeschossflaeche": 20.0,
-            "Thermische Gebaeudehuellflaeche": 38.0,
-            "U-Wert Fenster": 1.2,
-            "Waermeeintragsleistung Personen (bei 24.0 deg C, bzw. 70 W)": 1.4,
-            "Jaehrliche Vollaststunden der Geraete": 1780.0,
-            "U-Wert opake Bauteile": 0.2,
-            "Jaehrliche Vollaststunden der Raumbeleuchtung": 1450.0,
-            "Vollaststunden pro Jahr (Personen)": 4090.0,
-            "Abminderungsfaktor fuer Fensterrahmen": 0.75,
-            "Aussenluft-Volumenstrom durch Infiltration": 0.15,
-            "Raumlufttemperatur Auslegung Kuehlung (Sommer)": 26.0,
-            "Raumlufttemperatur Auslegung Kuehlung (Sommer) - Absenktemperatur": 28.0,
-            "Glasanteil": 30.0,
-            "Zeitkonstante": 164.0,
-            "Waermeeintragsleistung der Raumbeleuchtung": 2.7,
-            "Waermeeintragsleistung der Geraete": 8.0,
-            "Gesamtenergiedurchlassgrad Verglasung": 0.5,
-            "Temperatur-Aenderungsgrad der Waermerueckgewinnung": 0.7,
-            "Aussenluft-Volumenstrom (pro NGF)": 0.6
-        }
+        with open(r"C:\Users\Maxence\Documents\_ETH\2_Jobs\_Hive\hive\tests\Hive.Core\sia380\testdata.json", 'r') as f:
+            kwargs = json.loads(f.read(), encoding='utf-8')
         
-        room_schedules = {
-            "RoomType": "1.1 Wohnen Mehrfamilienhaus", 
-            "YearlyProfile": [
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8, 
-                0.8
-            ], 
-            "DaysOffPerWeek": 0, 
-            "DaysUsedPerYear": 365,
-            "LightingSchedule": {
-                "DailyProfile": [
-                    0, 
-                    0, 
-                    0, 
-                    0, 
-                    0, 
-                    1.0, 
-                    1.0, 
-                    1.0, 
-                    0, 
-                    0, 
-                    0, 
-                    0, 
-                    1.0, 
-                    1.0, 
-                    0, 
-                    0, 
-                    0, 
-                    1.0, 
-                    1.0, 
-                    1.0, 
-                    1.0, 
-                    1.0, 
-                    0, 
-                    0
-                ], 
-                "Default": 0.0
-            }, 
-            "OccupancySchedule": {
-                "DailyProfile": [
-                    1.0, 
-                    1.0, 
-                    1.0, 
-                    1.0, 
-                    1.0, 
-                    1.0, 
-                    0.6, 
-                    0.4, 
-                    0, 
-                    0, 
-                    0, 
-                    0, 
-                    0.8, 
-                    0.4, 
-                    0, 
-                    0, 
-                    0, 
-                    0.4, 
-                    0.8, 
-                    0.8, 
-                    0.8, 
-                    1.0, 
-                    1.0, 
-                    1.0
-                ], 
-                "Default": 0.0
-            }, 
-            "DeviceSchedule": {
-                "DailyProfile": [
-                    0.1, 
-                    0.1, 
-                    0.1, 
-                    0.1, 
-                    0.1, 
-                    0.2, 
-                    0.8, 
-                    0.2, 
-                    0.1, 
-                    0.1, 
-                    0.1, 
-                    0.1, 
-                    0.8, 
-                    0.2, 
-                    0.1, 
-                    0.1, 
-                    0.1, 
-                    0.2, 
-                    0.8, 
-                    1.0, 
-                    0.2, 
-                    0.2, 
-                    0.2, 
-                    0.1
-                ], 
-                "Default": 0.1
-            },
-             "SetpointSchedule": {
-                "DailyProfile": [
-                    0.5,
-                    0.5,
-                    0.5,
-                    0.5,
-                    0.5,
-                    0.5,
-                    1.0,
-                    1.0,
-                    1.0,
-                    1.0,
-                    1.0,
-                    1.0,
-                    1.0,
-                    1.0,
-                    1.0,
-                    1.0,
-                    1.0,
-                    1.0,
-                    1.0,
-                    1.0,
-                    1.0,
-                    0.5,
-                    0.5,
-                    0.5 
-                ], 
-                "Default": 0.0
-            }
-        }
-
-        floor_area = 200.0
-        T_e = [0.416398, 1.714286, 6.138038, 8.964167, 14.281048, 17.462361, 18.399328, 18.784946, 13.954167, 9.874059, 3.974583, 1.593683]
-        T_i = [21.0] * 12
-        setpoints_ub = [20,21,22,23,24,25,25,24,23,22,21,20]
-        setpoints_lb = [18] * 12
-        surface_areas = [30, 30, 3.0, 3.0, 3.0, 536.124969 - 69]
-        surface_type = ["transp", "transp", "transp", "transp", "transp", "opaque"]
-        Q_s_per_surface = [0.0] * len(surface_type)
-        Q_s_per_surface[0] = [15.93572, 28.137958, 52.534591, 70.864124, 97.429731, 100.659248, 110.715495, 89.630934, 64.212227, 38.79425, 19.025089, 11.624501]
-        Q_s_per_surface[1] = [23.174573, 39.025397, 68.999793, 88.159866, 101.53745, 109.179217, 119.64447, 98.66428, 77.103732, 44.753735, 21.723197, 17.185115]
-        Q_s_per_surface[2] = [11.164155, 18.686334, 29.798874, 45.721346, 57.51364, 65.652511, 66.630836, 51.430892, 35.616327, 23.692149, 12.46553, 9.476936]
-        Q_s_per_surface[3] = [46.316597, 61.478404, 90.694507, 87.846535, 91.278904, 83.993872, 93.773866, 97.520832, 92.037561, 70.833123, 42.180446, 29.584221]
-        Q_s_per_surface[4] = [22.257355, 38.413927, 72.508876, 100.603912, 138.930607, 144.043764, 155.043357, 126.633178, 88.618052, 52.984679, 25.594113, 16.571932]
-        Q_s_per_surface[5] = [0.0] * 12
-        for i in range(len(Q_s_per_surface)):
-            Q_s_per_surface[i] = [x * 1000 for x in Q_s_per_surface[i]]  # converting from kWh/m2 into Wh/m2
-        # Q_s_per_surface = list(map(list, zip(*Q_s_per_surface)))  # transposing
-        # jaggeddata = Jagged(Q_s_per_surface)
         import datatree as dt
-        srf_irrad_obstr_tree = dt.DataTree([Q_s_per_surface[5]])
-        srf_irrad_unobstr_tree = dt.DataTree(Q_s_per_surface[0:5])
-        # jaggeddata = dt.DataTree(Q_s_per_surface)
-        g_value = 0.5
-        g_value_total = 0.14
-        setpoint_shading = 200 # W/m2
-        
-        
-        # ONLY FOR DEBUG hallucinate hourly T_e, setpoints
-        if (__debug__):
-            import datatree as dt
-            srf_irrad_obstr_tree_tmp = dt.DataTree([[]]*srf_irrad_obstr_tree.BranchCount)
-            srf_irrad_unobstr_tree_tmp = dt.DataTree([[]]*srf_irrad_unobstr_tree.BranchCount)
-            
-            setpoints_lb_tmp = []
-            setpoints_ub_tmp = []
-            T_e_tmp = []
-            bs_multiplier = list(range(-6,6))+list(range(-6,6))[::-1]
-            
-            for i in range(MONTHS_PER_YEAR):
-                setpoints_lb_day = [setpoints_lb[i] + a*0.1 for a in bs_multiplier]
-                setpoints_ub_day = [setpoints_ub[i] + a*0.1 for a in bs_multiplier]
-                T_e_day = [T_e[i] + a for a in bs_multiplier]
-                
-                srf_irrad_obstr_tree_day = [[srf_irrad_obstr_tree.Branch(j)[i]/DAYS_PER_MONTH[i] + 100*a for a in bs_multiplier] for j in range(srf_irrad_obstr_tree_tmp.BranchCount)]
-                srf_irrad_unobstr_tree_day = [[srf_irrad_unobstr_tree.Branch(j)[i]/DAYS_PER_MONTH[i] + 100*a for a in bs_multiplier] for j in range(srf_irrad_unobstr_tree_tmp.BranchCount)]
-                for _ in range(DAYS_PER_MONTH[i]):
-                    setpoints_lb_tmp.extend(setpoints_lb_day)
-                    setpoints_ub_tmp.extend(setpoints_ub_day)
-                    T_e_tmp.extend(T_e_day)
-                    
-                    for i, b in enumerate(srf_irrad_obstr_tree_tmp.Branches):
-                        b.extend(srf_irrad_obstr_tree_day[i])
-                    for i, b in enumerate(srf_irrad_unobstr_tree_tmp.Branches):
-                        b.extend(srf_irrad_unobstr_tree_day[i])
-            setpoints_lb = setpoints_lb_tmp
-            setpoints_ub = setpoints_ub_tmp
-            T_e = T_e_tmp
-            
-            srf_irrad_obstr_tree = srf_irrad_obstr_tree_tmp
-            srf_irrad_unobstr_tree = srf_irrad_unobstr_tree_tmp
-            del T_e_tmp, setpoints_lb_tmp, setpoints_ub_tmp
-            del srf_irrad_obstr_tree_tmp
-            del srf_irrad_unobstr_tree_tmp
-        
-        hourly = True
-        use_adaptive_comfort = False
+        kwargs['srf_irrad_obstr_tree'] = dt.DataTree([[0.0]*8760])
+        kwargs['srf_irrad_unobstr_tree'] = dt.DataTree(kwargs['srf_irrad_unobstr_tree'])
         
         # Act
-        
-        results = main(room_properties, room_schedules, floor_area,
-                        T_e, 
-                        setpoints_ub, setpoints_lb, 
-                        surface_areas, surface_type, 
-                        srf_irrad_obstr_tree, srf_irrad_unobstr_tree,
-                        g_value, g_value_total,
-                        setpoint_shading,
-                        False, hourly=hourly, use_adaptive_comfort=use_adaptive_comfort)
-        
-        Q_Heat, Q_Cool, Q_Elec, Q_T, Q_V, Q_i, Q_s, Q_T_op, Q_T_tr, Q_s_tr_tree = results
-        
-        results_no_solar = [Q_Heat, Q_Cool, Q_Elec, Q_T, Q_V, Q_i, Q_T_op, Q_T_tr]
+        results = main(**kwargs)
         
         # Assert
-        
-        for r in results_no_solar:
-            if hourly: assert len(r) == HOURS_PER_YEAR, "%s != %s".format(len(r), HOURS_PER_YEAR)
-            else: assert len(r) == MONTHS_PER_YEAR, "%s != %s".format(len(r), MONTHS_PER_YEAR)
-        # print(Q_Heat)
-        # print(Q_Cool)
-        # print(Q_Elec)
-        # print(Q_T)
-        # print(Q_V)
-        # print(Q_i)
-        # print(Q_s)
-        
-
-
+        print(results)
+    
     test()
