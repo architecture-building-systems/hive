@@ -68,77 +68,10 @@ namespace Hive.IO.Building
         [JsonProperty]
         public StructInternalLoads InternalLoads;
 
-        ///// <summary>
-        ///// From SIA 2024 Ruhetage pro Woche, Nutzungstage pro Jahr, TagesProfil, Jahresprofil
-        ///// </summary>
-        //public struct OccupancySchedule
-        //{
-        //    /// <summary>
-        //    /// Days per week when schedule applies.
-        //    /// </summary>
-        //    public int DaysOffPerWeek { get; set; }
-        //    /// <summary>
-        //    /// Days per year when schedule applies. Probably not needed here
-        //    /// </summary>
-        //    public int DaysUsedPerYear { get; set; }
-        //    /// <summary>
-        //    /// Multiplier of how many days (0=no days, 1=all days) to apply the daily profile per month over the year (length=12).
-        //    /// </summary>
-        //    public double[] DailyProfile { get; set; }
-        //    /// <summary>
-        //    /// Multiplier of how many days (0=no days, 1=all days) to apply the daily profile per month over the year (length=12).
-        //    /// </summary>
-        //    public double[] YearlyProfile { get; set; }
-        //}
-
-        ///// <summary>
-        ///// From SIA 2024 Geräte TagesProfil
-        ///// </summary>
-        //public struct DevicesSchedule
-        //{
-        //    /// <summary>
-        //    /// Multiplier of how many days (0=no days, 1=all days) to apply the daily profile per month over the year (length=12).
-        //    /// </summary>
-        //    public double[] DailyProfile { get; set; }
-
-        //    /// <summary>
-        //    /// Mutliplier (0 to 1) when no occupancy.
-        //    /// </summary>
-        //    public double[] LoadWhenUnoccupied { get; set; }
-
-        //}
-
-        //public struct LightingSchedule
-        //{
-        //    /// <summary>
-        //    /// Number of hours on between 7-18h. SIA2024: Nutzungsstunden pro Tag
-        //    /// </summary>
-        //    public double HoursPerDay { get; set; }
-        //    /// <summary>
-        //    /// Number of hours on between 18h-7h. SIA2024: Nutzungsstunden pro Nacht
-        //    /// </summary>
-        //    public double HoursPerNight { get; set; }
-
-
-        //    // TODO Korrekturfaktor für Präsenzregelung
-        //}
-
-
-        ///// <summary>
-        ///// Time-resolved schedules, values are [0, 1].
-        ///// Value of 1 indicates full load as defined in this.InternalLoads
-        ///// </summary>
-        //public struct StructSchedules
-        //{
-        //    public OccupancySchedule Occupancy;
-        //    public DevicesSchedule Devices;
-        //    public LightingSchedule Lighting;
-        //}
-        ///// <summary>
-        ///// Schedules that define annual hourly internal loads schedules
-        ///// </summary>
-        //[JsonProperty]
-        public Sia2024Schedule Schedules;
+        /// <summary>
+        /// Processed schedules from SIA 2024.
+        /// </summary>
+        public ZoneSchedules Schedules;
 
         #endregion
 
@@ -217,6 +150,12 @@ namespace Hive.IO.Building
         public double [] ConsumedElectricityMonthly { get; set; } // set in GhResults... FIX ME
         [JsonProperty]
         public double [] ConsumedHeatingMonthly { get; set; } // same
+
+        /// <summary>
+        /// Determines if adaptive comfort should be used instead of setpoints from SIA 2024.
+        /// </summary>
+        public bool RunAdaptiveComfort { get; set; }
+
         #endregion
 
 
@@ -277,7 +216,7 @@ namespace Hive.IO.Building
         /// Windows self intersection
         /// </summary>
         [JsonProperty]
-        public bool IsWindowsNoSelfIntersect { get; private set; }
+        public bool IsWindowsCollisionFree { get; private set; }
         /// <summary>
         /// For additional floor surfaces, they have to be within the volume
         /// </summary>
@@ -293,7 +232,7 @@ namespace Hive.IO.Building
         #endregion
 
         [JsonConstructor]
-        protected Zone()
+        internal Zone()
         {
             // only for use in deserialization
         }
@@ -332,12 +271,13 @@ namespace Hive.IO.Building
                 }
             }
 
-            // only IsClosed needs to strictly guaranteed in all cases
+            // we want to have these checks to be all 'true'. Some are optional, though. Defined later in this.IsValid
+            // only IsClosed needs to be strictly guaranteed in all cases
             this.IsClosed = false;
             this.IsConvex = false;
             this.IsPlanar = false;
             this.IsWindowsOnZone = true; // zone might have no windows. so default is true
-            this.IsWindowsNoSelfIntersect = true;
+            this.IsWindowsCollisionFree = true;
             this.IsFloorInZone = true;
             this.IsFloorExist = true;
 
@@ -374,15 +314,15 @@ namespace Hive.IO.Building
             if (windowSrfs != null && windowSrfs.Length > 0)
             {
                 this.IsWindowsOnZone = CheckWindowsOnZone(this.ZoneGeometry, windowSrfs, this.Tolerance);
-                this.IsWindowsNoSelfIntersect = CheckWindowsSelfIntersect(windowSrfs, this.Tolerance);
+                this.IsWindowsCollisionFree = CheckWindowsIsFreeOfIntersections(windowSrfs, this.Tolerance);
             }
 
-            this.IsValidEPlus = CheckValidity(this.IsClosed, this.IsConvex, this.IsLinear, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsNoSelfIntersect);
-            this.IsValid = (this.IsClosed && this.IsWindowsOnZone && this.IsWindowsNoSelfIntersect && this.IsFloorExist) ? true : false;
+            this.IsValidEPlus = CheckValidity(this.IsClosed, this.IsConvex, this.IsLinear, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsCollisionFree);
+            this.IsValid = (this.IsClosed && this.IsWindowsOnZone && this.IsWindowsCollisionFree && this.IsFloorExist) ? true : false;
             this.ErrorText = String.Format("Edges are linear: {0} \n " + "Zone is convex: {1} \n " + "Zone geometry is a closed polysurface: {2} \n " + "Zone surfaces are planar: {3} \n " 
                                            + "Windows lie on zone surfaces: {4} \n " + "Windows have no self intersection: {5} \n " 
                                            + "Additional floor surfaces lie within zone geometry: {6} \n " + "Floor surface detected: {7}", 
-                this.IsLinear, this.IsConvex, this.IsClosed, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsNoSelfIntersect, this.IsFloorInZone, this.IsFloorExist);
+                this.IsLinear, this.IsConvex, this.IsClosed, this.IsPlanar, this.IsWindowsOnZone, this.IsWindowsCollisionFree, this.IsFloorInZone, this.IsFloorExist);
 
             // define standard building physical properties upon inizialization. 
             // Can be changed later via Windows Form
@@ -457,6 +397,12 @@ namespace Hive.IO.Building
 
 
         #region internalMethods
+
+        public Zone Clone()
+        {
+            return MemberwiseClone() as Zone;
+        }
+
 
         private static bool CheckFloorInZone(rg.Brep zone, rg.BrepFace floor)
         {
@@ -670,12 +616,12 @@ namespace Hive.IO.Building
         // ADAPT to work for non-planar and non-linear geometry
 
         /// <summary>
-        /// Check for self-intersection of windows
+        /// Check for windows-2-windows intersections
         /// </summary>
         /// <param name="windows"></param>
         /// <param name="tolerance"></param>
-        /// <returns></returns>
-        private static bool CheckWindowsSelfIntersect(rg.Surface[] windows, double tolerance)
+        /// <returns>Returns 'false' if there are windows-2-windows intersections</returns>
+        private static bool CheckWindowsIsFreeOfIntersections(rg.Surface[] windows, double tolerance)
         {
             for (int i = 0; i < windows.Length - 1; i++)
             {
@@ -684,13 +630,12 @@ namespace Hive.IO.Building
                 {
                     rg.Curve[] intersectionCrvs;
                     rg.Point3d[] intersectionPts;
-                    //misses overlaps ?!
-                    //rg.Intersect.Intersection.SurfaceSurface(windows[i], windows[u], tolerance, out intersectionCrvs, out intersectionPts);
+                    // intersection check with 2 windows. They should not intersect, otherwise return an error message to Grasshopper
                     rg.Intersect.Intersection.BrepSurface(w1, windows[u], tolerance, out intersectionCrvs, out intersectionPts);
-                    if (intersectionPts.Length > 0)
-                        return false;
                     if (intersectionCrvs.Length > 0)
-                        return false;
+                        foreach(var crv in intersectionCrvs)
+                            if (crv.IsClosed)   // they always have to be closed for intersections. otherwise the windows might just be touching
+                                return false;
                 }
             }
             return true;
