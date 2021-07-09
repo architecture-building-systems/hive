@@ -15,7 +15,7 @@ electricity demand: currently simply by using sqm and internal loads for lightin
 from __future__ import division
 import math
 
-# import ghpythonlib.treehelpers as th # DEBUG
+import ghpythonlib.treehelpers as th # DEBUG
 
 # Constants
 MONTHS_PER_YEAR = 12
@@ -36,7 +36,7 @@ def cleanDictForNaN(d):
     # a = d.values()
     # b = d.keys()
     for i in d:
-        if isinstance(d[i],str) or isinstance(d[i], unicode): continue # DEBUG
+        # if isinstance(d[i],str) or isinstance(d[i], unicode): continue # DEBUG
         if math.isnan(d[i]) or d[i] == "NaN":
             d[i] = 0.0
 
@@ -565,11 +565,11 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
                             run_hourly=False)
 
     if hourly and Q_s_tr_per_surface_jagged_hourly != None:
-        # Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged_hourly, source=[0, 0])   # import ghpythonlib.treehelpers as th
-        Q_s_tr_tree = Q_s_tr_per_surface_jagged_hourly # DEBUG
+        Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged_hourly, source=[0, 0])   # import ghpythonlib.treehelpers as th
+        # Q_s_tr_tree = Q_s_tr_per_surface_jagged_hourly # DEBUG
     elif not hourly and Q_s_tr_per_surface_jagged != None:
-        # Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged, source=[0, 0])   # import ghpythonlib.treehelpers as th
-        Q_s_tr_tree = Q_s_tr_per_surface_jagged # DEBUG
+        Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged, source=[0, 0])   # import ghpythonlib.treehelpers as th
+        # Q_s_tr_tree = Q_s_tr_per_surface_jagged # DEBUG
     else:
         Q_s_tr_tree = None
 
@@ -641,8 +641,8 @@ def calculate_Q_s(run_obstr, tree_obstr, tree_unobstr,
         row = []
         win_area = win_areas[i] 
         branch = tree.Branch(i)
-        for j in range(len(branch)): # DEBUG
-        # for j in range(branch.Count):
+        # for j in range(len(branch)): # DEBUG
+        for j in range(branch.Count):
             irrad = branch[j] / win_area   # calculating per W/m2 for shading control
             if irrad > setpoint:
                 irrad *= g_value_total
