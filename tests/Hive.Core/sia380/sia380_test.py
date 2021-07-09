@@ -24,3 +24,8 @@ def test_main(**args):
     
     # TODO
     assert True
+    
+def visualise_results():
+    
+    t_start = 0
+    t_end = 8760

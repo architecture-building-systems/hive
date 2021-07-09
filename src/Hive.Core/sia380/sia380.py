@@ -357,7 +357,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
         h = 1.5
         w = surface_areas[window_for_nat_vent_idx] / h
         # Precalculate constant part to reduce repetitive computation
-        Vdot_nat_vent_constant = calc_natural_ventilation_constant(h, w)
+        Vdot_nat_vent_constant = calc_nat_vent_Vdot_constant(h, w)
     else: # no windows
         Vdot_nat_vent_constant = 0
     
@@ -393,8 +393,11 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
         #   - Ta and Ti constant  
         #   - No wind influence (only driven by temperature differences) 
         #   - Single zone and single sided ventilation
-        Q_V_ub_nat_vent = calc_H_V_nat_vent(T_i_ub[t], T_e[t], Vdot_nat_vent_constant) * deltaT_ub
-        Q_V_lb_nat_vent = calc_H_V_nat_vent(T_i_lb[t], T_e[t], Vdot_nat_vent_constant) * deltaT_lb
+        Vdot_nat_vent_ub = calc_nat_vent_Vdot(Vdot_nat_vent_constant, T_i_ub[t], T_e[t])
+        Vdot_nat_vent_lb = calc_nat_vent_Vdot(Vdot_nat_vent_constant, T_i_lb[t], T_e[t])
+        
+        Q_V_ub_nat_vent = calc_nat_vent_H_V(Vdot_nat_vent_ub) * deltaT_ub
+        Q_V_lb_nat_vent = calc_nat_vent_H_V(Vdot_nat_vent_lb) * deltaT_lb
 
         # Internal loads (interne Wärmeeinträge)
         # Q_i = Phi_P * t_P + Phi_L * t_L + Phi_A * t_A
@@ -425,6 +428,9 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
         # unobstructed or obstructed, both using SolarModel.dll and GHSolar.gha
         Q_s_tr = sum(Q_s_tr_per_surface[t])
         Q_s = Q_s_tr   # currently, only transparent surfaces
+        
+        if t == 4074:
+            print()
         
         if eta_g_t is None:
             # Heatgains/-losses ratio (Wärmeeintrag/-verlust Verhältnis), gamma
@@ -458,28 +464,28 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
             # heating demand (Heizwärmebedarf), Q_H
             # Q_H = Q_T + Q_V - eta_g * (Q_i + Q_s)
             # calculating different cases with/without heat recovery, with/without natural ventilation (hr)
-            Q_H = Q_T_lb + Q_V_lb - eta_g_heating * (Q_i + Q_s)
+            Q_H_ = Q_T_lb + Q_V_lb - eta_g_heating * (Q_i + Q_s)
             Q_H_no_hr = Q_T_lb + Q_V_lb_no_hr - eta_g_heating_no_hr * (Q_i + Q_s)
             Q_H_nat_vent = Q_T_lb + Q_V_lb_nat_vent - eta_g_heating_nat_vent * (Q_i + Q_s)
-            Q_H, Q_H_no_hr, Q_H_nat_vent = negatives_to_zero([Q_H, Q_H_no_hr, Q_H_nat_vent])
+            Q_H_, Q_H_no_hr, Q_H_nat_vent = negatives_to_zero([Q_H_, Q_H_no_hr, Q_H_nat_vent])
             
             # cooling demand (Kältebedarf), Q_K
             # calculating different cases with/without heat recovery, with/without natural ventilation (hr)
-            Q_K = Q_i + Q_s - eta_g_cooling * (Q_T_ub + Q_V_ub)
+            Q_K_ = Q_i + Q_s - eta_g_cooling * (Q_T_ub + Q_V_ub)
             Q_K_no_hr = Q_i + Q_s - eta_g_cooling_no_hr * (Q_T_ub + Q_V_ub_no_hr)
             Q_K_nat_vent = Q_i + Q_s - eta_g_cooling_nat_vent * (Q_T_ub + Q_V_ub_nat_vent)
-            Q_K, Q_K_no_hr, Q_K_nat_vent = negatives_to_zero([Q_K, Q_K_no_hr, Q_K_nat_vent])
+            Q_K_, Q_K_no_hr, Q_K_nat_vent = negatives_to_zero([Q_K_, Q_K_no_hr, Q_K_nat_vent])
 
             # take smaller value of both comfort set points and remember the index
             if use_natural_ventilation:
-                Q_H, Q_H_index = min_and_index(Q_H, Q_H_no_hr, Q_H_nat_vent)
-                Q_K, Q_K_index = min_and_index(Q_K, Q_K_no_hr, Q_K_nat_vent)         
+                Q_H, Q_H_index = min_and_index(Q_H_, Q_H_no_hr, Q_H_nat_vent)
+                Q_K, Q_K_index = min_and_index(Q_K_, Q_K_no_hr, Q_K_nat_vent)         
             else:
-                Q_H, Q_H_index = min_and_index(Q_H, Q_H_no_hr)
-                Q_K, Q_K_index = min_and_index(Q_K, Q_K_no_hr)    
+                Q_H, Q_H_index = min_and_index(Q_H_, Q_H_no_hr)
+                Q_K, Q_K_index = min_and_index(Q_K_, Q_K_no_hr)    
             
-            if Q_K>0.0 and Q_K_index == 2:
-                print(t, " cooled by nat_vent", str(T_e[t]) + " C")
+            if Q_K > 0.01 and Q_K_index == 2:
+                print(str(t) + " cooled by nat_vent T_e = " + str(T_e[t]) + " C")
 
             # either subtract heating from cooling, but then also account for that in losses/gains by subtracting those too
             # or just take the higher load of both and then take the corresponding losses/gains
@@ -651,7 +657,7 @@ def calculate_Q_s(run_obstr, tree_obstr, tree_unobstr,
     
     return Q_array
 
-def calc_natural_ventilation_constant(H,W):
+def calc_nat_vent_Vdot_constant(H,W):
     """Precalculates the constant part of natural ventilation calc 
             _______________________________
     
@@ -666,19 +672,31 @@ def calc_natural_ventilation_constant(H,W):
     """
     return 0.6 * H * W * 0.333333 * math.sqrt(GRAVITATIONAL_CONSTANT * H)
 
-def calc_H_V_nat_vent(T_i, T_e, Vdot_nat_vent_constant):
-    """Calculates the coefficient of natural ventilation H_V_nat_vent
+def calc_nat_vent_Vdot(Vdot_nat_vent_constant, T_i, T_e):
+    """Calculates air flow from buoyancy driven natural ventilation.
     
-    V_dot_nat_vent = c_d * H * W * 1/3 * sqrt(g * H * (T_i - T_e)/T_e)
-    H_V_nat_vent = V_dot * rho * c_p
+    V_dot = c_d * H * W * 1/3 * sqrt(g * H * (T_i - T_e)/T_e)
     
-    rho = 1.2   [kg/m^3]    Specific heat capacity of air   
-    c_p = 1000  [J/kgK]     Average air density             
+    c_d = 0.6   [-]         discharge coefficient, value for open doors and windows
+    g = 9.8     [m/s^2]     graviational constant
     
     :param T_i: Indoor temperature [C]
     :param T_e: Outdoor temperature [C]
     """
-    return Vdot_nat_vent_constant * math.sqrt(abs(T_i - T_e) / (T_e + CELCIUS_TO_KELVIN)) * RHO * C_P
+    return Vdot_nat_vent_constant * math.sqrt(abs(T_i - T_e) / (T_e + CELCIUS_TO_KELVIN))
+
+def calc_nat_vent_H_V(Vdot_nat_vent):
+    """Calculates the coefficient of natural ventilation H_V_nat_vent
+    
+    H_V_nat_vent = V_dot_nat_vent * rho * c_p
+    
+    rho = 1.2   [kg/m^3]    Specific heat capacity of air   
+    c_p = 1005  [J/kgK]     Average air density             
+    
+    :param T_i: Indoor temperature [C]
+    :param T_e: Outdoor temperature [C]
+    """
+    return Vdot_nat_vent * RHO * C_P
 
 # UTILS
 
@@ -778,8 +796,14 @@ if __name__ == "__main__":
     def test():
         # Arrange
         import json
+        import os
         
-        with open(r"C:\Users\Maxence\Documents\_ETH\2_Jobs\_Hive\hive\tests\Hive.Core\sia380\testdata.json", 'r') as f:
+        testdir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(__file__)), "..\\..\\..\\tests\\Hive.Core\\sia380"))
+        path_testdata = os.path.join(testdir, "testdata.json")
+        path_results = os.path.join(testdir, "results.json")
+
+        
+        with open(path_testdata, 'r') as f:
             kwargs = json.loads(f.read(), encoding='utf-8')
         
         import datatree as dt
@@ -790,6 +814,44 @@ if __name__ == "__main__":
         results = main(**kwargs)
         
         # Assert
-        print(results)
+        Q_Heat, Q_Cool, Q_Elec, Q_T, Q_V, Q_i, Q_s, Q_T_op, Q_T_tr, Q_s_tr_tree = results
+        # with open(path_results, 'w') as f:
+        #     data = {
+        #         "Q_Heat": Q_Heat, 
+        #         "Q_Cool": Q_Cool,
+        #         "Q_Elec": Q_Elec,
+        #         "Q_T": Q_T,
+        #         "Q_V": Q_V,
+        #         "Q_i": Q_i,
+        #         "Q_s": Q_s,
+        #         "Q_T_op": Q_T_op,
+        #         "Q_T_tr": Q_T_tr,
+        #         "Q_s_tr_tree": Q_s_tr_tree 
+        #     }
+        #     json.dump(data, f, indent=4)
+            
+        print("Q_Cool = " + str(sum(Q_Cool)))
+        print("Q_Heat = " + str(sum(Q_Heat)))
+        
+        t_start = 168 * HOURS_PER_DAY
+        t_end = t_start + 7 * HOURS_PER_DAY
+        
+        import matplotlib.pyplot as plt
+
+        X = range(t_start, t_end)
+        plt.plot(X, Q_Cool[t_start:t_end], label='Q_Cool')
+        plt.plot(X, Q_Heat[t_start:t_end], label='Q_Heat')
+        plt.plot(X, Q_T[t_start:t_end], ':c', label='Q_T')
+        plt.plot(X, Q_V[t_start:t_end], ':b', label='Q_V')
+        plt.plot(X, Q_i[t_start:t_end], ':g', label='Q_i')
+        plt.plot(X, Q_s[t_start:t_end], ':r', label='Q_s')
+        
+        
+        plt.plot(X, kwargs['T_e_hourly'][t_start:t_end])
+        plt.plot(X, kwargs['T_i_ub_hourly'][t_start:t_end])
+        plt.plot(X, kwargs['T_i_lb_hourly'][t_start:t_end])
+        
+        
+        plt.show()
     
     test()

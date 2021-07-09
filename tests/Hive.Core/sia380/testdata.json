@@ -1,6 +1,6 @@
 {
     "run_obstructed_simulation": false,
-    "hourly": false,
+    "hourly": true,
     "use_adaptive_comfort": false,
     "use_natural_ventilation": false,
     "g_value": 0.5,
