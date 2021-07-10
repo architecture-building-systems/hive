@@ -504,12 +504,7 @@ namespace Hive.IO.Results
                 Zone zone = building.Zones[i];
                 for (int j = 0; j < zone.Windows.Length; j++)
                 {
-                    var solarGains = new double[Misc.MonthsPerYear];
-                    if (zone.SolarGainsPerWindowMonthly[j].Length == Misc.HoursPerYear)
-                        Misc.GetCumulativeMonthlyValue(zone.SolarGainsPerWindowMonthly[j]).CopyTo(solarGains, 0);
-                    else // assumes length is 12 otherwise
-                        zone.SolarGainsPerWindowMonthly[j].CopyTo(solarGains, 0);
-                    solarGainsList.Add(solarGains);
+                    solarGainsList.Add(zone.SolarGainsPerWindowMonthly[j]);
                 }
             }
 
@@ -792,22 +787,22 @@ namespace Hive.IO.Results
                 switch (loadType)
                 {
                     case "Qt_opaque_positive":
-                        result += (from x in zone.OpaqueTransmissionHeatLossesMonthly where x > 0.0 select x).Sum();
+                        result += zone.OpaqueTransmissionHeatLossesMonthly.Where(x => x > 0.0).Sum();
                         break;
                     case "Qt_transparent_positive":
-                        result += (from x in zone.TransparentTransmissionHeatLossesMonthly where x > 0.0 select x).Sum();
+                        result += zone.TransparentTransmissionHeatLossesMonthly.Where(x=> x > 0.0).Sum();
                         break;
                     case "Qv_positive":
-                        result += (from x in zone.VentilationHeatLossesMonthly where x > 0.0 select x).Sum();
+                        result += zone.VentilationHeatLossesMonthly.Where(x=> x > 0.0).Sum();
                         break;
                     case "Qt_opaque_negative":
-                        result += Math.Abs((from x in zone.OpaqueTransmissionHeatLossesMonthly where x <= 0.0 select x).Sum());
+                        result += Math.Abs(zone.OpaqueTransmissionHeatLossesMonthly.Where(x=> x <= 0.0).Sum());
                         break;
                     case "Qt_transparent_negative":
-                        result += Math.Abs((from x in zone.TransparentTransmissionHeatLossesMonthly where x <= 0.0 select x).Sum());
+                        result += Math.Abs(zone.TransparentTransmissionHeatLossesMonthly.Where(x=> x <= 0.0).Sum());
                         break;
                     case "Qv_negative":
-                        result += Math.Abs((from x in zone.VentilationHeatLossesMonthly where x <= 0.0 select x).Sum());
+                        result += Math.Abs(zone.VentilationHeatLossesMonthly.Where(x=> x <= 0.0).Sum());
                         break;
                     case "Qi":
                         result += zone.InternalHeatGainsMonthly.Sum();
