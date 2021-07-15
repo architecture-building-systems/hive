@@ -20,7 +20,7 @@ items:
   anyOf:
     - type: object
       properties:
-        DevicesSchedule:
+        DeviceSchedule:
           description: Geraete
           properties:
             DailyProfile:
@@ -84,5 +84,5 @@ items:
       required:
         - RoomType
         - OccupancySchedule
-        - DevicesSchedule
+        - DeviceSchedule
         - LightingSchedule
