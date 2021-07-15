@@ -28,6 +28,7 @@ namespace Hive.IO.GhParametricInputs
         {
             pManager.AddTextParameter("description", "description", "SIA 2024 room name. Must follow hive sia 2024 naming convention", GH_ParamAccess.item);
             pManager.AddNumberParameter("roomConstant", "roomConstant", "Room constant ('Zeitkonstante'), in hours", GH_ParamAccess.item);
+            pManager.AddNumberParameter("roomSpecificHeatCapacity", "roomSpecificHeatCapacity", "Room specific heat capacity ('Waermespeicherfaehigkeit des Raumes'), in Wh/(m^2*K)", GH_ParamAccess.item);
             pManager.AddNumberParameter("coolingSetpoint", "coolingSetpoint", "Cooling setpoint 'Raumlufttemperatur Auslegung Kuehlung (Sommer)'. in deg Celsius", GH_ParamAccess.item);
             pManager.AddNumberParameter("heatingSetpoint", "heatingSetpoint", "Heating setpoint 'Raumlufttemperatur Auslegung Heizen (Winter)'. in deg Celsius", GH_ParamAccess.item);
             pManager.AddNumberParameter("floorArea", "floorArea", "Floor area 'Nettogeschossflaeche' in m^2", GH_ParamAccess.item);
@@ -72,6 +73,7 @@ namespace Hive.IO.GhParametricInputs
 
             DA.GetData(0, ref siaRoom.RoomType);
             DA.GetData(1, ref siaRoom.RoomConstant);
+            DA.GetData(1, ref siaRoom.RoomSpecificHeatCapacity);
             DA.GetData(2, ref siaRoom.CoolingSetpoint);
             DA.GetData(3, ref siaRoom.HeatingSetpoint);
             DA.GetData(4, ref siaRoom.FloorArea);

@@ -34,7 +34,7 @@ namespace Hive.IO.GhInputOutput
             TraceWriter = TraceWriter
         };
 
-        private BuildingInputState _buildingInputState;
+        private BuildingInputState _buildingInputState { get; set; }
         
         /// <summary>
         /// Save BuildingInputState to the document.
@@ -71,7 +71,7 @@ namespace Hive.IO.GhInputOutput
         {
             try
             {
-                var json = reader.GetString("SiaRoom");
+                var json = reader.GetString("SiaRoom"); // why is this not reading the RoomSpecificHeatCapacity properly???
                 _buildingInputState.SiaRoom = JsonConvert.DeserializeObject<Sia2024RecordEx>(json, JsonSerializerSettings);
                 
             }

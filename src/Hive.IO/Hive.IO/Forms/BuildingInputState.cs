@@ -85,6 +85,7 @@ namespace Hive.IO.Forms
             {
                 RaisePropertyChangedEvent(nameof(RoomType));
                 RaisePropertyChangedEvent(nameof(RoomConstant));
+                RaisePropertyChangedEvent(nameof(RoomSpecificHeatCapacity));
                 RaisePropertyChangedEvent(nameof(CoolingSetpoint));
                 RaisePropertyChangedEvent(nameof(HeatingSetpoint));
                 RaisePropertyChangedEvent(nameof(CoolingSetback));
@@ -216,6 +217,23 @@ namespace Hive.IO.Forms
                 try
                 {
                     _siaRoom.RoomConstant = double.Parse(value);
+                }
+                catch (Exception)
+                {
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
+        public string RoomSpecificHeatCapacity
+        {
+            get => $"{_siaRoom.RoomSpecificHeatCapacity:0.00}";
+            set
+            {
+                try
+                {
+                    _siaRoom.RoomSpecificHeatCapacity = double.Parse(value);
                 }
                 catch (Exception)
                 {
@@ -804,6 +822,7 @@ namespace Hive.IO.Forms
         }
 
         public Brush RoomConstantBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush RoomSpecificHeatCapacityBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
         public Brush UValueFloorsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
         public Brush UValueRoofsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
         public Brush UValueWallsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
@@ -841,6 +860,8 @@ namespace Hive.IO.Forms
         private readonly FontWeight _modifiedFontWeight = FontWeights.Bold;
 
         public FontWeight RoomConstantFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight RoomSpecificHeatCapacityFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+
         public FontWeight UValueFloorsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight UValueRoofsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight UValueWallsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
