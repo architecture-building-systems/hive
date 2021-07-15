@@ -32,11 +32,14 @@ GRAVITATIONAL_CONSTANT = 9.8 # [m/s^2]
 RHO = 1.2       # Luftdichte in kg/m^3, average as actually dependent on temperature (and more..?)
 C_P = 1005      # Spez. Wärmekapazität Luft in J/(kgK)
 
+DEBUG_MODE = False
+
 def cleanDictForNaN(d):
     # a = d.values()
     # b = d.keys()
     for i in d:
-        # if isinstance(d[i],str) or isinstance(d[i], unicode): continue # DEBUG
+        if DEBUG_MODE: 
+            if isinstance(d[i],str) or isinstance(d[i], unicode): continue
         if math.isnan(d[i]) or d[i] == "NaN":
             d[i] = 0.0
 
@@ -45,7 +48,7 @@ def cleanDictForNaN(d):
 
 def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly, T_i_lb_hourly, surface_areas, surface_type,
          srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, 
-         run_obstructed_simulation, hourly, use_adaptive_comfort, use_natural_ventilation):
+         run_obstructed_simulation, hourly, use_adaptive_comfort, use_natural_ventilation, debug=False):
     '''
     Computes monthly heating, cooling and electricity demand for a thermal zone, based on SIA 380.1
     :param room_properties: room properties in json format
@@ -185,6 +188,8 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
         - ...   ...:
         _____________________________________________________________________________________
     """
+    global DEBUG_MODE
+    if debug: DEBUG_MODE = True
     
     # Assert inputs hourly
     adaptive_comfort = use_adaptive_comfort and (T_i_ub_hourly is not None and T_i_lb_hourly is not None) 
@@ -429,9 +434,6 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
         Q_s_tr = sum(Q_s_tr_per_surface[t])
         Q_s = Q_s_tr   # currently, only transparent surfaces
         
-        if t == 4074:
-            print()
-        
         if eta_g_t is None:
             # Heatgains/-losses ratio (Wärmeeintrag/-verlust Verhältnis), gamma
             # calculating for different cases, heating / cooling, upper / lower bounds, with / without heat recovery
@@ -484,7 +486,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
                 Q_H, Q_H_index = min_and_index(Q_H_, Q_H_no_hr)
                 Q_K, Q_K_index = min_and_index(Q_K_, Q_K_no_hr)    
             
-            if Q_K > 0.01 and Q_K_index == 2:
+            if DEBUG_MODE and Q_K > 0.01 and Q_K_index == 2:
                 print(str(t) + " cooled by nat_vent T_e = " + str(T_e[t]) + " C")
 
             # either subtract heating from cooling, but then also account for that in losses/gains by subtracting those too
@@ -565,11 +567,11 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
                             run_hourly=False)
 
     if hourly and Q_s_tr_per_surface_jagged_hourly != None:
-        Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged_hourly, source=[0, 0])   # import ghpythonlib.treehelpers as th
-        # Q_s_tr_tree = Q_s_tr_per_surface_jagged_hourly # DEBUG
+        if DEBUG_MODE: Q_s_tr_tree = Q_s_tr_per_surface_jagged_hourly
+        else: Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged_hourly, source=[0, 0])
     elif not hourly and Q_s_tr_per_surface_jagged != None:
-        Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged, source=[0, 0])   # import ghpythonlib.treehelpers as th
-        # Q_s_tr_tree = Q_s_tr_per_surface_jagged # DEBUG
+        if DEBUG_MODE: Q_s_tr_tree = Q_s_tr_per_surface_jagged
+        else: Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged, source=[0, 0])
     else:
         Q_s_tr_tree = None
 
@@ -641,8 +643,7 @@ def calculate_Q_s(run_obstr, tree_obstr, tree_unobstr,
         row = []
         win_area = win_areas[i] 
         branch = tree.Branch(i)
-        # for j in range(len(branch)): # DEBUG
-        for j in range(branch.Count):
+        for j in range(len(branch)) if DEBUG_MODE else range(branch.Count):
             irrad = branch[j] / win_area   # calculating per W/m2 for shading control
             if irrad > setpoint:
                 irrad *= g_value_total
@@ -809,6 +810,8 @@ if __name__ == "__main__":
         import datatree as dt
         kwargs['srf_irrad_obstr_tree'] = dt.DataTree([[0.0]*8760])
         kwargs['srf_irrad_unobstr_tree'] = dt.DataTree(kwargs['srf_irrad_unobstr_tree'])
+        
+        kwargs['debug'] = True
         
         # Act
         results = main(**kwargs)
