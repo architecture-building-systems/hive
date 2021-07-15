@@ -1,15 +1,14 @@
 @REM Script to build all solutions and create installer
 
 @REM Change these paths accordingly
-
 @REM Requires python 2.7, likely from conda env.
 SET PYTHON=python
-SET IPY=%PROGRAMFILES%\IronPython 2.7.8\ipy.exe
-SET HB=C:\Users\Maxence\Documents\_ETH\2_Jobs\_Hive\honey-badger\honey-badger.py
+SET IPY=%PROGRAMFILES%\IronPython 2.7\ipy.exe
+SET HB=C:\Users\Christoph\Documents\GitHub\honey-badger\honey-badger.py
 SET MSBUILD=%PROGRAMFILES(x86)%\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe
 SET MAKENSIS=%PROGRAMFILES(X86)%\NSIS\makensis.exe
 
-SET HIVEWIKIPY=C:\Users\Maxence\Documents\_ETH\2_Jobs\_Hive\hive.wiki\hbwiki.py
+SET HIVEWIKIPY=C:\Users\Christoph\Documents\GitHub\hive.wiki\hbwiki.py
 
 @REM Build Hive.Core
 echo Building Hive.Core...
