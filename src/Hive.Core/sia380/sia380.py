@@ -282,7 +282,6 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     windows_areas = [x for (x, y) in zip(surface_areas, surface_type) if y != "opaque"]
     windows_count = len(windows_areas)
     
-    
     # Solar
     # formatting the grasshopper tree that contains solar irradiation time series for each window
     # could be changed later to also include solar irradiation on opaque surfaces...
@@ -291,7 +290,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     Q_s_tr_per_surface_jagged = None
     Q_s_tr_per_surface_jagged_hourly = None
     
-    if (windows_count == 0
+    if (windows_count == 0 # Only considering solar gains through windows
         or (srf_irrad_obstr_tree.Branch(0).Count == 0 
             and srf_irrad_unobstr_tree.BranchCount == 0)):
         Q_s_tr_per_surface = [[0.0]*windows_count] * MONTHS_PER_YEAR
