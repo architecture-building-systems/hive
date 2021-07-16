@@ -2,8 +2,8 @@ REM use honey-badger to build all the Hive.Core components and install them to L
 
 REM set up some environment variables to make this easier
 REM (this assumes the IronPython installation folder and also the path to honey-badger.py)
-SET IPY=C:\Program Files\IronPython 2.7\ipy.exe
-SET HB=%USERPROFILE%\Documents\GitHub\honey-badger\honey-badger.py
+SET IPY=%PROGRAMFILES%\IronPython 2.7.8\ipy.exe
+SET HB=%USERPROFILE%\Documents\_ETH\2_Jobs\_Hive\honey-badger\honey-badger.py
 
 "%IPY%" "%HB%" -i epw_reader\Hive.Core.epw_reader.json
 "%IPY%" "%HB%" -i sia380\Hive.Core.sia380.json

@@ -30,6 +30,7 @@
     "room_properties": {
         "description": "3.2 Grossraumbuero",
         "Zeitkonstante": 126.0,
+        "Waermespeicherfaehigkeit des Raumes": 120.0,
         "Raumlufttemperatur Auslegung Kuehlung (Sommer)": 26.0,
         "Raumlufttemperatur Auslegung Heizen (Winter)": 21.0,
         "Raumlufttemperatur Auslegung Kuehlung (Sommer) - Absenktemperatur": 28.0,
