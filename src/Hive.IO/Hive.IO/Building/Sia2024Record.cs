@@ -17,6 +17,31 @@ namespace Hive.IO.Building
     {
         public string BuildingUseType;
         public string Quality;
+        public string Construction;
+        
+        // Coming from SIA 380 based on construction
+        public double _capacityWalls;
+        public double _capacityRoofs;
+        public double _capacityFloors;
+
+        public double CapacityWalls
+        {
+            get => _capacityWalls;
+            set => _capacityWalls = value;
+        }
+
+        public double CapacityRoofs
+        {
+            get => _capacityRoofs;
+            set => _capacityRoofs = value;
+        }
+
+        public double CapacityFloors
+        {
+            get => _capacityFloors;
+            set => _capacityFloors = value;
+        }
+
 
         public Sia2024RecordEx()
         {
@@ -26,6 +51,7 @@ namespace Hive.IO.Building
         {
             Quality = "<Custom>";
             BuildingUseType = "<Custom>";
+            Construction = "<Custom>";
 
             RoomType = room.RoomType;
             RoomConstant = room.RoomConstant;
@@ -295,6 +321,22 @@ namespace Hive.IO.Building
         {
             return ReadRecords().Where(r => r.BuildingUseType == useType).Select(r => r.RoomType).Distinct();
         }
+
+        // From SIA 380 !
+        public static IEnumerable<string> ConstructionAssemblies()
+        {
+            return Enum.GetNames(typeof(BuildingConstructionAssemblyTypes)).Select(c => c.ToLower());
+        }
+
+        public static ConstructionAssembly ConstructionAssemblyLookup(string construction) => ConstructionAssembliesLookupDict[construction];
+
+        static Dictionary<string, ConstructionAssembly> ConstructionAssembliesLookupDict = new Dictionary<string, ConstructionAssembly>()
+        {
+            { "superlightweight", new SuperLightWeightConstruction()},
+            { "lightweight", new LightWeightConstruction()},
+            { "mediumweight", new MediumWeightConstruction()},
+            { "heavyweight", new HeavyWeightConstruction()}
+        };
 
         public static Sia2024Record Lookup(string useType, string roomType, string quality)
         {

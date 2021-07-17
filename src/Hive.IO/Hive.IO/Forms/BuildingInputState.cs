@@ -103,11 +103,11 @@ namespace Hive.IO.Forms
                     "ShadingSetpoint",
                     "WindowFrameReduction",
                     "AirChangeRate",
-                    "Infiltration", 
-                    "HeatRecovery", 
-                    "OccupantLoads", 
+                    "Infiltration",
+                    "HeatRecovery",
+                    "OccupantLoads",
                     "LightingLoads",
-                    "EquipmentLoads", 
+                    "EquipmentLoads",
                     "OccupantYearlyHours",
                     "LightingYearlyHours",
                     "EquipmentYearlyHours",
@@ -147,24 +147,14 @@ namespace Hive.IO.Forms
 
         #region comboboxes
 
-        public IEnumerable<string> BuildingUseTypes =>
-            _editable ? Sia2024Record.BuildingUseTypes() : new List<string> {"<Custom>"};
+        public IEnumerable<string> BuildingUseTypes => _editable ? Sia2024Record.BuildingUseTypes() : new List<string> { "<Custom>" };
 
-        public IEnumerable<string> RoomTypes =>
-            _editable ? Sia2024Record.RoomTypes(BuildingUseType) : new List<string> {RoomType};
+        public IEnumerable<string> RoomTypes => _editable ? Sia2024Record.RoomTypes(BuildingUseType) : new List<string> { RoomType };
 
-        public IEnumerable<string> Qualities => _editable ? Sia2024Record.Qualities() : new List<string> {"<Custom>"};
+        public IEnumerable<string> Qualities => _editable ? Sia2024Record.Qualities() : new List<string> { "<Custom>" };
 
-        public string Quality
-        {
-            get => _siaRoom.Quality;
-            set
-            {
-                _siaRoom = Sia2024Record.Lookup(BuildingUseType, RoomType, value) as Sia2024RecordEx;
-                RaisePropertyChangedEvent();
-                RaiseAllPropertiesChangedEvent();
-            }
-        }
+        public IEnumerable<string> Constructions => _editable ? Sia2024Record.ConstructionAssemblies() : new List<string> { "<Custom>" };
+
 
         [SuppressMessage("ReSharper", "ExplicitCallerInfoArgument")]
         public string BuildingUseType
@@ -188,6 +178,30 @@ namespace Hive.IO.Forms
             {
                 _siaRoom = Sia2024Record.Lookup(BuildingUseType, value, Quality) as Sia2024RecordEx;
                 RaisePropertyChangedEvent();
+                RaiseAllPropertiesChangedEvent();
+            }
+        }
+
+        public string Quality
+        {
+            get => _siaRoom.Quality;
+            set
+            {
+                _siaRoom = Sia2024Record.Lookup(BuildingUseType, RoomType, value) as Sia2024RecordEx;
+                RaisePropertyChangedEvent();
+                RaiseAllPropertiesChangedEvent();
+            }
+        }
+
+        public string Construction
+        {
+            get => _siaRoom.Construction;
+            set
+            {
+                _siaRoom.Construction = value;
+                RoomSpecificHeatCapacity = Sia2024Record.ConstructionAssemblyLookup(value).CapacitancePerFloorArea.ToString();
+                RaisePropertyChangedEvent();
+                RaisePropertyChangedEvent("RoomSpecificHeatCapacity");
                 RaiseAllPropertiesChangedEvent();
             }
         }
@@ -406,6 +420,60 @@ namespace Hive.IO.Forms
                 try
                 {
                     _siaRoom.UValueWalls = double.Parse(value);
+                }
+                catch (FormatException)
+                {
+                    // don't update the value                    
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
+        public string CapacityFloors
+        {
+            get => $"{_siaRoom.CapacityFloors:0.00}";
+            set
+            {
+                try
+                {
+                    _siaRoom.CapacityFloors = double.Parse(value);
+                }
+                catch (FormatException)
+                {
+                    // don't update the value                    
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
+        public string CapacityRoofs
+        {
+            get => $"{_siaRoom.CapacityRoofs:0.00}";
+            set
+            {
+                try
+                {
+                    _siaRoom.CapacityRoofs = double.Parse(value);
+                }
+                catch (FormatException)
+                {
+                    // don't update the value                    
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
+        public string CapacityWalls
+        {
+            get => $"{_siaRoom.CapacityWalls:0.00}";
+            set
+            {
+                try
+                {
+                    _siaRoom.CapacityWalls = double.Parse(value);
                 }
                 catch (FormatException)
                 {
@@ -826,6 +894,9 @@ namespace Hive.IO.Forms
         public Brush UValueFloorsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
         public Brush UValueRoofsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
         public Brush UValueWallsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
+        public Brush CapacityFloorsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
+        public Brush CapacityRoofsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
+        public Brush CapacityWallsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
 
         public Brush UValueTransparentBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
         public Brush GValueBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
@@ -865,6 +936,9 @@ namespace Hive.IO.Forms
         public FontWeight UValueFloorsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight UValueRoofsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight UValueWallsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight CapacityFloorsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight CapacityRoofsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight CapacityWallsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight UValueTransparentFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight GValueFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight GValueTotalFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;

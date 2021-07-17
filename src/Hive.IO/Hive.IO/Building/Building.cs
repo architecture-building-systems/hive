@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System;
+using System.Linq;
 
 namespace Hive.IO.Building
 {
@@ -26,6 +27,11 @@ namespace Hive.IO.Building
         /// Describes the building type, e.g. residential, office, school, etc.
         /// </summary>
         public BuildingType Type { get; private set; }
+
+        /// <summary>
+        /// Describes the building construction generically, e.g. lightweight, heavyweight, etc.
+        /// </summary>
+        public BuildingConstructionAssemblyTypes ConstructionType { get; private set; }
 
         /// <summary>
         /// Building properties, such as U-values, infiltration, etc., according to SIA2024
@@ -110,4 +116,17 @@ namespace Hive.IO.Building
         School,
         Undefined
     }
+
+    /// <summary>
+    /// Building construction types
+    /// </summary>
+    public enum BuildingConstructionAssemblyTypes
+    {
+        SuperLightWeight,
+        LightWeight,
+        MediumWeight,
+        HeavyWeight,
+        Undefined
+    }
 }
+

@@ -70,6 +70,11 @@ namespace Hive.IO.Forms
             cboBuildingQuality.Items.AddRange(State.Qualities.ToArray<object>());
             cboBuildingQuality.SelectedItem = State.Quality;
             cboBuildingQuality.Enabled = State.IsEditable;
+
+            cboBuildingConstruction.Items.Clear();
+            cboBuildingConstruction.Items.AddRange(State.Constructions.ToArray<object>());
+            cboBuildingConstruction.SelectedItem = State.Construction;
+            cboBuildingConstruction.Enabled = State.IsEditable;
         }
 
         private void UpdateSiaPropertiesPanel()
@@ -120,19 +125,49 @@ namespace Hive.IO.Forms
             RenderState();
         }
 
+        private void cboBuildingConstruction_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_rendering)
+            {
+                return;
+            }
+
+            State.Construction = cboBuildingConstruction.SelectedItem as string;
+
+            cboWallTemplate.SelectedItem = State.Construction;
+            cboFloorTemplate.SelectedItem = State.Construction;
+            cboWindowTemplate.SelectedItem = State.Construction;
+            cboRoofTemplate.SelectedItem = State.Construction;
+
+
+            RenderState();
+        }
+
         private void UpdateEnvironmentTab()
         {
             cboWallTemplate.Enabled = false;
+            cboWallTemplate.Items.Clear();
+            cboWallTemplate.Items.AddRange(State.Constructions.ToArray<object>());
+            cboWallTemplate.SelectedItem = State.Construction;
             UpdateTextBox(txtWallUValue);
+            UpdateTextBox(txtWallCapacity);
             UpdateTextBox(txtWallEmissions);
             UpdateTextBox(txtWallCost);
 
             cboFloorTemplate.Enabled = false;
+            cboFloorTemplate.Items.Clear();
+            cboFloorTemplate.Items.AddRange(State.Constructions.ToArray<object>());
+            cboFloorTemplate.SelectedItem = State.Construction;
             UpdateTextBox(txtFloorUValue);
+            UpdateTextBox(txtFloorCapacity);
             UpdateTextBox(txtFloorEmissions);
             UpdateTextBox(txtFloorCost);
 
             cboWindowTemplate.Enabled = false;
+            cboWindowTemplate.Items.Clear();
+            cboWindowTemplate.Items.AddRange(State.Constructions.ToArray<object>());
+            cboWindowTemplate.SelectedItem = State.Construction;
+            UpdateTextBox(txtFloorUValue);
             UpdateTextBox(txtWindowUValue);
             UpdateTextBox(txtWindowGValue);
             UpdateTextBox(txtWindowEmissions);
@@ -141,7 +176,12 @@ namespace Hive.IO.Forms
             UpdateTextBox(txtWindowShadingSetpoint);
 
             cboRoofTemplate.Enabled = false;
+            cboRoofTemplate.Items.Clear();
+            cboRoofTemplate.Items.AddRange(State.Constructions.ToArray<object>());
+            cboRoofTemplate.SelectedItem = State.Construction;
+            UpdateTextBox(txtFloorUValue);
             UpdateTextBox(txtRoofUValue);
+            UpdateTextBox(txtRoofCapacity);
             UpdateTextBox(txtRoofEmissions);
             UpdateTextBox(txtRoofCost);
         }
