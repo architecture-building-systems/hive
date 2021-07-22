@@ -139,7 +139,44 @@ namespace Hive.IO.Forms
             cboWindowTemplate.SelectedItem = State.Construction;
             cboRoofTemplate.SelectedItem = State.Construction;
 
+            RenderState();
+        }
 
+        private void cboWallTemplate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_rendering)
+            {
+                return;
+            }
+
+            State.CapacityWalls = Sia2024Record.RoomSpecificCapacitanceLookup(cboWallTemplate.SelectedItem.ToString()).ToString();
+            RenderState();
+        }
+
+        private void cboFloorTemplate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_rendering)
+            {
+                return;
+            }
+
+            State.CapacityFloors = Sia2024Record.RoomSpecificCapacitanceLookup(cboFloorTemplate.SelectedItem.ToString()).ToString();
+            RenderState();
+        }
+
+        private void cboWindowTemplate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            return;
+        }
+
+        private void cboRoofTemplate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_rendering)
+            {
+                return;
+            }
+
+            State.CapacityRoofs = Sia2024Record.RoomSpecificCapacitanceLookup(cboRoofTemplate.SelectedItem.ToString()).ToString();
             RenderState();
         }
 
@@ -300,5 +337,6 @@ namespace Hive.IO.Forms
 
             RenderState();
         }
+
     }
 }

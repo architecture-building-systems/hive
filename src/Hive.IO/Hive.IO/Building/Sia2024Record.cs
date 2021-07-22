@@ -18,30 +18,6 @@ namespace Hive.IO.Building
         public string BuildingUseType;
         public string Quality;
         public string Construction;
-        
-        // Coming from SIA 380 based on construction
-        public double _capacityWalls;
-        public double _capacityRoofs;
-        public double _capacityFloors;
-
-        public double CapacityWalls
-        {
-            get => _capacityWalls;
-            set => _capacityWalls = value;
-        }
-
-        public double CapacityRoofs
-        {
-            get => _capacityRoofs;
-            set => _capacityRoofs = value;
-        }
-
-        public double CapacityFloors
-        {
-            get => _capacityFloors;
-            set => _capacityFloors = value;
-        }
-
 
         public Sia2024RecordEx()
         {
@@ -135,14 +111,17 @@ namespace Hive.IO.Building
 
         // as per #466, allow Sia2024Record to have separate values for walls, floors, roofs. Fall back to the Opaque values
         private double? _uValueFloors = null;
+        private double? _capacityFloors = null;
         private double? _costFloors = null;
         private double? _emissionsFloors = null;
 
         private double? _uValueRoofs = null;
+        private double? _capacityRoofs = null;
         private double? _costRoofs = null;
         private double? _emissionsRoofs = null;
 
         private double? _uValueWalls = null;
+        private double? _capacityWalls = null;
         private double? _costWalls = null;
         private double? _emissionsWalls = null;
 
@@ -150,6 +129,11 @@ namespace Hive.IO.Building
         {
             get => _uValueFloors ?? UValueOpaque;
             set => _uValueFloors = value;
+        }
+        public double CapacityFloors
+        {
+            get => _capacityFloors ?? RoomSpecificHeatCapacity;
+            set => _capacityFloors = value;
         }
 
         public double CostFloors
@@ -169,6 +153,11 @@ namespace Hive.IO.Building
             get => _uValueRoofs ?? UValueOpaque;
             set => _uValueRoofs = value;
         }
+        public double CapacityRoofs
+        {
+            get => _capacityRoofs ?? RoomSpecificHeatCapacity;
+            set => _capacityRoofs = value;
+        }
 
         public double CostRoofs
         {
@@ -186,6 +175,12 @@ namespace Hive.IO.Building
         {
             get => _uValueWalls ?? UValueOpaque;
             set => _uValueWalls = value;
+        }
+
+        public double CapacityWalls
+        {
+            get => _capacityWalls ?? RoomSpecificHeatCapacity;
+            set => _capacityWalls = value;
         }
 
         public double CostWalls
@@ -241,6 +236,9 @@ namespace Hive.IO.Building
                 {"U-Wert Boeden", UValueFloors },
                 {"U-Wert Daecher", UValueRoofs },
                 {"U-Wert Walls", UValueWalls },
+                {"Waermespeicherfaehigkeit Boeden", CapacityFloors },
+                {"Waermespeicherfaehigkeit Daecher", CapacityRoofs },
+                {"Waermespeicherfaehigkeit Walls", CapacityWalls },
                 {"Kosten Boeden", CostFloors},
                 {"Kosten Daecher", CostRoofs },
                 {"Kosten Waende", CostWalls },
@@ -292,6 +290,10 @@ namespace Hive.IO.Building
                 _uValueRoofs = readValueOrNull("U-Wert Daecher"),
                 _uValueWalls = readValueOrNull("U-Wert Waende"),
 
+                _capacityFloors = readValueOrNull("Waermespeicherfaehigkeit Boeden"),
+                _capacityRoofs = readValueOrNull("Waermespeicherfaehigkeit Daecher"),
+                _capacityWalls = readValueOrNull("Waermespeicherfaehigkeit Waende"),
+
                 _costFloors = readValueOrNull("Kosten Boeden"),
                 _costRoofs = readValueOrNull("Kosten Daecher"),
                 _costWalls = readValueOrNull("Kosten Waende"),
@@ -325,17 +327,18 @@ namespace Hive.IO.Building
         // From SIA 380 !
         public static IEnumerable<string> ConstructionAssemblies()
         {
-            return Enum.GetNames(typeof(BuildingConstructionAssemblyTypes)).Select(c => c.ToLower());
+            //return Enum.GetNames(typeof(BuildingConstructionAssemblyTypes)).Select(c => c.ToLower()).ToList();
+            return new[] { "superlightweight", "lightweight", "mediumweight", "heavyweight" };
         }
 
-        public static ConstructionAssembly ConstructionAssemblyLookup(string construction) => ConstructionAssembliesLookupDict[construction];
+        public static double RoomSpecificCapacitanceLookup(string construction) => RoomSpecificCapacitanceLookupDict[construction];
 
-        static Dictionary<string, ConstructionAssembly> ConstructionAssembliesLookupDict = new Dictionary<string, ConstructionAssembly>()
+        static Dictionary<string, double> RoomSpecificCapacitanceLookupDict = new Dictionary<string, double>()
         {
-            { "superlightweight", new SuperLightWeightConstruction()},
-            { "lightweight", new LightWeightConstruction()},
-            { "mediumweight", new MediumWeightConstruction()},
-            { "heavyweight", new HeavyWeightConstruction()}
+            { "superlightweight", 10.0},
+            { "lightweight", 50.0},
+            { "mediumweight", 100.0},
+            { "heavyweight", 150.0}
         };
 
         public static Sia2024Record Lookup(string useType, string roomType, string quality)

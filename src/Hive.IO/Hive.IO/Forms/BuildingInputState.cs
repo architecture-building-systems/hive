@@ -117,6 +117,9 @@ namespace Hive.IO.Forms
                     "UValueFloors",
                     "UValueRoofs",
                     "UValueWalls",
+                    "CapacityFloors",
+                    "CapacityRoofs",
+                    "CapacityWalls",
                     "CostFloors",
                     "CostRoofs",
                     "CostWalls",
@@ -153,7 +156,7 @@ namespace Hive.IO.Forms
 
         public IEnumerable<string> Qualities => _editable ? Sia2024Record.Qualities() : new List<string> { "<Custom>" };
 
-        public IEnumerable<string> Constructions => _editable ? Sia2024Record.ConstructionAssemblies() : new List<string> { "<Custom>" };
+        public IEnumerable<string> Constructions => _editable ? Sia380Constructions.ConstructionTypes() : new List<string> { "<Custom>" };
 
 
         [SuppressMessage("ReSharper", "ExplicitCallerInfoArgument")]
@@ -195,13 +198,11 @@ namespace Hive.IO.Forms
 
         public string Construction
         {
-            get => _siaRoom.Construction;
+            get => _zone.ConstructionType;
             set
             {
-                _siaRoom.Construction = value;
-                RoomSpecificHeatCapacity = Sia2024Record.ConstructionAssemblyLookup(value).CapacitancePerFloorArea.ToString();
+                _zone.ZoneConstruction = Sia380Constructions.Lookup(value);
                 RaisePropertyChangedEvent();
-                RaisePropertyChangedEvent("RoomSpecificHeatCapacity");
                 RaiseAllPropertiesChangedEvent();
             }
         }
@@ -242,19 +243,19 @@ namespace Hive.IO.Forms
 
         public string RoomSpecificHeatCapacity
         {
-            get => $"{_siaRoom.RoomSpecificHeatCapacity:0.00}";
-            set
-            {
-                try
-                {
-                    _siaRoom.RoomSpecificHeatCapacity = double.Parse(value);
-                }
-                catch (Exception)
-                {
-                }
+            get => $"{_zone.CapacitancePerFloorArea:0.00}";
+            //set
+            //{
+            //    try
+            //    {
+            //        _zone.CapacitancePerFloorArea = double.Parse(value);
+            //    }
+            //    catch (Exception)
+            //    {
+            //    }
 
-                RaisePropertyChangedEventEx();
-            }
+            //    RaisePropertyChangedEventEx();
+            //}
         }
 
         public string CoolingSetpoint
@@ -432,56 +433,56 @@ namespace Hive.IO.Forms
 
         public string CapacityFloors
         {
-            get => $"{_siaRoom.CapacityFloors:0.00}";
-            set
-            {
-                try
-                {
-                    _siaRoom.CapacityFloors = double.Parse(value);
-                }
-                catch (FormatException)
-                {
-                    // don't update the value                    
-                }
+            get => $"{_zone.FloorsCapacity:0.00}";
+            //set
+            //{
+            //    try
+            //    {
+            //        _zone.FloorsCapacity = double.Parse(value);
+            //    }
+            //    catch (FormatException)
+            //    {
+            //        // don't update the value                    
+            //    }
 
-                RaisePropertyChangedEventEx();
-            }
+            //    RaisePropertyChangedEventEx();
+            //}
         }
 
         public string CapacityRoofs
         {
-            get => $"{_siaRoom.CapacityRoofs:0.00}";
-            set
-            {
-                try
-                {
-                    _siaRoom.CapacityRoofs = double.Parse(value);
-                }
-                catch (FormatException)
-                {
-                    // don't update the value                    
-                }
+            get => $"{_zone.RoofsCapacity:0.00}";
+            //set
+            //{
+            //    try
+            //    {
+            //        _zone.RoofsCapacity = double.Parse(value);
+            //    }
+            //    catch (FormatException)
+            //    {
+            //        // don't update the value                    
+            //    }
 
-                RaisePropertyChangedEventEx();
-            }
+            //    RaisePropertyChangedEventEx();
+            //}
         }
 
         public string CapacityWalls
         {
-            get => $"{_siaRoom.CapacityWalls:0.00}";
-            set
-            {
-                try
-                {
-                    _siaRoom.CapacityWalls = double.Parse(value);
-                }
-                catch (FormatException)
-                {
-                    // don't update the value                    
-                }
+            get => $"{_zone.WallsCapacity:0.00}";
+            //set
+            //{
+            //    try
+            //    {
+            //        _zone.WallsCapacity = double.Parse(value);
+            //    }
+            //    catch (FormatException)
+            //    {
+            //        // don't update the value                    
+            //    }
 
-                RaisePropertyChangedEventEx();
-            }
+            //    RaisePropertyChangedEventEx();
+            //}
         }
 
 
@@ -860,8 +861,6 @@ namespace Hive.IO.Forms
         }
 
         #endregion sia2024 properties
-
-
 
         #region colors
 

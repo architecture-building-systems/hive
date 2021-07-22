@@ -120,6 +120,19 @@ namespace Hive.IO.Building
 
         #endregion
 
+        #region Construction
+
+
+        public Sia380ConstructionAssembly ZoneConstruction { get; internal set; }
+
+        public string ConstructionType => ZoneConstruction.ConstructionType;
+        public double CapacitancePerFloorArea => ZoneConstruction.RoomSpecificHeatCapacity; // TODO setter?
+        public double WallsCapacity => ZoneConstruction.WallsCapacity;
+        public double FloorsCapacity => ZoneConstruction.FloorsCapacity;
+        public double RoofsCapacity => ZoneConstruction.RoofsCapacity;
+
+
+        #endregion Construction
 
         #region Energy Demand
         /// <summary>
@@ -262,12 +275,14 @@ namespace Hive.IO.Building
         public bool IsFloorExist { get; private set; }
         [JsonProperty]
         public string ErrorText { get; private set; }
+
         #endregion
 
         [JsonConstructor]
         internal Zone()
         {
             // only for use in deserialization
+            ZoneConstruction = new Sia380ConstructionAssembly();
         }
 
         #region Constructor
@@ -525,8 +540,6 @@ namespace Hive.IO.Building
         }
 
         #endregion
-
-
 
         #region internalMethods
 

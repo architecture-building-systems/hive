@@ -194,7 +194,8 @@ namespace Hive.IO.Building
 
             OpaqueConstruction opaqueConstruction = new OpaqueConstruction("SIA2024_Opaque")
             {
-                UValue = siaRoom.UValueWalls
+                UValue = siaRoom.UValueWalls,
+                Capacitance = siaRoom.CapacityWalls
             };
             this.SpecificCo2 = siaRoom.EmissionsWalls;
             this.SpecificCost = siaRoom.CostWalls;
@@ -222,7 +223,8 @@ namespace Hive.IO.Building
 
             OpaqueConstruction opaqueConstruction = new OpaqueConstruction("SIA2024_Opaque")
             {
-                UValue = siaRoom.UValueRoofs
+                UValue = siaRoom.UValueRoofs,
+                Capacitance = siaRoom.CapacityRoofs
             };
             this.SpecificCo2 = siaRoom.EmissionsRoofs;
             this.SpecificCost = siaRoom.CostRoofs;
@@ -265,7 +267,8 @@ namespace Hive.IO.Building
 
             OpaqueConstruction opaqueConstruction = new OpaqueConstruction("SIA2024_Opaque")
             {
-                UValue = siaRoom.UValueFloors
+                UValue = siaRoom.UValueFloors,
+                Capacitance = siaRoom.CapacityFloors
             };
             this.SpecificCo2 = siaRoom.EmissionsFloors;
             this.SpecificCost = siaRoom.CostFloors;

@@ -708,6 +708,7 @@ namespace Hive.IO.Forms
             this.cboRoofTemplate.Name = "cboRoofTemplate";
             this.cboRoofTemplate.Size = new System.Drawing.Size(233, 24);
             this.cboRoofTemplate.TabIndex = 4;
+            this.cboRoofTemplate.SelectedIndexChanged += new System.EventHandler(this.cboRoofTemplate_SelectedIndexChanged);
             // 
             // txtRoofUValue
             // 
@@ -893,6 +894,7 @@ namespace Hive.IO.Forms
             this.cboWindowTemplate.Name = "cboWindowTemplate";
             this.cboWindowTemplate.Size = new System.Drawing.Size(232, 24);
             this.cboWindowTemplate.TabIndex = 4;
+            this.cboWindowTemplate.SelectedIndexChanged += new System.EventHandler(this.cboWindowTemplate_SelectedIndexChanged);
             // 
             // txtWindowUValue
             // 
@@ -1019,6 +1021,7 @@ namespace Hive.IO.Forms
             this.cboFloorTemplate.Name = "cboFloorTemplate";
             this.cboFloorTemplate.Size = new System.Drawing.Size(233, 24);
             this.cboFloorTemplate.TabIndex = 4;
+            this.cboFloorTemplate.SelectedIndexChanged += new System.EventHandler(this.cboFloorTemplate_SelectedIndexChanged);
             // 
             // txtFloorUValue
             // 
@@ -1167,6 +1170,7 @@ namespace Hive.IO.Forms
             this.cboWallTemplate.Name = "cboWallTemplate";
             this.cboWallTemplate.Size = new System.Drawing.Size(232, 24);
             this.cboWallTemplate.TabIndex = 4;
+            this.cboWallTemplate.SelectedIndexChanged += new System.EventHandler(this.cboWallTemplate_SelectedIndexChanged);
             // 
             // txtWallUValue
             // 
