@@ -113,23 +113,130 @@ namespace Hive.IO.Building
         [JsonProperty]
         public Shading[] ShadingDevices { get; private set; }
 
-        public double WallArea => Walls.Sum(w => w.Area);
-        public double RoofArea => Roofs.Sum(r => r.Area);
+        public double WallsArea => Walls.Sum(w => w.Area);
+        public double RoofsArea => Roofs.Sum(r => r.Area);
         public double WindowArea => Windows.Sum(w => w.Area);
-        public double FloorArea => Floors.Sum(f => f.Area);
+        public double FloorsArea => Floors.Sum(f => f.Area);
 
         #endregion
 
+
         #region Construction
 
+        public string ConstructionType { get; set; } = "undefined";
+        public string RoofsConstructionType { get; set; } = "undefined";
+        public string FloorsConstructionType { get; set; } = "undefined";
+        public string WallsConstructionType { get; set; } = "undefined";
 
-        public Sia380ConstructionAssembly ZoneConstruction { get; internal set; }
 
-        public string ConstructionType => ZoneConstruction.ConstructionType;
-        public double CapacitancePerFloorArea => ZoneConstruction.RoomSpecificHeatCapacity; // TODO setter?
-        public double WallsCapacity => ZoneConstruction.WallsCapacity;
-        public double FloorsCapacity => ZoneConstruction.FloorsCapacity;
-        public double RoofsCapacity => ZoneConstruction.RoofsCapacity;
+        public void ApplySia380ConstructionAssembly(string siaConstructionType)
+        {
+            //foreach (var wall in Walls) wall.Construction = siaConstruction.WallsConstruction;
+            //foreach (var floor in Floors) floor.Construction = siaConstruction.FloorsConstruction;
+            //foreach (var roof in Roofs) roof.Construction = siaConstruction.RoofsConstruction;
+            //foreach (var window in Windows) window.Construction = siaConstruction.WindowsConstruction;
+            var siaConstruction = Sia380Constructions.Lookup(siaConstructionType);
+            ConstructionType = siaConstruction.Name;
+            CapacitancePerFloorArea = siaConstruction.CapacitancePerFloorArea;
+        }
+
+        internal void ApplySia380RoofsConstruction(string siaConstructionType)
+        {
+            RoofsConstructionType = siaConstructionType;
+            var siaConstruction = Sia380Constructions.Lookup(siaConstructionType);
+            for (int i = 0; i < Roofs.Count(); i++)
+                Roofs[i].Construction = siaConstruction.RoofsConstruction;
+        }
+
+        internal void ApplySia380FloorsConstruction(string siaConstructionType)
+        {
+            FloorsConstructionType = siaConstructionType;
+            var siaConstruction = Sia380Constructions.Lookup(siaConstructionType);
+            for (int i = 0; i < Floors.Count(); i++)
+                Floors[i].Construction = siaConstruction.FloorsConstruction;
+        }
+
+        internal void ApplySia380WallsConstruction(string siaConstructionType)
+        {
+            WallsConstructionType = siaConstructionType;
+            var siaConstruction = Sia380Constructions.Lookup(siaConstructionType);
+            for (int i = 0; i < Walls.Count(); i++)
+                Walls[i].Construction = siaConstruction.WallsConstruction;
+        }
+
+        double _capacitancePerFloorArea;
+        double? _roofsCapacitance;
+        double? _wallsCapacitance;
+        double? _floorsCapacitance;
+        public double CapacitancePerFloorArea
+        {
+            get => _capacitancePerFloorArea;
+            set => _capacitancePerFloorArea = value;
+        }
+
+        double TotalCapacitance => CapacitancePerFloorArea * FloorsArea;
+
+        double RoofsCapacity
+        {
+            get
+            {
+                return _roofsCapacitance ?? Roofs.Select(r => r.Construction.Capacitance).Sum();
+            }
+            set
+            {
+                foreach (var roof in Roofs) roof.Construction.Capacitance = value * (roof.Area / RoofsArea);
+            }
+        }
+
+        double FloorsCapacity
+        {
+            get
+            {
+                return _floorsCapacitance ?? Roofs.Select(r => r.Construction.Capacitance).Sum();
+            }
+            set
+            {
+                foreach (var roof in Roofs) roof.Construction.Capacitance = value * (roof.Area / FloorsArea);
+                _floorsCapacitance = value;
+            }
+        }
+
+        double WallsCapacity
+        {
+            get
+            {
+                return _wallsCapacitance ?? Walls.Select(w => w.Construction.Capacitance).Sum();
+            }
+            set
+            {
+                foreach (var wall in Walls) wall.Construction.Capacitance = value * (wall.Area / WallsArea);
+                _wallsCapacitance = value;
+            }
+        }
+
+        internal double UpdateCapacityFloors(double roomCapacitance) => UpdateCapacities(roomCapacitance, "floor");
+        internal double UpdateCapacityRoofs(double roomCapacitance) => UpdateCapacities(roomCapacitance, "roof");
+        internal double UpdateCapacityWalls(double roomCapacitance) => UpdateCapacities(roomCapacitance, "wall");
+
+        double UpdateCapacities(double roomCapacitance, string kind)
+        {
+            var factorAll = 1 + RoofsArea / FloorsArea + WallsArea / FloorsArea;
+
+            if (kind == "floor")
+            {
+                FloorsCapacity = FloorsArea / factorAll * roomCapacitance;
+            }
+            else if (kind == "roof")
+            {
+                RoofsCapacity = RoofsArea / factorAll * roomCapacitance;
+            }
+            else if (kind == "wall")
+            {
+                WallsCapacity = WallsArea / factorAll * roomCapacitance;
+            }
+
+            return (FloorsCapacity + RoofsCapacity + WallsCapacity) / FloorsArea;
+        }
 
 
         #endregion Construction
@@ -221,6 +328,7 @@ namespace Hive.IO.Building
         #endregion
 
 
+
         #region Error handling
         /// <summary>
         /// For simplicity of thermal calculations, avoid curves etc., only accept linear floorplans and geometries
@@ -282,7 +390,6 @@ namespace Hive.IO.Building
         internal Zone()
         {
             // only for use in deserialization
-            ZoneConstruction = new Sia380ConstructionAssembly();
         }
 
         #region Constructor
@@ -386,7 +493,6 @@ namespace Hive.IO.Building
             }
         }
         #endregion
-
 
         #region Setters
 

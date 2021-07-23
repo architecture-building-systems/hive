@@ -31,7 +31,7 @@ namespace Hive.IO.Building
 
             RoomType = room.RoomType;
             RoomConstant = room.RoomConstant;
-            RoomSpecificHeatCapacity = room.RoomSpecificHeatCapacity;
+            CapacitancePerFloorArea = room.CapacitancePerFloorArea;
             CoolingSetpoint = room.CoolingSetpoint;
             HeatingSetpoint = room.HeatingSetpoint;
             CoolingSetback = room.CoolingSetback;
@@ -101,7 +101,7 @@ namespace Hive.IO.Building
         public double OpaqueCost; // Kosten opake Bauteile
         public double OpaqueEmissions; // Emissionen opake Bauteile
         public double RoomConstant; // Zeitkonstante
-        public double RoomSpecificHeatCapacity; // Waermespeicherfaehigkeit des Raumes
+        public double CapacitancePerFloorArea; // Waermespeicherfaehigkeit des Raumes
         public string RoomType; // description, e.g. "1.1 Wohnen Mehrfamilienhaus"
         public double TransparentCost; // Kosten transparente Bauteile
         public double TransparentEmissions; // Emissionen transparente Bauteile
@@ -132,7 +132,7 @@ namespace Hive.IO.Building
         }
         public double CapacityFloors
         {
-            get => _capacityFloors ?? RoomSpecificHeatCapacity;
+            get => _capacityFloors ?? CapacitancePerFloorArea;
             set => _capacityFloors = value;
         }
 
@@ -155,7 +155,7 @@ namespace Hive.IO.Building
         }
         public double CapacityRoofs
         {
-            get => _capacityRoofs ?? RoomSpecificHeatCapacity;
+            get => _capacityRoofs ?? CapacitancePerFloorArea;
             set => _capacityRoofs = value;
         }
 
@@ -179,7 +179,7 @@ namespace Hive.IO.Building
 
         public double CapacityWalls
         {
-            get => _capacityWalls ?? RoomSpecificHeatCapacity;
+            get => _capacityWalls ?? CapacitancePerFloorArea;
             set => _capacityWalls = value;
         }
 
@@ -205,7 +205,7 @@ namespace Hive.IO.Building
             {
                 {"description", RoomType},
                 {"Zeitkonstante", RoomConstant},
-                {"Waermespeicherfaehigkeit des Raumes", RoomSpecificHeatCapacity},
+                {"Waermespeicherfaehigkeit des Raumes", CapacitancePerFloorArea},
                 {"Raumlufttemperatur Auslegung Kuehlung (Sommer)", CoolingSetpoint},
                 {"Raumlufttemperatur Auslegung Heizen (Winter)", HeatingSetpoint},
                 {"Raumlufttemperatur Auslegung Kuehlung (Sommer) - Absenktemperatur", CoolingSetback},
@@ -235,10 +235,10 @@ namespace Hive.IO.Building
 
                 {"U-Wert Boeden", UValueFloors },
                 {"U-Wert Daecher", UValueRoofs },
-                {"U-Wert Walls", UValueWalls },
+                {"U-Wert Waende", UValueWalls },
                 {"Waermespeicherfaehigkeit Boeden", CapacityFloors },
                 {"Waermespeicherfaehigkeit Daecher", CapacityRoofs },
-                {"Waermespeicherfaehigkeit Walls", CapacityWalls },
+                {"Waermespeicherfaehigkeit Waende", CapacityWalls },
                 {"Kosten Boeden", CostFloors},
                 {"Kosten Daecher", CostRoofs },
                 {"Kosten Waende", CostWalls },
@@ -258,7 +258,7 @@ namespace Hive.IO.Building
             {
                 RoomType = d["description"] as string,
                 RoomConstant = (double) d["Zeitkonstante"],
-                RoomSpecificHeatCapacity = (double)d["Waermespeicherfaehigkeit des Raumes"],
+                CapacitancePerFloorArea = (double)d["Waermespeicherfaehigkeit des Raumes"],
                 CoolingSetpoint = (double) d["Raumlufttemperatur Auslegung Kuehlung (Sommer)"],
                 HeatingSetpoint = (double) d["Raumlufttemperatur Auslegung Heizen (Winter)"],
                 CoolingSetback = (double)d["Raumlufttemperatur Auslegung Kuehlung (Sommer) - Absenktemperatur"],

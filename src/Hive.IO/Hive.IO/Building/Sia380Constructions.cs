@@ -18,29 +18,29 @@ namespace Hive.IO.Building
         [JsonProperty]
         public string Description;
         [JsonProperty]
-        public double RoomSpecificHeatCapacity;
+        public double CapacitancePerFloorArea;
 
         [JsonProperty(Required = Required.Default)]
-        public double WallsCapacity => WallsConstruction?.Capacitance ?? RoomSpecificHeatCapacity;
+        public double WallsCapacity => WallsConstruction?.Capacitance ?? CapacitancePerFloorArea;
         [JsonProperty(Required = Required.Default)]
-        public double FloorsCapacity => FloorsConstruction?.Capacitance ?? RoomSpecificHeatCapacity;
+        public double FloorsCapacity => FloorsConstruction?.Capacitance ?? CapacitancePerFloorArea;
         [JsonProperty(Required = Required.Default)]
-        public double RoofsCapacity => RoofsConstruction?.Capacitance ?? RoomSpecificHeatCapacity;
+        public double RoofsCapacity => RoofsConstruction?.Capacitance ?? CapacitancePerFloorArea;
 
         public void SetCapacities(double floorArea, double wallArea, double roofArea)
         {
             var all_areas = floorArea + wallArea + roofArea;
             WallsConstruction = new OpaqueConstruction(Name)
             {
-                Capacitance = RoomSpecificHeatCapacity * wallArea / all_areas
+                Capacitance = CapacitancePerFloorArea * wallArea / all_areas
             };
             FloorsConstruction = new OpaqueConstruction(Name)
             {
-                Capacitance = RoomSpecificHeatCapacity * floorArea / all_areas
+                Capacitance = CapacitancePerFloorArea * floorArea / all_areas
             };
             RoofsConstruction = new OpaqueConstruction(Name)
             {
-                Capacitance = RoomSpecificHeatCapacity * roofArea / all_areas
+                Capacitance = CapacitancePerFloorArea * roofArea / all_areas
             };
             WindowsConstruction = new TransparentConstruction(Name);
         }

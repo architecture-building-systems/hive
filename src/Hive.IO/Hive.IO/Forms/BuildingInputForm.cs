@@ -75,6 +75,8 @@ namespace Hive.IO.Forms
             cboBuildingConstruction.Items.AddRange(State.Constructions.ToArray<object>());
             cboBuildingConstruction.SelectedItem = State.Construction;
             cboBuildingConstruction.Enabled = State.IsEditable;
+
+            UpdateTextBox(txtRoomCapacitance);
         }
 
         private void UpdateSiaPropertiesPanel()
@@ -149,7 +151,7 @@ namespace Hive.IO.Forms
                 return;
             }
 
-            State.CapacityWalls = Sia2024Record.RoomSpecificCapacitanceLookup(cboWallTemplate.SelectedItem.ToString()).ToString();
+            State.WallsConstruction = cboWallTemplate.SelectedItem as string; 
             RenderState();
         }
 
@@ -160,7 +162,7 @@ namespace Hive.IO.Forms
                 return;
             }
 
-            State.CapacityFloors = Sia2024Record.RoomSpecificCapacitanceLookup(cboFloorTemplate.SelectedItem.ToString()).ToString();
+            State.FloorsConstruction = cboFloorTemplate.SelectedItem as string; 
             RenderState();
         }
 
@@ -176,7 +178,7 @@ namespace Hive.IO.Forms
                 return;
             }
 
-            State.CapacityRoofs = Sia2024Record.RoomSpecificCapacitanceLookup(cboRoofTemplate.SelectedItem.ToString()).ToString();
+            State.RoofsConstruction = cboRoofTemplate.SelectedItem as string; 
             RenderState();
         }
 
@@ -187,7 +189,6 @@ namespace Hive.IO.Forms
             cboWallTemplate.Items.AddRange(State.Constructions.ToArray<object>());
             cboWallTemplate.SelectedItem = State.Construction;
             UpdateTextBox(txtWallUValue);
-            UpdateTextBox(txtWallCapacity);
             UpdateTextBox(txtWallEmissions);
             UpdateTextBox(txtWallCost);
 
@@ -196,7 +197,6 @@ namespace Hive.IO.Forms
             cboFloorTemplate.Items.AddRange(State.Constructions.ToArray<object>());
             cboFloorTemplate.SelectedItem = State.Construction;
             UpdateTextBox(txtFloorUValue);
-            UpdateTextBox(txtFloorCapacity);
             UpdateTextBox(txtFloorEmissions);
             UpdateTextBox(txtFloorCost);
 
@@ -218,7 +218,6 @@ namespace Hive.IO.Forms
             cboRoofTemplate.SelectedItem = State.Construction;
             UpdateTextBox(txtFloorUValue);
             UpdateTextBox(txtRoofUValue);
-            UpdateTextBox(txtRoofCapacity);
             UpdateTextBox(txtRoofEmissions);
             UpdateTextBox(txtRoofCost);
         }
@@ -338,5 +337,9 @@ namespace Hive.IO.Forms
             RenderState();
         }
 
+        private void txtRoomCapacitance_TextChanged(object sender, EventArgs e)
+        {
+
+        }
     }
 }

@@ -213,8 +213,11 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     # g = room_properties["Gesamtenergiedurchlassgrad Verglasung"]
     tau = room_properties["Zeitkonstante"]
     C_m = room_properties["Waermespeicherfaehigkeit des Raumes"]
-    U_value_opaque = room_properties["U-Wert opake Bauteile"]
-    U_value_transparent = room_properties["U-Wert Fenster"]
+    # U_value_opaque = room_properties["U-Wert opake Bauteile"]
+    U_value_floors = room_properties["U-Wert Boeden"]
+    U_value_roofs = room_properties["U-Wert Daecher"]
+    U_value_walls = room_properties["U-Wert Walls"]
+    U_value_windows = room_properties["U-Wert Fenster"]
     Vdot_e_spec = room_properties["Aussenluft-Volumenstrom (pro NGF)"]
     Vdot_inf_spec = room_properties["Aussenluft-Volumenstrom durch Infiltration"]
     eta_rec = room_properties["Temperatur-Aenderungsgrad der Waermerueckgewinnung"]
@@ -425,12 +428,13 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
             
         for surface in range(num_surfaces):
             # Transmission heat transfer coefficient (Transmissions-Wärmetransferkoeffizient), H_T      
-            if surface_type[surface] == "opaque":
-                H_T = surface_areas[surface] * U_value_opaque
+            if surface_type[surface] == "floor":
+                H_T = surface_areas[surface] * U_value_floors
                 Q_T_op_ub += H_T * deltaT_ub
                 Q_T_op_lb += H_T * deltaT_lb
+                # TODO other surface types
             else:
-                H_T = surface_areas[surface] * U_value_transparent
+                H_T = surface_areas[surface] * U_value_windows
                 Q_T_tr_ub += H_T * deltaT_ub
                 Q_T_tr_lb += H_T * deltaT_lb
 

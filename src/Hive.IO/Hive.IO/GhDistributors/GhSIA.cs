@@ -32,7 +32,7 @@ namespace Hive.IO.GhDistributors
             pManager.AddNumberParameter("External Surfaces Areas", "ExtSrfAreas", "Surface areas of the building that are exposed to the environment (external)", GH_ParamAccess.list);
             pManager.AddTextParameter("SIA 2024 Room", "SiaRoom", "SIA 2024 room definitions for each zone.", GH_ParamAccess.item);
             pManager.AddNumberParameter("All External Surface Areas", "AllExtSrfAreas", "All external surface areas, including opaque and transparent (windows) surfaces.", GH_ParamAccess.list);
-            pManager.AddTextParameter("Surface Type", "SrfType", "External surface type: 'opaque' or 'transp'.", GH_ParamAccess.list);
+            pManager.AddTextParameter("Surface Type", "SrfType", "External surface type: 'window', 'wall', or 'roof' (TODO 'floor').", GH_ParamAccess.list);
             pManager.AddTextParameter("SUA Room Schedules", "SiaRoomSchedules", "Schedules for occupancy, devices, lighting, amd setpoints.", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Use Adaptive Comfort", "UseAdaptiveComfort", "Determines whether to use adaptive comfort (true) or SIA 2024 setpoints (false)", GH_ParamAccess.item);
         }
@@ -49,8 +49,6 @@ namespace Hive.IO.GhDistributors
             var extSrfAreas = new List<double>();
             var allSrfAreas = new List<double>();
             var srfTypes = new List<string>();
-            string opaque = "opaque";
-            string transp = "transp";
             var zones_schedules = new List<ZoneSchedules>();
 
             for (int i = 0; i < zoneCount; i++)
@@ -62,6 +60,7 @@ namespace Hive.IO.GhDistributors
                 {
                     // TO DO: make check that it's not a void
                     zoneAreas[i] += floor.Area;
+                    // TODO no floor on surfaces?
                 }
 
                 
@@ -69,7 +68,7 @@ namespace Hive.IO.GhDistributors
                 {
                     windowAreas.Add(opening.Area);
                     allSrfAreas.Add(opening.Area);
-                    srfTypes.Add(transp);
+                    srfTypes.Add("window");
                 }
 
                 
@@ -82,14 +81,14 @@ namespace Hive.IO.GhDistributors
                     //}
                     extSrfAreas.Add(wall.Area);
                     allSrfAreas.Add(wall.Area);
-                    srfTypes.Add(opaque);
+                    srfTypes.Add("wall");
                     // TO DO: check, if external. VERY IMPORTANT
                 }
                 foreach (Roof roof in zone.Roofs)
                 {
                     extSrfAreas.Add(roof.Area);
                     allSrfAreas.Add(roof.Area);
-                    srfTypes.Add(opaque);
+                    srfTypes.Add("roof");
                     //TO DO: check if external. VERY IMPORTANT
                 }
 

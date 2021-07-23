@@ -85,7 +85,7 @@ namespace Hive.IO.Forms
             {
                 RaisePropertyChangedEvent(nameof(RoomType));
                 RaisePropertyChangedEvent(nameof(RoomConstant));
-                RaisePropertyChangedEvent(nameof(RoomSpecificHeatCapacity));
+                RaisePropertyChangedEvent(nameof(CapacitancePerFloorArea));
                 RaisePropertyChangedEvent(nameof(CoolingSetpoint));
                 RaisePropertyChangedEvent(nameof(HeatingSetpoint));
                 RaisePropertyChangedEvent(nameof(CoolingSetback));
@@ -141,9 +141,9 @@ namespace Hive.IO.Forms
         // NOTE: the funny syntax (x?.a ?? y.b) returns x.a, unless x is null, then it returns y.b
         // it works like this: (x?.a) is x.a if x != null, else null. (A ?? B) is A if A != null, else B
         // I'm using this to enable creating a BuildingInputSate with zone == null for testing purposes.
-        public string ZoneWallArea => $"{_zone?.WallArea ?? _siaRoom.EnvelopeArea:0.00}";
-        public string ZoneFloorArea => $"{_zone?.FloorArea ?? _siaRoom.FloorArea:0.00}";
-        public string ZoneRoofArea => $"{_zone?.RoofArea ?? _siaRoom.EnvelopeArea:0.00}";
+        public string ZoneWallArea => $"{_zone?.WallsArea ?? _siaRoom.EnvelopeArea:0.00}";
+        public string ZoneFloorArea => $"{_zone?.FloorsArea ?? _siaRoom.FloorArea:0.00}";
+        public string ZoneRoofArea => $"{_zone?.RoofsArea ?? _siaRoom.EnvelopeArea:0.00}";
         public string ZoneWindowArea => $"{_zone?.WindowArea ?? _siaRoom.EnvelopeArea:0.00}";
 
         #endregion areas
@@ -198,10 +198,10 @@ namespace Hive.IO.Forms
 
         public string Construction
         {
-            get => _zone.ConstructionType;
+            get => _zone.ConstructionType ?? "undefined";
             set
             {
-                _zone.ZoneConstruction = Sia380Constructions.Lookup(value);
+                _zone.ApplySia380ConstructionAssembly(value);
                 RaisePropertyChangedEvent();
                 RaiseAllPropertiesChangedEvent();
             }
@@ -241,21 +241,21 @@ namespace Hive.IO.Forms
             }
         }
 
-        public string RoomSpecificHeatCapacity
+        public string CapacitancePerFloorArea
         {
             get => $"{_zone.CapacitancePerFloorArea:0.00}";
-            //set
-            //{
-            //    try
-            //    {
-            //        _zone.CapacitancePerFloorArea = double.Parse(value);
-            //    }
-            //    catch (Exception)
-            //    {
-            //    }
+            set
+            {
+                try
+                {
+                    _zone.CapacitancePerFloorArea = double.Parse(value);
+                }
+                catch (Exception)
+                {
+                }
 
-            //    RaisePropertyChangedEventEx();
-            //}
+                RaisePropertyChangedEventEx();
+            }
         }
 
         public string CoolingSetpoint
@@ -431,58 +431,62 @@ namespace Hive.IO.Forms
             }
         }
 
-        public string CapacityFloors
+        public string FloorsConstruction
         {
-            get => $"{_zone.FloorsCapacity:0.00}";
-            //set
-            //{
-            //    try
-            //    {
-            //        _zone.FloorsCapacity = double.Parse(value);
-            //    }
-            //    catch (FormatException)
-            //    {
-            //        // don't update the value                    
-            //    }
+            get => $"{_zone.FloorsConstructionType:0.00}";
+            set
+            {
+                try
+                {
+                    _zone.ApplySia380FloorsConstruction(value);
+                    _siaRoom.CapacitancePerFloorArea = _zone.UpdateCapacityFloors(_siaRoom.CapacitancePerFloorArea);
+                }
+                catch (FormatException)
+                {
+                    // don't update the value                    
+                }
 
-            //    RaisePropertyChangedEventEx();
-            //}
+                RaisePropertyChangedEventEx();
+            }
         }
 
-        public string CapacityRoofs
+        public string RoofsConstruction
         {
-            get => $"{_zone.RoofsCapacity:0.00}";
-            //set
-            //{
-            //    try
-            //    {
-            //        _zone.RoofsCapacity = double.Parse(value);
-            //    }
-            //    catch (FormatException)
-            //    {
-            //        // don't update the value                    
-            //    }
+            get => $"{_zone.RoofsConstructionType:0.00}";
+            set
+            {
+                try
+                {
+                    //var construction = Sia380Constructions.Lookup(value);
+                    _zone.ApplySia380RoofsConstruction(value);
+                    _siaRoom.CapacitancePerFloorArea = _zone.UpdateCapacityRoofs(_siaRoom.CapacitancePerFloorArea);
+                }
+                catch (FormatException)
+                {
+                    // don't update the value                    
+                }
 
-            //    RaisePropertyChangedEventEx();
-            //}
+                RaisePropertyChangedEventEx();
+            }
         }
 
-        public string CapacityWalls
+        public string WallsConstruction
         {
-            get => $"{_zone.WallsCapacity:0.00}";
-            //set
-            //{
-            //    try
-            //    {
-            //        _zone.WallsCapacity = double.Parse(value);
-            //    }
-            //    catch (FormatException)
-            //    {
-            //        // don't update the value                    
-            //    }
+            get => $"{_zone.WallsConstructionType:0.00}";
+            set
+            {
+                try
+                {
+                    _zone.ApplySia380WallsConstruction(value);
+                    _siaRoom.CapacitancePerFloorArea = _zone.UpdateCapacityWalls(_siaRoom.CapacitancePerFloorArea);
+                }
+                catch (FormatException)
+                {
+                    // don't update the value                    
+                }
 
-            //    RaisePropertyChangedEventEx();
-            //}
+                RaisePropertyChangedEventEx();
+            }
         }
 
 
@@ -889,7 +893,7 @@ namespace Hive.IO.Forms
         }
 
         public Brush RoomConstantBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
-        public Brush RoomSpecificHeatCapacityBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush CapacitancePerFloorAreaBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
         public Brush UValueFloorsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
         public Brush UValueRoofsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
         public Brush UValueWallsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
@@ -930,7 +934,7 @@ namespace Hive.IO.Forms
         private readonly FontWeight _modifiedFontWeight = FontWeights.Bold;
 
         public FontWeight RoomConstantFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
-        public FontWeight RoomSpecificHeatCapacityFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight CapacitancePerFloorAreaFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
 
         public FontWeight UValueFloorsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight UValueRoofsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
