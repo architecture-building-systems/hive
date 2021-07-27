@@ -34,6 +34,14 @@ namespace Hive.IO.Forms
 
         private void BuildingInputForm_Load(object sender, EventArgs e)
         {
+            ToolTip toolTip1 = new ToolTip();
+            toolTip1.InitialDelay = 100;
+            string toolTipNaturalVentilationInfoMessage = "Natural Ventilation enables single sided natural ventilation" + "\n" +
+                "based on simplified calculations of CIBSE AM10: Natural Ventilation in Non-Domestic Buildings";
+
+            toolTip1.SetToolTip(this.checkBoxNaturalVentilation, toolTipNaturalVentilationInfoMessage);
+            toolTip1.SetToolTip(this.label43, toolTipNaturalVentilationInfoMessage);
+
             RenderState();
         }
 
@@ -231,8 +239,8 @@ namespace Hive.IO.Forms
                 "based on ambient temperature \nand assumptions about metabolic rates and clothing factors.";
         private string toolTipAdaptiveComfortWarningMessage(string roomType) =>
             toolTipAdaptiveComfortInfoMessage +
-                "\n\nWARNING: Adaptive Comfort is likely not appropriate \n" +
-                $"for room type {roomType}";
+            "\n\nWARNING: Adaptive Comfort is likely not appropriate \n" +
+            $"for room type {roomType}";
 
         private void adaptiveComfortCheck_CheckedChanged(object sender, EventArgs e)
         {
@@ -267,5 +275,6 @@ namespace Hive.IO.Forms
             State.RunNaturalVentilation = checkBoxNaturalVentilation.Checked;
             RenderState();
         }
+
     }
 }
