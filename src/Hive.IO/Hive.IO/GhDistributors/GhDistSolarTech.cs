@@ -6,10 +6,10 @@ using Rhino.Geometry;
 
 namespace Hive.IO.GhDistributors
 {
-    public class GhSolarTech : GH_Component
+    public class GhDistSolarTech : GH_Component
     {
 
-        public GhSolarTech()
+        public GhDistSolarTech()
           : base("Distributor SolarTech Hive", "HiveDistSolarTech",
               "Distributor for Solar technologies." +
                 "\nOutputs relevant parameters for Solar Energy Generation calculations (PV, ST, PVT, GC).",

@@ -8,9 +8,9 @@ using Hive.IO.Building;
 
 namespace Hive.IO.GhDistributors
 {
-    public class GhSIA : GH_Component
+    public class GhDistSIA : GH_Component
     {
-        public GhSIA()
+        public GhDistSIA()
           : base("Distributor SIARoom Hive", "HiveDistSIARoom",
               "Sia (Schweizerischer Ingenieur- und Architektenverein) 2024 distributor that reads in a Hive Building of type <Hive.IO.Building.Building> and outputs its SIA 2024 room definition.",
               "[hive]", "IO-Core")

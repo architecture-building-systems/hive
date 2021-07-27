@@ -151,11 +151,12 @@
     <Compile Include="Forms\VisualizerPlotProperties.Designer.cs">
       <DependentUpon>VisualizerPlotProperties.cs</DependentUpon>
     </Compile>
-    <Compile Include="GhDistributors\GhConversionTech.cs" />
-    <Compile Include="GhDistributors\GhEnvironment.cs" />
-    <Compile Include="GhDistributors\GhSIA.cs" />
-    <Compile Include="GhDistributors\GhSolarSimulation.cs" />
-    <Compile Include="GhDistributors\GhSolarTech.cs" />
+    <Compile Include="GhDistributors\GhDistConversionTech.cs" />
+    <Compile Include="GhDistributors\GhDistEmitter.cs" />
+    <Compile Include="GhDistributors\GhDistEnvironment.cs" />
+    <Compile Include="GhDistributors\GhDistSIA.cs" />
+    <Compile Include="GhDistributors\GhDistSolarSimulation.cs" />
+    <Compile Include="GhDistributors\GhDistSolarTech.cs" />
     <Compile Include="GhInputOutput\GhResultsParameter.cs" />
     <Compile Include="GhMergers\GhChiller.cs" />
     <Compile Include="GhMergers\GhCHP.cs" />

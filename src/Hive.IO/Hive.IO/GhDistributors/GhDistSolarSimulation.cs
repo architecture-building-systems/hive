@@ -7,9 +7,9 @@ using Hive.IO.Building;
 
 namespace Hive.IO.GhDistributors
 {
-    public class GhSolarSimulation : GH_Component
+    public class GhDistSolarSimulation : GH_Component
     {
-        public GhSolarSimulation()
+        public GhDistSolarSimulation()
           : base("Distributor Solar Simulation Hive", "HiveDistSolarSimu",
               "Distributor for 'GHSolar' solar simulations (github/christophwaibel/GH_Solar_V2). Reads in and outputs all relevant geometric, geographic and climatic information necessary for solar simulations. Model is explained in 10.1016/j.solener.2017.10.054 and is based on the Perez solar model. ",
               "[hive]", "IO-Core")
