@@ -85,6 +85,7 @@ namespace Hive.IO.Forms
             txtCoolingSetback.Text = State.CoolingSetback;
 
             checkBoxAdaptiveComfort.Checked = State.RunAdaptiveComfort;
+            checkBoxNaturalVentilation.Checked = State.RunNaturalVentilation;
         }
 
         private void cboBuildingUseType_SelectedIndexChanged(object sender, EventArgs e)
@@ -258,6 +259,12 @@ namespace Hive.IO.Forms
 
             State.RunAdaptiveComfort = checkBoxAdaptiveComfort.Checked;
 
+            RenderState();
+        }
+
+        private void checkBoxNaturalVentilation_CheckedChanged(object sender, EventArgs e)
+        {
+            State.RunNaturalVentilation = checkBoxNaturalVentilation.Checked;
             RenderState();
         }
     }

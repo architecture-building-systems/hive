@@ -90,6 +90,7 @@ namespace Hive.IO.Forms
                 RaisePropertyChangedEvent(nameof(CoolingSetback));
                 RaisePropertyChangedEvent(nameof(HeatingSetback));
                 RaisePropertyChangedEvent(nameof(RunAdaptiveComfort));
+                RaisePropertyChangedEvent(nameof(RunNaturalVentilation));
                 RaisePropertyChangedEvent(nameof(FloorArea));
                 RaisePropertyChangedEvent(nameof(EnvelopeArea));
                 RaisePropertyChangedEvent(nameof(GlazingRatio));
@@ -198,7 +199,30 @@ namespace Hive.IO.Forms
             get => _zone.RunAdaptiveComfort;
             set
             {
-                _zone.RunAdaptiveComfort = value;
+                try
+                {
+                    _zone.RunAdaptiveComfort = value;
+                }
+                catch 
+                { }
+
+                RaisePropertyChangedEvent();
+            }
+        }
+
+
+        public bool RunNaturalVentilation
+        {
+            get => _zone.RunNaturalVentilation;
+            set
+            {
+                try
+                {
+                    _zone.RunNaturalVentilation = value;
+                }
+                catch
+                { }
+
                 RaisePropertyChangedEvent();
             }
         }
