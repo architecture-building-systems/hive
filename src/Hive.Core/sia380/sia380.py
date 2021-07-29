@@ -288,7 +288,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     T_e = get_monthly_avg(T_e_hourly)
 
     # Windows
-    windows_areas = [x for (x, y) in zip(surface_areas, surface_type) if y != "opaque"]
+    windows_areas = [x for (x, y) in zip(surface_areas, surface_type) if y == "window"]
     windows_count = len(windows_areas)
     
     # Solar
@@ -425,7 +425,8 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
         Q_T_op_lb = 0.0
         Q_T_tr_ub = 0.0
         Q_T_tr_lb = 0.0
-            
+
+        # TODO create H_T dict beforehand.
         for surface in range(num_surfaces):
             # Transmission heat transfer coefficient (Transmissions-Wärmetransferkoeffizient), H_T      
             if surface_type[surface] == "floor":
@@ -433,7 +434,15 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
                 Q_T_op_ub += H_T * deltaT_ub
                 Q_T_op_lb += H_T * deltaT_lb
                 # TODO other surface types
-            else:
+            elif surface_type[surface] == "roof":
+                H_T = surface_areas[surface] * U_value_roofs
+                Q_T_op_ub += H_T * deltaT_ub
+                Q_T_op_lb += H_T * deltaT_lb
+            elif surface_type[surface] == "wall":
+                H_T = surface_areas[surface] * U_value_walls
+                Q_T_op_ub += H_T * deltaT_ub
+                Q_T_op_lb += H_T * deltaT_lb
+            elif surface_type[surface] == "window":
                 H_T = surface_areas[surface] * U_value_windows
                 Q_T_tr_ub += H_T * deltaT_ub
                 Q_T_tr_lb += H_T * deltaT_lb
@@ -459,6 +468,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
                 gamma_ub_nat_vent = calc_gamma(Q_i, Q_s, Q_T_ub, Q_V_ub_nat_vent)
                        
             # time constant of the building (Zeitkonstante), tau
+            # TODO where does H_T come from...
             tau = calc_tau(C_m, floor_area, H_V, H_T) 
             tau_no_hr = calc_tau(C_m, floor_area, H_V_no_heat_recovery, H_T) 
             if use_natural_ventilation:
