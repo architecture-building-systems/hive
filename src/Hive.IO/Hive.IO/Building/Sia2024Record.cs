@@ -108,6 +108,10 @@ namespace Hive.IO.Building
         public double UValueTransparent; // U-Wert Fenster
         public double WindowFrameReduction; // Abminderungsfaktor fuer Fensterrahmen
 
+        // custom booleans not part of sia2024
+        public bool RunAdaptiveComfort;
+        public bool RunNaturalVentilation;
+
         // as per #466, allow Sia2024Record to have separate values for walls, floors, roofs. Fall back to the Opaque values
         private double? _uValueFloors = null;
         private double? _costFloors = null;
@@ -120,10 +124,6 @@ namespace Hive.IO.Building
         private double? _uValueWalls = null;
         private double? _costWalls = null;
         private double? _emissionsWalls = null;
-
-        // custom booleans not part of sia2024
-        public bool RunAdaptiveComfort = false;
-        public bool RunNaturalVentilation = false;
 
         public double UValueFloors
         {

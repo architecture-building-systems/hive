@@ -87,13 +87,12 @@ namespace Hive.IO.Forms
             txtWinArea.Text = State.ZoneWindowArea;
             txtRoofArea.Text = State.ZoneRoofArea;
 
-            txtHeatingSetPoint.Text = State.HeatingSetpoint;
-            txtCoolingSetPoint.Text = State.CoolingSetpoint;
-            txtHeatingSetback.Text = State.HeatingSetback;
-            txtCoolingSetback.Text = State.CoolingSetback;
-
             checkBoxAdaptiveComfort.Checked = State.RunAdaptiveComfort;
-            checkBoxNaturalVentilation.Checked = State.RunNaturalVentilation;
+
+            UpdateTextBox(txtHeatingSetPoint, !State.RunAdaptiveComfort);
+            UpdateTextBox(txtCoolingSetPoint, !State.RunAdaptiveComfort);
+            UpdateTextBox(txtHeatingSetback, !State.RunAdaptiveComfort);
+            UpdateTextBox(txtCoolingSetback, !State.RunAdaptiveComfort);
         }
 
         private void cboBuildingUseType_SelectedIndexChanged(object sender, EventArgs e)
@@ -170,6 +169,8 @@ namespace Hive.IO.Forms
             UpdateTextBox(txtAirChangeRate);
             UpdateTextBox(txtInfiltration);
             UpdateTextBox(txtHeatRecovery);
+
+            checkBoxNaturalVentilation.Checked = State.RunNaturalVentilation;
         }
 
         /// <summary>
@@ -181,11 +182,11 @@ namespace Hive.IO.Forms
         /// </summary>
         /// <param name="textBox"></param>
         /// <param name="stateProperty"></param>
-        private void UpdateTextBox(TextBox textBox)
+        private void UpdateTextBox(TextBox textBox, bool? overrideEditable = null)
         {
             var stateProperty = textBox.Tag.ToString();
             textBox.Text = State.GetType().GetProperty(stateProperty).GetValue(State) as string;
-            textBox.Enabled = State.IsEditable;
+            textBox.Enabled = overrideEditable == null ? State.IsEditable : (bool)overrideEditable;
 
             if (State.IsEditable)
             {
@@ -235,7 +236,7 @@ namespace Hive.IO.Forms
 
         private ToolTip toolTipAdaptiveComfort = new ToolTip() { InitialDelay = 100};
         
-        private const string toolTipAdaptiveComfortInfoMessage = "Adaptive Comfort adjusts setpoints dynamically" +
+        private const string toolTipAdaptiveComfortInfoMessage = "Adaptive Comfort adjusts setpoints dynamically " +
                 "based on ambient temperature \nand assumptions about metabolic rates and clothing factors.";
         private string toolTipAdaptiveComfortWarningMessage(string roomType) =>
             toolTipAdaptiveComfortInfoMessage +
@@ -244,14 +245,21 @@ namespace Hive.IO.Forms
 
         private void adaptiveComfortCheck_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBoxAdaptiveComfort.Checked)
+            if (_rendering)
+            {
+                return;
+            }
+
+            var checkBox = (CheckBox)sender;
+
+            if (checkBox.Checked)
             {
                 var toolTipMessage = toolTipAdaptiveComfortInfoMessage;
-                if (!ShouldSetpointsBeAdaptive(cboRoomType.Text))
+                if (!ShouldSetpointsBeAdaptive(State.RoomType))
                 {
-                    toolTipMessage = toolTipAdaptiveComfortWarningMessage(cboBuildingUseType.Text);
+                    toolTipMessage = toolTipAdaptiveComfortWarningMessage(State.RoomType);
                 }
-                toolTipAdaptiveComfort.Show(toolTipMessage, (CheckBox)sender);
+                toolTipAdaptiveComfort.Show(toolTipMessage, checkBox);
                 txtHeatingSetPoint.Enabled = false;
                 txtCoolingSetPoint.Enabled = false;
                 txtHeatingSetback.Enabled = false;
@@ -265,14 +273,21 @@ namespace Hive.IO.Forms
                 txtCoolingSetback.Enabled = true;
             }
 
-            State.RunAdaptiveComfort = checkBoxAdaptiveComfort.Checked;
+            State.RunAdaptiveComfort = checkBox.Checked;
 
             RenderState();
         }
 
         private void checkBoxNaturalVentilation_CheckedChanged(object sender, EventArgs e)
         {
-            State.RunNaturalVentilation = checkBoxNaturalVentilation.Checked;
+            if (_rendering)
+            {
+                return;
+            }
+
+            var checkBox = (CheckBox)sender;
+            State.RunNaturalVentilation = checkBox.Checked;
+
             RenderState();
         }
 
