@@ -66,7 +66,7 @@ namespace Hive.IO.GhDistributors
         }
 
 
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.IOCore_Distconvtech;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.IOCore_DistEmitter;
 
 
         public override Guid ComponentGuid => new Guid("11520a55-b99e-43aa-8f02-4bedc9f7c7f1"); 
