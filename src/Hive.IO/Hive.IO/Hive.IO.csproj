@@ -395,5 +395,6 @@
     <StartArguments>
     </StartArguments>
     <StartAction>Program</StartAction>
+    <DocumentationFile>bin\Hive.IO.xml</DocumentationFile>
   </PropertyGroup>
 </Project>
