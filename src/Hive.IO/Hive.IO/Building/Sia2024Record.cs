@@ -55,6 +55,9 @@ namespace Hive.IO.Building
             TransparentCost = room.TransparentCost;
             OpaqueEmissions = room.OpaqueEmissions;
             TransparentEmissions = room.TransparentEmissions;
+            
+            RunAdaptiveComfort = room.RunAdaptiveComfort;
+            RunNaturalVentilation = room.RunNaturalVentilation;
         }
 
         public new static Sia2024RecordEx FromJson(string json)
@@ -104,6 +107,10 @@ namespace Hive.IO.Building
         public double UValueOpaque; // U-Wert opake Bauteile
         public double UValueTransparent; // U-Wert Fenster
         public double WindowFrameReduction; // Abminderungsfaktor fuer Fensterrahmen
+
+        // custom booleans not part of sia2024
+        public bool RunAdaptiveComfort;
+        public bool RunNaturalVentilation;
 
         // as per #466, allow Sia2024Record to have separate values for walls, floors, roofs. Fall back to the Opaque values
         private double? _uValueFloors = null;
@@ -217,7 +224,10 @@ namespace Hive.IO.Building
                 {"Kosten Waende", CostWalls },
                 {"Emissionen Boeden", EmissionsFloors },
                 {"Emissionen Daecher", EmissionsRoofs },
-                {"Emissionen Waende", EmissionsWalls }
+                {"Emissionen Waende", EmissionsWalls },
+
+                {"Natuerliche Belueftung", RunNaturalVentilation },
+                {"Adaptiver Komfort", RunAdaptiveComfort }
             };
             return JsonConvert.SerializeObject(result);
         }
@@ -226,6 +236,7 @@ namespace Hive.IO.Building
         {
             var d = JsonConvert.DeserializeObject<Dictionary<string, object>>(json); // TODO why not deserialise to Sia2024Record with JsonProperty name set to german keys?
             Func<string, double?> readValueOrNull = key => d.ContainsKey(key) ? (double?) d[key] : null;
+            Func<string, bool> readValueOrFalse = key => d.ContainsKey(key) ? (bool)d[key] : false;
 
             return new Sia2024Record
             {
@@ -269,6 +280,9 @@ namespace Hive.IO.Building
                 _emissionsFloors = readValueOrNull("Emissionen Boeden"),
                 _emissionsRoofs = readValueOrNull("Emissionen Daecher"),
                 _emissionsWalls = readValueOrNull("Emissionen Waende"),
+
+                RunNaturalVentilation = readValueOrFalse("Natuerliche Belueftung"),
+                RunAdaptiveComfort = readValueOrFalse("Adaptiver Komfort")
             };
         }
 

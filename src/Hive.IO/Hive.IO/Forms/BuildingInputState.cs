@@ -85,14 +85,11 @@ namespace Hive.IO.Forms
             {
                 RaisePropertyChangedEvent(nameof(RoomType));
                 RaisePropertyChangedEvent(nameof(RoomConstant));
-                RaisePropertyChangedEvent(nameof(CoolingSetpoint));
-                RaisePropertyChangedEvent(nameof(HeatingSetpoint));
-                RaisePropertyChangedEvent(nameof(CoolingSetback));
-                RaisePropertyChangedEvent(nameof(HeatingSetback));
-                RaisePropertyChangedEvent(nameof(RunAdaptiveComfort));
                 RaisePropertyChangedEvent(nameof(FloorArea));
                 RaisePropertyChangedEvent(nameof(EnvelopeArea));
                 RaisePropertyChangedEvent(nameof(GlazingRatio));
+                RaisePropertyChangedEvent(nameof(RunAdaptiveComfort));
+                RaisePropertyChangedEvent(nameof(RunNaturalVentilation));
 
                 var properties = new[]
                 {
@@ -113,6 +110,10 @@ namespace Hive.IO.Forms
                     "TransparentCost",
                     "TransparentEmissions",
 
+                    "HeatingSetpoint",
+                    "CoolingSetpoint",
+                    "HeatingSetback",
+                    "CoolingSetback",
                     "UValueFloors",
                     "UValueRoofs",
                     "UValueWalls",
@@ -198,7 +199,32 @@ namespace Hive.IO.Forms
             get => _zone.RunAdaptiveComfort;
             set
             {
-                _zone.RunAdaptiveComfort = value;
+                try
+                {
+                    _zone.RunAdaptiveComfort = value;
+                    _siaRoom.RunAdaptiveComfort = value; // not used, only to keep it consistent
+                }
+                catch 
+                { }
+
+                RaisePropertyChangedEvent();
+            }
+        }
+
+
+        public bool RunNaturalVentilation
+        {
+            get => _zone.RunNaturalVentilation;
+            set
+            {
+                try
+                {
+                    _zone.RunNaturalVentilation = value;
+                    _siaRoom.RunNaturalVentilation = value; // not used, only to keep it consistent
+                }
+                catch
+                { }
+
                 RaisePropertyChangedEvent();
             }
         }
@@ -807,8 +833,11 @@ namespace Hive.IO.Forms
         public Brush UValueFloorsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
         public Brush UValueRoofsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
         public Brush UValueWallsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
-
         public Brush UValueTransparentBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush HeatingSetpointBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush CoolingSetpointBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush HeatingSetbackBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
+        public Brush CoolingSetbackBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
         public Brush GValueBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
         public Brush GValueTotalBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
         public Brush ShadingSetpointBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
@@ -845,6 +874,10 @@ namespace Hive.IO.Forms
         public FontWeight UValueRoofsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight UValueWallsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight UValueTransparentFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight HeatingSetpointFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight CoolingSetpointFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight HeatingSetbackFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        public FontWeight CoolingSetbackFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight GValueFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight GValueTotalFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight ShadingSetpointFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
