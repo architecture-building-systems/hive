@@ -58,9 +58,9 @@ def room_properties():
     """
     Read in these three files (located in hive/src/Hive.IO/Hive.IO/Resources)
 
-    - 200108_SIA2024_Raumdaten_Bestand.csv
-    - 200108_SIA2024_Raumdaten_Standardwert.csv
-    - 200108_SIA2024_Raumdaten_Zielwert.csv
+    - 201008_SIA2024_Raumdaten_Bestand.csv
+    - 201008_SIA2024_Raumdaten_Standardwert.csv
+    - 201008_SIA2024_Raumdaten_Zielwert.csv
 
     and save them to a json format as a single file (adding a field "Quality" and "BuildingUseType"). This file
     will be added as a resource to `Hive.IO.dll` that can then be read with `Hive.IO.Building.Sia2024Record`.

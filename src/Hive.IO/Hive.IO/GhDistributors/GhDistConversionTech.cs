@@ -8,9 +8,9 @@ using Rhino.Geometry;
 
 namespace Hive.IO.GhDistributors
 {
-    public class GhConversionTech : GH_Component
+    public class GhDistConversionTech : GH_Component
     {
-        public GhConversionTech()
+        public GhDistConversionTech()
           : base("Distributor ConversionTech Hive", "HiveDistConversionTech",
               "Distributor for Hive conversion technologies",
               "[hive]", "IO-Core")
