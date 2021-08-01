@@ -219,7 +219,14 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     U_value_floors = room_properties["U-Wert Boeden"]
     U_value_roofs = room_properties["U-Wert Daecher"]
     U_value_walls = room_properties["U-Wert Walls"]
-    U_value_windows = room_properties["U-Wert Fenster"]
+    U_value_windows = room_properties["U-Wert Fenster"]    
+    U_value_dict = {
+        "floor": U_value_floors, 
+        "roof": U_value_roofs, 
+        "wall": U_value_walls, 
+        "window": U_value_windows
+    }
+    
     Vdot_e_spec = room_properties["Aussenluft-Volumenstrom (pro NGF)"]
     Vdot_inf_spec = room_properties["Aussenluft-Volumenstrom durch Infiltration"]
     eta_rec = room_properties["Temperatur-Aenderungsgrad der Waermerueckgewinnung"]
@@ -249,10 +256,10 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     t_A = [A_total_hours] * MONTHS_PER_YEAR
     # transforming daily sia2024 data to monthly
     DAYS_PER_YEAR_float = float(DAYS_PER_YEAR)
-    for i in range(MONTHS_PER_YEAR):
-        t_P[i] *= DAYS_PER_MONTH[i] / DAYS_PER_YEAR_float
-        t_L[i] *= DAYS_PER_MONTH[i] / DAYS_PER_YEAR_float
-        t_A[i] *= DAYS_PER_MONTH[i] / DAYS_PER_YEAR_float
+    for month in range(MONTHS_PER_YEAR):
+        t_P[month] *= DAYS_PER_MONTH[month] / DAYS_PER_YEAR_float
+        t_L[month] *= DAYS_PER_MONTH[month] / DAYS_PER_YEAR_float
+        t_A[month] *= DAYS_PER_MONTH[month] / DAYS_PER_YEAR_float
 
          
     # IF setpoints given monthly for hourly simulation, they stay the same for entire month regardless of T_e.
@@ -364,10 +371,23 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     H_V = (Vdot_th / SECONDS_PER_HOUR) * RHO * C_P
     H_V_no_heat_recovery = (Vdot_th_no_heat_recovery / SECONDS_PER_HOUR) * RHO * C_P
     
+    # Transmission heat transfer coefficient (Transmissions-Wärmetransferkoeffizient), H_T
+    H_T = 0.0
+    H_T_op = 0.0
+    H_T_tr = 0.0
+    
+    for s_type, s_area in zip(surface_type, surface_areas):
+        h_t = s_area * U_value_dict[s_type]
+        if s_type == 'window':
+            H_T_tr += h_t
+        else:
+            H_T_op += h_t
+        H_T += h_t
+    
     # Natural ventilation (no infiltration ? TODO)
     if use_natural_ventilation and windows_count > 0:
         # TODO picks the first window as the window to ventilate. Should be selected by user?
-        window_for_nat_vent_idx = next((i for i, s in enumerate(surface_type) if s == "transp"), None)
+        window_for_nat_vent_idx = next((i for i, s in enumerate(surface_type) if s == "window"), None)
         # TODO assume fixed height of 1.5m as has significant influence on natural ventilation calc.
         h = 1.5
         w = surface_areas[window_for_nat_vent_idx] / h
@@ -417,37 +437,20 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
             
             Q_V_ub_nat_vent = H_V_ub_nat_vent * deltaT_ub
             Q_V_lb_nat_vent = H_V_lb_nat_vent * deltaT_lb
+        else:
+            # assigned but won't be used later
+            Q_V_ub_nat_vent = 0.0
+            Q_V_lb_nat_vent = 0.0
 
         # Internal loads (interne Wärmeeinträge)
         # Q_i = Phi_P * t_P + Phi_L * t_L + Phi_A * t_A
         Q_i = Phi_P * t_P[t] + Phi_L * t_L[t] + Phi_A * t_A[t]
 
         # Transmission heat losses, Q_T, both transparent and opaque
-        Q_T_op_ub = 0.0
-        Q_T_op_lb = 0.0
-        Q_T_tr_ub = 0.0
-        Q_T_tr_lb = 0.0
-
-        # TODO create H_T dict beforehand.
-        for surface in range(num_surfaces):
-            # Transmission heat transfer coefficient (Transmissions-Wärmetransferkoeffizient), H_T      
-            if surface_type[surface] == "floor":
-                H_T = surface_areas[surface] * U_value_floors
-                Q_T_op_ub += H_T * deltaT_ub
-                Q_T_op_lb += H_T * deltaT_lb
-                # TODO other surface types
-            elif surface_type[surface] == "roof":
-                H_T = surface_areas[surface] * U_value_roofs
-                Q_T_op_ub += H_T * deltaT_ub
-                Q_T_op_lb += H_T * deltaT_lb
-            elif surface_type[surface] == "wall":
-                H_T = surface_areas[surface] * U_value_walls
-                Q_T_op_ub += H_T * deltaT_ub
-                Q_T_op_lb += H_T * deltaT_lb
-            elif surface_type[surface] == "window":
-                H_T = surface_areas[surface] * U_value_windows
-                Q_T_tr_ub += H_T * deltaT_ub
-                Q_T_tr_lb += H_T * deltaT_lb
+        Q_T_op_ub = H_T_op * deltaT_ub
+        Q_T_op_lb = H_T_op * deltaT_lb
+        Q_T_tr_ub = H_T_tr * deltaT_ub
+        Q_T_tr_lb = H_T_tr * deltaT_lb
 
         # Transmission losses (Transmissionswärmeverluste), Q_T, upper and lower bounds for all surfaces
         Q_T_ub = Q_T_tr_ub + Q_T_op_ub
@@ -481,7 +484,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
             # tau = 126.0
             # tau_no_hr = tau
             # tau_heating_nat_vent = tau
-            # tau_cooling_nat_vent = tau00
+            # tau_cooling_nat_vent = tau
             
             # usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
             eta_g_heating = calc_eta_g(gamma_lb, tau)
@@ -890,25 +893,25 @@ if __name__ == "__main__":
         print("Q_Cool = " + str(sum(Q_Cool)))
         print("Q_Heat = " + str(sum(Q_Heat)))
         
-        t_start = 168 * HOURS_PER_DAY
-        t_end = t_start + 7 * HOURS_PER_DAY
+        # t_start = 168 * HOURS_PER_DAY
+        # t_end = t_start + 7 * HOURS_PER_DAY
         
-        import matplotlib.pyplot as plt
+        # import matplotlib.pyplot as plt
 
-        X = range(t_start, t_end)
-        plt.plot(X, Q_Cool[t_start:t_end], label='Q_Cool')
-        plt.plot(X, Q_Heat[t_start:t_end], label='Q_Heat')
-        plt.plot(X, Q_T[t_start:t_end], ':c', label='Q_T')
-        plt.plot(X, Q_V[t_start:t_end], ':b', label='Q_V')
-        plt.plot(X, Q_i[t_start:t_end], ':g', label='Q_i')
-        plt.plot(X, Q_s[t_start:t_end], ':r', label='Q_s')
+        # X = range(t_start, t_end)
+        # plt.plot(X, Q_Cool[t_start:t_end], label='Q_Cool')
+        # plt.plot(X, Q_Heat[t_start:t_end], label='Q_Heat')
+        # plt.plot(X, Q_T[t_start:t_end], ':c', label='Q_T')
+        # plt.plot(X, Q_V[t_start:t_end], ':b', label='Q_V')
+        # plt.plot(X, Q_i[t_start:t_end], ':g', label='Q_i')
+        # plt.plot(X, Q_s[t_start:t_end], ':r', label='Q_s')
         
         
-        plt.plot(X, kwargs['T_e_hourly'][t_start:t_end])
-        plt.plot(X, kwargs['T_i_ub_hourly'][t_start:t_end])
-        plt.plot(X, kwargs['T_i_lb_hourly'][t_start:t_end])
+        # plt.plot(X, kwargs['T_e_hourly'][t_start:t_end])
+        # plt.plot(X, kwargs['T_i_ub_hourly'][t_start:t_end])
+        # plt.plot(X, kwargs['T_i_lb_hourly'][t_start:t_end])
         
         
-        plt.show()
+        # plt.show()
     
     test()

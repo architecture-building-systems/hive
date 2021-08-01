@@ -1,6 +1,5 @@
 {
     "run_obstructed_simulation": false,
-    "hourly": true,
     "use_adaptive_comfort": false,
     "use_natural_ventilation": false,
     "g_value": 0.5,
@@ -18,14 +17,14 @@
         104.746356
     ],
     "surface_type": [
-        "transp",
-        "transp",
-        "opaque",
-        "opaque",
-        "opaque",
-        "opaque",
-        "opaque",
-        "opaque"
+        "window",
+        "window",
+        "wall",
+        "wall",
+        "wall",
+        "wall",
+        "roof",
+        "floor"
     ],
     "room_properties": {
         "description": "3.2 Grossraumbuero",
