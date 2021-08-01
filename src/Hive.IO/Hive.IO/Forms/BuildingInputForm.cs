@@ -34,6 +34,16 @@ namespace Hive.IO.Forms
 
         private void BuildingInputForm_Load(object sender, EventArgs e)
         {
+            // Set ToolTips
+            // Natural Ventilation
+            hizardToolTip.SetToolTip(this.checkBoxNaturalVentilation, toolTipNaturalVentilationInfoMessage);
+            hizardToolTip.SetToolTip(this.label43, toolTipNaturalVentilationInfoMessage);
+            // Setbacks
+            hizardToolTip.SetToolTip(this.txtHeatingSetback, toolTipSetbackInfoMessage);
+            hizardToolTip.SetToolTip(this.label38, toolTipSetbackInfoMessage);
+            hizardToolTip.SetToolTip(this.txtCoolingSetback, toolTipSetbackInfoMessage);
+            hizardToolTip.SetToolTip(this.label41, toolTipSetbackInfoMessage);
+
             RenderState();
         }
 
@@ -79,12 +89,12 @@ namespace Hive.IO.Forms
             txtWinArea.Text = State.ZoneWindowArea;
             txtRoofArea.Text = State.ZoneRoofArea;
 
-            txtHeatingSetPoint.Text = State.HeatingSetpoint;
-            txtCoolingSetPoint.Text = State.CoolingSetpoint;
-            txtHeatingSetback.Text = State.HeatingSetback;
-            txtCoolingSetback.Text = State.CoolingSetback;
-
             checkBoxAdaptiveComfort.Checked = State.RunAdaptiveComfort;
+
+            UpdateTextBox(txtHeatingSetPoint, !State.RunAdaptiveComfort);
+            UpdateTextBox(txtCoolingSetPoint, !State.RunAdaptiveComfort);
+            UpdateTextBox(txtHeatingSetback, !State.RunAdaptiveComfort);
+            UpdateTextBox(txtCoolingSetback, !State.RunAdaptiveComfort);
         }
 
         private void cboBuildingUseType_SelectedIndexChanged(object sender, EventArgs e)
@@ -161,6 +171,8 @@ namespace Hive.IO.Forms
             UpdateTextBox(txtAirChangeRate);
             UpdateTextBox(txtInfiltration);
             UpdateTextBox(txtHeatRecovery);
+
+            checkBoxNaturalVentilation.Checked = State.RunNaturalVentilation;
         }
 
         /// <summary>
@@ -172,11 +184,11 @@ namespace Hive.IO.Forms
         /// </summary>
         /// <param name="textBox"></param>
         /// <param name="stateProperty"></param>
-        private void UpdateTextBox(TextBox textBox)
+        private void UpdateTextBox(TextBox textBox, bool? overrideEditable = null)
         {
             var stateProperty = textBox.Tag.ToString();
             textBox.Text = State.GetType().GetProperty(stateProperty).GetValue(State) as string;
-            textBox.Enabled = State.IsEditable;
+            textBox.Enabled = overrideEditable == null ? State.IsEditable : (bool)overrideEditable;
 
             if (State.IsEditable)
             {
@@ -224,25 +236,23 @@ namespace Hive.IO.Forms
                     "12.12 Serverraum"
             }.Contains(room_type);
 
-        private ToolTip toolTipAdaptiveComfort = new ToolTip() { InitialDelay = 100};
-        
-        private const string toolTipAdaptiveComfortInfoMessage = "Adaptive Comfort adjusts setpoints dynamically" +
-                "based on ambient temperature \nand assumptions about metabolic rates and clothing factors.";
-        private string toolTipAdaptiveComfortWarningMessage(string roomType) =>
-            toolTipAdaptiveComfortInfoMessage +
-                "\n\nWARNING: Adaptive Comfort is likely not appropriate \n" +
-                $"for room type {roomType}";
 
-        private void adaptiveComfortCheck_CheckedChanged(object sender, EventArgs e)
+        private void checkBoxAdaptiveComfort_CheckedChanged(object sender, EventArgs e)
         {
-            if (checkBoxAdaptiveComfort.Checked)
+            if (_rendering)
             {
-                var toolTipMessage = toolTipAdaptiveComfortInfoMessage;
-                if (!ShouldSetpointsBeAdaptive(cboRoomType.Text))
-                {
-                    toolTipMessage = toolTipAdaptiveComfortWarningMessage(cboBuildingUseType.Text);
-                }
-                toolTipAdaptiveComfort.Show(toolTipMessage, (CheckBox)sender);
+                return;
+            }
+
+            var checkBox = (CheckBox)sender;
+
+            hizardToolTip.SetToolTip(checkBox,
+                ShouldSetpointsBeAdaptive(State.RoomType)
+                ? toolTipAdaptiveComfortInfoMessage
+                : toolTipAdaptiveComfortWarningMessage(State.RoomType));
+
+            if (checkBox.Checked)
+            {
                 txtHeatingSetPoint.Enabled = false;
                 txtCoolingSetPoint.Enabled = false;
                 txtHeatingSetback.Enabled = false;
@@ -252,13 +262,49 @@ namespace Hive.IO.Forms
             {
                 txtHeatingSetPoint.Enabled = true;
                 txtCoolingSetPoint.Enabled = true;
-                txtHeatingSetback.Enabled = true;
-                txtCoolingSetback.Enabled = true;
+                //txtHeatingSetback.Enabled = true;
+                //txtCoolingSetback.Enabled = true;
             }
 
-            State.RunAdaptiveComfort = checkBoxAdaptiveComfort.Checked;
+            State.RunAdaptiveComfort = checkBox.Checked;
 
             RenderState();
         }
+
+        private void checkBoxNaturalVentilation_CheckedChanged(object sender, EventArgs e)
+        {
+            if (_rendering)
+            {
+                return;
+            }
+
+            var checkBox = (CheckBox)sender;
+            State.RunNaturalVentilation = checkBox.Checked;
+
+            RenderState();
+        }
+
+        #region ToolTips
+
+        private ToolTip hizardToolTip = new ToolTip() { InitialDelay = 100 };
+
+        private const string toolTipAdaptiveComfortInfoMessage = "Adaptive Comfort adjusts setpoints dynamically " +
+                "based on ambient temperature \nand assumptions about metabolic rates and clothing factors.";
+        private string toolTipAdaptiveComfortWarningMessage(string roomType) =>
+            toolTipAdaptiveComfortInfoMessage +
+            "\n\nWARNING: Adaptive Comfort is likely not appropriate \n" +
+            $"for room type {roomType}";
+
+        private const string toolTipNaturalVentilationInfoMessage = "Natural Ventilation enables single sided natural ventilation" + "\n" +
+            "based on simplified calculations of CIBSE AM10: Natural Ventilation in Non-Domestic Buildings";
+
+        private const string toolTipSetbackInfoMessage = "Only used during hourly demand calculation, which is currently WIP";
+
+        private void textBoxSetback_MouseHover(object sender, EventArgs e)
+        {
+            hizardToolTip.Show(toolTipSetbackInfoMessage, (TextBox)sender);
+        }
+
+        #endregion ToolTips
     }
 }

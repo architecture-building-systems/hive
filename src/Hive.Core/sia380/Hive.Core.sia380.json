@@ -32,7 +32,6 @@
         {"type": "float", "name": "G value with sunscreen", "nick-name": "gValueTotal", "description": "G value total including sunscreen ('Sonnenschutz') of windows", "access": "item"},
         {"type": "float", "name": "Setpoint sunscreen", "nick-name": "SetpointSunscreen", "description": "Shading setpoint for activating sunscreen of windows, in W/m^2", "access": "item"},
         {"type": "boolean", "name": "Run obstructed solar simulation?", "nick-name": "RunObstructed?", "description": "Boolean to indicate if an obstructed solar simulation is conducted. True if yes.", "access": "item"},
-        {"type": "boolean", "name": "Run hourly?", "nick-name": "RunHourly?", "description": "Boolean to indicate if to run monthly or hourly simulations. True if hourly.", "access": "item"},
         {"type": "boolean", "name": "Use adaptive comfort?", "nick-name": "UseAdaptiveComfort?", "description": "Boolean to indicate if adaptive comfort should be used instead of fixed setpoints. True if yes. Defaults to yes if setpoints_ub and setpoints_lb are null.", "access": "item"},
         {"type": "boolean", "name": "Use natural ventilation?", "nick-name": "UseNaturalVentilation?", "description": "Boolean to indicate if natural ventilation should be considered (True) or not (False).", "access": "item"}
       ],

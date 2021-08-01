@@ -35,6 +35,7 @@ namespace Hive.IO.GhDistributors
             pManager.AddTextParameter("Surface Type", "SrfType", "External surface type: 'opaque' or 'transp'.", GH_ParamAccess.list);
             pManager.AddTextParameter("SUA Room Schedules", "SiaRoomSchedules", "Schedules for occupancy, devices, lighting, amd setpoints.", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Use Adaptive Comfort", "UseAdaptiveComfort", "Determines whether to use adaptive comfort (true) or SIA 2024 setpoints (false)", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Use Natural Ventilation", "UseNatVent", "Use natural ventilation in the demand calculation. Based on simplified single sided ventilation", GH_ParamAccess.item);
         }
 
 
@@ -118,6 +119,7 @@ namespace Hive.IO.GhDistributors
             DA.SetDataList(5, srfTypes);
             DA.SetData(6, Sia2024Schedules.ToJson(zones_schedules[0].RoomType)); // single zone !!
             DA.SetData(7, building.Zones[0].RunAdaptiveComfort); // single zone !!
+            DA.SetData(8, building.Zones[0].RunNaturalVentilation); // single zone !!
         }
 
 
