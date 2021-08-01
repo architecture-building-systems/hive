@@ -295,7 +295,13 @@ namespace Hive.IO.Building
         /// <summary>
         /// Determines if adaptive comfort should be used instead of setpoints from SIA 2024.
         /// </summary>
+        [JsonProperty]
         public bool RunAdaptiveComfort { get; set; }
+        /// <summary>
+        /// Determines if natural ventilation should be used in the demand calculations
+        /// </summary>
+        [JsonProperty]
+        public bool RunNaturalVentilation { get; set; }
 
         #endregion
 

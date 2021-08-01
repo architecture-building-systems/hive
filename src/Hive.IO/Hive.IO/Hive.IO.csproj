@@ -153,11 +153,12 @@
     <Compile Include="Forms\VisualizerPlotProperties.Designer.cs">
       <DependentUpon>VisualizerPlotProperties.cs</DependentUpon>
     </Compile>
-    <Compile Include="GhDistributors\GhConversionTech.cs" />
-    <Compile Include="GhDistributors\GhEnvironment.cs" />
-    <Compile Include="GhDistributors\GhSIA.cs" />
-    <Compile Include="GhDistributors\GhSolarSimulation.cs" />
-    <Compile Include="GhDistributors\GhSolarTech.cs" />
+    <Compile Include="GhDistributors\GhDistConversionTech.cs" />
+    <Compile Include="GhDistributors\GhDistEmitter.cs" />
+    <Compile Include="GhDistributors\GhDistEnvironment.cs" />
+    <Compile Include="GhDistributors\GhDistSIA.cs" />
+    <Compile Include="GhDistributors\GhDistSolarSimulation.cs" />
+    <Compile Include="GhDistributors\GhDistSolarTech.cs" />
     <Compile Include="GhInputOutput\GhResultsParameter.cs" />
     <Compile Include="GhMergers\GhChiller.cs" />
     <Compile Include="GhMergers\GhCHP.cs" />
@@ -375,7 +376,9 @@
   <ItemGroup>
     <None Include="Resources\IO_Para_InputSolarTech.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <None Include="Resources\IOCore_DistEmitter.png" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -395,5 +398,6 @@
     <StartArguments>
     </StartArguments>
     <StartAction>Program</StartAction>
+    <DocumentationFile>bin\Hive.IO.xml</DocumentationFile>
   </PropertyGroup>
 </Project>

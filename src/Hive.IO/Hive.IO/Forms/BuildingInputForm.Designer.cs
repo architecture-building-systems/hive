@@ -131,6 +131,8 @@ namespace Hive.IO.Forms
             this.txtAirChangeRate = new System.Windows.Forms.TextBox();
             this.txtInfiltration = new System.Windows.Forms.TextBox();
             this.txtHeatRecovery = new System.Windows.Forms.TextBox();
+            this.label43 = new System.Windows.Forms.Label();
+            this.checkBoxNaturalVentilation = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabSIA.SuspendLayout();
             this.tableLayoutSiaMain.SuspendLayout();
@@ -264,8 +266,8 @@ namespace Hive.IO.Forms
             this.panelSiaProperties.Location = new System.Drawing.Point(6, 247);
             this.panelSiaProperties.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panelSiaProperties.Name = "panelSiaProperties";
-            this.panelSiaProperties.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.panelSiaProperties.Size = new System.Drawing.Size(344, 143);
+            this.panelSiaProperties.Padding = new System.Windows.Forms.Padding(5);
+            this.panelSiaProperties.Size = new System.Drawing.Size(483, 167);
             this.panelSiaProperties.TabIndex = 0;
             // 
             // tableLayoutSiaProperties
@@ -451,7 +453,8 @@ namespace Hive.IO.Forms
             this.txtHeatingSetPoint.Name = "txtHeatingSetPoint";
             this.txtHeatingSetPoint.Size = new System.Drawing.Size(81, 20);
             this.txtHeatingSetPoint.TabIndex = 12;
-            this.txtHeatingSetPoint.Tag = "SetpointHeating";
+            this.txtHeatingSetPoint.Tag = "HeatingSetpoint";
+            this.txtHeatingSetPoint.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
             // txtCoolingSetPoint
             // 
@@ -463,7 +466,8 @@ namespace Hive.IO.Forms
             this.txtCoolingSetPoint.Name = "txtCoolingSetPoint";
             this.txtCoolingSetPoint.Size = new System.Drawing.Size(81, 20);
             this.txtCoolingSetPoint.TabIndex = 13;
-            this.txtCoolingSetPoint.Tag = "SetpointCooling";
+            this.txtCoolingSetPoint.Tag = "CoolingSetpoint";
+            this.txtCoolingSetPoint.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
             // label41
             // 
@@ -497,7 +501,8 @@ namespace Hive.IO.Forms
             this.txtHeatingSetback.Name = "txtHeatingSetback";
             this.txtHeatingSetback.Size = new System.Drawing.Size(81, 20);
             this.txtHeatingSetback.TabIndex = 17;
-            this.txtHeatingSetback.Tag = "SetbackHeating";
+            this.txtHeatingSetback.Tag = "HeatingSetback";
+            this.txtHeatingSetback.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
             // txtCoolingSetback
             // 
@@ -509,7 +514,8 @@ namespace Hive.IO.Forms
             this.txtCoolingSetback.Name = "txtCoolingSetback";
             this.txtCoolingSetback.Size = new System.Drawing.Size(81, 20);
             this.txtCoolingSetback.TabIndex = 18;
-            this.txtCoolingSetback.Tag = "SetbackCooling";
+            this.txtCoolingSetback.Tag = "CoolingSetback";
+            this.txtCoolingSetback.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
             // checkBoxAdaptiveComfort
             // 
@@ -525,7 +531,7 @@ namespace Hive.IO.Forms
             this.checkBoxAdaptiveComfort.TabIndex = 20;
             this.checkBoxAdaptiveComfort.Text = "Adaptive?";
             this.checkBoxAdaptiveComfort.UseVisualStyleBackColor = true;
-            this.checkBoxAdaptiveComfort.CheckedChanged += new System.EventHandler(this.adaptiveComfortCheck_CheckedChanged);
+            this.checkBoxAdaptiveComfort.CheckedChanged += new System.EventHandler(this.checkBoxAdaptiveComfort_CheckedChanged);
             // 
             // label1
             // 
@@ -1364,13 +1370,15 @@ namespace Hive.IO.Forms
             this.tableLayoutVentilation.Controls.Add(this.txtAirChangeRate, 0, 1);
             this.tableLayoutVentilation.Controls.Add(this.txtInfiltration, 0, 3);
             this.tableLayoutVentilation.Controls.Add(this.txtHeatRecovery, 0, 5);
+            this.tableLayoutVentilation.Controls.Add(this.label43, 0, 6);
+            this.tableLayoutVentilation.Controls.Add(this.checkBoxNaturalVentilation, 0, 8);
             this.tableLayoutVentilation.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutVentilation.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutVentilation.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutVentilation.Name = "tableLayoutVentilation";
             this.tableLayoutVentilation.Padding = new System.Windows.Forms.Padding(4, 8, 4, 4);
             this.tableLayoutVentilation.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.tableLayoutVentilation.RowCount = 7;
+            this.tableLayoutVentilation.RowCount = 9;
             this.tableLayoutVentilation.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutVentilation.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutVentilation.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -1378,7 +1386,10 @@ namespace Hive.IO.Forms
             this.tableLayoutVentilation.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutVentilation.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutVentilation.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutVentilation.Size = new System.Drawing.Size(360, 416);
+            this.tableLayoutVentilation.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutVentilation.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutVentilation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tableLayoutVentilation.Size = new System.Drawing.Size(505, 567);
             this.tableLayoutVentilation.TabIndex = 1;
             // 
             // label39
@@ -1446,6 +1457,29 @@ namespace Hive.IO.Forms
             this.txtHeatRecovery.TabIndex = 11;
             this.txtHeatRecovery.Tag = "HeatRecovery";
             this.txtHeatRecovery.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
+            // 
+            // label43
+            // 
+            this.label43.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label43.AutoSize = true;
+            this.label43.Location = new System.Drawing.Point(8, 192);
+            this.label43.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(241, 17);
+            this.label43.TabIndex = 13;
+            this.label43.Text = "Natural Ventilation?";
+            // 
+            // checkBoxNaturalVentilation
+            // 
+            this.checkBoxNaturalVentilation.AutoSize = true;
+            this.checkBoxNaturalVentilation.Location = new System.Drawing.Point(8, 216);
+            this.checkBoxNaturalVentilation.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
+            this.checkBoxNaturalVentilation.Name = "checkBoxNaturalVentilation";
+            this.checkBoxNaturalVentilation.Size = new System.Drawing.Size(74, 21);
+            this.checkBoxNaturalVentilation.TabIndex = 14;
+            this.checkBoxNaturalVentilation.Text = "Enable";
+            this.checkBoxNaturalVentilation.UseVisualStyleBackColor = true;
+            this.checkBoxNaturalVentilation.CheckedChanged += new System.EventHandler(this.checkBoxNaturalVentilation_CheckedChanged);
             // 
             // BuildingInputForm
             // 
@@ -1588,5 +1622,7 @@ namespace Hive.IO.Forms
         private ComboBox cboBuildingQuality;
         private TextBox txtRoomCapacitance;
         private Label label44;
+        private Label label43;
+        private CheckBox checkBoxNaturalVentilation;
     }
 }
