@@ -123,44 +123,50 @@ namespace Hive.IO.Building
 
         #region Construction
 
-        public string ConstructionType { get; set; } = "undefined";
-        public string RoofsConstructionType { get; set; } = "undefined";
-        public string FloorsConstructionType { get; set; } = "undefined";
-        public string WallsConstructionType { get; set; } = "undefined";
+        public string ConstructionType;
+        public string RoofsConstructionType;
+        public string FloorsConstructionType;
+        public string WallsConstructionType;
 
-
-        public void ApplySia380ConstructionAssembly(string siaConstructionType)
+        /// <summary>
+        /// Applies a SIA 380 construction template based on the key (a.k.a. name).
+        /// </summary>
+        /// <param name="siaConstructionType">The name of the SIA 380 template construction type.</param>
+        public Zone ApplySia380ConstructionAssembly(string siaConstructionType)
         {
             //foreach (var wall in Walls) wall.Construction = siaConstruction.WallsConstruction;
             //foreach (var floor in Floors) floor.Construction = siaConstruction.FloorsConstruction;
             //foreach (var roof in Roofs) roof.Construction = siaConstruction.RoofsConstruction;
             //foreach (var window in Windows) window.Construction = siaConstruction.WindowsConstruction;
-            var siaConstruction = Sia380Constructions.Lookup(siaConstructionType);
+            Sia380ConstructionAssembly siaConstruction = Sia380Constructions.Lookup(siaConstructionType);
             ConstructionType = siaConstruction.Name;
             CapacitancePerFloorArea = siaConstruction.CapacitancePerFloorArea;
+            siaConstruction.SetCapacities(FloorsArea, WallsArea, RoofsArea);
+
+            return this;
         }
 
         internal void ApplySia380RoofsConstruction(string siaConstructionType)
         {
             RoofsConstructionType = siaConstructionType;
-            var siaConstruction = Sia380Constructions.Lookup(siaConstructionType);
-            for (int i = 0; i < Roofs.Count(); i++)
+            Sia380ConstructionAssembly siaConstruction = Sia380Constructions.Lookup(siaConstructionType);
+            for (int i = 0; i < Roofs.Length; i++)
                 Roofs[i].Construction = siaConstruction.RoofsConstruction;
         }
 
         internal void ApplySia380FloorsConstruction(string siaConstructionType)
         {
             FloorsConstructionType = siaConstructionType;
-            var siaConstruction = Sia380Constructions.Lookup(siaConstructionType);
-            for (int i = 0; i < Floors.Count(); i++)
+            Sia380ConstructionAssembly siaConstruction = Sia380Constructions.Lookup(siaConstructionType);
+            for (int i = 0; i < Floors.Length; i++)
                 Floors[i].Construction = siaConstruction.FloorsConstruction;
         }
 
         internal void ApplySia380WallsConstruction(string siaConstructionType)
         {
             WallsConstructionType = siaConstructionType;
-            var siaConstruction = Sia380Constructions.Lookup(siaConstructionType);
-            for (int i = 0; i < Walls.Count(); i++)
+            Sia380ConstructionAssembly siaConstruction = Sia380Constructions.Lookup(siaConstructionType);
+            for (int i = 0; i < Walls.Length; i++)
                 Walls[i].Construction = siaConstruction.WallsConstruction;
         }
 
@@ -178,38 +184,32 @@ namespace Hive.IO.Building
 
         double RoofsCapacity
         {
-            get
-            {
-                return _roofsCapacitance ?? Roofs.Select(r => r.Construction.Capacitance).Sum();
-            }
+            get => _roofsCapacitance ?? Roofs.Select(r => r.Construction.Capacitance).Sum();
             set
             {
-                foreach (var roof in Roofs) roof.Construction.Capacitance = value * (roof.Area / RoofsArea);
+                foreach (Roof roof in Roofs)
+                {
+                    roof.Construction.Capacitance = value * (roof.Area / RoofsArea);
+                }
             }
         }
 
         double FloorsCapacity
         {
-            get
-            {
-                return _floorsCapacitance ?? Roofs.Select(r => r.Construction.Capacitance).Sum();
-            }
+            get => _floorsCapacitance ?? Roofs.Select(r => r.Construction.Capacitance).Sum();
             set
             {
-                foreach (var roof in Roofs) roof.Construction.Capacitance = value * (roof.Area / FloorsArea);
+                foreach (Floor floor in Floors) floor.Construction.Capacitance = value * (floor.Area / FloorsArea);
                 _floorsCapacitance = value;
             }
         }
 
         double WallsCapacity
         {
-            get
-            {
-                return _wallsCapacitance ?? Walls.Select(w => w.Construction.Capacitance).Sum();
-            }
+            get => _wallsCapacitance ?? Walls.Select(w => w.Construction.Capacitance).Sum();
             set
             {
-                foreach (var wall in Walls) wall.Construction.Capacitance = value * (wall.Area / WallsArea);
+                foreach (Wall wall in Walls) wall.Construction.Capacitance = value * (wall.Area / WallsArea);
                 _wallsCapacitance = value;
             }
         }

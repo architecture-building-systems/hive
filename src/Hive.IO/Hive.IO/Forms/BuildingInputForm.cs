@@ -37,7 +37,7 @@ namespace Hive.IO.Forms
             // Set ToolTips
             // Natural Ventilation
             hizardToolTip.SetToolTip(this.checkBoxNaturalVentilation, toolTipNaturalVentilationInfoMessage);
-            hizardToolTip.SetToolTip(this.label43, toolTipNaturalVentilationInfoMessage);
+            hizardToolTip.SetToolTip(this.label45, toolTipNaturalVentilationInfoMessage);
             // Setbacks
             hizardToolTip.SetToolTip(this.txtHeatingSetback, toolTipSetbackInfoMessage);
             hizardToolTip.SetToolTip(this.label38, toolTipSetbackInfoMessage);
@@ -86,7 +86,7 @@ namespace Hive.IO.Forms
             cboBuildingConstruction.SelectedItem = State.Construction;
             cboBuildingConstruction.Enabled = State.IsEditable;
 
-            UpdateTextBox(txtRoomCapacitance);
+            UpdateTextBox(txtCapacitancePerFloorArea);
         }
 
         private void UpdateSiaPropertiesPanel()
@@ -358,11 +358,6 @@ namespace Hive.IO.Forms
             State.RunNaturalVentilation = checkBox.Checked;
 
             RenderState();
-        }
-
-        private void txtRoomCapacitance_TextChanged(object sender, EventArgs e)
-        {
-
         }
         
         #region ToolTips

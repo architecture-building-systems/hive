@@ -27,22 +27,57 @@ namespace Hive.IO.Building
         [JsonProperty(Required = Required.Default)]
         public double RoofsCapacity => RoofsConstruction?.Capacitance ?? CapacitancePerFloorArea;
 
+        public string Name => ConstructionType;
+
         public void SetCapacities(double floorArea, double wallArea, double roofArea)
         {
-            var all_areas = floorArea + wallArea + roofArea;
-            WallsConstruction = new OpaqueConstruction(Name)
+            var areas = floorArea + wallArea + roofArea;
+            var capacitanceRoom = CapacitancePerFloorArea * floorArea;
+
+            // Set walls
+            if (WallsConstruction != null)
             {
-                Capacitance = CapacitancePerFloorArea * wallArea / all_areas
-            };
-            FloorsConstruction = new OpaqueConstruction(Name)
+                WallsConstruction.Capacitance = capacitanceRoom * wallArea / areas;
+            }
+            else
             {
-                Capacitance = CapacitancePerFloorArea * floorArea / all_areas
-            };
-            RoofsConstruction = new OpaqueConstruction(Name)
+                WallsConstruction = new OpaqueConstruction(Name)
+                {
+                    Capacitance = capacitanceRoom * wallArea / areas
+                };
+            }
+
+            // Set floors
+            if (FloorsConstruction != null)
             {
-                Capacitance = CapacitancePerFloorArea * roofArea / all_areas
-            };
-            WindowsConstruction = new TransparentConstruction(Name);
+                FloorsConstruction.Capacitance = capacitanceRoom * floorArea / areas;
+            }
+            else
+            {
+                FloorsConstruction = new OpaqueConstruction(Name)
+                {
+                    Capacitance = capacitanceRoom * floorArea / areas
+                };
+            }
+
+            // Set roofs
+            if (RoofsConstruction != null)
+            {
+                RoofsConstruction.Capacitance = capacitanceRoom * roofArea / areas;
+            }
+            else
+            {
+                RoofsConstruction = new OpaqueConstruction(Name)
+                {
+                    Capacitance = capacitanceRoom * roofArea / areas
+                };
+            }
+
+            // Set windows
+            if (WindowsConstruction != null)
+            {
+                WindowsConstruction = new TransparentConstruction(Name);
+            }
         }
     }
 

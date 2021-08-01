@@ -29,11 +29,6 @@ namespace Hive.IO.Building
         public BuildingType Type { get; private set; }
 
         /// <summary>
-        /// Describes the building construction generically, e.g. lightweight, heavyweight, etc.
-        /// </summary>
-        public BuildingConstructionAssemblyTypes ConstructionType { get; private set; }
-
-        /// <summary>
         /// Building properties, such as U-values, infiltration, etc., according to SIA2024
         /// </summary>
         public Sia2024Record SIA2024 { get; private set; }
@@ -114,18 +109,6 @@ namespace Hive.IO.Building
         Laboratory,
         Supermarket,
         School,
-        Undefined
-    }
-
-    /// <summary>
-    /// Building construction types
-    /// </summary>
-    public enum BuildingConstructionAssemblyTypes
-    {
-        SuperLightWeight,
-        LightWeight,
-        MediumWeight,
-        HeavyWeight,
         Undefined
     }
 }

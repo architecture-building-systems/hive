@@ -216,6 +216,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     tau = room_properties["Zeitkonstante"]
     C_m = room_properties["Waermespeicherfaehigkeit des Raumes"]
     # U_value_opaque = room_properties["U-Wert opake Bauteile"]
+    # U_value_transparent = room_properties["U-Wert Fenster"]
     U_value_floors = room_properties["U-Wert Boeden"]
     U_value_roofs = room_properties["U-Wert Daecher"]
     U_value_walls = room_properties["U-Wert Walls"]
@@ -495,7 +496,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
                 eta_g_heating_nat_vent = calc_eta_g(gamma_lb_nat_vent, tau_heating_nat_vent)
                 eta_g_cooling_nat_vent = calc_eta_g(gamma_ub_nat_vent, tau_cooling_nat_vent, cooling=True)
             else:
-                # these won't be used anyways, just to avoid missing variables exception
+                # assigned but won't be used later
                 eta_g_heating_nat_vent = 1.0
                 eta_g_cooling_nat_vent = 1.0
         else:

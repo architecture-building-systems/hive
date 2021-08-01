@@ -134,7 +134,8 @@ namespace Hive.IO.Building
 
             OpaqueConstruction opaqueConstruction = new OpaqueConstruction("SIA2024_Opaque")
             {
-                UValue = siaRoom.UValueOpaque
+                UValue = siaRoom.UValueOpaque,
+                Capacitance = siaRoom.CapacitancePerFloorArea
             };
             this.SpecificCo2 = siaRoom.OpaqueEmissions;
             this.SpecificCost = siaRoom.OpaqueCost;

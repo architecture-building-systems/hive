@@ -92,6 +92,10 @@ namespace Hive.IO.Forms
                 RaisePropertyChangedEvent(nameof(RunAdaptiveComfort));
                 RaisePropertyChangedEvent(nameof(RunNaturalVentilation));
 
+                //RaisePropertyChangedEvent(nameof(CapacityWalls));
+                //RaisePropertyChangedEvent(nameof(CapacityFloors));
+                //RaisePropertyChangedEvent(nameof(CapacityRoofs));
+
                 var properties = new[]
                 {
                     "UValueTransparent",
@@ -118,9 +122,9 @@ namespace Hive.IO.Forms
                     "UValueFloors",
                     "UValueRoofs",
                     "UValueWalls",
-                    // "CapacityFloors",
-                    // "CapacityRoofs",
-                    // "CapacityWalls",
+                    //"CapacityFloors",
+                    //"CapacityRoofs",
+                    //"CapacityWalls",
                     "CostFloors",
                     "CostRoofs",
                     "CostWalls",
@@ -202,7 +206,7 @@ namespace Hive.IO.Forms
             get => _zone.ConstructionType ?? "undefined";
             set
             {
-                _zone.ApplySia380ConstructionAssembly(value);
+                _zone = _zone.ApplySia380ConstructionAssembly(value);
                 RaisePropertyChangedEvent();
                 RaiseAllPropertiesChangedEvent();
             }
