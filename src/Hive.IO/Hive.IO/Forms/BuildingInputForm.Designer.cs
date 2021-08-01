@@ -211,7 +211,7 @@ namespace Hive.IO.Forms
             this.panelSiaProperties.Location = new System.Drawing.Point(8, 389);
             this.panelSiaProperties.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.panelSiaProperties.Name = "panelSiaProperties";
-            this.panelSiaProperties.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.panelSiaProperties.Padding = new System.Windows.Forms.Padding(5);
             this.panelSiaProperties.Size = new System.Drawing.Size(483, 167);
             this.panelSiaProperties.TabIndex = 0;
             // 
@@ -464,7 +464,7 @@ namespace Hive.IO.Forms
             this.checkBoxAdaptiveComfort.TabIndex = 20;
             this.checkBoxAdaptiveComfort.Text = "Adaptive?";
             this.checkBoxAdaptiveComfort.UseVisualStyleBackColor = true;
-            this.checkBoxAdaptiveComfort.CheckedChanged += new System.EventHandler(this.adaptiveComfortCheck_CheckedChanged);
+            this.checkBoxAdaptiveComfort.CheckedChanged += new System.EventHandler(this.checkBoxAdaptiveComfort_CheckedChanged);
             // 
             // label1
             // 

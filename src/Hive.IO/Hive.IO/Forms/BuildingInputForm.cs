@@ -34,13 +34,15 @@ namespace Hive.IO.Forms
 
         private void BuildingInputForm_Load(object sender, EventArgs e)
         {
-            ToolTip toolTip1 = new ToolTip();
-            toolTip1.InitialDelay = 100;
-            string toolTipNaturalVentilationInfoMessage = "Natural Ventilation enables single sided natural ventilation" + "\n" +
-                "based on simplified calculations of CIBSE AM10: Natural Ventilation in Non-Domestic Buildings";
-
-            toolTip1.SetToolTip(this.checkBoxNaturalVentilation, toolTipNaturalVentilationInfoMessage);
-            toolTip1.SetToolTip(this.label43, toolTipNaturalVentilationInfoMessage);
+            // Set ToolTips
+            // Natural Ventilation
+            hizardToolTip.SetToolTip(this.checkBoxNaturalVentilation, toolTipNaturalVentilationInfoMessage);
+            hizardToolTip.SetToolTip(this.label43, toolTipNaturalVentilationInfoMessage);
+            // Setbacks
+            hizardToolTip.SetToolTip(this.txtHeatingSetback, toolTipSetbackInfoMessage);
+            hizardToolTip.SetToolTip(this.label38, toolTipSetbackInfoMessage);
+            hizardToolTip.SetToolTip(this.txtCoolingSetback, toolTipSetbackInfoMessage);
+            hizardToolTip.SetToolTip(this.label41, toolTipSetbackInfoMessage);
 
             RenderState();
         }
@@ -234,16 +236,8 @@ namespace Hive.IO.Forms
                     "12.12 Serverraum"
             }.Contains(room_type);
 
-        private ToolTip toolTipAdaptiveComfort = new ToolTip() { InitialDelay = 100};
-        
-        private const string toolTipAdaptiveComfortInfoMessage = "Adaptive Comfort adjusts setpoints dynamically " +
-                "based on ambient temperature \nand assumptions about metabolic rates and clothing factors.";
-        private string toolTipAdaptiveComfortWarningMessage(string roomType) =>
-            toolTipAdaptiveComfortInfoMessage +
-            "\n\nWARNING: Adaptive Comfort is likely not appropriate \n" +
-            $"for room type {roomType}";
 
-        private void adaptiveComfortCheck_CheckedChanged(object sender, EventArgs e)
+        private void checkBoxAdaptiveComfort_CheckedChanged(object sender, EventArgs e)
         {
             if (_rendering)
             {
@@ -252,14 +246,13 @@ namespace Hive.IO.Forms
 
             var checkBox = (CheckBox)sender;
 
+            hizardToolTip.SetToolTip(checkBox,
+                ShouldSetpointsBeAdaptive(State.RoomType)
+                ? toolTipAdaptiveComfortInfoMessage
+                : toolTipAdaptiveComfortWarningMessage(State.RoomType));
+
             if (checkBox.Checked)
             {
-                var toolTipMessage = toolTipAdaptiveComfortInfoMessage;
-                if (!ShouldSetpointsBeAdaptive(State.RoomType))
-                {
-                    toolTipMessage = toolTipAdaptiveComfortWarningMessage(State.RoomType);
-                }
-                toolTipAdaptiveComfort.Show(toolTipMessage, checkBox);
                 txtHeatingSetPoint.Enabled = false;
                 txtCoolingSetPoint.Enabled = false;
                 txtHeatingSetback.Enabled = false;
@@ -269,8 +262,8 @@ namespace Hive.IO.Forms
             {
                 txtHeatingSetPoint.Enabled = true;
                 txtCoolingSetPoint.Enabled = true;
-                txtHeatingSetback.Enabled = true;
-                txtCoolingSetback.Enabled = true;
+                //txtHeatingSetback.Enabled = true;
+                //txtCoolingSetback.Enabled = true;
             }
 
             State.RunAdaptiveComfort = checkBox.Checked;
@@ -291,5 +284,27 @@ namespace Hive.IO.Forms
             RenderState();
         }
 
+        #region ToolTips
+
+        private ToolTip hizardToolTip = new ToolTip() { InitialDelay = 100 };
+
+        private const string toolTipAdaptiveComfortInfoMessage = "Adaptive Comfort adjusts setpoints dynamically " +
+                "based on ambient temperature \nand assumptions about metabolic rates and clothing factors.";
+        private string toolTipAdaptiveComfortWarningMessage(string roomType) =>
+            toolTipAdaptiveComfortInfoMessage +
+            "\n\nWARNING: Adaptive Comfort is likely not appropriate \n" +
+            $"for room type {roomType}";
+
+        private const string toolTipNaturalVentilationInfoMessage = "Natural Ventilation enables single sided natural ventilation" + "\n" +
+            "based on simplified calculations of CIBSE AM10: Natural Ventilation in Non-Domestic Buildings";
+
+        private const string toolTipSetbackInfoMessage = "Only used during hourly demand calculation, which is currently WIP";
+
+        private void textBoxSetback_MouseHover(object sender, EventArgs e)
+        {
+            hizardToolTip.Show(toolTipSetbackInfoMessage, (TextBox)sender);
+        }
+
+        #endregion ToolTips
     }
 }
