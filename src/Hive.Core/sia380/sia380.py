@@ -48,7 +48,7 @@ def cleanDictForNaN(d):
 
 def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly, T_i_lb_hourly, surface_areas, surface_type,
          srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, 
-         run_obstructed_simulation, use_adaptive_comfort, use_natural_ventilation, debug=False):
+         run_obstructed_simulation, hourly, use_adaptive_comfort, use_natural_ventilation, debug=False):
     '''
     Computes monthly heating, cooling and electricity demand for a thermal zone, based on SIA 380.1
     :param room_properties: room properties in json format
@@ -65,6 +65,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     :param g_value_total: G value total including sunscreen ('Sonnenschutz') of windows
     :param setpoint_shading: Shading setpoint for activating sunscreen of windows, in W/m^2
     :param run_obstructed_simulation: Boolean to indicate if an obstructed solar simulation is conducted. True if yes.
+    :param hourly: Boolean to indicate if hourly values should be returned instead of monthly. True if yes.
     :param use_adaptive_comfort: Boolean to indicate if adaptive comfort should be used instead of fixed setpoints. True if yes. Defaults to yes if setpoints_ub and setpoints_lb are null.
     :param use_natural_ventilation: Boolean to indicate if natural ventilation should be considered (True) or not (False).
    
@@ -194,9 +195,6 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     """
     global DEBUG_MODE
     if debug: DEBUG_MODE = True
-    
-    # Hourly is WIP
-    hourly = False
     
     # Assert inputs hourly
     adaptive_comfort = use_adaptive_comfort and (T_i_ub_hourly is not None and T_i_lb_hourly is not None) 
