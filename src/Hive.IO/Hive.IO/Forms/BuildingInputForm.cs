@@ -161,8 +161,8 @@ namespace Hive.IO.Forms
                 return;
             }
 
-            State.WallsConstruction = cboWallTemplate.SelectedItem as string; 
-            RenderState();
+            //State.WallsConstruction = cboWallTemplate.SelectedItem as string; 
+            //RenderState();
         }
 
         private void cboFloorTemplate_SelectedIndexChanged(object sender, EventArgs e)
@@ -172,8 +172,8 @@ namespace Hive.IO.Forms
                 return;
             }
 
-            State.FloorsConstruction = cboFloorTemplate.SelectedItem as string; 
-            RenderState();
+            //State.FloorsConstruction = cboFloorTemplate.SelectedItem as string; 
+            //RenderState();
         }
 
         private void cboWindowTemplate_SelectedIndexChanged(object sender, EventArgs e)
@@ -188,8 +188,8 @@ namespace Hive.IO.Forms
                 return;
             }
 
-            State.RoofsConstruction = cboRoofTemplate.SelectedItem as string; 
-            RenderState();
+            //State.RoofsConstruction = cboRoofTemplate.SelectedItem as string; 
+            //RenderState();
         }
 
         private void UpdateEnvironmentTab()

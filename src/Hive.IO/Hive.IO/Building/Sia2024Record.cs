@@ -19,6 +19,11 @@ namespace Hive.IO.Building
         public string Quality;
         public string Construction;
 
+        public string WallsConstruction;
+        public string FloorsConstruction;
+        public string RoofsConstruction;
+
+
         public Sia2024RecordEx()
         {
         }
@@ -337,23 +342,6 @@ namespace Hive.IO.Building
         {
             return ReadRecords().Where(r => r.BuildingUseType == useType).Select(r => r.RoomType).Distinct();
         }
-
-        // From SIA 380 !
-        public static IEnumerable<string> ConstructionAssemblies()
-        {
-            //return Enum.GetNames(typeof(BuildingConstructionAssemblyTypes)).Select(c => c.ToLower()).ToList();
-            return new[] { "superlightweight", "lightweight", "mediumweight", "heavyweight" };
-        }
-
-        public static double RoomSpecificCapacitanceLookup(string construction) => RoomSpecificCapacitanceLookupDict[construction];
-
-        static Dictionary<string, double> RoomSpecificCapacitanceLookupDict = new Dictionary<string, double>()
-        {
-            { "superlightweight", 10.0},
-            { "lightweight", 50.0},
-            { "mediumweight", 100.0},
-            { "heavyweight", 150.0}
-        };
 
         public static Sia2024Record Lookup(string useType, string roomType, string quality)
         {

@@ -3,6 +3,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Runtime.Serialization;
 using System.Text;
 using System.Threading.Tasks;
 
@@ -12,13 +13,13 @@ namespace Hive.IO.Building
     public class Sia380ConstructionAssembly : ConstructionAssembly
     {
         [JsonProperty]
-        public string ConstructionType;
+        public string ConstructionType { get; private set; }
         [JsonProperty]
-        public string ConstructionTypePretty;
+        public string ConstructionTypePretty { get; private set; }
         [JsonProperty]
-        public string Description;
+        public string Description { get; private set; }
         [JsonProperty]
-        public double CapacitancePerFloorArea;
+        public double CapacitancePerFloorArea { get; private set; }
 
         [JsonProperty(Required = Required.Default)]
         public double WallsCapacity => WallsConstruction?.Capacitance ?? CapacitancePerFloorArea;
@@ -29,62 +30,32 @@ namespace Hive.IO.Building
 
         public string Name => ConstructionType;
 
+        [OnDeserialized] 
+        // This method runs once this class has been instantiated when deserializing in the JSON record.
+        // So upon creating the record lookup below, this will run afterwards to instantiate the Construction attributes.
+        // (and avoid Null exceptions)
+        public void Init(StreamingContext context)
+        {
+            WallsConstruction = new OpaqueConstruction(Name);
+            FloorsConstruction = new OpaqueConstruction(Name);
+            RoofsConstruction = new OpaqueConstruction(Name);
+            WindowsConstruction = new TransparentConstruction(Name);
+        }
+
         public void SetCapacities(double floorArea, double wallArea, double roofArea)
         {
             var areas = floorArea + wallArea + roofArea;
             var capacitanceRoom = CapacitancePerFloorArea * floorArea;
-
-            // Set walls
-            if (WallsConstruction != null)
-            {
-                WallsConstruction.Capacitance = capacitanceRoom * wallArea / areas;
-            }
-            else
-            {
-                WallsConstruction = new OpaqueConstruction(Name)
-                {
-                    Capacitance = capacitanceRoom * wallArea / areas
-                };
-            }
-
-            // Set floors
-            if (FloorsConstruction != null)
-            {
-                FloorsConstruction.Capacitance = capacitanceRoom * floorArea / areas;
-            }
-            else
-            {
-                FloorsConstruction = new OpaqueConstruction(Name)
-                {
-                    Capacitance = capacitanceRoom * floorArea / areas
-                };
-            }
-
-            // Set roofs
-            if (RoofsConstruction != null)
-            {
-                RoofsConstruction.Capacitance = capacitanceRoom * roofArea / areas;
-            }
-            else
-            {
-                RoofsConstruction = new OpaqueConstruction(Name)
-                {
-                    Capacitance = capacitanceRoom * roofArea / areas
-                };
-            }
-
-            // Set windows
-            if (WindowsConstruction != null)
-            {
-                WindowsConstruction = new TransparentConstruction(Name);
-            }
+            WallsConstruction.Capacitance = capacitanceRoom * wallArea / areas;
+            FloorsConstruction.Capacitance = capacitanceRoom * floorArea / areas;
+            RoofsConstruction.Capacitance = capacitanceRoom * roofArea / areas;
         }
     }
 
     ///
     /// Based on SIA 380 construction types from 3.5.6.1 for determing Heat Capacitance per m2 of floor area.
     ///
-    public static class Sia380Constructions
+    public static class Sia380ConstructionRecord
     {
         private static Sia380ConstructionAssembly[] _records;
         private static Dictionary<string, Sia380ConstructionAssembly> _recordLookup;

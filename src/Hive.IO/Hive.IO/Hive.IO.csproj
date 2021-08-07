@@ -78,7 +78,7 @@
     <Compile Include="Building\ConstructionAssembly.cs" />
     <Compile Include="Building\Material.cs" />
     <Compile Include="Building\Sia2024Record.cs" />
-    <Compile Include="Building\Sia380Constructions.cs" />
+    <Compile Include="Building\Sia380ConstructionRecord.cs" />
     <Compile Include="Building\Sia2024Schedules.cs" />
     <Compile Include="EnergySystems\CombustionTech.cs" />
     <Compile Include="EnergySystems\Carrier.cs" />

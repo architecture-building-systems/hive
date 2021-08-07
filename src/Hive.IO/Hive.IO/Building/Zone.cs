@@ -123,66 +123,110 @@ namespace Hive.IO.Building
 
         #region Construction
 
+        // For copying to the SiaRoom. These hold the string keywords for the SIA 380 Construction types.
         public string ConstructionType;
         public string RoofsConstructionType;
         public string FloorsConstructionType;
         public string WallsConstructionType;
+        public string WindowsConstructionType;
 
         /// <summary>
-        /// Applies a SIA 380 construction template based on the key (a.k.a. name).
+        /// Applies a SIA 380 construction template to the zone based on the key (a.k.a. name).
         /// </summary>
         /// <param name="siaConstructionType">The name of the SIA 380 template construction type.</param>
-        public Zone ApplySia380ConstructionAssembly(string siaConstructionType)
+        public void ApplySia380ConstructionAssembly(string siaConstructionType)
         {
-            //foreach (var wall in Walls) wall.Construction = siaConstruction.WallsConstruction;
-            //foreach (var floor in Floors) floor.Construction = siaConstruction.FloorsConstruction;
-            //foreach (var roof in Roofs) roof.Construction = siaConstruction.RoofsConstruction;
-            //foreach (var window in Windows) window.Construction = siaConstruction.WindowsConstruction;
-            Sia380ConstructionAssembly siaConstruction = Sia380Constructions.Lookup(siaConstructionType);
+            Sia380ConstructionAssembly siaConstruction = Sia380ConstructionRecord.Lookup(siaConstructionType);
             ConstructionType = siaConstruction.Name;
-            CapacitancePerFloorArea = siaConstruction.CapacitancePerFloorArea;
-            siaConstruction.SetCapacities(FloorsArea, WallsArea, RoofsArea);
 
-            return this;
-        }
-
-        internal void ApplySia380RoofsConstruction(string siaConstructionType)
-        {
-            RoofsConstructionType = siaConstructionType;
-            Sia380ConstructionAssembly siaConstruction = Sia380Constructions.Lookup(siaConstructionType);
-            for (int i = 0; i < Roofs.Length; i++)
-                Roofs[i].Construction = siaConstruction.RoofsConstruction;
-        }
-
-        internal void ApplySia380FloorsConstruction(string siaConstructionType)
-        {
-            FloorsConstructionType = siaConstructionType;
-            Sia380ConstructionAssembly siaConstruction = Sia380Constructions.Lookup(siaConstructionType);
+            // Apply construction to roofs, floors, walls, windows
+            RoofsConstructionType = siaConstruction.Name;
+            for (int i = 0; i < Roofs.Length; i++) Roofs[i].Construction = siaConstruction.RoofsConstruction;
+            FloorsConstructionType = siaConstruction.Name;
             for (int i = 0; i < Floors.Length; i++)
+            {
                 Floors[i].Construction = siaConstruction.FloorsConstruction;
+            }
+            WallsConstructionType = siaConstruction.Name;
+            for (int i = 0; i < Walls.Length; i++) Walls[i].Construction = siaConstruction.WallsConstruction;
+            WindowsConstructionType = siaConstruction.Name;
+            for (int i = 0; i < Windows.Length; i++) Windows[i].Construction = siaConstruction.WindowsConstruction;
+
+            // Update the capacitances of the components
+            siaConstruction.SetCapacities(FloorsArea, WallsArea, RoofsArea);
+            CapacitancePerFloorArea = siaConstruction.CapacitancePerFloorArea;
         }
 
-        internal void ApplySia380WallsConstruction(string siaConstructionType)
-        {
-            WallsConstructionType = siaConstructionType;
-            Sia380ConstructionAssembly siaConstruction = Sia380Constructions.Lookup(siaConstructionType);
-            for (int i = 0; i < Walls.Length; i++)
-                Walls[i].Construction = siaConstruction.WallsConstruction;
-        }
-
+        // Capacitance
         double _capacitancePerFloorArea;
-        double? _roofsCapacitance;
         double? _wallsCapacitance;
         double? _floorsCapacitance;
+        double? _roofsCapacitance;
+
+        /// <summary>
+        /// The total capacitance of the zone divided by its floor area. 
+        /// This is due to how SIA 380 provides room capacitance by construction type for its templates.
+        /// </summary>
         public double CapacitancePerFloorArea
         {
             get => _capacitancePerFloorArea;
-            set => _capacitancePerFloorArea = value;
+            set 
+            { 
+                _capacitancePerFloorArea = value;
+                UpdateCapacities();
+            }
         }
 
-        double TotalCapacitance => CapacitancePerFloorArea * FloorsArea;
+        /// <summary>
+        /// Recalculates the capacities per component type in case of changed surface areas 
+        /// or capacitance per floor area (in the case of a construction type change, for instance).
+        /// </summary>
+        void UpdateCapacities()
+        {
+            // Recalculate in case surface areas have changed
+            var factorAll = 1 + RoofsArea / FloorsArea + WallsArea / FloorsArea;
+            // Assign capacities per component type. To use in sia380 GH component (demand calculation).
+            FloorsCapacity = FloorsArea / factorAll * CapacitancePerFloorArea;
+            RoofsCapacity = RoofsArea / factorAll * CapacitancePerFloorArea;
+            WallsCapacity = WallsArea / factorAll * CapacitancePerFloorArea;
+        }
 
-        double RoofsCapacity
+        /// <summary>
+        /// The total capacitance of all walls assigned to the zone
+        /// </summary>
+        public double WallsCapacity
+        {
+            get => _wallsCapacitance ?? Walls.Select(w => w.Construction.Capacitance).Sum();
+            set
+            {
+                foreach (Wall wall in Walls)
+                {
+                    wall.Construction.Capacitance = value * (wall.Area / WallsArea);
+                }
+                _wallsCapacitance = value;
+            }
+        }
+
+        /// <summary>
+        /// The total capacitance of all floors assigned to the zone
+        /// </summary>
+        public double FloorsCapacity
+        {
+            get => _floorsCapacitance ?? Floors.Select(f => f.Construction.Capacitance).Sum();
+            set
+            {
+                foreach (Floor floor in Floors)
+                {
+                    floor.Construction.Capacitance = value * (floor.Area / FloorsArea);
+                }
+                _floorsCapacitance = value;
+            }
+        }
+
+        /// <summary>
+        /// The total capacitance of all roofs assigned to the zone.
+        /// </summary>
+        public double RoofsCapacity
         {
             get => _roofsCapacitance ?? Roofs.Select(r => r.Construction.Capacitance).Sum();
             set
@@ -191,53 +235,9 @@ namespace Hive.IO.Building
                 {
                     roof.Construction.Capacitance = value * (roof.Area / RoofsArea);
                 }
+                _roofsCapacitance = value;
             }
         }
-
-        double FloorsCapacity
-        {
-            get => _floorsCapacitance ?? Roofs.Select(r => r.Construction.Capacitance).Sum();
-            set
-            {
-                foreach (Floor floor in Floors) floor.Construction.Capacitance = value * (floor.Area / FloorsArea);
-                _floorsCapacitance = value;
-            }
-        }
-
-        double WallsCapacity
-        {
-            get => _wallsCapacitance ?? Walls.Select(w => w.Construction.Capacitance).Sum();
-            set
-            {
-                foreach (Wall wall in Walls) wall.Construction.Capacitance = value * (wall.Area / WallsArea);
-                _wallsCapacitance = value;
-            }
-        }
-
-        internal double UpdateCapacityFloors(double roomCapacitance) => UpdateCapacities(roomCapacitance, "floor");
-        internal double UpdateCapacityRoofs(double roomCapacitance) => UpdateCapacities(roomCapacitance, "roof");
-        internal double UpdateCapacityWalls(double roomCapacitance) => UpdateCapacities(roomCapacitance, "wall");
-
-        double UpdateCapacities(double roomCapacitance, string kind)
-        {
-            var factorAll = 1 + RoofsArea / FloorsArea + WallsArea / FloorsArea;
-
-            if (kind == "floor")
-            {
-                FloorsCapacity = FloorsArea / factorAll * roomCapacitance;
-            }
-            else if (kind == "roof")
-            {
-                RoofsCapacity = RoofsArea / factorAll * roomCapacitance;
-            }
-            else if (kind == "wall")
-            {
-                WallsCapacity = WallsArea / factorAll * roomCapacitance;
-            }
-
-            return (FloorsCapacity + RoofsCapacity + WallsCapacity) / FloorsArea;
-        }
-
 
         #endregion Construction
 
