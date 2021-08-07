@@ -2,6 +2,7 @@
     "run_obstructed_simulation": false,
     "use_adaptive_comfort": false,
     "use_natural_ventilation": false,
+    "hourly": false,
     "g_value": 0.5,
     "g_value_total": 0.14,
     "setpoint_shading": 200,
@@ -24,7 +25,7 @@
         "wall",
         "wall",
         "roof",
-        "floor"
+        "roof"
     ],
     "room_properties": {
         "description": "3.2 Grossraumbuero",
@@ -58,7 +59,7 @@
         "Emissionen transparente Bauteile": 64.0,
         "U-Wert Boeden": 0.2,
         "U-Wert Daecher": 0.2,
-        "U-Wert Walls": 0.2,
+        "U-Wert Waende": 0.2,
         "Kosten Boeden": 347.0,
         "Kosten Daecher": 347.0,
         "Kosten Waende": 347.0,

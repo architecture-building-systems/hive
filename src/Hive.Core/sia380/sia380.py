@@ -385,11 +385,9 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     
     # Natural ventilation (no infiltration ? TODO)
     if use_natural_ventilation and windows_count > 0:
-        # TODO picks the first window as the window to ventilate. Should be selected by user?
-        window_for_nat_vent_idx = next((i for i, s in enumerate(surface_type) if s == "window"), None)
         # TODO assume fixed height of 1.5m as has significant influence on natural ventilation calc.
         h = 1.5
-        w = surface_areas[window_for_nat_vent_idx] / h
+        w = sum(windows_areas) / h
         # Precalculate constant part to reduce repetitive computation
         Vdot_nat_vent_constant = calc_nat_vent_Vdot_constant(h, w)
     else: # no windows
@@ -714,28 +712,25 @@ def calculate_Q_s(run_obstr, tree_obstr, tree_unobstr,
     
     return Q_array
 
-def calc_nat_vent_Vdot_constant(H,W):
+def calc_nat_vent_Vdot_constant(H, W):
     """Precalculates the constant part of natural ventilation calc 
             _______________________________
     
     V_dot = c_d * H * W * 1/3 * sqrt(g * H * (T_i - T_e)/T_e)
             _______________________________
     
-    c_d = 0.6   [-]         discharge coefficient, value for open doors and windows
+    c_d = 0.25   [-]         discharge coefficient, value for large single openings such as open doors and windows
     g = 9.8     [m/s^2]     graviational constant
     
     :param H: Height of window opening [m]
     :param W: Width of window opening [m]
     """
-    return 0.6 * H * W * 0.333333 * math.sqrt(GRAVITATIONAL_CONSTANT * H)
+    return 0.25 * H * W * 0.333333 * math.sqrt(GRAVITATIONAL_CONSTANT * H)
 
 def calc_nat_vent_Vdot(Vdot_nat_vent_constant, T_i, T_e):
     """Calculates air flow from buoyancy driven natural ventilation.
     
     V_dot = c_d * H * W * 1/3 * sqrt(g * H * (T_i - T_e)/T_e)
-    
-    c_d = 0.6   [-]         discharge coefficient, value for open doors and windows
-    g = 9.8     [m/s^2]     graviational constant
     
     :param T_i: Indoor temperature [C]
     :param T_e: Outdoor temperature [C]
