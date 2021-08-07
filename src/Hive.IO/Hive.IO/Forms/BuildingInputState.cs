@@ -941,7 +941,6 @@ namespace Hive.IO.Forms
         }
 
         public Brush RoomConstantBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
-        public Brush CapacitancePerFloorAreaBrush => ModifiedField() ? _modifiedBrush : _normalBrush;
         public Brush UValueFloorsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
         public Brush UValueRoofsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;
         public Brush UValueWallsBrush => ModifiedProperty() ? _modifiedBrush : _normalBrush;

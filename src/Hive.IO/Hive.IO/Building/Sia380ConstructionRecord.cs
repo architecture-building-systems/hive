@@ -28,7 +28,7 @@ namespace Hive.IO.Building
         [JsonProperty(Required = Required.Default)]
         public double RoofsCapacity => RoofsConstruction?.Capacitance ?? CapacitancePerFloorArea;
 
-        public string Name => ConstructionType;
+        public new string Name => ConstructionType;
 
         [OnDeserialized] 
         // This method runs once this class has been instantiated when deserializing in the JSON record.

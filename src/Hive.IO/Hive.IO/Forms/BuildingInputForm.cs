@@ -86,7 +86,7 @@ namespace Hive.IO.Forms
             cboBuildingConstruction.SelectedItem = State.Construction;
             cboBuildingConstruction.Enabled = State.IsEditable;
 
-            UpdateTextBox(txtCapacitancePerFloorArea);
+            UpdateTextBox(txtCapacitancePerFloorArea, editableOverride: false);
         }
 
         private void UpdateSiaPropertiesPanel()
@@ -214,7 +214,6 @@ namespace Hive.IO.Forms
             cboWindowTemplate.Items.Clear();
             cboWindowTemplate.Items.AddRange(State.Constructions.ToArray<object>());
             cboWindowTemplate.SelectedItem = State.Construction;
-            UpdateTextBox(txtFloorUValue);
             UpdateTextBox(txtWindowUValue);
             UpdateTextBox(txtWindowGValue);
             UpdateTextBox(txtWindowEmissions);
@@ -226,7 +225,6 @@ namespace Hive.IO.Forms
             cboRoofTemplate.Items.Clear();
             cboRoofTemplate.Items.AddRange(State.Constructions.ToArray<object>());
             cboRoofTemplate.SelectedItem = State.Construction;
-            UpdateTextBox(txtFloorUValue);
             UpdateTextBox(txtRoofUValue);
             UpdateTextBox(txtRoofEmissions);
             UpdateTextBox(txtRoofCost);
@@ -260,13 +258,15 @@ namespace Hive.IO.Forms
         /// </summary>
         /// <param name="textBox"></param>
         /// <param name="stateProperty"></param>
-        private void UpdateTextBox(TextBox textBox, bool? overrideEditable = null)
+        private void UpdateTextBox(TextBox textBox, bool? editableOverride = null)
         {
+            bool editable = editableOverride ?? State.IsEditable;
+
             var stateProperty = textBox.Tag.ToString();
             textBox.Text = State.GetType().GetProperty(stateProperty).GetValue(State) as string;
-            textBox.Enabled = overrideEditable == null ? State.IsEditable : (bool)overrideEditable;
+            textBox.Enabled = editable;
 
-            if (State.IsEditable)
+            if (editable)
             {
                 var fontWeight = (FontWeight) State.GetType().GetProperty(stateProperty + "FontWeight").GetValue(State);
                 textBox.Font = new Font(textBox.Font, fontWeight == FontWeights.Bold? FontStyle.Bold: FontStyle.Regular);

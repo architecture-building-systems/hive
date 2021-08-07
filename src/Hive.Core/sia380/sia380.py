@@ -217,7 +217,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     # U_value_transparent = room_properties["U-Wert Fenster"]
     U_value_floors = room_properties["U-Wert Boeden"]
     U_value_roofs = room_properties["U-Wert Daecher"]
-    U_value_walls = room_properties["U-Wert Walls"]
+    U_value_walls = room_properties["U-Wert Waende"]
     U_value_windows = room_properties["U-Wert Fenster"]    
     U_value_dict = {
         "floor": U_value_floors, 
