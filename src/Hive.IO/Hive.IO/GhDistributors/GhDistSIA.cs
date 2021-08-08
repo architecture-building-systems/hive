@@ -61,7 +61,11 @@ namespace Hive.IO.GhDistributors
                 {
                     // TO DO: make check that it's not a void
                     zoneAreas[i] += floor.Area;
-                    // TODO no floor on surfaces?
+                    if (floor.IsExternal)
+                    {
+                        extSrfAreas.Add(floor.Area);
+                        allSrfAreas.Add(floor.Area);
+                    }
                 }
 
                 

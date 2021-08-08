@@ -79,18 +79,13 @@ namespace Hive.IO.Building
         #region Building Components
 
         public IEnumerable<Component> SurfaceComponents =>
-            Walls.Cast<Component>().Concat(Ceilings).Concat(Roofs).Concat(Floors).Concat(Windows);
+            Walls.Cast<Component>().Concat(Roofs).Concat(Floors).Concat(Windows);
 
         /// <summary>
         /// Wall components of this zone. Cannot be empty.
         /// </summary>
         [JsonProperty]
         public Wall[] Walls { get; private set; }
-        /// <summary>
-        /// Ceiling components of this zone. Cannot be empty.
-        /// </summary>
-        [JsonProperty]
-        public Ceiling[] Ceilings { get; private set; }
         /// <summary>
         /// Floor components of this zone. Cannot be empty. A void would also be a floor, but with material property 'air' or something
         /// </summary>
@@ -453,19 +448,18 @@ namespace Hive.IO.Building
 
 
             // identify building components based on their surface angles
-            Tuple<Wall[], Ceiling[], Roof[], Floor[], Window[], Shading[]> tuple = IdentifyComponents(zone_geometry, windowSrfs, shadingSrfs);
+            Tuple<Wall[], Roof[], Floor[], Window[], Shading[]> tuple = IdentifyComponents(zone_geometry, windowSrfs, shadingSrfs);
             this.Walls = tuple.Item1;
-            this.Ceilings = tuple.Item2;
-            this.Roofs = tuple.Item3;
-            this.Floors = new Floor[floorList.Count + tuple.Item4.Length];
-            int mainFloors = tuple.Item4.Length;
+            this.Roofs = tuple.Item2;
+            this.Floors = new Floor[floorList.Count + tuple.Item3.Length];
+            int mainFloors = tuple.Item3.Length;
             int additionalFloors = floorList.Count;
             for (int i = 0; i < mainFloors; i++)
-                this.Floors[i] = tuple.Item4[i];
+                this.Floors[i] = tuple.Item3[i];
             for (int i = mainFloors; i < mainFloors + additionalFloors; i++)
                 this.Floors[i] = new Floor(floorList[i - mainFloors]);
-            this.Windows = tuple.Item5;
-            this.ShadingDevices = tuple.Item6;
+            this.Windows = tuple.Item4;
+            this.ShadingDevices = tuple.Item5;
             
 
             // check, if floor is detected
@@ -919,13 +913,14 @@ namespace Hive.IO.Building
         /// <param name="window_geometry"></param>
         /// <param name="shading_geometry"></param>
         /// <returns></returns>
-        private Tuple<Wall[], Ceiling[], Roof[], Floor[], Window[], Shading[]>
+        private Tuple<Wall[], Roof[], Floor[], Window[], Shading[]>
             IdentifyComponents(rg.Brep zone_geometry, rg.BrepFace[] window_geometry, rg.BrepFace[] shading_geometry)
         {
-            List<int> wall_indices = new List<int>();
-            List<int> ceiling_indices = new List<int>();
-            List<int> roof_indices = new List<int>();
-            List<int> floor_indices = new List<int>();
+            var wallIndices = new List<int>();
+            var roofIndices = new List<int>();
+            var floorIndices = new List<int>();
+
+            var floorHeights = new List<double>();
 
             for (int i = 0; i < zone_geometry.Faces.Count(); i++)
             {
@@ -940,30 +935,27 @@ namespace Hive.IO.Building
                 // Ceiling: Same, but there must be an adjacent zone surface, such that this surface is internal. Hive 0.2
                 if (normal.Z == -1.0)
                 {
-                    floor_indices.Add(i);
+                    floorIndices.Add(i);
                 }
                 else if (angle < 45.0)                  // Roof: surface angle < 45? 
                 {
-                    roof_indices.Add(i);
+                    roofIndices.Add(i);
                 }
                 else                                    // Wall: surface angle >= 45?
                 {
-                    wall_indices.Add(i);
+                    wallIndices.Add(i);
                 }
             }
-            Wall[] walls = new Wall[wall_indices.Count()];
-            Ceiling[] ceilings = new Ceiling[ceiling_indices.Count()];
-            Roof[] roofs = new Roof[roof_indices.Count()];
-            Floor[] floors = new Floor[floor_indices.Count()];
+            Wall[] walls = new Wall[wallIndices.Count()];
+            Roof[] roofs = new Roof[roofIndices.Count()];
+            Floor[] floors = new Floor[floorIndices.Count()];
 
             for (int i = 0; i < walls.Length; i++)
-                walls[i] = new Wall(zone_geometry.Faces[wall_indices[i]]);
-            for (int i = 0; i < ceilings.Length; i++)
-                ceilings[i] = new Ceiling(zone_geometry.Faces[ceiling_indices[i]]);
+                walls[i] = new Wall(zone_geometry.Faces[wallIndices[i]]);
             for (int i = 0; i < roofs.Length; i++)
-                roofs[i] = new Roof(zone_geometry.Faces[roof_indices[i]]);
+                roofs[i] = new Roof(zone_geometry.Faces[roofIndices[i]]);
             for (int i = 0; i < floors.Length; i++)
-                floors[i] = new Floor(zone_geometry.Faces[floor_indices[i]]);
+                floors[i] = new Floor(zone_geometry.Faces[floorIndices[i]]);
 
 
             var windowList = new List<Window>();
@@ -994,7 +986,7 @@ namespace Hive.IO.Building
                 }
             }
 
-            return new Tuple<Wall[], Ceiling[], Roof[], Floor[], Window[], Shading[]>(walls, ceilings, roofs, floors, windowList.ToArray(), shadings);
+            return new Tuple<Wall[], Roof[], Floor[], Window[], Shading[]>(walls, roofs, floors, windowList.ToArray(), shadings);
         }
         #endregion
     }

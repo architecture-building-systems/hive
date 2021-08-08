@@ -235,20 +235,6 @@ namespace Hive.IO.Building
     }
 
 
-    /// <summary>
-    /// Ceiling, i.e. internal surface
-    /// </summary>
-    [JsonObject(MemberSerialization.OptIn)]
-    public class Ceiling : Component
-    {
-        public Ceiling(rg.BrepFace surfaceGeometry) : base(surfaceGeometry)
-        {
-
-        }
-        [JsonConstructor] 
-        protected Ceiling() { }
-    }
-
 
     /// <summary>
     /// Floor, i.e. internal surface
