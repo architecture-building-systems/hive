@@ -691,6 +691,8 @@ namespace Hive.IO.Results
         /// <returns></returns>
         public static double[] GetTotalMonthlyPrimaryLoads(List<ConversionTech> conversionTech)
         {
+
+
             double[] result = new double[Misc.MonthsPerYear];
             for (int i = 0; i < result.Length; i++)
                 result[i] = 0.0;

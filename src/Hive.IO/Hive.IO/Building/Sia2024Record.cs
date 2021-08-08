@@ -17,6 +17,12 @@ namespace Hive.IO.Building
     {
         public string BuildingUseType;
         public string Quality;
+        public string Construction;
+
+        public string WallsConstruction;
+        public string FloorsConstruction;
+        public string RoofsConstruction;
+
 
         public Sia2024RecordEx()
         {
@@ -26,9 +32,11 @@ namespace Hive.IO.Building
         {
             Quality = "<Custom>";
             BuildingUseType = "<Custom>";
+            Construction = "<Custom>";
 
             RoomType = room.RoomType;
             RoomConstant = room.RoomConstant;
+            CapacitancePerFloorArea = room.CapacitancePerFloorArea;
             CoolingSetpoint = room.CoolingSetpoint;
             HeatingSetpoint = room.HeatingSetpoint;
             CoolingSetback = room.CoolingSetback;
@@ -101,6 +109,7 @@ namespace Hive.IO.Building
         public double OpaqueCost; // Kosten opake Bauteile
         public double OpaqueEmissions; // Emissionen opake Bauteile
         public double RoomConstant; // Zeitkonstante
+        public double CapacitancePerFloorArea; // Waermespeicherfaehigkeit des Raumes
         public string RoomType; // description, e.g. "1.1 Wohnen Mehrfamilienhaus"
         public double TransparentCost; // Kosten transparente Bauteile
         public double TransparentEmissions; // Emissionen transparente Bauteile
@@ -114,14 +123,17 @@ namespace Hive.IO.Building
 
         // as per #466, allow Sia2024Record to have separate values for walls, floors, roofs. Fall back to the Opaque values
         private double? _uValueFloors = null;
+        private double? _capacityFloors = null;
         private double? _costFloors = null;
         private double? _emissionsFloors = null;
 
         private double? _uValueRoofs = null;
+        private double? _capacityRoofs = null;
         private double? _costRoofs = null;
         private double? _emissionsRoofs = null;
 
         private double? _uValueWalls = null;
+        private double? _capacityWalls = null;
         private double? _costWalls = null;
         private double? _emissionsWalls = null;
 
@@ -129,6 +141,11 @@ namespace Hive.IO.Building
         {
             get => _uValueFloors ?? UValueOpaque;
             set => _uValueFloors = value;
+        }
+        public double CapacityFloors
+        {
+            get => _capacityFloors ?? CapacitancePerFloorArea;
+            set => _capacityFloors = value;
         }
 
         public double CostFloors
@@ -148,6 +165,11 @@ namespace Hive.IO.Building
             get => _uValueRoofs ?? UValueOpaque;
             set => _uValueRoofs = value;
         }
+        public double CapacityRoofs
+        {
+            get => _capacityRoofs ?? CapacitancePerFloorArea;
+            set => _capacityRoofs = value;
+        }
 
         public double CostRoofs
         {
@@ -165,6 +187,12 @@ namespace Hive.IO.Building
         {
             get => _uValueWalls ?? UValueOpaque;
             set => _uValueWalls = value;
+        }
+
+        public double CapacityWalls
+        {
+            get => _capacityWalls ?? CapacitancePerFloorArea;
+            set => _capacityWalls = value;
         }
 
         public double CostWalls
@@ -189,6 +217,7 @@ namespace Hive.IO.Building
             {
                 {"description", RoomType},
                 {"Zeitkonstante", RoomConstant},
+                {"Waermespeicherfaehigkeit des Raumes", CapacitancePerFloorArea},
                 {"Raumlufttemperatur Auslegung Kuehlung (Sommer)", CoolingSetpoint},
                 {"Raumlufttemperatur Auslegung Heizen (Winter)", HeatingSetpoint},
                 {"Raumlufttemperatur Auslegung Kuehlung (Sommer) - Absenktemperatur", CoolingSetback},
@@ -218,7 +247,10 @@ namespace Hive.IO.Building
 
                 {"U-Wert Boeden", UValueFloors },
                 {"U-Wert Daecher", UValueRoofs },
-                {"U-Wert Walls", UValueWalls },
+                {"U-Wert Waende", UValueWalls },
+                {"Waermespeicherfaehigkeit Boeden", CapacityFloors },
+                {"Waermespeicherfaehigkeit Daecher", CapacityRoofs },
+                {"Waermespeicherfaehigkeit Waende", CapacityWalls },
                 {"Kosten Boeden", CostFloors},
                 {"Kosten Daecher", CostRoofs },
                 {"Kosten Waende", CostWalls },
@@ -242,6 +274,7 @@ namespace Hive.IO.Building
             {
                 RoomType = d["description"] as string,
                 RoomConstant = (double) d["Zeitkonstante"],
+                CapacitancePerFloorArea = (double)d["Waermespeicherfaehigkeit des Raumes"],
                 CoolingSetpoint = (double) d["Raumlufttemperatur Auslegung Kuehlung (Sommer)"],
                 HeatingSetpoint = (double) d["Raumlufttemperatur Auslegung Heizen (Winter)"],
                 CoolingSetback = (double)d["Raumlufttemperatur Auslegung Kuehlung (Sommer) - Absenktemperatur"],
@@ -272,6 +305,10 @@ namespace Hive.IO.Building
                 _uValueFloors = readValueOrNull("U-Wert Boeden"),
                 _uValueRoofs = readValueOrNull("U-Wert Daecher"),
                 _uValueWalls = readValueOrNull("U-Wert Waende"),
+
+                _capacityFloors = readValueOrNull("Waermespeicherfaehigkeit Boeden"),
+                _capacityRoofs = readValueOrNull("Waermespeicherfaehigkeit Daecher"),
+                _capacityWalls = readValueOrNull("Waermespeicherfaehigkeit Waende"),
 
                 _costFloors = readValueOrNull("Kosten Boeden"),
                 _costRoofs = readValueOrNull("Kosten Daecher"),

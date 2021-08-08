@@ -37,7 +37,7 @@ namespace Hive.IO.Forms
             // Set ToolTips
             // Natural Ventilation
             hizardToolTip.SetToolTip(this.checkBoxNaturalVentilation, toolTipNaturalVentilationInfoMessage);
-            hizardToolTip.SetToolTip(this.label43, toolTipNaturalVentilationInfoMessage);
+            hizardToolTip.SetToolTip(this.label45, toolTipNaturalVentilationInfoMessage);
             // Setbacks
             hizardToolTip.SetToolTip(this.txtHeatingSetback, toolTipSetbackInfoMessage);
             hizardToolTip.SetToolTip(this.label38, toolTipSetbackInfoMessage);
@@ -80,6 +80,13 @@ namespace Hive.IO.Forms
             cboBuildingQuality.Items.AddRange(State.Qualities.ToArray<object>());
             cboBuildingQuality.SelectedItem = State.Quality;
             cboBuildingQuality.Enabled = State.IsEditable;
+
+            cboBuildingConstruction.Items.Clear();
+            cboBuildingConstruction.Items.AddRange(State.Constructions.ToArray<object>());
+            cboBuildingConstruction.SelectedItem = State.Construction;
+            cboBuildingConstruction.Enabled = State.IsEditable;
+
+            UpdateTextBox(txtCapacitancePerFloorArea, editableOverride: false);
         }
 
         private void UpdateSiaPropertiesPanel()
@@ -130,19 +137,83 @@ namespace Hive.IO.Forms
             RenderState();
         }
 
+        private void cboBuildingConstruction_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_rendering)
+            {
+                return;
+            }
+
+            State.Construction = cboBuildingConstruction.SelectedItem as string;
+
+            cboWallTemplate.SelectedItem = State.Construction;
+            cboFloorTemplate.SelectedItem = State.Construction;
+            cboWindowTemplate.SelectedItem = State.Construction;
+            cboRoofTemplate.SelectedItem = State.Construction;
+
+            RenderState();
+        }
+
+        private void cboWallTemplate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_rendering)
+            {
+                return;
+            }
+
+            //State.WallsConstruction = cboWallTemplate.SelectedItem as string; 
+            //RenderState();
+        }
+
+        private void cboFloorTemplate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_rendering)
+            {
+                return;
+            }
+
+            //State.FloorsConstruction = cboFloorTemplate.SelectedItem as string; 
+            //RenderState();
+        }
+
+        private void cboWindowTemplate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            return;
+        }
+
+        private void cboRoofTemplate_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (_rendering)
+            {
+                return;
+            }
+
+            //State.RoofsConstruction = cboRoofTemplate.SelectedItem as string; 
+            //RenderState();
+        }
+
         private void UpdateEnvironmentTab()
         {
             cboWallTemplate.Enabled = false;
+            cboWallTemplate.Items.Clear();
+            cboWallTemplate.Items.AddRange(State.Constructions.ToArray<object>());
+            cboWallTemplate.SelectedItem = State.Construction;
             UpdateTextBox(txtWallUValue);
             UpdateTextBox(txtWallEmissions);
             UpdateTextBox(txtWallCost);
 
             cboFloorTemplate.Enabled = false;
+            cboFloorTemplate.Items.Clear();
+            cboFloorTemplate.Items.AddRange(State.Constructions.ToArray<object>());
+            cboFloorTemplate.SelectedItem = State.Construction;
             UpdateTextBox(txtFloorUValue);
             UpdateTextBox(txtFloorEmissions);
             UpdateTextBox(txtFloorCost);
 
             cboWindowTemplate.Enabled = false;
+            cboWindowTemplate.Items.Clear();
+            cboWindowTemplate.Items.AddRange(State.Constructions.ToArray<object>());
+            cboWindowTemplate.SelectedItem = State.Construction;
             UpdateTextBox(txtWindowUValue);
             UpdateTextBox(txtWindowGValue);
             UpdateTextBox(txtWindowEmissions);
@@ -151,6 +222,9 @@ namespace Hive.IO.Forms
             UpdateTextBox(txtWindowShadingSetpoint);
 
             cboRoofTemplate.Enabled = false;
+            cboRoofTemplate.Items.Clear();
+            cboRoofTemplate.Items.AddRange(State.Constructions.ToArray<object>());
+            cboRoofTemplate.SelectedItem = State.Construction;
             UpdateTextBox(txtRoofUValue);
             UpdateTextBox(txtRoofEmissions);
             UpdateTextBox(txtRoofCost);
@@ -184,13 +258,15 @@ namespace Hive.IO.Forms
         /// </summary>
         /// <param name="textBox"></param>
         /// <param name="stateProperty"></param>
-        private void UpdateTextBox(TextBox textBox, bool? overrideEditable = null)
+        private void UpdateTextBox(TextBox textBox, bool? editableOverride = null)
         {
+            bool editable = editableOverride ?? State.IsEditable;
+
             var stateProperty = textBox.Tag.ToString();
             textBox.Text = State.GetType().GetProperty(stateProperty).GetValue(State) as string;
-            textBox.Enabled = overrideEditable == null ? State.IsEditable : (bool)overrideEditable;
+            textBox.Enabled = editable;
 
-            if (State.IsEditable)
+            if (editable)
             {
                 var fontWeight = (FontWeight) State.GetType().GetProperty(stateProperty + "FontWeight").GetValue(State);
                 textBox.Font = new Font(textBox.Font, fontWeight == FontWeights.Bold? FontStyle.Bold: FontStyle.Regular);
@@ -283,7 +359,7 @@ namespace Hive.IO.Forms
 
             RenderState();
         }
-
+        
         #region ToolTips
 
         private ToolTip hizardToolTip = new ToolTip() { InitialDelay = 100 };

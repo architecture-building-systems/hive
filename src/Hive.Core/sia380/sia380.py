@@ -48,7 +48,7 @@ def cleanDictForNaN(d):
 
 def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly, T_i_lb_hourly, surface_areas, surface_type,
          srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, 
-         run_obstructed_simulation, use_adaptive_comfort, use_natural_ventilation, debug=False):
+         run_obstructed_simulation, hourly, use_adaptive_comfort, use_natural_ventilation, debug=False):
     '''
     Computes monthly heating, cooling and electricity demand for a thermal zone, based on SIA 380.1
     :param room_properties: room properties in json format
@@ -65,6 +65,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     :param g_value_total: G value total including sunscreen ('Sonnenschutz') of windows
     :param setpoint_shading: Shading setpoint for activating sunscreen of windows, in W/m^2
     :param run_obstructed_simulation: Boolean to indicate if an obstructed solar simulation is conducted. True if yes.
+    :param hourly: Boolean to indicate if hourly values should be returned instead of monthly. True if yes.
     :param use_adaptive_comfort: Boolean to indicate if adaptive comfort should be used instead of fixed setpoints. True if yes. Defaults to yes if setpoints_ub and setpoints_lb are null.
     :param use_natural_ventilation: Boolean to indicate if natural ventilation should be considered (True) or not (False).
    
@@ -83,6 +84,9 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     
     Wärmeeintrag/-verlust-Verhältnis (in -):
     gamma = (Q_i + Q_s) / (Q_T + Q_V)
+    
+    Zeitkonstante (in h):
+    tau = C_A_e * A / (H_V + H_T)
     
     Transmissionswärmeverluste (in Wh):
     Q_T = H_T * (T_i - T_e) * t
@@ -124,6 +128,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     
     [gamma] = - (Wärmeeintrag/-verlust-Verhältnis)
     [tau] = h (Zeitkonstante des Gebäudes)
+    [C_A_e] = W/(m^2K) (Waermespeicherfaehigkeit pro Energiebezugsflaeche (SIA 2024: Waermespeicherfaehigkeit des Raumes))
     [t] = h (Länge der Berechnungsperiode)
         
     [Vdot_th] = m^3/h (Thermisch wirksamer Aussenluftvolumenstrom)
@@ -149,6 +154,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     SIA 2024 variables:
 
     tau     Zeitkonstante des Gebäudes [h]
+    C_m     Waermespeicherfaehigkeit des Raumes [Wh/m2K]
     theta_e Aussenlufttemperatur
     theta_i Raumlufttemperatur
     t       Länge der Berechnungsperiode [h]
@@ -190,9 +196,6 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     global DEBUG_MODE
     if debug: DEBUG_MODE = True
     
-    # Hourly is WIP
-    hourly = False
-    
     # Assert inputs hourly
     adaptive_comfort = use_adaptive_comfort and (T_i_ub_hourly is not None and T_i_lb_hourly is not None) 
     
@@ -209,8 +212,20 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     # f_sh = 0.9  # sia2024, p.12, 1.3.1.9 Reduktion solare Wärmeeinträge
     # g = room_properties["Gesamtenergiedurchlassgrad Verglasung"]
     tau = room_properties["Zeitkonstante"]
-    U_value_opaque = room_properties["U-Wert opake Bauteile"]
-    U_value_transparent = room_properties["U-Wert Fenster"]
+    C_m = room_properties["Waermespeicherfaehigkeit des Raumes"]
+    # U_value_opaque = room_properties["U-Wert opake Bauteile"]
+    # U_value_transparent = room_properties["U-Wert Fenster"]
+    U_value_floors = room_properties["U-Wert Boeden"]
+    U_value_roofs = room_properties["U-Wert Daecher"]
+    U_value_walls = room_properties["U-Wert Waende"]
+    U_value_windows = room_properties["U-Wert Fenster"]    
+    U_value_dict = {
+        "floor": U_value_floors, 
+        "roof": U_value_roofs, 
+        "wall": U_value_walls, 
+        "window": U_value_windows
+    }
+    
     Vdot_e_spec = room_properties["Aussenluft-Volumenstrom (pro NGF)"]
     Vdot_inf_spec = room_properties["Aussenluft-Volumenstrom durch Infiltration"]
     eta_rec = room_properties["Temperatur-Aenderungsgrad der Waermerueckgewinnung"]
@@ -240,10 +255,10 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     t_A = [A_total_hours] * MONTHS_PER_YEAR
     # transforming daily sia2024 data to monthly
     DAYS_PER_YEAR_float = float(DAYS_PER_YEAR)
-    for i in range(MONTHS_PER_YEAR):
-        t_P[i] *= DAYS_PER_MONTH[i] / DAYS_PER_YEAR_float
-        t_L[i] *= DAYS_PER_MONTH[i] / DAYS_PER_YEAR_float
-        t_A[i] *= DAYS_PER_MONTH[i] / DAYS_PER_YEAR_float
+    for month in range(MONTHS_PER_YEAR):
+        t_P[month] *= DAYS_PER_MONTH[month] / DAYS_PER_YEAR_float
+        t_L[month] *= DAYS_PER_MONTH[month] / DAYS_PER_YEAR_float
+        t_A[month] *= DAYS_PER_MONTH[month] / DAYS_PER_YEAR_float
 
          
     # IF setpoints given monthly for hourly simulation, they stay the same for entire month regardless of T_e.
@@ -281,7 +296,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     T_e = get_monthly_avg(T_e_hourly)
 
     # Windows
-    windows_areas = [x for (x, y) in zip(surface_areas, surface_type) if y != "opaque"]
+    windows_areas = [x for (x, y) in zip(surface_areas, surface_type) if y == "window"]
     windows_count = len(windows_areas)
     
     # Solar
@@ -355,13 +370,24 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     H_V = (Vdot_th / SECONDS_PER_HOUR) * RHO * C_P
     H_V_no_heat_recovery = (Vdot_th_no_heat_recovery / SECONDS_PER_HOUR) * RHO * C_P
     
+    # Transmission heat transfer coefficient (Transmissions-Wärmetransferkoeffizient), H_T
+    H_T = 0.0
+    H_T_op = 0.0
+    H_T_tr = 0.0
+    
+    for s_type, s_area in zip(surface_type, surface_areas):
+        h_t = s_area * U_value_dict[s_type]
+        if s_type == 'window':
+            H_T_tr += h_t
+        else:
+            H_T_op += h_t
+        H_T += h_t
+    
     # Natural ventilation (no infiltration ? TODO)
     if use_natural_ventilation and windows_count > 0:
-        # TODO picks the first window as the window to ventilate. Should be selected by user?
-        window_for_nat_vent_idx = next((i for i, s in enumerate(surface_type) if s == "transp"), None)
         # TODO assume fixed height of 1.5m as has significant influence on natural ventilation calc.
         h = 1.5
-        w = surface_areas[window_for_nat_vent_idx] / h
+        w = sum(windows_areas) / h
         # Precalculate constant part to reduce repetitive computation
         Vdot_nat_vent_constant = calc_nat_vent_Vdot_constant(h, w)
     else: # no windows
@@ -399,32 +425,29 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
         #   - Ta and Ti constant  
         #   - No wind influence (only driven by temperature differences) 
         #   - Single zone and single sided ventilation
-        Vdot_nat_vent_ub = calc_nat_vent_Vdot(Vdot_nat_vent_constant, T_i_ub[t], T_e[t])
-        Vdot_nat_vent_lb = calc_nat_vent_Vdot(Vdot_nat_vent_constant, T_i_lb[t], T_e[t])
-        
-        Q_V_ub_nat_vent = calc_nat_vent_H_V(Vdot_nat_vent_ub) * deltaT_ub
-        Q_V_lb_nat_vent = calc_nat_vent_H_V(Vdot_nat_vent_lb) * deltaT_lb
+        if use_natural_ventilation:
+            Vdot_nat_vent_ub = calc_nat_vent_Vdot(Vdot_nat_vent_constant, T_i_ub[t], T_e[t])
+            Vdot_nat_vent_lb = calc_nat_vent_Vdot(Vdot_nat_vent_constant, T_i_lb[t], T_e[t])
+            
+            H_V_ub_nat_vent = calc_nat_vent_H_V(Vdot_nat_vent_ub)
+            H_V_lb_nat_vent = calc_nat_vent_H_V(Vdot_nat_vent_lb)
+            
+            Q_V_ub_nat_vent = H_V_ub_nat_vent * deltaT_ub
+            Q_V_lb_nat_vent = H_V_lb_nat_vent * deltaT_lb
+        else:
+            # assigned but won't be used later
+            Q_V_ub_nat_vent = 0.0
+            Q_V_lb_nat_vent = 0.0
 
         # Internal loads (interne Wärmeeinträge)
         # Q_i = Phi_P * t_P + Phi_L * t_L + Phi_A * t_A
         Q_i = Phi_P * t_P[t] + Phi_L * t_L[t] + Phi_A * t_A[t]
 
         # Transmission heat losses, Q_T, both transparent and opaque
-        Q_T_op_ub = 0.0
-        Q_T_op_lb = 0.0
-        Q_T_tr_ub = 0.0
-        Q_T_tr_lb = 0.0
-            
-        for surface in range(num_surfaces):
-            # Transmission heat transfer coefficient (Transmissions-Wärmetransferkoeffizient), H_T      
-            if surface_type[surface] == "opaque":
-                H_T = surface_areas[surface] * U_value_opaque
-                Q_T_op_ub += H_T * deltaT_ub
-                Q_T_op_lb += H_T * deltaT_lb
-            else:
-                H_T = surface_areas[surface] * U_value_transparent
-                Q_T_tr_ub += H_T * deltaT_ub
-                Q_T_tr_lb += H_T * deltaT_lb
+        Q_T_op_ub = H_T_op * deltaT_ub
+        Q_T_op_lb = H_T_op * deltaT_lb
+        Q_T_tr_ub = H_T_tr * deltaT_ub
+        Q_T_tr_lb = H_T_tr * deltaT_lb
 
         # Transmission losses (Transmissionswärmeverluste), Q_T, upper and lower bounds for all surfaces
         Q_T_ub = Q_T_tr_ub + Q_T_op_ub
@@ -438,20 +461,40 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
         if eta_g_t is None:
             # Heatgains/-losses ratio (Wärmeeintrag/-verlust Verhältnis), gamma
             # calculating for different cases, heating / cooling, upper / lower bounds, with / without heat recovery
-            gamma_ub = calc_gamma(Q_i, Q_s, Q_T_ub, Q_V_ub)
             gamma_lb = calc_gamma(Q_i, Q_s, Q_T_lb, Q_V_lb)
-            gamma_ub_no_hr = calc_gamma(Q_i, Q_s, Q_T_ub, Q_V_ub_no_hr)
+            gamma_ub = calc_gamma(Q_i, Q_s, Q_T_ub, Q_V_ub)
             gamma_lb_no_hr = calc_gamma(Q_i, Q_s, Q_T_lb, Q_V_lb_no_hr)
-            gamma_ub_nat_vent = calc_gamma(Q_i, Q_s, Q_T_ub, Q_V_ub_nat_vent)
-            gamma_lb_nat_vent = calc_gamma(Q_i, Q_s, Q_T_lb, Q_V_lb_nat_vent)
-
+            gamma_ub_no_hr = calc_gamma(Q_i, Q_s, Q_T_ub, Q_V_ub_no_hr)
+            if use_natural_ventilation:
+                gamma_lb_nat_vent = calc_gamma(Q_i, Q_s, Q_T_lb, Q_V_lb_nat_vent)
+                gamma_ub_nat_vent = calc_gamma(Q_i, Q_s, Q_T_ub, Q_V_ub_nat_vent)
+                       
+            # time constant of the building (Zeitkonstante), tau
+            # TODO where does H_T come from...
+            tau = calc_tau(C_m, floor_area, H_V, H_T) 
+            tau_no_hr = calc_tau(C_m, floor_area, H_V_no_heat_recovery, H_T) 
+            if use_natural_ventilation:
+                tau_heating_nat_vent = calc_tau(C_m, floor_area, H_V_lb_nat_vent, H_T) 
+                tau_cooling_nat_vent = calc_tau(C_m, floor_area, H_V_ub_nat_vent, H_T) 
+            
+            # for debugging, to compare fixed tau
+            # tau = 126.0
+            # tau_no_hr = tau
+            # tau_heating_nat_vent = tau
+            # tau_cooling_nat_vent = tau
+            
             # usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
             eta_g_heating = calc_eta_g(gamma_lb, tau)
             eta_g_cooling = calc_eta_g(gamma_ub, tau, cooling=True) 
-            eta_g_heating_no_hr = calc_eta_g(gamma_lb_no_hr, tau)
-            eta_g_cooling_no_hr = calc_eta_g(gamma_ub_no_hr, tau, cooling=True)
-            eta_g_heating_nat_vent = calc_eta_g(gamma_lb_nat_vent, tau)
-            eta_g_cooling_nat_vent = calc_eta_g(gamma_ub_nat_vent, tau, cooling=True)
+            eta_g_heating_no_hr = calc_eta_g(gamma_lb_no_hr, tau_no_hr)
+            eta_g_cooling_no_hr = calc_eta_g(gamma_ub_no_hr, tau_no_hr, cooling=True)
+            if use_natural_ventilation:
+                eta_g_heating_nat_vent = calc_eta_g(gamma_lb_nat_vent, tau_heating_nat_vent)
+                eta_g_cooling_nat_vent = calc_eta_g(gamma_ub_nat_vent, tau_cooling_nat_vent, cooling=True)
+            else:
+                # assigned but won't be used later
+                eta_g_heating_nat_vent = 1.0
+                eta_g_cooling_nat_vent = 1.0
         else:
             eta_g_heating, eta_g_cooling, \
                 eta_g_heating_no_hr, eta_g_cooling_no_hr, \
@@ -603,6 +646,16 @@ def calc_gamma(Q_i, Q_s, Q_T, Q_V):
     """
     return (Q_i + Q_s) / (Q_T + Q_V)
 
+def calc_tau(C, A, H_V, H_T):
+    """
+    Zeitkonstante. Time constant of a zone
+    :param C: specific heat capacity per netto floor area
+    :param A: netto floor area
+    :param H_V: transmission heat losses
+    :param H_T: ventilation heat losses
+    :return: float. time constant of the zone
+    """
+    return (C * A) / (H_V + H_T)
 
 # usage of heat gains (Ausnutzungsgrad für Wärmegewinne), eta_g
 def calc_eta_g(gamma, tau, cooling=False):
@@ -659,28 +712,25 @@ def calculate_Q_s(run_obstr, tree_obstr, tree_unobstr,
     
     return Q_array
 
-def calc_nat_vent_Vdot_constant(H,W):
+def calc_nat_vent_Vdot_constant(H, W):
     """Precalculates the constant part of natural ventilation calc 
             _______________________________
     
     V_dot = c_d * H * W * 1/3 * sqrt(g * H * (T_i - T_e)/T_e)
             _______________________________
     
-    c_d = 0.6   [-]         discharge coefficient, value for open doors and windows
+    c_d = 0.25   [-]         discharge coefficient, value for large single openings such as open doors and windows
     g = 9.8     [m/s^2]     graviational constant
     
     :param H: Height of window opening [m]
     :param W: Width of window opening [m]
     """
-    return 0.6 * H * W * 0.333333 * math.sqrt(GRAVITATIONAL_CONSTANT * H)
+    return 0.25 * H * W * 0.333333 * math.sqrt(GRAVITATIONAL_CONSTANT * H)
 
 def calc_nat_vent_Vdot(Vdot_nat_vent_constant, T_i, T_e):
     """Calculates air flow from buoyancy driven natural ventilation.
     
     V_dot = c_d * H * W * 1/3 * sqrt(g * H * (T_i - T_e)/T_e)
-    
-    c_d = 0.6   [-]         discharge coefficient, value for open doors and windows
-    g = 9.8     [m/s^2]     graviational constant
     
     :param T_i: Indoor temperature [C]
     :param T_e: Outdoor temperature [C]
@@ -819,7 +869,7 @@ if __name__ == "__main__":
         
         # Assert
         Q_Heat, Q_Cool, Q_Elec, Q_T, Q_V, Q_i, Q_s, Q_T_op, Q_T_tr, Q_s_tr_tree = results
-        # with open(path_results, 'w') as f:
+        # with open(os.path.join(testdir, "results_variable_tau.json"), 'w') as f:
         #     data = {
         #         "Q_Heat": Q_Heat, 
         #         "Q_Cool": Q_Cool,
@@ -837,25 +887,25 @@ if __name__ == "__main__":
         print("Q_Cool = " + str(sum(Q_Cool)))
         print("Q_Heat = " + str(sum(Q_Heat)))
         
-        t_start = 168 * HOURS_PER_DAY
-        t_end = t_start + 7 * HOURS_PER_DAY
+        # t_start = 168 * HOURS_PER_DAY
+        # t_end = t_start + 7 * HOURS_PER_DAY
         
-        import matplotlib.pyplot as plt
+        # import matplotlib.pyplot as plt
 
-        X = range(t_start, t_end)
-        plt.plot(X, Q_Cool[t_start:t_end], label='Q_Cool')
-        plt.plot(X, Q_Heat[t_start:t_end], label='Q_Heat')
-        plt.plot(X, Q_T[t_start:t_end], ':c', label='Q_T')
-        plt.plot(X, Q_V[t_start:t_end], ':b', label='Q_V')
-        plt.plot(X, Q_i[t_start:t_end], ':g', label='Q_i')
-        plt.plot(X, Q_s[t_start:t_end], ':r', label='Q_s')
+        # X = range(t_start, t_end)
+        # plt.plot(X, Q_Cool[t_start:t_end], label='Q_Cool')
+        # plt.plot(X, Q_Heat[t_start:t_end], label='Q_Heat')
+        # plt.plot(X, Q_T[t_start:t_end], ':c', label='Q_T')
+        # plt.plot(X, Q_V[t_start:t_end], ':b', label='Q_V')
+        # plt.plot(X, Q_i[t_start:t_end], ':g', label='Q_i')
+        # plt.plot(X, Q_s[t_start:t_end], ':r', label='Q_s')
         
         
-        plt.plot(X, kwargs['T_e_hourly'][t_start:t_end])
-        plt.plot(X, kwargs['T_i_ub_hourly'][t_start:t_end])
-        plt.plot(X, kwargs['T_i_lb_hourly'][t_start:t_end])
+        # plt.plot(X, kwargs['T_e_hourly'][t_start:t_end])
+        # plt.plot(X, kwargs['T_i_ub_hourly'][t_start:t_end])
+        # plt.plot(X, kwargs['T_i_lb_hourly'][t_start:t_end])
         
         
-        plt.show()
+        # plt.show()
     
     test()

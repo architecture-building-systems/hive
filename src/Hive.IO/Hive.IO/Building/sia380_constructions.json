@@ -1,0 +1,26 @@
+[
+	{
+		"ConstructionType": "superlightweight",
+		"ConstructionTypePretty": "Super Light Weight",
+		"Description": "Examples: industrial steel building",
+		"CapacitancePerFloorArea": 10.0
+	},
+	{
+		"ConstructionType": "lightweight",
+		"ConstructionTypePretty": "Light Weight",
+		"Description": "Examples: wood construction",
+		"CapacitancePerFloorArea": 50.0
+	},
+	{
+		"ConstructionType": "mediumweight",
+		"ConstructionTypePretty": "Medium Weight",
+		"Description": "Examples: walls with plasterboard and fibre cement facade, wood floors with cement screed and parquet",
+		"CapacitancePerFloorArea": 100.0
+	},
+	{
+		"ConstructionType": "heavyweight",
+		"ConstructionTypePretty": "Heavy Weight",
+		"Description": "Examples: reinforced concrete structure, less than 50% windows, outer insulation",
+		"CapacitancePerFloorArea": 150.0
+	}
+]

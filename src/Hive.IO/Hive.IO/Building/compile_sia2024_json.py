@@ -8,6 +8,7 @@ import json
 # (try to keep them as similar as possible)
 header_map = {    
     "Zeitkonstante": "RoomConstant",
+    "Waermespeicherfaehigkeit des Raumes": "RoomSpecificHeatCapacity",
     "Raumlufttemperatur Auslegung Kuehlung (Sommer)": "CoolingSetpoint",
     "Raumlufttemperatur Auslegung Kuehlung (Sommer) - Absenktemperatur": "CoolingSetback",
     "Raumlufttemperatur Auslegung Heizen (Winter)": "HeatingSetpoint",

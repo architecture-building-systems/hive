@@ -32,7 +32,7 @@ namespace Hive.IO.GhDistributors
             pManager.AddNumberParameter("External Surfaces Areas", "ExtSrfAreas", "Surface areas of the building that are exposed to the environment (external)", GH_ParamAccess.list);
             pManager.AddTextParameter("SIA 2024 Room", "SiaRoom", "SIA 2024 room definitions for each zone.", GH_ParamAccess.item);
             pManager.AddNumberParameter("All External Surface Areas", "AllExtSrfAreas", "All external surface areas, including opaque and transparent (windows) surfaces.", GH_ParamAccess.list);
-            pManager.AddTextParameter("Surface Type", "SrfType", "External surface type: 'opaque' or 'transp'.", GH_ParamAccess.list);
+            pManager.AddTextParameter("Surface Type", "SrfType", "External surface type: 'window', 'wall', or 'roof' (TODO 'floor').", GH_ParamAccess.list);
             pManager.AddTextParameter("SUA Room Schedules", "SiaRoomSchedules", "Schedules for occupancy, devices, lighting, amd setpoints.", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Use Adaptive Comfort", "UseAdaptiveComfort", "Determines whether to use adaptive comfort (true) or SIA 2024 setpoints (false)", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Use Natural Ventilation", "UseNatVent", "Use natural ventilation in the demand calculation. Based on simplified single sided ventilation", GH_ParamAccess.item);
@@ -49,10 +49,8 @@ namespace Hive.IO.GhDistributors
             var windowAreas = new List<double>();
             var extSrfAreas = new List<double>();
             var allSrfAreas = new List<double>();
-            var srfTypes = new List<string>();
-            string opaque = "opaque";
-            string transp = "transp";
-            var zones_schedules = new List<ZoneSchedules>();
+            var srfTypes = new List<string>();  // these strings need to correspond with the sia380.py in Hive.Core. not very elegant... ^^
+            var zonesSchedules = new List<ZoneSchedules>();
 
             for (int i = 0; i < zoneCount; i++)
             {
@@ -63,6 +61,12 @@ namespace Hive.IO.GhDistributors
                 {
                     // TO DO: make check that it's not a void
                     zoneAreas[i] += floor.Area;
+                    if (floor.IsExternal)
+                    {
+                        extSrfAreas.Add(floor.Area);
+                        allSrfAreas.Add(floor.Area);
+                        srfTypes.Add("floor");
+                    }
                 }
 
                 
@@ -70,7 +74,7 @@ namespace Hive.IO.GhDistributors
                 {
                     windowAreas.Add(opening.Area);
                     allSrfAreas.Add(opening.Area);
-                    srfTypes.Add(transp);
+                    srfTypes.Add("window");
                 }
 
                 
@@ -83,14 +87,14 @@ namespace Hive.IO.GhDistributors
                     //}
                     extSrfAreas.Add(wall.Area);
                     allSrfAreas.Add(wall.Area);
-                    srfTypes.Add(opaque);
+                    srfTypes.Add("wall");
                     // TO DO: check, if external. VERY IMPORTANT
                 }
                 foreach (Roof roof in zone.Roofs)
                 {
                     extSrfAreas.Add(roof.Area);
                     allSrfAreas.Add(roof.Area);
-                    srfTypes.Add(opaque);
+                    srfTypes.Add("roof");
                     //TO DO: check if external. VERY IMPORTANT
                 }
 
@@ -102,7 +106,7 @@ namespace Hive.IO.GhDistributors
                 //foreach (BuildingComponents.Floor floor in zone.Floors)
                 //    extSrfAreas[i] += floor.Area;
 
-                zones_schedules.Add(zone.Schedules);
+                zonesSchedules.Add(zone.Schedules);
             }
 
 
@@ -117,7 +121,7 @@ namespace Hive.IO.GhDistributors
             DA.SetData(3, building.SIA2024.ToJson()); // single zone
             DA.SetDataList(4, allSrfAreas);
             DA.SetDataList(5, srfTypes);
-            DA.SetData(6, Sia2024Schedules.ToJson(zones_schedules[0].RoomType)); // single zone !!
+            DA.SetData(6, Sia2024Schedules.ToJson(zonesSchedules[0].RoomType)); // single zone !!
             DA.SetData(7, building.Zones[0].RunAdaptiveComfort); // single zone !!
             DA.SetData(8, building.Zones[0].RunNaturalVentilation); // single zone !!
         }

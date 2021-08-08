@@ -75,8 +75,10 @@
     <Compile Include="Building\Building.cs" />
     <Compile Include="Building\Components.cs" />
     <Compile Include="Building\Construction.cs" />
+    <Compile Include="Building\ConstructionAssembly.cs" />
     <Compile Include="Building\Material.cs" />
     <Compile Include="Building\Sia2024Record.cs" />
+    <Compile Include="Building\Sia380ConstructionRecord.cs" />
     <Compile Include="Building\Sia2024Schedules.cs" />
     <Compile Include="EnergySystems\CombustionTech.cs" />
     <Compile Include="EnergySystems\Carrier.cs" />
@@ -249,10 +251,11 @@
   </ItemGroup>
   <ItemGroup>
     <EmbeddedResource Include="Building\sia2024_room_data.json" />
+    <EmbeddedResource Include="Building\sia2024_schedules.json" />
+    <EmbeddedResource Include="Building\sia380_constructions.json" />
     <EmbeddedResource Include="EnergySystems\conversion_technology_defaults.json" />
     <EmbeddedResource Include="EnergySystems\surface_tech_module_types.json" />
     <EmbeddedResource Include="EnergySystems\emitter_defaults.json" />
-    <EmbeddedResource Include="Building\sia2024_schedules.json" />
     <None Include="packages.config" />
     <None Include="Resources\gc_efficiency.csv" />
     <None Include="Resources\pvt_efficiency.csv" />
@@ -395,6 +398,7 @@
     <StartArguments>
     </StartArguments>
     <StartAction>Program</StartAction>
-    <DocumentationFile>bin\Hive.IO.xml</DocumentationFile>
+    <DocumentationFile>
+    </DocumentationFile>
   </PropertyGroup>
 </Project>

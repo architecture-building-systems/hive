@@ -28,6 +28,7 @@ namespace Hive.IO.GhParametricInputs
         {
             pManager.AddTextParameter("description", "description", "SIA 2024 room name. Must follow hive sia 2024 naming convention", GH_ParamAccess.item);
             pManager.AddNumberParameter("roomConstant", "roomConstant", "Room constant ('Zeitkonstante'), in hours", GH_ParamAccess.item);
+            pManager.AddNumberParameter("capacitancePerFloorArea", "capacitancePerFloorArea", "Room specific heat capacity ('Waermespeicherfaehigkeit des Raumes'), in Wh/(m^2*K)", GH_ParamAccess.item);
             pManager.AddNumberParameter("coolingSetpoint", "coolingSetpoint", "Cooling setpoint 'Raumlufttemperatur Auslegung Kuehlung (Sommer)'. in deg Celsius", GH_ParamAccess.item);
             pManager.AddNumberParameter("heatingSetpoint", "heatingSetpoint", "Heating setpoint 'Raumlufttemperatur Auslegung Heizen (Winter)'. in deg Celsius", GH_ParamAccess.item);
             pManager.AddNumberParameter("floorArea", "floorArea", "Floor area 'Nettogeschossflaeche' in m^2", GH_ParamAccess.item);
@@ -72,30 +73,31 @@ namespace Hive.IO.GhParametricInputs
 
             DA.GetData(0, ref siaRoom.RoomType);
             DA.GetData(1, ref siaRoom.RoomConstant);
-            DA.GetData(2, ref siaRoom.CoolingSetpoint);
-            DA.GetData(3, ref siaRoom.HeatingSetpoint);
-            DA.GetData(4, ref siaRoom.FloorArea);
-            DA.GetData(5, ref siaRoom.EnvelopeArea);
-            DA.GetData(6, ref siaRoom.GlazingRatio);
-            DA.GetData(7, ref siaRoom.UValueOpaque);
-            DA.GetData(8, ref siaRoom.UValueTransparent);
-            DA.GetData(9, ref siaRoom.GValue);
-            DA.GetData(10, ref siaRoom.GValueTotal);
-            DA.GetData(11, ref siaRoom.ShadingSetpoint);
-            DA.GetData(12, ref siaRoom.WindowFrameReduction);
-            DA.GetData(13, ref siaRoom.AirChangeRate);
-            DA.GetData(14, ref siaRoom.Infiltration);
-            DA.GetData(15, ref siaRoom.HeatRecovery);
-            DA.GetData(16, ref siaRoom.OccupantLoads);
-            DA.GetData(17, ref siaRoom.LightingLoads);
-            DA.GetData(18, ref siaRoom.EquipmentLoads);
-            DA.GetData(19, ref siaRoom.OccupantYearlyHours);
-            DA.GetData(20, ref siaRoom.LightingYearlyHours);
-            DA.GetData(21, ref siaRoom.EquipmentYearlyHours);
-            DA.GetData(22, ref siaRoom.OpaqueCost);
-            DA.GetData(23, ref siaRoom.TransparentCost);
-            DA.GetData(24, ref siaRoom.OpaqueEmissions);
-            DA.GetData(25, ref siaRoom.TransparentEmissions);
+            DA.GetData(2, ref siaRoom.CapacitancePerFloorArea);
+            DA.GetData(3, ref siaRoom.CoolingSetpoint);
+            DA.GetData(4, ref siaRoom.HeatingSetpoint);
+            DA.GetData(5, ref siaRoom.FloorArea);
+            DA.GetData(6, ref siaRoom.EnvelopeArea);
+            DA.GetData(7, ref siaRoom.GlazingRatio);
+            DA.GetData(8, ref siaRoom.UValueOpaque);
+            DA.GetData(9, ref siaRoom.UValueTransparent);
+            DA.GetData(10, ref siaRoom.GValue);
+            DA.GetData(11, ref siaRoom.GValueTotal);
+            DA.GetData(12, ref siaRoom.ShadingSetpoint);
+            DA.GetData(13, ref siaRoom.WindowFrameReduction);
+            DA.GetData(14, ref siaRoom.AirChangeRate);
+            DA.GetData(15, ref siaRoom.Infiltration);
+            DA.GetData(16, ref siaRoom.HeatRecovery);
+            DA.GetData(17, ref siaRoom.OccupantLoads);
+            DA.GetData(18, ref siaRoom.LightingLoads);
+            DA.GetData(19, ref siaRoom.EquipmentLoads);
+            DA.GetData(20, ref siaRoom.OccupantYearlyHours);
+            DA.GetData(21, ref siaRoom.LightingYearlyHours);
+            DA.GetData(22, ref siaRoom.EquipmentYearlyHours);
+            DA.GetData(23, ref siaRoom.OpaqueCost);
+            DA.GetData(24, ref siaRoom.TransparentCost);
+            DA.GetData(25, ref siaRoom.OpaqueEmissions);
+            DA.GetData(27, ref siaRoom.TransparentEmissions);
 
             DA.SetData(0, siaRoom.ToJson());
         }

@@ -40,7 +40,7 @@ namespace Hive.IO.Building
         /// Flag for external, i.e. access to solar radiation and ambient environment
         /// </summary>
         [JsonProperty]
-        public bool IsExternal { get; private set; }
+        public bool IsExternal { get; internal set; }
         /// <summary>
         /// Total Cost in [Currency]
         /// </summary>
@@ -134,7 +134,8 @@ namespace Hive.IO.Building
 
             OpaqueConstruction opaqueConstruction = new OpaqueConstruction("SIA2024_Opaque")
             {
-                UValue = siaRoom.UValueOpaque
+                UValue = siaRoom.UValueOpaque,
+                Capacitance = siaRoom.CapacitancePerFloorArea
             };
             this.SpecificCo2 = siaRoom.OpaqueEmissions;
             this.SpecificCost = siaRoom.OpaqueCost;
@@ -194,7 +195,8 @@ namespace Hive.IO.Building
 
             OpaqueConstruction opaqueConstruction = new OpaqueConstruction("SIA2024_Opaque")
             {
-                UValue = siaRoom.UValueWalls
+                UValue = siaRoom.UValueWalls,
+                Capacitance = siaRoom.CapacityWalls
             };
             this.SpecificCo2 = siaRoom.EmissionsWalls;
             this.SpecificCost = siaRoom.CostWalls;
@@ -222,7 +224,8 @@ namespace Hive.IO.Building
 
             OpaqueConstruction opaqueConstruction = new OpaqueConstruction("SIA2024_Opaque")
             {
-                UValue = siaRoom.UValueRoofs
+                UValue = siaRoom.UValueRoofs,
+                Capacitance = siaRoom.CapacityRoofs
             };
             this.SpecificCo2 = siaRoom.EmissionsRoofs;
             this.SpecificCost = siaRoom.CostRoofs;
@@ -231,20 +234,6 @@ namespace Hive.IO.Building
 
     }
 
-
-    /// <summary>
-    /// Ceiling, i.e. internal surface
-    /// </summary>
-    [JsonObject(MemberSerialization.OptIn)]
-    public class Ceiling : Component
-    {
-        public Ceiling(rg.BrepFace surfaceGeometry) : base(surfaceGeometry)
-        {
-
-        }
-        [JsonConstructor] 
-        protected Ceiling() { }
-    }
 
 
     /// <summary>
@@ -265,7 +254,8 @@ namespace Hive.IO.Building
 
             OpaqueConstruction opaqueConstruction = new OpaqueConstruction("SIA2024_Opaque")
             {
-                UValue = siaRoom.UValueFloors
+                UValue = siaRoom.UValueFloors,
+                Capacitance = siaRoom.CapacityFloors
             };
             this.SpecificCo2 = siaRoom.EmissionsFloors;
             this.SpecificCost = siaRoom.CostFloors;

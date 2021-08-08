@@ -79,18 +79,13 @@ namespace Hive.IO.Building
         #region Building Components
 
         public IEnumerable<Component> SurfaceComponents =>
-            Walls.Cast<Component>().Concat(Ceilings).Concat(Roofs).Concat(Floors).Concat(Windows);
+            Walls.Cast<Component>().Concat(Roofs).Concat(Floors).Concat(Windows);
 
         /// <summary>
         /// Wall components of this zone. Cannot be empty.
         /// </summary>
         [JsonProperty]
         public Wall[] Walls { get; private set; }
-        /// <summary>
-        /// Ceiling components of this zone. Cannot be empty.
-        /// </summary>
-        [JsonProperty]
-        public Ceiling[] Ceilings { get; private set; }
         /// <summary>
         /// Floor components of this zone. Cannot be empty. A void would also be a floor, but with material property 'air' or something
         /// </summary>
@@ -113,13 +108,133 @@ namespace Hive.IO.Building
         [JsonProperty]
         public Shading[] ShadingDevices { get; private set; }
 
-        public double WallArea => Walls.Sum(w => w.Area);
-        public double RoofArea => Roofs.Sum(r => r.Area);
+        public double WallsArea => Walls.Sum(w => w.Area);
+        public double RoofsArea => Roofs.Sum(r => r.Area);
         public double WindowArea => Windows.Sum(w => w.Area);
-        public double FloorArea => Floors.Sum(f => f.Area);
+        public double FloorsArea => Floors.Sum(f => f.Area);
 
         #endregion
 
+
+        #region Construction
+
+        // For copying to the SiaRoom. These hold the string keywords for the SIA 380 Construction types.
+        public string ConstructionType;
+        public string RoofsConstructionType;
+        public string FloorsConstructionType;
+        public string WallsConstructionType;
+        public string WindowsConstructionType;
+
+        /// <summary>
+        /// Applies a SIA 380 construction template to the zone based on the key (a.k.a. name).
+        /// </summary>
+        /// <param name="siaConstructionType">The name of the SIA 380 template construction type.</param>
+        public void ApplySia380ConstructionAssembly(string siaConstructionType)
+        {
+            Sia380ConstructionAssembly siaConstruction = Sia380ConstructionRecord.Lookup(siaConstructionType);
+            ConstructionType = siaConstruction.Name;
+
+            // Apply construction to roofs, floors, walls, windows
+            RoofsConstructionType = siaConstruction.Name;
+            for (int i = 0; i < Roofs.Length; i++) Roofs[i].Construction = siaConstruction.RoofsConstruction;
+            FloorsConstructionType = siaConstruction.Name;
+            for (int i = 0; i < Floors.Length; i++)
+            {
+                Floors[i].Construction = siaConstruction.FloorsConstruction;
+            }
+            WallsConstructionType = siaConstruction.Name;
+            for (int i = 0; i < Walls.Length; i++) Walls[i].Construction = siaConstruction.WallsConstruction;
+            WindowsConstructionType = siaConstruction.Name;
+            for (int i = 0; i < Windows.Length; i++) Windows[i].Construction = siaConstruction.WindowsConstruction;
+
+            // Update the capacitances of the components
+            siaConstruction.SetCapacities(FloorsArea, WallsArea, RoofsArea);
+            CapacitancePerFloorArea = siaConstruction.CapacitancePerFloorArea;
+        }
+
+        // Capacitance
+        double _capacitancePerFloorArea;
+        double? _wallsCapacitance;
+        double? _floorsCapacitance;
+        double? _roofsCapacitance;
+
+        /// <summary>
+        /// The total capacitance of the zone divided by its floor area. 
+        /// This is due to how SIA 380 provides room capacitance by construction type for its templates.
+        /// </summary>
+        public double CapacitancePerFloorArea
+        {
+            get => _capacitancePerFloorArea;
+            set 
+            { 
+                _capacitancePerFloorArea = value;
+                UpdateCapacities();
+            }
+        }
+
+        /// <summary>
+        /// Recalculates the capacities per component type in case of changed surface areas 
+        /// or capacitance per floor area (in the case of a construction type change, for instance).
+        /// </summary>
+        void UpdateCapacities()
+        {
+            // Recalculate in case surface areas have changed
+            var factorAll = 1 + RoofsArea / FloorsArea + WallsArea / FloorsArea;
+            // Assign capacities per component type. To use in sia380 GH component (demand calculation).
+            FloorsCapacity = FloorsArea / factorAll * CapacitancePerFloorArea;
+            RoofsCapacity = RoofsArea / factorAll * CapacitancePerFloorArea;
+            WallsCapacity = WallsArea / factorAll * CapacitancePerFloorArea;
+        }
+
+        /// <summary>
+        /// The total capacitance of all walls assigned to the zone
+        /// </summary>
+        public double WallsCapacity
+        {
+            get => _wallsCapacitance ?? Walls.Select(w => w.Construction.Capacitance).Sum();
+            set
+            {
+                foreach (Wall wall in Walls)
+                {
+                    wall.Construction.Capacitance = value * (wall.Area / WallsArea);
+                }
+                _wallsCapacitance = value;
+            }
+        }
+
+        /// <summary>
+        /// The total capacitance of all floors assigned to the zone
+        /// </summary>
+        public double FloorsCapacity
+        {
+            get => _floorsCapacitance ?? Floors.Select(f => f.Construction.Capacitance).Sum();
+            set
+            {
+                foreach (Floor floor in Floors)
+                {
+                    floor.Construction.Capacitance = value * (floor.Area / FloorsArea);
+                }
+                _floorsCapacitance = value;
+            }
+        }
+
+        /// <summary>
+        /// The total capacitance of all roofs assigned to the zone.
+        /// </summary>
+        public double RoofsCapacity
+        {
+            get => _roofsCapacitance ?? Roofs.Select(r => r.Construction.Capacitance).Sum();
+            set
+            {
+                foreach (Roof roof in Roofs)
+                {
+                    roof.Construction.Capacitance = value * (roof.Area / RoofsArea);
+                }
+                _roofsCapacitance = value;
+            }
+        }
+
+        #endregion Construction
 
         #region Energy Demand
         /// <summary>
@@ -214,6 +329,7 @@ namespace Hive.IO.Building
         #endregion
 
 
+
         #region Error handling
         /// <summary>
         /// For simplicity of thermal calculations, avoid curves etc., only accept linear floorplans and geometries
@@ -268,6 +384,7 @@ namespace Hive.IO.Building
         public bool IsFloorExist { get; private set; }
         [JsonProperty]
         public string ErrorText { get; private set; }
+
         #endregion
 
         [JsonConstructor]
@@ -331,19 +448,22 @@ namespace Hive.IO.Building
 
 
             // identify building components based on their surface angles
-            Tuple<Wall[], Ceiling[], Roof[], Floor[], Window[], Shading[]> tuple = IdentifyComponents(zone_geometry, windowSrfs, shadingSrfs);
+            Tuple<Wall[], Roof[], Floor[], Window[], Shading[]> tuple = IdentifyComponents(zone_geometry, windowSrfs, shadingSrfs);
             this.Walls = tuple.Item1;
-            this.Ceilings = tuple.Item2;
-            this.Roofs = tuple.Item3;
-            this.Floors = new Floor[floorList.Count + tuple.Item4.Length];
-            int mainFloors = tuple.Item4.Length;
+            this.Roofs = tuple.Item2;
+            this.Floors = new Floor[floorList.Count + tuple.Item3.Length];
+            int mainFloors = tuple.Item3.Length;
             int additionalFloors = floorList.Count;
             for (int i = 0; i < mainFloors; i++)
-                this.Floors[i] = tuple.Item4[i];
-            for (int i = mainFloors; i < mainFloors + additionalFloors; i++)
+                this.Floors[i] = tuple.Item3[i];
+            for (int i = mainFloors; i < mainFloors + additionalFloors; i++) // these are the additional floors inside the zone, identified a few lines above in CheckFloorInZone( )
+            {
                 this.Floors[i] = new Floor(floorList[i - mainFloors]);
-            this.Windows = tuple.Item5;
-            this.ShadingDevices = tuple.Item6;
+                this.Floors[i].IsExternal = false; // a bit redundant, because boolean property will be false if not declared. but just to be explicit
+            }
+
+            this.Windows = tuple.Item4;
+            this.ShadingDevices = tuple.Item5;
             
 
             // check, if floor is detected
@@ -377,7 +497,6 @@ namespace Hive.IO.Building
             }
         }
         #endregion
-
 
         #region Setters
 
@@ -531,8 +650,6 @@ namespace Hive.IO.Building
         }
 
         #endregion
-
-
 
         #region internalMethods
 
@@ -800,58 +917,74 @@ namespace Hive.IO.Building
         /// <param name="window_geometry"></param>
         /// <param name="shading_geometry"></param>
         /// <returns></returns>
-        private Tuple<Wall[], Ceiling[], Roof[], Floor[], Window[], Shading[]>
+        private Tuple<Wall[], Roof[], Floor[], Window[], Shading[]>
             IdentifyComponents(rg.Brep zone_geometry, rg.BrepFace[] window_geometry, rg.BrepFace[] shading_geometry)
         {
-            List<int> wall_indices = new List<int>();
-            List<int> ceiling_indices = new List<int>();
-            List<int> roof_indices = new List<int>();
-            List<int> floor_indices = new List<int>();
+            var wallIndices = new List<int>();
+            var roofIndices = new List<int>();
+            var floorIndices = new List<int>();
 
+            var floorHeights = new List<double>();
+            
             for (int i = 0; i < zone_geometry.Faces.Count(); i++)
             {
                 rg.BrepFace srf = zone_geometry.Faces[i];
-                srf.ClosestPoint(rg.AreaMassProperties.Compute(srf).Centroid, out double u, out double v);
+                rg.Point3d centroid = rg.AreaMassProperties.Compute(srf).Centroid;
+                srf.ClosestPoint(centroid, out double u, out double v);
                 rg.Vector3d normal = srf.NormalAt(u, v); // for some reason, the bottom surface also has postivie normal here?!... using wrong point at line above?
                 double angle = rg.Vector3d.VectorAngle(normal, new rg.Vector3d(0, 0, 1)) * 180 / Math.PI;
 
                 // Floor: flat surface with  normal pointing downwards. 
                 //  but careful, it could also be an overhanging wall. so floor is that surface with the lowest corner point
                 //  lets say, floor MUST be flat
-                // Ceiling: Same, but there must be an adjacent zone surface, such that this surface is internal. Hive 0.2
                 if (normal.Z == -1.0)
                 {
-                    floor_indices.Add(i);
+                    floorIndices.Add(i);
+                    floorHeights.Add(centroid.Z);
                 }
                 else if (angle < 45.0)                  // Roof: surface angle < 45? 
-                {
-                    roof_indices.Add(i);
-                }
+                    roofIndices.Add(i);
                 else                                    // Wall: surface angle >= 45?
-                {
-                    wall_indices.Add(i);
-                }
+                    wallIndices.Add(i);
             }
-            Wall[] walls = new Wall[wall_indices.Count()];
-            Ceiling[] ceilings = new Ceiling[ceiling_indices.Count()];
-            Roof[] roofs = new Roof[roof_indices.Count()];
-            Floor[] floors = new Floor[floor_indices.Count()];
+
+            Wall[] walls = new Wall[wallIndices.Count()];
+            Roof[] roofs = new Roof[roofIndices.Count()];
+            Floor[] floors = new Floor[floorIndices.Count()];
+            double minFloorHeight = floorHeights.Min();
 
             for (int i = 0; i < walls.Length; i++)
-                walls[i] = new Wall(zone_geometry.Faces[wall_indices[i]]);
-            for (int i = 0; i < ceilings.Length; i++)
-                ceilings[i] = new Ceiling(zone_geometry.Faces[ceiling_indices[i]]);
-            for (int i = 0; i < roofs.Length; i++)
-                roofs[i] = new Roof(zone_geometry.Faces[roof_indices[i]]);
-            for (int i = 0; i < floors.Length; i++)
-                floors[i] = new Floor(zone_geometry.Faces[floor_indices[i]]);
+            {
+                walls[i] = new Wall(zone_geometry.Faces[wallIndices[i]]);
+                walls[i].IsExternal = true;
+            }
 
+            for (int i = 0; i < roofs.Length; i++)
+            {
+                roofs[i] = new Roof(zone_geometry.Faces[roofIndices[i]]);
+                roofs[i].IsExternal = true;
+            }
+
+            for (int i = 0; i < floors.Length; i++)
+            {
+                floors[i] = new Floor(zone_geometry.Faces[floorIndices[i]]);
+                // this might only work in single zone models, coz in multi zone, we could have a building on a slope, where several floors are touching the ground
+                if (Math.Abs(floorHeights[i] - minFloorHeight) > Tolerance)
+                {
+                    floors[i].IsExternal = true;
+                }
+                else
+                {
+                    floors[i].IsExternal = false;
+                }
+            }
 
             var windowList = new List<Window>();
             if (window_geometry != null && window_geometry.Length > 0)
             {
-                foreach (var w in walls.Cast<Component>().Concat(roofs))
+                foreach (var w in walls.Cast<Component>().Concat(roofs).Concat(floors))
                 {
+                    if (!w.IsExternal) continue;
                     w.SubComponents = new List<Component>();
                     foreach (var win in window_geometry)
                     {
@@ -875,7 +1008,7 @@ namespace Hive.IO.Building
                 }
             }
 
-            return new Tuple<Wall[], Ceiling[], Roof[], Floor[], Window[], Shading[]>(walls, ceilings, roofs, floors, windowList.ToArray(), shadings);
+            return new Tuple<Wall[], Roof[], Floor[], Window[], Shading[]>(walls, roofs, floors, windowList.ToArray(), shadings);
         }
         #endregion
     }

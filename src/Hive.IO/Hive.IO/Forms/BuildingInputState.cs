@@ -85,11 +85,16 @@ namespace Hive.IO.Forms
             {
                 RaisePropertyChangedEvent(nameof(RoomType));
                 RaisePropertyChangedEvent(nameof(RoomConstant));
+                RaisePropertyChangedEvent(nameof(CapacitancePerFloorArea));
                 RaisePropertyChangedEvent(nameof(FloorArea));
                 RaisePropertyChangedEvent(nameof(EnvelopeArea));
                 RaisePropertyChangedEvent(nameof(GlazingRatio));
                 RaisePropertyChangedEvent(nameof(RunAdaptiveComfort));
                 RaisePropertyChangedEvent(nameof(RunNaturalVentilation));
+
+                //RaisePropertyChangedEvent(nameof(CapacityWalls));
+                //RaisePropertyChangedEvent(nameof(CapacityFloors));
+                //RaisePropertyChangedEvent(nameof(CapacityRoofs));
 
                 var properties = new[]
                 {
@@ -99,11 +104,11 @@ namespace Hive.IO.Forms
                     "ShadingSetpoint",
                     "WindowFrameReduction",
                     "AirChangeRate",
-                    "Infiltration", 
-                    "HeatRecovery", 
-                    "OccupantLoads", 
+                    "Infiltration",
+                    "HeatRecovery",
+                    "OccupantLoads",
                     "LightingLoads",
-                    "EquipmentLoads", 
+                    "EquipmentLoads",
                     "OccupantYearlyHours",
                     "LightingYearlyHours",
                     "EquipmentYearlyHours",
@@ -117,6 +122,9 @@ namespace Hive.IO.Forms
                     "UValueFloors",
                     "UValueRoofs",
                     "UValueWalls",
+                    //"CapacityFloors",
+                    //"CapacityRoofs",
+                    //"CapacityWalls",
                     "CostFloors",
                     "CostRoofs",
                     "CostWalls",
@@ -133,38 +141,41 @@ namespace Hive.IO.Forms
             }
         }
 
+        public void UpdateSiaRoomConstruction()
+        {
+            _siaRoom.Construction = _zone.ConstructionType;
+            _siaRoom.WallsConstruction = _zone.WallsConstructionType;
+            _siaRoom.FloorsConstruction = _zone.FloorsConstructionType;
+            _siaRoom.RoofsConstruction = _zone.RoofsConstructionType;
+
+            _siaRoom.CapacitancePerFloorArea = _zone.CapacitancePerFloorArea;
+            _siaRoom.CapacityFloors = _zone.FloorsCapacity;
+            _siaRoom.CapacityRoofs = _zone.RoofsCapacity;
+            _siaRoom.CapacityWalls = _zone.WallsCapacity;
+        }
+
         #region areas
 
         // NOTE: the funny syntax (x?.a ?? y.b) returns x.a, unless x is null, then it returns y.b
         // it works like this: (x?.a) is x.a if x != null, else null. (A ?? B) is A if A != null, else B
         // I'm using this to enable creating a BuildingInputSate with zone == null for testing purposes.
-        public string ZoneWallArea => $"{_zone?.WallArea ?? _siaRoom.EnvelopeArea:0.00}";
-        public string ZoneFloorArea => $"{_zone?.FloorArea ?? _siaRoom.FloorArea:0.00}";
-        public string ZoneRoofArea => $"{_zone?.RoofArea ?? _siaRoom.EnvelopeArea:0.00}";
+        public string ZoneWallArea => $"{_zone?.WallsArea ?? _siaRoom.EnvelopeArea:0.00}";
+        public string ZoneFloorArea => $"{_zone?.FloorsArea ?? _siaRoom.FloorArea:0.00}";
+        public string ZoneRoofArea => $"{_zone?.RoofsArea ?? _siaRoom.EnvelopeArea:0.00}";
         public string ZoneWindowArea => $"{_zone?.WindowArea ?? _siaRoom.EnvelopeArea:0.00}";
 
         #endregion areas
 
         #region comboboxes
 
-        public IEnumerable<string> BuildingUseTypes =>
-            _editable ? Sia2024Record.BuildingUseTypes() : new List<string> {"<Custom>"};
+        public IEnumerable<string> BuildingUseTypes => _editable ? Sia2024Record.BuildingUseTypes() : new List<string> { "<Custom>" };
 
-        public IEnumerable<string> RoomTypes =>
-            _editable ? Sia2024Record.RoomTypes(BuildingUseType) : new List<string> {RoomType};
+        public IEnumerable<string> RoomTypes => _editable ? Sia2024Record.RoomTypes(BuildingUseType) : new List<string> { RoomType };
 
-        public IEnumerable<string> Qualities => _editable ? Sia2024Record.Qualities() : new List<string> {"<Custom>"};
+        public IEnumerable<string> Qualities => _editable ? Sia2024Record.Qualities() : new List<string> { "<Custom>" };
 
-        public string Quality
-        {
-            get => _siaRoom.Quality;
-            set
-            {
-                _siaRoom = Sia2024Record.Lookup(BuildingUseType, RoomType, value) as Sia2024RecordEx;
-                RaisePropertyChangedEvent();
-                RaiseAllPropertiesChangedEvent();
-            }
-        }
+        public IEnumerable<string> Constructions => _editable ? Sia380ConstructionRecord.ConstructionTypes() : new List<string> { "<Custom>" };
+
 
         [SuppressMessage("ReSharper", "ExplicitCallerInfoArgument")]
         public string BuildingUseType
@@ -192,11 +203,35 @@ namespace Hive.IO.Forms
             }
         }
 
+        public string Quality
+        {
+            get => _siaRoom.Quality;
+            set
+            {
+                _siaRoom = Sia2024Record.Lookup(BuildingUseType, RoomType, value) as Sia2024RecordEx;
+                RaisePropertyChangedEvent();
+                RaiseAllPropertiesChangedEvent();
+            }
+        }
+
+        public string Construction
+        {
+            get => _siaRoom.Construction ?? "undefined";
+            set
+            {
+                _zone.ApplySia380ConstructionAssembly(value);
+                UpdateSiaRoomConstruction();
+
+                RaisePropertyChangedEvent();
+                RaiseAllPropertiesChangedEvent();
+            }
+        }
+
         #region zone properties
 
         public bool RunAdaptiveComfort
         {
-            get => _zone.RunAdaptiveComfort;
+            get => _siaRoom.RunAdaptiveComfort;
             set
             {
                 try
@@ -214,7 +249,7 @@ namespace Hive.IO.Forms
 
         public bool RunNaturalVentilation
         {
-            get => _zone.RunNaturalVentilation;
+            get => _siaRoom.RunNaturalVentilation;
             set
             {
                 try
@@ -242,6 +277,24 @@ namespace Hive.IO.Forms
                 try
                 {
                     _siaRoom.RoomConstant = double.Parse(value);
+                }
+                catch (Exception)
+                {
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
+        public string CapacitancePerFloorArea
+        {
+            get => $"{_siaRoom.CapacitancePerFloorArea:0.00}";
+            set
+            {
+                try
+                {
+                    _zone.CapacitancePerFloorArea = double.Parse(value);
+                    UpdateSiaRoomConstruction();
                 }
                 catch (Exception)
                 {
@@ -414,6 +467,66 @@ namespace Hive.IO.Forms
                 try
                 {
                     _siaRoom.UValueWalls = double.Parse(value);
+                }
+                catch (FormatException)
+                {
+                    // don't update the value                    
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
+        public string FloorsConstruction
+        {
+            get => $"{_siaRoom.FloorsConstruction:0.00}";
+            set // Not user settable for now
+            {
+                try
+                {
+                    //_zone.ApplySia380FloorsConstruction(value);
+                    //UpdateSiaRoomConstruction();
+                    _siaRoom.FloorsConstruction = value;
+                }
+                catch (FormatException)
+                {
+                    // don't update the value                    
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
+        public string RoofsConstruction
+        {
+            get => $"{_siaRoom.RoofsConstruction:0.00}";
+            set // Not user settable for now
+            {
+                try
+                {
+                    //_zone.ApplySia380RoofsConstruction(value);
+                    //UpdateSiaRoomConstruction();
+                    _siaRoom.RoofsConstruction = value;
+                }
+                catch (FormatException)
+                {
+                    // don't update the value                    
+                }
+
+                RaisePropertyChangedEventEx();
+            }
+        }
+
+        public string WallsConstruction
+        {
+            get => $"{_siaRoom.WallsConstruction:0.00}";
+            set // Not user settable for now
+            {
+                try
+                {
+                    //_zone.ApplySia380WallsConstruction(value);
+                    //UpdateSiaRoomConstruction();
+                    _siaRoom.WallsConstruction = value;
                 }
                 catch (FormatException)
                 {
@@ -801,8 +914,6 @@ namespace Hive.IO.Forms
 
         #endregion sia2024 properties
 
-
-
         #region colors
 
         private readonly Brush _normalBrush = new SolidColorBrush(Colors.Black);
@@ -870,6 +981,8 @@ namespace Hive.IO.Forms
         private readonly FontWeight _modifiedFontWeight = FontWeights.Bold;
 
         public FontWeight RoomConstantFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+        //public FontWeight CapacitancePerFloorAreaFontWeight => ModifiedField() ? _modifiedFontWeight : _normalFontWeight;
+
         public FontWeight UValueFloorsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight UValueRoofsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
         public FontWeight UValueWallsFontWeight => ModifiedProperty() ? _modifiedFontWeight : _normalFontWeight;
