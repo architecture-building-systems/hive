@@ -40,7 +40,7 @@ namespace Hive.IO.Building
         /// Flag for external, i.e. access to solar radiation and ambient environment
         /// </summary>
         [JsonProperty]
-        public bool IsExternal { get; private set; }
+        public bool IsExternal { get; internal set; }
         /// <summary>
         /// Total Cost in [Currency]
         /// </summary>

@@ -49,8 +49,8 @@ namespace Hive.IO.GhDistributors
             var windowAreas = new List<double>();
             var extSrfAreas = new List<double>();
             var allSrfAreas = new List<double>();
-            var srfTypes = new List<string>();
-            var zones_schedules = new List<ZoneSchedules>();
+            var srfTypes = new List<string>();  // these strings need to correspond with the sia380.py in Hive.Core. not very elegant... ^^
+            var zonesSchedules = new List<ZoneSchedules>();
 
             for (int i = 0; i < zoneCount; i++)
             {
@@ -65,6 +65,7 @@ namespace Hive.IO.GhDistributors
                     {
                         extSrfAreas.Add(floor.Area);
                         allSrfAreas.Add(floor.Area);
+                        srfTypes.Add("floor");
                     }
                 }
 
@@ -105,7 +106,7 @@ namespace Hive.IO.GhDistributors
                 //foreach (BuildingComponents.Floor floor in zone.Floors)
                 //    extSrfAreas[i] += floor.Area;
 
-                zones_schedules.Add(zone.Schedules);
+                zonesSchedules.Add(zone.Schedules);
             }
 
 
@@ -120,7 +121,7 @@ namespace Hive.IO.GhDistributors
             DA.SetData(3, building.SIA2024.ToJson()); // single zone
             DA.SetDataList(4, allSrfAreas);
             DA.SetDataList(5, srfTypes);
-            DA.SetData(6, Sia2024Schedules.ToJson(zones_schedules[0].RoomType)); // single zone !!
+            DA.SetData(6, Sia2024Schedules.ToJson(zonesSchedules[0].RoomType)); // single zone !!
             DA.SetData(7, building.Zones[0].RunAdaptiveComfort); // single zone !!
             DA.SetData(8, building.Zones[0].RunNaturalVentilation); // single zone !!
         }

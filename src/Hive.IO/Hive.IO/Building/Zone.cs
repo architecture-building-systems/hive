@@ -456,8 +456,12 @@ namespace Hive.IO.Building
             int additionalFloors = floorList.Count;
             for (int i = 0; i < mainFloors; i++)
                 this.Floors[i] = tuple.Item3[i];
-            for (int i = mainFloors; i < mainFloors + additionalFloors; i++)
+            for (int i = mainFloors; i < mainFloors + additionalFloors; i++) // these are the additional floors inside the zone, identified a few lines above in CheckFloorInZone( )
+            {
                 this.Floors[i] = new Floor(floorList[i - mainFloors]);
+                this.Floors[i].IsExternal = false; // a bit redundant, because boolean property will be false if not declared. but just to be explicit
+            }
+
             this.Windows = tuple.Item4;
             this.ShadingDevices = tuple.Item5;
             
@@ -921,48 +925,66 @@ namespace Hive.IO.Building
             var floorIndices = new List<int>();
 
             var floorHeights = new List<double>();
-
+            
             for (int i = 0; i < zone_geometry.Faces.Count(); i++)
             {
                 rg.BrepFace srf = zone_geometry.Faces[i];
-                srf.ClosestPoint(rg.AreaMassProperties.Compute(srf).Centroid, out double u, out double v);
+                rg.Point3d centroid = rg.AreaMassProperties.Compute(srf).Centroid;
+                srf.ClosestPoint(centroid, out double u, out double v);
                 rg.Vector3d normal = srf.NormalAt(u, v); // for some reason, the bottom surface also has postivie normal here?!... using wrong point at line above?
                 double angle = rg.Vector3d.VectorAngle(normal, new rg.Vector3d(0, 0, 1)) * 180 / Math.PI;
 
                 // Floor: flat surface with  normal pointing downwards. 
                 //  but careful, it could also be an overhanging wall. so floor is that surface with the lowest corner point
                 //  lets say, floor MUST be flat
-                // Ceiling: Same, but there must be an adjacent zone surface, such that this surface is internal. Hive 0.2
                 if (normal.Z == -1.0)
                 {
                     floorIndices.Add(i);
+                    floorHeights.Add(centroid.Z);
                 }
                 else if (angle < 45.0)                  // Roof: surface angle < 45? 
-                {
                     roofIndices.Add(i);
-                }
                 else                                    // Wall: surface angle >= 45?
-                {
                     wallIndices.Add(i);
-                }
             }
+
             Wall[] walls = new Wall[wallIndices.Count()];
             Roof[] roofs = new Roof[roofIndices.Count()];
             Floor[] floors = new Floor[floorIndices.Count()];
+            double minFloorHeight = floorHeights.Min();
 
             for (int i = 0; i < walls.Length; i++)
+            {
                 walls[i] = new Wall(zone_geometry.Faces[wallIndices[i]]);
-            for (int i = 0; i < roofs.Length; i++)
-                roofs[i] = new Roof(zone_geometry.Faces[roofIndices[i]]);
-            for (int i = 0; i < floors.Length; i++)
-                floors[i] = new Floor(zone_geometry.Faces[floorIndices[i]]);
+                walls[i].IsExternal = true;
+            }
 
+            for (int i = 0; i < roofs.Length; i++)
+            {
+                roofs[i] = new Roof(zone_geometry.Faces[roofIndices[i]]);
+                roofs[i].IsExternal = true;
+            }
+
+            for (int i = 0; i < floors.Length; i++)
+            {
+                floors[i] = new Floor(zone_geometry.Faces[floorIndices[i]]);
+                // this might only work in single zone models, coz in multi zone, we could have a building on a slope, where several floors are touching the ground
+                if (Math.Abs(floorHeights[i] - minFloorHeight) > Tolerance)
+                {
+                    floors[i].IsExternal = true;
+                }
+                else
+                {
+                    floors[i].IsExternal = false;
+                }
+            }
 
             var windowList = new List<Window>();
             if (window_geometry != null && window_geometry.Length > 0)
             {
-                foreach (var w in walls.Cast<Component>().Concat(roofs))
+                foreach (var w in walls.Cast<Component>().Concat(roofs).Concat(floors))
                 {
+                    if (!w.IsExternal) continue;
                     w.SubComponents = new List<Component>();
                     foreach (var win in window_geometry)
                     {
