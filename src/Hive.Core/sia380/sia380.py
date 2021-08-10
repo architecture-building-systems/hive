@@ -233,8 +233,8 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     Phi_L_per_m2 = room_properties["Waermeeintragsleistung der Raumbeleuchtung"]
     Phi_A_per_m2 = room_properties["Waermeeintragsleistung der Geraete"]
     Q_dhw_year = room_properties["Jaehrlicher Waermebedarf fuer Warmwasser"] # in kWh/m2a
-    Q_dhw_hourly = (Q_dhw_year / HOURS_PER_YEAR) * floor_area # in kWh per hour
-    Q_dhw_monthly = [a*b for a, b in zip([Q_dhw_hourly * HOURS_PER_DAY] * MONTHS_PER_YEAR, DAYS_PER_MONTH)] # in kWh per month
+    Q_dhw_hourly = (Q_dhw_year / HOURS_PER_YEAR) * floor_area # in kWh per hour. TODO: add schedule to annual hourly dhw
+    Q_dhw_monthly = [Q_dhw_hourly * h for h in HOURS_PER_MONTH] # in kWh per month
 
     # assign room properties to individual surfaces
     #    surface_type = ["opaque", "opaque", "transp", "transp"]
