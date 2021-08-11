@@ -27,7 +27,7 @@ namespace Hive.IO.GhDistributors
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("Zone Areas", "ZoneAreas", "Floor areas in [m²] of all zones of the building.", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Net Zone Areas", "ZoneAreas", "Net Floor areas in [m²] of all zones of the building.", GH_ParamAccess.list);
             pManager.AddNumberParameter("Windows Areas", "WinAreas", "All window areas in [m²] of the building.", GH_ParamAccess.list);
             pManager.AddNumberParameter("External Surfaces Areas", "ExtSrfAreas", "Surface areas of the building that are exposed to the environment (external)", GH_ParamAccess.list);
             pManager.AddTextParameter("SIA 2024 Room", "SiaRoom", "SIA 2024 room definitions for each zone.", GH_ParamAccess.item);
@@ -56,11 +56,10 @@ namespace Hive.IO.GhDistributors
             {
                 Zone zone = building.Zones[i];
 
-                zoneAreas[i] = 0.0;
+                zoneAreas[i] = zone.FloorsAreaNet;
                 foreach (Floor floor in zone.Floors)
                 {
                     // TO DO: make check that it's not a void
-                    zoneAreas[i] += floor.Area;
                     if (floor.IsExternal)
                     {
                         extSrfAreas.Add(floor.Area);

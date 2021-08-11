@@ -38,6 +38,7 @@
       ],
       "outputs": [
         {"type": "float", "name": "Heating demand", "nick-name": "Q_Heat", "description": "Heating loads of a zone in kWh.", "access": "list"},
+        {"type": "float", "name": "Domestic hot water demand", "nick-name": "Q_dhw", "description": "Domestic hot water demands of a zone in kWh.", "access": "list"},
         {"type": "float", "name": "Cooling demand", "nick-name": "Q_Cool", "description": "Cooling loads of a zone in kWh.", "access": "list"},
         {"type": "float", "name": "Electricity demand", "nick-name": "Q_Elec", "description": "Electricity loads of a zone in kWh.", "access": "list"},
         {"type": "float", "name": "Transmission heat losses", "nick-name": "Q_T", "description": "Transmission heat losses of a zone in kWh.", "access": "list"},

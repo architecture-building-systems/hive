@@ -44,6 +44,9 @@ namespace Hive.IO.Forms
             hizardToolTip.SetToolTip(this.txtCoolingSetback, toolTipSetbackInfoMessage);
             hizardToolTip.SetToolTip(this.label41, toolTipSetbackInfoMessage);
 
+            hizardToolTip.SetToolTip(this.txtFloorArea, toolTipFloorArea);
+            hizardToolTip.SetToolTip(this.label7, toolTipFloorArea);
+
             RenderState();
         }
 
@@ -375,6 +378,10 @@ namespace Hive.IO.Forms
             "based on simplified calculations of CIBSE AM10: Natural Ventilation in Non-Domestic Buildings";
 
         private const string toolTipSetbackInfoMessage = "Only used during hourly demand calculation, which is currently WIP";
+
+        private const string toolTipFloorArea =
+            "Note that this number refers to the gross area (Energiebezugsflaeche) measured from the hull geometry." + "\n " +
+            "For loads calculation, this area will be reduced by 0.9, according to SIA 2024, E.3";
 
         private void textBoxSetback_MouseHover(object sender, EventArgs e)
         {

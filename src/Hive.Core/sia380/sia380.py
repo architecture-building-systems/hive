@@ -232,6 +232,9 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     Phi_P_per_m2 = room_properties["Waermeeintragsleistung Personen (bei 24.0 deg C, bzw. 70 W)"]
     Phi_L_per_m2 = room_properties["Waermeeintragsleistung der Raumbeleuchtung"]
     Phi_A_per_m2 = room_properties["Waermeeintragsleistung der Geraete"]
+    Q_dhw_year = room_properties["Jaehrlicher Waermebedarf fuer Warmwasser"] # in kWh/m2a
+    Q_dhw_hourly = (Q_dhw_year / HOURS_PER_YEAR) * floor_area # in kWh per hour. TODO: add schedule to annual hourly dhw
+    Q_dhw_monthly = [Q_dhw_hourly * h for h in HOURS_PER_MONTH] # in kWh per month
 
     # assign room properties to individual surfaces
     #    surface_type = ["opaque", "opaque", "transp", "transp"]
@@ -253,6 +256,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     t_P = [P_total_hours] * MONTHS_PER_YEAR
     t_L = [L_total_hours] * MONTHS_PER_YEAR
     t_A = [A_total_hours] * MONTHS_PER_YEAR
+
     # transforming daily sia2024 data to monthly
     DAYS_PER_YEAR_float = float(DAYS_PER_YEAR)
     for month in range(MONTHS_PER_YEAR):
@@ -619,7 +623,13 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     else:
         Q_s_tr_tree = None
 
-    return toKwh(Q_Heat), toKwh(Q_Cool), toKwh(Q_Elec), \
+    # in kWh per month or per hour
+    if hourly:
+        Q_dhw = [Q_dhw_hourly] * HOURS_PER_YEAR
+    else:
+        Q_dhw = Q_dhw_monthly
+
+    return toKwh(Q_Heat), Q_dhw, toKwh(Q_Cool), toKwh(Q_Elec), \
            toKwh(Q_T_out), toKwh(Q_V_out), toKwh(Q_i_out), \
            toKwh(Q_s_out), toKwh(Q_T_opaque_out), toKwh(Q_T_transparent_out), \
            Q_s_tr_tree

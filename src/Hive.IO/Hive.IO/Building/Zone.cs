@@ -111,7 +111,8 @@ namespace Hive.IO.Building
         public double WallsArea => Walls.Sum(w => w.Area);
         public double RoofsArea => Roofs.Sum(r => r.Area);
         public double WindowArea => Windows.Sum(w => w.Area);
-        public double FloorsArea => Floors.Sum(f => f.Area);
+        public double FloorsAreaNet => Floors.Sum(f => f.Area) * 0.9; // SIA 2024 E.3
+        public double FloorsAreaGross => Floors.Sum(f => f.Area); 
 
         #endregion
 
@@ -148,7 +149,7 @@ namespace Hive.IO.Building
             for (int i = 0; i < Windows.Length; i++) Windows[i].Construction = siaConstruction.WindowsConstruction;
 
             // Update the capacitances of the components
-            siaConstruction.SetCapacities(FloorsArea, WallsArea, RoofsArea);
+            siaConstruction.SetCapacities(FloorsAreaNet, WallsArea, RoofsArea);
             CapacitancePerFloorArea = siaConstruction.CapacitancePerFloorArea;
         }
 
@@ -179,9 +180,9 @@ namespace Hive.IO.Building
         void UpdateCapacities()
         {
             // Recalculate in case surface areas have changed
-            var factorAll = 1 + RoofsArea / FloorsArea + WallsArea / FloorsArea;
+            var factorAll = 1 + RoofsArea / FloorsAreaNet + WallsArea / FloorsAreaNet;
             // Assign capacities per component type. To use in sia380 GH component (demand calculation).
-            FloorsCapacity = FloorsArea / factorAll * CapacitancePerFloorArea;
+            FloorsCapacity = FloorsAreaNet / factorAll * CapacitancePerFloorArea;
             RoofsCapacity = RoofsArea / factorAll * CapacitancePerFloorArea;
             WallsCapacity = WallsArea / factorAll * CapacitancePerFloorArea;
         }
@@ -212,7 +213,7 @@ namespace Hive.IO.Building
             {
                 foreach (Floor floor in Floors)
                 {
-                    floor.Construction.Capacitance = value * (floor.Area / FloorsArea);
+                    floor.Construction.Capacitance = value * (floor.Area / FloorsAreaNet);
                 }
                 _floorsCapacitance = value;
             }

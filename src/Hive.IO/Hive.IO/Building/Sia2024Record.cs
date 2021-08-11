@@ -63,7 +63,8 @@ namespace Hive.IO.Building
             TransparentCost = room.TransparentCost;
             OpaqueEmissions = room.OpaqueEmissions;
             TransparentEmissions = room.TransparentEmissions;
-            
+            DomesticHotWaterLoads = room.DomesticHotWaterLoads;
+
             RunAdaptiveComfort = room.RunAdaptiveComfort;
             RunNaturalVentilation = room.RunNaturalVentilation;
         }
@@ -116,6 +117,7 @@ namespace Hive.IO.Building
         public double UValueOpaque; // U-Wert opake Bauteile
         public double UValueTransparent; // U-Wert Fenster
         public double WindowFrameReduction; // Abminderungsfaktor fuer Fensterrahmen
+        public double DomesticHotWaterLoads; // Jaehrlicher Waermebedarf fuer Warmwasser
 
         // custom booleans not part of sia2024
         public bool RunAdaptiveComfort;
@@ -244,6 +246,7 @@ namespace Hive.IO.Building
                 {"Kosten transparente Bauteile", TransparentCost},
                 {"Emissionen opake Bauteile", OpaqueEmissions},
                 {"Emissionen transparente Bauteile", TransparentEmissions},
+                {"Jaehrlicher Waermebedarf fuer Warmwasser", DomesticHotWaterLoads},
 
                 {"U-Wert Boeden", UValueFloors },
                 {"U-Wert Daecher", UValueRoofs },
@@ -301,6 +304,7 @@ namespace Hive.IO.Building
                 TransparentCost = (double) d["Kosten transparente Bauteile"],
                 OpaqueEmissions = (double) d["Emissionen opake Bauteile"],
                 TransparentEmissions = (double) d["Emissionen transparente Bauteile"],
+                DomesticHotWaterLoads = (double) d["Jaehrlicher Waermebedarf fuer Warmwasser"],
 
                 _uValueFloors = readValueOrNull("U-Wert Boeden"),
                 _uValueRoofs = readValueOrNull("U-Wert Daecher"),

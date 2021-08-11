@@ -20,7 +20,7 @@ header_map = {
     "U-Wert Fenster": "UValueTransparent",
     "Gesamtenergiedurchlassgrad Verglasung": "GValue",
     "Gesamtenergiedurchlassgrad Verglasung und Sonnenschutz": "GValueTotal",
-	"Strahlungsleistung fuer Betaetigung Sonnenschutz": "ShadingSetpoint",
+    "Strahlungsleistung fuer Betaetigung Sonnenschutz": "ShadingSetpoint",
     "Abminderungsfaktor fuer Fensterrahmen": "WindowFrameReduction",
     "Aussenluft-Volumenstrom (pro NGF)": "AirChangeRate",
     "Aussenluft-Volumenstrom durch Infiltration": "Infiltration",
@@ -34,7 +34,8 @@ header_map = {
     "Kosten opake Bauteile": "OpaqueCost",
     "Kosten transparente Bauteile": "TransparentCost",
     "Emissionen opake Bauteile": "OpaqueEmissions",
-    "Emissionen transparente Bauteile": "TransparentEmissions"
+    "Emissionen transparente Bauteile": "TransparentEmissions",
+    "Jaehrlicher Waermebedarf fuer Warmwasser": "DomesticHotWaterLoads"
 }
 
 

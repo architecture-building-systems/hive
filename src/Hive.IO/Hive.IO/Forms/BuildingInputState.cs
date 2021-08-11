@@ -160,7 +160,7 @@ namespace Hive.IO.Forms
         // it works like this: (x?.a) is x.a if x != null, else null. (A ?? B) is A if A != null, else B
         // I'm using this to enable creating a BuildingInputSate with zone == null for testing purposes.
         public string ZoneWallArea => $"{_zone?.WallsArea ?? _siaRoom.EnvelopeArea:0.00}";
-        public string ZoneFloorArea => $"{_zone?.FloorsArea ?? _siaRoom.FloorArea:0.00}";
+        public string ZoneFloorArea => $"{_zone?.FloorsAreaGross ?? _siaRoom.FloorArea:0.00}";
         public string ZoneRoofArea => $"{_zone?.RoofsArea ?? _siaRoom.EnvelopeArea:0.00}";
         public string ZoneWindowArea => $"{_zone?.WindowArea ?? _siaRoom.EnvelopeArea:0.00}";
 
