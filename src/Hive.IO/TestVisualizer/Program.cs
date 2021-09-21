@@ -29,14 +29,14 @@ namespace TestVisualizer
             {
                 Name = "Boiler (Gas)",
             };
-            boiler.SetProperties(new GasBoiler(20.0, 20.0, 20.0, 20.0));
+            boiler.SetProperties(new GasBoiler(20.0, 20.0, 20.0, 20.0, 20.0));
             state.ConversionTechnologies.Add(boiler);
 
             var radiator = new EmitterPropertiesViewModel()
             {
                 Name = "Radiator",
             };
-            radiator.SetProperties(new Radiator(12, 13, true, false, 45, 50));
+            radiator.SetProperties(new Radiator(12, 13, 20.0, true, false, 45, 50));
             state.Emitters.Add(radiator);
 
 
