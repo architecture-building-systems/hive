@@ -16,6 +16,7 @@ namespace Hive.IO.GhParametricInputs
         public double ThermalEfficiency;
         public double InvestmentCost;
         public double EmbodiedEmissions;
+        public double Lifetime; // FIXME implement this properly
 
         public Mesh MeshSurface;
     }

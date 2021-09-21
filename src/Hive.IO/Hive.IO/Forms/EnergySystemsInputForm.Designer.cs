@@ -58,20 +58,20 @@
             this.tabControl.Controls.Add(this.tabEmission);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl.Location = new System.Drawing.Point(0, 0);
-            this.tabControl.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.tabControl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(2243, 1031);
+            this.tabControl.Size = new System.Drawing.Size(1122, 532);
             this.tabControl.TabIndex = 0;
             // 
             // tabConversion
             // 
             this.tabConversion.Controls.Add(this.tableLayoutPanelMain);
-            this.tabConversion.Location = new System.Drawing.Point(10, 48);
-            this.tabConversion.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.tabConversion.Location = new System.Drawing.Point(4, 25);
+            this.tabConversion.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabConversion.Name = "tabConversion";
-            this.tabConversion.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.tabConversion.Size = new System.Drawing.Size(2061, 1005);
+            this.tabConversion.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabConversion.Size = new System.Drawing.Size(1114, 503);
             this.tabConversion.TabIndex = 0;
             this.tabConversion.Text = "Conversion";
             this.tabConversion.UseVisualStyleBackColor = true;
@@ -83,13 +83,13 @@
             this.tableLayoutPanelMain.Controls.Add(this.gridConversion, 0, 0);
             this.tableLayoutPanelMain.Controls.Add(this.ConversionProperties, 0, 1);
             this.tableLayoutPanelMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanelMain.Location = new System.Drawing.Point(8, 7);
-            this.tableLayoutPanelMain.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.tableLayoutPanelMain.Location = new System.Drawing.Point(4, 4);
+            this.tableLayoutPanelMain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tableLayoutPanelMain.Name = "tableLayoutPanelMain";
             this.tableLayoutPanelMain.RowCount = 2;
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
-            this.tableLayoutPanelMain.Size = new System.Drawing.Size(2045, 991);
+            this.tableLayoutPanelMain.Size = new System.Drawing.Size(1106, 495);
             this.tableLayoutPanelMain.TabIndex = 0;
             // 
             // gridConversion
@@ -103,15 +103,16 @@
             this.EndUse});
             this.gridConversion.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridConversion.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.gridConversion.Location = new System.Drawing.Point(8, 7);
-            this.gridConversion.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.gridConversion.Location = new System.Drawing.Point(4, 4);
+            this.gridConversion.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.gridConversion.MultiSelect = false;
             this.gridConversion.Name = "gridConversion";
             this.gridConversion.RowHeadersVisible = false;
             this.gridConversion.RowHeadersWidth = 102;
             this.gridConversion.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.gridConversion.Size = new System.Drawing.Size(2029, 283);
+            this.gridConversion.Size = new System.Drawing.Size(1098, 140);
             this.gridConversion.TabIndex = 0;
+            this.gridConversion.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridConversion_CellContentClick);
             this.gridConversion.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridConversion_CellValueChanged);
             this.gridConversion.CurrentCellDirtyStateChanged += new System.EventHandler(this.gridConversion_CurrentCellDirtyStateChanged);
             this.gridConversion.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.gridConversion_DataBindingComplete);
@@ -146,19 +147,20 @@
             this.ConversionProperties.BackColor = System.Drawing.SystemColors.Window;
             this.ConversionProperties.Conversion = null;
             this.ConversionProperties.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ConversionProperties.Location = new System.Drawing.Point(3, 300);
+            this.ConversionProperties.Location = new System.Drawing.Point(1, 149);
+            this.ConversionProperties.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.ConversionProperties.Name = "ConversionProperties";
-            this.ConversionProperties.Size = new System.Drawing.Size(2039, 688);
+            this.ConversionProperties.Size = new System.Drawing.Size(1104, 345);
             this.ConversionProperties.TabIndex = 1;
             // 
             // tabEmission
             // 
             this.tabEmission.Controls.Add(this.tableLayoutEmission);
-            this.tabEmission.Location = new System.Drawing.Point(10, 48);
-            this.tabEmission.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.tabEmission.Location = new System.Drawing.Point(4, 25);
+            this.tabEmission.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tabEmission.Name = "tabEmission";
-            this.tabEmission.Padding = new System.Windows.Forms.Padding(8, 7, 8, 7);
-            this.tabEmission.Size = new System.Drawing.Size(2223, 973);
+            this.tabEmission.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabEmission.Size = new System.Drawing.Size(1114, 503);
             this.tabEmission.TabIndex = 1;
             this.tabEmission.Text = "Emission";
             this.tabEmission.UseVisualStyleBackColor = true;
@@ -167,16 +169,17 @@
             // 
             this.tableLayoutEmission.ColumnCount = 1;
             this.tableLayoutEmission.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutEmission.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutEmission.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
             this.tableLayoutEmission.Controls.Add(this.gridEmission, 0, 0);
             this.tableLayoutEmission.Controls.Add(this.emitterProperties, 0, 1);
             this.tableLayoutEmission.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutEmission.Location = new System.Drawing.Point(8, 7);
+            this.tableLayoutEmission.Location = new System.Drawing.Point(4, 4);
+            this.tableLayoutEmission.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutEmission.Name = "tableLayoutEmission";
             this.tableLayoutEmission.RowCount = 2;
             this.tableLayoutEmission.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tableLayoutEmission.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
-            this.tableLayoutEmission.Size = new System.Drawing.Size(2207, 959);
+            this.tableLayoutEmission.Size = new System.Drawing.Size(1106, 495);
             this.tableLayoutEmission.TabIndex = 0;
             // 
             // gridEmission
@@ -190,14 +193,14 @@
             this.dataGridViewTextBoxColumn2});
             this.gridEmission.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridEmission.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.gridEmission.Location = new System.Drawing.Point(8, 7);
-            this.gridEmission.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.gridEmission.Location = new System.Drawing.Point(4, 4);
+            this.gridEmission.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.gridEmission.MultiSelect = false;
             this.gridEmission.Name = "gridEmission";
             this.gridEmission.RowHeadersVisible = false;
             this.gridEmission.RowHeadersWidth = 102;
             this.gridEmission.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.gridEmission.Size = new System.Drawing.Size(2191, 273);
+            this.gridEmission.Size = new System.Drawing.Size(1098, 140);
             this.gridEmission.TabIndex = 1;
             this.gridEmission.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridEmission_CellValueChanged);
             this.gridEmission.CurrentCellDirtyStateChanged += new System.EventHandler(this.gridEmission_CurrentCellDirtyStateChanged);
@@ -233,19 +236,20 @@
             this.emitterProperties.BackColor = System.Drawing.SystemColors.Window;
             this.emitterProperties.Dock = System.Windows.Forms.DockStyle.Fill;
             this.emitterProperties.Emitter = null;
-            this.emitterProperties.Location = new System.Drawing.Point(3, 290);
+            this.emitterProperties.Location = new System.Drawing.Point(1, 149);
+            this.emitterProperties.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
             this.emitterProperties.Name = "emitterProperties";
-            this.emitterProperties.Size = new System.Drawing.Size(2201, 666);
+            this.emitterProperties.Size = new System.Drawing.Size(1104, 345);
             this.emitterProperties.TabIndex = 2;
             // 
             // EnergySystemsInputForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(16F, 31F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(2243, 1031);
+            this.ClientSize = new System.Drawing.Size(1122, 532);
             this.Controls.Add(this.tabControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(8, 7, 8, 7);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.Name = "EnergySystemsInputForm";
             this.Text = "EnergySystemsInputForm";
             this.Load += new System.EventHandler(this.EnergySystemsInputForm_Load);

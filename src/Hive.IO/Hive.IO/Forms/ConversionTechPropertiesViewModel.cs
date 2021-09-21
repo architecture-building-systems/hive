@@ -101,6 +101,15 @@ namespace Hive.IO.Forms
             }
         }
 
+        public string Lifetime
+        {
+            get => $"{_lifetime:0.00}";
+            set
+            {
+                _lifetime = ParseDouble(value, _lifetime);
+            }
+        }
+
         public string HeatToPowerRatio
         {
             get => $"{_heatToPowerRatio:0.00}";
@@ -164,6 +173,7 @@ namespace Hive.IO.Forms
 
                     _specificCapitalCost = _moduleType.SpecificCapitalCost;
                     _specificEmbodiedEmissions = _moduleType.SpecificEmbodiedEmissions;
+                    _lifetime = _moduleType.Lifetime;
                 }
             }
         }
@@ -206,6 +216,7 @@ namespace Hive.IO.Forms
             _capacity = defaults.Capacity;
             _specificCapitalCost = defaults.SpecificCapitalCost;
             _specificEmbodiedEmissions = defaults.SpecificEmbodiedEmissions;
+            _lifetime = defaults.Lifetime;
             _distributionLosses = defaults.DistributionLosses;
             _heatToPowerRatio = defaults.HeatToPowerRatio;
 
@@ -235,6 +246,9 @@ namespace Hive.IO.Forms
 
         [JsonProperty]
         private double _specificEmbodiedEmissions;
+
+        [JsonProperty]
+        private double _lifetime;
 
         [JsonProperty]
         private double _heatToPowerRatio;
@@ -280,6 +294,9 @@ namespace Hive.IO.Forms
         public Brush SpecificEmbodiedEmissionsBrush => CompareBrush(_specificEmbodiedEmissions,
             IsSurfaceTech ? ModuleType.SpecificEmbodiedEmissions : Defaults[Name].SpecificEmbodiedEmissions);
 
+        public Brush LifetimeBrush => CompareBrush(_lifetime,
+            IsSurfaceTech ? ModuleType.Lifetime : Defaults[Name].Lifetime);
+
         public Brush HeatToPowerRatioBrush => CompareBrush(_heatToPowerRatio, Defaults[Name].HeatToPowerRatio);
         public Brush DistributionLossesBrush => CompareBrush(_distributionLosses, Defaults[Name].DistributionLosses);
 
@@ -293,6 +310,10 @@ namespace Hive.IO.Forms
         public FontWeight SpecificEmbodiedEmissionsFontWeight =>
             CompareFontWeight(_specificEmbodiedEmissions,
                 IsSurfaceTech ? ModuleType.SpecificEmbodiedEmissions : Defaults[Name].SpecificEmbodiedEmissions);
+
+        public FontWeight LifetimeFontWeight =>
+            CompareFontWeight(_lifetime,
+                IsSurfaceTech ? ModuleType.Lifetime : Defaults[Name].Lifetime);
 
         public FontWeight HeatToPowerRatioFontWeight =>
             CompareFontWeight(_heatToPowerRatio, Defaults[Name].HeatToPowerRatio);
@@ -318,6 +339,7 @@ namespace Hive.IO.Forms
             _capacity = gasBoiler.Capacity;
             _specificCapitalCost = gasBoiler.SpecificInvestmentCost;
             _specificEmbodiedEmissions = gasBoiler.SpecificEmbodiedGhg;
+            _lifetime = gasBoiler.Lifetime;
         }
 
         public void SetProperties(HeatCoolingExchanger exchanger)
@@ -328,6 +350,7 @@ namespace Hive.IO.Forms
             _capacity = exchanger.Capacity;
             _specificCapitalCost = exchanger.SpecificInvestmentCost;
             _specificEmbodiedEmissions = exchanger.SpecificEmbodiedGhg;
+            _lifetime = exchanger.Lifetime;
         }
 
         public void SetProperties(Chiller chiller)
@@ -338,6 +361,7 @@ namespace Hive.IO.Forms
             _capacity = chiller.Capacity;
             _specificCapitalCost = chiller.SpecificInvestmentCost;
             _specificEmbodiedEmissions = chiller.SpecificEmbodiedGhg;
+            _lifetime = chiller.Lifetime;
         }
 
         public void SetProperties(CombinedHeatPower chp)
@@ -348,6 +372,7 @@ namespace Hive.IO.Forms
             _capacity = chp.Capacity;
             _specificCapitalCost = chp.SpecificInvestmentCost;
             _specificEmbodiedEmissions = chp.SpecificEmbodiedGhg;
+            _lifetime = chp.Lifetime;
             _heatToPowerRatio = chp.HeatToPowerRatio;
         }
 
@@ -359,6 +384,7 @@ namespace Hive.IO.Forms
             _capacity = ashp.Capacity;
             _specificCapitalCost = ashp.SpecificInvestmentCost;
             _specificEmbodiedEmissions = ashp.SpecificEmbodiedGhg;
+            _lifetime = ashp.Lifetime;
         }
 
         public void SetProperties(Photovoltaic photovoltaic)
@@ -369,12 +395,14 @@ namespace Hive.IO.Forms
             _capacity = photovoltaic.Capacity;
             _specificCapitalCost = photovoltaic.SpecificInvestmentCost;
             _specificEmbodiedEmissions = photovoltaic.SpecificEmbodiedGhg;
+            _lifetime = photovoltaic.Lifetime;
             _moduleType = new ModuleTypeRecord
             {
                 Name = "<custom>",
                 ElectricEfficiency = photovoltaic.RefEfficiencyElectric,
                 SpecificCapitalCost = photovoltaic.SpecificInvestmentCost,
                 SpecificEmbodiedEmissions = photovoltaic.SpecificEmbodiedGhg,
+                Lifetime = photovoltaic.Lifetime,
                 ThermalEfficiency = 0.00
             };
         }
@@ -387,6 +415,7 @@ namespace Hive.IO.Forms
             _capacity = solarThermal.Capacity;
             _specificCapitalCost = solarThermal.SpecificInvestmentCost;
             _specificEmbodiedEmissions = solarThermal.SpecificEmbodiedGhg;
+            _lifetime = solarThermal.Lifetime;
 
             _moduleType = new ModuleTypeRecord
             {
@@ -394,6 +423,7 @@ namespace Hive.IO.Forms
                 ElectricEfficiency = 0.00,
                 SpecificCapitalCost = solarThermal.SpecificInvestmentCost,
                 SpecificEmbodiedEmissions = solarThermal.SpecificEmbodiedGhg,
+                Lifetime = solarThermal.Lifetime,
                 ThermalEfficiency = solarThermal.RefEfficiencyHeating
             };
         }
@@ -425,6 +455,7 @@ namespace Hive.IO.Forms
         public double Capacity;
         public double SpecificCapitalCost;
         public double SpecificEmbodiedEmissions;
+        public double Lifetime;
         public double HeatToPowerRatio; // only CHP
         public string Description;
     }
@@ -437,6 +468,7 @@ namespace Hive.IO.Forms
         public double ThermalEfficiency;
         public double SpecificCapitalCost;
         public double SpecificEmbodiedEmissions;
+        public double Lifetime;
         public string Description;
     }
 }
