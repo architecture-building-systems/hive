@@ -29,8 +29,12 @@ namespace Hive.IO.EnergySystems
         public double CostPerSquareMeter { get; protected set; }
         public double EmissionsPerSquareMeter { get; protected set; }
 
-        protected SurfaceBasedTech(double investmentCost, double embodiedGhg, bool isHeating, bool isCooling, bool isElectric, Mesh surfaceGeometry)
-            : base(investmentCost, embodiedGhg, 0.0, "undefined", isHeating, isCooling, isElectric)
+        public new double InvestmentCost => CostPerSquareMeter * SurfaceArea;
+        public new double EmbodiedGhg => EmissionsPerSquareMeter * SurfaceArea;
+
+
+        protected SurfaceBasedTech(double investmentCost, double embodiedGhg, double lifetime, bool isHeating, bool isCooling, bool isElectric, Mesh surfaceGeometry)
+            : base(investmentCost, embodiedGhg, lifetime, 0.0, "undefined", isHeating, isCooling, isElectric)
         {
             this.SurfaceGeometry = surfaceGeometry;
             this.SurfaceArea = Rhino.Geometry.AreaMassProperties.Compute(this.SurfaceGeometry).Area;
@@ -151,9 +155,9 @@ namespace Hive.IO.EnergySystems
         /// </summary>
         public double RefEfficiencyElectric { get; private set; }
 
-        public Photovoltaic(double investmentCost, double embodiedGhg, Mesh surfaceGeometry, string detailedName,
+        public Photovoltaic(double investmentCost, double embodiedGhg, double lifetime, Mesh surfaceGeometry, string detailedName,
             double refEfficiencyElectric)
-            : base(investmentCost, embodiedGhg, false, false, true, surfaceGeometry)
+            : base(investmentCost, embodiedGhg, lifetime, false, false, true, surfaceGeometry)
         {
             base.DetailedName = detailedName;
             base.Name = "Photovoltaic";
@@ -302,9 +306,9 @@ namespace Hive.IO.EnergySystems
         /// </summary>
         public double RefEfficiencyHeating { get; private set; }
 
-        public SolarThermal(double investmentCost, double embodiedGhg, Mesh surfaceGeometry, string detailedName,
+        public SolarThermal(double investmentCost, double embodiedGhg, double lifetime, Mesh surfaceGeometry, string detailedName,
             double refEfficiencyHeating)
-            : base(investmentCost, embodiedGhg, true, false, false, surfaceGeometry)
+            : base(investmentCost, embodiedGhg, lifetime, true, false, false, surfaceGeometry)
         {
             base.DetailedName = detailedName;
             base.Name = "SolarThermal";
@@ -445,9 +449,9 @@ namespace Hive.IO.EnergySystems
         public double RefEfficiencyElectric { get; }
         public double RefEfficiencyHeating { get; }
 
-        public PVT(double investmentCost, double embodiedGhg, Mesh surfaceGeometry, string detailedName,
+        public PVT(double investmentCost, double embodiedGhg, double lifetime, Mesh surfaceGeometry, string detailedName,
             double refEfficiencyElectric, double refEfficiencyHeating)
-            : base(investmentCost, embodiedGhg, true, false, true, surfaceGeometry)
+            : base(investmentCost, embodiedGhg, lifetime, true, false, true, surfaceGeometry)
         {
             base.DetailedName = detailedName;
             base.Name = "PVT";
@@ -474,8 +478,8 @@ namespace Hive.IO.EnergySystems
     /// </summary>
     public class GroundCollector : SurfaceBasedTech
     {
-        public GroundCollector(double investmentCost, double embodiedGhg, Mesh surfaceGeometry, string detailedName)
-            : base(investmentCost, embodiedGhg, true, false, false, surfaceGeometry)
+        public GroundCollector(double investmentCost, double embodiedGhg, double lifetime, Mesh surfaceGeometry, string detailedName)
+            : base(investmentCost, embodiedGhg, lifetime, true, false, false, surfaceGeometry)
         {
             base.DetailedName = detailedName;
             base.Name = "GroundCollector";
