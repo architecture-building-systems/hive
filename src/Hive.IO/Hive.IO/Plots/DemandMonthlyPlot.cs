@@ -11,7 +11,6 @@ namespace Hive.IO.Plots
     {
         protected override PlotModel CreatePlotModel(ResultsPlotting results, Dictionary<string, string> plotParameters)
         {
-            const int months = 12;
             var model = new PlotModel { Title = "Energy demand (Total Monthly)" };
 
             var demandHeating = new ColumnSeries
@@ -37,6 +36,14 @@ namespace Hive.IO.Plots
                 FillColor = ElectricityColor
             };
             model.Series.Add(demandElectricity);
+
+            var demandDhw = new ColumnSeries
+            {
+                ItemsSource = results.TotalDomesticHotWaterMonthly.Select(demand => new ColumnItem { Value = demand }),
+                Title = " DWH",
+                FillColor = DhwColor,
+            };
+            model.Series.Add(demandDhw);
 
             var axis = new LinearAxis
             {

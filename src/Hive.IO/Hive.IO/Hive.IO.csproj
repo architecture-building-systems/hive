@@ -197,7 +197,7 @@
     <Compile Include="Plots\IVisualizerPlot.cs" />
     <Compile Include="Plots\MenuButton.cs" />
     <Compile Include="Plots\MenuButtonPanel.cs" />
-    <Compile Include="Plots\OperationalPerformancePlot.cs" />
+    <Compile Include="Plots\KpiPlot.cs" />
     <Compile Include="Plots\OxyPlotBase.cs" />
     <Compile Include="Plots\PlotSelector.cs" />
     <Compile Include="Plots\DrawingExtensions.cs" />

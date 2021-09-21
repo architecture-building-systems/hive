@@ -36,6 +36,11 @@ namespace Hive.IO.Plots
         public abstract float TotalOperation { get; }
         public abstract float Total { get; }
 
+        public abstract float EmbodiedSystemsYearly { get; }
+        public abstract float EmbodiedBuildingsYearly { get; }
+        public abstract float OperationSystemsYearly { get; }
+        public abstract float OperationBuildingsYearly{ get; }
+
         public abstract float[] EmbodiedSystemsMonthly { get; }
         public abstract float[] EmbodiedBuildingsMonthly { get; }
         public abstract float[] OperationSystemsMonthly { get; }
@@ -56,6 +61,18 @@ namespace Hive.IO.Plots
         public override float TotalEmbodied => (float)Results.TotalEmbodiedCosts(Normalized);
         public override float TotalOperation => (float)Results.TotalOperationCosts(Normalized);
         public override float Total => (float)Results.TotalCosts(Normalized);
+
+        public override float EmbodiedSystemsYearly =>
+            (float)Results.EmbodiedCostsSystemsYearly(Normalized);
+
+        public override float EmbodiedBuildingsYearly =>
+            (float)Results.EmbodiedCostsBuildingsYearly(Normalized);
+
+        public override float OperationSystemsYearly =>
+            (float)Results.OperationCostsSystemsYearly(Normalized);
+
+        public override float OperationBuildingsYearly =>
+            (float)Results.OperationCostsBuildingsYearly(Normalized);
 
         public override float[] EmbodiedSystemsMonthly =>
             Results.EmbodiedCostsSystemsMonthly(Normalized).ToFloatArray();
@@ -85,6 +102,18 @@ namespace Hive.IO.Plots
         public override float TotalOperation => (float)Results.TotalOperationEmissions(Normalized);
         public override float Total => (float)Results.TotalEmissions(Normalized);
 
+        public override float EmbodiedSystemsYearly =>
+            (float)Results.EmbodiedEmissionsSystemsYearly(Normalized);
+
+        public override float EmbodiedBuildingsYearly =>
+            (float)Results.EmbodiedEmissionsBuildingsYearly(Normalized);
+
+        public override float OperationSystemsYearly =>
+            (float)Results.OperationEmissionsSystemsYearly(Normalized);
+
+        public override float OperationBuildingsYearly =>
+            (float)Results.OperationEmissionsBuildingsYearly(Normalized);
+
         public override float[] EmbodiedSystemsMonthly =>
             Results.EmbodiedEmissionsSystemsMonthly(Normalized).ToFloatArray();
 
@@ -112,6 +141,18 @@ namespace Hive.IO.Plots
         public override float TotalEmbodied => (float)Results.TotalEmbodiedEnergy(Normalized);
         public override float TotalOperation => (float)Results.TotalOperationEnergy(Normalized);
         public override float Total => (float)Results.TotalEnergy(Normalized);
+
+        public override float EmbodiedSystemsYearly =>
+            (float)Results.EmbodiedEnergySystemsYearly(Normalized);
+
+        public override float EmbodiedBuildingsYearly =>
+            (float)Results.EmbodiedEnergyBuildingsYearly(Normalized);
+
+        public override float OperationSystemsYearly =>
+            (float)Results.OperationEnergySystemsYearly(Normalized);
+
+        public override float OperationBuildingsYearly =>
+            (float)Results.OperationEnergyBuildingsYearly(Normalized);
 
         public override float[] EmbodiedSystemsMonthly =>
             Results.EmbodiedEnergySystemsMonthly(Normalized).ToFloatArray();
