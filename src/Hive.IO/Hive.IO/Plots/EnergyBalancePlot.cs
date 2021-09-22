@@ -9,8 +9,10 @@ using Hive.IO.Results;
 
 namespace Hive.IO.Plots
 {
-    public class EnergyBalancePlot : IVisualizerPlot
+    public abstract class EnergyBalancePlotBase : IVisualizerPlot
     {
+        public abstract bool Normalized { get; }
+
         private const float ArrowPadding = 5f;
         private const float ArrowIndent = 10f;
         private const float IconPadding = 5f;
@@ -94,24 +96,24 @@ namespace Hive.IO.Plots
 
             var gains = new[]
             {
-                results.SolarGains,
-                results.InternalGains,
-                results.PrimaryEnergy,
-                results.RenewableEnergy,
-                results.VentilationGains,
-                results.EnvelopeGains,
-                results.WindowsGains
+                results.SolarGains(Normalized),
+                results.InternalGains(Normalized),
+                results.PrimaryEnergy(Normalized),
+                results.RenewableEnergy(Normalized),
+                results.VentilationGains(Normalized),
+                results.EnvelopeGains(Normalized),
+                results.WindowsGains(Normalized)
             };
             var losses = new[]
             {
-                results.Electricity,
-                results.VentilationLosses,
-                results.EnvelopeLosses,
-                results.WindowsLosses,
-                results.SystemLosses,
-                results.ActiveCooling,
-                results.SurplusElectricity,
-                results.SurplusHeating
+                results.Electricity(Normalized),
+                results.VentilationLosses(Normalized),
+                results.EnvelopeLosses(Normalized),
+                results.WindowsLosses(Normalized),
+                results.SystemLosses(Normalized),
+                results.ActiveCooling(Normalized),
+                results.SurplusElectricity(Normalized),
+                results.SurplusHeating(Normalized)
             };
 
             if (losses.Any(loss => loss < 0.0f) || gains.Any(gain => gain < 0.0f))
@@ -150,10 +152,13 @@ namespace Hive.IO.Plots
 
         private void RenderLegend(Graphics graphics, float[] gains, float[] losses, RectangleF legendBounds)
         {
+            var units = Normalized ? "kWh/m²" : "kWh";
+
             var leftTitle = "ENERGY IN";
             var totalGains = gains.Sum();
             var energyInStrings = gains.Zip(EnergyInStrings,
-                (gain, s) => $"{s}: {gain:0} kWh ({gain / totalGains * 100:0}%)").ToList();
+                    (gain, s) => $"{s}: {gain:0} {units} ({gain / totalGains * 100:0}%)"
+                ).ToList();
             var leftLegendWidth =
                 energyInStrings.Concat(new[] {leftTitle}).Select(
                     // NOTE: the "xxx" in the string template is used for a bit of padding
@@ -166,7 +171,7 @@ namespace Hive.IO.Plots
             var rightTitle = "ENERGY OUT";
             var totalLosses = losses.Sum();
             var energyOutStrings = losses.Zip(EnergyOutStrings,
-                (loss, s) => $"{s}: {loss:0} kWh ({loss / totalLosses * 100:0}%)").ToList();
+                (loss, s) => $"{s}: {loss:0} {units} ({loss / totalLosses * 100:0}%)").ToList();
             var rightLegendWidth
                 = energyOutStrings.Concat(new[] {rightTitle}).Select(
                       s => GH_FontServer.MeasureString($"{s}xxx", GH_FontServer.Standard).Width).Max() + IconWidth +
@@ -403,5 +408,15 @@ namespace Hive.IO.Plots
             };
             return house;
         }
+    }
+
+    public class EnergyBalancePlot : EnergyBalancePlotBase
+    {
+        public override bool Normalized => false;
+    }
+
+    public class EnergyBalanceNormalizedPlot : EnergyBalancePlotBase
+    {
+        public override bool Normalized => true;
     }
 }

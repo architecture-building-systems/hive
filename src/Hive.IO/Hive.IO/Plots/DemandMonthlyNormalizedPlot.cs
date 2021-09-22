@@ -39,7 +39,7 @@ namespace Hive.IO.Plots
             var demandElectricity = new ColumnSeries
             {
                 ItemsSource = results.TotalElectricityMonthly.Select(demand => new ColumnItem { Value = demand / totalFloorArea }),
-                Title = " Electricity",
+                Title = " Grid Electricity",
                 FillColor = ElectricityColor,
                 //StrokeThickness = strokeThickness,
                 //StrokeColor = ElectricityColor

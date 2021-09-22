@@ -49,7 +49,6 @@ namespace Hive.IO.Plots
 
         public PlotSelector()
         {
-            // FIXME: @chris, this needs to be changed back again when we add the amr plots!
             _panelFactory = CreatePerformancePanel;
             _panelFactory = CreateSystemsPanel;
 
@@ -62,7 +61,7 @@ namespace Hive.IO.Plots
             set => _normalized = value;
         }
 
-        public Kpi CurrentKpi { get; private set; } = Kpi.Energy; // = Kpi.None; // FIXME: use this for amr plots:  Kpi.Energy;
+        public Kpi CurrentKpi { get; private set; } = Kpi.Energy;
 
         private string Category => _currentPanel.Category;
 
@@ -93,8 +92,8 @@ namespace Hive.IO.Plots
 
             mbResolution.OnClicked += CycleResolution;
 
-            //var mbNormalize = Normalized ? new BlackMenuButton("/m²") : new MenuButton("TOT");
-            //mbNormalize.OnClicked += (sender, e) => Normalized = !Normalized;
+            var mbNormalize = Normalized ? new BlackMenuButton("/m²") : new MenuButton("TOT");
+            mbNormalize.OnClicked += (sender, e) => Normalized = !Normalized;
 
             var mbBreakdown = _breakdown ? new BlackMenuButton("BRK") : new MenuButton("BRK");
             mbBreakdown.OnClicked += (sender, e) => _breakdown = !_breakdown;
@@ -102,8 +101,8 @@ namespace Hive.IO.Plots
             return new MenuButtonPanel(new[]
             {
                 mbCategory,
+                mbNormalize,
                 mbResolution,
-                //mbNormalize,
                 mbBreakdown
             });
         }
@@ -116,9 +115,13 @@ namespace Hive.IO.Plots
                 _panelFactory = CreateOtherPanel; // link to next panel in list
             };
 
+            var mbNormalize = Normalized ? new BlackMenuButton("/m²") : new MenuButton("TOT");
+            mbNormalize.OnClicked += (sender, e) => Normalized = !Normalized;
+
             return new MenuButtonPanel(new[]
             {
                 mbCategory,
+                mbNormalize,
                 // new MenuButton("SIZ"),
                 // new MenuButton("CHA")
             });
@@ -130,8 +133,11 @@ namespace Hive.IO.Plots
             mbCategory.OnClicked += (sender, e) =>
             {
                 _panelFactory = CreatePerformancePanel; // link to next panel in list
-                CurrentKpi = Kpi.Energy;  // FIXME @chris uncomment this to add amr plots back
+                CurrentKpi = Kpi.Energy;
             };
+
+            var mbNormalize = Normalized ? new BlackMenuButton("/m²") : new MenuButton("TOT");
+            mbNormalize.OnClicked += (sender, e) => Normalized = !Normalized;
 
             var mbSvD = _otherSubcategory == OtherSubcategory.SvD ? new BlackMenuButton("SvD") : new MenuButton("SvD");
             //var mbGvL = _otherSubcategory == OtherSubcategory.GvL ? new BlackMenuButton("GvL") : new MenuButton("GvL");
@@ -144,6 +150,7 @@ namespace Hive.IO.Plots
             return new MenuButtonPanel(new[]
             {
                 mbCategory,
+                mbNormalize,
                 mbSvD,
                 //mbGvL,
                 mbSol
@@ -172,7 +179,10 @@ namespace Hive.IO.Plots
                 switch (_otherSubcategory)
                 {
                     case OtherSubcategory.SvD:
-                        return new EnergyBalancePlot();
+                        if (_normalized)
+                            return new EnergyBalanceNormalizedPlot();
+                        else
+                            return new EnergyBalancePlot();
                     //case OtherSubcategory.GvL:
                     //    return new EnergyBalancePlot();
                     case OtherSubcategory.Sol:
@@ -294,10 +304,7 @@ namespace Hive.IO.Plots
 
         public void CostsKpiClicked(object sender, EventArgs e)
         {
-            if (CurrentKpi != Kpi.None)
-            {
-                CurrentKpi = Kpi.Costs;
-            }
+            if (CurrentKpi != Kpi.None) CurrentKpi = Kpi.Costs;
         }
 
         public void EmissionsKpiClicked(object sender, EventArgs e)

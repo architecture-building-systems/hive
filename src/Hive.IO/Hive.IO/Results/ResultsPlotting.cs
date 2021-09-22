@@ -264,25 +264,25 @@ namespace Hive.IO.Results
         #region EnergyBalance
 
         // ingoing energy
-        public float SolarGains => (float)Results.TotalSolarGains;
-        public float InternalGains => (float)Results.TotalInternalGains;
-        public float PrimaryEnergy => (float)Results.TotalPrimaryEnergyNonRenewableMonthly.Sum(); //inputCarriers from conversionTech, except renewable tech (solar). 
-        public float RenewableEnergy => (float)Results.TotalFinalEnergyRenewableMonthly.Sum(); // solar tech
-        public float VentilationGains => (float) Results.TotalVentilationHeatGains;   
-        public float EnvelopeGains => (float) Results.TotalOpaqueTransmissionHeatGains; 
-        public float WindowsGains => (float) Results.TotalWindowTransmissionHeatGains; 
+        public float SolarGains(bool normalized) => (float)(normalized ? Results.TotalSolarGains / TotalFloorArea : Results.TotalSolarGains);
+        public float InternalGains(bool normalized) => (float)(normalized ? Results.TotalInternalGains / TotalFloorArea : Results.TotalInternalGains);
+        public float PrimaryEnergy(bool normalized) => (float)(normalized ? Results.TotalPrimaryEnergyNonRenewableMonthly.Sum() / TotalFloorArea : Results.TotalPrimaryEnergyNonRenewableMonthly.Sum()); //inputCarriers from conversionTech, except renewable tech (solar). 
+        public float RenewableEnergy(bool normalized) => (float)(normalized ? Results.TotalFinalEnergyRenewableMonthly.Sum() / TotalFloorArea : Results.TotalFinalEnergyRenewableMonthly.Sum()); // solar tech
+        public float VentilationGains(bool normalized) => (float)(normalized ?  Results.TotalVentilationHeatGains / TotalFloorArea :  Results.TotalVentilationHeatGains);   
+        public float EnvelopeGains(bool normalized) => (float)(normalized ?  Results.TotalOpaqueTransmissionHeatGains / TotalFloorArea :  Results.TotalOpaqueTransmissionHeatGains); 
+        public float WindowsGains(bool normalized) => (float)(normalized ?  Results.TotalWindowTransmissionHeatGains / TotalFloorArea :  Results.TotalWindowTransmissionHeatGains); 
 
 
         // outgoing energy
-        public float Electricity => (float)Results.TotalConsumedElectricityMonthly.Sum(); // consumed electricity. it is not electricity loads, which could become negative with e.g. pv electricity
-        public float VentilationLosses => (float)Results.TotalVentilationHeatLosses;
-        public float EnvelopeLosses => (float)Results.TotalOpaqueTransmissionHeatLosses;
-        public float WindowsLosses => (float)Results.TotalWindowTransmissionHeatLosses;
+        public float Electricity(bool normalized) => (float)(normalized ? Results.TotalConsumedElectricityMonthly.Sum() / TotalFloorArea : Results.TotalConsumedElectricityMonthly.Sum()); // consumed electricity. it is not electricity loads, which could become negative with e.g. pv electricity
+        public float VentilationLosses(bool normalized) => (float)(normalized ? Results.TotalVentilationHeatLosses / TotalFloorArea : Results.TotalVentilationHeatLosses);
+        public float EnvelopeLosses(bool normalized) => (float)(normalized ? Results.TotalOpaqueTransmissionHeatLosses / TotalFloorArea : Results.TotalOpaqueTransmissionHeatLosses);
+        public float WindowsLosses(bool normalized) => (float)(normalized ? Results.TotalWindowTransmissionHeatLosses / TotalFloorArea : Results.TotalWindowTransmissionHeatLosses);
 
-        public float SystemLosses => (float)Results.TotalSystemLosses; // system losses only from fuel based systems. Heatpump electricity is accounted to Electricity (out)
-        public float ActiveCooling => (float)Results.TotalActiveCoolingMonthly.Sum();           // new arrow for active cooling @Daren
-        public float SurplusElectricity => (float)Results.TotalFeedInElectricityMonthly.Sum();      // new arrow for surplus electricity @Daren
-        public float SurplusHeating => (float)Results.TotalSurplusHeatingMonthly.Sum();          // new arrow for surplus heating energy @Daren
+        public float SystemLosses(bool normalized) => (float)(normalized ? Results.TotalSystemLosses / TotalFloorArea : Results.TotalSystemLosses); // system losses only from fuel based systems. Heatpump electricity is accounted to Electricity (out)
+        public float ActiveCooling(bool normalized) => (float)(normalized ? Results.TotalActiveCoolingMonthly.Sum() / TotalFloorArea : Results.TotalActiveCoolingMonthly.Sum());           // new arrow for active cooling @Daren
+        public float SurplusElectricity(bool normalized) => (float)(normalized ? Results.TotalFeedInElectricityMonthly.Sum() / TotalFloorArea : Results.TotalFeedInElectricityMonthly.Sum());      // new arrow for surplus electricity @Daren
+        public float SurplusHeating(bool normalized) => (float)(normalized ? Results.TotalSurplusHeatingMonthly.Sum() / TotalFloorArea : Results.TotalSurplusHeatingMonthly.Sum());          // new arrow for surplus heating energy @Daren
 
         public float PrimaryTransferLosses => 0f;   // deactivate for now @Daren
 
