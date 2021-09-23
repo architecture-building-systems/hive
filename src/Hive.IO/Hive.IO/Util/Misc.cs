@@ -36,6 +36,8 @@ namespace Hive.IO
 
         public const double Kelvin = 273.15;
 
+        public const string DefaultConstructionType = "default"; // For using fixed tau values instead of variable for SIA 380 demand calc
+
         public static double[] GetAverageMonthlyValue(double[] annualTimeSeries)
         {
             if (annualTimeSeries == null)

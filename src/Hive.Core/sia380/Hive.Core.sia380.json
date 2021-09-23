@@ -34,7 +34,8 @@
         {"type": "boolean", "name": "Run obstructed solar simulation?", "nick-name": "RunObstructed?", "description": "Boolean to indicate if an obstructed solar simulation is conducted. True if yes.", "access": "item"},
         {"type": "boolean", "name": "Run hourly?", "nick-name": "RunHourly?", "description": "Boolean to indicate if to run monthly or hourly simulations. True if hourly.", "access": "item"},
         {"type": "boolean", "name": "Use adaptive comfort?", "nick-name": "UseAdaptiveComfort?", "description": "Boolean to indicate if adaptive comfort should be used instead of fixed setpoints. True if yes. Defaults to yes if setpoints_ub and setpoints_lb are null.", "access": "item"},
-        {"type": "boolean", "name": "Use natural ventilation?", "nick-name": "UseNaturalVentilation?", "description": "Boolean to indicate if natural ventilation should be considered (True) or not (False).", "access": "item"}
+        {"type": "boolean", "name": "Use natural ventilation?", "nick-name": "UseNaturalVentilation?", "description": "Boolean to indicate if natural ventilation should be considered (True) or not (False).", "access": "item"},
+        {"type": "boolean", "name": "Use fixed time constant?", "nick-name": "UseFixedTimeConstant?", "description": "Boolean to indicate if the fixed time constant from SIA 2024 should be used (True) or dynamically calculated based on capacities (False).", "access": "item"}
       ],
       "outputs": [
         {"type": "float", "name": "Heating demand", "nick-name": "Q_Heat", "description": "Heating loads of a zone in kWh.", "access": "list"},

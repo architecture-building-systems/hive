@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Web.Script.Serialization;
-using System.Windows.Documents;
 using Grasshopper.Kernel;
 using Hive.IO.Building;
 
@@ -36,6 +33,7 @@ namespace Hive.IO.GhDistributors
             pManager.AddTextParameter("SUA Room Schedules", "SiaRoomSchedules", "Schedules for occupancy, devices, lighting, amd setpoints.", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Use Adaptive Comfort", "UseAdaptiveComfort", "Determines whether to use adaptive comfort (true) or SIA 2024 setpoints (false)", GH_ParamAccess.item);
             pManager.AddBooleanParameter("Use Natural Ventilation", "UseNatVent", "Use natural ventilation in the demand calculation. Based on simplified single sided ventilation", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Use Fixed Time Constant", "UseFixedTimeConstant", "Use the fixed time constant provided by SIA 2024", GH_ParamAccess.item);
         }
 
 
@@ -113,7 +111,6 @@ namespace Hive.IO.GhDistributors
             //var json = building.SIA2024.ToJson();
             //JavaScriptSerializer js = new JavaScriptSerializer();
 
-
             DA.SetDataList(0, zoneAreas);
             DA.SetDataList(1, windowAreas);
             DA.SetDataList(2, extSrfAreas);
@@ -123,6 +120,7 @@ namespace Hive.IO.GhDistributors
             DA.SetData(6, Sia2024Schedules.ToJson(zonesSchedules[0].RoomType)); // single zone !!
             DA.SetData(7, building.Zones[0].RunAdaptiveComfort); // single zone !!
             DA.SetData(8, building.Zones[0].RunNaturalVentilation); // single zone !!
+            DA.SetData(9, building.Zones[0].UseFixedTimeConstant); // single zone !!
         }
 
 

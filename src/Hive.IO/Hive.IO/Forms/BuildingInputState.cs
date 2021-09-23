@@ -214,11 +214,15 @@ namespace Hive.IO.Forms
             }
         }
 
+        #region zone properties
+
         public string Construction
         {
-            get => _siaRoom.Construction ?? "undefined";
+            get => _siaRoom.Construction ?? Misc.DefaultConstructionType;
             set
             {
+                _siaRoom.UseFixedTimeConstant = value == Misc.DefaultConstructionType;
+                _zone.UseFixedTimeConstant = value == Misc.DefaultConstructionType;
                 _zone.ApplySia380ConstructionAssembly(value);
                 UpdateSiaRoomConstruction();
 
@@ -227,7 +231,6 @@ namespace Hive.IO.Forms
             }
         }
 
-        #region zone properties
 
         public bool RunAdaptiveComfort
         {
@@ -263,6 +266,24 @@ namespace Hive.IO.Forms
                 RaisePropertyChangedEvent();
             }
         }
+
+        public bool UseFixedTimeConstant
+        {
+            get => _siaRoom.UseFixedTimeConstant;
+            set
+            {
+                try
+                {
+                    _zone.UseFixedTimeConstant = value;
+                    _siaRoom.UseFixedTimeConstant = value; // not used, only to keep it consistent
+                }
+                catch
+                { }
+
+                RaisePropertyChangedEvent();
+            }
+        }
+
         #endregion
 
         #endregion comboboxes
@@ -288,7 +309,7 @@ namespace Hive.IO.Forms
 
         public string CapacitancePerFloorArea
         {
-            get => $"{_siaRoom.CapacitancePerFloorArea:0.00}";
+            get => _siaRoom.CapacitancePerFloorArea > 0 ? $"{_siaRoom.CapacitancePerFloorArea:0.00}" : "";
             set
             {
                 try

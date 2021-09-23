@@ -67,6 +67,7 @@ namespace Hive.IO.Building
 
             RunAdaptiveComfort = room.RunAdaptiveComfort;
             RunNaturalVentilation = room.RunNaturalVentilation;
+            UseFixedTimeConstant = room.UseFixedTimeConstant;
         }
 
         public new static Sia2024RecordEx FromJson(string json)
@@ -122,6 +123,7 @@ namespace Hive.IO.Building
         // custom booleans not part of sia2024
         public bool RunAdaptiveComfort;
         public bool RunNaturalVentilation;
+        public bool UseFixedTimeConstant;
 
         // as per #466, allow Sia2024Record to have separate values for walls, floors, roofs. Fall back to the Opaque values
         private double? _uValueFloors = null;
@@ -262,7 +264,8 @@ namespace Hive.IO.Building
                 {"Emissionen Waende", EmissionsWalls },
 
                 {"Natuerliche Belueftung", RunNaturalVentilation },
-                {"Adaptiver Komfort", RunAdaptiveComfort }
+                {"Adaptiver Komfort", RunAdaptiveComfort },
+                {"Feste Zeitkonstante", UseFixedTimeConstant }
             };
             return JsonConvert.SerializeObject(result);
         }
@@ -323,7 +326,8 @@ namespace Hive.IO.Building
                 _emissionsWalls = readValueOrNull("Emissionen Waende"),
 
                 RunNaturalVentilation = readValueOrFalse("Natuerliche Belueftung"),
-                RunAdaptiveComfort = readValueOrFalse("Adaptiver Komfort")
+                RunAdaptiveComfort = readValueOrFalse("Adaptiver Komfort"),
+                UseFixedTimeConstant = readValueOrFalse("Feste Zeitkonstante")
             };
         }
 
