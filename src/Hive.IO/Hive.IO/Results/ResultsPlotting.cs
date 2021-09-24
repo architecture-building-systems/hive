@@ -293,6 +293,8 @@ namespace Hive.IO.Results
 
         public List<double[]> IrradiationOnWindows => Results.MonthlySolarGainsPerWindow;
 
+        public List<double> AreasPerWindow => Results.AreasPerWindow;
+
         #endregion Irradiation
     }
 }

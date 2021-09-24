@@ -322,6 +322,8 @@ namespace Hive.IO.Results
         public rg.Curve[] SkySunPath { get; private set; }
         [JsonProperty]
         public rg.Mesh[] IrradiationSurfaces { get; private set; }
+        [JsonProperty]
+        public List<double> AreasPerWindow { get; private set; }
         #endregion
 
 
@@ -433,6 +435,7 @@ namespace Hive.IO.Results
             this.TotalSolarGains = GetTotalGainsOrLosses(building, "Qs");
             this.TotalSystemLosses = GetTotalMonthlySystemLossesNonRenewable(conversionTech).Sum();
             this.MonthlySolarGainsPerWindow = GetMonthlySolarGainsPerWindow(building);
+            this.AreasPerWindow = GetAreasPerWindow(building);
 
             this.SupplyNames = null;
             this.SupplyTypes = null;
@@ -629,9 +632,8 @@ namespace Hive.IO.Results
         public static List<double[]> GetMonthlySolarGainsPerWindow(Building.Building building)
         {
             var solarGainsList = new List<double[]>();
-            for (int i = 0; i < building.Zones.Length; i++)
+            foreach (Zone zone in building.Zones)
             {
-                Zone zone = building.Zones[i];
                 for (int j = 0; j < zone.Windows.Length; j++)
                 {
                     solarGainsList.Add(zone.SolarGainsPerWindowMonthly[j]);
@@ -639,6 +641,11 @@ namespace Hive.IO.Results
             }
 
             return solarGainsList;
+        }
+
+        public static List<double> GetAreasPerWindow(Building.Building building)
+        {
+            return building.Zones.SelectMany(z => z.Windows.Select(w => w.Area)).ToList();
         }
 
         public static double [] GetTotalMonthlySurplusHeating(Building.Building building, List<ConversionTech> conversionTech)
@@ -831,12 +838,12 @@ namespace Hive.IO.Results
             for (int j = 0; j < surfs.Count(); j++) // single zone !!
             {
                 Component surf = surfs.ElementAt(j);
-                double costEmbodied = surf.TotalEmissions;
+                double emissionsEmbodied = surf.TotalEmissions;
                 //double costOperational = 0.0; // assume no OPEX!
 
                 for (int k = 0; k < buildingLifetime; k++)
                 {
-                    if (k % surf.Lifetime == 0) emissionsYearly[k] += costEmbodied;
+                    if (k % surf.Lifetime == 0) emissionsYearly[k] += emissionsEmbodied;
                 }
             }
 

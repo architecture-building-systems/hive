@@ -65,7 +65,7 @@ namespace Hive.IO.GhInputOutput
             energyKpi.OnClicked += _plotSelector.EnergyKpiClicked;
 
             //bool Normalized = true;
-            var mbNormalize = _plotSelector.Normalized ? new BlackMenuButton("/m²") : new MenuButton("TOT");
+            var mbNormalize = _plotSelector.Normalized ? new BlackMenuButton("/m²") : new MenuButton("/m²");
             mbNormalize.OnClicked += (sender, e) => _plotSelector.Normalized = !_plotSelector.Normalized;
 
             _kpiPlots = new KpiPlot[]

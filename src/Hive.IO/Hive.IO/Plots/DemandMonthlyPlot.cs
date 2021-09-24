@@ -40,7 +40,7 @@ namespace Hive.IO.Plots
             var demandDhw = new ColumnSeries
             {
                 ItemsSource = results.TotalDomesticHotWaterMonthly.Select(demand => new ColumnItem { Value = demand }),
-                Title = " DWH",
+                Title = " DHW",
                 FillColor = DhwColor,
             };
             model.Series.Add(demandDhw);

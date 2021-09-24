@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Hive.IO.Results;
 using OxyPlot;
@@ -7,8 +8,12 @@ using OxyPlot.Series;
 
 namespace Hive.IO.Plots
 {
-    public class SolarGainsPerWindowPlot : OxyPlotBase
+    public abstract class SolarGainsPerWindowPlotBase : OxyPlotBase
     {
+        protected abstract bool Normalize { get; }
+        protected abstract string Units { get; }
+        protected abstract string PlotTitle { get; }
+
         private const int MaxColors = 8;
         private static readonly List<OxyColor> Colors = Enumerable.Range(0, MaxColors).Select(i => OxyColor.FromRgb(
             (byte) (235 - i * 5),
@@ -18,22 +23,20 @@ namespace Hive.IO.Plots
 
         protected override PlotModel CreatePlotModel(ResultsPlotting results, Dictionary<string, string> plotParameters)
         {
-            var model = new PlotModel {Title = "Solar Gains per Window (kWh)"};
+            var model = new PlotModel {Title = PlotTitle};
 
             // add the data
-            var i = 0;
-            foreach (var windowIrradiation in results.IrradiationOnWindows)
+            for (int i = 0; i < results.IrradiationOnWindows.Count; i++)
             {
                 model.Series.Add(new ColumnSeries
                 {
-                    ItemsSource = windowIrradiation.Select(x => new ColumnItem {Value = x}),
+                    ItemsSource = results.IrradiationOnWindows[i].Select(x => new ColumnItem {Value = Normalize ? x / results.AreasPerWindow[i] : x }),
                     IsStacked = true,
                     FillColor = Colors[i % MaxColors],
                     Title = $" Win{i:00}",
                     LabelFormatString = "{0:0}",
                     LabelPlacement = LabelPlacement.Middle
                 });
-                i++;
             }
 
             // add the axes
@@ -41,7 +44,7 @@ namespace Hive.IO.Plots
             {
                 Position = AxisPosition.Left,
                 Key = "Irradiation",
-                Title = "kWh"
+                Title = Units
             };
             var axisMinimum = plotParameters.ReadDouble("SolarGains-Axis-Minimum");
             if (axisMinimum.HasValue)
@@ -66,4 +69,20 @@ namespace Hive.IO.Plots
             return model;
         }
     }
+
+
+    public class SolarGainsPerWindowPlot : SolarGainsPerWindowPlotBase
+    {
+        protected override bool Normalize => false;
+        protected override string Units => "kWh";
+        protected override string PlotTitle => $"Solar Gains per Window (kWh)";
+    }
+
+    public class SolarGainsPerWindowNormalizedPlot : SolarGainsPerWindowPlotBase
+    {
+        protected override bool Normalize => true;
+        protected override string Units => "kWh / m²";
+        protected override string PlotTitle => $"Solar Gains per Window, Normalized per Window Area (kWh / m²)";
+    }
+
 }

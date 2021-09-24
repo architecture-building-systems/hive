@@ -49,7 +49,7 @@ namespace Hive.IO.Plots
             var demandDhw = new ColumnSeries
             {
                 ItemsSource = results.TotalDomesticHotWaterMonthly.Select(demand => new ColumnItem { Value = demand / totalFloorArea }),
-                Title = " DWH",
+                Title = " DHW",
                 FillColor = DhwColor,
                 //StrokeThickness = strokeThickness,
                 //StrokeColor = DhwColor,

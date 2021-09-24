@@ -11,9 +11,10 @@ namespace Hive.IO.Plots
 
     public enum PerformanceResolution
     {
+        Lifetime,
         Yearly,
         Monthly,
-        Hourly
+        //Hourly
     }
 
     public enum Kpi
@@ -27,7 +28,7 @@ namespace Hive.IO.Plots
     public enum OtherSubcategory
     {
         SvD,
-        GvL,
+        //GvL,
         Sol
     }
 
@@ -79,31 +80,35 @@ namespace Hive.IO.Plots
             MenuButton mbResolution;
             switch (_performanceResolution)
             {
+                case PerformanceResolution.Lifetime:
+                    mbResolution = new BlackMenuButton("TOT");
+                    break;
                 case PerformanceResolution.Monthly:
                     mbResolution = new BlackMenuButton("M");
                     break;
-                case PerformanceResolution.Hourly:
-                    mbResolution = new BlackMenuButton("D");
-                    break;
+                //case PerformanceResolution.Hourly:
+                //    mbResolution = new BlackMenuButton("D");
+                //    break;
                 default:
-                    mbResolution = new MenuButton("Y");
+                    mbResolution = new BlackMenuButton("Y");
                     break;
             }
 
             mbResolution.OnClicked += CycleResolution;
 
-            var mbNormalize = Normalized ? new BlackMenuButton("/m²") : new MenuButton("TOT");
+            var mbNormalize = Normalized ? new BlackMenuButton("/m²") : new MenuButton("/m²");
             mbNormalize.OnClicked += (sender, e) => Normalized = !Normalized;
 
-            var mbBreakdown = _breakdown ? new BlackMenuButton("BRK") : new MenuButton("BRK");
-            mbBreakdown.OnClicked += (sender, e) => _breakdown = !_breakdown;
+            // TODO implement breakdown
+            //var mbBreakdown = _breakdown ? new BlackMenuButton("BRK") : new MenuButton("BRK");
+            //mbBreakdown.OnClicked += (sender, e) => _breakdown = !_breakdown;
 
             return new MenuButtonPanel(new[]
             {
                 mbCategory,
                 mbNormalize,
                 mbResolution,
-                mbBreakdown
+                //mbBreakdown
             });
         }
 
@@ -115,7 +120,7 @@ namespace Hive.IO.Plots
                 _panelFactory = CreateOtherPanel; // link to next panel in list
             };
 
-            var mbNormalize = Normalized ? new BlackMenuButton("/m²") : new MenuButton("TOT");
+            var mbNormalize = Normalized ? new BlackMenuButton("/m²") : new MenuButton("/m²");
             mbNormalize.OnClicked += (sender, e) => Normalized = !Normalized;
 
             return new MenuButtonPanel(new[]
@@ -136,7 +141,7 @@ namespace Hive.IO.Plots
                 CurrentKpi = Kpi.Energy;
             };
 
-            var mbNormalize = Normalized ? new BlackMenuButton("/m²") : new MenuButton("TOT");
+            var mbNormalize = Normalized ? new BlackMenuButton("/m²") : new MenuButton("/m²");
             mbNormalize.OnClicked += (sender, e) => Normalized = !Normalized;
 
             var mbSvD = _otherSubcategory == OtherSubcategory.SvD ? new BlackMenuButton("SvD") : new MenuButton("SvD");
@@ -165,6 +170,8 @@ namespace Hive.IO.Plots
         {
             if (Category == "P") // Performance
             {
+                if (_performanceResolution == PerformanceResolution.Lifetime)
+                    return LifetimePerformancePlot(CurrentKpi, results, _normalized, _breakdown);
                 if (_performanceResolution == PerformanceResolution.Yearly)
                     return YearlyPerformancePlot(CurrentKpi, results, _normalized, _breakdown);
                 if (_performanceResolution == PerformanceResolution.Monthly)
@@ -186,7 +193,10 @@ namespace Hive.IO.Plots
                     //case OtherSubcategory.GvL:
                     //    return new EnergyBalancePlot();
                     case OtherSubcategory.Sol:
-                        return new SolarGainsPerWindowPlot();
+                        if (_normalized)
+                            return new SolarGainsPerWindowNormalizedPlot();
+                        else
+                            return new SolarGainsPerWindowPlot();
                     default:
                         return new EnergyBalancePlot();
                 }
@@ -200,6 +210,35 @@ namespace Hive.IO.Plots
             }
         }
 
+        private IVisualizerPlot LifetimePerformancePlot(Kpi currentKpi, ResultsPlotting results, bool normalized,
+            bool breakdown)
+        {
+            IVisualizerPlot plot;
+            switch (currentKpi)
+            {
+                case Kpi.Energy:
+                    plot = new LifetimeAmrPlot("Energy", new EnergyDataAdaptor(results, normalized),
+                        new EnergyPlotStyle());
+                    break;
+                case Kpi.Emissions:
+                    plot = new LifetimeAmrPlot("CO₂ Emissions", new EmissionsDataAdaptor(results, normalized),
+                        new EmissionsPlotStyle());
+                    break;
+                case Kpi.Costs:
+                    plot = new LifetimeAmrPlot("Cost", new CostsDataAdaptor(results, normalized), new CostsPlotStyle());
+                    break;
+                default:
+                    // this shouldn't happen...
+                    plot = new AmrPlotBase(
+                        "TODO: Implement this plot!",
+                        new EnergyDataAdaptor(results, normalized),
+                        new EnergyPlotStyle());
+                    break;
+            }
+
+            return plot;
+        }
+        
         private IVisualizerPlot YearlyPerformancePlot(Kpi currentKpi, ResultsPlotting results, bool normalized,
             bool breakdown)
         {
@@ -285,14 +324,17 @@ namespace Hive.IO.Plots
             PerformanceResolution nextResolution;
             switch (_performanceResolution)
             {
+                case PerformanceResolution.Lifetime:
+                    nextResolution = PerformanceResolution.Yearly;
+                    break;
                 case PerformanceResolution.Yearly:
                     nextResolution = PerformanceResolution.Monthly;
                     break;
                 case PerformanceResolution.Monthly:
-                    nextResolution = PerformanceResolution.Hourly;
-                    break;
-                case PerformanceResolution.Hourly:
-                    nextResolution = PerformanceResolution.Yearly;
+                //    nextResolution = PerformanceResolution.Hourly;
+                //    break;
+                //case PerformanceResolution.Hourly:
+                    nextResolution = PerformanceResolution.Lifetime;
                     break;
                 default:
                     nextResolution = PerformanceResolution.Yearly;
