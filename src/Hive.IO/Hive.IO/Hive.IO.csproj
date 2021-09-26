@@ -180,6 +180,7 @@
     <Compile Include="GhInputOutput\GhBuilding.cs" />
     <Compile Include="GhDistributors\GhMainDistributor.cs" />
     <Compile Include="GhInputOutput\GhVisualizerAttributes.cs" />
+    <Compile Include="Plots\AmrPlotConstants.cs" />
     <Compile Include="Plots\LifetimeAmrPlot.cs" />
     <Compile Include="Util\HiveCategoryIcon.cs" />
     <Compile Include="Util\HiveIOInfo.cs" />

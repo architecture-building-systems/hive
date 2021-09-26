@@ -4,12 +4,17 @@ namespace Hive.IO.Plots
 {
     public class LifetimeAmrPlot : AmrPlotBase
     {
-        public LifetimeAmrPlot(string title, AmrPlotDataAdaptor data, AmrPlotStyle style) : base(title, data, style)
+        public LifetimeAmrPlot(string title, string description, AmrPlotDataAdaptor data, AmrPlotStyle style) : base(title, description, data, style)
         {
         }
 
         protected override float AxisMax => Data.EmbodiedBuildings + Data.EmbodiedSystems + Data.OperationBuildings +
                                    Data.OperationSystems;
+
+        protected override float TotalBuildings => Data.TotalBuildings;
+        protected override float TotalSystems => Data.TotalSystems;
+        protected override float TotalEmbodied => Data.TotalEmbodied;
+        protected override float TotalOperation => Data.TotalOperation;
 
         protected RectangleF RenderEmbodiedBuildings(Graphics graphics)
         {

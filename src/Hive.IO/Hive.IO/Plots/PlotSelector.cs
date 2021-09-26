@@ -176,8 +176,7 @@ namespace Hive.IO.Plots
                     return YearlyPerformancePlot(CurrentKpi, results, _normalized, _breakdown);
                 if (_performanceResolution == PerformanceResolution.Monthly)
                     return MonthlyPerformancePlot(CurrentKpi, results, _normalized, _breakdown);
-                return new AmrPlotBase(
-                    "TODO: Implement this plot!",
+                return new AmrPlotBase("TODO: Implement this plot!", "",
                     new EnergyDataAdaptor(results, _normalized),
                     new EnergyPlotStyle());
             }
@@ -217,20 +216,21 @@ namespace Hive.IO.Plots
             switch (currentKpi)
             {
                 case Kpi.Energy:
-                    plot = new LifetimeAmrPlot("Energy", new EnergyDataAdaptor(results, normalized),
-                        new EnergyPlotStyle());
+                    plot = new LifetimeAmrPlot(AmrPlotConstants.EnergyTitle, AmrPlotConstants.EnergyDescription,
+                        new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle());
                     break;
                 case Kpi.Emissions:
-                    plot = new LifetimeAmrPlot("CO₂ Emissions", new EmissionsDataAdaptor(results, normalized),
-                        new EmissionsPlotStyle());
+                    plot = new LifetimeAmrPlot(AmrPlotConstants.EmissionsTitle, AmrPlotConstants.EmissionsDescription, 
+                        new EmissionsDataAdaptor(results, normalized), new EmissionsPlotStyle());
                     break;
                 case Kpi.Costs:
-                    plot = new LifetimeAmrPlot("Cost", new CostsDataAdaptor(results, normalized), new CostsPlotStyle());
+                    plot = new LifetimeAmrPlot(AmrPlotConstants.CostTitle, AmrPlotConstants.CostDescription, 
+                        new CostsDataAdaptor(results, normalized), new CostsPlotStyle());
                     break;
                 default:
                     // this shouldn't happen...
                     plot = new AmrPlotBase(
-                        "TODO: Implement this plot!",
+                        "TODO: Implement this plot!", "",
                         new EnergyDataAdaptor(results, normalized),
                         new EnergyPlotStyle());
                     break;
@@ -246,22 +246,21 @@ namespace Hive.IO.Plots
             switch (currentKpi)
             {
                 case Kpi.Energy:
-                    plot = new YearlyAmrPlot("Energy", new EnergyDataAdaptor(results, normalized),
-                        new EnergyPlotStyle());
+                    plot = new YearlyAmrPlot(AmrPlotConstants.EnergyTitle, AmrPlotConstants.EnergyDescription,
+                        new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle());
                     break;
                 case Kpi.Emissions:
-                    plot = new YearlyAmrPlot("CO₂ Emissions", new EmissionsDataAdaptor(results, normalized),
-                        new EmissionsPlotStyle());
+                    plot = new YearlyAmrPlot(AmrPlotConstants.EmissionsTitle, AmrPlotConstants.EmissionsDescription, 
+                        new EmissionsDataAdaptor(results, normalized), new EmissionsPlotStyle());
                     break;
                 case Kpi.Costs:
-                    plot = new YearlyAmrPlot("Cost", new CostsDataAdaptor(results, normalized), new CostsPlotStyle());
+                    plot = new YearlyAmrPlot(AmrPlotConstants.CostTitle, AmrPlotConstants.CostDescription, 
+                        new CostsDataAdaptor(results, normalized), new CostsPlotStyle());
                     break;
                 default:
                     // this shouldn't happen...
-                    plot = new AmrPlotBase(
-                        "TODO: Implement this plot!",
-                        new EnergyDataAdaptor(results, normalized),
-                        new EnergyPlotStyle());
+                    plot = new AmrPlotBase("TODO: Implement this plot!", "",
+                        new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle());
                     break;
             }
 
@@ -275,22 +274,21 @@ namespace Hive.IO.Plots
             switch (currentKpi)
             {
                 case Kpi.Energy:
-                    plot = new MonthlyAmrPlot("Energy", new EnergyDataAdaptor(results, normalized),
-                        new EnergyPlotStyle());
+                    plot = new MonthlyAmrPlot(AmrPlotConstants.EnergyTitle, AmrPlotConstants.EnergyDescription,
+                        new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle());
                     break;
                 case Kpi.Emissions:
-                    plot = new MonthlyAmrPlot("CO₂ Emissions", new EmissionsDataAdaptor(results, normalized),
-                        new EmissionsPlotStyle());
+                    plot = new MonthlyAmrPlot(AmrPlotConstants.EmissionsTitle, AmrPlotConstants.EmissionsDescription,
+                        new EmissionsDataAdaptor(results, normalized), new EmissionsPlotStyle());
                     break;
                 case Kpi.Costs:
-                    plot = new MonthlyAmrPlot("Cost", new CostsDataAdaptor(results, normalized), new CostsPlotStyle());
+                    plot = new MonthlyAmrPlot(AmrPlotConstants.CostTitle, AmrPlotConstants.CostDescription, 
+                        new CostsDataAdaptor(results, normalized), new CostsPlotStyle());
                     break;
                 default:
                     // this shouldn't happen...
-                    plot = new AmrPlotBase(
-                        "TODO: Implement this plot!",
-                        new EnergyDataAdaptor(results, normalized),
-                        new EnergyPlotStyle());
+                    plot = new AmrPlotBase("TODO: Implement this plot!", "",
+                        new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle());
                     break;
             }
 

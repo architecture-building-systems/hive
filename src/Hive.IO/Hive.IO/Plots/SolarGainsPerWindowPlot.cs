@@ -28,9 +28,10 @@ namespace Hive.IO.Plots
             // add the data
             for (int i = 0; i < results.IrradiationOnWindows.Count; i++)
             {
+                var windowArea = results.AreasPerWindow[i];
                 model.Series.Add(new ColumnSeries
                 {
-                    ItemsSource = results.IrradiationOnWindows[i].Select(x => new ColumnItem {Value = Normalize ? x / results.AreasPerWindow[i] : x }),
+                    ItemsSource = results.IrradiationOnWindows[i].Select(x => new ColumnItem {Value = Normalize ? x / windowArea : x}),
                     IsStacked = true,
                     FillColor = Colors[i % MaxColors],
                     Title = $" Win{i:00}",

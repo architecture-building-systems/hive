@@ -10,12 +10,17 @@ namespace Hive.IO.Plots
     {
         private const string months = "JFMAMJJASOND";
 
-        public MonthlyAmrPlot(string title, AmrPlotDataAdaptor data, AmrPlotStyle style) : base(title, data, style)
+        public MonthlyAmrPlot(string title, string description, AmrPlotDataAdaptor data, AmrPlotStyle style) : base(title, description, data, style)
         {
         }
 
         protected override float AxisMax => Data.EmbodiedBuildingsMonthly.Max() + Data.EmbodiedSystemsMonthly.Max() +
                                             Data.OperationBuildingsMonthly.Max() + Data.OperationSystemsMonthly.Max();
+
+        protected override float TotalBuildings => Data.AverageBuildingsMonthly;
+        protected override float TotalSystems => Data.AverageSystemsMonthly;
+        protected override float TotalEmbodied => Data.AverageEmbodiedMonthly;
+        protected override float TotalOperation => Data.AverageOperationMonthly;
 
         protected override void RenderPlot(Graphics graphics)
         {

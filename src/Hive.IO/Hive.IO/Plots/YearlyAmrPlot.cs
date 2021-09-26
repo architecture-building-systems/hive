@@ -4,12 +4,17 @@ namespace Hive.IO.Plots
 {
     public class YearlyAmrPlot : AmrPlotBase
     {
-        public YearlyAmrPlot(string title, AmrPlotDataAdaptor data, AmrPlotStyle style) : base(title, data, style)
+        public YearlyAmrPlot(string title, string description, AmrPlotDataAdaptor data, AmrPlotStyle style) : base(title, description, data, style)
         {
         }
 
         protected override float AxisMax => Data.EmbodiedBuildingsYearly + Data.EmbodiedSystemsYearly + Data.OperationBuildingsYearly +
                                    Data.OperationSystemsYearly;
+
+        protected override float TotalBuildings => Data.TotalBuildingsYearly;
+        protected override float TotalSystems => Data.TotalSystemsYearly;
+        protected override float TotalEmbodied => Data.TotalEmbodiedYearly;
+        protected override float TotalOperation => Data.TotalOperationYearly;
 
         protected RectangleF RenderEmbodiedBuildings(Graphics graphics)
         {
@@ -61,6 +66,8 @@ namespace Hive.IO.Plots
 
         protected override void RenderPlot(Graphics graphics)
         {
+            // FIXME in case bounds are too small, caption sometimes does not appear
+            // enforce some minimum bounds for the caption to always appear (based on string size)
             var ebBounds = RenderEmbodiedBuildings(graphics);
             var esBounds = RenderEmbodiedSystems(graphics);
             var obBounds = RenderOperationBuildings(graphics);
