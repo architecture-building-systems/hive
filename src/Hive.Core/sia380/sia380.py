@@ -48,7 +48,8 @@ def cleanDictForNaN(d):
 
 def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly, T_i_lb_hourly, surface_areas, surface_type,
          srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, 
-         run_obstructed_simulation, hourly, use_adaptive_comfort, use_natural_ventilation, debug=False):
+         run_obstructed_simulation, hourly, use_adaptive_comfort, use_natural_ventilation, use_fixed_time_constant,
+         debug=False):
     '''
     Computes monthly heating, cooling and electricity demand for a thermal zone, based on SIA 380.1
     :param room_properties: room properties in json format
@@ -68,6 +69,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     :param hourly: Boolean to indicate if hourly values should be returned instead of monthly. True if yes.
     :param use_adaptive_comfort: Boolean to indicate if adaptive comfort should be used instead of fixed setpoints. True if yes. Defaults to yes if setpoints_ub and setpoints_lb are null.
     :param use_natural_ventilation: Boolean to indicate if natural ventilation should be considered (True) or not (False).
+    :param use_fixed_time_constant: Boolean to indicate if fixed time constant should be uesd from SIA 2024 (True) or dynamically calculated based on room capacitance (False).
    
     :return: Monthly or hourly cooling, heating and electricity loads for a thermal zone
     '''
@@ -211,7 +213,7 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
     
     # f_sh = 0.9  # sia2024, p.12, 1.3.1.9 Reduktion solare Wärmeeinträge
     # g = room_properties["Gesamtenergiedurchlassgrad Verglasung"]
-    tau = room_properties["Zeitkonstante"]
+    tau_fixed = room_properties["Zeitkonstante"]
     C_m = room_properties["Waermespeicherfaehigkeit des Raumes"]
     # U_value_opaque = room_properties["U-Wert opake Bauteile"]
     # U_value_transparent = room_properties["U-Wert Fenster"]
@@ -475,11 +477,17 @@ def main(room_properties, room_schedules, floor_area, T_e_hourly, T_i_ub_hourly,
                        
             # time constant of the building (Zeitkonstante), tau
             # TODO where does H_T come from...
-            tau = calc_tau(C_m, floor_area, H_V, H_T) 
-            tau_no_hr = calc_tau(C_m, floor_area, H_V_no_heat_recovery, H_T) 
-            if use_natural_ventilation:
-                tau_heating_nat_vent = calc_tau(C_m, floor_area, H_V_lb_nat_vent, H_T) 
-                tau_cooling_nat_vent = calc_tau(C_m, floor_area, H_V_ub_nat_vent, H_T) 
+            if use_fixed_time_constant:
+                tau = tau_fixed
+                tau_no_hr = tau_fixed
+                tau_heating_nat_vent = tau_fixed
+                tau_cooling_nat_vent = tau_fixed
+            else:
+                tau = calc_tau(C_m, floor_area, H_V, H_T) 
+                tau_no_hr = calc_tau(C_m, floor_area, H_V_no_heat_recovery, H_T) 
+                if use_natural_ventilation:
+                    tau_heating_nat_vent = calc_tau(C_m, floor_area, H_V_lb_nat_vent, H_T) 
+                    tau_cooling_nat_vent = calc_tau(C_m, floor_area, H_V_ub_nat_vent, H_T) 
             
             # for debugging, to compare fixed tau
             # tau = 126.0
@@ -878,10 +886,11 @@ if __name__ == "__main__":
         results = main(**kwargs)
         
         # Assert
-        Q_Heat, Q_Cool, Q_Elec, Q_T, Q_V, Q_i, Q_s, Q_T_op, Q_T_tr, Q_s_tr_tree = results
+        Q_Heat, Q_dhw, Q_Cool, Q_Elec, Q_T, Q_V, Q_i, Q_s, Q_T_op, Q_T_tr, Q_s_tr_tree = results
         # with open(os.path.join(testdir, "results_variable_tau.json"), 'w') as f:
         #     data = {
         #         "Q_Heat": Q_Heat, 
+        #         "Q_dhw": Q_dhw, 
         #         "Q_Cool": Q_Cool,
         #         "Q_Elec": Q_Elec,
         #         "Q_T": Q_T,
@@ -905,6 +914,7 @@ if __name__ == "__main__":
         # X = range(t_start, t_end)
         # plt.plot(X, Q_Cool[t_start:t_end], label='Q_Cool')
         # plt.plot(X, Q_Heat[t_start:t_end], label='Q_Heat')
+        # plt.plot(X, Q_dhw[t_start:t_end], label='Q_dhw')
         # plt.plot(X, Q_T[t_start:t_end], ':c', label='Q_T')
         # plt.plot(X, Q_V[t_start:t_end], ':b', label='Q_V')
         # plt.plot(X, Q_i[t_start:t_end], ':g', label='Q_i')
