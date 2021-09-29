@@ -248,6 +248,7 @@ namespace Hive.IO.GhInputOutput
 
             zone.RunAdaptiveComfort = _buildingInputState.RunAdaptiveComfort;
             zone.RunNaturalVentilation = _buildingInputState.RunNaturalVentilation;
+            zone.UseFixedTimeConstant = _buildingInputState.UseFixedTimeConstant;
 
             return zone;
         }
