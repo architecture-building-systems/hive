@@ -371,6 +371,9 @@ namespace Hive.IO.Results
             //this.TotalFinalElectricityHourly = new double[Misc.HoursPerYear];
             //this.TotalFinalDomesticHotWaterHourly = new double[Misc.HoursPerYear];
 
+            this.TotalCostOperationalSystemsMonthly = new double[Misc.MonthsPerYear];
+            this.TotalEmissionsOperationalSystemsMonthly = new double[Misc.MonthsPerYear];
+
             this.SupplyNames = null;
             this.SupplyTypes = null;
             this.SupplyCapacities = null;
@@ -634,9 +637,16 @@ namespace Hive.IO.Results
             var solarGainsList = new List<double[]>();
             foreach (Zone zone in building.Zones)
             {
-                for (int j = 0; j < zone.Windows.Length; j++)
+                if (zone.SolarGainsPerWindowMonthly.Length != zone.Windows.Length)
                 {
-                    solarGainsList.Add(zone.SolarGainsPerWindowMonthly[j]);
+                    solarGainsList.Add(new double[Misc.MonthsPerYear]);
+                }
+                else
+                {
+                    for (int j = 0; j < zone.Windows.Length; j++)
+                    {
+                        solarGainsList.Add(zone.SolarGainsPerWindowMonthly[j]);
+                    }
                 }
             }
 

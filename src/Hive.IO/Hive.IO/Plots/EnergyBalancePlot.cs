@@ -94,7 +94,12 @@ namespace Hive.IO.Plots
             houseBounds.Height = bounds.Height - LegendHeight; // leave room for the legend
             var innerHousePolygon = RenderHouse(graphics, houseBounds);
 
-            var gains = new[]
+            // throw new Exception("Losses and Gains need to be positive values.");
+            // FIXME: remove this when chris has fixed the bug
+            // FIXME: in case of corrupted / not valid data, avoid trying to draw NaN gains or losses.
+            float CleanUpNegativeOrNan(float val) => val < 0.0f || float.IsNaN(val) ? 0.0f : val; 
+
+            var gains = new float[]
             {
                 results.SolarGains(Normalized),
                 results.InternalGains(Normalized),
@@ -104,7 +109,7 @@ namespace Hive.IO.Plots
                 results.EnvelopeGains(Normalized),
                 results.WindowsGains(Normalized)
             };
-            var losses = new[]
+            var losses = new float[]
             {
                 results.Electricity(Normalized),
                 results.VentilationLosses(Normalized),
@@ -116,13 +121,8 @@ namespace Hive.IO.Plots
                 results.SurplusHeating(Normalized)
             };
 
-            if (losses.Any(loss => loss < 0.0f) || gains.Any(gain => gain < 0.0f))
-            {
-                // throw new Exception("Losses and Gains need to be positive values.");
-                // FIXME: remove this when chris has fixed the bug
-                losses = losses.Select(loss => Math.Max(0.0f, loss)).ToArray();
-                gains = gains.Select(gain => Math.Max(0.0f, gain)).ToArray();
-            }
+            gains = gains.Select(v => CleanUpNegativeOrNan(v)).ToArray();
+            losses = losses.Select(v => CleanUpNegativeOrNan(v)).ToArray();
 
             var maxTotal = Math.Max(gains.Sum(), losses.Sum());
 
@@ -155,7 +155,7 @@ namespace Hive.IO.Plots
             var units = Normalized ? "kWh/m²" : "kWh";
 
             var leftTitle = "ENERGY IN";
-            var totalGains = gains.Sum();
+            var totalGains = gains.Sum() == 0.0 ? 1.0 : gains.Sum(); // to prevent divide by zero errors
             var energyInStrings = gains.Zip(EnergyInStrings,
                     (gain, s) => $"{s}: {gain:0} {units} ({gain / totalGains * 100:0}%)"
                 ).ToList();
@@ -169,7 +169,7 @@ namespace Hive.IO.Plots
             RenderLegendColumn(graphics, leftTitle, leftLegendBounds, energyInStrings, GainsColors);
 
             var rightTitle = "ENERGY OUT";
-            var totalLosses = losses.Sum();
+            var totalLosses = losses.Sum() == 0.0 ? 1.0 : losses.Sum(); // to prevent divide by zero errors
             var energyOutStrings = losses.Zip(EnergyOutStrings,
                 (loss, s) => $"{s}: {loss:0} {units} ({loss / totalLosses * 100:0}%)").ToList();
             var rightLegendWidth

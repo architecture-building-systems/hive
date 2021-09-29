@@ -26,7 +26,7 @@ namespace Hive.IO.Plots
             var model = new PlotModel {Title = PlotTitle};
 
             // add the data
-            for (int i = 0; i < results.IrradiationOnWindows.Count; i++)
+            for (int i = 0; i < results.IrradiationOnWindows?.Count; i++)
             {
                 var windowArea = results.AreasPerWindow[i];
                 model.Series.Add(new ColumnSeries
