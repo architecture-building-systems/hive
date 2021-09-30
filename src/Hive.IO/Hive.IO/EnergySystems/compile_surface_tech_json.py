@@ -5,48 +5,44 @@ import csv
 import json
 
 RESOURCES_DIR = os.path.abspath(os.path.join(os.path.dirname(__file__), "..", "Resources")) 
-JSON_OUT = "surface_tech_module_types.json"
 OUT_DIR = os.path.dirname(__file__)
-JSON_PATH = os.path.join(OUT_DIR, JSON_OUT)
 
-CSV_FILES = ["pv_efficiency.csv", "st_efficiency.csv"] # not yet supported: "pvt_efficiency.csv"
-CATEGORIES = ["Photovoltaic (PV)", "Solar Thermal (ST)"] # not yet supported:"Photovoltaic and Thermal (PVT)"
-
-HEADERS = {
-    "Type": str,
-    "electric efficiency": float,
-    "thermal efficiency": float,
-    "cost per m2": float,
-    "cost per kWp": float,
-    "life cycle GHG factor kgCO2eq per m2": float,
-    "life cycle GHG factor kgCO2eq per kWp": float,
-    "Lifetime": float,
-    "Description": str
-}
-
-HEADERS_MAP = {
-    "Type": "Name",
-    "electric efficiency": "ElectricEfficiency",
-    "thermal efficiency": "ThermalEfficiency",
-    "cost per m2": "SpecificCapitalCost",
-    "cost per kWp": None,
-    "life cycle GHG factor kgCO2eq per m2": "SpecificEmbodiedEmissions",
-    "life cycle GHG factor kgCO2eq per kWp": None,
-    "Lifetime": "Lifetime", 
-    "Description": "Description"
-}
-
-def compile_to_json():
+def compile_surface_tech_to_json():
     """
-    Read in these three files (located in hive/src/Hive.IO/Hive.IO/Resources)
-
-    - 201008_SIA2024_Raumdaten_Bestand.csv
-    - 201008_SIA2024_Raumdaten_Standardwert.csv
-    - 201008_SIA2024_Raumdaten_Zielwert.csv
-
-    and save them to a json format as a single file. This file
-    will be added as a resource to `Hive.IO.dll` that can then be read with `Hive.IO.Building.Sia2024Record`.
+    Read in csv files with data about solar tech (located in hive/src/Hive.IO/Hive.IO/Resources)
+    and save them to a json format as a single file. This file will be added as a resource to 
+    `Hive.IO.dll` that can then be read with `Hive.IO.EnergySystems.SurfaceBasedTech`.
     """
+    
+    JSON_OUT = "surface_tech_module_types.json"
+    JSON_PATH = os.path.join(OUT_DIR, JSON_OUT)
+
+    CSV_FILES = ["pv_efficiency.csv", "st_efficiency.csv"] # not yet supported: "pvt_efficiency.csv"
+    CATEGORIES = ["Photovoltaic (PV)", "Solar Thermal (ST)"] # not yet supported:"Photovoltaic and Thermal (PVT)"
+
+    HEADERS = {
+        "Type": str,
+        "electric efficiency": float,
+        "thermal efficiency": float,
+        "cost per m2": float,
+        "cost per kWp": float,
+        "life cycle GHG factor kgCO2eq per m2": float,
+        "life cycle GHG factor kgCO2eq per kWp": float,
+        "Lifetime": float,
+        "Description": str
+    }
+
+    HEADERS_MAP = {
+        "Type": "Name",
+        "electric efficiency": "ElectricEfficiency",
+        "thermal efficiency": "ThermalEfficiency",
+        "cost per m2": "SpecificCapitalCost",
+        "cost per kWp": None,
+        "life cycle GHG factor kgCO2eq per m2": "SpecificEmbodiedEmissions",
+        "life cycle GHG factor kgCO2eq per kWp": None,
+        "Lifetime": "Lifetime", 
+        "Description": "Description"
+    }
     
     print("Compiling Surface Tech Module Types...")
     data = dict()
@@ -76,6 +72,14 @@ def compile_to_json():
         json.dump(data, fp, indent=4, encoding="utf8")
     
     print("Done. Saved at {0}".format(JSON_PATH))
-        
+
+def compile_emitters_to_json():
+    pass
+
+def compile_conversion_tech_to_json():
+    pass
+
 if __name__ == '__main__':
-    compile_to_json()
+    compile_surface_tech_to_json()
+    compile_emitters_to_json()
+    compile_conversion_tech_to_json()
