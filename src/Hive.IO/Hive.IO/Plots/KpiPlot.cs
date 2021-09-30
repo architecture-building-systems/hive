@@ -69,7 +69,7 @@ namespace Hive.IO.Plots
         private string Data(ResultsPlotting results)
         {
             var value = _properties.Data(results, Normalized);
-            return $"{value:F1}";
+            return $"{value:0}";
         }
 
         /// <summary>

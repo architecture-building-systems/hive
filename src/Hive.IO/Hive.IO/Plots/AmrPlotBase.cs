@@ -1,5 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
+using System.Windows.Forms;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
@@ -31,16 +33,19 @@ namespace Hive.IO.Plots
 
         private readonly float Spacer = 13; // half of MenuButtonPanel spacer =25.
 
-        public AmrPlotBase(string title, string description, AmrPlotDataAdaptor data, AmrPlotStyle style)
+        public AmrPlotBase(string title, string description, AmrPlotDataAdaptor data, AmrPlotStyle style, bool displaySumsAndAverages)
         {
             Title = title;
             Description = description;
             Data = data;
             Style = style;
+            DisplaySumsAndAverages = displaySumsAndAverages;
         }
 
         protected AmrPlotDataAdaptor Data { get; }
         protected AmrPlotStyle Style { get; }
+
+        protected bool DisplaySumsAndAverages { get; private set; }
 
 
         protected RectangleF Bounds { get; private set; }
@@ -50,6 +55,7 @@ namespace Hive.IO.Plots
         protected Font TitleFont => GH_FontServer.Large;
         protected Font BoldFont => GH_FontServer.StandardBold;
         protected Font NormalFont => GH_FontServer.Standard;
+        protected Font SmallFont => GH_FontServer.Small;
 
         protected Brush TextBrush => new SolidBrush(Color.Black);
 
@@ -174,6 +180,7 @@ namespace Hive.IO.Plots
             graphics.DrawString(Title, TitleFont, TextBrush, HeaderCenterBounds, format);
             format.Alignment = StringAlignment.Near;
             format.LineAlignment = StringAlignment.Near;
+            format.Trimming = StringTrimming.EllipsisCharacter;
             graphics.DrawString(Description, NormalFont, TextBrush, HeaderLeftBounds.CloneInflate(-Spacer,0).CloneWithOffset(Spacer,0), format);
         }
 
@@ -189,10 +196,13 @@ namespace Hive.IO.Plots
             format.Alignment = StringAlignment.Center;
 
             graphics.DrawString("Embodied", BoldFont, TextBrush, EmbodiedTitleBounds, format);
-            graphics.DrawString(Caption(TotalEmbodied, Data.Unit, Data.TotalEmbodied / Data.Total * 100), NormalFont, TextBrush, EmbodiedBuildingsLegendBounds, format);
-
             graphics.DrawString("Operation", BoldFont, TextBrush, OperationTitleBounds, format);
-            graphics.DrawString(Caption(TotalOperation, Data.Unit, Data.TotalOperation / Data.Total * 100), NormalFont, TextBrush, OperationBuildingsLegendBounds, format);
+
+            if (DisplaySumsAndAverages)
+            {
+                graphics.DrawString(Caption(TotalEmbodied, Data.Unit, Data.TotalEmbodied / Data.Total * 100), NormalFont, TextBrush, EmbodiedBuildingsLegendBounds, format);
+                graphics.DrawString(Caption(TotalOperation, Data.Unit, Data.TotalOperation / Data.Total * 100), NormalFont, TextBrush, OperationBuildingsLegendBounds, format);
+            }
 
             //graphics.DrawStringTwoFonts("Embodied\n", BoldFont,
             //    Caption(TotalEmbodied, Data.Unit, Data.TotalEmbodied / Data.Total * 100), NormalFont, TextBrush,
@@ -211,19 +221,17 @@ namespace Hive.IO.Plots
 
         private void RenderRightAxis(Graphics graphics)
         {
-            string Caption(double absoluteValue, string unit, double relativeValue)
-            {
-                return $"{absoluteValue:0} {unit}\n({relativeValue:0}%)";
-            }
-            var format = StringFormat.GenericTypographic;
-            format.Alignment = StringAlignment.Center;
-            format.LineAlignment = StringAlignment.Center;
-            graphics.DrawString(Caption(TotalBuildings, Data.Unit, Data.TotalBuildings / Data.Total * 100), NormalFont, TextBrush, BuildingsRightAxisBounds.CloneWithOffset(0, 2),
-                format);
+            if (DisplaySumsAndAverages) {
+                var format = StringFormat.GenericTypographic;
+                format.Alignment = StringAlignment.Center;
+                format.LineAlignment = StringAlignment.Center;
+                graphics.DrawString(PlotCaption(TotalBuildings, Data.Unit, Data.TotalBuildings / Data.Total * 100), NormalFont, TextBrush, BuildingsRightAxisBounds.CloneWithOffset(0, 2),
+                    format);
 
-            format.LineAlignment = StringAlignment.Center;
-            graphics.DrawString(Caption(TotalSystems, Data.Unit, Data.TotalSystems / Data.Total * 100), NormalFont, TextBrush, SystemsRightAxisBounds.CloneWithOffset(0, 2),
-                format);
+                format.LineAlignment = StringAlignment.Center;
+                graphics.DrawString(PlotCaption(TotalSystems, Data.Unit, Data.TotalSystems / Data.Total * 100), NormalFont, TextBrush, SystemsRightAxisBounds.CloneWithOffset(0, 2),
+                    format);
+            }
         }
 
         private void RenderGrid(Graphics graphics)
@@ -250,6 +258,11 @@ namespace Hive.IO.Plots
             //graphics.DrawRectangleF(borderPen, EmbodiedSystemsLegendBounds);
             //graphics.DrawRectangleF(borderPen, OperationSystemsLegendBounds);
             //graphics.DrawRectangleF(borderPen, RightBottomBounds);
+        }
+
+        private string PlotCaption(double absoluteValue, string unit, double relativeValue)
+        {
+            return $"{absoluteValue:0} {unit}\n({relativeValue:0}%)";
         }
     }
 }

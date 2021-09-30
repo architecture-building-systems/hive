@@ -63,6 +63,8 @@ namespace Hive.IO.Plots
         }
 
         public Kpi CurrentKpi { get; private set; } = Kpi.Energy;
+        public IVisualizerPlot _currentPlot;
+
 
         private string Category => _currentPanel.Category;
 
@@ -178,7 +180,7 @@ namespace Hive.IO.Plots
                     return MonthlyPerformancePlot(CurrentKpi, results, _normalized, _breakdown);
                 return new AmrPlotBase("TODO: Implement this plot!", "",
                     new EnergyDataAdaptor(results, _normalized),
-                    new EnergyPlotStyle());
+                    new EnergyPlotStyle(), true);
             }
             else if (Category == "O") // Other
             {
@@ -217,7 +219,7 @@ namespace Hive.IO.Plots
             {
                 case Kpi.Energy:
                     plot = new LifetimeAmrPlot(AmrPlotConstants.EnergyTitle, AmrPlotConstants.EnergyDescription,
-                        new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle());
+                        new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle(), displaySumsAndAverages: false);
                     break;
                 case Kpi.Emissions:
                     plot = new LifetimeAmrPlot(AmrPlotConstants.EmissionsTitle, AmrPlotConstants.EmissionsDescription, 
@@ -232,7 +234,7 @@ namespace Hive.IO.Plots
                     plot = new AmrPlotBase(
                         "TODO: Implement this plot!", "",
                         new EnergyDataAdaptor(results, normalized),
-                        new EnergyPlotStyle());
+                        new EnergyPlotStyle(), true);
                     break;
             }
 
@@ -247,7 +249,7 @@ namespace Hive.IO.Plots
             {
                 case Kpi.Energy:
                     plot = new YearlyAmrPlot(AmrPlotConstants.EnergyTitle, AmrPlotConstants.EnergyDescription,
-                        new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle());
+                        new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle(), displaySumsAndAverages: false);
                     break;
                 case Kpi.Emissions:
                     plot = new YearlyAmrPlot(AmrPlotConstants.EmissionsTitle, AmrPlotConstants.EmissionsDescription, 
@@ -260,7 +262,7 @@ namespace Hive.IO.Plots
                 default:
                     // this shouldn't happen...
                     plot = new AmrPlotBase("TODO: Implement this plot!", "",
-                        new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle());
+                        new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle(), true);
                     break;
             }
 
@@ -275,7 +277,7 @@ namespace Hive.IO.Plots
             {
                 case Kpi.Energy:
                     plot = new MonthlyAmrPlot(AmrPlotConstants.EnergyTitle, AmrPlotConstants.EnergyDescription,
-                        new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle());
+                        new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle(), displaySumsAndAverages: false);
                     break;
                 case Kpi.Emissions:
                     plot = new MonthlyAmrPlot(AmrPlotConstants.EmissionsTitle, AmrPlotConstants.EmissionsDescription,
@@ -288,16 +290,16 @@ namespace Hive.IO.Plots
                 default:
                     // this shouldn't happen...
                     plot = new AmrPlotBase("TODO: Implement this plot!", "",
-                        new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle());
+                        new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle(), true);
                     break;
             }
 
             return plot;
         }
 
-        public bool Contains(PointF location)
+        public bool Contains(PointF location, bool usePlotBounds = false)
         {
-            return _currentPanel.Contains(location);
+            return usePlotBounds ? _currentPlot.Contains(location) : _currentPanel.Contains(location);
         }
 
         public void Clicked(GH_Canvas sender, GH_CanvasMouseEvent e)
@@ -313,8 +315,8 @@ namespace Hive.IO.Plots
 
         public void RenderCurrentPlot(ResultsPlotting results, Dictionary<string, string> plotProperties, Graphics graphics, RectangleF bounds)
         {
-            var plot = SelectCurrentPlot(results);
-            plot.Render(results, plotProperties, graphics, bounds);
+            _currentPlot = SelectCurrentPlot(results);
+            _currentPlot.Render(results, plotProperties, graphics, bounds);
         }
 
         private void CycleResolution(object sender, EventArgs e)

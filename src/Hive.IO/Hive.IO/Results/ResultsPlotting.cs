@@ -1,9 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Security.Permissions;
-using System.Windows.Forms;
-using System.Windows.Forms.VisualStyles;
-using Grasshopper.Kernel.Geometry.SpatialTrees;
 
 namespace Hive.IO.Results
 {
@@ -68,14 +64,14 @@ namespace Hive.IO.Results
                 ? this.Results.TotalEmissionsOperationalConstructionYearlyLevelised / TotalFloorArea
                 : this.Results.TotalEmissionsOperationalConstructionYearlyLevelised;
 
-        public double OperationEmissionsBuildings(bool normalized) 
+        public double OperationEmissionsBuildings(bool normalized)
             => normalized
                 ? this.Results.TotalEmissionsOperationalConstruction / TotalFloorArea
                 : this.Results.TotalEmissionsOperationalConstruction;
 
         public double[] OperationEmissionsSystemsMonthly(bool normalized)
             => normalized
-                ? this.Results.TotalEmissionsOperationalSystemsMonthly.Select(r=> r / TotalFloorArea).ToArray()
+                ? this.Results.TotalEmissionsOperationalSystemsMonthly.Select(r => r / TotalFloorArea).ToArray()
                 : this.Results.TotalEmissionsOperationalSystemsMonthly;
 
         public double OperationEmissionsSystemsYearly(bool normalized)
@@ -83,12 +79,12 @@ namespace Hive.IO.Results
                 ? this.Results.TotalEmissionsOperationalSystemsYearly / TotalFloorArea
                 : this.Results.TotalEmissionsOperationalSystemsYearly;
 
-        public double OperationEmissionsSystems(bool normalized) 
+        public double OperationEmissionsSystems(bool normalized)
             => normalized
                 ? this.Results.TotalEmissionsOperationalSystems / TotalFloorArea
                 : this.Results.TotalEmissionsOperationalSystems;
 
-        public double TotalEmbodiedEmissions(bool normalized) 
+        public double TotalEmbodiedEmissions(bool normalized)
             => normalized
                 ? this.Results.TotalEmissionsEmbodied / TotalFloorArea
                 : this.Results.TotalEmissionsEmbodied;
@@ -107,20 +103,20 @@ namespace Hive.IO.Results
 
         #region Costs
 
-        public double[] EmbodiedCostsBuildingsMonthly(bool normalized) 
+        public double[] EmbodiedCostsBuildingsMonthly(bool normalized)
             => normalized
                 ? new double[Misc.MonthsPerYear].Select(r => this.Results.TotalCostEmbodiedConstructionMonthlyLevelised / TotalFloorArea).ToArray()
                 : new double[Misc.MonthsPerYear].Select(r => this.Results.TotalCostEmbodiedConstructionMonthlyLevelised).ToArray();
 
         public double EmbodiedCostsBuildingsYearly(bool normalized)
             => normalized
-            ? this.Results.TotalCostEmbodiedConstructionYearlyLevelised / TotalFloorArea
-            : this.Results.TotalCostEmbodiedConstructionYearlyLevelised;
+                ? this.Results.TotalCostEmbodiedConstructionYearlyLevelised / TotalFloorArea
+                : this.Results.TotalCostEmbodiedConstructionYearlyLevelised;
 
         public double EmbodiedCostsBuildings(bool normalized)
             => normalized
-            ? this.Results.TotalCostEmbodiedConstruction / TotalFloorArea
-            : this.Results.TotalCostEmbodiedConstruction;
+                ? this.Results.TotalCostEmbodiedConstruction / TotalFloorArea
+                : this.Results.TotalCostEmbodiedConstruction;
 
         public double[] EmbodiedCostsSystemsMonthly(bool normalized)
             => normalized
@@ -129,13 +125,13 @@ namespace Hive.IO.Results
 
         public double EmbodiedCostsSystemsYearly(bool normalized)
             => normalized
-            ? this.Results.TotalCostEmbodiedSystemsYearlyLevelised / TotalFloorArea
-            : this.Results.TotalCostEmbodiedSystemsYearlyLevelised;
+                ? this.Results.TotalCostEmbodiedSystemsYearlyLevelised / TotalFloorArea
+                : this.Results.TotalCostEmbodiedSystemsYearlyLevelised;
 
-        public double EmbodiedCostsSystems(bool normalized) 
+        public double EmbodiedCostsSystems(bool normalized)
             => normalized
-            ? this.Results.TotalCostEmbodiedSystems / TotalFloorArea
-            : this.Results.TotalCostEmbodiedSystems;
+                ? this.Results.TotalCostEmbodiedSystems / TotalFloorArea
+                : this.Results.TotalCostEmbodiedSystems;
 
         public double[] OperationCostsBuildingsMonthly(bool normalized)
             => normalized
@@ -144,8 +140,8 @@ namespace Hive.IO.Results
 
         public double OperationCostsBuildingsYearly(bool normalized)
             => normalized
-            ? this.Results.TotalCostOperationalConstructionYearlyLevelised / TotalFloorArea
-            : this.Results.TotalCostOperationalConstructionYearlyLevelised;
+                ? this.Results.TotalCostOperationalConstructionYearlyLevelised / TotalFloorArea
+                : this.Results.TotalCostOperationalConstructionYearlyLevelised;
 
         public double OperationCostsBuildings(bool normalized) => this.Results.TotalCostOperationalConstruction;
 
@@ -156,23 +152,23 @@ namespace Hive.IO.Results
 
         public double OperationCostsSystemsYearly(bool normalized)
             => normalized
-            ? this.Results.TotalCostOperationalSystemsYearly / TotalFloorArea
-            : this.Results.TotalCostOperationalSystemsYearly;
+                ? this.Results.TotalCostOperationalSystemsYearly / TotalFloorArea
+                : this.Results.TotalCostOperationalSystemsYearly;
 
-        public double OperationCostsSystems(bool normalized) 
+        public double OperationCostsSystems(bool normalized)
             => normalized
-            ? this.Results.TotalCostOperationalSystems / TotalFloorArea
-            : this.Results.TotalCostOperationalSystems;
+                ? this.Results.TotalCostOperationalSystems / TotalFloorArea
+                : this.Results.TotalCostOperationalSystems;
 
-        public double TotalEmbodiedCosts(bool normalized) 
+        public double TotalEmbodiedCosts(bool normalized)
             => normalized
-            ? this.Results.TotalCostEmbodied / TotalFloorArea
-            : this.Results.TotalCostEmbodied;
+                ? this.Results.TotalCostEmbodied / TotalFloorArea
+                : this.Results.TotalCostEmbodied;
 
-        public double TotalOperationCosts(bool normalized) 
+        public double TotalOperationCosts(bool normalized)
             => normalized
-            ? this.Results.TotalCostOperational / TotalFloorArea
-            : this.Results.TotalCostOperational;
+                ? this.Results.TotalCostOperational / TotalFloorArea
+                : this.Results.TotalCostOperational;
 
         public double TotalCosts(bool normalized) => TotalEmbodiedCosts(normalized) + TotalOperationCosts(normalized);
         #endregion Costs
@@ -182,9 +178,9 @@ namespace Hive.IO.Results
         public double[] EmbodiedEnergyBuildingsMonthly(bool normalized)
             // FIXME
             => new double[Misc.MonthsPerYear].Select(r => 0.0).ToArray();
-            //=> normalized
-            //    ? new double[Misc.MonthsPerYear].Select(r => this.Results.TotalEnergyEmbodiedConstructionMonthlyLevelised / TotalFloorArea).ToArray()
-            //    : new double[Misc.MonthsPerYear].Select(r => this.Results.TotalEnergyEmbodiedConstructionMonthlyLevelised).ToArray();
+        //=> normalized
+        //    ? new double[Misc.MonthsPerYear].Select(r => this.Results.TotalEnergyEmbodiedConstructionMonthlyLevelised / TotalFloorArea).ToArray()
+        //    : new double[Misc.MonthsPerYear].Select(r => this.Results.TotalEnergyEmbodiedConstructionMonthlyLevelised).ToArray();
 
         // FIXME
         public double EmbodiedEnergyBuildingsYearly(bool normalized) => EmbodiedEnergyBuildingsMonthly(normalized).Sum();
@@ -196,14 +192,14 @@ namespace Hive.IO.Results
         public double[] EmbodiedEnergySystemsMonthly(bool normalized)
             // FIXME
             => new double[Misc.MonthsPerYear].Select(r => 0.0).ToArray();
-            //=> normalized
-            //    ? new double[Misc.MonthsPerYear].Select(r => this.Results.TotalEnergyEmbodiedSystemsMonthlyLevelised / TotalFloorArea).ToArray()
-            //    : new double[Misc.MonthsPerYear].Select(r => this.Results.TotalEnergyEmbodiedSystemsMonthlyLevelised).ToArray();
+        //=> normalized
+        //    ? new double[Misc.MonthsPerYear].Select(r => this.Results.TotalEnergyEmbodiedSystemsMonthlyLevelised / TotalFloorArea).ToArray()
+        //    : new double[Misc.MonthsPerYear].Select(r => this.Results.TotalEnergyEmbodiedSystemsMonthlyLevelised).ToArray();
 
         // FIXME
         public double EmbodiedEnergySystemsYearly(bool normalized) => EmbodiedEnergySystemsMonthly(normalized).Sum();
 
-        public double EmbodiedEnergySystems(bool normalized) => EmbodiedEnergySystemsMonthly(normalized).Sum();
+        public double EmbodiedEnergySystems(bool normalized) => EmbodiedEnergySystemsYearly(normalized) * this.Results.BuildingLifetime;
 
         // Ideal demands, a.k.a. final energy demand
         public double[] OperationEnergyBuildingsMonthly(bool normalized)
@@ -214,12 +210,12 @@ namespace Hive.IO.Results
             //    .Select((x, index) => x + Results.TotalFinalHeatingMonthly[index])
             //    .ToArray();
 
-            double [] result = new double[Misc.MonthsPerYear];
+            double[] result = new double[Misc.MonthsPerYear];
             for (int i = 0; i < result.Length; i++)
             {
-                result[i] = Results.TotalFinalCoolingMonthly[i] 
+                result[i] = Results.TotalFinalCoolingMonthly[i]
                             + Results.TotalFinalDomesticHotWaterMonthly[i]
-                            + Results.TotalFinalElectricityMonthly[i] 
+                            + Results.TotalFinalElectricityMonthly[i]
                             + Results.TotalFinalHeatingMonthly[i];
             }
 
@@ -228,7 +224,7 @@ namespace Hive.IO.Results
 
         public double OperationEnergyBuildingsYearly(bool normalized) => OperationEnergyBuildingsMonthly(normalized).Sum();
 
-        public double OperationEnergyBuildings(bool normalized) => OperationEnergyBuildingsMonthly(normalized).Sum();
+        public double OperationEnergyBuildings(bool normalized) => OperationEnergyBuildingsYearly(normalized) * this.Results.BuildingLifetime;
 
         // Primary energy demand, incl. conversion losses
         public double[] OperationEnergySystemsMonthly(bool normalized)
@@ -238,9 +234,9 @@ namespace Hive.IO.Results
         }
 
         // FIXME
-        public double OperationEnergySystemsYearly(bool normalized) => 0.0;
-        
-        public double OperationEnergySystems(bool normalized) => OperationEnergySystemsMonthly(normalized).Sum();
+        public double OperationEnergySystemsYearly(bool normalized) => OperationEnergySystemsMonthly(normalized).Sum();
+
+        public double OperationEnergySystems(bool normalized) => OperationEnergySystemsYearly(normalized) * this.Results.BuildingLifetime;
 
 
         // FIX ME what is embodied energy?
@@ -268,9 +264,9 @@ namespace Hive.IO.Results
         public float InternalGains(bool normalized) => (float)(normalized ? Results.TotalInternalGains / TotalFloorArea : Results.TotalInternalGains);
         public float PrimaryEnergy(bool normalized) => (float)(normalized ? Results.TotalPrimaryEnergyNonRenewableMonthly.Sum() / TotalFloorArea : Results.TotalPrimaryEnergyNonRenewableMonthly.Sum()); //inputCarriers from conversionTech, except renewable tech (solar). 
         public float RenewableEnergy(bool normalized) => (float)(normalized ? Results.TotalFinalEnergyRenewableMonthly.Sum() / TotalFloorArea : Results.TotalFinalEnergyRenewableMonthly.Sum()); // solar tech
-        public float VentilationGains(bool normalized) => (float)(normalized ?  Results.TotalVentilationHeatGains / TotalFloorArea :  Results.TotalVentilationHeatGains);   
-        public float EnvelopeGains(bool normalized) => (float)(normalized ?  Results.TotalOpaqueTransmissionHeatGains / TotalFloorArea :  Results.TotalOpaqueTransmissionHeatGains); 
-        public float WindowsGains(bool normalized) => (float)(normalized ?  Results.TotalWindowTransmissionHeatGains / TotalFloorArea :  Results.TotalWindowTransmissionHeatGains); 
+        public float VentilationGains(bool normalized) => (float)(normalized ? Results.TotalVentilationHeatGains / TotalFloorArea : Results.TotalVentilationHeatGains);
+        public float EnvelopeGains(bool normalized) => (float)(normalized ? Results.TotalOpaqueTransmissionHeatGains / TotalFloorArea : Results.TotalOpaqueTransmissionHeatGains);
+        public float WindowsGains(bool normalized) => (float)(normalized ? Results.TotalWindowTransmissionHeatGains / TotalFloorArea : Results.TotalWindowTransmissionHeatGains);
 
 
         // outgoing energy
@@ -291,9 +287,9 @@ namespace Hive.IO.Results
 
         #region Irradiation
 
-        public List<double[]> IrradiationOnWindows => Results.MonthlySolarGainsPerWindow;
+        public List<double[]> IrradiationOnWindows => Results.MonthlySolarGainsPerWindow ?? new List<double[]>();
 
-        public List<double> AreasPerWindow => Results.AreasPerWindow;
+        public List<double> AreasPerWindow => Results.AreasPerWindow ?? new List<double>();
 
         #endregion Irradiation
     }

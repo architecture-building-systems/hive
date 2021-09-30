@@ -4,7 +4,7 @@ namespace Hive.IO.Plots
 {
     public class LifetimeAmrPlot : AmrPlotBase
     {
-        public LifetimeAmrPlot(string title, string description, AmrPlotDataAdaptor data, AmrPlotStyle style) : base(title, description, data, style)
+        public LifetimeAmrPlot(string title, string description, AmrPlotDataAdaptor data, AmrPlotStyle style, bool displaySumsAndAverages = true) : base(title, description, data, style, displaySumsAndAverages)
         {
         }
 
