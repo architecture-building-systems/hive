@@ -18,6 +18,7 @@ namespace Hive.IO.Forms
         private double _returnTemperature;
         private double _specificCapitalCost;
         private double _specificEmbodiedEmissions;
+        private double _lifetime;
         private double _capacity;
         private bool _isAir;
         private bool _isRadiation;
@@ -59,6 +60,7 @@ namespace Hive.IO.Forms
             _capacity = defaults.Capacity;
             _specificCapitalCost = defaults.SpecificCapitalCost;
             _specificEmbodiedEmissions = defaults.SpecificEmbodiedEmissions;
+            _lifetime = defaults.Lifetime;
             _isAir = defaults.IsAir;
             _isRadiation = defaults.IsRadiation;
             _isHeating = defaults.IsHeating;
@@ -74,6 +76,7 @@ namespace Hive.IO.Forms
             _capacity = 0.00;
             _specificCapitalCost = emitter.SpecificInvestmentCost;
             _specificEmbodiedEmissions = emitter.SpecificEmbodiedGhg;
+            _lifetime = emitter.Lifetime;
             _isAir = emitter is AirDiffuser;
             _isRadiation = emitter is Radiator;
             _isHeating = emitter.IsHeating;
@@ -133,10 +136,13 @@ namespace Hive.IO.Forms
         public string SpecificEmbodiedEmissions
         {
             get => $"{_specificEmbodiedEmissions:0.00}";
-            set
-            {
-                _specificEmbodiedEmissions= ParseDouble(value, _specificEmbodiedEmissions); 
-            }
+            set => _specificEmbodiedEmissions = ParseDouble(value, _specificEmbodiedEmissions);
+        }
+
+        public string Lifetime
+        {
+            get => $"{_lifetime:0.00}";
+            set => _lifetime = ParseDouble(value, _lifetime);
         }
 
         public double EmbodiedEmissions => _capacity * _specificEmbodiedEmissions;
@@ -195,6 +201,8 @@ namespace Hive.IO.Forms
 
         public Brush SpecificCapitalCostBrush => CompareBrush(_specificCapitalCost, Defaults[Name].SpecificCapitalCost);
         public Brush SpecificEmbodiedEmissionsBrush => CompareBrush(_specificEmbodiedEmissions, Defaults[Name].SpecificEmbodiedEmissions);
+        public Brush LifetimeBrush => CompareBrush(_lifetime, Defaults[Name].Lifetime);
+
 
         public FontWeight SupplyTemperatureFontWeight => CompareFontWeight(_supplyTemperature, Defaults[Name].SupplyTemperature);
 
@@ -205,6 +213,8 @@ namespace Hive.IO.Forms
         
         public FontWeight SpecificEmbodiedEmissionsFontWeight =>
             CompareFontWeight(_specificEmbodiedEmissions, Defaults[Name].SpecificEmbodiedEmissions);
+
+        public FontWeight LifetimeFontWeight => CompareFontWeight(_lifetime, Defaults[Name].Lifetime);
 
         public FontWeight CapacityFontWeight => CompareFontWeight(_capacity, Defaults[Name].Capacity);
         #endregion
@@ -231,6 +241,7 @@ namespace Hive.IO.Forms
         public double Capacity;
         public double SpecificCapitalCost;
         public double SpecificEmbodiedEmissions;
+        public double Lifetime;
         public bool IsAir;
         public bool IsRadiation;
         public bool IsCooling;

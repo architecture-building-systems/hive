@@ -49,7 +49,7 @@ namespace Hive.IO.GhDistributors
             HeatCoolingExchanger hx = null;
             HeatCoolingExchanger cx = null;
             HeatCoolingExchanger hcx = null;
-            DirectElectricity elec = new DirectElectricity(0.0, 0.0, 0.0, 1.0);
+            DirectElectricity elec = new DirectElectricity(0.0, 0.0, Misc.DefaultBuildingLifetime, 0.0, 1.0); // using building lifetime to indicate "infinite" lifetime.
 
             
 

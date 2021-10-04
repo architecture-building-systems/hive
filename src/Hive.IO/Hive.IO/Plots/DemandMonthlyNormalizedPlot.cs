@@ -11,19 +11,18 @@ namespace Hive.IO.Plots
     {
         protected override PlotModel CreatePlotModel(ResultsPlotting results, Dictionary<string, string> plotParameters)
         {
-            const int months = 12;
             var model = new PlotModel { Title = "Energy demand (Normalized Monthly)" };
             var totalFloorArea = results.TotalFloorArea;
 
-            var strokeThickness = 4.0;
+            //var strokeThickness = 4.0;
 
             var demandHeating = new ColumnSeries
             {
                 ItemsSource = results.TotalHeatingMonthly.Select(demand => new ColumnItem { Value = demand / totalFloorArea }),
                 Title = " Space Heating",
-                FillColor = BackgroundColor,
-                StrokeThickness = strokeThickness,
-                StrokeColor = SpaceHeatingColor
+                FillColor = SpaceHeatingColor,
+                //StrokeThickness = strokeThickness,
+                //StrokeColor = SpaceHeatingColor
             };
             model.Series.Add(demandHeating);
 
@@ -31,30 +30,29 @@ namespace Hive.IO.Plots
             {
                 ItemsSource = results.TotalCoolingMonthly.Select(demand => new ColumnItem { Value = demand / totalFloorArea }),
                 Title = " Space Cooling",
-                FillColor = BackgroundColor,
-                StrokeThickness = strokeThickness,
-                StrokeColor = SpaceCoolingColor
+                FillColor = SpaceCoolingColor,
+                //StrokeThickness = strokeThickness,
+                //StrokeColor = SpaceCoolingColor
             };
             model.Series.Add(demandCooling);
 
             var demandElectricity = new ColumnSeries
             {
-                ItemsSource = results.TotalElectricityMonthly.Select(
-                    demand => new ColumnItem { Value = demand / totalFloorArea }),
-                Title = " Electricity",
-                FillColor = BackgroundColor,
-                StrokeThickness = strokeThickness,
-                StrokeColor = ElectricityColor
+                ItemsSource = results.TotalElectricityMonthly.Select(demand => new ColumnItem { Value = demand / totalFloorArea }),
+                Title = " Grid Electricity",
+                FillColor = ElectricityColor,
+                //StrokeThickness = strokeThickness,
+                //StrokeColor = ElectricityColor
             };
             model.Series.Add(demandElectricity);
 
             var demandDhw = new ColumnSeries
             {
                 ItemsSource = results.TotalDomesticHotWaterMonthly.Select(demand => new ColumnItem { Value = demand / totalFloorArea }),
-                Title = " DWH",
-                FillColor = BackgroundColor,
-                StrokeThickness = strokeThickness,
-                StrokeColor = DhwColor,
+                Title = " DHW",
+                FillColor = DhwColor,
+                //StrokeThickness = strokeThickness,
+                //StrokeColor = DhwColor,
             };
             model.Series.Add(demandDhw);
 
@@ -69,21 +67,7 @@ namespace Hive.IO.Plots
             {
                 Position = AxisPosition.Bottom,
                 Key = "Months",
-                ItemsSource = new[]
-                {
-                    "Jan",
-                    "Feb",
-                    "Mar",
-                    "Apr",
-                    "May",
-                    "Jun",
-                    "Jul",
-                    "Aug",
-                    "Sep",
-                    "Oct",
-                    "Nov",
-                    "Dec"
-                }
+                ItemsSource = Misc.MonthNames
             });
             return model;
         }

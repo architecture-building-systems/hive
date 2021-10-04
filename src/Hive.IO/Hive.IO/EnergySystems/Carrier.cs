@@ -225,16 +225,15 @@ namespace Hive.IO.EnergySystems
             KiloWattHours
         }
 
-        private double[] _monthlyAverageEnergy;
+        private double[] _energyMonthlyAverage;
 
+        private double[] _emissionsMonthly;
 
-        private double[] _monthlyCumulativeEmissions;
+        private double[] _costMonthly;
 
+        private double[] _energyMonthly;
 
-        private double[] _monthlyCumulativeEnergy;
-
-
-        private double[] _monthlyTemperature;
+        private double[] _temperatureMonthly;
 
         [JsonConstructor]
         protected Carrier()
@@ -262,45 +261,45 @@ namespace Hive.IO.EnergySystems
             // energy could be free, e.g. air, in which case energyCost == null
             if (energyPrice != null && energyPrice.Length != 0)
             {
-                EnergyPrice = new double[energyPrice.Length];
-                energyPrice.CopyTo(EnergyPrice, 0);
+                SpecificCost = new double[energyPrice.Length];
+                energyPrice.CopyTo(SpecificCost, 0);
             }
             else
             {
-                EnergyPrice = new double[horizon].Select(x => 0.0).ToArray();
+                SpecificCost = new double[horizon].Select(x => 0.0).ToArray();
             }
 
             // energy could have zero emissions, e.g. air or solar, in which case ghgEmissions == null
             if (ghgEmissionsFactor != null && ghgEmissionsFactor.Length != 0)
             {
-                GhgEmissionsFactor = new double[ghgEmissionsFactor.Length];
-                ghgEmissionsFactor.CopyTo(GhgEmissionsFactor, 0);
+                SpecificEmissions = new double[ghgEmissionsFactor.Length];
+                ghgEmissionsFactor.CopyTo(SpecificEmissions, 0);
             }
             else
             {
-                GhgEmissionsFactor = new double[horizon].Select(x => 0.0).ToArray();
+                SpecificEmissions = new double[horizon].Select(x => 0.0).ToArray();
             }
 
-            if (Energy != null && EnergyPrice != null && Energy.Length == EnergyPrice.Length)
+            if (Energy != null && SpecificCost != null && Energy.Length == SpecificCost.Length)
             {
                 var _horizon = Energy.Length;
-                TotalEnergyCost = new double[_horizon];
-                for (var t = 0; t < _horizon; t++) TotalEnergyCost[t] = Energy[t] * EnergyPrice[t];
+                TotalCost = new double[_horizon]; 
+                for (var t = 0; t < _horizon; t++) TotalCost[t] = Energy[t] * SpecificCost[t];
             }
             else
             {
-                TotalEnergyCost = new double[horizon].Select(x => 0.0).ToArray();
+                TotalCost = new double[horizon].Select(x => 0.0).ToArray();
             }
 
-            if (Energy != null && GhgEmissionsFactor != null && Energy.Length == GhgEmissionsFactor.Length)
+            if (Energy != null && SpecificEmissions != null && Energy.Length == SpecificEmissions.Length)
             {
                 var _horizon = Energy.Length;
-                TotalGhgEmissions = new double[_horizon];
-                for (var t = 0; t < _horizon; t++) TotalGhgEmissions[t] = Energy[t] * GhgEmissionsFactor[t];
+                TotalEmissions = new double[_horizon];
+                for (var t = 0; t < _horizon; t++) TotalEmissions[t] = Energy[t] * SpecificEmissions[t];
             }
             else
             {
-                TotalGhgEmissions = new double[horizon].Select(x => 0.0).ToArray();
+                TotalEmissions = new double[horizon].Select(x => 0.0).ToArray();
             }
         }
 
@@ -330,19 +329,21 @@ namespace Hive.IO.EnergySystems
         ///     Time series with cost coefficients per this.Unit
         /// </summary>
         [JsonProperty]
-        public double[] EnergyPrice { get; protected set; }
+        public double[] SpecificCost { get; protected set; }
 
-        [JsonProperty] 
-        public double[] TotalEnergyCost { get; protected set; }
-
+        [JsonProperty]
+        public double[] TotalCost { get; protected set; }
         /// <summary>
         ///     Time series of Greenhouse gas emissions in kgCO2eq/this.Unit
         /// </summary>
         [JsonProperty]
-        public double[] GhgEmissionsFactor { get; protected set; }
+        public double[] SpecificEmissions { get; protected set; }
 
+        /// <summary>
+        /// Time series of Greenhouse gas emissions in kgCO2eq
+        /// </summary>
         [JsonProperty] 
-        public double[] TotalGhgEmissions { get; protected set; }
+        public double[] TotalEmissions { get; protected set; }
 
 
         [JsonProperty] 
@@ -356,51 +357,64 @@ namespace Hive.IO.EnergySystems
         public double[] Temperature { get; protected set; }
 
         [JsonProperty]
-        public double[] MonthlyCumulativeEmissions
+        public double[] EmissionsMonthly
         {
             get
             {
-                if (_monthlyCumulativeEmissions == null)
-                    _monthlyCumulativeEmissions = Misc.GetCumulativeMonthlyValue(TotalGhgEmissions);
-                return _monthlyCumulativeEmissions;
+                if (_emissionsMonthly == null)
+                    _emissionsMonthly = Misc.GetCumulativeMonthlyValue(TotalEmissions);
+                return _emissionsMonthly;
             }
-            private set => _monthlyCumulativeEmissions = value;
+            private set => _emissionsMonthly = value;
+        }
+
+
+        [JsonProperty]
+        public double[] CostMonthlyCumulative
+        {
+            get
+            {
+                if (_costMonthly == null)
+                    _costMonthly = Misc.GetCumulativeMonthlyValue(TotalCost);
+                return _costMonthly;
+            }
+            private set => _costMonthly = value;
         }
 
         [JsonProperty]
-        public double[] MonthlyCumulativeEnergy
+        public double[] EnergyMonthlyCumulative
         {
             get
             {
-                if (_monthlyCumulativeEnergy == null)
-                    _monthlyCumulativeEnergy = Misc.GetCumulativeMonthlyValue(Energy);
-                return _monthlyCumulativeEnergy;
+                if (_energyMonthly == null)
+                    _energyMonthly = Misc.GetCumulativeMonthlyValue(Energy);
+                return _energyMonthly;
             }
-            private set => _monthlyCumulativeEmissions = value;
+            private set => _energyMonthly = value;
         }
 
         [JsonProperty]
-        public double[] MonthlyAverageEnergy
+        public double[] EnergyMonthlyAverage
         {
             get
             {
-                if (_monthlyAverageEnergy == null)
-                    _monthlyAverageEnergy = Misc.GetAverageMonthlyValue(Energy);
-                return _monthlyAverageEnergy;
+                if (_energyMonthlyAverage == null)
+                    _energyMonthlyAverage = Misc.GetAverageMonthlyValue(Energy);
+                return _energyMonthlyAverage;
             }
-            private set => _monthlyAverageEnergy = value;
+            private set => _energyMonthlyAverage = value;
         }
 
         [JsonProperty]
-        public double[] MonthlyTemperature
+        public double[] TemperatureMonthly
         {
             get
             {
-                if (_monthlyTemperature == null)
-                    _monthlyTemperature = Misc.GetAverageMonthlyValue(Temperature);
-                return _monthlyTemperature;
+                if (_temperatureMonthly == null)
+                    _temperatureMonthly = Misc.GetAverageMonthlyValue(Temperature);
+                return _temperatureMonthly;
             }
-            private set => _monthlyTemperature = value;
+            private set => _temperatureMonthly = value;
         }
     }
 }

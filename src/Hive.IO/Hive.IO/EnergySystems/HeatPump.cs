@@ -14,8 +14,8 @@ namespace Hive.IO.EnergySystems
             protected set;
         }
 
-        public HeatPump(double investmentCost, double embodiedGhg, double capacity, bool isHeating, bool isCooling) 
-            : base(investmentCost, embodiedGhg, capacity, "kW", isHeating, isCooling, false){}
+        public HeatPump(double investmentCost, double embodiedGhg, double lifetime, double capacity, bool isHeating, bool isCooling) 
+            : base(investmentCost, embodiedGhg, lifetime, capacity, "kW", isHeating, isCooling, false){}
     }
 
 
@@ -27,8 +27,8 @@ namespace Hive.IO.EnergySystems
         /// </summary>
         public Air AmbientAir { get; private set; }
         public double EtaRef { get; private set; }
-        public Chiller(double investmentCost, double embodiedGhg, double capacity, double etaRef)
-            : base(investmentCost, embodiedGhg, capacity, false, true)
+        public Chiller(double investmentCost, double embodiedGhg, double lifetime, double capacity, double etaRef)
+            : base(investmentCost, embodiedGhg, lifetime, capacity, false, true)
         {
             this.EtaRef = etaRef;
             base.Name = "Chiller";
@@ -49,15 +49,15 @@ namespace Hive.IO.EnergySystems
 
             if (horizon == Misc.MonthsPerYear)
             {
-                elecPrice = Misc.GetAverageMonthlyValue(electricityIn.EnergyPrice);
-                elecEmissionsFactor = Misc.GetAverageMonthlyValue(electricityIn.GhgEmissionsFactor);
+                elecPrice = Misc.GetAverageMonthlyValue(electricityIn.SpecificCost);
+                elecEmissionsFactor = Misc.GetAverageMonthlyValue(electricityIn.SpecificEmissions);
                 tempWarmHorizon = Misc.GetAverageMonthlyValue(ambientAir.Temperature);
                 tempColdHorizon = Misc.GetAverageMonthlyValue(tempCold);
             }
             else
             {
-                elecPrice = electricityIn.EnergyPrice;
-                elecEmissionsFactor = electricityIn.GhgEmissionsFactor;
+                elecPrice = electricityIn.SpecificCost;
+                elecEmissionsFactor = electricityIn.SpecificEmissions;
                 tempWarmHorizon = ambientAir.Temperature;
                 tempColdHorizon = tempCold;
             }
@@ -101,14 +101,14 @@ namespace Hive.IO.EnergySystems
 
             if (horizon == Misc.MonthsPerYear)
             {
-                elecPrice = Misc.GetAverageMonthlyValue(electricityIn.EnergyPrice);
-                elecEmissionsFactor = Misc.GetAverageMonthlyValue(electricityIn.GhgEmissionsFactor);
-                airTemp = airIn.MonthlyTemperature;
+                elecPrice = Misc.GetAverageMonthlyValue(electricityIn.SpecificCost);
+                elecEmissionsFactor = Misc.GetAverageMonthlyValue(electricityIn.SpecificEmissions);
+                airTemp = airIn.TemperatureMonthly;
             }
             else
             {
-                elecPrice = electricityIn.EnergyPrice;
-                elecEmissionsFactor = electricityIn.GhgEmissionsFactor;
+                elecPrice = electricityIn.SpecificCost;
+                elecEmissionsFactor = electricityIn.SpecificEmissions;
                 airTemp = airIn.Temperature;
             }
 
@@ -138,8 +138,8 @@ namespace Hive.IO.EnergySystems
         /// </summary>
         public Air AmbientAir { get; private set; }
         public double EtaRef { get; private set; }
-        public AirSourceHeatPump(double investmentCost, double embodiedGhg, double capacity, double etaRef)
-            : base(investmentCost, embodiedGhg, capacity, true, false)
+        public AirSourceHeatPump(double investmentCost, double embodiedGhg, double lifetime, double capacity, double etaRef)
+            : base(investmentCost, embodiedGhg, lifetime, capacity, true, false)
         {
             this.EtaRef = etaRef;
             base.Name = "AirSourceHeatPump";
@@ -160,15 +160,15 @@ namespace Hive.IO.EnergySystems
 
             if (horizon == Misc.MonthsPerYear)
             {
-                elecPrice = Misc.GetAverageMonthlyValue(electricityIn.EnergyPrice);
-                elecEmissionsFactor = Misc.GetAverageMonthlyValue(electricityIn.GhgEmissionsFactor);
+                elecPrice = Misc.GetAverageMonthlyValue(electricityIn.SpecificCost);
+                elecEmissionsFactor = Misc.GetAverageMonthlyValue(electricityIn.SpecificEmissions);
                 tempWarmHorizon = Misc.GetAverageMonthlyValue(tempWarm);
                 tempColdHorizon = Misc.GetAverageMonthlyValue(ambientAir.Temperature);
             }
             else
             {
-                elecPrice = electricityIn.EnergyPrice;
-                elecEmissionsFactor = electricityIn.GhgEmissionsFactor;
+                elecPrice = electricityIn.SpecificCost;
+                elecEmissionsFactor = electricityIn.SpecificEmissions;
                 tempWarmHorizon = tempWarm;
                 tempColdHorizon = ambientAir.Temperature;
             }
@@ -212,14 +212,14 @@ namespace Hive.IO.EnergySystems
 
             if (horizon == Misc.MonthsPerYear)
             {
-                elecPrice = Misc.GetAverageMonthlyValue(electricityIn.EnergyPrice);
-                elecEmissionsFactor = Misc.GetAverageMonthlyValue(electricityIn.GhgEmissionsFactor);
-                airTemp = airIn.MonthlyTemperature;
+                elecPrice = Misc.GetAverageMonthlyValue(electricityIn.SpecificCost);
+                elecEmissionsFactor = Misc.GetAverageMonthlyValue(electricityIn.SpecificEmissions);
+                airTemp = airIn.TemperatureMonthly;
             }
             else
             {
-                elecPrice = electricityIn.EnergyPrice;
-                elecEmissionsFactor = electricityIn.GhgEmissionsFactor;
+                elecPrice = electricityIn.SpecificCost;
+                elecEmissionsFactor = electricityIn.SpecificEmissions;
                 airTemp = airIn.Temperature;
             }
 

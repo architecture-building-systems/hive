@@ -21,7 +21,7 @@ namespace Hive.IO.GhInputOutput
         private static readonly float MinHeight =
             TitleBarHeight + 15 * GH_FontServer.MeasureString("abc", GH_FontServer.StandardBold).Height;
 
-        private readonly OperationalPerformancePlot[] _kpiPlots;
+        private readonly KpiPlot[] _kpiPlots;
 
         private readonly PlotSelector _plotSelector = new PlotSelector();
 
@@ -55,21 +55,26 @@ namespace Hive.IO.GhInputOutput
                 Kpi = Kpi.Costs
             };
 
-            var costsKpi = new OperationalPerformancePlot(costsKpiConfig);
+            var costsKpi = new KpiPlot(costsKpiConfig);
             costsKpi.OnClicked += _plotSelector.CostsKpiClicked;
 
-            var emissionsKpi = new OperationalPerformancePlot(emissionsKpiConfig);
+            var emissionsKpi = new KpiPlot(emissionsKpiConfig);
             emissionsKpi.OnClicked += _plotSelector.EmissionsKpiClicked;
 
-            var energyKpi = new OperationalPerformancePlot(energyKpiConfig);
+            var energyKpi = new KpiPlot(energyKpiConfig);
             energyKpi.OnClicked += _plotSelector.EnergyKpiClicked;
 
-            _kpiPlots = new[]
+            //bool Normalized = true;
+            var mbNormalize = _plotSelector.Normalized ? new BlackMenuButton("/m²") : new MenuButton("/m²");
+            mbNormalize.OnClicked += (sender, e) => _plotSelector.Normalized = !_plotSelector.Normalized;
+
+            _kpiPlots = new KpiPlot[]
             {
                 // from the right
                 costsKpi,
                 emissionsKpi,
-                energyKpi
+                energyKpi,
+                //mbNormalize
             };
         }
 
@@ -100,7 +105,6 @@ namespace Hive.IO.GhInputOutput
 
         private RectangleF MenuPanelBounds =>
             new RectangleF(InnerBounds.X, InnerBounds.Y, InnerBounds.Width, TitleBarHeight);
-
         protected override void Layout()
         {
             var bounds = Bounds;
@@ -151,15 +155,13 @@ namespace Hive.IO.GhInputOutput
                 return;
 
             RenderCapsule(graphics);
-            Render(graphics);
-        }
-
-        public void Render(Graphics graphics)
-        {
-            graphics.FillRectangle(new SolidBrush(Color.White), InnerBounds);
+            RenderBackground(graphics);
             RenderPlot(graphics);
             RenderTitleBar(graphics);
         }
+
+        private void RenderBackground(Graphics graphics) => graphics.FillRectangle(new SolidBrush(Color.White), InnerBounds);
+
 
         /// <summary>
         ///     Render the title bar at the top with the dropdown for selecting the plot and the
@@ -180,6 +182,10 @@ namespace Hive.IO.GhInputOutput
                 kpi.Render(Owner.Results, graphics, bounds, _plotSelector.CurrentKpi == kpi.Kpi);
                 bounds.Offset(-(plotWidth + Padding), 0);
             }
+
+            
+            bounds.Offset(-(plotWidth + Padding), 0);
+
         }
 
         public void RenderPlot(Graphics graphics)

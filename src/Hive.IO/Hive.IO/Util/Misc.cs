@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Rhino.Geometry;
 
 namespace Hive.IO
@@ -33,6 +34,9 @@ namespace Hive.IO
         public const double PEFBioGas = 1.286; // "
         public const double PEFWoodPellets = 1.325; // "
         public const double PEFElectricitySwiss = 2.02; // 40% Nuclear à 2.8 and 60% hydro à 1.5 http://go.leonardo-energy.org/rs/europeancopper/images/PEF-finalreport.pdf
+
+        public const double DefaultBuildingLifetime = 80;
+        public const double DefaultInterestRate = 0.05;
 
         public const double Kelvin = 273.15;
 
@@ -205,6 +209,35 @@ namespace Hive.IO
             if (area is Double.NaN) area = 0;
 
             return new double[3] { tilt, azimuth, area };
+        }
+
+        /// <summary>
+        /// From https://www.homerenergy.com/products/pro/docs/latest/annualized_cost.html
+        /// Interest rate, liftime must be in the same time resolution / units !
+        /// </summary>
+        /// <param name="interestRate">The real discount rate (includes inflation)</param>
+        /// <param name="projectLifetime">The duration of the entire projects lifetime</param>
+        /// <returns>Levelised values in units provided for duration of projectLifetime.</returns>
+        public static double ComputeLevelisedValues(double[] valuesNonLevelised, double interestRate, double projectLifetime)
+        {
+            // From (with real discount rate) https://www.homerenergy.com/products/pro/docs/latest/capital_recovery_factor.html
+            double CapitalRecoveryFactor(double i, double N) => i != 0 ? i * Math.Pow(1 + i, N) / (Math.Pow(1 + i, N) - 1) : 1;
+
+            double NetPresentCost(double[] values, double i)
+            {
+                double[] netPresentValues = new double[values.Length];
+                for (int t = 0; t < values.Length; t++)
+                {
+                    netPresentValues[t] = DiscountFactor(i, t) * values[t];
+                }
+                return netPresentValues.Sum();
+            }
+
+            double DiscountFactor(double i, double N) => 1 / Math.Pow(1 + i, N);
+
+            double costLevelised = CapitalRecoveryFactor(interestRate, projectLifetime) * NetPresentCost(valuesNonLevelised, interestRate);
+
+            return costLevelised;
         }
     }
 }

@@ -20,7 +20,7 @@ namespace Hive.IO.Plots
         public Kpi Kpi;
     }
 
-    public class OperationalPerformancePlot : IVisualizerControl
+    public class KpiPlot : IVisualizerControl
     {
         private readonly Font _boldFont;
         private readonly float _penWidth;
@@ -33,7 +33,7 @@ namespace Hive.IO.Plots
         ///     Draw a square box with data inside and a unit string above.
         /// </summary>
         /// <param name="properties">KpiPlotProperties to use for this plot</param>
-        public OperationalPerformancePlot(KpiPlotProperties properties)
+        public KpiPlot(KpiPlotProperties properties)
         {
             _standardFont = GH_FontServer.Standard;
             _boldFont = GH_FontServer.StandardBold;
@@ -69,7 +69,7 @@ namespace Hive.IO.Plots
         private string Data(ResultsPlotting results)
         {
             var value = _properties.Data(results, Normalized);
-            return $"{value:F1}";
+            return $"{value:0}";
         }
 
         /// <summary>
@@ -92,7 +92,7 @@ namespace Hive.IO.Plots
             var box = new RectangleF(bounds.Location, bounds.Size);
             box.Inflate(-_penWidth / 2, -_penWidth / 2); // make sure lines fit _inside_ box
             graphics.DrawRectangle(pen, box.Left, box.Top, box.Width, box.Height);
-            if (!Normalized) graphics.FillRectangle(new SolidBrush(_properties.Color), box);
+            graphics.FillRectangle(new SolidBrush(_properties.Color), box);
 
             if (selected)
             {

@@ -180,6 +180,8 @@
     <Compile Include="GhInputOutput\GhBuilding.cs" />
     <Compile Include="GhDistributors\GhMainDistributor.cs" />
     <Compile Include="GhInputOutput\GhVisualizerAttributes.cs" />
+    <Compile Include="Plots\AmrPlotConstants.cs" />
+    <Compile Include="Plots\LifetimeAmrPlot.cs" />
     <Compile Include="Util\HiveCategoryIcon.cs" />
     <Compile Include="Util\HiveIOInfo.cs" />
     <Compile Include="Util\Misc.cs" />
@@ -197,7 +199,7 @@
     <Compile Include="Plots\IVisualizerPlot.cs" />
     <Compile Include="Plots\MenuButton.cs" />
     <Compile Include="Plots\MenuButtonPanel.cs" />
-    <Compile Include="Plots\OperationalPerformancePlot.cs" />
+    <Compile Include="Plots\KpiPlot.cs" />
     <Compile Include="Plots\OxyPlotBase.cs" />
     <Compile Include="Plots\PlotSelector.cs" />
     <Compile Include="Plots\DrawingExtensions.cs" />

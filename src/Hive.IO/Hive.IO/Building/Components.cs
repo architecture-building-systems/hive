@@ -66,22 +66,24 @@ namespace Hive.IO.Building
         /// Specific CO2 emissions [kgCO2eq./m^2]
         /// </summary>
         [JsonProperty]
-        public double SpecificCo2 { get; protected set; }
+        public double SpecificEmissions { get; protected set; }
 
-        private double? _totalCo2 = null;
+        private double? _totalEmissions = null;
 
         [JsonProperty]
-        public double TotalCo2
+        public double TotalEmissions
         {
             get
             {
-                if (_totalCo2 == null)
-                    _totalCo2 = this.SpecificCo2 * this.Area;
+                if (_totalEmissions == null)
+                    _totalEmissions = this.SpecificEmissions * this.Area;
 
-                return (double) _totalCo2;
+                return (double) _totalEmissions;
             }
-            private set => _totalCo2 = value;
+            private set => _totalEmissions = value;
         }
+
+        public double Lifetime => Misc.DefaultBuildingLifetime; // hard coded for now!
 
         /// <summary>
         /// Total surface area of this component, in [sqm]
@@ -137,7 +139,7 @@ namespace Hive.IO.Building
                 UValue = siaRoom.UValueOpaque,
                 Capacitance = siaRoom.CapacitancePerFloorArea
             };
-            this.SpecificCo2 = siaRoom.OpaqueEmissions;
+            this.SpecificEmissions = siaRoom.OpaqueEmissions;
             this.SpecificCost = siaRoom.OpaqueCost;
             this.Construction = opaqueConstruction;
         }
@@ -168,7 +170,7 @@ namespace Hive.IO.Building
                 UValue = siaRoom.UValueTransparent,
                 Transmissivity = siaRoom.GValue
             };
-            base.SpecificCo2 = siaRoom.TransparentEmissions;
+            base.SpecificEmissions = siaRoom.TransparentEmissions;
             base.SpecificCost = siaRoom.TransparentCost;
             base.Construction = transparentConstruction;
         }
@@ -198,7 +200,7 @@ namespace Hive.IO.Building
                 UValue = siaRoom.UValueWalls,
                 Capacitance = siaRoom.CapacityWalls
             };
-            this.SpecificCo2 = siaRoom.EmissionsWalls;
+            this.SpecificEmissions = siaRoom.EmissionsWalls;
             this.SpecificCost = siaRoom.CostWalls;
             this.Construction = opaqueConstruction;
         }
@@ -227,7 +229,7 @@ namespace Hive.IO.Building
                 UValue = siaRoom.UValueRoofs,
                 Capacitance = siaRoom.CapacityRoofs
             };
-            this.SpecificCo2 = siaRoom.EmissionsRoofs;
+            this.SpecificEmissions = siaRoom.EmissionsRoofs;
             this.SpecificCost = siaRoom.CostRoofs;
             this.Construction = opaqueConstruction;
         }
@@ -257,7 +259,7 @@ namespace Hive.IO.Building
                 UValue = siaRoom.UValueFloors,
                 Capacitance = siaRoom.CapacityFloors
             };
-            this.SpecificCo2 = siaRoom.EmissionsFloors;
+            this.SpecificEmissions = siaRoom.EmissionsFloors;
             this.SpecificCost = siaRoom.CostFloors;
             this.Construction = opaqueConstruction;
         }

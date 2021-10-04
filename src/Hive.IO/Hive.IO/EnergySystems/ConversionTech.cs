@@ -6,8 +6,8 @@ namespace Hive.IO.EnergySystems
     public class DirectElectricity : ConversionTech
     {
         public double Efficiency { get; private set; }
-        public DirectElectricity(double investmentCost, double embodiedGhg, double capacity, double efficiency)
-            : base(investmentCost, embodiedGhg, capacity, "kW", false, false, true)
+        public DirectElectricity(double investmentCost, double embodiedGhg, double lifetime, double capacity, double efficiency)
+            : base(investmentCost, embodiedGhg, lifetime, capacity, "kW", false, false, true)
         {
             this.Efficiency = efficiency;
             base.Name = "DirectEletricity";
@@ -25,13 +25,13 @@ namespace Hive.IO.EnergySystems
             
             if (horizon == Misc.MonthsPerYear)
             {
-                elecPrice = Misc.GetAverageMonthlyValue(electricityIn.EnergyPrice);
-                elecEmissionsFactor = Misc.GetAverageMonthlyValue(electricityIn.GhgEmissionsFactor);
+                elecPrice = Misc.GetAverageMonthlyValue(electricityIn.SpecificCost);
+                elecEmissionsFactor = Misc.GetAverageMonthlyValue(electricityIn.SpecificEmissions);
             }
             else
             {
-                elecPrice = electricityIn.EnergyPrice;
-                elecEmissionsFactor = electricityIn.GhgEmissionsFactor;
+                elecPrice = electricityIn.SpecificCost;
+                elecEmissionsFactor = electricityIn.SpecificEmissions;
             }
             base.InputCarrier = new Electricity(horizon, purchasedElectricity, elecPrice, elecEmissionsFactor, electricityIn.PrimaryEnergyFactor);
             base.OutputCarriers = new Carrier[1];
@@ -48,8 +48,8 @@ namespace Hive.IO.EnergySystems
         public double DistributionLosses { get; private set; }
 
 
-        public HeatCoolingExchanger(double investmentCost, double embodiedGhg, double capacity, double losses, bool heatingExchanger = true, bool coolingExchanger = false)
-            : base(investmentCost, embodiedGhg, capacity, "kW", heatingExchanger, coolingExchanger, false)
+        public HeatCoolingExchanger(double investmentCost, double embodiedGhg, double lifetime, double capacity, double losses, bool heatingExchanger = true, bool coolingExchanger = false)
+            : base(investmentCost, embodiedGhg, lifetime, capacity, "kW", heatingExchanger, coolingExchanger, false)
         {
             this.DistributionLosses = losses;
             if (heatingExchanger && !coolingExchanger)
@@ -70,13 +70,13 @@ namespace Hive.IO.EnergySystems
 
             if (horizon == Misc.MonthsPerYear)
             {
-                energyPrice = Misc.GetAverageMonthlyValue(districtFluid.EnergyPrice);
-                energyGhg = Misc.GetAverageMonthlyValue(districtFluid.GhgEmissionsFactor);
+                energyPrice = Misc.GetAverageMonthlyValue(districtFluid.SpecificCost);
+                energyGhg = Misc.GetAverageMonthlyValue(districtFluid.SpecificEmissions);
             }
             else
             {
-                energyPrice = districtFluid.EnergyPrice;
-                energyGhg = districtFluid.GhgEmissionsFactor;
+                energyPrice = districtFluid.SpecificCost;
+                energyGhg = districtFluid.SpecificEmissions;
             }
 
             for(int t=0; t<horizon; t++)
@@ -149,6 +149,46 @@ namespace Hive.IO.EnergySystems
         /// </summary>
         public double SpecificEmbodiedGhg { get; protected set; }
 
+        private double? _totalCost = null;
+
+        /// <summary>
+        /// Investment cost
+        /// </summary>
+        public double InvestmentCost
+        {
+            get
+            {
+                if (_totalCost == null)
+                    _totalCost = this.SpecificInvestmentCost * this.Capacity;
+
+                return (double)_totalCost;
+            }
+            private set => _totalCost = value;
+        }
+
+        private double? _totalEmissions = null;
+
+        /// <summary>
+        /// Life cycle GHG emissions, in kgCO2eq.
+        /// </summary>
+        public double EmbodiedGhg
+        {
+            get
+            {
+                if (_totalEmissions == null)
+                    _totalEmissions = this.SpecificEmbodiedGhg * this.Capacity;
+
+                return (double)_totalEmissions;
+            }
+            private set => _totalEmissions = value;
+        }
+
+        /// <summary>
+        /// Liftime of the technology in years.
+        /// </summary>
+        public double Lifetime { get; protected set; }
+
+
 
         /// <summary>
         /// Input stream. e.g. for a CHP this could be 'NaturalGas'
@@ -160,10 +200,11 @@ namespace Hive.IO.EnergySystems
         public Carrier[] OutputCarriers { get; protected set; }
 
 
-        protected ConversionTech(double investmentCost, double embodiedGhg, double capacity, string capacityUnity, bool isHeating, bool isCooling, bool isElectric)
+        protected ConversionTech(double investmentCost, double embodiedGhg, double lifetime, double capacity, string capacityUnity, bool isHeating, bool isCooling, bool isElectric)
         {
             this.SpecificInvestmentCost = investmentCost;
             this.SpecificEmbodiedGhg = embodiedGhg;
+            this.Lifetime = lifetime;
             this.Capacity = capacity;
             this.CapacityUnit = capacityUnity;
             this.IsHeating = isHeating;
