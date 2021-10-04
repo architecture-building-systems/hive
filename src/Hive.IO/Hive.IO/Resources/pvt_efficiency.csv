@@ -1,5 +1,5 @@
-PVT tech,electric efficiency,thermal efficiency,cost per m2,life cycle GHG factor kgCO2eq per m2
-PVT_cheap,NaN,NaN,NaN,NaN
-PVT_normal,NaN,NaN,NaN,NaN
-PVT_high_tech,NaN,NaN,NaN,NaN
-PVT,0.17,0.3,NaN,400
+Type,electric efficiency,thermal efficiency,cost per m2,life cycle GHG factor kgCO2eq per m2, Descripton
+PVT_cheap,NaN,NaN,NaN,NaN,
+PVT_normal,NaN,NaN,NaN,NaN,
+PVT_high_tech,NaN,NaN,NaN,NaN,
+PVT,0.17,0.3,NaN,400,
