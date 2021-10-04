@@ -170,10 +170,12 @@ namespace Hive.IO.Forms
 
         public string Description => IsSurfaceTech ? ModuleType.Description : Defaults[Name].Description;
 
-        public ImageSource TechnologyImage => IsSurfaceTech
-            ? new BitmapImage(new Uri(
-                $"pack://application:,,,/Hive.IO,Culture=neutral,PublicKeyToken=null;component/Resources/EnergySystems/{ModuleType.Name}.jpg"))
-            : null;
+        //public ImageSource TechnologyImage => IsSurfaceTech
+        //    ? new BitmapImage(new Uri(
+        //        $"pack://application:,,,/Hive.IO,Culture=neutral,PublicKeyToken=null;component/Resources/EnergySystems/{ModuleType.Name}.jpg"))
+        //    : null;
+
+        public System.Drawing.Image TechnologyImage => IsSurfaceTech ? (System.Drawing.Image) Properties.Resources.ResourceManager.GetObject(ModuleType.Name) : null;
 
         public double Area
         {

@@ -22,6 +22,7 @@ namespace Hive.IO.Forms.Controls
             {
                 base.Conversion = value;
                 lblDescription.Text = Conversion.ModuleType.Description;
+                technologyImage.Image = Conversion.TechnologyImage;
                 UpdateAvailableSurfaces();
                 UpdateModuleTypesList();
                 UpdateArea();
@@ -74,6 +75,7 @@ namespace Hive.IO.Forms.Controls
             Conversion.ModuleType = moduleType;
 
             lblDescription.Text = Conversion.ModuleType.Description;
+            technologyImage.Image = Conversion.TechnologyImage;
 
             foreach (var textBox in GetAll(this, typeof(TextBox)).Cast<TextBox>()) UpdateTextBoxText(textBox);
         }

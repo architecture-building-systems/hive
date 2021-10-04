@@ -61,6 +61,36 @@ namespace Hive.IO.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap CdTe {
+            get {
+                object obj = ResourceManager.GetObject("CdTe", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap CIGS {
+            get {
+                object obj = ResourceManager.GetObject("CIGS", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap flat_plate {
+            get {
+                object obj = ResourceManager.GetObject("flat_plate", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to GC tech,electric efficiency,thermal efficiency,cost per m2,life cycle GHG factor kgCO2eq per m2
         ///GC_cheap,0.0,0.1,300.0,1.0
         ///GC_normal,0.0,0.2,400.0,2.0
@@ -69,6 +99,16 @@ namespace Hive.IO.Properties {
         internal static string gc_efficiency {
             get {
                 return ResourceManager.GetString("gc_efficiency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap HIT {
+            get {
+                object obj = ResourceManager.GetObject("HIT", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
@@ -343,13 +383,28 @@ namespace Hive.IO.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PV tech,electric efficiency,thermal efficiency,cost per m2,cost per kWp,life cycle GHG factor kgCO2eq per m2,life cycle GHG factor kgCO2eq per kWp,Lifetime
-        ///polycristalline,0.206,0,633.656,3076,171.598,833,30
-        ///monocristalline,0.228,0,701.328,3076,189.924,833,30
-        ///CIGS,0.156,0,592.8,3800,121.68,780,30
-        ///CdTe,0.182,0,691.6,3800,78.806,433,30
-        ///HIT,0.209,0,642.884,3076,174.097,833,30
-        ///.
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Monocristalline {
+            get {
+                object obj = ResourceManager.GetObject("Monocristalline", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Polycristalline {
+            get {
+                object obj = ResourceManager.GetObject("Polycristalline", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Type,electric efficiency,thermal efficiency,cost per m2,cost per kWp,life cycle GHG factor kgCO2eq per m2,life cycle GHG factor kgCO2eq per kWp,Lifetime,Description
+        ///Polycristalline,0.206,0,633.656,3076,171.598,833,30,&quot;Polycristalline modules consist of silicon wafer based cells that typically come in classic blue or black color. The PV cell wafers consist of multiple smaller crystals, which can show as a camouflage-like pattern on the cells. Generally, they can be colored more easily than monocrystalline c [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string pv_efficiency {
             get {
@@ -358,11 +413,11 @@ namespace Hive.IO.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to PVT tech,electric efficiency,thermal efficiency,cost per m2,life cycle GHG factor kgCO2eq per m2
-        ///PVT_cheap,NaN,NaN,NaN,NaN
-        ///PVT_normal,NaN,NaN,NaN,NaN
-        ///PVT_high_tech,NaN,NaN,NaN,NaN
-        ///PVT,0.17,0.3,NaN,400
+        ///   Looks up a localized string similar to Type,electric efficiency,thermal efficiency,cost per m2,life cycle GHG factor kgCO2eq per m2, Descripton
+        ///PVT_cheap,NaN,NaN,NaN,NaN,
+        ///PVT_normal,NaN,NaN,NaN,NaN,
+        ///PVT_high_tech,NaN,NaN,NaN,NaN,
+        ///PVT,0.17,0.3,NaN,400,
         ///.
         /// </summary>
         internal static string pvt_efficiency {
@@ -372,14 +427,23 @@ namespace Hive.IO.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to ST tech;electric efficiency;thermal efficiency;cost per kWp;cost per m2;life cycle GHG factor kgCO2eq per kWp;life cycle GHG factor kgCO2eq per m2
-        ///vacume_tube;0;0.45;4444.444444;2000;462.2222222;208
-        ///flat_plate;0;0.45;4444.444444;2000;408.8888889;184
-        ///.
+        ///   Looks up a localized string similar to Type,electric efficiency,thermal efficiency,cost per kWp,cost per m2,life cycle GHG factor kgCO2eq per kWp,life cycle GHG factor kgCO2eq per m2,Lifetime,Description
+        ///vacume_tube,0,0.45,4444.444444,2000,462.2222222,208,30,&quot;Evacuated tube collectors are used when high water temperatures are required. They can reach temperature levels of over 100\u00b0C. Several tubes are installed next to each other. The appearance is not a homogeneous surface. Fa\u00e7ade integration is possible to some extent.&quot;,
+        ///flat_plate [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string st_efficiency {
             get {
                 return ResourceManager.GetString("st_efficiency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap vacume_tube {
+            get {
+                object obj = ResourceManager.GetObject("vacume_tube", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }
