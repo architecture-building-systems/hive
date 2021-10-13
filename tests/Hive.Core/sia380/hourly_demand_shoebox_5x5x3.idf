@@ -1,0 +1,1617 @@
+
+Version,
+  8.9;                                    !- Version Identifier
+
+Timestep,
+  6;                                      !- Number of Timesteps per Hour
+
+LifeCycleCost:Parameters,
+  Life Cycle Cost Parameters,             !- Name
+  EndOfYear,                              !- Discounting Convention
+  ConstantDollar,                         !- Inflation Approach
+  0.03,                                   !- Real Discount Rate
+  ,                                       !- Nominal Discount Rate
+  ,                                       !- Inflation
+  ,                                       !- Base Date Month
+  2011,                                   !- Base Date Year
+  ,                                       !- Service Date Month
+  2011,                                   !- Service Date Year
+  25,                                     !- Length of Study Period in Years
+  ,                                       !- Tax rate
+  None;                                   !- Depreciation Method
+
+LifeCycleCost:UsePriceEscalation,
+  U.S. Avg  Commercial-Electricity,       !- LCC Price Escalation Name
+  Electricity,                            !- Resource
+  2011,                                   !- Escalation Start Year
+  January,                                !- Escalation Start Month
+  0.9838,                                 !- Year Escalation 1
+  0.9730,                                 !- Year Escalation 2
+  0.9632,                                 !- Year Escalation 3
+  0.9611,                                 !- Year Escalation 4
+  0.9571,                                 !- Year Escalation 5
+  0.9553,                                 !- Year Escalation 6
+  0.9539,                                 !- Year Escalation 7
+  0.9521,                                 !- Year Escalation 8
+  0.9546,                                 !- Year Escalation 9
+  0.9550,                                 !- Year Escalation 10
+  0.9553,                                 !- Year Escalation 11
+  0.9564,                                 !- Year Escalation 12
+  0.9575,                                 !- Year Escalation 13
+  0.9596,                                 !- Year Escalation 14
+  0.9618,                                 !- Year Escalation 15
+  0.9614,                                 !- Year Escalation 16
+  0.9618,                                 !- Year Escalation 17
+  0.9618,                                 !- Year Escalation 18
+  0.9593,                                 !- Year Escalation 19
+  0.9589,                                 !- Year Escalation 20
+  0.9607,                                 !- Year Escalation 21
+  0.9625,                                 !- Year Escalation 22
+  0.9650,                                 !- Year Escalation 23
+  0.9708,                                 !- Year Escalation 24
+  0.9751,                                 !- Year Escalation 25
+  0.9762,                                 !- Year Escalation 26
+  0.9766,                                 !- Year Escalation 27
+  0.9766,                                 !- Year Escalation 28
+  0.9769,                                 !- Year Escalation 29
+  0.9773;                                 !- Year Escalation 30
+
+LifeCycleCost:UsePriceEscalation,
+  U.S. Avg  Commercial-Distillate Oil,    !- LCC Price Escalation Name
+  FuelOil#1,                              !- Resource
+  2011,                                   !- Escalation Start Year
+  January,                                !- Escalation Start Month
+  0.9714,                                 !- Year Escalation 1
+  0.9730,                                 !- Year Escalation 2
+  0.9942,                                 !- Year Escalation 3
+  1.0164,                                 !- Year Escalation 4
+  1.0541,                                 !- Year Escalation 5
+  1.0928,                                 !- Year Escalation 6
+  1.1267,                                 !- Year Escalation 7
+  1.1580,                                 !- Year Escalation 8
+  1.1792,                                 !- Year Escalation 9
+  1.1967,                                 !- Year Escalation 10
+  1.2200,                                 !- Year Escalation 11
+  1.2333,                                 !- Year Escalation 12
+  1.2566,                                 !- Year Escalation 13
+  1.2709,                                 !- Year Escalation 14
+  1.2826,                                 !- Year Escalation 15
+  1.2985,                                 !- Year Escalation 16
+  1.3102,                                 !- Year Escalation 17
+  1.3250,                                 !- Year Escalation 18
+  1.3261,                                 !- Year Escalation 19
+  1.3282,                                 !- Year Escalation 20
+  1.3324,                                 !- Year Escalation 21
+  1.3356,                                 !- Year Escalation 22
+  1.3431,                                 !- Year Escalation 23
+  1.3510,                                 !- Year Escalation 24
+  1.3568,                                 !- Year Escalation 25
+  1.3606,                                 !- Year Escalation 26
+  1.3637,                                 !- Year Escalation 27
+  1.3674,                                 !- Year Escalation 28
+  1.3706,                                 !- Year Escalation 29
+  1.3743;                                 !- Year Escalation 30
+
+LifeCycleCost:UsePriceEscalation,
+  U.S. Avg  Commercial-Residual Oil,      !- LCC Price Escalation Name
+  FuelOil#2,                              !- Resource
+  2011,                                   !- Escalation Start Year
+  January,                                !- Escalation Start Month
+  0.8469,                                 !- Year Escalation 1
+  0.8257,                                 !- Year Escalation 2
+  0.8681,                                 !- Year Escalation 3
+  0.8988,                                 !- Year Escalation 4
+  0.9289,                                 !- Year Escalation 5
+  0.9604,                                 !- Year Escalation 6
+  0.9897,                                 !- Year Escalation 7
+  1.0075,                                 !- Year Escalation 8
+  1.0314,                                 !- Year Escalation 9
+  1.0554,                                 !- Year Escalation 10
+  1.0861,                                 !- Year Escalation 11
+  1.1278,                                 !- Year Escalation 12
+  1.1497,                                 !- Year Escalation 13
+  1.1620,                                 !- Year Escalation 14
+  1.1743,                                 !- Year Escalation 15
+  1.1852,                                 !- Year Escalation 16
+  1.1948,                                 !- Year Escalation 17
+  1.2037,                                 !- Year Escalation 18
+  1.2071,                                 !- Year Escalation 19
+  1.2119,                                 !- Year Escalation 20
+  1.2139,                                 !- Year Escalation 21
+  1.2194,                                 !- Year Escalation 22
+  1.2276,                                 !- Year Escalation 23
+  1.2365,                                 !- Year Escalation 24
+  1.2420,                                 !- Year Escalation 25
+  1.2461,                                 !- Year Escalation 26
+  1.2509,                                 !- Year Escalation 27
+  1.2550,                                 !- Year Escalation 28
+  1.2591,                                 !- Year Escalation 29
+  1.2638;                                 !- Year Escalation 30
+
+LifeCycleCost:UsePriceEscalation,
+  U.S. Avg  Commercial-Natural gas,       !- LCC Price Escalation Name
+  NaturalGas,                             !- Resource
+  2011,                                   !- Escalation Start Year
+  January,                                !- Escalation Start Month
+  0.9823,                                 !- Year Escalation 1
+  0.9557,                                 !- Year Escalation 2
+  0.9279,                                 !- Year Escalation 3
+  0.9257,                                 !- Year Escalation 4
+  0.9346,                                 !- Year Escalation 5
+  0.9412,                                 !- Year Escalation 6
+  0.9512,                                 !- Year Escalation 7
+  0.9645,                                 !- Year Escalation 8
+  0.9856,                                 !- Year Escalation 9
+  1.0067,                                 !- Year Escalation 10
+  1.0222,                                 !- Year Escalation 11
+  1.0410,                                 !- Year Escalation 12
+  1.0610,                                 !- Year Escalation 13
+  1.0787,                                 !- Year Escalation 14
+  1.0942,                                 !- Year Escalation 15
+  1.1098,                                 !- Year Escalation 16
+  1.1220,                                 !- Year Escalation 17
+  1.1308,                                 !- Year Escalation 18
+  1.1386,                                 !- Year Escalation 19
+  1.1486,                                 !- Year Escalation 20
+  1.1619,                                 !- Year Escalation 21
+  1.1763,                                 !- Year Escalation 22
+  1.1918,                                 !- Year Escalation 23
+  1.2118,                                 !- Year Escalation 24
+  1.2284,                                 !- Year Escalation 25
+  1.2439,                                 !- Year Escalation 26
+  1.2605,                                 !- Year Escalation 27
+  1.2772,                                 !- Year Escalation 28
+  1.2938,                                 !- Year Escalation 29
+  1.3115;                                 !- Year Escalation 30
+
+LifeCycleCost:UsePriceEscalation,
+  U.S. Avg  Commercial-Coal,              !- LCC Price Escalation Name
+  Coal,                                   !- Resource
+  2011,                                   !- Escalation Start Year
+  January,                                !- Escalation Start Month
+  0.9970,                                 !- Year Escalation 1
+  1.0089,                                 !- Year Escalation 2
+  1.0089,                                 !- Year Escalation 3
+  0.9941,                                 !- Year Escalation 4
+  0.9941,                                 !- Year Escalation 5
+  1.0000,                                 !- Year Escalation 6
+  1.0030,                                 !- Year Escalation 7
+  1.0059,                                 !- Year Escalation 8
+  1.0089,                                 !- Year Escalation 9
+  1.0119,                                 !- Year Escalation 10
+  1.0148,                                 !- Year Escalation 11
+  1.0178,                                 !- Year Escalation 12
+  1.0208,                                 !- Year Escalation 13
+  1.0267,                                 !- Year Escalation 14
+  1.0297,                                 !- Year Escalation 15
+  1.0356,                                 !- Year Escalation 16
+  1.0415,                                 !- Year Escalation 17
+  1.0534,                                 !- Year Escalation 18
+  1.0564,                                 !- Year Escalation 19
+  1.0593,                                 !- Year Escalation 20
+  1.0653,                                 !- Year Escalation 21
+  1.0712,                                 !- Year Escalation 22
+  1.0742,                                 !- Year Escalation 23
+  1.0801,                                 !- Year Escalation 24
+  1.0831,                                 !- Year Escalation 25
+  1.0831,                                 !- Year Escalation 26
+  1.0861,                                 !- Year Escalation 27
+  1.0890,                                 !- Year Escalation 28
+  1.0920,                                 !- Year Escalation 29
+  1.0950;                                 !- Year Escalation 30
+
+Building,
+  Building 1,                             !- Name
+  0,                                      !- North Axis {deg}
+  City,                                   !- Terrain
+  ,                                       !- Loads Convergence Tolerance Value
+  ,                                       !- Temperature Convergence Tolerance Value {deltaC}
+  FullInteriorAndExteriorWithReflections, !- Solar Distribution
+  ,                                       !- Maximum Number of Warmup Days
+  ;                                       !- Minimum Number of Warmup Days
+
+Zone,
+  zone_0,                                 !- Name
+  ,                                       !- Direction of Relative North {deg}
+  ,                                       !- X Origin {m}
+  ,                                       !- Y Origin {m}
+  ,                                       !- Z Origin {m}
+  ,                                       !- Type
+  ,                                       !- Multiplier
+  ,                                       !- Ceiling Height {m}
+  ,                                       !- Volume {m3}
+  ,                                       !- Floor Area {m2}
+  ,                                       !- Zone Inside Convection Algorithm
+  ;                                       !- Zone Outside Convection Algorithm
+
+BuildingSurface:Detailed,
+  zone_0_Srf_0,                           !- Name
+  Wall,                                   !- Surface Type
+  WALL,                                   !- Construction Name
+  zone_0,                                 !- Zone Name
+  Outdoors,                               !- Outside Boundary Condition
+  ,                                       !- Outside Boundary Condition Object
+  Sunexposed,                             !- Sun Exposure
+  Windexposed,                            !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  0, 0, 3,                                !- X,Y,Z Vertex 1 {m}
+  0, 0, 0,                                !- X,Y,Z Vertex 2 {m}
+  5, 0, 0,                                !- X,Y,Z Vertex 3 {m}
+  5, 0, 3;                                !- X,Y,Z Vertex 4 {m}
+
+BuildingSurface:Detailed,
+  zone_0_Srf_1,                           !- Name
+  Wall,                                   !- Surface Type
+  WALL,                                   !- Construction Name
+  zone_0,                                 !- Zone Name
+  Outdoors,                               !- Outside Boundary Condition
+  ,                                       !- Outside Boundary Condition Object
+  Sunexposed,                             !- Sun Exposure
+  Windexposed,                            !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  5, 0, 3,                                !- X,Y,Z Vertex 1 {m}
+  5, 0, 0,                                !- X,Y,Z Vertex 2 {m}
+  5, 5, 0,                                !- X,Y,Z Vertex 3 {m}
+  5, 5, 3;                                !- X,Y,Z Vertex 4 {m}
+
+BuildingSurface:Detailed,
+  zone_0_Srf_2,                           !- Name
+  Wall,                                   !- Surface Type
+  WALL,                                   !- Construction Name
+  zone_0,                                 !- Zone Name
+  Outdoors,                               !- Outside Boundary Condition
+  ,                                       !- Outside Boundary Condition Object
+  Sunexposed,                             !- Sun Exposure
+  Windexposed,                            !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  5, 5, 3,                                !- X,Y,Z Vertex 1 {m}
+  5, 5, 0,                                !- X,Y,Z Vertex 2 {m}
+  0, 5, 0,                                !- X,Y,Z Vertex 3 {m}
+  0, 5, 3;                                !- X,Y,Z Vertex 4 {m}
+
+BuildingSurface:Detailed,
+  zone_0_Srf_3,                           !- Name
+  Wall,                                   !- Surface Type
+  WALL,                                   !- Construction Name
+  zone_0,                                 !- Zone Name
+  Outdoors,                               !- Outside Boundary Condition
+  ,                                       !- Outside Boundary Condition Object
+  Sunexposed,                             !- Sun Exposure
+  Windexposed,                            !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  0, 5, 3,                                !- X,Y,Z Vertex 1 {m}
+  0, 5, 0,                                !- X,Y,Z Vertex 2 {m}
+  0, 0, 0,                                !- X,Y,Z Vertex 3 {m}
+  0, 0, 3;                                !- X,Y,Z Vertex 4 {m}
+
+FenestrationSurface:Detailed,
+  zone_0_Srf_3_glz_0_51e96df039e64dbc9b18, !- Name
+  Window,                                 !- Surface Type
+  Exterior Window,                        !- Construction Name
+  zone_0_Srf_3,                           !- Building Surface Name
+  ,                                       !- Outside Boundary Condition Object
+  ,                                       !- View Factor to Ground
+  ,                                       !- Shading Control Name
+  ,                                       !- Frame and Divider Name
+  ,                                       !- Multiplier
+  ,                                       !- Number of Vertices
+  0, 3.75, 2.59999990463257,              !- X,Y,Z Vertex 1 {m}
+  0, 3.75, 0.400000005960464,             !- X,Y,Z Vertex 2 {m}
+  0, 1.25, 0.400000005960464,             !- X,Y,Z Vertex 3 {m}
+  0, 1.25, 2.59999990463257;              !- X,Y,Z Vertex 4 {m}
+
+BuildingSurface:Detailed,
+  zone_0_Srf_4,                           !- Name
+  Floor,                                  !- Surface Type
+  FLOOR,                                  !- Construction Name
+  zone_0,                                 !- Zone Name
+  Ground,                                 !- Outside Boundary Condition
+  ,                                       !- Outside Boundary Condition Object
+  Nosun,                                  !- Sun Exposure
+  Nowind,                                 !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  5, 0, 0,                                !- X,Y,Z Vertex 1 {m}
+  0, 0, 0,                                !- X,Y,Z Vertex 2 {m}
+  0, 5, 0,                                !- X,Y,Z Vertex 3 {m}
+  5, 5, 0;                                !- X,Y,Z Vertex 4 {m}
+
+BuildingSurface:Detailed,
+  zone_0_Srf_5,                           !- Name
+  Roof,                                   !- Surface Type
+  ROOF,                                   !- Construction Name
+  zone_0,                                 !- Zone Name
+  Outdoors,                               !- Outside Boundary Condition
+  ,                                       !- Outside Boundary Condition Object
+  Sunexposed,                             !- Sun Exposure
+  Windexposed,                            !- Wind Exposure
+  ,                                       !- View Factor to Ground
+  ,                                       !- Number of Vertices
+  0, 5, 3,                                !- X,Y,Z Vertex 1 {m}
+  0, 0, 3,                                !- X,Y,Z Vertex 2 {m}
+  5, 0, 3,                                !- X,Y,Z Vertex 3 {m}
+  5, 5, 3;                                !- X,Y,Z Vertex 4 {m}
+
+ZoneControl:Thermostat,
+  zone_0 Thermostat,                      !- Name
+  zone_0,                                 !- Zone or ZoneList Name
+  zone_0 Thermostat Schedule,             !- Control Type Schedule Name
+  ThermostatSetpoint:DualSetpoint,        !- Control Object Type 1
+  dualSetPtThermostatzone_0;              !- Control Name 1
+
+Schedule:Compact,
+  zone_0 Thermostat Schedule,             !- Name
+  zone_0 Thermostat Schedule Type Limits, !- Schedule Type Limits Name
+  Through: 12/31,                         !- Field 1
+  For: AllDays,                           !- Field 2
+  Until: 24:00,                           !- Field 3
+  4;                                      !- Field 4
+
+ScheduleTypeLimits,
+  zone_0 Thermostat Schedule Type Limits, !- Name
+  0,                                      !- Lower Limit Value {BasedOnField A3}
+  4,                                      !- Upper Limit Value {BasedOnField A3}
+  DISCRETE;                               !- Numeric Type
+
+ThermostatSetpoint:DualSetpoint,
+  dualSetPtThermostatzone_0,              !- Name
+  MIDRISEAPARTMENT APARTMENT HTGSETP SETPT 20.0 , !- Heating Setpoint Temperature Schedule Name
+  MIDRISEAPARTMENT APARTMENT CLGSETP SETPT 28.0 ; !- Cooling Setpoint Temperature Schedule Name
+
+Schedule:Year,
+  MIDRISEAPARTMENT APARTMENT HTGSETP SETPT 20.0 , !- Name
+  Schedule Type Limits 3,                 !- Schedule Type Limits Name
+  SETPT 20.0  {7CD2F102-3EEC-404D-8628-98CA9CB5C387}, !- Schedule:Week Name 1
+  1,                                      !- Start Month 1
+  1,                                      !- Start Day 1
+  12,                                     !- End Month 1
+  31;                                     !- End Day 1
+
+ScheduleTypeLimits,
+  Schedule Type Limits 3,                 !- Name
+  ,                                       !- Lower Limit Value {BasedOnField A3}
+  ,                                       !- Upper Limit Value {BasedOnField A3}
+  Continuous,                             !- Numeric Type
+  temperature;                            !- Unit Type
+
+Schedule:Week:Daily,
+  SETPT 20.0  {7CD2F102-3EEC-404D-8628-98CA9CB5C387}, !- Name
+  MIDRISEAPARTMENT APARTMENT HTGSETP DEFAULT SCHEDULESETPT 20.0 , !- Sunday Schedule:Day Name
+  MIDRISEAPARTMENT APARTMENT HTGSETP DEFAULT SCHEDULESETPT 20.0 , !- Monday Schedule:Day Name
+  MIDRISEAPARTMENT APARTMENT HTGSETP DEFAULT SCHEDULESETPT 20.0 , !- Tuesday Schedule:Day Name
+  MIDRISEAPARTMENT APARTMENT HTGSETP DEFAULT SCHEDULESETPT 20.0 , !- Wednesday Schedule:Day Name
+  MIDRISEAPARTMENT APARTMENT HTGSETP DEFAULT SCHEDULESETPT 20.0 , !- Thursday Schedule:Day Name
+  MIDRISEAPARTMENT APARTMENT HTGSETP DEFAULT SCHEDULESETPT 20.0 , !- Friday Schedule:Day Name
+  MIDRISEAPARTMENT APARTMENT HTGSETP DEFAULT SCHEDULESETPT 20.0 , !- Saturday Schedule:Day Name
+  MIDRISEAPARTMENT APARTMENT HTGSETP DEFAULT SCHEDULESETPT 20.0 , !- Holiday Schedule:Day Name
+  SCHEDULE DAY 5SETPT 20.0 ,              !- SummerDesignDay Schedule:Day Name
+  SCHEDULE DAY 4SETPT 20.0 ,              !- WinterDesignDay Schedule:Day Name
+  MIDRISEAPARTMENT APARTMENT HTGSETP DEFAULT SCHEDULESETPT 20.0 , !- CustomDay1 Schedule:Day Name
+  MIDRISEAPARTMENT APARTMENT HTGSETP DEFAULT SCHEDULESETPT 20.0 ; !- CustomDay2 Schedule:Day Name
+
+Schedule:Day:Interval,
+  MIDRISEAPARTMENT APARTMENT HTGSETP DEFAULT SCHEDULESETPT 20.0 , !- Name
+  Schedule Type Limits 3,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  24:00,                                  !- Time 1 {hh:mm}
+  20;                                     !- Value Until Time 1
+
+Schedule:Day:Interval,
+  SCHEDULE DAY 5SETPT 20.0 ,              !- Name
+  Schedule Type Limits 3,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  24:00,                                  !- Time 1 {hh:mm}
+  20;                                     !- Value Until Time 1
+
+Schedule:Day:Interval,
+  SCHEDULE DAY 4SETPT 20.0 ,              !- Name
+  Schedule Type Limits 3,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  24:00,                                  !- Time 1 {hh:mm}
+  20;                                     !- Value Until Time 1
+
+Schedule:Year,
+  MIDRISEAPARTMENT APARTMENT CLGSETP SETPT 28.0 , !- Name
+  Schedule Type Limits 4,                 !- Schedule Type Limits Name
+  SETPT 28.0  {ECBD0E11-2ABE-4B29-B590-1DB13F5BA0B2}, !- Schedule:Week Name 1
+  1,                                      !- Start Month 1
+  1,                                      !- Start Day 1
+  12,                                     !- End Month 1
+  31;                                     !- End Day 1
+
+ScheduleTypeLimits,
+  Schedule Type Limits 4,                 !- Name
+  ,                                       !- Lower Limit Value {BasedOnField A3}
+  ,                                       !- Upper Limit Value {BasedOnField A3}
+  Continuous,                             !- Numeric Type
+  temperature;                            !- Unit Type
+
+Schedule:Week:Daily,
+  SETPT 28.0  {ECBD0E11-2ABE-4B29-B590-1DB13F5BA0B2}, !- Name
+  MIDRISEAPARTMENT APARTMENT CLGSETP DEFAULT SCHEDULESETPT 28.0 , !- Sunday Schedule:Day Name
+  MIDRISEAPARTMENT APARTMENT CLGSETP DEFAULT SCHEDULESETPT 28.0 , !- Monday Schedule:Day Name
+  MIDRISEAPARTMENT APARTMENT CLGSETP DEFAULT SCHEDULESETPT 28.0 , !- Tuesday Schedule:Day Name
+  MIDRISEAPARTMENT APARTMENT CLGSETP DEFAULT SCHEDULESETPT 28.0 , !- Wednesday Schedule:Day Name
+  MIDRISEAPARTMENT APARTMENT CLGSETP DEFAULT SCHEDULESETPT 28.0 , !- Thursday Schedule:Day Name
+  MIDRISEAPARTMENT APARTMENT CLGSETP DEFAULT SCHEDULESETPT 28.0 , !- Friday Schedule:Day Name
+  MIDRISEAPARTMENT APARTMENT CLGSETP DEFAULT SCHEDULESETPT 28.0 , !- Saturday Schedule:Day Name
+  MIDRISEAPARTMENT APARTMENT CLGSETP DEFAULT SCHEDULESETPT 28.0 , !- Holiday Schedule:Day Name
+  SCHEDULE DAY 3SETPT 28.0 ,              !- SummerDesignDay Schedule:Day Name
+  SCHEDULE DAY 2SETPT 28.0 ,              !- WinterDesignDay Schedule:Day Name
+  MIDRISEAPARTMENT APARTMENT CLGSETP DEFAULT SCHEDULESETPT 28.0 , !- CustomDay1 Schedule:Day Name
+  MIDRISEAPARTMENT APARTMENT CLGSETP DEFAULT SCHEDULESETPT 28.0 ; !- CustomDay2 Schedule:Day Name
+
+Schedule:Day:Interval,
+  MIDRISEAPARTMENT APARTMENT CLGSETP DEFAULT SCHEDULESETPT 28.0 , !- Name
+  Schedule Type Limits 4,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  24:00,                                  !- Time 1 {hh:mm}
+  28;                                     !- Value Until Time 1
+
+Schedule:Day:Interval,
+  SCHEDULE DAY 3SETPT 28.0 ,              !- Name
+  Schedule Type Limits 4,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  24:00,                                  !- Time 1 {hh:mm}
+  28;                                     !- Value Until Time 1
+
+Schedule:Day:Interval,
+  SCHEDULE DAY 2SETPT 28.0 ,              !- Name
+  Schedule Type Limits 4,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  24:00,                                  !- Time 1 {hh:mm}
+  28;                                     !- Value Until Time 1
+
+ZoneHVAC:EquipmentConnections,
+  zone_0,                                 !- Zone Name
+  zone_0 Equipment List,                  !- Zone Conditioning Equipment List Name
+  zone_0 Inlet Node List,                 !- Zone Air Inlet Node or NodeList Name
+  zone_0 Exhaust Node List,               !- Zone Air Exhaust Node or NodeList Name
+  Node 1,                                 !- Zone Air Node Name
+  zone_0 Return Air Node;                 !- Zone Return Air Node or NodeList Name
+
+NodeList,
+  zone_0 Inlet Node List,                 !- Name
+  Node 3;                                 !- Node Name 1
+
+NodeList,
+  zone_0 Exhaust Node List,               !- Name
+  Node 2;                                 !- Node Name 1
+
+ZoneHVAC:IdealLoadsAirSystem,
+  zone_0 IDEAL LOADS AIR SYSTEM,          !- Name
+  ,                                       !- Availability Schedule Name
+  Node 3,                                 !- Zone Supply Air Node Name
+  Node 2,                                 !- Zone Exhaust Air Node Name
+  ,                                       !- System Inlet Air Node Name
+  ,                                       !- Maximum Heating Supply Air Temperature {C}
+  ,                                       !- Minimum Cooling Supply Air Temperature {C}
+  ,                                       !- Maximum Heating Supply Air Humidity Ratio {kgWater/kgDryAir}
+  ,                                       !- Minimum Cooling Supply Air Humidity Ratio {kgWater/kgDryAir}
+  ,                                       !- Heating Limit
+  ,                                       !- Maximum Heating Air Flow Rate {m3/s}
+  ,                                       !- Maximum Sensible Heating Capacity {W}
+  LimitFlowRate,                          !- Cooling Limit
+  Autosize,                               !- Maximum Cooling Air Flow Rate {m3/s}
+  ,                                       !- Maximum Total Cooling Capacity {W}
+  ,                                       !- Heating Availability Schedule Name
+  ,                                       !- Cooling Availability Schedule Name
+  None,                                   !- Dehumidification Control Type
+  ,                                       !- Cooling Sensible Heat Ratio {dimensionless}
+  None,                                   !- Humidification Control Type
+  zone_0_DSOA,                            !- Design Specification Outdoor Air Object Name
+  ,                                       !- Outdoor Air Inlet Node Name
+  ,                                       !- Demand Controlled Ventilation Type
+  DifferentialDryBulb,                    !- Outdoor Air Economizer Type
+  ,                                       !- Heat Recovery Type
+  ,                                       !- Sensible Heat Recovery Effectiveness {dimensionless}
+  ;                                       !- Latent Heat Recovery Effectiveness {dimensionless}
+
+DesignSpecification:OutdoorAir,
+  zone_0_DSOA,                            !- Name
+  Sum,                                    !- Outdoor Air Method
+  0,                                      !- Outdoor Air Flow per Person {m3/s-person}
+  0.0002,                                 !- Outdoor Air Flow per Zone Floor Area {m3/s-m2}
+  0,                                      !- Outdoor Air Flow per Zone {m3/s}
+  0;                                      !- Outdoor Air Flow Air Changes per Hour {1/hr}
+
+ZoneHVAC:EquipmentList,
+  zone_0 Equipment List,                  !- Name
+  ,                                       !- Load Distribution Scheme
+  ZoneHVAC:IdealLoadsAirSystem,           !- Zone Equipment Object Type 1
+  zone_0 IDEAL LOADS AIR SYSTEM,          !- Zone Equipment Name 1
+  1,                                      !- Zone Equipment Cooling Sequence 1
+  1;                                      !- Zone Equipment Heating or No-Load Sequence 1
+
+Sizing:Zone,
+  zone_0,                                 !- Zone or ZoneList Name
+  SupplyAirTemperature,                   !- Zone Cooling Design Supply Air Temperature Input Method
+  14,                                     !- Zone Cooling Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Cooling Design Supply Air Temperature Difference {deltaC}
+  SupplyAirTemperature,                   !- Zone Heating Design Supply Air Temperature Input Method
+  40,                                     !- Zone Heating Design Supply Air Temperature {C}
+  11.11,                                  !- Zone Heating Design Supply Air Temperature Difference {deltaC}
+  0.0085,                                 !- Zone Cooling Design Supply Air Humidity Ratio {kgWater/kgDryAir}
+  0.008,                                  !- Zone Heating Design Supply Air Humidity Ratio {kgWater/kgDryAir}
+  zone_0_DSOA,                            !- Design Specification Outdoor Air Object Name
+  ,                                       !- Zone Heating Sizing Factor
+  ,                                       !- Zone Cooling Sizing Factor
+  DesignDay,                              !- Cooling Design Air Flow Method
+  0,                                      !- Cooling Design Air Flow Rate {m3/s}
+  0.000762,                               !- Cooling Minimum Air Flow per Zone Floor Area {m3/s-m2}
+  0,                                      !- Cooling Minimum Air Flow {m3/s}
+  0,                                      !- Cooling Minimum Air Flow Fraction
+  DesignDay,                              !- Heating Design Air Flow Method
+  0,                                      !- Heating Design Air Flow Rate {m3/s}
+  0.002032,                               !- Heating Maximum Air Flow per Zone Floor Area {m3/s-m2}
+  0.1415762,                              !- Heating Maximum Air Flow {m3/s}
+  0.3,                                    !- Heating Maximum Air Flow Fraction
+  zone_0 Design Spec Zone Air Dist,       !- Design Specification Zone Air Distribution Object Name
+  No;                                     !- Account for Dedicated Outdoor Air System
+
+DesignSpecification:ZoneAirDistribution,
+  zone_0 Design Spec Zone Air Dist,       !- Name
+  1,                                      !- Zone Air Distribution Effectiveness in Cooling Mode {dimensionless}
+  1;                                      !- Zone Air Distribution Effectiveness in Heating Mode {dimensionless}
+
+SimulationControl,
+  Yes,                                    !- Do Zone Sizing Calculation
+  Yes,                                    !- Do System Sizing Calculation
+  Yes,                                    !- Do Plant Sizing Calculation
+  No,                                     !- Run Simulation for Sizing Periods
+  Yes;                                    !- Run Simulation for Weather File Run Periods
+
+RunPeriod,
+  Run Period 1,                           !- Name
+  1,                                      !- Begin Month
+  1,                                      !- Begin Day of Month
+  12,                                     !- End Month
+  31,                                     !- End Day of Month
+UseWeatherFile,
+  No,                                     !- Use Weather File Holidays and Special Days
+  No,                                     !- Use Weather File Daylight Saving Period
+  No,                                     !- Apply Weekend Holiday Rule
+  Yes,                                    !- Use Weather File Rain Indicators
+  Yes,                                    !- Use Weather File Snow Indicators
+  1;                                      !- Number of Times Runperiod to be Repeated
+
+ShadowCalculation,
+  AverageOverDaysInFrequency,             !- Calculation Method
+  30,                                     !- Calculation Frequency
+  3000;                                   !- Maximum Figures in Shadow Overlap Calculations
+
+Sizing:Parameters,
+  1.25,                                   !- Heating Sizing Factor
+  1.15;                                   !- Cooling Sizing Factor
+
+GlobalGeometryRules,
+  UpperLeftCorner,                        !- Starting Vertex Position
+  Counterclockwise,                       !- Vertex Entry Direction
+  Relative,                               !- Coordinate System
+  Relative,                               !- Daylighting Reference Point Coordinate System
+  Relative;                               !- Rectangular Surface Coordinate System
+
+Material:NoMass,
+  FLOOR,                                  !- Name
+  Rough,                                  !- Roughness
+  5,                                      !- Thermal Resistance {m2-K/W}
+  0.9,                                    !- Thermal Absorptance
+  0.7,                                    !- Solar Absorptance
+  0.7;                                    !- Visible Absorptance
+
+Material:NoMass,
+  ROOF,                                   !- Name
+  Rough,                                  !- Roughness
+  6.67,                                   !- Thermal Resistance {m2-K/W}
+  0.9,                                    !- Thermal Absorptance
+  0.7,                                    !- Solar Absorptance
+  0.7;                                    !- Visible Absorptance
+
+Material:NoMass,
+  WALL,                                   !- Name
+  Rough,                                  !- Roughness
+  4,                                      !- Thermal Resistance {m2-K/W}
+  0.9,                                    !- Thermal Absorptance
+  0.7,                                    !- Solar Absorptance
+  0.7;                                    !- Visible Absorptance
+
+WindowMaterial:Gas,
+  Air 13mm,                               !- Name
+  Air,                                    !- Gas Type
+  0.0127;                                 !- Thickness {m}
+
+WindowMaterial:Glazing,
+  Clear 3mm,                              !- Name
+  SpectralAverage,                        !- Optical Data Type
+  ,                                       !- Window Glass Spectral Data Set Name
+  0.00299999999999999,                    !- Thickness {m}
+  0.837,                                  !- Solar Transmittance at Normal Incidence
+  0.075,                                  !- Front Side Solar Reflectance at Normal Incidence
+  0,                                      !- Back Side Solar Reflectance at Normal Incidence
+  0.898,                                  !- Visible Transmittance at Normal Incidence
+  0.081,                                  !- Front Side Visible Reflectance at Normal Incidence
+  0,                                      !- Back Side Visible Reflectance at Normal Incidence
+  0,                                      !- Infrared Transmittance at Normal Incidence
+  0.84,                                   !- Front Side Infrared Hemispherical Emissivity
+  0.84,                                   !- Back Side Infrared Hemispherical Emissivity
+  0.9,                                    !- Conductivity {W/m-K}
+  1;                                      !- Dirt Correction Factor for Solar and Visible Transmittance
+
+Construction,
+  Exterior Window,                        !- Name
+  Clear 3mm,                              !- Layer 1
+  Air 13mm,                               !- Layer 2
+  Clear 3mm;                              !- Layer 3
+
+Construction,
+  FLOOR,                                  !- Name
+  FLOOR;                                  !- Layer 1
+
+Construction,
+  ROOF,                                   !- Name
+  ROOF;                                   !- Layer 1
+
+Construction,
+  WALL,                                   !- Name
+  WALL;                                   !- Layer 1
+
+ScheduleTypeLimits,
+  Schedule Type Limits 1,                 !- Name
+  0,                                      !- Lower Limit Value {BasedOnField A3}
+  1,                                      !- Upper Limit Value {BasedOnField A3}
+  CONTINUOUS;                             !- Numeric Type
+
+ScheduleTypeLimits,
+  Schedule Type Limits 2,                 !- Name
+  0,                                      !- Lower Limit Value {BasedOnField A3}
+  ,                                       !- Upper Limit Value {BasedOnField A3}
+  Continuous,                             !- Numeric Type
+  activitylevel;                          !- Unit Type
+
+Schedule:Day:Interval,
+  MidriseApartment Activity Default Schedule, !- Name
+  Schedule Type Limits 2,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  24:00,                                  !- Time 1 {hh:mm}
+  120;                                    !- Value Until Time 1
+
+Schedule:Day:Interval,
+  MidriseApartment Activity Summer Design Day, !- Name
+  Schedule Type Limits 2,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  24:00,                                  !- Time 1 {hh:mm}
+  120;                                    !- Value Until Time 1
+
+Schedule:Day:Interval,
+  MidriseApartment Activity Winter Design Day, !- Name
+  Schedule Type Limits 2,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  24:00,                                  !- Time 1 {hh:mm}
+  120;                                    !- Value Until Time 1
+
+Schedule:Day:Interval,
+  MidriseApartment Apartment Equip Default Schedule, !- Name
+  Schedule Type Limits 1,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  01:00,                                  !- Time 1 {hh:mm}
+  0.45,                                   !- Value Until Time 1
+  02:00,                                  !- Time 2 {hh:mm}
+  0.41,                                   !- Value Until Time 2
+  03:00,                                  !- Time 3 {hh:mm}
+  0.39,                                   !- Value Until Time 3
+  05:00,                                  !- Time 4 {hh:mm}
+  0.38,                                   !- Value Until Time 4
+  06:00,                                  !- Time 5 {hh:mm}
+  0.43,                                   !- Value Until Time 5
+  07:00,                                  !- Time 6 {hh:mm}
+  0.54,                                   !- Value Until Time 6
+  08:00,                                  !- Time 7 {hh:mm}
+  0.65,                                   !- Value Until Time 7
+  09:00,                                  !- Time 8 {hh:mm}
+  0.66,                                   !- Value Until Time 8
+  10:00,                                  !- Time 9 {hh:mm}
+  0.67,                                   !- Value Until Time 9
+  11:00,                                  !- Time 10 {hh:mm}
+  0.69,                                   !- Value Until Time 10
+  12:00,                                  !- Time 11 {hh:mm}
+  0.7,                                    !- Value Until Time 11
+  13:00,                                  !- Time 12 {hh:mm}
+  0.69,                                   !- Value Until Time 12
+  14:00,                                  !- Time 13 {hh:mm}
+  0.66,                                   !- Value Until Time 13
+  15:00,                                  !- Time 14 {hh:mm}
+  0.65,                                   !- Value Until Time 14
+  16:00,                                  !- Time 15 {hh:mm}
+  0.68,                                   !- Value Until Time 15
+  17:00,                                  !- Time 16 {hh:mm}
+  0.8,                                    !- Value Until Time 16
+  19:00,                                  !- Time 17 {hh:mm}
+  1,                                      !- Value Until Time 17
+  20:00,                                  !- Time 18 {hh:mm}
+  0.93,                                   !- Value Until Time 18
+  21:00,                                  !- Time 19 {hh:mm}
+  0.89,                                   !- Value Until Time 19
+  22:00,                                  !- Time 20 {hh:mm}
+  0.85,                                   !- Value Until Time 20
+  23:00,                                  !- Time 21 {hh:mm}
+  0.71,                                   !- Value Until Time 21
+  24:00,                                  !- Time 22 {hh:mm}
+  0.58;                                   !- Value Until Time 22
+
+Schedule:Day:Interval,
+  MidriseApartment Apartment Equip Summer Design Day, !- Name
+  Schedule Type Limits 1,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  01:00,                                  !- Time 1 {hh:mm}
+  0.45,                                   !- Value Until Time 1
+  02:00,                                  !- Time 2 {hh:mm}
+  0.41,                                   !- Value Until Time 2
+  03:00,                                  !- Time 3 {hh:mm}
+  0.39,                                   !- Value Until Time 3
+  05:00,                                  !- Time 4 {hh:mm}
+  0.38,                                   !- Value Until Time 4
+  06:00,                                  !- Time 5 {hh:mm}
+  0.43,                                   !- Value Until Time 5
+  07:00,                                  !- Time 6 {hh:mm}
+  0.54,                                   !- Value Until Time 6
+  08:00,                                  !- Time 7 {hh:mm}
+  0.65,                                   !- Value Until Time 7
+  09:00,                                  !- Time 8 {hh:mm}
+  0.66,                                   !- Value Until Time 8
+  10:00,                                  !- Time 9 {hh:mm}
+  0.67,                                   !- Value Until Time 9
+  11:00,                                  !- Time 10 {hh:mm}
+  0.69,                                   !- Value Until Time 10
+  12:00,                                  !- Time 11 {hh:mm}
+  0.7,                                    !- Value Until Time 11
+  13:00,                                  !- Time 12 {hh:mm}
+  0.69,                                   !- Value Until Time 12
+  14:00,                                  !- Time 13 {hh:mm}
+  0.66,                                   !- Value Until Time 13
+  15:00,                                  !- Time 14 {hh:mm}
+  0.65,                                   !- Value Until Time 14
+  16:00,                                  !- Time 15 {hh:mm}
+  0.68,                                   !- Value Until Time 15
+  17:00,                                  !- Time 16 {hh:mm}
+  0.8,                                    !- Value Until Time 16
+  19:00,                                  !- Time 17 {hh:mm}
+  1,                                      !- Value Until Time 17
+  20:00,                                  !- Time 18 {hh:mm}
+  0.93,                                   !- Value Until Time 18
+  21:00,                                  !- Time 19 {hh:mm}
+  0.89,                                   !- Value Until Time 19
+  22:00,                                  !- Time 20 {hh:mm}
+  0.85,                                   !- Value Until Time 20
+  23:00,                                  !- Time 21 {hh:mm}
+  0.71,                                   !- Value Until Time 21
+  24:00,                                  !- Time 22 {hh:mm}
+  0.58;                                   !- Value Until Time 22
+
+Schedule:Day:Interval,
+  MidriseApartment Apartment Equip Winter Design Day, !- Name
+  Schedule Type Limits 1,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  01:00,                                  !- Time 1 {hh:mm}
+  0.45,                                   !- Value Until Time 1
+  02:00,                                  !- Time 2 {hh:mm}
+  0.41,                                   !- Value Until Time 2
+  03:00,                                  !- Time 3 {hh:mm}
+  0.39,                                   !- Value Until Time 3
+  05:00,                                  !- Time 4 {hh:mm}
+  0.38,                                   !- Value Until Time 4
+  06:00,                                  !- Time 5 {hh:mm}
+  0.43,                                   !- Value Until Time 5
+  07:00,                                  !- Time 6 {hh:mm}
+  0.54,                                   !- Value Until Time 6
+  08:00,                                  !- Time 7 {hh:mm}
+  0.65,                                   !- Value Until Time 7
+  09:00,                                  !- Time 8 {hh:mm}
+  0.66,                                   !- Value Until Time 8
+  10:00,                                  !- Time 9 {hh:mm}
+  0.67,                                   !- Value Until Time 9
+  11:00,                                  !- Time 10 {hh:mm}
+  0.69,                                   !- Value Until Time 10
+  12:00,                                  !- Time 11 {hh:mm}
+  0.7,                                    !- Value Until Time 11
+  13:00,                                  !- Time 12 {hh:mm}
+  0.69,                                   !- Value Until Time 12
+  14:00,                                  !- Time 13 {hh:mm}
+  0.66,                                   !- Value Until Time 13
+  15:00,                                  !- Time 14 {hh:mm}
+  0.65,                                   !- Value Until Time 14
+  16:00,                                  !- Time 15 {hh:mm}
+  0.68,                                   !- Value Until Time 15
+  17:00,                                  !- Time 16 {hh:mm}
+  0.8,                                    !- Value Until Time 16
+  19:00,                                  !- Time 17 {hh:mm}
+  1,                                      !- Value Until Time 17
+  20:00,                                  !- Time 18 {hh:mm}
+  0.93,                                   !- Value Until Time 18
+  21:00,                                  !- Time 19 {hh:mm}
+  0.89,                                   !- Value Until Time 19
+  22:00,                                  !- Time 20 {hh:mm}
+  0.85,                                   !- Value Until Time 20
+  23:00,                                  !- Time 21 {hh:mm}
+  0.71,                                   !- Value Until Time 21
+  24:00,                                  !- Time 22 {hh:mm}
+  0.58;                                   !- Value Until Time 22
+
+Schedule:Day:Interval,
+  MidriseApartment Apartment Light Default Schedule, !- Name
+  Schedule Type Limits 1,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  04:00,                                  !- Time 1 {hh:mm}
+  0.067,                                  !- Value Until Time 1
+  05:00,                                  !- Time 2 {hh:mm}
+  0.187,                                  !- Value Until Time 2
+  06:00,                                  !- Time 3 {hh:mm}
+  0.394,                                  !- Value Until Time 3
+  07:00,                                  !- Time 4 {hh:mm}
+  0.44,                                   !- Value Until Time 4
+  08:00,                                  !- Time 5 {hh:mm}
+  0.393,                                  !- Value Until Time 5
+  09:00,                                  !- Time 6 {hh:mm}
+  0.172,                                  !- Value Until Time 6
+  15:00,                                  !- Time 7 {hh:mm}
+  0.119,                                  !- Value Until Time 7
+  16:00,                                  !- Time 8 {hh:mm}
+  0.206,                                  !- Value Until Time 8
+  17:00,                                  !- Time 9 {hh:mm}
+  0.439,                                  !- Value Until Time 9
+  18:00,                                  !- Time 10 {hh:mm}
+  0.616,                                  !- Value Until Time 10
+  19:00,                                  !- Time 11 {hh:mm}
+  0.829,                                  !- Value Until Time 11
+  20:00,                                  !- Time 12 {hh:mm}
+  0.986,                                  !- Value Until Time 12
+  21:00,                                  !- Time 13 {hh:mm}
+  1,                                      !- Value Until Time 13
+  22:00,                                  !- Time 14 {hh:mm}
+  0.692,                                  !- Value Until Time 14
+  23:00,                                  !- Time 15 {hh:mm}
+  0.384,                                  !- Value Until Time 15
+  24:00,                                  !- Time 16 {hh:mm}
+  0.16;                                   !- Value Until Time 16
+
+Schedule:Day:Interval,
+  MidriseApartment Apartment Light Summer Design Day, !- Name
+  Schedule Type Limits 1,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  04:00,                                  !- Time 1 {hh:mm}
+  0.067,                                  !- Value Until Time 1
+  05:00,                                  !- Time 2 {hh:mm}
+  0.187,                                  !- Value Until Time 2
+  06:00,                                  !- Time 3 {hh:mm}
+  0.394,                                  !- Value Until Time 3
+  07:00,                                  !- Time 4 {hh:mm}
+  0.44,                                   !- Value Until Time 4
+  08:00,                                  !- Time 5 {hh:mm}
+  0.393,                                  !- Value Until Time 5
+  09:00,                                  !- Time 6 {hh:mm}
+  0.172,                                  !- Value Until Time 6
+  15:00,                                  !- Time 7 {hh:mm}
+  0.119,                                  !- Value Until Time 7
+  16:00,                                  !- Time 8 {hh:mm}
+  0.206,                                  !- Value Until Time 8
+  17:00,                                  !- Time 9 {hh:mm}
+  0.439,                                  !- Value Until Time 9
+  18:00,                                  !- Time 10 {hh:mm}
+  0.616,                                  !- Value Until Time 10
+  19:00,                                  !- Time 11 {hh:mm}
+  0.829,                                  !- Value Until Time 11
+  20:00,                                  !- Time 12 {hh:mm}
+  0.986,                                  !- Value Until Time 12
+  21:00,                                  !- Time 13 {hh:mm}
+  1,                                      !- Value Until Time 13
+  22:00,                                  !- Time 14 {hh:mm}
+  0.692,                                  !- Value Until Time 14
+  23:00,                                  !- Time 15 {hh:mm}
+  0.384,                                  !- Value Until Time 15
+  24:00,                                  !- Time 16 {hh:mm}
+  0.16;                                   !- Value Until Time 16
+
+Schedule:Day:Interval,
+  MidriseApartment Apartment Light Winter Design Day, !- Name
+  Schedule Type Limits 1,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  04:00,                                  !- Time 1 {hh:mm}
+  0.067,                                  !- Value Until Time 1
+  05:00,                                  !- Time 2 {hh:mm}
+  0.187,                                  !- Value Until Time 2
+  06:00,                                  !- Time 3 {hh:mm}
+  0.394,                                  !- Value Until Time 3
+  07:00,                                  !- Time 4 {hh:mm}
+  0.44,                                   !- Value Until Time 4
+  08:00,                                  !- Time 5 {hh:mm}
+  0.393,                                  !- Value Until Time 5
+  09:00,                                  !- Time 6 {hh:mm}
+  0.172,                                  !- Value Until Time 6
+  15:00,                                  !- Time 7 {hh:mm}
+  0.119,                                  !- Value Until Time 7
+  16:00,                                  !- Time 8 {hh:mm}
+  0.206,                                  !- Value Until Time 8
+  17:00,                                  !- Time 9 {hh:mm}
+  0.439,                                  !- Value Until Time 9
+  18:00,                                  !- Time 10 {hh:mm}
+  0.616,                                  !- Value Until Time 10
+  19:00,                                  !- Time 11 {hh:mm}
+  0.829,                                  !- Value Until Time 11
+  20:00,                                  !- Time 12 {hh:mm}
+  0.986,                                  !- Value Until Time 12
+  21:00,                                  !- Time 13 {hh:mm}
+  1,                                      !- Value Until Time 13
+  22:00,                                  !- Time 14 {hh:mm}
+  0.692,                                  !- Value Until Time 14
+  23:00,                                  !- Time 15 {hh:mm}
+  0.384,                                  !- Value Until Time 15
+  24:00,                                  !- Time 16 {hh:mm}
+  0.16;                                   !- Value Until Time 16
+
+Schedule:Day:Interval,
+  MidriseApartment Apartment Occ Default Schedule, !- Name
+  Schedule Type Limits 1,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  07:00,                                  !- Time 1 {hh:mm}
+  1,                                      !- Value Until Time 1
+  08:00,                                  !- Time 2 {hh:mm}
+  0.85,                                   !- Value Until Time 2
+  09:00,                                  !- Time 3 {hh:mm}
+  0.39,                                   !- Value Until Time 3
+  16:00,                                  !- Time 4 {hh:mm}
+  0.25,                                   !- Value Until Time 4
+  17:00,                                  !- Time 5 {hh:mm}
+  0.3,                                    !- Value Until Time 5
+  18:00,                                  !- Time 6 {hh:mm}
+  0.52,                                   !- Value Until Time 6
+  21:00,                                  !- Time 7 {hh:mm}
+  0.87,                                   !- Value Until Time 7
+  24:00,                                  !- Time 8 {hh:mm}
+  1;                                      !- Value Until Time 8
+
+Schedule:Day:Interval,
+  MidriseApartment Apartment Occ Summer Design Day, !- Name
+  Schedule Type Limits 1,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  07:00,                                  !- Time 1 {hh:mm}
+  1,                                      !- Value Until Time 1
+  08:00,                                  !- Time 2 {hh:mm}
+  0.85,                                   !- Value Until Time 2
+  09:00,                                  !- Time 3 {hh:mm}
+  0.39,                                   !- Value Until Time 3
+  16:00,                                  !- Time 4 {hh:mm}
+  0.25,                                   !- Value Until Time 4
+  17:00,                                  !- Time 5 {hh:mm}
+  0.3,                                    !- Value Until Time 5
+  18:00,                                  !- Time 6 {hh:mm}
+  0.52,                                   !- Value Until Time 6
+  21:00,                                  !- Time 7 {hh:mm}
+  0.87,                                   !- Value Until Time 7
+  24:00,                                  !- Time 8 {hh:mm}
+  1;                                      !- Value Until Time 8
+
+Schedule:Day:Interval,
+  MidriseApartment Apartment Occ Winter Design Day, !- Name
+  Schedule Type Limits 1,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  07:00,                                  !- Time 1 {hh:mm}
+  1,                                      !- Value Until Time 1
+  08:00,                                  !- Time 2 {hh:mm}
+  0.85,                                   !- Value Until Time 2
+  09:00,                                  !- Time 3 {hh:mm}
+  0.39,                                   !- Value Until Time 3
+  16:00,                                  !- Time 4 {hh:mm}
+  0.25,                                   !- Value Until Time 4
+  17:00,                                  !- Time 5 {hh:mm}
+  0.3,                                    !- Value Until Time 5
+  18:00,                                  !- Time 6 {hh:mm}
+  0.52,                                   !- Value Until Time 6
+  21:00,                                  !- Time 7 {hh:mm}
+  0.87,                                   !- Value Until Time 7
+  24:00,                                  !- Time 8 {hh:mm}
+  1;                                      !- Value Until Time 8
+
+Schedule:Day:Interval,
+  MidriseApartment Infil Default Schedule, !- Name
+  Schedule Type Limits 1,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  24:00,                                  !- Time 1 {hh:mm}
+  1;                                      !- Value Until Time 1
+
+Schedule:Day:Interval,
+  MidriseApartment Infil Summer Design Day, !- Name
+  Schedule Type Limits 1,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  24:00,                                  !- Time 1 {hh:mm}
+  1;                                      !- Value Until Time 1
+
+Schedule:Day:Interval,
+  MidriseApartment Infil Winter Design Day, !- Name
+  Schedule Type Limits 1,                 !- Schedule Type Limits Name
+  No,                                     !- Interpolate to Timestep
+  24:00,                                  !- Time 1 {hh:mm}
+  1;                                      !- Value Until Time 1
+
+Schedule:Week:Daily,
+  Schedule:Week:Daily {1b2951d3-8a6d-40b0-a578-f54d283818bd}, !- Name
+  MidriseApartment Infil Default Schedule, !- Sunday Schedule:Day Name
+  MidriseApartment Infil Default Schedule, !- Monday Schedule:Day Name
+  MidriseApartment Infil Default Schedule, !- Tuesday Schedule:Day Name
+  MidriseApartment Infil Default Schedule, !- Wednesday Schedule:Day Name
+  MidriseApartment Infil Default Schedule, !- Thursday Schedule:Day Name
+  MidriseApartment Infil Default Schedule, !- Friday Schedule:Day Name
+  MidriseApartment Infil Default Schedule, !- Saturday Schedule:Day Name
+  MidriseApartment Infil Default Schedule, !- Holiday Schedule:Day Name
+  MidriseApartment Infil Summer Design Day, !- SummerDesignDay Schedule:Day Name
+  MidriseApartment Infil Winter Design Day, !- WinterDesignDay Schedule:Day Name
+  MidriseApartment Infil Default Schedule, !- CustomDay1 Schedule:Day Name
+  MidriseApartment Infil Default Schedule; !- CustomDay2 Schedule:Day Name
+
+Schedule:Week:Daily,
+  Schedule:Week:Daily {209dd2e3-012e-4d8d-9bec-2729f2339963}, !- Name
+  MidriseApartment Apartment Equip Default Schedule, !- Sunday Schedule:Day Name
+  MidriseApartment Apartment Equip Default Schedule, !- Monday Schedule:Day Name
+  MidriseApartment Apartment Equip Default Schedule, !- Tuesday Schedule:Day Name
+  MidriseApartment Apartment Equip Default Schedule, !- Wednesday Schedule:Day Name
+  MidriseApartment Apartment Equip Default Schedule, !- Thursday Schedule:Day Name
+  MidriseApartment Apartment Equip Default Schedule, !- Friday Schedule:Day Name
+  MidriseApartment Apartment Equip Default Schedule, !- Saturday Schedule:Day Name
+  MidriseApartment Apartment Equip Default Schedule, !- Holiday Schedule:Day Name
+  MidriseApartment Apartment Equip Summer Design Day, !- SummerDesignDay Schedule:Day Name
+  MidriseApartment Apartment Equip Winter Design Day, !- WinterDesignDay Schedule:Day Name
+  MidriseApartment Apartment Equip Default Schedule, !- CustomDay1 Schedule:Day Name
+  MidriseApartment Apartment Equip Default Schedule; !- CustomDay2 Schedule:Day Name
+
+Schedule:Week:Daily,
+  Schedule:Week:Daily {4e5573de-4297-45a0-9d21-9559a796cc95}, !- Name
+  MidriseApartment Apartment Occ Default Schedule, !- Sunday Schedule:Day Name
+  MidriseApartment Apartment Occ Default Schedule, !- Monday Schedule:Day Name
+  MidriseApartment Apartment Occ Default Schedule, !- Tuesday Schedule:Day Name
+  MidriseApartment Apartment Occ Default Schedule, !- Wednesday Schedule:Day Name
+  MidriseApartment Apartment Occ Default Schedule, !- Thursday Schedule:Day Name
+  MidriseApartment Apartment Occ Default Schedule, !- Friday Schedule:Day Name
+  MidriseApartment Apartment Occ Default Schedule, !- Saturday Schedule:Day Name
+  MidriseApartment Apartment Occ Default Schedule, !- Holiday Schedule:Day Name
+  MidriseApartment Apartment Occ Summer Design Day, !- SummerDesignDay Schedule:Day Name
+  MidriseApartment Apartment Occ Winter Design Day, !- WinterDesignDay Schedule:Day Name
+  MidriseApartment Apartment Occ Default Schedule, !- CustomDay1 Schedule:Day Name
+  MidriseApartment Apartment Occ Default Schedule; !- CustomDay2 Schedule:Day Name
+
+Schedule:Week:Daily,
+  Schedule:Week:Daily {9c0406d9-e4d3-4426-bf7f-223e9201c084}, !- Name
+  MidriseApartment Apartment Light Default Schedule, !- Sunday Schedule:Day Name
+  MidriseApartment Apartment Light Default Schedule, !- Monday Schedule:Day Name
+  MidriseApartment Apartment Light Default Schedule, !- Tuesday Schedule:Day Name
+  MidriseApartment Apartment Light Default Schedule, !- Wednesday Schedule:Day Name
+  MidriseApartment Apartment Light Default Schedule, !- Thursday Schedule:Day Name
+  MidriseApartment Apartment Light Default Schedule, !- Friday Schedule:Day Name
+  MidriseApartment Apartment Light Default Schedule, !- Saturday Schedule:Day Name
+  MidriseApartment Apartment Light Default Schedule, !- Holiday Schedule:Day Name
+  MidriseApartment Apartment Light Summer Design Day, !- SummerDesignDay Schedule:Day Name
+  MidriseApartment Apartment Light Winter Design Day, !- WinterDesignDay Schedule:Day Name
+  MidriseApartment Apartment Light Default Schedule, !- CustomDay1 Schedule:Day Name
+  MidriseApartment Apartment Light Default Schedule; !- CustomDay2 Schedule:Day Name
+
+Schedule:Week:Daily,
+  Schedule:Week:Daily {fdb76ec8-7c93-4e32-825e-2e157afa2a94}, !- Name
+  MidriseApartment Activity Default Schedule, !- Sunday Schedule:Day Name
+  MidriseApartment Activity Default Schedule, !- Monday Schedule:Day Name
+  MidriseApartment Activity Default Schedule, !- Tuesday Schedule:Day Name
+  MidriseApartment Activity Default Schedule, !- Wednesday Schedule:Day Name
+  MidriseApartment Activity Default Schedule, !- Thursday Schedule:Day Name
+  MidriseApartment Activity Default Schedule, !- Friday Schedule:Day Name
+  MidriseApartment Activity Default Schedule, !- Saturday Schedule:Day Name
+  MidriseApartment Activity Default Schedule, !- Holiday Schedule:Day Name
+  MidriseApartment Activity Summer Design Day, !- SummerDesignDay Schedule:Day Name
+  MidriseApartment Activity Winter Design Day, !- WinterDesignDay Schedule:Day Name
+  MidriseApartment Activity Default Schedule, !- CustomDay1 Schedule:Day Name
+  MidriseApartment Activity Default Schedule; !- CustomDay2 Schedule:Day Name
+
+Schedule:Year,
+  MidriseApartment Activity,              !- Name
+  Schedule Type Limits 2,                 !- Schedule Type Limits Name
+  Schedule:Week:Daily {fdb76ec8-7c93-4e32-825e-2e157afa2a94}, !- Schedule:Week Name 1
+  1,                                      !- Start Month 1
+  1,                                      !- Start Day 1
+  12,                                     !- End Month 1
+  31;                                     !- End Day 1
+
+Schedule:Year,
+  MidriseApartment Apartment Equip,       !- Name
+  Schedule Type Limits 1,                 !- Schedule Type Limits Name
+  Schedule:Week:Daily {209dd2e3-012e-4d8d-9bec-2729f2339963}, !- Schedule:Week Name 1
+  1,                                      !- Start Month 1
+  1,                                      !- Start Day 1
+  12,                                     !- End Month 1
+  31;                                     !- End Day 1
+
+Schedule:Year,
+  MidriseApartment Apartment Light,       !- Name
+  Schedule Type Limits 1,                 !- Schedule Type Limits Name
+  Schedule:Week:Daily {9c0406d9-e4d3-4426-bf7f-223e9201c084}, !- Schedule:Week Name 1
+  1,                                      !- Start Month 1
+  1,                                      !- Start Day 1
+  12,                                     !- End Month 1
+  31;                                     !- End Day 1
+
+Schedule:Year,
+  MidriseApartment Apartment Occ,         !- Name
+  Schedule Type Limits 1,                 !- Schedule Type Limits Name
+  Schedule:Week:Daily {4e5573de-4297-45a0-9d21-9559a796cc95}, !- Schedule:Week Name 1
+  1,                                      !- Start Month 1
+  1,                                      !- Start Day 1
+  12,                                     !- End Month 1
+  31;                                     !- End Day 1
+
+Schedule:Year,
+  MidriseApartment Infil,                 !- Name
+  Schedule Type Limits 1,                 !- Schedule Type Limits Name
+  Schedule:Week:Daily {1b2951d3-8a6d-40b0-a578-f54d283818bd}, !- Schedule:Week Name 1
+  1,                                      !- Start Month 1
+  1,                                      !- Start Day 1
+  12,                                     !- End Month 1
+  31;                                     !- End Day 1
+
+Schedule:Constant,
+  Always On Discrete,                     !- Name
+  ,                                       !- Schedule Type Limits Name
+  1;                                      !- Hourly Value
+
+Schedule:Constant,
+  Always Off Discrete,                    !- Name
+  ,                                       !- Schedule Type Limits Name
+  0;                                      !- Hourly Value
+
+Schedule:Constant,
+  Always On Continuous,                   !- Name
+  ,                                       !- Schedule Type Limits Name
+  1;                                      !- Hourly Value
+
+OutdoorAir:Node,
+  Model Outdoor Air Node;                 !- Name
+
+Site:Location,
+  Zürich	-,                              !- Name
+  47.37,                                  !- Latitude {deg}
+  8.539,                                  !- Longitude {deg}
+  1,                                      !- Time Zone {hr}
+  413;                                    !- Elevation {m}
+
+SizingPeriod:DesignDay,
+  Ann Clg .4% Condns DB=>MWB,             !- Name
+  7,                                      !- Month
+  21,                                     !- Day of Month
+  SummerDesignDay,                        !- Day Type
+  28.3,                                   !- Maximum Dry-Bulb Temperature {C}
+  9.59,                                   !- Daily Dry-Bulb Temperature Range {deltaC}
+  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
+  ,                                       !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  Wetbulb,                                !- Humidity Condition Type
+  19.911,                                 !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                                       !- Humidity Condition Day Schedule Name
+  ,                                       !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                                       !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                                       !- Daily Wet-Bulb Temperature Range {deltaC}
+  96591,                                  !- Barometric Pressure {Pa}
+  3.7,                                    !- Wind Speed {m/s}
+  191,                                    !- Wind Direction {deg}
+  No,                                     !- Rain Indicator
+  No,                                     !- Snow Indicator
+  No,                                     !- Daylight Saving Time Indicator
+  ASHRAEClearSky,                         !- Solar Model Indicator
+  ,                                       !- Beam Solar Day Schedule Name
+  ,                                       !- Diffuse Solar Day Schedule Name
+  ,                                       !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+  ,                                       !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+  1.2;                                    !- Sky Clearness
+
+SizingPeriod:DesignDay,
+  Ann Clg .4% Condns DP=>MDB,             !- Name
+  7,                                      !- Month
+  21,                                     !- Day of Month
+  SummerDesignDay,                        !- Day Type
+  23.8,                                   !- Maximum Dry-Bulb Temperature {C}
+  9.59,                                   !- Daily Dry-Bulb Temperature Range {deltaC}
+  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
+  ,                                       !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  Dewpoint,                               !- Humidity Condition Type
+  20.1,                                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                                       !- Humidity Condition Day Schedule Name
+  ,                                       !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                                       !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                                       !- Daily Wet-Bulb Temperature Range {deltaC}
+  96591,                                  !- Barometric Pressure {Pa}
+  3.7,                                    !- Wind Speed {m/s}
+  191,                                    !- Wind Direction {deg}
+  No,                                     !- Rain Indicator
+  No,                                     !- Snow Indicator
+  No,                                     !- Daylight Saving Time Indicator
+  ASHRAEClearSky,                         !- Solar Model Indicator
+  ,                                       !- Beam Solar Day Schedule Name
+  ,                                       !- Diffuse Solar Day Schedule Name
+  ,                                       !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+  ,                                       !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+  1.2;                                    !- Sky Clearness
+
+SizingPeriod:DesignDay,
+  Ann Clg .4% Condns Enth=>MDB,           !- Name
+  7,                                      !- Month
+  21,                                     !- Day of Month
+  SummerDesignDay,                        !- Day Type
+  26.9,                                   !- Maximum Dry-Bulb Temperature {C}
+  9.59,                                   !- Daily Dry-Bulb Temperature Range {deltaC}
+  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
+  ,                                       !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  Enthalpy,                               !- Humidity Condition Type
+  ,                                       !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                                       !- Humidity Condition Day Schedule Name
+  ,                                       !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  63179,                                  !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                                       !- Daily Wet-Bulb Temperature Range {deltaC}
+  96591,                                  !- Barometric Pressure {Pa}
+  3.7,                                    !- Wind Speed {m/s}
+  191,                                    !- Wind Direction {deg}
+  No,                                     !- Rain Indicator
+  No,                                     !- Snow Indicator
+  No,                                     !- Daylight Saving Time Indicator
+  ASHRAEClearSky,                         !- Solar Model Indicator
+  ,                                       !- Beam Solar Day Schedule Name
+  ,                                       !- Diffuse Solar Day Schedule Name
+  ,                                       !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+  ,                                       !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+  1.2;                                    !- Sky Clearness
+
+SizingPeriod:DesignDay,
+  Ann Clg .4% Condns WB=>MDB,             !- Name
+  7,                                      !- Month
+  21,                                     !- Day of Month
+  SummerDesignDay,                        !- Day Type
+  24.1,                                   !- Maximum Dry-Bulb Temperature {C}
+  9.59,                                   !- Daily Dry-Bulb Temperature Range {deltaC}
+  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
+  ,                                       !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  Wetbulb,                                !- Humidity Condition Type
+  21.271,                                 !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                                       !- Humidity Condition Day Schedule Name
+  ,                                       !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                                       !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                                       !- Daily Wet-Bulb Temperature Range {deltaC}
+  96591,                                  !- Barometric Pressure {Pa}
+  3.7,                                    !- Wind Speed {m/s}
+  191,                                    !- Wind Direction {deg}
+  No,                                     !- Rain Indicator
+  No,                                     !- Snow Indicator
+  No,                                     !- Daylight Saving Time Indicator
+  ASHRAEClearSky,                         !- Solar Model Indicator
+  ,                                       !- Beam Solar Day Schedule Name
+  ,                                       !- Diffuse Solar Day Schedule Name
+  ,                                       !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+  ,                                       !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+  1.2;                                    !- Sky Clearness
+
+SizingPeriod:DesignDay,
+  Ann Htg 99.6% Condns DB,                !- Name
+  1,                                      !- Month
+  21,                                     !- Day of Month
+  WinterDesignDay,                        !- Day Type
+  -6.2,                                   !- Maximum Dry-Bulb Temperature {C}
+  0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
+  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
+  ,                                       !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  Wetbulb,                                !- Humidity Condition Type
+  -6.2,                                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                                       !- Humidity Condition Day Schedule Name
+  ,                                       !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                                       !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                                       !- Daily Wet-Bulb Temperature Range {deltaC}
+  96591,                                  !- Barometric Pressure {Pa}
+  3.5,                                    !- Wind Speed {m/s}
+  203,                                    !- Wind Direction {deg}
+  No,                                     !- Rain Indicator
+  No,                                     !- Snow Indicator
+  No,                                     !- Daylight Saving Time Indicator
+  ASHRAEClearSky,                         !- Solar Model Indicator
+  ,                                       !- Beam Solar Day Schedule Name
+  ,                                       !- Diffuse Solar Day Schedule Name
+  ,                                       !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+  ,                                       !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+  0;                                      !- Sky Clearness
+
+SizingPeriod:DesignDay,
+  Ann Htg Wind 99.6% Condns WS=>MCDB,     !- Name
+  1,                                      !- Month
+  21,                                     !- Day of Month
+  WinterDesignDay,                        !- Day Type
+  2,                                      !- Maximum Dry-Bulb Temperature {C}
+  0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
+  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
+  ,                                       !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  Wetbulb,                                !- Humidity Condition Type
+  2,                                      !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                                       !- Humidity Condition Day Schedule Name
+  ,                                       !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                                       !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                                       !- Daily Wet-Bulb Temperature Range {deltaC}
+  96591,                                  !- Barometric Pressure {Pa}
+  11.1,                                   !- Wind Speed {m/s}
+  203,                                    !- Wind Direction {deg}
+  No,                                     !- Rain Indicator
+  No,                                     !- Snow Indicator
+  No,                                     !- Daylight Saving Time Indicator
+  ASHRAEClearSky,                         !- Solar Model Indicator
+  ,                                       !- Beam Solar Day Schedule Name
+  ,                                       !- Diffuse Solar Day Schedule Name
+  ,                                       !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+  ,                                       !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+  0;                                      !- Sky Clearness
+
+SizingPeriod:DesignDay,
+  Ann Hum_n 99.6% Condns DP=>MCDB,        !- Name
+  1,                                      !- Month
+  21,                                     !- Day of Month
+  WinterDesignDay,                        !- Day Type
+  -6.6,                                   !- Maximum Dry-Bulb Temperature {C}
+  0,                                      !- Daily Dry-Bulb Temperature Range {deltaC}
+  DefaultMultipliers,                     !- Dry-Bulb Temperature Range Modifier Type
+  ,                                       !- Dry-Bulb Temperature Range Modifier Day Schedule Name
+  Dewpoint,                               !- Humidity Condition Type
+  -9.1,                                   !- Wetbulb or DewPoint at Maximum Dry-Bulb {C}
+  ,                                       !- Humidity Condition Day Schedule Name
+  ,                                       !- Humidity Ratio at Maximum Dry-Bulb {kgWater/kgDryAir}
+  ,                                       !- Enthalpy at Maximum Dry-Bulb {J/kg}
+  ,                                       !- Daily Wet-Bulb Temperature Range {deltaC}
+  96591,                                  !- Barometric Pressure {Pa}
+  3.5,                                    !- Wind Speed {m/s}
+  203,                                    !- Wind Direction {deg}
+  No,                                     !- Rain Indicator
+  No,                                     !- Snow Indicator
+  No,                                     !- Daylight Saving Time Indicator
+  ASHRAEClearSky,                         !- Solar Model Indicator
+  ,                                       !- Beam Solar Day Schedule Name
+  ,                                       !- Diffuse Solar Day Schedule Name
+  ,                                       !- ASHRAE Clear Sky Optical Depth for Beam Irradiance (taub) {dimensionless}
+  ,                                       !- ASHRAE Clear Sky Optical Depth for Diffuse Irradiance (taud) {dimensionless}
+  0;                                      !- Sky Clearness
+
+ZoneList,
+  MidriseApartment:Apartment:zone_0,      !- Name
+  zone_0;                                 !- Zone Name 1
+
+Lights,
+  MidriseApartment:Apartment:zone_0_LightsObject, !- Name
+  MidriseApartment:Apartment:zone_0,      !- Zone or ZoneList Name
+  MidriseApartment Apartment Light,       !- Schedule Name
+  Watts/Area,                             !- Design Level Calculation Method
+  ,                                       !- Lighting Level {W}
+  11.8403571,                             !- Watts per Zone Floor Area {W/m2}
+  ,                                       !- Watts per Person {W/person}
+  ,                                       !- Return Air Fraction
+  ,                                       !- Fraction Radiant
+  ,                                       !- Fraction Visible
+  1,                                      !- Fraction Replaceable
+  General;                                !- End-Use Subcategory
+
+People,
+  MidriseApartment:Apartment:zone_0_PeopleObject, !- Name
+  MidriseApartment:Apartment:zone_0,      !- Zone or ZoneList Name
+  MidriseApartment Apartment Occ,         !- Number of People Schedule Name
+  People/Area,                            !- Number of People Calculation Method
+  ,                                       !- Number of People
+  0.025,                                  !- People per Zone Floor Area {person/m2}
+  ,                                       !- Zone Floor Area per Person {m2/person}
+  0.3,                                    !- Fraction Radiant
+  ,                                       !- Sensible Heat Fraction
+  MidriseApartment Activity;              !- Activity Level Schedule Name
+
+ElectricEquipment,
+  zone_0_ElectricEquipmentObject,         !- Name
+  MidriseApartment:Apartment:zone_0,      !- Zone or ZoneList Name
+  MidriseApartment Apartment Equip,       !- Schedule Name
+  Watts/Area,                             !- Design Level Calculation Method
+  ,                                       !- Design Level {W}
+  28,                                     !- Watts per Zone Floor Area {W/m2}
+  ,                                       !- Watts per Person {W/person}
+  ,                                       !- Fraction Latent
+  ,                                       !- Fraction Radiant
+  ,                                       !- Fraction Lost
+  ElectricEquipment;                      !- End-Use Subcategory
+
+ZoneInfiltration:DesignFlowRate,
+  Space Infiltration Design Flow Rate 1,  !- Name
+  MidriseApartment:Apartment:zone_0,      !- Zone or ZoneList Name
+  MidriseApartment Infil,                 !- Schedule Name
+  Flow/Area,                              !- Design Flow Rate Calculation Method
+  ,                                       !- Design Flow Rate {m3/s}
+  0.001,                                  !- Flow per Zone Floor Area {m3/s-m2}
+  ,                                       !- Flow per Exterior Surface Area {m3/s-m2}
+  ,                                       !- Air Changes per Hour {1/hr}
+  ,                                       !- Constant Term Coefficient
+  ,                                       !- Temperature Term Coefficient
+  ,                                       !- Velocity Term Coefficient
+  ;                                       !- Velocity Squared Term Coefficient
+
+Output:Variable,
+  *,                                      !- Key Value
+  Zone Ideal Loads Supply Air Total Cooling Energy, !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Fan Electric Energy,                    !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Zone Ventilation Fan Electric Energy,   !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Zone Lights Electric Energy,            !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Zone Electric Equipment Electric Energy, !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Earth Tube Fan Electric Energy,         !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Pump Electric Energy,                   !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Zone VRF Air Terminal Cooling Electric Energy, !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Zone VRF Air Terminal Heating Electric Energy, !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  VRF Heat Pump Cooling Electric Energy,  !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  VRF Heat Pump Heating Electric Energy,  !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Zone Ideal Loads Supply Air Total Heating Energy, !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Chiller Heater System Cooling Electric Energy, !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Chiller Heater System Heating Electric Energy, !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Zone Windows Total Transmitted Solar Radiation Energy, !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Zone Ventilation Sensible Heat Loss Energy, !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Zone Ventilation Sensible Heat Gain Energy, !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Zone People Total Heating Energy,       !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Zone Ideal Loads Zone Total Heating Energy, !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Zone Ideal Loads Zone Total Cooling Energy, !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Zone Infiltration Total Heat Loss Energy, !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Zone Infiltration Total Heat Gain Energy, !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Cooling Coil Electric Energy,           !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Surface Average Face Conduction Heat Transfer Energy, !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Surface Window Heat Loss Energy,        !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Surface Window Heat Gain Energy,        !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Chiller Electric Energy,                !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Boiler Gas Energy,                      !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Heating Coil Total Heating Energy,      !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Heating Coil Gas Energy,                !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Heating Coil Electric Energy,           !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Variable,
+  *,                                      !- Key Value
+  Humidifier Electric Energy,             !- Variable Name
+  hourly;                                 !- Reporting Frequency
+
+Output:Table:SummaryReports,
+  AllSummary;                             !- Report Name 1
+
+Output:VariableDictionary,
+  IDF,                                    !- Key Field
+  Unsorted;                               !- Sort Option
+
+Output:SQLite,
+  SimpleAndTabular;                       !- Option Type
+
+LifeCycleCost:NonrecurringCost,
+  Default Cost,                           !- Name
+  Construction,                           !- Category
+  0,                                      !- Cost
+  ServicePeriod;                          !- Start of Costs
+
+OutputControl:Table:Style,
+  CommaAndHTML;                           !- Column Separator
+
+
+Output:Surfaces:List,
+	Details;                 !- Report Type
