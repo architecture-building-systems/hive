@@ -198,14 +198,15 @@
             // 
             this.txtSpecificEmbodiedEmissions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSpecificEmbodiedEmissions.Enabled = false;
+            this.txtSpecificEmbodiedEmissions.Enabled = true;
             this.txtSpecificEmbodiedEmissions.Location = new System.Drawing.Point(198, 65);
             this.txtSpecificEmbodiedEmissions.Margin = new System.Windows.Forms.Padding(2, 5, 2, 5);
             this.txtSpecificEmbodiedEmissions.Name = "txtSpecificEmbodiedEmissions";
-            this.txtSpecificEmbodiedEmissions.ReadOnly = true;
+            this.txtSpecificEmbodiedEmissions.ReadOnly = false;
             this.txtSpecificEmbodiedEmissions.Size = new System.Drawing.Size(31, 22);
             this.txtSpecificEmbodiedEmissions.TabIndex = 7;
             this.txtSpecificEmbodiedEmissions.Tag = "SpecificEmbodiedEmissions";
+            this.txtSpecificEmbodiedEmissions.Validating += new System.ComponentModel.CancelEventHandler(this.Validating);
             // 
             // txtEmbodiedEmissions
             // 
@@ -361,14 +362,15 @@
             // 
             this.txtSpecificCapitalCost.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSpecificCapitalCost.Enabled = false;
+            this.txtSpecificCapitalCost.Enabled = true;
             this.txtSpecificCapitalCost.Location = new System.Drawing.Point(148, 37);
             this.txtSpecificCapitalCost.Margin = new System.Windows.Forms.Padding(2, 5, 2, 5);
             this.txtSpecificCapitalCost.Name = "txtSpecificCapitalCost";
-            this.txtSpecificCapitalCost.ReadOnly = true;
+            this.txtSpecificCapitalCost.ReadOnly = false;
             this.txtSpecificCapitalCost.Size = new System.Drawing.Size(96, 22);
             this.txtSpecificCapitalCost.TabIndex = 7;
             this.txtSpecificCapitalCost.Tag = "SpecificCapitalCost";
+            this.txtSpecificCapitalCost.Validating += new System.ComponentModel.CancelEventHandler(this.Validating);
             // 
             // txtCapitalCost
             // 
