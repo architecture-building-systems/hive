@@ -144,7 +144,7 @@
             this.txtEfficiency.Location = new System.Drawing.Point(198, 33);
             this.txtEfficiency.Margin = new System.Windows.Forms.Padding(2, 5, 2, 5);
             this.txtEfficiency.Name = "txtEfficiency";
-            this.txtEfficiency.ReadOnly = true;
+            this.txtEfficiency.ReadOnly = false;
             this.txtEfficiency.Size = new System.Drawing.Size(31, 22);
             this.txtEfficiency.TabIndex = 2;
             this.txtEfficiency.Tag = "Efficiency";
