@@ -140,7 +140,7 @@
             // 
             this.txtEfficiency.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtEfficiency.Enabled = false;
+            this.txtEfficiency.Enabled = true;
             this.txtEfficiency.Location = new System.Drawing.Point(198, 33);
             this.txtEfficiency.Margin = new System.Windows.Forms.Padding(2, 5, 2, 5);
             this.txtEfficiency.Name = "txtEfficiency";
@@ -148,6 +148,7 @@
             this.txtEfficiency.Size = new System.Drawing.Size(31, 22);
             this.txtEfficiency.TabIndex = 2;
             this.txtEfficiency.Tag = "Efficiency";
+            this.txtEfficiency.Validating += new System.ComponentModel.CancelEventHandler(this.Validating);
             // 
             // label3
             // 
