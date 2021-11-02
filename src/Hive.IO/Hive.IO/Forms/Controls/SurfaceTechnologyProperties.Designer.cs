@@ -411,7 +411,7 @@
             this.lstAvailableSurfaces.Location = new System.Drawing.Point(2, 2);
             this.lstAvailableSurfaces.Margin = new System.Windows.Forms.Padding(2);
             this.lstAvailableSurfaces.Name = "lstAvailableSurfaces";
-            this.lstAvailableSurfaces.SelectionMode = System.Windows.Forms.SelectionMode.MultiSimple;
+            this.lstAvailableSurfaces.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
             this.lstAvailableSurfaces.Size = new System.Drawing.Size(350, 134);
             this.lstAvailableSurfaces.TabIndex = 0;
             this.lstAvailableSurfaces.Tag = "AvailableSurfaces";
