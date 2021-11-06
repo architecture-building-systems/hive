@@ -287,7 +287,8 @@ namespace Hive.IO.Forms
                 : _normalFontWeight;
         }
 
-        public Brush EfficiencyBrush => CompareBrush(_efficiency, Defaults[Name].Efficiency);
+        public Brush EfficiencyBrush => CompareBrush(_efficiency, 
+            IsSurfaceTech ? ModuleType.ElectricEfficiency : Defaults[Name].Efficiency);
         public Brush CapacityBrush => CompareBrush(_capacity, Defaults[Name].Capacity);
 
         public Brush SpecificCapitalCostBrush => CompareBrush(_specificCapitalCost,
@@ -323,7 +324,8 @@ namespace Hive.IO.Forms
         public FontWeight DistributionLossesFontWeight =>
             CompareFontWeight(_distributionLosses, Defaults[Name].DistributionLosses);
 
-        public FontWeight EfficiencyFontWeight => CompareFontWeight(_efficiency, Defaults[Name].Efficiency);
+        public FontWeight EfficiencyFontWeight => CompareFontWeight(_efficiency, 
+            IsSurfaceTech? ModuleType.ElectricEfficiency : Defaults[Name].Efficiency);
 
         #endregion
 
