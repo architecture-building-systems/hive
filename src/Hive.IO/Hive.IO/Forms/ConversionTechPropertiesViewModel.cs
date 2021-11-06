@@ -202,6 +202,10 @@ namespace Hive.IO.Forms
 
         public bool IsSurfaceTech => Name == "Photovoltaic (PV)" || Name == "Solar Thermal (ST)";
 
+        public bool IsPV => Name == "Photovoltaic (PV)";
+
+        public bool IsST => Name == "Solar Thermal (ST)";
+
         private static Dictionary<string, List<ModuleTypeRecord>> ModuleTypesCatalog =>
             JsonResource.ReadRecords(ModuleTypeRecord.ResourceName, ref _moduleTypesCatalog);
 
@@ -288,7 +292,7 @@ namespace Hive.IO.Forms
         }
 
         public Brush EfficiencyBrush => CompareBrush(_efficiency, 
-            IsSurfaceTech ? ModuleType.ElectricEfficiency : Defaults[Name].Efficiency);
+           IsST ? ModuleType.ThermalEfficiency : IsPV ? ModuleType.ElectricEfficiency : Defaults[Name].Efficiency);
         public Brush CapacityBrush => CompareBrush(_capacity, Defaults[Name].Capacity);
 
         public Brush SpecificCapitalCostBrush => CompareBrush(_specificCapitalCost,
@@ -324,8 +328,8 @@ namespace Hive.IO.Forms
         public FontWeight DistributionLossesFontWeight =>
             CompareFontWeight(_distributionLosses, Defaults[Name].DistributionLosses);
 
-        public FontWeight EfficiencyFontWeight => CompareFontWeight(_efficiency, 
-            IsSurfaceTech? ModuleType.ElectricEfficiency : Defaults[Name].Efficiency);
+        public FontWeight EfficiencyFontWeight => CompareFontWeight(_efficiency,
+            IsST ? ModuleType.ThermalEfficiency : IsPV ? ModuleType.ElectricEfficiency : Defaults[Name].Efficiency);
 
         #endregion
 
