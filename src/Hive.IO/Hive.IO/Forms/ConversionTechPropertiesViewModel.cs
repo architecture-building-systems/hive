@@ -281,14 +281,12 @@ namespace Hive.IO.Forms
 
         private Brush CompareBrush(double a, double b)
         {
-            return ConversionTech == null ? AreEqual(a, b) ? _normalBrush : _modifiedBrush : _normalBrush;
+            return ConversionTech == null ? AreEqual(Math.Round(a, 2), Math.Round(b, 2)) ? _normalBrush : _modifiedBrush : _normalBrush;
         }
 
         private FontWeight CompareFontWeight(double a, double b)
         {
-            return ConversionTech == null
-                ? AreEqual(a, b) ? _normalFontWeight : _modifiedFontWeight
-                : _normalFontWeight;
+            return ConversionTech == null  ? AreEqual(Math.Round(a, 2), Math.Round(b,2)) ? _normalFontWeight : _modifiedFontWeight : _normalFontWeight;
         }
 
         public Brush EfficiencyBrush => CompareBrush(_efficiency, 
