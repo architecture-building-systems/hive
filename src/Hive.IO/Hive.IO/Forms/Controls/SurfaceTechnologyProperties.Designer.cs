@@ -312,7 +312,7 @@
             this.txtCapacity.ReadOnly = true;
             this.txtCapacity.Size = new System.Drawing.Size(96, 22);
             this.txtCapacity.TabIndex = 2;
-            this.txtCapacity.Tag = "Capacity";
+            this.txtCapacity.Tag = "SurfaceTechCapacity";
             // 
             // label9
             // 

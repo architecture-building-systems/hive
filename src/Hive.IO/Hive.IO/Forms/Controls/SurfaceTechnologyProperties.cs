@@ -23,10 +23,10 @@ namespace Hive.IO.Forms.Controls
                 base.Conversion = value;
                 lblDescription.Text = Conversion.ModuleType.Description;
                 technologyImage.Image = Conversion.TechnologyImage;
+
                 UpdateAvailableSurfaces();
                 UpdateModuleTypesList();
-                UpdateArea();
-                UpdateCapacity();
+                UpdateCalculatedFields();
             }
         }
 
@@ -39,6 +39,8 @@ namespace Hive.IO.Forms.Controls
         private new void Validating(object sender, CancelEventArgs e)
         {
             TextBox_Validating(sender, e);
+
+            UpdateCalculatedFields();
         }
 
         private void UpdateAvailableSurfaces()
@@ -100,18 +102,15 @@ namespace Hive.IO.Forms.Controls
             }
 
             Conversion.SelectedSurfaces = new List<SurfaceViewModel>(lstAvailableSurfaces.SelectedItems.Cast<SurfaceViewModel>());
-            UpdateArea();
-            UpdateCapacity();
+            UpdateCalculatedFields();
         }
 
-        private void UpdateArea()
-        {
-            txtArea.Text = $"{Conversion.Area:0.00}";
-        }
-
-        private void UpdateCapacity()
+        private void UpdateCalculatedFields()
         {
             txtCapacity.Text = $"{Conversion.SurfaceTechCapacity:0.00}";
+            txtEmbodiedEmissions.Text = $"{Conversion.EmbodiedEmissions:0.0}";
+            txtCapitalCost.Text = $"{Conversion.CapitalCost:0.00}";
+            txtArea.Text = $"{Conversion.Area:0.00}";
         }
     }
 }
