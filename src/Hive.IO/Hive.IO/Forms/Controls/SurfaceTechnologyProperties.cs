@@ -26,6 +26,7 @@ namespace Hive.IO.Forms.Controls
                 UpdateAvailableSurfaces();
                 UpdateModuleTypesList();
                 UpdateArea();
+                UpdateCapacity();
             }
         }
 
@@ -100,11 +101,17 @@ namespace Hive.IO.Forms.Controls
 
             Conversion.SelectedSurfaces = new List<SurfaceViewModel>(lstAvailableSurfaces.SelectedItems.Cast<SurfaceViewModel>());
             UpdateArea();
+            UpdateCapacity();
         }
 
         private void UpdateArea()
         {
             txtArea.Text = $"{Conversion.Area:0.00}";
+        }
+
+        private void UpdateCapacity()
+        {
+            txtCapacity.Text = $"{Conversion.SurfaceTechCapacity:0.00}";
         }
     }
 }
