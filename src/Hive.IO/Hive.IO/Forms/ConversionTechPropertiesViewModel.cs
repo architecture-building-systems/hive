@@ -202,6 +202,10 @@ namespace Hive.IO.Forms
 
         public bool IsSurfaceTech => Name == "Photovoltaic (PV)" || Name == "Solar Thermal (ST)";
 
+        public bool IsPV => Name == "Photovoltaic (PV)";
+
+        public bool IsST => Name == "Solar Thermal (ST)";
+
         private static Dictionary<string, List<ModuleTypeRecord>> ModuleTypesCatalog =>
             JsonResource.ReadRecords(ModuleTypeRecord.ResourceName, ref _moduleTypesCatalog);
 
@@ -277,17 +281,16 @@ namespace Hive.IO.Forms
 
         private Brush CompareBrush(double a, double b)
         {
-            return ConversionTech == null ? AreEqual(a, b) ? _normalBrush : _modifiedBrush : _normalBrush;
+            return ConversionTech == null ? AreEqual(Math.Round(a, 2), Math.Round(b, 2)) ? _normalBrush : _modifiedBrush : _normalBrush;
         }
 
         private FontWeight CompareFontWeight(double a, double b)
         {
-            return ConversionTech == null
-                ? AreEqual(a, b) ? _normalFontWeight : _modifiedFontWeight
-                : _normalFontWeight;
+            return ConversionTech == null  ? AreEqual(Math.Round(a, 2), Math.Round(b,2)) ? _normalFontWeight : _modifiedFontWeight : _normalFontWeight;
         }
 
-        public Brush EfficiencyBrush => CompareBrush(_efficiency, Defaults[Name].Efficiency);
+        public Brush EfficiencyBrush => CompareBrush(_efficiency, 
+           IsST ? ModuleType.ThermalEfficiency : IsPV ? ModuleType.ElectricEfficiency : Defaults[Name].Efficiency);
         public Brush CapacityBrush => CompareBrush(_capacity, Defaults[Name].Capacity);
 
         public Brush SpecificCapitalCostBrush => CompareBrush(_specificCapitalCost,
@@ -323,7 +326,8 @@ namespace Hive.IO.Forms
         public FontWeight DistributionLossesFontWeight =>
             CompareFontWeight(_distributionLosses, Defaults[Name].DistributionLosses);
 
-        public FontWeight EfficiencyFontWeight => CompareFontWeight(_efficiency, Defaults[Name].Efficiency);
+        public FontWeight EfficiencyFontWeight => CompareFontWeight(_efficiency,
+            IsST ? ModuleType.ThermalEfficiency : IsPV ? ModuleType.ElectricEfficiency : Defaults[Name].Efficiency);
 
         #endregion
 
