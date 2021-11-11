@@ -300,7 +300,7 @@
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(38, 17);
             this.label8.TabIndex = 1;
-            this.label8.Text = "(kW)";
+            this.label8.Text = "(kWp)";
             // 
             // txtCapacity
             // 
