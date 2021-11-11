@@ -192,13 +192,20 @@ namespace Hive.IO.Forms
             get { return SelectedSurfaces.Sum(sm => sm.Area); }
         }
 
-        public double EmbodiedEmissions =>
-            IsSurfaceTech ? _specificEmbodiedEmissions * Area : _specificEmbodiedEmissions * _capacity;
+        public string EmbodiedEmissions
+        {
+            get { return $"{(IsSurfaceTech ? _specificEmbodiedEmissions * Area : _specificEmbodiedEmissions * _capacity):0.00}"; }
+        }
 
-        public double CapitalCost =>
-            IsSurfaceTech ? _specificCapitalCost * Area : _specificCapitalCost * _capacity;
+        public string CapitalCost
+        {
+            get { return $"{(IsSurfaceTech ? _specificCapitalCost * Area : _specificCapitalCost * _capacity):0.00}"; }
+        }
 
-        public double SurfaceTechCapacity => _efficiency * Area;
+        public string SurfaceTechCapacity
+        {
+            get { return $"{(_efficiency * Area):0.00}"; }
+        }
 
         public bool IsSurfaceTech => Name == "Photovoltaic (PV)" || Name == "Solar Thermal (ST)";
 
