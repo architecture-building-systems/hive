@@ -105,6 +105,25 @@ namespace Hive.IO.Forms.Controls
             UpdateCalculatedFields();
         }
 
+        private void lstAvailableSurfaces_SelectAll(object sender, KeyEventArgs e)
+        {
+            if (_initializingControls)
+            {
+                return;
+            }
+
+            if (e.Control && e.KeyCode == Keys.A)
+            {
+                for (int i = 0; i < lstAvailableSurfaces.Items.Count; i++)
+                {
+                    lstAvailableSurfaces.SetSelected(i, true);
+                }
+
+                Conversion.SelectedSurfaces = new List<SurfaceViewModel>(lstAvailableSurfaces.SelectedItems.Cast<SurfaceViewModel>());
+                UpdateCalculatedFields();
+            }
+        }
+
         private void UpdateCalculatedFields()
         {
             txtCapacity.Text = $"{Conversion.SurfaceTechCapacity:0.00}";

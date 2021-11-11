@@ -170,7 +170,7 @@
             this.label4.Name = "label4";
             this.label4.Size = new System.Drawing.Size(82, 17);
             this.label4.TabIndex = 4;
-            this.label4.Text = "(kgCO₂/kW)";
+            this.label4.Text = "(kgCO₂/m^2)";
             // 
             // label5
             // 
@@ -334,7 +334,7 @@
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(69, 17);
             this.label10.TabIndex = 4;
-            this.label10.Text = "(CHF/kW)";
+            this.label10.Text = "(CHF/m^2)";
             // 
             // label11
             // 
@@ -420,6 +420,7 @@
             this.lstAvailableSurfaces.Tag = "AvailableSurfaces";
             this.lstAvailableSurfaces.ValueMember = "Name";
             this.lstAvailableSurfaces.SelectedIndexChanged += new System.EventHandler(this.lstAvailableSurfaces_SelectedIndexChanged);
+            this.lstAvailableSurfaces.KeyDown += lstAvailableSurfaces_SelectAll;
             // 
             // label13
             // 
