@@ -388,6 +388,7 @@ namespace Hive.IO.EnergySystems
             for (int t = 0; t < horizon; t++)
             {
                 double temp = solarCarrier.Energy[t] * this.SurfaceArea * this.RefEfficiencyHeating * this.R_V / 1000.0; // in kWh/m^2
+                temp = temp * this.PR * this.f_cover; //consider Performance Ratio and f_cover, default values are 1.0
                 availableEnergy[t] = double.IsNaN(temp) ? 0.0 : temp;
             }
 
@@ -441,6 +442,7 @@ namespace Hive.IO.EnergySystems
             {
                 double etaTemp = Math.Max(0, this.FRtauAlpha - ((this.FRUL * (inletTemperature[t] - ambientAirCarrier.Temperature[t])) / meanIrradiance[t]));
                 double temp = meanIrradiance[t] * etaTemp * this.SurfaceArea / 1000.0;
+                temp = temp * this.PR * this.f_cover; //consider Performance Ratio and f_cover, default values are 1.0
                 heatingEnergy[t] = (double.IsNaN(temp) || temp < 0.0) ? 0.0 : temp;
             }
 
