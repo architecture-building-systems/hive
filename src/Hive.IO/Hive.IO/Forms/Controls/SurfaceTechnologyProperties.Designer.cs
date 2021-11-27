@@ -31,12 +31,18 @@
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
-            this.label2 = new System.Windows.Forms.Label();
             this.txtEfficiency = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
             this.cboModuleType = new System.Windows.Forms.ComboBox();
             this.technologyImage = new System.Windows.Forms.PictureBox();
+            this.label5 = new System.Windows.Forms.Label();
+            this.txtPerformanceRatio = new System.Windows.Forms.TextBox();
+            this.label2 = new System.Windows.Forms.Label();
+            this.txtSurfaceTransmittance = new System.Windows.Forms.TextBox();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
+            this.label16 = new System.Windows.Forms.Label();
+            this.txtEmbodiedEmissions = new System.Windows.Forms.TextBox();
+            this.label4 = new System.Windows.Forms.Label();
             this.label15 = new System.Windows.Forms.Label();
             this.txtSpecificEmbodiedEmissions = new System.Windows.Forms.TextBox();
             this.label3 = new System.Windows.Forms.Label();
@@ -54,9 +60,6 @@
             this.label13 = new System.Windows.Forms.Label();
             this.txtArea = new System.Windows.Forms.TextBox();
             this.lblDescription = new System.Windows.Forms.Label();
-            this.label4 = new System.Windows.Forms.Label();
-            this.txtEmbodiedEmissions = new System.Windows.Forms.TextBox();
-            this.label16 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.technologyImage)).BeginInit();
@@ -85,20 +88,24 @@
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 3;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle());
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 25F));
             this.tableLayoutPanel2.Controls.Add(this.label1, 0, 1);
-            this.tableLayoutPanel2.Controls.Add(this.label2, 2, 1);
             this.tableLayoutPanel2.Controls.Add(this.txtEfficiency, 1, 1);
             this.tableLayoutPanel2.Controls.Add(this.label14, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.cboModuleType, 1, 0);
-            this.tableLayoutPanel2.Controls.Add(this.technologyImage, 0, 4);
+            this.tableLayoutPanel2.Controls.Add(this.technologyImage, 0, 5);
+            this.tableLayoutPanel2.Controls.Add(this.label5, 0, 2);
+            this.tableLayoutPanel2.Controls.Add(this.txtPerformanceRatio, 1, 2);
+            this.tableLayoutPanel2.Controls.Add(this.label2, 0, 4);
+            this.tableLayoutPanel2.Controls.Add(this.txtSurfaceTransmittance, 1, 4);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(505, 3);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(3, 3, 22, 3);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
-            this.tableLayoutPanel2.RowCount = 5;
+            this.tableLayoutPanel2.RowCount = 6;
+            this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -115,28 +122,18 @@
             this.label1.Location = new System.Drawing.Point(3, 47);
             this.label1.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(287, 25);
+            this.label1.Size = new System.Drawing.Size(430, 25);
             this.label1.TabIndex = 0;
             this.label1.Text = "Module Efficiency";
-            // 
-            // label2
-            // 
-            this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(429, 47);
-            this.label2.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
-            this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(45, 25);
-            this.label2.TabIndex = 1;
-            this.label2.Text = "(%)";
             // 
             // txtEfficiency
             // 
             this.txtEfficiency.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtEfficiency.Location = new System.Drawing.Point(296, 47);
+            this.txtEfficiency.Location = new System.Drawing.Point(439, 47);
             this.txtEfficiency.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.txtEfficiency.Name = "txtEfficiency";
-            this.txtEfficiency.Size = new System.Drawing.Size(127, 31);
+            this.txtEfficiency.Size = new System.Drawing.Size(35, 31);
             this.txtEfficiency.TabIndex = 2;
             this.txtEfficiency.Tag = "Efficiency";
             this.txtEfficiency.Validating += new System.ComponentModel.CancelEventHandler(this.Validating);
@@ -145,6 +142,7 @@
             // 
             this.label14.AutoSize = true;
             this.label14.Location = new System.Drawing.Point(3, 0);
+            this.label14.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(137, 25);
             this.label14.TabIndex = 9;
@@ -157,22 +155,67 @@
             this.tableLayoutPanel2.SetColumnSpan(this.cboModuleType, 2);
             this.cboModuleType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboModuleType.FormattingEnabled = true;
-            this.cboModuleType.Location = new System.Drawing.Point(296, 3);
+            this.cboModuleType.Location = new System.Drawing.Point(439, 3);
+            this.cboModuleType.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.cboModuleType.Name = "cboModuleType";
-            this.cboModuleType.Size = new System.Drawing.Size(178, 33);
+            this.cboModuleType.Size = new System.Drawing.Size(35, 33);
             this.cboModuleType.TabIndex = 10;
             this.cboModuleType.SelectedIndexChanged += new System.EventHandler(this.cboModuleType_SelectedIndexChanged);
             // 
             // technologyImage
             // 
             this.technologyImage.ImageLocation = "";
-            this.technologyImage.Location = new System.Drawing.Point(4, 91);
+            this.technologyImage.Location = new System.Drawing.Point(4, 165);
             this.technologyImage.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.technologyImage.Name = "technologyImage";
-            this.technologyImage.Size = new System.Drawing.Size(285, 239);
+            this.technologyImage.Size = new System.Drawing.Size(428, 359);
             this.technologyImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.technologyImage.TabIndex = 11;
             this.technologyImage.TabStop = false;
+            // 
+            // label5
+            // 
+            this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label5.AutoSize = true;
+            this.label5.Location = new System.Drawing.Point(3, 86);
+            this.label5.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
+            this.label5.Name = "label5";
+            this.label5.Size = new System.Drawing.Size(430, 25);
+            this.label5.TabIndex = 12;
+            this.label5.Text = "Performance ratio";
+            // 
+            // txtPerformanceRatio
+            // 
+            this.txtPerformanceRatio.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtPerformanceRatio.Location = new System.Drawing.Point(439, 89);
+            this.txtPerformanceRatio.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
+            this.txtPerformanceRatio.Name = "txtPerformanceRatio";
+            this.txtPerformanceRatio.Size = new System.Drawing.Size(35, 31);
+            this.txtPerformanceRatio.TabIndex = 13;
+            // 
+            // label2
+            // 
+            this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label2.AutoSize = true;
+            this.label2.Location = new System.Drawing.Point(3, 123);
+            this.label2.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
+            this.label2.Name = "label2";
+            this.label2.Size = new System.Drawing.Size(430, 25);
+            this.label2.TabIndex = 14;
+            this.label2.Text = "Surface Transmittance";
+            // 
+            // txtSurfaceTransmittance
+            // 
+            this.txtSurfaceTransmittance.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtSurfaceTransmittance.Location = new System.Drawing.Point(439, 126);
+            this.txtSurfaceTransmittance.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
+            this.txtSurfaceTransmittance.Name = "txtSurfaceTransmittance";
+            this.txtSurfaceTransmittance.Size = new System.Drawing.Size(35, 31);
+            this.txtSurfaceTransmittance.TabIndex = 15;
             // 
             // tableLayoutPanel3
             // 
@@ -199,7 +242,7 @@
             this.tableLayoutPanel3.Location = new System.Drawing.Point(1026, 3);
             this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(22, 3, 3, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 6;
+            this.tableLayoutPanel3.RowCount = 5;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -208,6 +251,40 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(477, 761);
             this.tableLayoutPanel3.TabIndex = 3;
+            // 
+            // label16
+            // 
+            this.label16.AutoSize = true;
+            this.label16.Location = new System.Drawing.Point(342, 196);
+            this.label16.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
+            this.label16.Name = "label16";
+            this.label16.Size = new System.Drawing.Size(87, 25);
+            this.label16.TabIndex = 14;
+            this.label16.Text = "(kgCO₂)";
+            // 
+            // txtEmbodiedEmissions
+            // 
+            this.txtEmbodiedEmissions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtEmbodiedEmissions.Location = new System.Drawing.Point(235, 196);
+            this.txtEmbodiedEmissions.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
+            this.txtEmbodiedEmissions.Name = "txtEmbodiedEmissions";
+            this.txtEmbodiedEmissions.ReadOnly = true;
+            this.txtEmbodiedEmissions.Size = new System.Drawing.Size(101, 31);
+            this.txtEmbodiedEmissions.TabIndex = 13;
+            this.txtEmbodiedEmissions.Tag = "EmbodiedEmissions";
+            // 
+            // label4
+            // 
+            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label4.AutoSize = true;
+            this.label4.Location = new System.Drawing.Point(3, 196);
+            this.label4.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
+            this.label4.Name = "label4";
+            this.label4.Size = new System.Drawing.Size(226, 25);
+            this.label4.TabIndex = 12;
+            this.label4.Text = "Embodied Emissions";
             // 
             // label15
             // 
@@ -412,40 +489,6 @@
             this.lblDescription.TabIndex = 3;
             this.lblDescription.Text = "lblDescription";
             // 
-            // label4
-            // 
-            this.label4.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.label4.AutoSize = true;
-            this.label4.Location = new System.Drawing.Point(3, 196);
-            this.label4.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
-            this.label4.Name = "label4";
-            this.label4.Size = new System.Drawing.Size(226, 25);
-            this.label4.TabIndex = 12;
-            this.label4.Text = "Embodied Emissions";
-            // 
-            // txtEmbodiedEmissions
-            // 
-            this.txtEmbodiedEmissions.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtEmbodiedEmissions.Location = new System.Drawing.Point(235, 196);
-            this.txtEmbodiedEmissions.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
-            this.txtEmbodiedEmissions.Name = "txtEmbodiedEmissions";
-            this.txtEmbodiedEmissions.ReadOnly = true;
-            this.txtEmbodiedEmissions.Size = new System.Drawing.Size(101, 31);
-            this.txtEmbodiedEmissions.TabIndex = 13;
-            this.txtEmbodiedEmissions.Tag = "EmbodiedEmissions";
-            // 
-            // label16
-            // 
-            this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(342, 196);
-            this.label16.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
-            this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(87, 25);
-            this.label16.TabIndex = 14;
-            this.label16.Text = "(kgCO₂)";
-            // 
             // SurfaceTechnologyProperties
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -480,7 +523,6 @@
         private System.Windows.Forms.TextBox txtCapitalCost;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
         private System.Windows.Forms.Label label1;
-        private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtEfficiency;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel4;
         private System.Windows.Forms.ListBox lstAvailableSurfaces;
@@ -496,5 +538,9 @@
         private System.Windows.Forms.Label label16;
         private System.Windows.Forms.Label label4;
         private System.Windows.Forms.TextBox txtEmbodiedEmissions;
+        private System.Windows.Forms.Label label5;
+        private System.Windows.Forms.TextBox txtPerformanceRatio;
+        private System.Windows.Forms.Label label2;
+        private System.Windows.Forms.TextBox txtSurfaceTransmittance;
     }
 }
