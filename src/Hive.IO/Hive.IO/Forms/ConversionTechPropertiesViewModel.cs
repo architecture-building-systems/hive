@@ -177,17 +177,19 @@ namespace Hive.IO.Forms
                     {
                         case "Photovoltaic (PV)":
                             _efficiency = _moduleType.ElectricEfficiency;
+                            _performanceRatio = 0.85;
+                            _surfaceTransmittance = 1.0;
                             break;
                         case "Solar Thermal (ST)":
                             _efficiency = _moduleType.ThermalEfficiency;
+                            _performanceRatio = 1.0;
+                            _surfaceTransmittance = 1.0;
                             break;
                     }
 
                     _specificCapitalCost = _moduleType.SpecificCapitalCost;
                     _specificEmbodiedEmissions = _moduleType.SpecificEmbodiedEmissions;
                     _lifetime = _moduleType.Lifetime;
-                    _performanceRatio = 0.85;
-                    _surfaceTransmittance = 1.0;
                 }
             }
         }
@@ -320,7 +322,7 @@ namespace Hive.IO.Forms
            IsST ? ModuleType.ThermalEfficiency : IsPV ? ModuleType.ElectricEfficiency : Defaults[Name].Efficiency);
 
         //TODO: Not nice with hardcoded values
-        public Brush PerformanceRatioBrush => CompareBrush(_performanceRatio, 0.85);
+        public Brush PerformanceRatioBrush => CompareBrush(_performanceRatio, IsPV ? 0.85 : 1);
 
         public Brush SurfaceTransmittanceBrush => CompareBrush(_surfaceTransmittance, 1.00);
 
@@ -342,7 +344,7 @@ namespace Hive.IO.Forms
         public FontWeight SpecificEfficiencyFontWeight => CompareFontWeight(_efficiency, Defaults[Name].Efficiency);
 
         //TODO: Not nice with hardcoded values
-        public FontWeight PerformanceRatioFontWeight => CompareFontWeight(_performanceRatio, 0.85);
+        public FontWeight PerformanceRatioFontWeight => CompareFontWeight(_performanceRatio, IsPV ? 0.85 : 1);
 
         public FontWeight SurfaceTransmittanceFontWeight => CompareFontWeight(_surfaceTransmittance, 1.00);
 

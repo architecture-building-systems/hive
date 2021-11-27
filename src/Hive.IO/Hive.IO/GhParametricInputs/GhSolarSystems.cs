@@ -81,10 +81,10 @@ namespace Hive.IO.GhParametricInputs
             DA.GetData(2, ref solarTech.Technology);
             DA.GetData(3, ref solarTech.ElectricEfficiency);
             DA.GetData(4, ref solarTech.ThermalEfficiency);
-            DA.GetData(5, ref solarTech.PerformanceRatio);
-            DA.GetData(6, ref solarTech.SurfaceTransmittance);
-            DA.GetData(7, ref solarTech.InvestmentCost);
-            DA.GetData(8, ref solarTech.EmbodiedEmissions);
+            DA.GetData(5, ref solarTech.InvestmentCost);
+            DA.GetData(6, ref solarTech.EmbodiedEmissions);
+            DA.GetData(7, ref solarTech.PerformanceRatio);
+            DA.GetData(8, ref solarTech.SurfaceTransmittance);
 
             var solarTechList = new List<SolarTechProperties>();
             foreach (var mesh in meshes)
