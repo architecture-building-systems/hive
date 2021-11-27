@@ -14,6 +14,12 @@ namespace Hive.IO.Forms
     [JsonObject(MemberSerialization.OptIn)]
     public class ConversionTechPropertiesViewModel : ViewModelBase
     {
+        private static double _performanceRatioDefaultPV = 0.85;
+
+        private static double _performanceRatioDefaultST = 1.0;
+
+        private static double _f_coverDefault = 1.0;
+
         private static Dictionary<string, ConversionTechDefaults> _defaults;  // JsonResource backing field
 
         private static Dictionary<string, List<ModuleTypeRecord>> _moduleTypesCatalog;  // JsonResource backing field
@@ -177,13 +183,13 @@ namespace Hive.IO.Forms
                     {
                         case "Photovoltaic (PV)":
                             _efficiency = _moduleType.ElectricEfficiency;
-                            _performanceRatio = 0.85;
-                            _surfaceTransmittance = 1.0;
+                            _performanceRatio = _performanceRatioDefaultPV;
+                            _surfaceTransmittance = _f_coverDefault;
                             break;
                         case "Solar Thermal (ST)":
                             _efficiency = _moduleType.ThermalEfficiency;
-                            _performanceRatio = 1.0;
-                            _surfaceTransmittance = 1.0;
+                            _performanceRatio = _performanceRatioDefaultST;
+                            _surfaceTransmittance = _f_coverDefault;
                             break;
                     }
 
@@ -322,9 +328,9 @@ namespace Hive.IO.Forms
            IsST ? ModuleType.ThermalEfficiency : IsPV ? ModuleType.ElectricEfficiency : Defaults[Name].Efficiency);
 
         //TODO: Not nice with hardcoded values
-        public Brush PerformanceRatioBrush => CompareBrush(_performanceRatio, IsPV ? 0.85 : 1);
+        public Brush PerformanceRatioBrush => CompareBrush(_performanceRatio, IsPV ? _performanceRatioDefaultPV : _performanceRatioDefaultST);
 
-        public Brush SurfaceTransmittanceBrush => CompareBrush(_surfaceTransmittance, 1.00);
+        public Brush SurfaceTransmittanceBrush => CompareBrush(_surfaceTransmittance, _f_coverDefault);
 
 
         public Brush CapacityBrush => CompareBrush(_capacity, Defaults[Name].Capacity);
