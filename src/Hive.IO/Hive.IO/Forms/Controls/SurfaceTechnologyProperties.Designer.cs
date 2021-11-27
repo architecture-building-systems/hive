@@ -119,10 +119,10 @@
             this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(3, 47);
+            this.label1.Location = new System.Drawing.Point(3, 57);
             this.label1.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(430, 25);
+            this.label1.Size = new System.Drawing.Size(232, 25);
             this.label1.TabIndex = 0;
             this.label1.Text = "Module Efficiency";
             // 
@@ -130,10 +130,10 @@
             // 
             this.txtEfficiency.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtEfficiency.Location = new System.Drawing.Point(439, 47);
+            this.txtEfficiency.Location = new System.Drawing.Point(241, 57);
             this.txtEfficiency.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.txtEfficiency.Name = "txtEfficiency";
-            this.txtEfficiency.Size = new System.Drawing.Size(35, 31);
+            this.txtEfficiency.Size = new System.Drawing.Size(113, 31);
             this.txtEfficiency.TabIndex = 2;
             this.txtEfficiency.Tag = "Efficiency";
             this.txtEfficiency.Validating += new System.ComponentModel.CancelEventHandler(this.Validating);
@@ -141,7 +141,7 @@
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(3, 0);
+            this.label14.Location = new System.Drawing.Point(3, 8);
             this.label14.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.label14.Name = "label14";
             this.label14.Size = new System.Drawing.Size(137, 25);
@@ -155,20 +155,20 @@
             this.tableLayoutPanel2.SetColumnSpan(this.cboModuleType, 2);
             this.cboModuleType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboModuleType.FormattingEnabled = true;
-            this.cboModuleType.Location = new System.Drawing.Point(439, 3);
+            this.cboModuleType.Location = new System.Drawing.Point(241, 8);
             this.cboModuleType.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.cboModuleType.Name = "cboModuleType";
-            this.cboModuleType.Size = new System.Drawing.Size(35, 33);
+            this.cboModuleType.Size = new System.Drawing.Size(233, 33);
             this.cboModuleType.TabIndex = 10;
             this.cboModuleType.SelectedIndexChanged += new System.EventHandler(this.cboModuleType_SelectedIndexChanged);
             // 
             // technologyImage
             // 
             this.technologyImage.ImageLocation = "";
-            this.technologyImage.Location = new System.Drawing.Point(4, 165);
+            this.technologyImage.Location = new System.Drawing.Point(4, 195);
             this.technologyImage.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.technologyImage.Name = "technologyImage";
-            this.technologyImage.Size = new System.Drawing.Size(428, 359);
+            this.technologyImage.Size = new System.Drawing.Size(230, 359);
             this.technologyImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.technologyImage.TabIndex = 11;
             this.technologyImage.TabStop = false;
@@ -178,10 +178,10 @@
             this.label5.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label5.AutoSize = true;
-            this.label5.Location = new System.Drawing.Point(3, 86);
+            this.label5.Location = new System.Drawing.Point(3, 104);
             this.label5.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(430, 25);
+            this.label5.Size = new System.Drawing.Size(232, 25);
             this.label5.TabIndex = 12;
             this.label5.Text = "Performance ratio";
             // 
@@ -189,21 +189,23 @@
             // 
             this.txtPerformanceRatio.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPerformanceRatio.Location = new System.Drawing.Point(439, 89);
+            this.txtPerformanceRatio.Location = new System.Drawing.Point(241, 104);
             this.txtPerformanceRatio.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.txtPerformanceRatio.Name = "txtPerformanceRatio";
-            this.txtPerformanceRatio.Size = new System.Drawing.Size(35, 31);
+            this.txtPerformanceRatio.Size = new System.Drawing.Size(113, 31);
             this.txtPerformanceRatio.TabIndex = 13;
+            this.txtPerformanceRatio.Tag = "PerformanceRatio";
+            this.txtPerformanceRatio.Validating += new System.ComponentModel.CancelEventHandler(this.Validating);
             // 
             // label2
             // 
             this.label2.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(3, 123);
+            this.label2.Location = new System.Drawing.Point(3, 151);
             this.label2.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(430, 25);
+            this.label2.Size = new System.Drawing.Size(232, 25);
             this.label2.TabIndex = 14;
             this.label2.Text = "Surface Transmittance";
             // 
@@ -211,11 +213,13 @@
             // 
             this.txtSurfaceTransmittance.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSurfaceTransmittance.Location = new System.Drawing.Point(439, 126);
+            this.txtSurfaceTransmittance.Location = new System.Drawing.Point(241, 151);
             this.txtSurfaceTransmittance.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.txtSurfaceTransmittance.Name = "txtSurfaceTransmittance";
-            this.txtSurfaceTransmittance.Size = new System.Drawing.Size(35, 31);
+            this.txtSurfaceTransmittance.Size = new System.Drawing.Size(113, 31);
             this.txtSurfaceTransmittance.TabIndex = 15;
+            this.txtSurfaceTransmittance.Tag = "SurfaceTransmittance";
+            this.txtSurfaceTransmittance.Validating += new System.ComponentModel.CancelEventHandler(this.Validating);
             // 
             // tableLayoutPanel3
             // 

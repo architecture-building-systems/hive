@@ -151,12 +151,19 @@ namespace Hive.IO.EnergySystems
         public double PR { get; set; }
 
         /// <summary>
+        /// Surface Transmittance [0.0, 1.0]
+        /// </summary>
+        public double f_cover { get; set; }
+
+        /// <summary>
         /// PV module efficiency [0.0, 1.0]
         /// </summary>
         public double RefEfficiencyElectric { get; private set; }
 
+        
+
         public Photovoltaic(double investmentCost, double embodiedGhg, double lifetime, Mesh surfaceGeometry, string detailedName,
-            double refEfficiencyElectric)
+            double refEfficiencyElectric, double PR, double f_cover)
             : base(investmentCost, embodiedGhg, lifetime, false, false, true, surfaceGeometry)
         {
             base.DetailedName = detailedName;
@@ -168,7 +175,8 @@ namespace Hive.IO.EnergySystems
             this.NOCT_ref = 20.0;
             this.NOCT_sol = 800.0;
 
-            this.PR = 1.0;
+            this.PR = PR;
+            this.f_cover = f_cover;
 
             base.CapacityUnit = "kW_peak";
             base.Capacity = refEfficiencyElectric * base.SurfaceArea; // kW_peak, assuming 1kW per m^2 solar irradiance
@@ -193,10 +201,11 @@ namespace Hive.IO.EnergySystems
             this.NOCT_sol = noct_sol;
         }
 
-        public void SetTechnologyParametersSimple(double performanceRatio, double referenceEfficiency)
+        public void SetTechnologyParametersSimple(double performanceRatio, double referenceEfficiency, double f_cover)
         {
             this.PR = performanceRatio;
             this.RefEfficiencyElectric = referenceEfficiency;
+            this.f_cover = f_cover;
         }
 
 

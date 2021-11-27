@@ -103,7 +103,7 @@ namespace Hive.IO.GhInputOutput
                     if (solarProperties.Type == "PV")
                         conversionTech.Add(new Photovoltaic(solarProperties.InvestmentCost,
                             solarProperties.EmbodiedEmissions, solarProperties.Lifetime, solarProperties.MeshSurface, solarProperties.Technology,
-                            solarProperties.ElectricEfficiency));
+                            solarProperties.ElectricEfficiency, solarProperties.PerformanceRatio, solarProperties.SurfaceTransmittance));
                     else if (solarProperties.Type == "PVT")
                         conversionTech.Add(new PVT(solarProperties.InvestmentCost, solarProperties.EmbodiedEmissions, solarProperties.Lifetime,
                             solarProperties.MeshSurface, solarProperties.Technology, solarProperties.ElectricEfficiency,
@@ -340,6 +340,8 @@ namespace Hive.IO.GhInputOutput
                     var specificEmbodiedEmissions = double.Parse(ct.SpecificEmbodiedEmissions);
                     var lifetime = double.Parse(ct.Lifetime);
                     var efficiency = double.Parse(ct.Efficiency);
+                    var performanceRatio = double.Parse(ct.PerformanceRatio);
+                    var surfaceTransmittance = double.Parse(ct.SurfaceTransmittance); 
                     var capacity = double.Parse(ct.Capacity);
                     var heatToPowerRatio = double.Parse(ct.HeatToPowerRatio);
                     var distributionLosses = double.Parse(ct.DistributionLosses);
@@ -350,7 +352,7 @@ namespace Hive.IO.GhInputOutput
                             foreach (var sm in ct.SelectedSurfaces)
                                 result.Add(new Photovoltaic(specificCapitalCost, specificEmbodiedEmissions, lifetime, sm.Mesh,
                                     "FIXME: PV",
-                                    efficiency));
+                                    efficiency, performanceRatio, surfaceTransmittance));
                             break;
                         case "Solar Thermal (ST)":
                             ct.AvailableSurfaces = _viewModel.SurfacesForConversion(ct);
