@@ -241,7 +241,7 @@ namespace Hive.IO.EnergySystems
             for (int t = 0; t < horizon; t++)
             {
                 double tempPV = ambientTemp[t] + ((this.NOCT - this.NOCT_ref) / NOCT_sol) * meanIrradiance[t];
-                double eta = this.RefEfficiencyElectric * (1 - this.Beta * (tempPV - refTemp));
+                double eta = this.RefEfficiencyElectric * (1 - this.Beta * (tempPV - refTemp)) * this.PR * this.f_cover;
                 electricityGenerated[t] = this.SurfaceArea * eta * meanIrradiance[t] / 1000.0; // in kWh/m^2
             }
 
@@ -275,7 +275,7 @@ namespace Hive.IO.EnergySystems
             double[] electricityGenerated = new double[horizon];
             for (int t = 0; t < horizon; t++)
             {
-                electricityGenerated[t] = meanIrradiance[t] * this.SurfaceArea * this.RefEfficiencyElectric * this.PR / 1000.0; // in kWh/m^2
+                electricityGenerated[t] = meanIrradiance[t] * this.SurfaceArea * this.RefEfficiencyElectric * this.PR / 1000.0 * this.f_cover; // in kWh/m^2
             }
 
             // empty, because renewable energy
