@@ -14,6 +14,12 @@ namespace Hive.IO.Forms
     [JsonObject(MemberSerialization.OptIn)]
     public class ConversionTechPropertiesViewModel : ViewModelBase
     {
+        private static double _performanceRatioDefaultPV = 0.85;
+
+        private static double _performanceRatioDefaultST = 1.0;
+
+        private static double _f_coverDefault = 1.0;
+
         private static Dictionary<string, ConversionTechDefaults> _defaults;  // JsonResource backing field
 
         private static Dictionary<string, List<ModuleTypeRecord>> _moduleTypesCatalog;  // JsonResource backing field
@@ -75,6 +81,18 @@ namespace Hive.IO.Forms
         {
             get => $"{_efficiency:0.00}";
             set => _efficiency = ParseDouble(value, _efficiency);
+        }
+
+        public string PerformanceRatio
+        {
+            get => $"{_performanceRatio:0.00}";
+            set => _performanceRatio = ParseDouble(value, _performanceRatio);
+        }
+
+        public string SurfaceTransmittance
+        {
+            get => $"{_surfaceTransmittance:0.00}";
+            set => _surfaceTransmittance = ParseDouble(value, _surfaceTransmittance);
         }
 
         public string Capacity
@@ -165,9 +183,13 @@ namespace Hive.IO.Forms
                     {
                         case "Photovoltaic (PV)":
                             _efficiency = _moduleType.ElectricEfficiency;
+                            _performanceRatio = _performanceRatioDefaultPV;
+                            _surfaceTransmittance = _f_coverDefault;
                             break;
                         case "Solar Thermal (ST)":
                             _efficiency = _moduleType.ThermalEfficiency;
+                            _performanceRatio = _performanceRatioDefaultST;
+                            _surfaceTransmittance = _f_coverDefault;
                             break;
                     }
 
@@ -252,6 +274,12 @@ namespace Hive.IO.Forms
         private double _efficiency;
 
         [JsonProperty]
+        private double _performanceRatio;
+
+        [JsonProperty]
+        private double _surfaceTransmittance;
+
+        [JsonProperty]
         private double _capacity;
 
         [JsonProperty]
@@ -298,6 +326,13 @@ namespace Hive.IO.Forms
 
         public Brush EfficiencyBrush => CompareBrush(_efficiency, 
            IsST ? ModuleType.ThermalEfficiency : IsPV ? ModuleType.ElectricEfficiency : Defaults[Name].Efficiency);
+
+        //TODO: Not nice with hardcoded values
+        public Brush PerformanceRatioBrush => CompareBrush(_performanceRatio, IsPV ? _performanceRatioDefaultPV : _performanceRatioDefaultST);
+
+        public Brush SurfaceTransmittanceBrush => CompareBrush(_surfaceTransmittance, _f_coverDefault);
+
+
         public Brush CapacityBrush => CompareBrush(_capacity, Defaults[Name].Capacity);
 
         public Brush SpecificCapitalCostBrush => CompareBrush(_specificCapitalCost,
@@ -313,6 +348,12 @@ namespace Hive.IO.Forms
         public Brush DistributionLossesBrush => CompareBrush(_distributionLosses, Defaults[Name].DistributionLosses);
 
         public FontWeight SpecificEfficiencyFontWeight => CompareFontWeight(_efficiency, Defaults[Name].Efficiency);
+
+        //TODO: Not nice with hardcoded values
+        public FontWeight PerformanceRatioFontWeight => CompareFontWeight(_performanceRatio, IsPV ? 0.85 : 1);
+
+        public FontWeight SurfaceTransmittanceFontWeight => CompareFontWeight(_surfaceTransmittance, 1.00);
+
         public FontWeight CapacityFontWeight => CompareFontWeight(_capacity, Defaults[Name].Capacity);
 
         public FontWeight SpecificCapitalCostFontWeight =>
@@ -405,6 +446,8 @@ namespace Hive.IO.Forms
             ConversionTech = photovoltaic;
 
             _efficiency = photovoltaic.RefEfficiencyElectric;
+            _performanceRatio = photovoltaic.PR;
+            _surfaceTransmittance = photovoltaic.f_cover;
             _capacity = photovoltaic.Capacity;
             _specificCapitalCost = photovoltaic.SpecificInvestmentCost;
             _specificEmbodiedEmissions = photovoltaic.SpecificEmbodiedGhg;
@@ -413,6 +456,8 @@ namespace Hive.IO.Forms
             {
                 Name = "<custom>",
                 ElectricEfficiency = photovoltaic.RefEfficiencyElectric,
+                PerformanceRatio = photovoltaic.PR,
+                SurfaceTransmittance = photovoltaic.f_cover,
                 SpecificCapitalCost = photovoltaic.SpecificInvestmentCost,
                 SpecificEmbodiedEmissions = photovoltaic.SpecificEmbodiedGhg,
                 Lifetime = photovoltaic.Lifetime,
@@ -479,6 +524,8 @@ namespace Hive.IO.Forms
         public string Name { get; set; }
         public double ElectricEfficiency;
         public double ThermalEfficiency;
+        public double PerformanceRatio;
+        public double SurfaceTransmittance;
         public double SpecificCapitalCost;
         public double SpecificEmbodiedEmissions;
         public double Lifetime;
