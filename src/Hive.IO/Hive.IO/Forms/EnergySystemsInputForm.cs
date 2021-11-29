@@ -204,6 +204,16 @@ namespace Hive.IO.Forms
             }
         }
 
+        private void gridConversion_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+            if(e.ColumnIndex == 3)
+            {
+                gridConversion.Rows.RemoveAt(e.RowIndex);
+            }
+
+            else return;
+        }
+
         private void gridConversion_CellValueChanged(object sender, DataGridViewCellEventArgs e)
         {
             if (e.RowIndex < 0)
@@ -211,7 +221,7 @@ namespace Hive.IO.Forms
                 return;
             }
 
-            if (e.ColumnIndex != 1)
+            if (e.ColumnIndex != 0)
             {
                 return;
             }
