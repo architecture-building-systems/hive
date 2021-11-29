@@ -32,9 +32,10 @@
             this.tabConversion = new System.Windows.Forms.TabPage();
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
             this.gridConversion = new System.Windows.Forms.DataGridView();
-            this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.Conversion = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EndUse = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.DeleteRow = new System.Windows.Forms.DataGridViewButtonColumn();
             this.ConversionProperties = new Hive.IO.Forms.Controls.ConversionTechPropertiesBase();
             this.tabEmission = new System.Windows.Forms.TabPage();
             this.tableLayoutEmission = new System.Windows.Forms.TableLayoutPanel();
@@ -42,6 +43,7 @@
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.dataGridViewButtonColumn1 = new System.Windows.Forms.DataGridViewButtonColumn();
             this.emitterProperties = new Hive.IO.Forms.Controls.EmitterProperties();
             this.tabControl.SuspendLayout();
             this.tabConversion.SuspendLayout();
@@ -98,9 +100,14 @@
             this.gridConversion.AllowUserToResizeRows = false;
             this.gridConversion.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridConversion.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Source,
             this.Conversion,
-            this.EndUse});
+            this.Source,
+            this.EndUse,
+            this.DeleteRow});
+            this.gridConversion.Columns.HeaderText["Conversion"].DisplayIndex = 0;
+            this.gridConversion.Columns.HeaderText["Source"].DisplayIndex = 1;
+            this.gridConversion.Columns.HeaderText["EndUse"].DisplayIndex = 2;
+            this.gridConversion.Columns.HeaderText["Delete Entry"].DisplayIndex = 3;
             this.gridConversion.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridConversion.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.gridConversion.Location = new System.Drawing.Point(4, 4);
@@ -141,6 +148,15 @@
             this.EndUse.Name = "EndUse";
             this.EndUse.ReadOnly = true;
             this.EndUse.Width = 250;
+            //
+            // Delete Row
+            //
+            this.DeleteRow.HeaderText = "Delete Entry";
+            this.DeleteRow.MinimumWidth = 12;
+            this.DeleteRow.Name = "EndUse";
+            this.DeleteRow.ReadOnly = true;
+            this.DeleteRow.Width = 250;
+            
             // 
             // ConversionProperties
             // 
@@ -230,6 +246,13 @@
             this.dataGridViewTextBoxColumn2.Name = "dataGridViewTextBoxColumn2";
             this.dataGridViewTextBoxColumn2.ReadOnly = true;
             this.dataGridViewTextBoxColumn2.Width = 250;
+            //
+            // dataGridViewButtonColumn
+            //
+            this.dataGridViewButtonColumn1.HeaderText = "Delete Entry";
+            this.dataGridViewButtonColumn1.MinimumWidth = 12;
+            this.dataGridViewButtonColumn1.Name = "dataGridViewButtonColumn";
+            this.dataGridViewButtonColumn1.Width = 250;
             // 
             // emitterProperties
             // 

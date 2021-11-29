@@ -70,14 +70,6 @@ namespace Hive.IO.Forms
             // set up gridConversion
             gridConversion.AutoGenerateColumns = false;
             gridConversion.Columns.Clear();
-            gridConversion.Columns.Add(new DataGridViewTextBoxColumn()
-            {
-                Name = "Source",
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
-                FillWeight = 0.2f,
-                DataPropertyName = "Source",
-                ReadOnly = true
-            });
             // conversionColumn.Items.AddRange(ConversionTechPropertiesViewModel.AllNames.ToArray<object>());
             gridConversion.Columns.Add(new DataGridViewComboBoxColumn()
             {
@@ -88,12 +80,28 @@ namespace Hive.IO.Forms
             });
             gridConversion.Columns.Add(new DataGridViewTextBoxColumn()
             {
+                Name = "Source",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+                FillWeight = 0.2f,
+                DataPropertyName = "Source",
+                ReadOnly = true
+            });
+            gridConversion.Columns.Add(new DataGridViewTextBoxColumn()
+            {
                 Name = "EndUse",
                 HeaderText = "End Use",
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
                 FillWeight = 0.2f,
                 DataPropertyName = "EndUse",
                 ReadOnly = true
+            });
+            gridConversion.Columns.Add(new DataGridViewTextBoxColumn()
+            {
+                Name = "Delete Entry",
+                HeaderText = "Delete entry",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+                FillWeight = 0.2f,
+                DataPropertyName = "Delete Entry"
             });
             gridConversion.DataSource = new BindingList<ConversionTechPropertiesViewModel>(State.ConversionTechnologies);
             UpdateEditableForConversionRows();
