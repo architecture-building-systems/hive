@@ -4,8 +4,8 @@ namespace Hive.IO.EnergySystems
 {
     public abstract class CombustionTech : ConversionTech
     {
-        protected CombustionTech(double investmentCost, double embodiedGhg, double capacity, bool isHeating, bool isElectric)
-            : base(investmentCost, embodiedGhg, capacity, "kW", isHeating, false, isElectric)
+        protected CombustionTech(double investmentCost, double embodiedGhg, double lifetime, double capacity, bool isHeating, bool isElectric)
+            : base(investmentCost, embodiedGhg, lifetime, capacity, "kW", isHeating, false, isElectric)
         {
         }
     }
@@ -14,8 +14,8 @@ namespace Hive.IO.EnergySystems
     public class GasBoiler : CombustionTech
     {
         public double Efficiency { get; private set; }
-        public GasBoiler(double investmentCost, double embodiedGhg, double capacity, double efficiency)
-            : base(investmentCost, embodiedGhg, capacity, true, false)
+        public GasBoiler(double investmentCost, double embodiedGhg, double lifetime, double capacity, double efficiency)
+            : base(investmentCost, embodiedGhg, lifetime, capacity, true, false)
         {
             this.Efficiency = efficiency;
             base.Name = "GasBoiler";
@@ -36,13 +36,13 @@ namespace Hive.IO.EnergySystems
             }
             if (horizon == Misc.MonthsPerYear)
             {
-                gasPrice = Misc.GetAverageMonthlyValue(gasInput.EnergyPrice);
-                gasEmissionsFactor = Misc.GetAverageMonthlyValue(gasInput.GhgEmissionsFactor);
+                gasPrice = Misc.GetAverageMonthlyValue(gasInput.SpecificCost);
+                gasEmissionsFactor = Misc.GetAverageMonthlyValue(gasInput.SpecificEmissions);
             }
             else
             {
-                gasPrice = gasInput.EnergyPrice;
-                gasEmissionsFactor = gasInput.GhgEmissionsFactor;
+                gasPrice = gasInput.SpecificCost;
+                gasEmissionsFactor = gasInput.SpecificEmissions;
             }
 
             base.InputCarrier = new Gas(horizon, gasConsumed, gasPrice, gasEmissionsFactor, gasInput.PrimaryEnergyFactor); // infused with how much gas is consumed. input Gas carrier has no Energy information
@@ -57,8 +57,8 @@ namespace Hive.IO.EnergySystems
     {
         public double HeatToPowerRatio { get; private set; }
         public double ElectricEfficiency { get; private set; }
-        public CombinedHeatPower(double investmentCost, double embodiedGhg, double capacityElectric, double heatToPowerRatio, double electricEfficiency)
-            : base(investmentCost, embodiedGhg, capacityElectric, true, true)
+        public CombinedHeatPower(double investmentCost, double embodiedGhg, double lifetime, double capacityElectric, double heatToPowerRatio, double electricEfficiency)
+            : base(investmentCost, lifetime, embodiedGhg, capacityElectric, true, true)
         {
             this.HeatToPowerRatio = heatToPowerRatio;
             this.ElectricEfficiency = electricEfficiency;
@@ -93,13 +93,13 @@ namespace Hive.IO.EnergySystems
 
             if (horizon == Misc.MonthsPerYear)
             {
-                gasPrice = Misc.GetAverageMonthlyValue(gasInput.EnergyPrice);
-                gasEmissionsFactor = Misc.GetAverageMonthlyValue(gasInput.GhgEmissionsFactor);
+                gasPrice = Misc.GetAverageMonthlyValue(gasInput.SpecificCost);
+                gasEmissionsFactor = Misc.GetAverageMonthlyValue(gasInput.SpecificEmissions);
             }
             else
             {
-                gasPrice = gasInput.EnergyPrice;
-                gasEmissionsFactor = gasInput.GhgEmissionsFactor;
+                gasPrice = gasInput.SpecificCost;
+                gasEmissionsFactor = gasInput.SpecificEmissions;
             }
 
             base.InputCarrier = new Gas(horizon, gasConsumed, gasPrice, gasEmissionsFactor, Misc.PEFNaturalGas);  // infused with how much gas is consumed. input Gas carrier has no Energy information

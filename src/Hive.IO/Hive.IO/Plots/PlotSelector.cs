@@ -11,9 +11,10 @@ namespace Hive.IO.Plots
 
     public enum PerformanceResolution
     {
+        Lifetime,
         Yearly,
         Monthly,
-        Hourly
+        //Hourly
     }
 
     public enum Kpi
@@ -27,7 +28,7 @@ namespace Hive.IO.Plots
     public enum OtherSubcategory
     {
         SvD,
-        GvL,
+        //GvL,
         Sol
     }
 
@@ -49,8 +50,7 @@ namespace Hive.IO.Plots
 
         public PlotSelector()
         {
-            // FIXME: @chris, this needs to be changed back again when we add the amr plots!
-            // _panelFactory = CreatePerformancePanel;
+            _panelFactory = CreatePerformancePanel;
             _panelFactory = CreateSystemsPanel;
 
             _currentPanel = _panelFactory();
@@ -62,7 +62,9 @@ namespace Hive.IO.Plots
             set => _normalized = value;
         }
 
-        public Kpi CurrentKpi { get; private set; } = Kpi.None; // FIXME: use this for amr plots:  Kpi.Energy;
+        public Kpi CurrentKpi { get; private set; } = Kpi.Energy;
+        public IVisualizerPlot _currentPlot;
+
 
         private string Category => _currentPanel.Category;
 
@@ -73,38 +75,42 @@ namespace Hive.IO.Plots
             mbCategory.OnClicked += (sender, e) =>
             {
                 _panelFactory = CreateSystemsPanel;
-                CurrentKpi = Kpi.None;
+                //CurrentKpi = Kpi.None;
             };
-            // mbCategory.OnClicked += (sender, args) => RhinoApp.Write("P was clicked!");
+            //mbCategory.OnClicked += (sender, args) => RhinoApp.Write("P was clicked!");
 
             MenuButton mbResolution;
             switch (_performanceResolution)
             {
+                case PerformanceResolution.Lifetime:
+                    mbResolution = new BlackMenuButton("TOT");
+                    break;
                 case PerformanceResolution.Monthly:
                     mbResolution = new BlackMenuButton("M");
                     break;
-                case PerformanceResolution.Hourly:
-                    mbResolution = new BlackMenuButton("D");
-                    break;
+                //case PerformanceResolution.Hourly:
+                //    mbResolution = new BlackMenuButton("D");
+                //    break;
                 default:
-                    mbResolution = new MenuButton("Y");
+                    mbResolution = new BlackMenuButton("Y");
                     break;
             }
 
             mbResolution.OnClicked += CycleResolution;
 
-            var mbNormalize = Normalized ? new BlackMenuButton("/m²") : new MenuButton("TOT");
+            var mbNormalize = Normalized ? new BlackMenuButton("/m²") : new MenuButton("/m²");
             mbNormalize.OnClicked += (sender, e) => Normalized = !Normalized;
 
-            var mbBreakdown = _breakdown ? new BlackMenuButton("BRK") : new MenuButton("BRK");
-            mbBreakdown.OnClicked += (sender, e) => _breakdown = !_breakdown;
+            // TODO implement breakdown
+            //var mbBreakdown = _breakdown ? new BlackMenuButton("BRK") : new MenuButton("BRK");
+            //mbBreakdown.OnClicked += (sender, e) => _breakdown = !_breakdown;
 
             return new MenuButtonPanel(new[]
             {
                 mbCategory,
-                mbResolution,
                 mbNormalize,
-                mbBreakdown
+                mbResolution,
+                //mbBreakdown
             });
         }
 
@@ -116,9 +122,13 @@ namespace Hive.IO.Plots
                 _panelFactory = CreateOtherPanel; // link to next panel in list
             };
 
+            var mbNormalize = Normalized ? new BlackMenuButton("/m²") : new MenuButton("/m²");
+            mbNormalize.OnClicked += (sender, e) => Normalized = !Normalized;
+
             return new MenuButtonPanel(new[]
             {
                 mbCategory,
+                mbNormalize,
                 // new MenuButton("SIZ"),
                 // new MenuButton("CHA")
             });
@@ -129,26 +139,27 @@ namespace Hive.IO.Plots
             var mbCategory = new CategoryMenuButton("O");
             mbCategory.OnClicked += (sender, e) =>
             {
-                // _panelFactory = CreatePerformancePanel; // FIXME @chris change this back when ready for amr plots
-                _panelFactory = CreateSystemsPanel; // link to next panel in list
-                // CurrentKpi = Kpi.Energy;  // FIXME @chris uncomment this to add amr plots back
+                _panelFactory = CreatePerformancePanel; // link to next panel in list
+                CurrentKpi = Kpi.Energy;
             };
 
+            var mbNormalize = Normalized ? new BlackMenuButton("/m²") : new MenuButton("/m²");
+            mbNormalize.OnClicked += (sender, e) => Normalized = !Normalized;
+
             var mbSvD = _otherSubcategory == OtherSubcategory.SvD ? new BlackMenuButton("SvD") : new MenuButton("SvD");
-            // var mbGvL = _otherSubcategory == OtherSubcategory.GvL ? new BlackMenuButton("GvL") : new MenuButton("GvL");
-            ;
+            //var mbGvL = _otherSubcategory == OtherSubcategory.GvL ? new BlackMenuButton("GvL") : new MenuButton("GvL");
             var mbSol = _otherSubcategory == OtherSubcategory.Sol ? new BlackMenuButton("SOL") : new MenuButton("SOL");
-            ;
 
             mbSvD.OnClicked += (sender, args) => _otherSubcategory = OtherSubcategory.SvD;
-            // mbGvL.OnClicked += (sender, args) => _otherSubcategory = OtherSubcategory.GvL;
+            //mbGvL.OnClicked += (sender, args) => _otherSubcategory = OtherSubcategory.GvL;
             mbSol.OnClicked += (sender, args) => _otherSubcategory = OtherSubcategory.Sol;
 
             return new MenuButtonPanel(new[]
             {
                 mbCategory,
+                mbNormalize,
                 mbSvD,
-                // mbGvL,
+                //mbGvL,
                 mbSol
             });
         }
@@ -159,34 +170,77 @@ namespace Hive.IO.Plots
         /// </summary>
         private IVisualizerPlot SelectCurrentPlot(ResultsPlotting results)
         {
-            if (Category == "P")
+            if (Category == "P") // Performance
             {
+                if (_performanceResolution == PerformanceResolution.Lifetime)
+                    return LifetimePerformancePlot(CurrentKpi, results, _normalized, _breakdown);
                 if (_performanceResolution == PerformanceResolution.Yearly)
                     return YearlyPerformancePlot(CurrentKpi, results, _normalized, _breakdown);
                 if (_performanceResolution == PerformanceResolution.Monthly)
                     return MonthlyPerformancePlot(CurrentKpi, results, _normalized, _breakdown);
-                return new AmrPlotBase(
-                    "TODO: Implement this plot!",
+                return new AmrPlotBase("TODO: Implement this plot!", "",
                     new EnergyDataAdaptor(results, _normalized),
-                    new EnergyPlotStyle());
+                    new EnergyPlotStyle(), true);
             }
-
-            if (Category == "O")
+            else if (Category == "O") // Other
+            {
                 switch (_otherSubcategory)
                 {
                     case OtherSubcategory.SvD:
-                        return new EnergyBalancePlot();
-                    case OtherSubcategory.GvL:
-                        return new EnergyBalancePlot();
+                        if (_normalized)
+                            return new EnergyBalanceNormalizedPlot();
+                        else
+                            return new EnergyBalancePlot();
+                    //case OtherSubcategory.GvL:
+                    //    return new EnergyBalancePlot();
                     case OtherSubcategory.Sol:
-                        return new SolarGainsPerWindowPlot();
+                        if (_normalized)
+                            return new SolarGainsPerWindowNormalizedPlot();
+                        else
+                            return new SolarGainsPerWindowPlot();
                     default:
                         return new EnergyBalancePlot();
                 }
-
-            return new DemandMonthlyPlot();
+            }
+            else // Monthly Energy Demand
+            {
+                if (_normalized) 
+                    return new DemandMonthlyNormalizedPlot();
+                else 
+                    return new DemandMonthlyPlot();
+            }
         }
 
+        private IVisualizerPlot LifetimePerformancePlot(Kpi currentKpi, ResultsPlotting results, bool normalized,
+            bool breakdown)
+        {
+            IVisualizerPlot plot;
+            switch (currentKpi)
+            {
+                case Kpi.Energy:
+                    plot = new LifetimeAmrPlot(AmrPlotConstants.EnergyTitle, AmrPlotConstants.EnergyDescription,
+                        new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle(), displaySumsAndAverages: false);
+                    break;
+                case Kpi.Emissions:
+                    plot = new LifetimeAmrPlot(AmrPlotConstants.EmissionsTitle, AmrPlotConstants.EmissionsDescription, 
+                        new EmissionsDataAdaptor(results, normalized), new EmissionsPlotStyle());
+                    break;
+                case Kpi.Costs:
+                    plot = new LifetimeAmrPlot(AmrPlotConstants.CostTitle, AmrPlotConstants.CostDescription, 
+                        new CostsDataAdaptor(results, normalized), new CostsPlotStyle());
+                    break;
+                default:
+                    // this shouldn't happen...
+                    plot = new AmrPlotBase(
+                        "TODO: Implement this plot!", "",
+                        new EnergyDataAdaptor(results, normalized),
+                        new EnergyPlotStyle(), true);
+                    break;
+            }
+
+            return plot;
+        }
+        
         private IVisualizerPlot YearlyPerformancePlot(Kpi currentKpi, ResultsPlotting results, bool normalized,
             bool breakdown)
         {
@@ -194,22 +248,21 @@ namespace Hive.IO.Plots
             switch (currentKpi)
             {
                 case Kpi.Energy:
-                    plot = new YearlyAmrPlot("Energy", new EnergyDataAdaptor(results, normalized),
-                        new EnergyPlotStyle());
+                    plot = new YearlyAmrPlot(AmrPlotConstants.EnergyTitle, AmrPlotConstants.EnergyDescription,
+                        new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle(), displaySumsAndAverages: false);
                     break;
                 case Kpi.Emissions:
-                    plot = new YearlyAmrPlot("CO₂ Emissions", new EmissionsDataAdaptor(results, normalized),
-                        new EmissionsPlotStyle());
+                    plot = new YearlyAmrPlot(AmrPlotConstants.EmissionsTitle, AmrPlotConstants.EmissionsDescription, 
+                        new EmissionsDataAdaptor(results, normalized), new EmissionsPlotStyle());
                     break;
                 case Kpi.Costs:
-                    plot = new YearlyAmrPlot("Cost", new CostsDataAdaptor(results, normalized), new CostsPlotStyle());
+                    plot = new YearlyAmrPlot(AmrPlotConstants.CostTitle, AmrPlotConstants.CostDescription, 
+                        new CostsDataAdaptor(results, normalized), new CostsPlotStyle());
                     break;
                 default:
                     // this shouldn't happen...
-                    plot = new AmrPlotBase(
-                        "TODO: Implement this plot!",
-                        new EnergyDataAdaptor(results, normalized),
-                        new EnergyPlotStyle());
+                    plot = new AmrPlotBase("TODO: Implement this plot!", "",
+                        new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle(), true);
                     break;
             }
 
@@ -223,31 +276,30 @@ namespace Hive.IO.Plots
             switch (currentKpi)
             {
                 case Kpi.Energy:
-                    plot = new MonthlyAmrPlot("Energy", new EnergyDataAdaptor(results, normalized),
-                        new EnergyPlotStyle());
+                    plot = new MonthlyAmrPlot(AmrPlotConstants.EnergyTitle, AmrPlotConstants.EnergyDescription,
+                        new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle(), displaySumsAndAverages: false);
                     break;
                 case Kpi.Emissions:
-                    plot = new MonthlyAmrPlot("CO₂ Emissions", new EmissionsDataAdaptor(results, normalized),
-                        new EmissionsPlotStyle());
+                    plot = new MonthlyAmrPlot(AmrPlotConstants.EmissionsTitle, AmrPlotConstants.EmissionsDescription,
+                        new EmissionsDataAdaptor(results, normalized), new EmissionsPlotStyle());
                     break;
                 case Kpi.Costs:
-                    plot = new MonthlyAmrPlot("Cost", new CostsDataAdaptor(results, normalized), new CostsPlotStyle());
+                    plot = new MonthlyAmrPlot(AmrPlotConstants.CostTitle, AmrPlotConstants.CostDescription, 
+                        new CostsDataAdaptor(results, normalized), new CostsPlotStyle());
                     break;
                 default:
                     // this shouldn't happen...
-                    plot = new AmrPlotBase(
-                        "TODO: Implement this plot!",
-                        new EnergyDataAdaptor(results, normalized),
-                        new EnergyPlotStyle());
+                    plot = new AmrPlotBase("TODO: Implement this plot!", "",
+                        new EnergyDataAdaptor(results, normalized), new EnergyPlotStyle(), true);
                     break;
             }
 
             return plot;
         }
 
-        public bool Contains(PointF location)
+        public bool Contains(PointF location, bool usePlotBounds = false)
         {
-            return _currentPanel.Contains(location);
+            return usePlotBounds ? _currentPlot.Contains(location) : _currentPanel.Contains(location);
         }
 
         public void Clicked(GH_Canvas sender, GH_CanvasMouseEvent e)
@@ -263,8 +315,8 @@ namespace Hive.IO.Plots
 
         public void RenderCurrentPlot(ResultsPlotting results, Dictionary<string, string> plotProperties, Graphics graphics, RectangleF bounds)
         {
-            var plot = SelectCurrentPlot(results);
-            plot.Render(results, plotProperties, graphics, bounds);
+            _currentPlot = SelectCurrentPlot(results);
+            _currentPlot.Render(results, plotProperties, graphics, bounds);
         }
 
         private void CycleResolution(object sender, EventArgs e)
@@ -272,14 +324,17 @@ namespace Hive.IO.Plots
             PerformanceResolution nextResolution;
             switch (_performanceResolution)
             {
+                case PerformanceResolution.Lifetime:
+                    nextResolution = PerformanceResolution.Yearly;
+                    break;
                 case PerformanceResolution.Yearly:
                     nextResolution = PerformanceResolution.Monthly;
                     break;
                 case PerformanceResolution.Monthly:
-                    nextResolution = PerformanceResolution.Hourly;
-                    break;
-                case PerformanceResolution.Hourly:
-                    nextResolution = PerformanceResolution.Yearly;
+                //    nextResolution = PerformanceResolution.Hourly;
+                //    break;
+                //case PerformanceResolution.Hourly:
+                    nextResolution = PerformanceResolution.Lifetime;
                     break;
                 default:
                     nextResolution = PerformanceResolution.Yearly;

@@ -22,10 +22,25 @@ namespace Hive.IO.Forms.Controls
             {
                 base.Conversion = value;
                 lblDescription.Text = Conversion.ModuleType.Description;
+                technologyImage.Image = Conversion.TechnologyImage;
+
                 UpdateAvailableSurfaces();
                 UpdateModuleTypesList();
-                UpdateArea();
+                UpdateCalculatedFields();
             }
+        }
+
+        /// <summary>
+        ///     See [here](https://stackoverflow.com/a/3165330/2260) for why I'm not
+        ///     hooking the event up directly with the handler defined in the base class.
+        /// </summary>
+        /// <param name="sender"></param>
+        /// <param name="e"></param>
+        private new void Validating(object sender, CancelEventArgs e)
+        {
+            TextBox_Validating(sender, e);
+
+            UpdateCalculatedFields();
         }
 
         private void UpdateAvailableSurfaces()
@@ -74,6 +89,7 @@ namespace Hive.IO.Forms.Controls
             Conversion.ModuleType = moduleType;
 
             lblDescription.Text = Conversion.ModuleType.Description;
+            technologyImage.Image = Conversion.TechnologyImage;
 
             foreach (var textBox in GetAll(this, typeof(TextBox)).Cast<TextBox>()) UpdateTextBoxText(textBox);
         }
@@ -86,11 +102,33 @@ namespace Hive.IO.Forms.Controls
             }
 
             Conversion.SelectedSurfaces = new List<SurfaceViewModel>(lstAvailableSurfaces.SelectedItems.Cast<SurfaceViewModel>());
-            UpdateArea();
+            UpdateCalculatedFields();
         }
 
-        private void UpdateArea()
+        private void lstAvailableSurfaces_SelectAll(object sender, KeyEventArgs e)
         {
+            if (_initializingControls)
+            {
+                return;
+            }
+
+            if (e.Control && e.KeyCode == Keys.A)
+            {
+                for (int i = 0; i < lstAvailableSurfaces.Items.Count; i++)
+                {
+                    lstAvailableSurfaces.SetSelected(i, true);
+                }
+
+                Conversion.SelectedSurfaces = new List<SurfaceViewModel>(lstAvailableSurfaces.SelectedItems.Cast<SurfaceViewModel>());
+                UpdateCalculatedFields();
+            }
+        }
+
+        private void UpdateCalculatedFields()
+        {
+            txtCapacity.Text = $"{Conversion.SurfaceTechCapacity:0.00}";
+            txtEmbodiedEmissions.Text = $"{Conversion.EmbodiedEmissions:0.0}";
+            txtCapitalCost.Text = $"{Conversion.CapitalCost:0.00}";
             txtArea.Text = $"{Conversion.Area:0.00}";
         }
     }

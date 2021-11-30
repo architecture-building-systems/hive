@@ -9,8 +9,8 @@ namespace Hive.IO.EnergySystems
 {
     public class Radiator : Emitter
     {
-        public Radiator(double investmentCost, double embodiedGhg, bool isHeating, bool isCooling, double inletTemperature, double returnTemperature) 
-            : base(investmentCost, embodiedGhg, isHeating, isCooling)
+        public Radiator(double investmentCost, double embodiedGhg, double lifetime, bool isHeating, bool isCooling, double inletTemperature, double returnTemperature) 
+            : base(investmentCost, embodiedGhg, lifetime, isHeating, isCooling)
         {
 
             double [] inletTemperatures = new double[Horizon];
@@ -40,8 +40,8 @@ namespace Hive.IO.EnergySystems
 
     public class AirDiffuser : Emitter
     {
-        public AirDiffuser(double investmentCost, double embodiedGhg, bool isHeating, bool isCooling, double inletTemperature, double returnTemperature)
-            : base(investmentCost, embodiedGhg, isHeating, isCooling)
+        public AirDiffuser(double investmentCost, double embodiedGhg, double lifetime, bool isHeating, bool isCooling, double inletTemperature, double returnTemperature)
+            : base(investmentCost, embodiedGhg, lifetime, isHeating, isCooling)
         {
             double[] inletTemperatures = new double[Horizon];
             double[] returnTemperatures = new double[Horizon];
@@ -110,6 +110,20 @@ namespace Hive.IO.EnergySystems
         public double SpecificEmbodiedGhg { get; protected set; }
 
         /// <summary>
+        /// Lifetime in years.
+        /// </summary>
+        public double Lifetime { get; protected set; }
+
+        /// <summary>
+        /// Investment cost
+        /// </summary>
+        public double InvestmentCost => SpecificInvestmentCost * Capacity;
+        /// <summary>
+        /// Life cycle GHG emissions, in kgCO2eq.
+        /// </summary>
+        public double EmbodiedGhg => SpecificInvestmentCost * Capacity;
+
+        /// <summary>
         /// Input stream. For most emitters, this would be water
         /// </summary>
         public Carrier InletCarrier { get; protected set; }
@@ -120,11 +134,12 @@ namespace Hive.IO.EnergySystems
 
 
 
-        protected Emitter(double investmentCost, double embodiedGhg,
+        protected Emitter(double investmentCost, double embodiedGhg, double lifetime,
             bool isHeating, bool isCooling)
         {
             this.SpecificInvestmentCost = investmentCost;
             this.SpecificEmbodiedGhg = embodiedGhg;
+            this.Lifetime = lifetime;
             this.IsHeating = isHeating;
             this.IsCooling = isCooling;
         }

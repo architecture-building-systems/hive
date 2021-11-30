@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Hive.IO.EnergySystems;
+using Rhino;
 
 namespace Hive.IO.GhDistributors
 {
@@ -65,6 +66,21 @@ namespace Hive.IO.GhDistributors
             Building.Building building = null;
             Environment.Environment environment = null;
             var emitters = new List<Emitter>();
+
+            foreach (GH_ObjectWrapper hiveInput in inputObjects)
+            {
+                switch (hiveInput.Value)
+                {
+                    case GH_Boolean bln:
+                        if (bln.Value == false)
+                        {
+                            RhinoApp.WriteLine("Toggle Set to \"False\": Hive.Core not simulating...");
+                            return;
+                        }
+                        break;
+                }
+            }
+
 
             foreach (GH_ObjectWrapper hiveInput in inputObjects)
             {

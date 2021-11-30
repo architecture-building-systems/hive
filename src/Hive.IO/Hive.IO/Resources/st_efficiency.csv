@@ -1,3 +1,3 @@
-ST tech;electric efficiency;thermal efficiency;cost per kWp;cost per m2;life cycle GHG factor kgCO2eq per kWp;life cycle GHG factor kgCO2eq per m2
-vacume_tube;0;0.45;4444.444444;2000;462.2222222;208
-flat_plate;0;0.45;4444.444444;2000;408.8888889;184
+Type,electric efficiency,thermal efficiency,cost per kWp,cost per m2,life cycle GHG factor kgCO2eq per kWp,life cycle GHG factor kgCO2eq per m2,Lifetime,Description
+vacume_tube,0,0.45,4444.444444,2000,462.2222222,208,30,"Evacuated tube collectors are used when high water temperatures are required. They can reach temperature levels of over 100\u00b0C. Several tubes are installed next to each other. The appearance is not a homogeneous surface. Fa\u00e7ade integration is possible to some extent.",
+flat_plate,0,0.45,4444.444444,2000,408.8888889,184,30,"Flat plate collectors are the most commonly used technology. They reach temperature levels of typically <100\u00b0C before the fluid evaporates. They appear as a homogenous black surface and are usually not spread over a whole roof. Fa\u00e7ade integration is possible. Customized designs (size, shape and colors) are possible at the expense of efficiency losses and increased costs.",

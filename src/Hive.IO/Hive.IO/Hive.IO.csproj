@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project ToolsVersion="4.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
@@ -10,9 +10,10 @@
     <AppDesignerFolder>Properties</AppDesignerFolder>
     <RootNamespace>Hive.IO</RootNamespace>
     <AssemblyName>Hive.IO</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <IsWebBootstrapper>false</IsWebBootstrapper>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)' == 'Debug|AnyCPU'">
     <DebugSymbols>true</DebugSymbols>
@@ -181,6 +182,8 @@
     <Compile Include="GhInputOutput\GhBuilding.cs" />
     <Compile Include="GhDistributors\GhMainDistributor.cs" />
     <Compile Include="GhInputOutput\GhVisualizerAttributes.cs" />
+    <Compile Include="Plots\AmrPlotConstants.cs" />
+    <Compile Include="Plots\LifetimeAmrPlot.cs" />
     <Compile Include="Util\HiveCategoryIcon.cs" />
     <Compile Include="Util\HiveIOInfo.cs" />
     <Compile Include="Util\Misc.cs" />
@@ -198,7 +201,7 @@
     <Compile Include="Plots\IVisualizerPlot.cs" />
     <Compile Include="Plots\MenuButton.cs" />
     <Compile Include="Plots\MenuButtonPanel.cs" />
-    <Compile Include="Plots\OperationalPerformancePlot.cs" />
+    <Compile Include="Plots\KpiPlot.cs" />
     <Compile Include="Plots\OxyPlotBase.cs" />
     <Compile Include="Plots\PlotSelector.cs" />
     <Compile Include="Plots\DrawingExtensions.cs" />

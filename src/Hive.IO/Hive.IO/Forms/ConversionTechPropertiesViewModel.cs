@@ -14,6 +14,12 @@ namespace Hive.IO.Forms
     [JsonObject(MemberSerialization.OptIn)]
     public class ConversionTechPropertiesViewModel : ViewModelBase
     {
+        private static double _performanceRatioDefaultPV = 0.85;
+
+        private static double _performanceRatioDefaultST = 1.0;
+
+        private static double _f_coverDefault = 1.0;
+
         private static Dictionary<string, ConversionTechDefaults> _defaults;  // JsonResource backing field
 
         private static Dictionary<string, List<ModuleTypeRecord>> _moduleTypesCatalog;  // JsonResource backing field
@@ -77,6 +83,18 @@ namespace Hive.IO.Forms
             set => _efficiency = ParseDouble(value, _efficiency);
         }
 
+        public string PerformanceRatio
+        {
+            get => $"{_performanceRatio:0.00}";
+            set => _performanceRatio = ParseDouble(value, _performanceRatio);
+        }
+
+        public string SurfaceTransmittance
+        {
+            get => $"{_surfaceTransmittance:0.00}";
+            set => _surfaceTransmittance = ParseDouble(value, _surfaceTransmittance);
+        }
+
         public string Capacity
         {
             get => $"{_capacity:0.00}";
@@ -98,6 +116,15 @@ namespace Hive.IO.Forms
             set
             {
                 _specificEmbodiedEmissions = ParseDouble(value, _specificEmbodiedEmissions);
+            }
+        }
+
+        public string Lifetime
+        {
+            get => $"{_lifetime:0.00}";
+            set
+            {
+                _lifetime = ParseDouble(value, _lifetime);
             }
         }
 
@@ -156,39 +183,57 @@ namespace Hive.IO.Forms
                     {
                         case "Photovoltaic (PV)":
                             _efficiency = _moduleType.ElectricEfficiency;
+                            _performanceRatio = _performanceRatioDefaultPV;
+                            _surfaceTransmittance = _f_coverDefault;
                             break;
                         case "Solar Thermal (ST)":
                             _efficiency = _moduleType.ThermalEfficiency;
+                            _performanceRatio = _performanceRatioDefaultST;
+                            _surfaceTransmittance = _f_coverDefault;
                             break;
                     }
 
                     _specificCapitalCost = _moduleType.SpecificCapitalCost;
                     _specificEmbodiedEmissions = _moduleType.SpecificEmbodiedEmissions;
+                    _lifetime = _moduleType.Lifetime;
                 }
             }
         }
 
         public string Description => IsSurfaceTech ? ModuleType.Description : Defaults[Name].Description;
 
-        public ImageSource TechnologyImage => IsSurfaceTech
-            ? new BitmapImage(new Uri(
-                $"pack://application:,,,/Hive.IO,Culture=neutral,PublicKeyToken=null;component/Resources/EnergySystems/{ModuleType.Name}.jpg"))
-            : null;
+        //public ImageSource TechnologyImage => IsSurfaceTech
+        //    ? new BitmapImage(new Uri(
+        //        $"pack://application:,,,/Hive.IO,Culture=neutral,PublicKeyToken=null;component/Resources/EnergySystems/{ModuleType.Name}.jpg"))
+        //    : null;
+
+        public System.Drawing.Image TechnologyImage => IsSurfaceTech ? (System.Drawing.Image) Properties.Resources.ResourceManager.GetObject(ModuleType.Name) : null;
 
         public double Area
         {
             get { return SelectedSurfaces.Sum(sm => sm.Area); }
         }
 
-        public double EmbodiedEmissions =>
-            IsSurfaceTech ? _specificEmbodiedEmissions * Area : _specificEmbodiedEmissions * _capacity;
+        public string EmbodiedEmissions
+        {
+            get { return $"{(IsSurfaceTech ? _specificEmbodiedEmissions * Area : _specificEmbodiedEmissions * _capacity):0.00}"; }
+        }
 
-        public double CapitalCost =>
-            IsSurfaceTech ? _specificCapitalCost * Area : _specificCapitalCost * _capacity;
+        public string CapitalCost
+        {
+            get { return $"{(IsSurfaceTech ? _specificCapitalCost * Area : _specificCapitalCost * _capacity):0.00}"; }
+        }
 
-        public double SurfaceTechCapacity => _efficiency * Area;
+        public string SurfaceTechCapacity
+        {
+            get { return $"{(_efficiency * Area):0.00}"; }
+        }
 
         public bool IsSurfaceTech => Name == "Photovoltaic (PV)" || Name == "Solar Thermal (ST)";
+
+        public bool IsPV => Name == "Photovoltaic (PV)";
+
+        public bool IsST => Name == "Solar Thermal (ST)";
 
         private static Dictionary<string, List<ModuleTypeRecord>> ModuleTypesCatalog =>
             JsonResource.ReadRecords(ModuleTypeRecord.ResourceName, ref _moduleTypesCatalog);
@@ -206,6 +251,7 @@ namespace Hive.IO.Forms
             _capacity = defaults.Capacity;
             _specificCapitalCost = defaults.SpecificCapitalCost;
             _specificEmbodiedEmissions = defaults.SpecificEmbodiedEmissions;
+            _lifetime = defaults.Lifetime;
             _distributionLosses = defaults.DistributionLosses;
             _heatToPowerRatio = defaults.HeatToPowerRatio;
 
@@ -228,6 +274,12 @@ namespace Hive.IO.Forms
         private double _efficiency;
 
         [JsonProperty]
+        private double _performanceRatio;
+
+        [JsonProperty]
+        private double _surfaceTransmittance;
+
+        [JsonProperty]
         private double _capacity;
 
         [JsonProperty]
@@ -235,6 +287,9 @@ namespace Hive.IO.Forms
 
         [JsonProperty]
         private double _specificEmbodiedEmissions;
+
+        [JsonProperty]
+        private double _lifetime;
 
         [JsonProperty]
         private double _heatToPowerRatio;
@@ -261,17 +316,23 @@ namespace Hive.IO.Forms
 
         private Brush CompareBrush(double a, double b)
         {
-            return ConversionTech == null ? AreEqual(a, b) ? _normalBrush : _modifiedBrush : _normalBrush;
+            return ConversionTech == null ? AreEqual(Math.Round(a, 2), Math.Round(b, 2)) ? _normalBrush : _modifiedBrush : _normalBrush;
         }
 
         private FontWeight CompareFontWeight(double a, double b)
         {
-            return ConversionTech == null
-                ? AreEqual(a, b) ? _normalFontWeight : _modifiedFontWeight
-                : _normalFontWeight;
+            return ConversionTech == null  ? AreEqual(Math.Round(a, 2), Math.Round(b,2)) ? _normalFontWeight : _modifiedFontWeight : _normalFontWeight;
         }
 
-        public Brush EfficiencyBrush => CompareBrush(_efficiency, Defaults[Name].Efficiency);
+        public Brush EfficiencyBrush => CompareBrush(_efficiency, 
+           IsST ? ModuleType.ThermalEfficiency : IsPV ? ModuleType.ElectricEfficiency : Defaults[Name].Efficiency);
+
+        //TODO: Not nice with hardcoded values
+        public Brush PerformanceRatioBrush => CompareBrush(_performanceRatio, IsPV ? _performanceRatioDefaultPV : _performanceRatioDefaultST);
+
+        public Brush SurfaceTransmittanceBrush => CompareBrush(_surfaceTransmittance, _f_coverDefault);
+
+
         public Brush CapacityBrush => CompareBrush(_capacity, Defaults[Name].Capacity);
 
         public Brush SpecificCapitalCostBrush => CompareBrush(_specificCapitalCost,
@@ -280,10 +341,19 @@ namespace Hive.IO.Forms
         public Brush SpecificEmbodiedEmissionsBrush => CompareBrush(_specificEmbodiedEmissions,
             IsSurfaceTech ? ModuleType.SpecificEmbodiedEmissions : Defaults[Name].SpecificEmbodiedEmissions);
 
+        public Brush LifetimeBrush => CompareBrush(_lifetime,
+            IsSurfaceTech ? ModuleType.Lifetime : Defaults[Name].Lifetime);
+
         public Brush HeatToPowerRatioBrush => CompareBrush(_heatToPowerRatio, Defaults[Name].HeatToPowerRatio);
         public Brush DistributionLossesBrush => CompareBrush(_distributionLosses, Defaults[Name].DistributionLosses);
 
         public FontWeight SpecificEfficiencyFontWeight => CompareFontWeight(_efficiency, Defaults[Name].Efficiency);
+
+        //TODO: Not nice with hardcoded values
+        public FontWeight PerformanceRatioFontWeight => CompareFontWeight(_performanceRatio, IsPV ? 0.85 : 1);
+
+        public FontWeight SurfaceTransmittanceFontWeight => CompareFontWeight(_surfaceTransmittance, 1.00);
+
         public FontWeight CapacityFontWeight => CompareFontWeight(_capacity, Defaults[Name].Capacity);
 
         public FontWeight SpecificCapitalCostFontWeight =>
@@ -294,13 +364,18 @@ namespace Hive.IO.Forms
             CompareFontWeight(_specificEmbodiedEmissions,
                 IsSurfaceTech ? ModuleType.SpecificEmbodiedEmissions : Defaults[Name].SpecificEmbodiedEmissions);
 
+        public FontWeight LifetimeFontWeight =>
+            CompareFontWeight(_lifetime,
+                IsSurfaceTech ? ModuleType.Lifetime : Defaults[Name].Lifetime);
+
         public FontWeight HeatToPowerRatioFontWeight =>
             CompareFontWeight(_heatToPowerRatio, Defaults[Name].HeatToPowerRatio);
 
         public FontWeight DistributionLossesFontWeight =>
             CompareFontWeight(_distributionLosses, Defaults[Name].DistributionLosses);
 
-        public FontWeight EfficiencyFontWeight => CompareFontWeight(_efficiency, Defaults[Name].Efficiency);
+        public FontWeight EfficiencyFontWeight => CompareFontWeight(_efficiency,
+            IsST ? ModuleType.ThermalEfficiency : IsPV ? ModuleType.ElectricEfficiency : Defaults[Name].Efficiency);
 
         #endregion
 
@@ -318,6 +393,7 @@ namespace Hive.IO.Forms
             _capacity = gasBoiler.Capacity;
             _specificCapitalCost = gasBoiler.SpecificInvestmentCost;
             _specificEmbodiedEmissions = gasBoiler.SpecificEmbodiedGhg;
+            _lifetime = gasBoiler.Lifetime;
         }
 
         public void SetProperties(HeatCoolingExchanger exchanger)
@@ -328,6 +404,7 @@ namespace Hive.IO.Forms
             _capacity = exchanger.Capacity;
             _specificCapitalCost = exchanger.SpecificInvestmentCost;
             _specificEmbodiedEmissions = exchanger.SpecificEmbodiedGhg;
+            _lifetime = exchanger.Lifetime;
         }
 
         public void SetProperties(Chiller chiller)
@@ -338,6 +415,7 @@ namespace Hive.IO.Forms
             _capacity = chiller.Capacity;
             _specificCapitalCost = chiller.SpecificInvestmentCost;
             _specificEmbodiedEmissions = chiller.SpecificEmbodiedGhg;
+            _lifetime = chiller.Lifetime;
         }
 
         public void SetProperties(CombinedHeatPower chp)
@@ -348,6 +426,7 @@ namespace Hive.IO.Forms
             _capacity = chp.Capacity;
             _specificCapitalCost = chp.SpecificInvestmentCost;
             _specificEmbodiedEmissions = chp.SpecificEmbodiedGhg;
+            _lifetime = chp.Lifetime;
             _heatToPowerRatio = chp.HeatToPowerRatio;
         }
 
@@ -359,6 +438,7 @@ namespace Hive.IO.Forms
             _capacity = ashp.Capacity;
             _specificCapitalCost = ashp.SpecificInvestmentCost;
             _specificEmbodiedEmissions = ashp.SpecificEmbodiedGhg;
+            _lifetime = ashp.Lifetime;
         }
 
         public void SetProperties(Photovoltaic photovoltaic)
@@ -366,15 +446,21 @@ namespace Hive.IO.Forms
             ConversionTech = photovoltaic;
 
             _efficiency = photovoltaic.RefEfficiencyElectric;
+            _performanceRatio = photovoltaic.PR;
+            _surfaceTransmittance = photovoltaic.f_cover;
             _capacity = photovoltaic.Capacity;
             _specificCapitalCost = photovoltaic.SpecificInvestmentCost;
             _specificEmbodiedEmissions = photovoltaic.SpecificEmbodiedGhg;
+            _lifetime = photovoltaic.Lifetime;
             _moduleType = new ModuleTypeRecord
             {
                 Name = "<custom>",
                 ElectricEfficiency = photovoltaic.RefEfficiencyElectric,
+                PerformanceRatio = photovoltaic.PR,
+                SurfaceTransmittance = photovoltaic.f_cover,
                 SpecificCapitalCost = photovoltaic.SpecificInvestmentCost,
                 SpecificEmbodiedEmissions = photovoltaic.SpecificEmbodiedGhg,
+                Lifetime = photovoltaic.Lifetime,
                 ThermalEfficiency = 0.00
             };
         }
@@ -387,6 +473,7 @@ namespace Hive.IO.Forms
             _capacity = solarThermal.Capacity;
             _specificCapitalCost = solarThermal.SpecificInvestmentCost;
             _specificEmbodiedEmissions = solarThermal.SpecificEmbodiedGhg;
+            _lifetime = solarThermal.Lifetime;
 
             _moduleType = new ModuleTypeRecord
             {
@@ -394,6 +481,7 @@ namespace Hive.IO.Forms
                 ElectricEfficiency = 0.00,
                 SpecificCapitalCost = solarThermal.SpecificInvestmentCost,
                 SpecificEmbodiedEmissions = solarThermal.SpecificEmbodiedGhg,
+                Lifetime = solarThermal.Lifetime,
                 ThermalEfficiency = solarThermal.RefEfficiencyHeating
             };
         }
@@ -425,6 +513,7 @@ namespace Hive.IO.Forms
         public double Capacity;
         public double SpecificCapitalCost;
         public double SpecificEmbodiedEmissions;
+        public double Lifetime;
         public double HeatToPowerRatio; // only CHP
         public string Description;
     }
@@ -435,8 +524,11 @@ namespace Hive.IO.Forms
         public string Name { get; set; }
         public double ElectricEfficiency;
         public double ThermalEfficiency;
+        public double PerformanceRatio;
+        public double SurfaceTransmittance;
         public double SpecificCapitalCost;
         public double SpecificEmbodiedEmissions;
+        public double Lifetime;
         public string Description;
     }
 }

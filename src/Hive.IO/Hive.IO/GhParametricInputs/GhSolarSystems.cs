@@ -14,8 +14,11 @@ namespace Hive.IO.GhParametricInputs
         public string Technology; // e.g. 'Monocrystalline. Not really necessary, just for information
         public double ElectricEfficiency;
         public double ThermalEfficiency;
+        public double PerformanceRatio;
+        public double SurfaceTransmittance;
         public double InvestmentCost;
         public double EmbodiedEmissions;
+        public double Lifetime; // FIXME implement this properly
 
         public Mesh MeshSurface;
     }
@@ -50,6 +53,8 @@ namespace Hive.IO.GhParametricInputs
 
             pManager.AddNumberParameter("EfficiencyElectric", "EfficiencyElectric", "Electric Efficiency [0.0, 1.0]", GH_ParamAccess.item);
             pManager.AddNumberParameter("EfficiencyThermal", "EfficiencyThermal", "Thermal Efficiency [0.0, 1.0]", GH_ParamAccess.item);
+            pManager.AddNumberParameter("PerformanceRatio", "PerformanceRatio", "Performance Ratio [0.0, 1.0]", GH_ParamAccess.item);
+            pManager.AddNumberParameter("SurfaceTransmittance", "SurfaceTransmittance", "Surface Transmittance [0.0, 1.0]", GH_ParamAccess.item);
             pManager.AddNumberParameter("InvestmentCost", "InvestmentCost", "Investment cost in CHF/m^2", GH_ParamAccess.item);
             pManager.AddNumberParameter("EmbodiedEmissions", "EmbodiedEmissions", "Embodied emissions in kgCO2/m^2", GH_ParamAccess.item);
         }
@@ -78,6 +83,8 @@ namespace Hive.IO.GhParametricInputs
             DA.GetData(4, ref solarTech.ThermalEfficiency);
             DA.GetData(5, ref solarTech.InvestmentCost);
             DA.GetData(6, ref solarTech.EmbodiedEmissions);
+            DA.GetData(7, ref solarTech.PerformanceRatio);
+            DA.GetData(8, ref solarTech.SurfaceTransmittance);
 
             var solarTechList = new List<SolarTechProperties>();
             foreach (var mesh in meshes)

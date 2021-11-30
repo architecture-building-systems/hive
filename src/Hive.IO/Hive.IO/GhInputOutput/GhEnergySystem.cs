@@ -102,46 +102,49 @@ namespace Hive.IO.GhInputOutput
                 foreach (var solarProperties in solarTechProperties)
                     if (solarProperties.Type == "PV")
                         conversionTech.Add(new Photovoltaic(solarProperties.InvestmentCost,
-                            solarProperties.EmbodiedEmissions, solarProperties.MeshSurface, solarProperties.Technology,
-                            solarProperties.ElectricEfficiency));
+                            solarProperties.EmbodiedEmissions, solarProperties.Lifetime, solarProperties.MeshSurface, solarProperties.Technology,
+                            solarProperties.ElectricEfficiency, solarProperties.PerformanceRatio, solarProperties.SurfaceTransmittance));
                     else if (solarProperties.Type == "PVT")
-                        conversionTech.Add(new PVT(solarProperties.InvestmentCost, solarProperties.EmbodiedEmissions,
+                        conversionTech.Add(new PVT(solarProperties.InvestmentCost, solarProperties.EmbodiedEmissions, solarProperties.Lifetime,
                             solarProperties.MeshSurface, solarProperties.Technology, solarProperties.ElectricEfficiency,
-                            solarProperties.ThermalEfficiency));
+                            solarProperties.ThermalEfficiency, solarProperties.PerformanceRatio, solarProperties.SurfaceTransmittance));
                     else if (solarProperties.Type == "ST")
                         conversionTech.Add(new SolarThermal(solarProperties.InvestmentCost,
-                            solarProperties.EmbodiedEmissions, solarProperties.MeshSurface, solarProperties.Technology,
-                            solarProperties.ThermalEfficiency));
+                            solarProperties.EmbodiedEmissions, solarProperties.Lifetime, solarProperties.MeshSurface, solarProperties.Technology,
+                            solarProperties.ThermalEfficiency, solarProperties.PerformanceRatio, solarProperties.SurfaceTransmittance));
                     else
                         conversionTech.Add(new GroundCollector(solarProperties.InvestmentCost,
-                            solarProperties.EmbodiedEmissions, solarProperties.MeshSurface,
-                            solarProperties.Technology));
+                            solarProperties.EmbodiedEmissions, solarProperties.Lifetime, solarProperties.MeshSurface,
+                            solarProperties.Technology, solarProperties.PerformanceRatio, solarProperties.SurfaceTransmittance));
 
             if (conversionTechProperties != null)
             {
                 if (conversionTechProperties.ASHPCapacity > 0.0)
                     conversionTech.Add(new AirSourceHeatPump(conversionTechProperties.ASHPCost,
-                        conversionTechProperties.ASHPEmissions, conversionTechProperties.ASHPCapacity,
+                        conversionTechProperties.ASHPEmissions, conversionTechProperties.ASHPLifetime, conversionTechProperties.ASHPCapacity,
                         conversionTechProperties.ASHPEtaRef));
                 if (conversionTechProperties.GasBoilerCapacity > 0.0)
                     conversionTech.Add(new GasBoiler(conversionTechProperties.GasBoilerCost,
-                        conversionTechProperties.GasBoilerEmissions, conversionTechProperties.GasBoilerCapacity,
+                        conversionTechProperties.GasBoilerEmissions, conversionTechProperties.GasBoilerLifetime,
+                        conversionTechProperties.GasBoilerCapacity,
                         conversionTechProperties.GasBoilerEfficiency));
                 if (conversionTechProperties.CHPCapacity > 0.0)
                     conversionTech.Add(new CombinedHeatPower(conversionTechProperties.CHPCost,
-                        conversionTechProperties.CHPEmissions, conversionTechProperties.CHPCapacity,
+                        conversionTechProperties.CHPEmissions, conversionTechProperties.CHPLifetime, conversionTechProperties.CHPCapacity,
                         conversionTechProperties.CHPHTP, conversionTechProperties.CHPEffElec));
                 if (conversionTechProperties.ChillerCapacity > 0.0)
                     conversionTech.Add(new Chiller(conversionTechProperties.ChillerCost,
-                        conversionTechProperties.ChillerEmissions, conversionTechProperties.ChillerCapacity,
-                        conversionTechProperties.ChillerEtaRef));
+                        conversionTechProperties.ChillerEmissions, conversionTechProperties.ChillerLifetime, 
+                        conversionTechProperties.ChillerCapacity, conversionTechProperties.ChillerEtaRef));
                 if (conversionTechProperties.HeatExchangerCapacity > 0.0)
                     conversionTech.Add(new HeatCoolingExchanger(conversionTechProperties.HeatExchangerCost,
-                        conversionTechProperties.HeatExchangerEmissions, conversionTechProperties.HeatExchangerCapacity,
+                        conversionTechProperties.HeatExchangerEmissions, conversionTechProperties.HeatExchangerLifetime, 
+                        conversionTechProperties.HeatExchangerCapacity,
                         conversionTechProperties.HeatExchangerLosses));
                 if (conversionTechProperties.CoolExchangerCapacity > 0.0)
                     conversionTech.Add(new HeatCoolingExchanger(conversionTechProperties.CoolExchangerCost,
-                        conversionTechProperties.CoolExchangerEmissions, conversionTechProperties.CoolExchangerCapacity,
+                        conversionTechProperties.CoolExchangerEmissions, conversionTechProperties.CoolExchangerLifetime, 
+                        conversionTechProperties.CoolExchangerCapacity,
                         conversionTechProperties.CoolExchangerLosses, false, true));
             }
 
@@ -150,10 +153,10 @@ namespace Hive.IO.GhInputOutput
             {
                 Emitter emitter;
                 if (emProp.IsRadiation)
-                    emitter = new Radiator(emProp.InvestmentCost, emProp.EmbodiedEmissions, emProp.IsHeating,
+                    emitter = new Radiator(emProp.InvestmentCost, emProp.EmbodiedEmissions, emProp.Lifetime, emProp.IsHeating,
                         emProp.IsCooling, emProp.SupplyTemperature, emProp.ReturnTemperature);
                 else
-                    emitter = new AirDiffuser(emProp.InvestmentCost, emProp.EmbodiedEmissions, emProp.IsHeating,
+                    emitter = new AirDiffuser(emProp.InvestmentCost, emProp.EmbodiedEmissions, emProp.Lifetime, emProp.IsHeating,
                         emProp.IsCooling, emProp.SupplyTemperature, emProp.ReturnTemperature);
                 emitter.SetEmitterName(emProp.Name);
                 emitters.Add(emitter);
@@ -165,7 +168,7 @@ namespace Hive.IO.GhInputOutput
             // the result might be changed by opening the form,
             // so we need to create it based on the view model (the result of the form)
             var result = ReadViewModel();
-            DA.SetDataList(0, result);
+           DA.SetDataList(0, result);
         }
 
         /// <summary>
@@ -335,7 +338,10 @@ namespace Hive.IO.GhInputOutput
                 {
                     var specificCapitalCost = double.Parse(ct.SpecificCapitalCost);
                     var specificEmbodiedEmissions = double.Parse(ct.SpecificEmbodiedEmissions);
+                    var lifetime = double.Parse(ct.Lifetime);
                     var efficiency = double.Parse(ct.Efficiency);
+                    var performanceRatio = double.Parse(ct.PerformanceRatio);
+                    var surfaceTransmittance = double.Parse(ct.SurfaceTransmittance); 
                     var capacity = double.Parse(ct.Capacity);
                     var heatToPowerRatio = double.Parse(ct.HeatToPowerRatio);
                     var distributionLosses = double.Parse(ct.DistributionLosses);
@@ -344,40 +350,40 @@ namespace Hive.IO.GhInputOutput
                         case "Photovoltaic (PV)":
                             ct.AvailableSurfaces = _viewModel.SurfacesForConversion(ct);
                             foreach (var sm in ct.SelectedSurfaces)
-                                result.Add(new Photovoltaic(specificCapitalCost, specificEmbodiedEmissions, sm.Mesh,
+                                result.Add(new Photovoltaic(specificCapitalCost, specificEmbodiedEmissions, lifetime, sm.Mesh,
                                     "FIXME: PV",
-                                    efficiency));
+                                    efficiency, performanceRatio, surfaceTransmittance));
                             break;
                         case "Solar Thermal (ST)":
                             ct.AvailableSurfaces = _viewModel.SurfacesForConversion(ct);
                             foreach (var sm in ct.SelectedSurfaces)
-                                result.Add(new SolarThermal(specificCapitalCost, specificEmbodiedEmissions, sm.Mesh,
+                                result.Add(new SolarThermal(specificCapitalCost, specificEmbodiedEmissions, lifetime, sm.Mesh,
                                     "FIXME: ST",
-                                    efficiency));
+                                    efficiency, performanceRatio, surfaceTransmittance));
                             break;
                         case "Boiler (Gas)":
-                            result.Add(new GasBoiler(specificCapitalCost, specificEmbodiedEmissions, capacity,
+                            result.Add(new GasBoiler(specificCapitalCost, specificEmbodiedEmissions, lifetime, capacity,
                                 efficiency));
                             break;
                         case "CHP":
-                            result.Add(new CombinedHeatPower(specificCapitalCost, specificEmbodiedEmissions, capacity,
+                            result.Add(new CombinedHeatPower(specificCapitalCost, specificEmbodiedEmissions, lifetime, capacity,
                                 heatToPowerRatio,
                                 efficiency));
                             break;
                         case "Chiller (Electricity)":
                             result.Add(
-                                new Chiller(specificCapitalCost, specificEmbodiedEmissions, capacity, efficiency));
+                                new Chiller(specificCapitalCost, specificEmbodiedEmissions, lifetime, capacity, efficiency));
                             break;
                         case "ASHP (Electricity)":
-                            result.Add(new AirSourceHeatPump(specificCapitalCost, specificEmbodiedEmissions, capacity,
+                            result.Add(new AirSourceHeatPump(specificCapitalCost, specificEmbodiedEmissions, lifetime, capacity,
                                 efficiency));
                             break;
                         case "Heat Exchanger":
-                            result.Add(new HeatCoolingExchanger(specificCapitalCost, specificEmbodiedEmissions,
+                            result.Add(new HeatCoolingExchanger(specificCapitalCost, specificEmbodiedEmissions, lifetime,
                                 capacity, distributionLosses));
                             break;
                         case "Cooling Exchanger":
-                            result.Add(new HeatCoolingExchanger(specificCapitalCost, specificEmbodiedEmissions,
+                            result.Add(new HeatCoolingExchanger(specificCapitalCost, specificEmbodiedEmissions, lifetime,
                                 capacity, distributionLosses,
                                 false, true));
                             break;
@@ -390,18 +396,19 @@ namespace Hive.IO.GhInputOutput
             {
                 var specificInvestmentCost = double.Parse(emitter.SpecificCapitalCost);
                 var specificEmbodiedEmissions = double.Parse(emitter.SpecificEmbodiedEmissions);
+                var lifetime = double.Parse(emitter.Lifetime);
                 var inletTemperature = double.Parse(emitter.SupplyTemperature);
                 var returnTemperature = double.Parse(emitter.ReturnTemperature);
 
                 switch (emitter.Name)
                 {
                     case "Radiator":
-                        result.Add(new Radiator(specificInvestmentCost, specificEmbodiedEmissions, emitter.IsHeating,
+                        result.Add(new Radiator(specificInvestmentCost, specificEmbodiedEmissions, lifetime, emitter.IsHeating,
                             emitter.IsCooling,
                             inletTemperature, returnTemperature));
                         break;
                     case "Air diffuser":
-                        result.Add(new AirDiffuser(specificInvestmentCost, specificEmbodiedEmissions, emitter.IsHeating,
+                        result.Add(new AirDiffuser(specificInvestmentCost, specificEmbodiedEmissions, lifetime, emitter.IsHeating,
                             emitter.IsCooling,
                             inletTemperature, returnTemperature));
                         break;

@@ -298,6 +298,11 @@ namespace Hive.IO.Building
         /// </summary>
         [JsonProperty]
         public bool RunNaturalVentilation { get; set; }
+        /// <summary>
+        /// Determines if the fixed time constant provided by SIA2024 should be used.
+        /// </summary>
+        [JsonProperty]
+        public bool UseFixedTimeConstant { get; set; }
 
         #endregion
 

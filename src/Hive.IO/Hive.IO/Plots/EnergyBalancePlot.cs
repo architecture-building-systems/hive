@@ -9,8 +9,10 @@ using Hive.IO.Results;
 
 namespace Hive.IO.Plots
 {
-    public class EnergyBalancePlot : IVisualizerPlot
+    public abstract class EnergyBalancePlotBase : IVisualizerPlot
     {
+        public abstract bool Normalized { get; }
+
         private const float ArrowPadding = 5f;
         private const float ArrowIndent = 10f;
         private const float IconPadding = 5f;
@@ -92,35 +94,35 @@ namespace Hive.IO.Plots
             houseBounds.Height = bounds.Height - LegendHeight; // leave room for the legend
             var innerHousePolygon = RenderHouse(graphics, houseBounds);
 
-            var gains = new[]
+            // throw new Exception("Losses and Gains need to be positive values.");
+            // FIXME: remove this when chris has fixed the bug
+            // FIXME: in case of corrupted / not valid data, avoid trying to draw NaN gains or losses.
+            float CleanUpNegativeOrNan(float val) => val < 0.0f || float.IsNaN(val) ? 0.0f : val; 
+
+            var gains = new float[]
             {
-                results.SolarGains,
-                results.InternalGains,
-                results.PrimaryEnergy,
-                results.RenewableEnergy,
-                results.VentilationGains,
-                results.EnvelopeGains,
-                results.WindowsGains
+                results.SolarGains(Normalized),
+                results.InternalGains(Normalized),
+                results.PrimaryEnergy(Normalized),
+                results.RenewableEnergy(Normalized),
+                results.VentilationGains(Normalized),
+                results.EnvelopeGains(Normalized),
+                results.WindowsGains(Normalized)
             };
-            var losses = new[]
+            var losses = new float[]
             {
-                results.Electricity,
-                results.VentilationLosses,
-                results.EnvelopeLosses,
-                results.WindowsLosses,
-                results.SystemLosses,
-                results.ActiveCooling,
-                results.SurplusElectricity,
-                results.SurplusHeating
+                results.Electricity(Normalized),
+                results.VentilationLosses(Normalized),
+                results.EnvelopeLosses(Normalized),
+                results.WindowsLosses(Normalized),
+                results.SystemLosses(Normalized),
+                results.ActiveCooling(Normalized),
+                results.SurplusElectricity(Normalized),
+                results.SurplusHeating(Normalized)
             };
 
-            if (losses.Any(loss => loss < 0.0f) || gains.Any(gain => gain < 0.0f))
-            {
-                // throw new Exception("Losses and Gains need to be positive values.");
-                // FIXME: remove this when chris has fixed the bug
-                losses = losses.Select(loss => Math.Max(0.0f, loss)).ToArray();
-                gains = gains.Select(gain => Math.Max(0.0f, gain)).ToArray();
-            }
+            gains = gains.Select(v => CleanUpNegativeOrNan(v)).ToArray();
+            losses = losses.Select(v => CleanUpNegativeOrNan(v)).ToArray();
 
             var maxTotal = Math.Max(gains.Sum(), losses.Sum());
 
@@ -150,10 +152,13 @@ namespace Hive.IO.Plots
 
         private void RenderLegend(Graphics graphics, float[] gains, float[] losses, RectangleF legendBounds)
         {
+            var units = Normalized ? "kWh/m²" : "kWh";
+
             var leftTitle = "ENERGY IN";
-            var totalGains = gains.Sum();
+            var totalGains = gains.Sum() == 0.0 ? 1.0 : gains.Sum(); // to prevent divide by zero errors
             var energyInStrings = gains.Zip(EnergyInStrings,
-                (gain, s) => $"{s}: {gain:0} kWh ({gain / totalGains * 100:0}%)").ToList();
+                    (gain, s) => $"{s}: {gain:0} {units} ({gain / totalGains * 100:0}%)"
+                ).ToList();
             var leftLegendWidth =
                 energyInStrings.Concat(new[] {leftTitle}).Select(
                     // NOTE: the "xxx" in the string template is used for a bit of padding
@@ -164,9 +169,9 @@ namespace Hive.IO.Plots
             RenderLegendColumn(graphics, leftTitle, leftLegendBounds, energyInStrings, GainsColors);
 
             var rightTitle = "ENERGY OUT";
-            var totalLosses = losses.Sum();
+            var totalLosses = losses.Sum() == 0.0 ? 1.0 : losses.Sum(); // to prevent divide by zero errors
             var energyOutStrings = losses.Zip(EnergyOutStrings,
-                (loss, s) => $"{s}: {loss:0} kWh ({loss / totalLosses * 100:0}%)").ToList();
+                (loss, s) => $"{s}: {loss:0} {units} ({loss / totalLosses * 100:0}%)").ToList();
             var rightLegendWidth
                 = energyOutStrings.Concat(new[] {rightTitle}).Select(
                       s => GH_FontServer.MeasureString($"{s}xxx", GH_FontServer.Standard).Width).Max() + IconWidth +
@@ -403,5 +408,15 @@ namespace Hive.IO.Plots
             };
             return house;
         }
+    }
+
+    public class EnergyBalancePlot : EnergyBalancePlotBase
+    {
+        public override bool Normalized => false;
+    }
+
+    public class EnergyBalanceNormalizedPlot : EnergyBalancePlotBase
+    {
+        public override bool Normalized => true;
     }
 }

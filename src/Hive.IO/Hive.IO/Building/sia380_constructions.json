@@ -1,5 +1,11 @@
 [
 	{
+		"ConstructionType": "default",
+		"ConstructionTypePretty": "Default",
+		"Description": "Uses the fixed time constants from SIA 2024 instead.",
+		"CapacitancePerFloorArea": 0.0
+	},
+	{
 		"ConstructionType": "superlightweight",
 		"ConstructionTypePretty": "Super Light Weight",
 		"Description": "Examples: industrial steel building",

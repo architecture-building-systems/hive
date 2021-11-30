@@ -7,37 +7,44 @@ using Rhino.Geometry;
 
 namespace Hive.IO.GhParametricInputs
 {
+    // TODO add lifetimes
     public class ConversionTechProperties
     {
         public double ASHPCapacity;
         public double ASHPCost;
         public double ASHPEmissions;
+        public double ASHPLifetime; // FIX ME implement this properly
         public double ASHPEtaRef;
 
         public double GasBoilerCapacity;
         public double GasBoilerCost;
         public double GasBoilerEmissions;
+        public double GasBoilerLifetime; // FIX ME implement this properly
         public double GasBoilerEfficiency;
 
         public double CHPCapacity;
         public double CHPCost;
         public double CHPEmissions;
+        public double CHPLifetime; // FIX ME implement this properly
         public double CHPHTP;  // heat to power ratio
         public double CHPEffElec;
 
         public double ChillerCapacity;
         public double ChillerCost;
         public double ChillerEmissions;
+        public double ChillerLifetime; // FIX ME implement this properly
         public double ChillerEtaRef;
 
         public double HeatExchangerCapacity;
         public double HeatExchangerCost;
         public double HeatExchangerEmissions;
+        public double HeatExchangerLifetime; // FIX ME implement this properly
         public double HeatExchangerLosses;
 
         public double CoolExchangerCapacity;
         public double CoolExchangerCost;
         public double CoolExchangerEmissions;
+        public double CoolExchangerLifetime; // FIX ME implement this properly
         public double CoolExchangerLosses;
     }
 

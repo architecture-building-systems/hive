@@ -305,5 +305,10 @@ namespace Hive.IO.Forms
         }
 
         #endregion tabEmission
+
+        private void gridConversion_CellContentClick(object sender, DataGridViewCellEventArgs e)
+        {
+
+        }
     }
 }

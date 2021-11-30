@@ -11,6 +11,7 @@ namespace Hive.IO.GhParametricInputs
         public double Capacity;
         public double InvestmentCost;
         public double EmbodiedEmissions;
+        public double Lifetime; // FIX ME implement this properly
         public string Name;
         public bool IsAir;
         public bool IsRadiation;

@@ -26,7 +26,7 @@ namespace UnitTests
         [TestMethod]
         public void TestSerializeGasBoiler()
         {
-            var gasBoiler = new GasBoiler(100.0, 200.0, 400.0, 400.0);
+            var gasBoiler = new GasBoiler(100.0, 200.0, 20.0, 400.0, 400.0);
             var gasEnergy = new double[Misc.MonthsPerYear];
             var gasPrice = new double[Misc.MonthsPerYear];
             var ghgEmissionsFactor = new double[Misc.MonthsPerYear];
@@ -52,7 +52,7 @@ namespace UnitTests
         [TestMethod]
         public void TestSerializeDirectElectricity()
         {
-            var directElectricity = new DirectElectricity(100.0, 200.0, 400.0, 400.0);
+            var directElectricity = new DirectElectricity(100.0, 200.0, 80.0, 400.0, 400.0);
 
             var electricEnergy = new double[Misc.MonthsPerYear];
             var electricityPrice = new double[Misc.MonthsPerYear];
