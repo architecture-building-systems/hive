@@ -97,7 +97,7 @@ namespace Hive.IO.GhParametricInputs
             DA.GetData(23, ref siaRoom.OpaqueCost);
             DA.GetData(24, ref siaRoom.TransparentCost);
             DA.GetData(25, ref siaRoom.OpaqueEmissions);
-            DA.GetData(27, ref siaRoom.TransparentEmissions);
+            DA.GetData(26, ref siaRoom.TransparentEmissions);
 
             DA.SetData(0, siaRoom.ToJson());
         }
