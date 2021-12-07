@@ -101,7 +101,7 @@ namespace Hive.IO.Results
         public double TotalEmissionsEmbodiedConstructionMonthlyLevelised => TotalEmissionsEmbodiedConstructionYearlyLevelised / Misc.MonthsPerYear;
 
         [JsonProperty]
-        [ResultsExposeForGhList(Keys.Emissions, Keys.Embodied, Keys.Systems, Keys.Lifetime, levelised: true)]
+        [ResultsExposeForGhList(Keys.Emissions, Keys.Embodied, Keys.Systems, Keys.Lifetime)]
         public double TotalEmissionsEmbodiedSystems => TotalEmissionsEmbodiedSystemsYearlyLevelised * BuildingLifetime;
 
         [JsonProperty]

@@ -47,14 +47,30 @@ namespace Hive.IO.Results
     [AttributeUsage(AttributeTargets.Property)]
     internal class ResultsExposeForGhListAttribute : ExposeForGhListAttribute
     {
+        // this is not pretty... 
+        public readonly Keys Kpi;
+        public readonly Keys EmbodiedOperational;
+        public readonly Keys ConstructionSystems;
+        public readonly Keys TimeResolution;
+        public readonly bool Levelised;
+
         public ResultsExposeForGhListAttribute(Keys kpi,
             Keys embodiedOrOperational,
             Keys constructionOrSystems,
             Keys timeResolution,
             bool levelised = false)
         {
-            string GetName(Keys x) => x == Keys.None ? "" : Enum.GetName(typeof(Keys), x);
-            base.Name = $"{GetName(kpi)} {GetName(timeResolution)} {(levelised ? "(Levelised)" : "")} - {GetName(embodiedOrOperational)} {GetName(constructionOrSystems)}";
+            Kpi = kpi;
+            EmbodiedOperational = embodiedOrOperational;
+            ConstructionSystems = constructionOrSystems;
+            TimeResolution = timeResolution;
+            Levelised = levelised;
+
+            if (kpi == Keys.Emissions || kpi == Keys.Cost)
+            {
+                string GetName(Keys x) => x == Keys.None ? "" : Enum.GetName(typeof(Keys), x);
+                base.Name = $"{GetName(kpi)} {GetName(timeResolution)} {(levelised ? "(Levelised)" : "")} - {GetName(embodiedOrOperational)} {GetName(constructionOrSystems)}";
+            }
         }
     }
 }

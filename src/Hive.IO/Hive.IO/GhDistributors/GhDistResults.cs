@@ -1,8 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel;
-using Hive.IO.EnergySystems;
 
 namespace Hive.IO.GhDistributors
 {
@@ -18,16 +15,16 @@ namespace Hive.IO.GhDistributors
         public override GH_Exposure Exposure => GH_Exposure.secondary;
 
 
-        protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
+        protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("Results", "Results", "Hive Results of type <Hive.IO.Results.Results>", GH_ParamAccess.item);
             pManager.AddGenericParameter("ResultType", "ResultType", "Which result to extract. Choose from a dropdwon menu.", GH_ParamAccess.item);
         }
 
 
-        protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
+        protected override void RegisterOutputParams(GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("HourlyHtgSupTemp", "HourlyHtgSupTemp", "Hourly heating supply temperature", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Result", "Result", "The selected result to extract.", GH_ParamAccess.list);
         }
 
 
@@ -39,7 +36,15 @@ namespace Hive.IO.GhDistributors
             string resultsType = "";
             if (!DA.GetData(1, ref resultsType)) return;
 
-            DA.SetData(0, typeof(Results.Results).GetProperty(resultsType)?.GetValue(results));
+            var result = typeof(Results.Results).GetProperty(resultsType)?.GetValue(results);
+            if (result is double resultAsDouble)
+            {
+                DA.SetData(0, resultAsDouble);
+            }
+            else if (result is double[] resultAsDoubleArray)
+            {
+                DA.SetDataList(0, resultAsDoubleArray);
+            }
         }
 
 

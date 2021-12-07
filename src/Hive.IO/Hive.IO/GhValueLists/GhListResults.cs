@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using Grasshopper.Kernel.Expressions;
 using Grasshopper.Kernel.Data;
 using System.Collections.Specialized;
+using Grasshopper.Kernel.Types;
+using System.Linq.Expressions;
 
 namespace Hive.IO.GhValueLists
 {
@@ -13,8 +15,8 @@ namespace Hive.IO.GhValueLists
     {
         public GhListResults()
         {
-            this.Name = "Results Value List Hive";
-            this.NickName = "HiveResultsValueList";
+            this.Name = "Hive Results Type";
+            this.NickName = "HiveResultsType";
             this.Description = "Names of possible results to extract from <Hive.IO.Results.Results>, sorted by KPI, time resolution, and more.";
             this.Category = "[hive]";
             this.SubCategory = "IO-Core";
@@ -32,16 +34,19 @@ namespace Hive.IO.GhValueLists
                 {
                     var attr = Attribute.GetCustomAttribute(prop, typeof(ResultsExposeForGhListAttribute));
                     ResultsExposeForGhListAttribute attrResults = (ResultsExposeForGhListAttribute)attr;
-                    propsChosen[prop.Name] = attrResults.Name;
+                    propsChosen[attrResults.Name] = prop.Name;
                 }
             }
-            
-            this.ListItems.AddRange(
-                propsChosen.OrderBy(x => x.Value)
-                    .Select(x => new GH_ValueListItem(x.Key, x.Value))
-            );
+
+            foreach (var prop in propsChosen.OrderBy(x => x.Key))
+            {
+                var item = new GH_ValueListItem(prop.Key, prop.Value);
+                item.ExpireValue();
+                this.ListItems.Add(item);
+            }
         }
 
+        // from honeybadger.
         protected override void CollectVolatileData_Custom()
         {
             this.m_data.Clear();
