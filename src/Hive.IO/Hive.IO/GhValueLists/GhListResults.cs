@@ -5,9 +5,7 @@ using System.Linq;
 using System.Collections.Generic;
 using Grasshopper.Kernel.Expressions;
 using Grasshopper.Kernel.Data;
-using System.Collections.Specialized;
-using Grasshopper.Kernel.Types;
-using System.Linq.Expressions;
+using System.Text.RegularExpressions;
 
 namespace Hive.IO.GhValueLists
 {
@@ -26,7 +24,7 @@ namespace Hive.IO.GhValueLists
         private void Load()
         {
             this.ListItems.Clear();
-            Dictionary<string,string> propsChosen = new Dictionary<string, string>();
+            var propsChosen = new Dictionary<string, ResultsExposeForGhListAttribute>();
 
             foreach (var prop in typeof(Results.Results).GetProperties())
             {
@@ -34,17 +32,30 @@ namespace Hive.IO.GhValueLists
                 {
                     var attr = Attribute.GetCustomAttribute(prop, typeof(ResultsExposeForGhListAttribute));
                     ResultsExposeForGhListAttribute attrResults = (ResultsExposeForGhListAttribute)attr;
-                    propsChosen[attrResults.Name] = prop.Name;
+                    propsChosen[prop.Name] = attrResults;
                 }
             }
 
-            foreach (var prop in propsChosen.OrderBy(x => x.Key))
+            foreach (var prop in propsChosen.OrderBy(x => x.Value.Kpi).ThenBy(x => x.Value.TimeResolution))
             {
-                var item = new GH_ValueListItem(prop.Key, prop.Value);
+                if (prop.Value.Kpi == Keys.Energy) prop.Value.Name += " - " + PrettifyPropertyName(prop.Key).Replace("Total ", "");
+                var item = new GH_ValueListItem(prop.Value.Name, prop.Key);
                 item.ExpireValue();
                 this.ListItems.Add(item);
             }
         }
+
+        private string PrettifyPropertyName(string key)
+        {
+            var r = new Regex(@"
+                (?<=[A-Z])(?=[A-Z][a-z]) |
+                (?<=[^A-Z])(?=[A-Z]) |
+                (?<=[A-Za-z])(?=[^A-Za-z])", RegexOptions.IgnorePatternWhitespace);
+
+            return r.Replace(key, " ").Trim();
+        }
+
+
 
         // from honeybadger.
         protected override void CollectVolatileData_Custom()

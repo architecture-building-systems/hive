@@ -46,28 +46,39 @@ namespace Hive.IO.Results
 
         // implemented in Plots.DemandMonthlyPlot
         [JsonProperty]
+        [ResultsExposeForGhList(Keys.Energy, Keys.Monthly, Keys.None, Keys.None)]
         public double[] TotalFinalElectricityMonthly { get; private set; }
         [JsonProperty]
+        [ResultsExposeForGhList(Keys.Energy, Keys.Monthly, Keys.None, Keys.None)]
         public double[] TotalFinalCoolingMonthly { get; private set; }
         [JsonProperty]
+        [ResultsExposeForGhList(Keys.Energy, Keys.Monthly, Keys.None, Keys.None)]
         public double[] TotalFinalHeatingMonthly { get; private set; }
         [JsonProperty]
+        [ResultsExposeForGhList(Keys.Energy, Keys.Monthly, Keys.None, Keys.None)]
         public double[] TotalFinalDomesticHotWaterMonthly { get; private set; }
 
         [JsonProperty]
+        [ResultsExposeForGhList(Keys.Energy, Keys.Monthly, Keys.None, Keys.None)]
         public double[] TotalPrimaryEnergyNonRenewableMonthly { get; private set; }
         [JsonProperty]
+        [ResultsExposeForGhList(Keys.Energy, Keys.Monthly, Keys.None, Keys.None)]
         public double[] TotalFinalEnergyRenewableMonthly { get; private set; }
 
         [JsonProperty]
+        [ResultsExposeForGhList(Keys.Energy, Keys.Monthly, Keys.None, Keys.None)]
         public double[] TotalPurchasedElectricityMonthly { get; private set; }
         [JsonProperty]
+        [ResultsExposeForGhList(Keys.Energy, Keys.Monthly, Keys.None, Keys.None)]
         public double[] TotalFeedInElectricityMonthly { get; private set; }
         [JsonProperty]
+        [ResultsExposeForGhList(Keys.Energy, Keys.Monthly, Keys.None, Keys.None)]
         public double[] TotalSurplusHeatingMonthly { get; private set; } // just dumped? we can't utilize it without storage model, or connection to district heating network
         [JsonProperty]
+        [ResultsExposeForGhList(Keys.Energy, Keys.Monthly, Keys.None, Keys.None)]
         public double[] TotalConsumedElectricityMonthly { get; private set; }
         [JsonProperty]
+        [ResultsExposeForGhList(Keys.Energy, Keys.Monthly, Keys.None, Keys.None)]
         public double[] TotalActiveCoolingMonthly { get; private set; }
 
 
@@ -81,63 +92,63 @@ namespace Hive.IO.Results
         #region Total Emissions
 
         [JsonProperty]
-        [ResultsExposeForGhList(Keys.Emissions, Keys.None, Keys.None, Keys.Lifetime)]
+        [ResultsExposeForGhList(Keys.Emissions, Keys.Lifetime, Keys.None, Keys.None)]
         public double TotalEmissions => TotalEmissionsEmbodied + TotalEmissionsOperational;
 
         [JsonProperty]
-        [ResultsExposeForGhList(Keys.Emissions, Keys.Embodied, Keys.None, Keys.Lifetime)]
+        [ResultsExposeForGhList(Keys.Emissions, Keys.Lifetime, Keys.Embodied, Keys.None)]
         public double TotalEmissionsEmbodied => TotalEmissionsEmbodiedConstruction + TotalEmissionsEmbodiedSystems;
 
         [JsonProperty]
-        [ResultsExposeForGhList(Keys.Emissions, Keys.Embodied, Keys.Construction, Keys.Lifetime)]
+        [ResultsExposeForGhList(Keys.Emissions, Keys.Lifetime, Keys.Embodied, Keys.Construction)]
         public double TotalEmissionsEmbodiedConstruction => TotalEmissionsEmbodiedConstructionYearlyLevelised * BuildingLifetime;
 
         [JsonProperty]
-        [ResultsExposeForGhList(Keys.Emissions, Keys.Embodied, Keys.Construction, Keys.Yearly, levelised: true)]
+        [ResultsExposeForGhList(Keys.Emissions, Keys.Yearly, Keys.Embodied, Keys.Construction, levelised: true)]
         public double TotalEmissionsEmbodiedConstructionYearlyLevelised { get; protected set; }
 
         [JsonProperty]
-        [ResultsExposeForGhList(Keys.Emissions, Keys.Embodied, Keys.Construction, Keys.Monthly, levelised: true)]
+        [ResultsExposeForGhList(Keys.Emissions, Keys.Monthly, Keys.Embodied, Keys.Construction, levelised: true)]
         public double TotalEmissionsEmbodiedConstructionMonthlyLevelised => TotalEmissionsEmbodiedConstructionYearlyLevelised / Misc.MonthsPerYear;
 
         [JsonProperty]
-        [ResultsExposeForGhList(Keys.Emissions, Keys.Embodied, Keys.Systems, Keys.Lifetime)]
+        [ResultsExposeForGhList(Keys.Emissions, Keys.Lifetime, Keys.Embodied, Keys.Systems)]
         public double TotalEmissionsEmbodiedSystems => TotalEmissionsEmbodiedSystemsYearlyLevelised * BuildingLifetime;
 
         [JsonProperty]
-        [ResultsExposeForGhList(Keys.Emissions, Keys.Embodied, Keys.Systems, Keys.Yearly, levelised: true)]
+        [ResultsExposeForGhList(Keys.Emissions, Keys.Yearly, Keys.Embodied, Keys.Systems, levelised: true)]
         public double TotalEmissionsEmbodiedSystemsYearlyLevelised { get; protected set; }
 
         [JsonProperty]
-        [ResultsExposeForGhList(Keys.Emissions, Keys.Embodied, Keys.Systems, Keys.Monthly, levelised: true)]
+        [ResultsExposeForGhList(Keys.Emissions, Keys.Monthly, Keys.Embodied, Keys.Systems, levelised: true)]
         public double TotalEmissionsEmbodiedSystemsMonthlyLevelised => TotalEmissionsEmbodiedSystemsYearlyLevelised / Misc.MonthsPerYear;
 
         [JsonProperty]
-        [ResultsExposeForGhList(Keys.Emissions, Keys.Operational, Keys.None, Keys.Lifetime)]
+        [ResultsExposeForGhList(Keys.Emissions, Keys.Lifetime, Keys.Operational, Keys.None)]
         public double TotalEmissionsOperational => TotalEmissionsOperationalConstruction + TotalEmissionsOperationalSystems;
 
         [JsonProperty]
-        [ResultsExposeForGhList(Keys.Emissions, Keys.Operational, Keys.Construction, Keys.Lifetime)]
+        [ResultsExposeForGhList(Keys.Emissions, Keys.Lifetime, Keys.Operational, Keys.Construction)]
         public double TotalEmissionsOperationalConstruction { get; private set; }
 
         [JsonProperty]
-        [ResultsExposeForGhList(Keys.Emissions, Keys.Operational, Keys.Construction, Keys.Yearly, levelised: true)]
+        [ResultsExposeForGhList(Keys.Emissions, Keys.Yearly, Keys.Operational, Keys.Construction, levelised: true)]
         public double TotalEmissionsOperationalConstructionYearlyLevelised { get; protected set; }
 
         [JsonProperty]
-        [ResultsExposeForGhList(Keys.Emissions, Keys.Operational, Keys.Construction, Keys.Monthly, levelised: true)]
+        [ResultsExposeForGhList(Keys.Emissions, Keys.Monthly, Keys.Operational, Keys.Construction, levelised: true)]
         public double TotalEmissionsOperationalConstructionMonthlyLevelised => TotalEmissionsOperationalConstructionYearlyLevelised / Misc.MonthsPerYear;
 
         [JsonProperty]
-        [ResultsExposeForGhList(Keys.Emissions, Keys.Operational, Keys.Systems, Keys.Lifetime)]
+        [ResultsExposeForGhList(Keys.Emissions, Keys.Lifetime, Keys.Operational, Keys.Systems)]
         public double TotalEmissionsOperationalSystems => TotalEmissionsOperationalSystemsYearly * BuildingLifetime;
 
         [JsonProperty]
-        [ResultsExposeForGhList(Keys.Emissions, Keys.Operational, Keys.Systems, Keys.Yearly)]
+        [ResultsExposeForGhList(Keys.Emissions, Keys.Yearly, Keys.Operational, Keys.Systems)]
         public double TotalEmissionsOperationalSystemsYearly => TotalEmissionsOperationalSystemsMonthly.Sum();
 
         [JsonProperty]
-        [ResultsExposeForGhList(Keys.Emissions, Keys.Operational, Keys.Systems, Keys.Monthly)]
+        [ResultsExposeForGhList(Keys.Emissions, Keys.Monthly, Keys.Operational, Keys.Systems)]
         public double[] TotalEmissionsOperationalSystemsMonthly { get; private set; }
 
         #endregion

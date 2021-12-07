@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 
 namespace Hive.IO.Results
@@ -17,28 +18,14 @@ namespace Hive.IO.Results
         internal string Name;
     }
 
-    //public struct Keys
-    //{
-    //    string Lifetime => "Lifetime";
-    //    string Yearly => "Yearly";
-    //    string Monthly => "Monthly";
-    //    string Embodied => "Embodied";
-    //    string Operational => "Operational";
-    //    string Construction => "Construction";
-    //    string Systems => "Systems";
-
-
-
-    //}
-    
     internal enum Keys
     {
-        Lifetime, Yearly, Monthly, 
-        Energy, Emissions, Cost,
-        Embodied, Operational, 
-        Construction, Systems,
+        Energy = 0, Emissions = 1, Cost = 2,
+        Lifetime = 10, Yearly = 11, Monthly = 12, 
+        Embodied = 20, Operational = 21, 
+        Construction = 30, Systems = 31,
 
-        None
+        None = 100
     }
 
     /// <summary>
@@ -55,21 +42,26 @@ namespace Hive.IO.Results
         public readonly bool Levelised;
 
         public ResultsExposeForGhListAttribute(Keys kpi,
-            Keys embodiedOrOperational,
-            Keys constructionOrSystems,
             Keys timeResolution,
+            Keys embodiedOrOperational = Keys.None,
+            Keys constructionOrSystems = Keys.None,
             bool levelised = false)
         {
             Kpi = kpi;
+            TimeResolution = timeResolution;
             EmbodiedOperational = embodiedOrOperational;
             ConstructionSystems = constructionOrSystems;
-            TimeResolution = timeResolution;
             Levelised = levelised;
+
+            string GetName(Keys x) => x == Keys.None ? "" : Enum.GetName(typeof(Keys), x);
 
             if (kpi == Keys.Emissions || kpi == Keys.Cost)
             {
-                string GetName(Keys x) => x == Keys.None ? "" : Enum.GetName(typeof(Keys), x);
                 base.Name = $"{GetName(kpi)} {GetName(timeResolution)} {(levelised ? "(Levelised)" : "")} - {GetName(embodiedOrOperational)} {GetName(constructionOrSystems)}";
+            }
+            else if (kpi == Keys.Energy)
+            {
+                base.Name = $"{GetName(kpi)}"; /// TODO prettify happens elsewhere
             }
         }
     }
