@@ -9,6 +9,9 @@ using System.Text.RegularExpressions;
 
 namespace Hive.IO.GhValueLists
 {
+    /// <summary>
+    /// A ValueList for all the properties from the Results class that we want to expose to the user.
+    /// </summary>
     public class GhListResults : GH_ValueList
     {
         public GhListResults()
@@ -23,29 +26,37 @@ namespace Hive.IO.GhValueLists
 
         private void Load()
         {
-            this.ListItems.Clear();
-            var propsChosen = new Dictionary<string, ResultsExposeForGhListAttribute>();
+            var propsChosen = new Dictionary<string, string>();
+            var items = new Dictionary<string, string>();
 
             foreach (var prop in typeof(Results.Results).GetProperties())
             {
-                if (Attribute.IsDefined(prop, typeof(ResultsExposeForGhListAttribute)))
+                var attrs = Attribute.GetCustomAttributes(prop);
+                var prettyName = attrs
+                    .Where(a => a is IResultAttribute)
+                    .Cast<IResultAttribute>()
+                    .OrderBy(a => a.Rank)
+                    .Select(a => a.Name)
+                    .ToArray();
+
+                if (prettyName.Length > 0)
                 {
-                    var attr = Attribute.GetCustomAttribute(prop, typeof(ResultsExposeForGhListAttribute));
-                    ResultsExposeForGhListAttribute attrResults = (ResultsExposeForGhListAttribute)attr;
-                    propsChosen[prop.Name] = attrResults;
+                    items[prop.Name] =
+                        prettyName[0] == "Energy"
+                            ? prettyName[0] + " - " + SplitCamelCase(prop.Name.Replace("Total", ""))
+                            : prettyName[0] + " - " + string.Join(" ", prettyName.Skip(1));
                 }
             }
 
-            foreach (var prop in propsChosen.OrderBy(x => x.Value.Kpi).ThenBy(x => x.Value.TimeResolution))
-            {
-                if (prop.Value.Kpi == Keys.Energy) prop.Value.Name += " - " + PrettifyPropertyName(prop.Key).Replace("Total ", "");
-                var item = new GH_ValueListItem(prop.Value.Name, prop.Key);
-                item.ExpireValue();
-                this.ListItems.Add(item);
-            }
+            this.ListItems.Clear();
+            this.ListItems.AddRange(items
+                .OrderBy(prop => prop.Value)
+                .Select(p => new GH_ValueListItem(p.Value, p.Key))
+            );
         }
 
-        private string PrettifyPropertyName(string key)
+        // See https://stackoverflow.com/questions/28695172/converting-c-sharp-regex-to-javascript-gives-error-invalid-group
+        private string SplitCamelCase(string key)
         {
             var r = new Regex(@"
                 (?<=[A-Z])(?=[A-Z][a-z]) |
@@ -54,8 +65,6 @@ namespace Hive.IO.GhValueLists
 
             return r.Replace(key, " ").Trim();
         }
-
-
 
         // from honeybadger.
         protected override void CollectVolatileData_Custom()

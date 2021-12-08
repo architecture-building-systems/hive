@@ -1,68 +1,101 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace Hive.IO.Results
 {
-
-
     /// <summary>
-    /// Attribute for which properties to include in the GhListResults class.
+    /// Base interface for attributes for results. Name is the name ot be used for display, 
+    /// Rank indicates the ordering of each word for the displayed word on the Grasshopper ValueList.
     /// </summary>
-    [AttributeUsage(AttributeTargets.Property)]
-    public class ExposeForGhListAttribute : Attribute
+    public interface IResultAttribute
     {
-        internal string Name;
+        int Rank { get; }
+        string Name { get; }
     }
 
-    internal enum Keys
-    {
-        Energy = 0, Emissions = 1, Cost = 2,
-        Lifetime = 10, Yearly = 11, Monthly = 12, 
-        Embodied = 20, Operational = 21, 
-        Construction = 30, Systems = 31,
 
-        None = 100
+    // KPI Attributes
+
+    [AttributeUsage(AttributeTargets.Property)]
+    public class EnergyAttribute : Attribute, IResultAttribute
+    {
+        public int Rank => 1;
+        public string Name => "Energy";
     }
 
-    /// <summary>
-    /// Attribute for which properties to include in the GhListResults class.
-    /// </summary>
     [AttributeUsage(AttributeTargets.Property)]
-    internal class ResultsExposeForGhListAttribute : ExposeForGhListAttribute
+    public class EmissionsAttribute : Attribute, IResultAttribute
     {
-        // this is not pretty... 
-        public readonly Keys Kpi;
-        public readonly Keys EmbodiedOperational;
-        public readonly Keys ConstructionSystems;
-        public readonly Keys TimeResolution;
-        public readonly bool Levelised;
+        public int Rank => 1;
+        public string Name => "Emissions";
+    }
 
-        public ResultsExposeForGhListAttribute(Keys kpi,
-            Keys timeResolution,
-            Keys embodiedOrOperational = Keys.None,
-            Keys constructionOrSystems = Keys.None,
-            bool levelised = false)
-        {
-            Kpi = kpi;
-            TimeResolution = timeResolution;
-            EmbodiedOperational = embodiedOrOperational;
-            ConstructionSystems = constructionOrSystems;
-            Levelised = levelised;
+    [AttributeUsage(AttributeTargets.Property)]
+    internal class CostAttribute : Attribute, IResultAttribute
+    {
+        public int Rank => 1;
+        public string Name => "Cost";
+    }
 
-            string GetName(Keys x) => x == Keys.None ? "" : Enum.GetName(typeof(Keys), x);
+    // Time Resolution Attributes
 
-            if (kpi == Keys.Emissions || kpi == Keys.Cost)
-            {
-                base.Name = $"{GetName(kpi)} {GetName(timeResolution)} {(levelised ? "(Levelised)" : "")} - {GetName(embodiedOrOperational)} {GetName(constructionOrSystems)}";
-            }
-            else if (kpi == Keys.Energy)
-            {
-                base.Name = $"{GetName(kpi)}"; /// TODO prettify happens elsewhere
-            }
-        }
+    [AttributeUsage(AttributeTargets.Property)]
+    internal class LifetimeAttribute : Attribute, IResultAttribute
+    {
+        public int Rank => 2;
+        public string Name => "Lifetime";
+    }
+
+    [AttributeUsage(AttributeTargets.Property)]
+    internal class YearlyAttribute : Attribute, IResultAttribute
+    {
+        public int Rank => 2;
+        public string Name => "Yearly";
+    }
+
+    [AttributeUsage(AttributeTargets.Property)]
+    internal class MonthlyAttribute : Attribute, IResultAttribute
+    {
+        public int Rank => 2;
+        public string Name => "Monthly";
+    }
+
+    [AttributeUsage(AttributeTargets.Property)]
+    internal class LevelisedAttribute : Attribute, IResultAttribute
+    {
+        public int Rank => 3;
+        public string Name => "Levelized";
+    }
+
+    // Embodied / Operational Attributes
+
+    [AttributeUsage(AttributeTargets.Property)]
+    internal class EmbodiedAttribute : Attribute, IResultAttribute
+    {
+        public int Rank => 4;
+        public string Name => "Embodied";
+    }
+
+    [AttributeUsage(AttributeTargets.Property)]
+    internal class OperationalAttribute : Attribute, IResultAttribute
+    {
+        public int Rank => 4;
+        public string Name => "Operational";
+    }
+
+
+    // Construction / Systems Attributes
+
+    [AttributeUsage(AttributeTargets.Property)]
+    internal class ConstructionAttribute : Attribute, IResultAttribute
+    {
+        public int Rank => 5;
+        public string Name => "Construction";
+    }
+
+    [AttributeUsage(AttributeTargets.Property)]
+    internal class SystemsAttribute : Attribute, IResultAttribute
+    {
+        public int Rank => 5;
+        public string Name => "Systems";
     }
 }

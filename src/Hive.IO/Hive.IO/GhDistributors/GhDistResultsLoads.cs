@@ -35,16 +35,16 @@ namespace Hive.IO.GhDistributors
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            var x = new Results.Results();
-            if (!DA.GetData(0, ref x)) return;
+            var results = new Results.Results();
+            if (!DA.GetData(0, ref results)) return;
 
-            var heatingLoads = x.TotalFinalHeatingMonthly;
-            var coolingLoads = x.TotalFinalCoolingMonthly;
-            var electricityLoads = x.TotalFinalElectricityMonthly;
+            double[] heatingLoads = results.TotalFinalHeatingMonthly;
+            double[] coolingLoads = results.TotalFinalCoolingMonthly;
+            double[] electricityLoads = results.TotalFinalElectricityMonthly;
 
             var windowSolarGains = new List<object>();
             int windowCount = 0;
-            foreach (double[] window in x.MonthlySolarGainsPerWindow) {
+            foreach (double[] window in results.MonthlySolarGainsPerWindow) {
                 windowSolarGains.Add("______");
                 windowSolarGains.Add("window " + windowCount);
                 foreach (double solarGain in window) {
@@ -55,17 +55,17 @@ namespace Hive.IO.GhDistributors
 
             var gainsAndLosses = new List<string>()
             {
-                "SolarGains: " + x.TotalSolarGains,
-                "InternalGains: " + x.TotalInternalGains ,
-                "PrimaryEnergy: " + x.TotalPrimaryEnergyNonRenewableMonthly.Sum() ,
-                "VentilationHeatGains: " + x.TotalVentilationHeatGains ,
-                "EnvelopeHeatGains: " + x.TotalOpaqueTransmissionHeatGains ,
-                "WindowHeatGains: " + x.TotalWindowTransmissionHeatGains ,
-                "ElectricityDemand: " + x.TotalConsumedElectricityMonthly.Sum() ,
-                "VentilationHeatLosses: " + x.TotalVentilationHeatLosses, 
-                "EnvelopeHeatLosses: " + x.TotalOpaqueTransmissionHeatLosses,  
-                "WindowHeatLosses: " + x.TotalWindowTransmissionHeatLosses,
-                "SystemConversionLosses: " + x.TotalSystemLosses
+                "SolarGains: " + results.TotalSolarGains,
+                "InternalGains: " + results.TotalInternalGains ,
+                "PrimaryEnergy: " + results.TotalPrimaryEnergyNonRenewableMonthly.Sum() ,
+                "VentilationHeatGains: " + results.TotalVentilationHeatGains ,
+                "EnvelopeHeatGains: " + results.TotalOpaqueTransmissionHeatGains ,
+                "WindowHeatGains: " + results.TotalWindowTransmissionHeatGains ,
+                "ElectricityDemand: " + results.TotalConsumedElectricityMonthly.Sum() ,
+                "VentilationHeatLosses: " + results.TotalVentilationHeatLosses, 
+                "EnvelopeHeatLosses: " + results.TotalOpaqueTransmissionHeatLosses,  
+                "WindowHeatLosses: " + results.TotalWindowTransmissionHeatLosses,
+                "SystemConversionLosses: " + results.TotalSystemLosses
             };
 
             DA.SetDataList(0, heatingLoads);
