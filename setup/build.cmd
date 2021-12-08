@@ -13,7 +13,7 @@ SET PYTHON=python
 SET IPY=%PROGRAMFILES%\IronPython 2.7\ipy.exe
 SET HB=%HONEY_BADGER_DIR%\honey-badger.py
 SET HIVE_WIKI_PY= %HIVE_WIKI_DIR%\hbwiki.py
-SET MSBUILD=%PROGRAMFILES%\Microsoft Visual Studio\2022\Community\MSBuild\Current\Bin\MSBuild.exe
+SET MSBUILD=%PROGRAMFILES(x86)%\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe
 SET MAKENSIS=%PROGRAMFILES(X86)%\NSIS\makensis.exe
 
 CD %HIVE_BUILD_DIR%

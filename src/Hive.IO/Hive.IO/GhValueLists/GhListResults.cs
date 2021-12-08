@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using Grasshopper.Kernel.Expressions;
 using Grasshopper.Kernel.Data;
 using System.Text.RegularExpressions;
+using Grasshopper.Kernel;
 
 namespace Hive.IO.GhValueLists
 {
@@ -23,6 +24,8 @@ namespace Hive.IO.GhValueLists
             this.SubCategory = "IO-Core";
             Load();
         }
+
+        public override GH_Exposure Exposure => GH_Exposure.quarternary;
 
         private void Load()
         {
