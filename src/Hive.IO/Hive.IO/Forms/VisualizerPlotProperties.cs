@@ -65,5 +65,17 @@ namespace Hive.IO.Forms
             WriteDoubleParameter("SolarGains-Axis-Minimum", txtSolarGainsMinimum.Text);
             WriteDoubleParameter("SolarGains-Axis-Maximum", txtSolarGainsMaximum.Text);
         }
+
+        private void btnResetDemandAxis_Click(object sender, EventArgs e)
+        {
+            txtEnergyDemandMinimum.Text = null;
+            txtEnergyDemandMaximum.Text = null;
+        }
+
+        private void btnResetSolarGainsAxis_Click(object sender, EventArgs e)
+        {
+            txtSolarGainsMinimum.Text = null;
+            txtSolarGainsMaximum.Text = null;
+        }
     }
 }

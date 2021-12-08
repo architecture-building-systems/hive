@@ -23,7 +23,7 @@ OutFile "Setup_Hive.exe"
 ;--------------------------------
 ;Folder selection page
 
-InstallDir "$APPDATA\Grasshopper\Libraries"
+InstallDir "$APPDATA\Grasshopper\Libraries\Hive"
 
 ;Request application privileges for Windows Vista
 RequestExecutionLevel user
@@ -57,23 +57,42 @@ Section "Base Installation" Base_Installation_Section
     SetOutPath "$INSTDIR"
 
     # first, delete any "old" files (some of them have been renamed...)
-    Delete /REBOOTOK "$INSTDIR\epw-reader.ghpy"
+    Delete /REBOOTOK "$INSTDIR\Hive.Core.epw_reader.ghpy"
     Delete /REBOOTOK "$INSTDIR\GHSolar.gha"
     Delete /REBOOTOK "$INSTDIR\Hive.IO.gha"
     Delete /REBOOTOK "$INSTDIR\honey-badger-runtime.dll"
     Delete /REBOOTOK "$INSTDIR\Newtonsoft.Json.dll"
     Delete /REBOOTOK "$INSTDIR\OxyPlot.dll"
     Delete /REBOOTOK "$INSTDIR\OxyPlot.WindowsForms.dll"
-    Delete /REBOOTOK "$INSTDIR\sia380.ghpy"
-    Delete /REBOOTOK "$INSTDIR\sia380.gha"
-    Delete /REBOOTOK "$INSTDIR\solar.gha"
-    Delete /REBOOTOK "$INSTDIR\solar.ghpy"
+    Delete /REBOOTOK "$INSTDIR\Hive.Core.sia380.ghpy"
+    Delete /REBOOTOK "$INSTDIR\Hive.Core.sia380.gha"
+    Delete /REBOOTOK "$INSTDIR\Hive.Core.solar.gha"
+    Delete /REBOOTOK "$INSTDIR\Hive.Core.solar.ghpy"
     Delete /REBOOTOK "$INSTDIR\SolarModel.dll"
-    Delete /REBOOTOK "$INSTDIR\combustion.ghpy"
-    Delete /REBOOTOK "$INSTDIR\cooling.ghpy"   
-    Delete /REBOOTOK "$INSTDIR\heatpumps.ghpy"   
-    Delete /REBOOTOK "$INSTDIR\solar-tech.ghpy"   
+    Delete /REBOOTOK "$INSTDIR\Hive.Core.combustion.ghpy"
+    Delete /REBOOTOK "$INSTDIR\Hive.Core.cooling.ghpy"   
+    Delete /REBOOTOK "$INSTDIR\Hive.Core.heatpumps.ghpy"   
+    Delete /REBOOTOK "$INSTDIR\Hive.Core.solar_tech.ghpy" 
+    Delete /REBOOTOK "$INSTDIR\Hive.Core.solar_tech.gha"
     
+    # Also delete files from previous install location (Appdata\Grasshopper\Libraries)
+    Delete /REBOOTOK "$INSTDIR\..\Hive.Core.epw_reader.ghpy"
+    Delete /REBOOTOK "$INSTDIR\..\GHSolar.gha"
+    Delete /REBOOTOK "$INSTDIR\..\Hive.IO.gha"
+    Delete /REBOOTOK "$INSTDIR\..\honey-badger-runtime.dll"
+    Delete /REBOOTOK "$INSTDIR\..\Newtonsoft.Json.dll"
+    Delete /REBOOTOK "$INSTDIR\..\OxyPlot.dll"
+    Delete /REBOOTOK "$INSTDIR\..\OxyPlot.WindowsForms.dll"
+    Delete /REBOOTOK "$INSTDIR\..\Hive.Core.sia380.ghpy"
+    Delete /REBOOTOK "$INSTDIR\..\Hive.Core.sia380.gha"
+    Delete /REBOOTOK "$INSTDIR\..\Hive.Core.solar.gha"
+    Delete /REBOOTOK "$INSTDIR\..\Hive.Core.solar.ghpy"
+    Delete /REBOOTOK "$INSTDIR\..\SolarModel.dll"
+    Delete /REBOOTOK "$INSTDIR\..\Hive.Core.combustion.ghpy"
+    Delete /REBOOTOK "$INSTDIR\..\Hive.Core.cooling.ghpy"   
+    Delete /REBOOTOK "$INSTDIR\..\Hive.Core.heatpumps.ghpy"   
+    Delete /REBOOTOK "$INSTDIR\..\Hive.Core.solar_tech.ghpy"
+    Delete /REBOOTOK "$INSTDIR\..\Hive.Core.solar_tech.gha"
 
     # next, copy the "new files"
 

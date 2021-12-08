@@ -11,7 +11,7 @@ import Grasshopper as gh
 path = gh.Folders.AppDataFolder
 import clr
 import os
-clr.AddReferenceToFileAndPath(os.path.join(path, "Libraries", "SolarModel.dll"))
+clr.AddReferenceToFileAndPath(os.path.join(path, "Libraries\Hive", "SolarModel.dll"))
 import SolarModel as sm
 
 

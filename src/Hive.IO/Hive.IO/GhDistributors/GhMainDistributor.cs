@@ -4,7 +4,9 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Hive.IO.EnergySystems;
+using Hive.IO.Util;
 using Rhino;
+using System.Reflection;
 
 namespace Hive.IO.GhDistributors
 {
@@ -58,6 +60,9 @@ namespace Hive.IO.GhDistributors
         /// <param name="DA"></param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            //read InformationalVersion attribute from AssemblyInfo.cs to display as message under the Main Hive Distributor
+            Message = Misc.GetInformationalVersionAttribute();
+
             var inputObjects = new List<GH_ObjectWrapper>();
             if (!DA.GetDataList(0, inputObjects)) return;
             
