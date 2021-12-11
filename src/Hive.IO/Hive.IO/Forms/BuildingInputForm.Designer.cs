@@ -1283,6 +1283,7 @@ namespace Hive.IO.Forms
             this.cboBuildingUseType.Name = "cboBuildingUseType";
             this.cboBuildingUseType.Size = new System.Drawing.Size(362, 33);
             this.cboBuildingUseType.TabIndex = 5;
+            this.cboBuildingUseType.SelectedIndexChanged += new System.EventHandler(this.cboBuildingUseType_SelectedIndexChanged);
             // 
             // label2
             // 
@@ -1306,6 +1307,7 @@ namespace Hive.IO.Forms
             this.cboRoomType.Name = "cboRoomType";
             this.cboRoomType.Size = new System.Drawing.Size(362, 33);
             this.cboRoomType.TabIndex = 7;
+            this.cboRoomType.SelectedIndexChanged += new System.EventHandler(this.cboRoomType_SelectedIndexChanged);
             // 
             // label3
             // 
@@ -1329,6 +1331,7 @@ namespace Hive.IO.Forms
             this.cboBuildingQuality.Name = "cboBuildingQuality";
             this.cboBuildingQuality.Size = new System.Drawing.Size(362, 33);
             this.cboBuildingQuality.TabIndex = 9;
+            this.cboBuildingQuality.SelectedIndexChanged += new System.EventHandler(this.cboBuildingQuality_SelectedIndexChanged);
             // 
             // label43
             // 
@@ -1352,6 +1355,7 @@ namespace Hive.IO.Forms
             this.cboBuildingConstruction.Name = "cboBuildingConstruction";
             this.cboBuildingConstruction.Size = new System.Drawing.Size(354, 33);
             this.cboBuildingConstruction.TabIndex = 10;
+            this.cboBuildingConstruction.SelectedIndexChanged += new System.EventHandler(this.cboBuildingConstruction_SelectedIndexChanged);
             // 
             // label44
             // 
