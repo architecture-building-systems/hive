@@ -34,10 +34,6 @@ namespace Hive.IO.Forms
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabSIA = new System.Windows.Forms.TabPage();
             this.tableLayoutSiaMain = new System.Windows.Forms.TableLayoutPanel();
-            this.txtCapacitancePerFloorArea = new System.Windows.Forms.TextBox();
-            this.label44 = new System.Windows.Forms.Label();
-            this.cboBuildingConstruction = new System.Windows.Forms.ComboBox();
-            this.label43 = new System.Windows.Forms.Label();
             this.panelSiaProperties = new System.Windows.Forms.Panel();
             this.tableLayoutSiaProperties = new System.Windows.Forms.TableLayoutPanel();
             this.label5 = new System.Windows.Forms.Label();
@@ -117,16 +113,6 @@ namespace Hive.IO.Forms
             this.txtLightingYearlyHours = new System.Windows.Forms.TextBox();
             this.txtEquipmentLoads = new System.Windows.Forms.TextBox();
             this.txtEquipmentYearlyHours = new System.Windows.Forms.TextBox();
-            this.tabVEN = new System.Windows.Forms.TabPage();
-            this.tableLayoutVentilation = new System.Windows.Forms.TableLayoutPanel();
-            this.label39 = new System.Windows.Forms.Label();
-            this.label40 = new System.Windows.Forms.Label();
-            this.label42 = new System.Windows.Forms.Label();
-            this.txtAirChangeRate = new System.Windows.Forms.TextBox();
-            this.txtInfiltration = new System.Windows.Forms.TextBox();
-            this.txtHeatRecovery = new System.Windows.Forms.TextBox();
-            this.label45 = new System.Windows.Forms.Label();
-            this.checkBoxNaturalVentilation = new System.Windows.Forms.CheckBox();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
             this.cboBuildingUseType = new System.Windows.Forms.ComboBox();
@@ -134,6 +120,18 @@ namespace Hive.IO.Forms
             this.cboRoomType = new System.Windows.Forms.ComboBox();
             this.label3 = new System.Windows.Forms.Label();
             this.cboBuildingQuality = new System.Windows.Forms.ComboBox();
+            this.label43 = new System.Windows.Forms.Label();
+            this.cboBuildingConstruction = new System.Windows.Forms.ComboBox();
+            this.label44 = new System.Windows.Forms.Label();
+            this.txtCapacitancePerFloorArea = new System.Windows.Forms.TextBox();
+            this.label39 = new System.Windows.Forms.Label();
+            this.txtAirChangeRate = new System.Windows.Forms.TextBox();
+            this.label40 = new System.Windows.Forms.Label();
+            this.txtInfiltration = new System.Windows.Forms.TextBox();
+            this.label42 = new System.Windows.Forms.Label();
+            this.txtHeatRecovery = new System.Windows.Forms.TextBox();
+            this.label45 = new System.Windows.Forms.Label();
+            this.checkBoxNaturalVentilation = new System.Windows.Forms.CheckBox();
             this.tabControl.SuspendLayout();
             this.tabSIA.SuspendLayout();
             this.tableLayoutSiaMain.SuspendLayout();
@@ -147,8 +145,6 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeWall.SuspendLayout();
             this.tabIG.SuspendLayout();
             this.tableLayoutInternalGains.SuspendLayout();
-            this.tabVEN.SuspendLayout();
-            this.tableLayoutVentilation.SuspendLayout();
             this.tableLayoutPanel1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -158,7 +154,6 @@ namespace Hive.IO.Forms
             this.tabControl.Controls.Add(this.tabSIA);
             this.tabControl.Controls.Add(this.tabENV);
             this.tabControl.Controls.Add(this.tabIG);
-            this.tabControl.Controls.Add(this.tabVEN);
             this.tabControl.Location = new System.Drawing.Point(0, 159);
             this.tabControl.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabControl.Name = "tabControl";
@@ -175,7 +170,7 @@ namespace Hive.IO.Forms
             this.tabSIA.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabSIA.Size = new System.Drawing.Size(748, 974);
             this.tabSIA.TabIndex = 0;
-            this.tabSIA.Text = "SIA";
+            this.tabSIA.Text = "Geo./Set-points";
             this.tabSIA.UseVisualStyleBackColor = true;
             // 
             // tableLayoutSiaMain
@@ -185,72 +180,17 @@ namespace Hive.IO.Forms
             this.tableLayoutSiaMain.ColumnCount = 2;
             this.tableLayoutSiaMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutSiaMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutSiaMain.Controls.Add(this.txtCapacitancePerFloorArea, 1, 4);
-            this.tableLayoutSiaMain.Controls.Add(this.label44, 0, 4);
-            this.tableLayoutSiaMain.Controls.Add(this.cboBuildingConstruction, 1, 3);
-            this.tableLayoutSiaMain.Controls.Add(this.label43, 0, 3);
-            this.tableLayoutSiaMain.Controls.Add(this.panelSiaProperties, 0, 6);
+            this.tableLayoutSiaMain.Controls.Add(this.panelSiaProperties, 0, 0);
             this.tableLayoutSiaMain.Location = new System.Drawing.Point(4, 3);
             this.tableLayoutSiaMain.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tableLayoutSiaMain.Name = "tableLayoutSiaMain";
             this.tableLayoutSiaMain.Padding = new System.Windows.Forms.Padding(8, 16, 8, 8);
-            this.tableLayoutSiaMain.RowCount = 8;
-            this.tableLayoutSiaMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutSiaMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutSiaMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutSiaMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutSiaMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutSiaMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
+            this.tableLayoutSiaMain.RowCount = 2;
             this.tableLayoutSiaMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutSiaMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
+            this.tableLayoutSiaMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutSiaMain.Size = new System.Drawing.Size(740, 968);
             this.tableLayoutSiaMain.TabIndex = 0;
-            // 
-            // txtCapacitancePerFloorArea
-            // 
-            this.txtCapacitancePerFloorArea.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.txtCapacitancePerFloorArea.Enabled = false;
-            this.txtCapacitancePerFloorArea.Location = new System.Drawing.Point(374, 63);
-            this.txtCapacitancePerFloorArea.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
-            this.txtCapacitancePerFloorArea.Name = "txtCapacitancePerFloorArea";
-            this.txtCapacitancePerFloorArea.Size = new System.Drawing.Size(354, 31);
-            this.txtCapacitancePerFloorArea.TabIndex = 21;
-            this.txtCapacitancePerFloorArea.Tag = "CapacitancePerFloorArea";
-            // 
-            // label44
-            // 
-            this.label44.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label44.AutoSize = true;
-            this.label44.Location = new System.Drawing.Point(12, 55);
-            this.label44.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label44.Name = "label44";
-            this.label44.Size = new System.Drawing.Size(281, 50);
-            this.label44.TabIndex = 10;
-            this.label44.Text = "Capacitance per Floor Area (Wh/m²K)";
-            // 
-            // cboBuildingConstruction
-            // 
-            this.cboBuildingConstruction.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.cboBuildingConstruction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
-            this.cboBuildingConstruction.FormattingEnabled = true;
-            this.cboBuildingConstruction.Location = new System.Drawing.Point(374, 19);
-            this.cboBuildingConstruction.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.cboBuildingConstruction.Name = "cboBuildingConstruction";
-            this.cboBuildingConstruction.Size = new System.Drawing.Size(354, 33);
-            this.cboBuildingConstruction.TabIndex = 9;
-            this.cboBuildingConstruction.SelectedIndexChanged += new System.EventHandler(this.cboBuildingConstruction_SelectedIndexChanged);
-            // 
-            // label43
-            // 
-            this.label43.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(12, 23);
-            this.label43.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
-            this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(259, 25);
-            this.label43.TabIndex = 8;
-            this.label43.Text = "Building construction type";
             // 
             // panelSiaProperties
             // 
@@ -259,7 +199,7 @@ namespace Hive.IO.Forms
             this.tableLayoutSiaMain.SetColumnSpan(this.panelSiaProperties, 2);
             this.panelSiaProperties.Controls.Add(this.tableLayoutSiaProperties);
             this.panelSiaProperties.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelSiaProperties.Location = new System.Drawing.Point(12, 682);
+            this.panelSiaProperties.Location = new System.Drawing.Point(12, 19);
             this.panelSiaProperties.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.panelSiaProperties.Name = "panelSiaProperties";
             this.panelSiaProperties.Padding = new System.Windows.Forms.Padding(10, 9, 10, 9);
@@ -546,18 +486,26 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeMain.ColumnCount = 2;
             this.tableLayoutEnvelopeMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutEnvelopeMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutEnvelopeMain.Controls.Add(this.tableLayoutEnvelopeRoof, 1, 1);
-            this.tableLayoutEnvelopeMain.Controls.Add(this.tableLayoutEnvelopeWindow, 0, 1);
-            this.tableLayoutEnvelopeMain.Controls.Add(this.tableLayoutEnvelopeFloor, 1, 0);
-            this.tableLayoutEnvelopeMain.Controls.Add(this.tableLayoutEnvelopeWall, 0, 0);
+            this.tableLayoutEnvelopeMain.Controls.Add(this.txtCapacitancePerFloorArea, 1, 1);
+            this.tableLayoutEnvelopeMain.Controls.Add(this.label44, 0, 1);
+            this.tableLayoutEnvelopeMain.Controls.Add(this.cboBuildingConstruction, 1, 0);
+            this.tableLayoutEnvelopeMain.Controls.Add(this.label43, 0, 0);
+            this.tableLayoutEnvelopeMain.Controls.Add(this.tableLayoutEnvelopeRoof, 1, 4);
+            this.tableLayoutEnvelopeMain.Controls.Add(this.tableLayoutEnvelopeWindow, 0, 4);
+            this.tableLayoutEnvelopeMain.Controls.Add(this.tableLayoutEnvelopeFloor, 1, 3);
+            this.tableLayoutEnvelopeMain.Controls.Add(this.tableLayoutEnvelopeWall, 0, 3);
             this.tableLayoutEnvelopeMain.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutEnvelopeMain.Location = new System.Drawing.Point(4, 3);
             this.tableLayoutEnvelopeMain.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tableLayoutEnvelopeMain.Name = "tableLayoutEnvelopeMain";
             this.tableLayoutEnvelopeMain.Padding = new System.Windows.Forms.Padding(8, 16, 8, 8);
-            this.tableLayoutEnvelopeMain.RowCount = 2;
+            this.tableLayoutEnvelopeMain.RowCount = 5;
+            this.tableLayoutEnvelopeMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutEnvelopeMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutEnvelopeMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutEnvelopeMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 384F));
             this.tableLayoutEnvelopeMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 384F));
+            this.tableLayoutEnvelopeMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutEnvelopeMain.Size = new System.Drawing.Size(740, 968);
             this.tableLayoutEnvelopeMain.TabIndex = 0;
             // 
@@ -575,7 +523,7 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeRoof.Controls.Add(this.txtRoofEmissions, 1, 4);
             this.tableLayoutEnvelopeRoof.Controls.Add(this.txtRoofCost, 1, 5);
             this.tableLayoutEnvelopeRoof.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutEnvelopeRoof.Location = new System.Drawing.Point(374, 403);
+            this.tableLayoutEnvelopeRoof.Location = new System.Drawing.Point(374, 512);
             this.tableLayoutEnvelopeRoof.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tableLayoutEnvelopeRoof.Name = "tableLayoutEnvelopeRoof";
             this.tableLayoutEnvelopeRoof.RowCount = 7;
@@ -586,7 +534,7 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeRoof.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutEnvelopeRoof.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutEnvelopeRoof.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutEnvelopeRoof.Size = new System.Drawing.Size(354, 554);
+            this.tableLayoutEnvelopeRoof.Size = new System.Drawing.Size(354, 445);
             this.tableLayoutEnvelopeRoof.TabIndex = 3;
             // 
             // label25
@@ -696,7 +644,7 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeWindow.Controls.Add(this.txtWindowGValue, 1, 3);
             this.tableLayoutEnvelopeWindow.Controls.Add(this.txtWindowEmissions, 1, 4);
             this.tableLayoutEnvelopeWindow.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutEnvelopeWindow.Location = new System.Drawing.Point(12, 403);
+            this.tableLayoutEnvelopeWindow.Location = new System.Drawing.Point(12, 512);
             this.tableLayoutEnvelopeWindow.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tableLayoutEnvelopeWindow.Name = "tableLayoutEnvelopeWindow";
             this.tableLayoutEnvelopeWindow.RowCount = 9;
@@ -709,7 +657,7 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeWindow.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutEnvelopeWindow.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutEnvelopeWindow.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
-            this.tableLayoutEnvelopeWindow.Size = new System.Drawing.Size(354, 554);
+            this.tableLayoutEnvelopeWindow.Size = new System.Drawing.Size(354, 445);
             this.tableLayoutEnvelopeWindow.TabIndex = 2;
             // 
             // txtWindowShadingSetpoint
@@ -876,7 +824,7 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeFloor.Controls.Add(this.txtFloorEmissions, 1, 4);
             this.tableLayoutEnvelopeFloor.Controls.Add(this.txtFloorCost, 1, 5);
             this.tableLayoutEnvelopeFloor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutEnvelopeFloor.Location = new System.Drawing.Point(374, 19);
+            this.tableLayoutEnvelopeFloor.Location = new System.Drawing.Point(374, 128);
             this.tableLayoutEnvelopeFloor.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tableLayoutEnvelopeFloor.Name = "tableLayoutEnvelopeFloor";
             this.tableLayoutEnvelopeFloor.RowCount = 7;
@@ -991,7 +939,7 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeWall.Controls.Add(this.txtWallEmissions, 1, 4);
             this.tableLayoutEnvelopeWall.Controls.Add(this.txtWallCost, 1, 5);
             this.tableLayoutEnvelopeWall.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutEnvelopeWall.Location = new System.Drawing.Point(12, 19);
+            this.tableLayoutEnvelopeWall.Location = new System.Drawing.Point(12, 128);
             this.tableLayoutEnvelopeWall.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tableLayoutEnvelopeWall.Name = "tableLayoutEnvelopeWall";
             this.tableLayoutEnvelopeWall.RowCount = 8;
@@ -1103,7 +1051,7 @@ namespace Hive.IO.Forms
             this.tabIG.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
             this.tabIG.Size = new System.Drawing.Size(748, 974);
             this.tabIG.TabIndex = 2;
-            this.tabIG.Text = "Internal Gains";
+            this.tabIG.Text = "Internal Gains/Ventilation";
             this.tabIG.UseVisualStyleBackColor = true;
             // 
             // tableLayoutInternalGains
@@ -1111,6 +1059,14 @@ namespace Hive.IO.Forms
             this.tableLayoutInternalGains.ColumnCount = 2;
             this.tableLayoutInternalGains.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutInternalGains.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
+            this.tableLayoutInternalGains.Controls.Add(this.checkBoxNaturalVentilation, 0, 14);
+            this.tableLayoutInternalGains.Controls.Add(this.label45, 0, 13);
+            this.tableLayoutInternalGains.Controls.Add(this.txtHeatRecovery, 0, 12);
+            this.tableLayoutInternalGains.Controls.Add(this.label42, 0, 11);
+            this.tableLayoutInternalGains.Controls.Add(this.txtInfiltration, 0, 10);
+            this.tableLayoutInternalGains.Controls.Add(this.label40, 0, 9);
+            this.tableLayoutInternalGains.Controls.Add(this.txtAirChangeRate, 0, 8);
+            this.tableLayoutInternalGains.Controls.Add(this.label39, 0, 7);
             this.tableLayoutInternalGains.Controls.Add(this.label32, 1, 0);
             this.tableLayoutInternalGains.Controls.Add(this.label33, 0, 0);
             this.tableLayoutInternalGains.Controls.Add(this.label34, 0, 2);
@@ -1129,7 +1085,14 @@ namespace Hive.IO.Forms
             this.tableLayoutInternalGains.Name = "tableLayoutInternalGains";
             this.tableLayoutInternalGains.Padding = new System.Windows.Forms.Padding(8, 16, 8, 8);
             this.tableLayoutInternalGains.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.tableLayoutInternalGains.RowCount = 7;
+            this.tableLayoutInternalGains.RowCount = 15;
+            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -1137,6 +1100,7 @@ namespace Hive.IO.Forms
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
+            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutInternalGains.Size = new System.Drawing.Size(748, 974);
             this.tableLayoutInternalGains.TabIndex = 0;
             // 
@@ -1272,139 +1236,6 @@ namespace Hive.IO.Forms
             this.txtEquipmentYearlyHours.Tag = "EquipmentYearlyHours";
             this.txtEquipmentYearlyHours.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
             // 
-            // tabVEN
-            // 
-            this.tabVEN.Controls.Add(this.tableLayoutVentilation);
-            this.tabVEN.Location = new System.Drawing.Point(4, 34);
-            this.tabVEN.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabVEN.Name = "tabVEN";
-            this.tabVEN.Size = new System.Drawing.Size(748, 974);
-            this.tabVEN.TabIndex = 3;
-            this.tabVEN.Text = "Ventilation";
-            this.tabVEN.UseVisualStyleBackColor = true;
-            // 
-            // tableLayoutVentilation
-            // 
-            this.tableLayoutVentilation.ColumnCount = 2;
-            this.tableLayoutVentilation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutVentilation.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutVentilation.Controls.Add(this.label39, 0, 0);
-            this.tableLayoutVentilation.Controls.Add(this.label40, 0, 2);
-            this.tableLayoutVentilation.Controls.Add(this.label42, 0, 4);
-            this.tableLayoutVentilation.Controls.Add(this.txtAirChangeRate, 0, 1);
-            this.tableLayoutVentilation.Controls.Add(this.txtInfiltration, 0, 3);
-            this.tableLayoutVentilation.Controls.Add(this.txtHeatRecovery, 0, 5);
-            this.tableLayoutVentilation.Controls.Add(this.label45, 0, 6);
-            this.tableLayoutVentilation.Controls.Add(this.checkBoxNaturalVentilation, 0, 8);
-            this.tableLayoutVentilation.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutVentilation.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutVentilation.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tableLayoutVentilation.Name = "tableLayoutVentilation";
-            this.tableLayoutVentilation.Padding = new System.Windows.Forms.Padding(8, 16, 8, 8);
-            this.tableLayoutVentilation.RightToLeft = System.Windows.Forms.RightToLeft.No;
-            this.tableLayoutVentilation.RowCount = 9;
-            this.tableLayoutVentilation.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutVentilation.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutVentilation.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutVentilation.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutVentilation.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutVentilation.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutVentilation.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutVentilation.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutVentilation.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutVentilation.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-            this.tableLayoutVentilation.Size = new System.Drawing.Size(748, 974);
-            this.tableLayoutVentilation.TabIndex = 1;
-            // 
-            // label39
-            // 
-            this.label39.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(12, 24);
-            this.label39.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
-            this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(358, 25);
-            this.label39.TabIndex = 1;
-            this.label39.Text = "Volumetric air flow (m³/m²h)";
-            // 
-            // label40
-            // 
-            this.label40.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(12, 112);
-            this.label40.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
-            this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(358, 25);
-            this.label40.TabIndex = 3;
-            this.label40.Text = "Infiltration (m³/m²h)";
-            // 
-            // label42
-            // 
-            this.label42.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(12, 200);
-            this.label42.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
-            this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(358, 25);
-            this.label42.TabIndex = 5;
-            this.label42.Text = "Heat recovery (-)";
-            // 
-            // txtAirChangeRate
-            // 
-            this.txtAirChangeRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtAirChangeRate.Location = new System.Drawing.Point(38, 65);
-            this.txtAirChangeRate.Margin = new System.Windows.Forms.Padding(30, 8, 30, 8);
-            this.txtAirChangeRate.Name = "txtAirChangeRate";
-            this.txtAirChangeRate.Size = new System.Drawing.Size(306, 31);
-            this.txtAirChangeRate.TabIndex = 7;
-            this.txtAirChangeRate.Tag = "AirChangeRate";
-            this.txtAirChangeRate.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
-            // 
-            // txtInfiltration
-            // 
-            this.txtInfiltration.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtInfiltration.Location = new System.Drawing.Point(38, 153);
-            this.txtInfiltration.Margin = new System.Windows.Forms.Padding(30, 8, 30, 8);
-            this.txtInfiltration.Name = "txtInfiltration";
-            this.txtInfiltration.Size = new System.Drawing.Size(306, 31);
-            this.txtInfiltration.TabIndex = 9;
-            this.txtInfiltration.Tag = "Infiltration";
-            this.txtInfiltration.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
-            // 
-            // txtHeatRecovery
-            // 
-            this.txtHeatRecovery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtHeatRecovery.Location = new System.Drawing.Point(38, 241);
-            this.txtHeatRecovery.Margin = new System.Windows.Forms.Padding(30, 8, 30, 8);
-            this.txtHeatRecovery.Name = "txtHeatRecovery";
-            this.txtHeatRecovery.Size = new System.Drawing.Size(306, 31);
-            this.txtHeatRecovery.TabIndex = 11;
-            this.txtHeatRecovery.Tag = "HeatRecovery";
-            this.txtHeatRecovery.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
-            // 
-            // label45
-            // 
-            this.label45.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(14, 289);
-            this.label45.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
-            this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(354, 25);
-            this.label45.TabIndex = 13;
-            this.label45.Text = "Natural Ventilation?";
-            // 
-            // checkBoxNaturalVentilation
-            // 
-            this.checkBoxNaturalVentilation.AutoSize = true;
-            this.checkBoxNaturalVentilation.Location = new System.Drawing.Point(14, 326);
-            this.checkBoxNaturalVentilation.Margin = new System.Windows.Forms.Padding(6, 3, 6, 3);
-            this.checkBoxNaturalVentilation.Name = "checkBoxNaturalVentilation";
-            this.checkBoxNaturalVentilation.Size = new System.Drawing.Size(105, 29);
-            this.checkBoxNaturalVentilation.TabIndex = 14;
-            this.checkBoxNaturalVentilation.Text = "Enable";
-            this.checkBoxNaturalVentilation.UseVisualStyleBackColor = true;
-            this.checkBoxNaturalVentilation.CheckedChanged += new System.EventHandler(this.checkBoxNaturalVentilation_CheckedChanged);
-            // 
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
@@ -1499,6 +1330,136 @@ namespace Hive.IO.Forms
             this.cboBuildingQuality.Size = new System.Drawing.Size(362, 33);
             this.cboBuildingQuality.TabIndex = 9;
             // 
+            // label43
+            // 
+            this.label43.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label43.AutoSize = true;
+            this.label43.Location = new System.Drawing.Point(12, 23);
+            this.label43.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label43.Name = "label43";
+            this.label43.Size = new System.Drawing.Size(259, 25);
+            this.label43.TabIndex = 9;
+            this.label43.Text = "Building construction type";
+            // 
+            // cboBuildingConstruction
+            // 
+            this.cboBuildingConstruction.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.cboBuildingConstruction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cboBuildingConstruction.FormattingEnabled = true;
+            this.cboBuildingConstruction.Location = new System.Drawing.Point(374, 19);
+            this.cboBuildingConstruction.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.cboBuildingConstruction.Name = "cboBuildingConstruction";
+            this.cboBuildingConstruction.Size = new System.Drawing.Size(354, 33);
+            this.cboBuildingConstruction.TabIndex = 10;
+            // 
+            // label44
+            // 
+            this.label44.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.label44.AutoSize = true;
+            this.label44.Location = new System.Drawing.Point(12, 55);
+            this.label44.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label44.Name = "label44";
+            this.label44.Size = new System.Drawing.Size(281, 50);
+            this.label44.TabIndex = 11;
+            this.label44.Text = "Capacitance per Floor Area (Wh/m²K)";
+            // 
+            // txtCapacitancePerFloorArea
+            // 
+            this.txtCapacitancePerFloorArea.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.txtCapacitancePerFloorArea.Enabled = false;
+            this.txtCapacitancePerFloorArea.Location = new System.Drawing.Point(374, 63);
+            this.txtCapacitancePerFloorArea.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtCapacitancePerFloorArea.Name = "txtCapacitancePerFloorArea";
+            this.txtCapacitancePerFloorArea.Size = new System.Drawing.Size(354, 31);
+            this.txtCapacitancePerFloorArea.TabIndex = 22;
+            this.txtCapacitancePerFloorArea.Tag = "CapacitancePerFloorArea";
+            // 
+            // label39
+            // 
+            this.label39.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label39.AutoSize = true;
+            this.label39.Location = new System.Drawing.Point(12, 308);
+            this.label39.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label39.Name = "label39";
+            this.label39.Size = new System.Drawing.Size(358, 25);
+            this.label39.TabIndex = 13;
+            this.label39.Text = "Volumetric air flow (m³/m²h)";
+            // 
+            // txtAirChangeRate
+            // 
+            this.txtAirChangeRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtAirChangeRate.Location = new System.Drawing.Point(38, 349);
+            this.txtAirChangeRate.Margin = new System.Windows.Forms.Padding(30, 8, 30, 8);
+            this.txtAirChangeRate.Name = "txtAirChangeRate";
+            this.txtAirChangeRate.Size = new System.Drawing.Size(306, 31);
+            this.txtAirChangeRate.TabIndex = 14;
+            this.txtAirChangeRate.Tag = "AirChangeRate";
+            // 
+            // label40
+            // 
+            this.label40.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label40.AutoSize = true;
+            this.label40.Location = new System.Drawing.Point(12, 396);
+            this.label40.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label40.Name = "label40";
+            this.label40.Size = new System.Drawing.Size(358, 25);
+            this.label40.TabIndex = 15;
+            this.label40.Text = "Infiltration (m³/m²h)";
+            // 
+            // txtInfiltration
+            // 
+            this.txtInfiltration.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtInfiltration.Location = new System.Drawing.Point(38, 437);
+            this.txtInfiltration.Margin = new System.Windows.Forms.Padding(30, 8, 30, 8);
+            this.txtInfiltration.Name = "txtInfiltration";
+            this.txtInfiltration.Size = new System.Drawing.Size(306, 31);
+            this.txtInfiltration.TabIndex = 16;
+            this.txtInfiltration.Tag = "Infiltration";
+            // 
+            // label42
+            // 
+            this.label42.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label42.AutoSize = true;
+            this.label42.Location = new System.Drawing.Point(12, 484);
+            this.label42.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label42.Name = "label42";
+            this.label42.Size = new System.Drawing.Size(358, 25);
+            this.label42.TabIndex = 17;
+            this.label42.Text = "Heat recovery (-)";
+            // 
+            // txtHeatRecovery
+            // 
+            this.txtHeatRecovery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.txtHeatRecovery.Location = new System.Drawing.Point(38, 525);
+            this.txtHeatRecovery.Margin = new System.Windows.Forms.Padding(30, 8, 30, 8);
+            this.txtHeatRecovery.Name = "txtHeatRecovery";
+            this.txtHeatRecovery.Size = new System.Drawing.Size(306, 31);
+            this.txtHeatRecovery.TabIndex = 18;
+            this.txtHeatRecovery.Tag = "HeatRecovery";
+            // 
+            // label45
+            // 
+            this.label45.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.label45.AutoSize = true;
+            this.label45.Location = new System.Drawing.Point(14, 573);
+            this.label45.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
+            this.label45.Name = "label45";
+            this.label45.Size = new System.Drawing.Size(354, 25);
+            this.label45.TabIndex = 19;
+            this.label45.Text = "Natural Ventilation?";
+            // 
+            // checkBoxNaturalVentilation
+            // 
+            this.checkBoxNaturalVentilation.AutoSize = true;
+            this.checkBoxNaturalVentilation.Location = new System.Drawing.Point(14, 610);
+            this.checkBoxNaturalVentilation.Margin = new System.Windows.Forms.Padding(6, 3, 6, 3);
+            this.checkBoxNaturalVentilation.Name = "checkBoxNaturalVentilation";
+            this.checkBoxNaturalVentilation.Size = new System.Drawing.Size(105, 29);
+            this.checkBoxNaturalVentilation.TabIndex = 20;
+            this.checkBoxNaturalVentilation.Text = "Enable";
+            this.checkBoxNaturalVentilation.UseVisualStyleBackColor = true;
+            // 
             // BuildingInputForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -1521,6 +1482,7 @@ namespace Hive.IO.Forms
             this.tableLayoutSiaProperties.PerformLayout();
             this.tabENV.ResumeLayout(false);
             this.tableLayoutEnvelopeMain.ResumeLayout(false);
+            this.tableLayoutEnvelopeMain.PerformLayout();
             this.tableLayoutEnvelopeRoof.ResumeLayout(false);
             this.tableLayoutEnvelopeRoof.PerformLayout();
             this.tableLayoutEnvelopeWindow.ResumeLayout(false);
@@ -1532,9 +1494,6 @@ namespace Hive.IO.Forms
             this.tabIG.ResumeLayout(false);
             this.tableLayoutInternalGains.ResumeLayout(false);
             this.tableLayoutInternalGains.PerformLayout();
-            this.tabVEN.ResumeLayout(false);
-            this.tableLayoutVentilation.ResumeLayout(false);
-            this.tableLayoutVentilation.PerformLayout();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
             this.ResumeLayout(false);
@@ -1547,7 +1506,6 @@ namespace Hive.IO.Forms
         private System.Windows.Forms.TabPage tabSIA;
         private System.Windows.Forms.TabPage tabENV;
         private System.Windows.Forms.TabPage tabIG;
-        private System.Windows.Forms.TabPage tabVEN;
         private TableLayoutPanel tableLayoutEnvelopeMain;
         private TableLayoutPanel tableLayoutEnvelopeWall;
         private Label label13;
@@ -1604,16 +1562,7 @@ namespace Hive.IO.Forms
         private TextBox txtLightingYearlyHours;
         private TextBox txtEquipmentLoads;
         private TextBox txtEquipmentYearlyHours;
-        private TableLayoutPanel tableLayoutVentilation;
-        private Label label39;
-        private Label label40;
-        private Label label42;
-        private TextBox txtAirChangeRate;
-        private TextBox txtInfiltration;
-        private TextBox txtHeatRecovery;
         private TableLayoutPanel tableLayoutSiaMain;
-        private ComboBox cboBuildingConstruction;
-        private Label label43;
         private Panel panelSiaProperties;
         private TableLayoutPanel tableLayoutSiaProperties;
         private Label label5;
@@ -1635,10 +1584,6 @@ namespace Hive.IO.Forms
         private TextBox txtHeatingSetback;
         private TextBox txtCoolingSetback;
         private CheckBox checkBoxAdaptiveComfort;
-        private TextBox txtCapacitancePerFloorArea;
-        private Label label44;
-        private Label label45;
-        private CheckBox checkBoxNaturalVentilation;
         private TableLayoutPanel tableLayoutPanel1;
         private ComboBox cboBuildingUseType;
         private Label label1;
@@ -1646,5 +1591,17 @@ namespace Hive.IO.Forms
         private Label label3;
         private ComboBox cboRoomType;
         private Label label2;
+        private TextBox txtCapacitancePerFloorArea;
+        private Label label44;
+        private ComboBox cboBuildingConstruction;
+        private Label label43;
+        private CheckBox checkBoxNaturalVentilation;
+        private Label label45;
+        private TextBox txtHeatRecovery;
+        private Label label42;
+        private TextBox txtInfiltration;
+        private Label label40;
+        private TextBox txtAirChangeRate;
+        private Label label39;
     }
 }
