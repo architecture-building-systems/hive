@@ -1138,7 +1138,7 @@ namespace Hive.IO.Forms
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 30F));
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -1153,7 +1153,7 @@ namespace Hive.IO.Forms
             // checkBoxNaturalVentilation
             // 
             this.checkBoxNaturalVentilation.AutoSize = true;
-            this.checkBoxNaturalVentilation.Location = new System.Drawing.Point(14, 610);
+            this.checkBoxNaturalVentilation.Location = new System.Drawing.Point(14, 620);
             this.checkBoxNaturalVentilation.Margin = new System.Windows.Forms.Padding(6, 3, 6, 3);
             this.checkBoxNaturalVentilation.Name = "checkBoxNaturalVentilation";
             this.checkBoxNaturalVentilation.Size = new System.Drawing.Size(105, 29);
@@ -1165,7 +1165,7 @@ namespace Hive.IO.Forms
             // 
             this.label45.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(14, 573);
+            this.label45.Location = new System.Drawing.Point(14, 583);
             this.label45.Margin = new System.Windows.Forms.Padding(6, 9, 6, 9);
             this.label45.Name = "label45";
             this.label45.Size = new System.Drawing.Size(354, 25);
@@ -1175,7 +1175,7 @@ namespace Hive.IO.Forms
             // txtHeatRecovery
             // 
             this.txtHeatRecovery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtHeatRecovery.Location = new System.Drawing.Point(38, 525);
+            this.txtHeatRecovery.Location = new System.Drawing.Point(38, 535);
             this.txtHeatRecovery.Margin = new System.Windows.Forms.Padding(30, 8, 30, 8);
             this.txtHeatRecovery.Name = "txtHeatRecovery";
             this.txtHeatRecovery.Size = new System.Drawing.Size(306, 31);
@@ -1186,7 +1186,7 @@ namespace Hive.IO.Forms
             // 
             this.label42.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(12, 484);
+            this.label42.Location = new System.Drawing.Point(12, 494);
             this.label42.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
             this.label42.Name = "label42";
             this.label42.Size = new System.Drawing.Size(358, 25);
@@ -1196,7 +1196,7 @@ namespace Hive.IO.Forms
             // txtInfiltration
             // 
             this.txtInfiltration.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtInfiltration.Location = new System.Drawing.Point(38, 437);
+            this.txtInfiltration.Location = new System.Drawing.Point(38, 447);
             this.txtInfiltration.Margin = new System.Windows.Forms.Padding(30, 8, 30, 8);
             this.txtInfiltration.Name = "txtInfiltration";
             this.txtInfiltration.Size = new System.Drawing.Size(306, 31);
@@ -1207,7 +1207,7 @@ namespace Hive.IO.Forms
             // 
             this.label40.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(12, 396);
+            this.label40.Location = new System.Drawing.Point(12, 406);
             this.label40.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
             this.label40.Name = "label40";
             this.label40.Size = new System.Drawing.Size(358, 25);
@@ -1217,7 +1217,7 @@ namespace Hive.IO.Forms
             // txtAirChangeRate
             // 
             this.txtAirChangeRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtAirChangeRate.Location = new System.Drawing.Point(38, 349);
+            this.txtAirChangeRate.Location = new System.Drawing.Point(38, 359);
             this.txtAirChangeRate.Margin = new System.Windows.Forms.Padding(30, 8, 30, 8);
             this.txtAirChangeRate.Name = "txtAirChangeRate";
             this.txtAirChangeRate.Size = new System.Drawing.Size(306, 31);
@@ -1228,7 +1228,7 @@ namespace Hive.IO.Forms
             // 
             this.label39.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(12, 308);
+            this.label39.Location = new System.Drawing.Point(12, 318);
             this.label39.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
             this.label39.Name = "label39";
             this.label39.Size = new System.Drawing.Size(358, 25);
