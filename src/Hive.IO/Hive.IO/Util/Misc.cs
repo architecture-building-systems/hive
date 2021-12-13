@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Reflection;
 using Rhino.Geometry;
 
 namespace Hive.IO
@@ -238,6 +239,16 @@ namespace Hive.IO
             double costLevelised = CapitalRecoveryFactor(interestRate, projectLifetime) * NetPresentCost(valuesNonLevelised, interestRate);
 
             return costLevelised;
+        }
+
+        //read InformationalVersion attribute from AssemblyInfo.cs to display as message under the Main Hive Distributor
+        public static string GetInformationalVersionAttribute()
+        {
+            Assembly asm = Assembly.GetExecutingAssembly();
+            object[] assemblyInformationalVersion = asm.GetCustomAttributes(typeof(AssemblyInformationalVersionAttribute), false);
+
+            var versionAttribute = assemblyInformationalVersion[0] as AssemblyInformationalVersionAttribute;
+            return versionAttribute.InformationalVersion;
         }
     }
 }

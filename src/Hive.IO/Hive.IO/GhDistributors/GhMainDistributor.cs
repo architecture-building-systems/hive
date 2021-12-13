@@ -4,6 +4,9 @@ using System.Collections.Generic;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Types;
 using Hive.IO.EnergySystems;
+using Hive.IO.Util;
+using Rhino;
+using System.Reflection;
 
 namespace Hive.IO.GhDistributors
 {
@@ -57,6 +60,9 @@ namespace Hive.IO.GhDistributors
         /// <param name="DA"></param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            //read InformationalVersion attribute from AssemblyInfo.cs to display as message under the Main Hive Distributor
+            Message = Misc.GetInformationalVersionAttribute();
+
             var inputObjects = new List<GH_ObjectWrapper>();
             if (!DA.GetDataList(0, inputObjects)) return;
             
@@ -65,6 +71,21 @@ namespace Hive.IO.GhDistributors
             Building.Building building = null;
             Environment.Environment environment = null;
             var emitters = new List<Emitter>();
+
+            foreach (GH_ObjectWrapper hiveInput in inputObjects)
+            {
+                switch (hiveInput.Value)
+                {
+                    case GH_Boolean bln:
+                        if (bln.Value == false)
+                        {
+                            RhinoApp.WriteLine("Toggle Set to \"False\": Hive.Core not simulating...");
+                            return;
+                        }
+                        break;
+                }
+            }
+
 
             foreach (GH_ObjectWrapper hiveInput in inputObjects)
             {

@@ -46,28 +46,39 @@ namespace Hive.IO.Results
 
         // implemented in Plots.DemandMonthlyPlot
         [JsonProperty]
+        [Energy, Monthly]
         public double[] TotalFinalElectricityMonthly { get; private set; }
         [JsonProperty]
+        [Energy, Monthly]
         public double[] TotalFinalCoolingMonthly { get; private set; }
         [JsonProperty]
+        [Energy, Monthly]
         public double[] TotalFinalHeatingMonthly { get; private set; }
         [JsonProperty]
+        [Energy, Monthly]
         public double[] TotalFinalDomesticHotWaterMonthly { get; private set; }
 
         [JsonProperty]
+        [Energy, Monthly]
         public double[] TotalPrimaryEnergyNonRenewableMonthly { get; private set; }
         [JsonProperty]
+        [Energy, Monthly]
         public double[] TotalFinalEnergyRenewableMonthly { get; private set; }
 
         [JsonProperty]
+        [Energy, Monthly]
         public double[] TotalPurchasedElectricityMonthly { get; private set; }
         [JsonProperty]
+        [Energy, Monthly]
         public double[] TotalFeedInElectricityMonthly { get; private set; }
         [JsonProperty]
+        [Energy, Monthly]
         public double[] TotalSurplusHeatingMonthly { get; private set; } // just dumped? we can't utilize it without storage model, or connection to district heating network
         [JsonProperty]
+        [Energy, Monthly]
         public double[] TotalConsumedElectricityMonthly { get; private set; }
         [JsonProperty]
+        [Energy, Monthly]
         public double[] TotalActiveCoolingMonthly { get; private set; }
 
 
@@ -81,48 +92,63 @@ namespace Hive.IO.Results
         #region Total Emissions
 
         [JsonProperty]
+        [Emissions, Lifetime]
         public double TotalEmissions => TotalEmissionsEmbodied + TotalEmissionsOperational;
 
         [JsonProperty]
+        [Emissions, Lifetime, Embodied]
         public double TotalEmissionsEmbodied => TotalEmissionsEmbodiedConstruction + TotalEmissionsEmbodiedSystems;
 
         [JsonProperty]
+        [Emissions, Lifetime, Embodied, Construction]
         public double TotalEmissionsEmbodiedConstruction => TotalEmissionsEmbodiedConstructionYearlyLevelised * BuildingLifetime;
 
         [JsonProperty]
+        [Emissions, Yearly, Embodied, Construction, Levelised]
         public double TotalEmissionsEmbodiedConstructionYearlyLevelised { get; protected set; }
 
         [JsonProperty]
+        [Emissions, Monthly, Embodied, Construction, Levelised]
         public double TotalEmissionsEmbodiedConstructionMonthlyLevelised => TotalEmissionsEmbodiedConstructionYearlyLevelised / Misc.MonthsPerYear;
 
         [JsonProperty]
+        [Emissions, Lifetime, Embodied, Systems]
         public double TotalEmissionsEmbodiedSystems => TotalEmissionsEmbodiedSystemsYearlyLevelised * BuildingLifetime;
 
         [JsonProperty]
+        [Emissions, Yearly, Embodied, Systems, Levelised]
         public double TotalEmissionsEmbodiedSystemsYearlyLevelised { get; protected set; }
 
         [JsonProperty]
+        [Emissions, Monthly, Embodied, Systems, Levelised]
         public double TotalEmissionsEmbodiedSystemsMonthlyLevelised => TotalEmissionsEmbodiedSystemsYearlyLevelised / Misc.MonthsPerYear;
 
         [JsonProperty]
+        [Emissions, Lifetime, Operational]
         public double TotalEmissionsOperational => TotalEmissionsOperationalConstruction + TotalEmissionsOperationalSystems;
 
         [JsonProperty]
+        [Emissions, Lifetime, Operational, Construction]
         public double TotalEmissionsOperationalConstruction { get; private set; }
 
         [JsonProperty]
+        [Emissions, Yearly, Operational, Construction, Levelised]
         public double TotalEmissionsOperationalConstructionYearlyLevelised { get; protected set; }
 
         [JsonProperty]
+        [Emissions, Monthly, Operational, Construction, Levelised]
         public double TotalEmissionsOperationalConstructionMonthlyLevelised => TotalEmissionsOperationalConstructionYearlyLevelised / Misc.MonthsPerYear;
 
         [JsonProperty]
+        [Emissions, Operational, Systems, Lifetime]
         public double TotalEmissionsOperationalSystems => TotalEmissionsOperationalSystemsYearly * BuildingLifetime;
 
         [JsonProperty]
+        [Emissions, Operational, Systems, Yearly]
         public double TotalEmissionsOperationalSystemsYearly => TotalEmissionsOperationalSystemsMonthly.Sum();
 
         [JsonProperty]
+        [Emissions, Operational, Systems, Monthly]
         public double[] TotalEmissionsOperationalSystemsMonthly { get; private set; }
 
         #endregion
@@ -130,57 +156,68 @@ namespace Hive.IO.Results
 
         #region Total Costs
         [JsonProperty]
+        [Cost, Embodied, Lifetime]
         public double TotalCostEmbodied => TotalCostEmbodiedConstruction + TotalCostEmbodiedSystems;
 
         [JsonProperty]
+        [Cost, Embodied, Construction, Lifetime]
         public double TotalCostEmbodiedConstruction => TotalCostEmbodiedConstructionYearlyLevelised * BuildingLifetime;
         /// <summary>
         /// Levelised CAPEX per year.
         /// </summary>
         [JsonProperty]
+        [Cost, Embodied, Construction, Yearly, Levelised]
         public double TotalCostEmbodiedConstructionYearlyLevelised { get; protected set; }
 
         /// <summary>
         /// Levelized CAPEX monthly, for one year.
         /// </summary>
         [JsonProperty]
+        [Cost, Embodied, Construction, Monthly, Levelised]
         public double TotalCostEmbodiedConstructionMonthlyLevelised => TotalCostEmbodiedConstructionYearlyLevelised / Misc.MonthsPerYear;
 
         [JsonProperty]
+        [Cost, Embodied, Systems, Lifetime]
         public double TotalCostEmbodiedSystems => TotalCostEmbodiedSystemsYearlyLevelised * BuildingLifetime;
 
         /// <summary>
         /// Levelised CAPEX for systems, yearly.
         /// </summary>
         [JsonProperty]
+        [Cost, Embodied, Systems, Yearly, Levelised]
         public double TotalCostEmbodiedSystemsYearlyLevelised { get; protected set; }
 
         /// <summary>
         /// Levelized CAPEX for systems, monthly.
         /// </summary>
         [JsonProperty]
+        [Cost, Embodied, Systems, Monthly, Levelised]
         public double TotalCostEmbodiedSystemsMonthlyLevelized => TotalCostEmbodiedSystemsYearlyLevelised / Misc.MonthsPerYear;
 
         /// <summary>
         /// Net Present Value of operational costs of building, over building lifetime.
         /// </summary>
         [JsonProperty]
+        [Cost, Operational, Lifetime]
         public double TotalCostOperational => TotalCostOperationalConstruction + TotalCostOperationalSystems;
 
         /// <summary>
         /// Net Present Value of operational costs of construction, over building lifetime.
         /// </summary>
         [JsonProperty]
+        [Cost, Operational, Construction, Lifetime]
         public double TotalCostOperationalConstruction => TotalCostOperationalConstructionYearlyLevelised * BuildingLifetime;
 
         /// <summary>
         /// OPEX for maintaining the building.
         /// </summary>
         [JsonProperty]
+        [Cost, Operational, Construction, Yearly, Levelised]
         public double TotalCostOperationalConstructionYearlyLevelised { get; private set; }
 
 
         [JsonProperty]
+        [Cost, Operational, Construction, Monthly, Levelised]
         public double TotalCostOperationalConstructionMonthlyLevelized => TotalCostOperationalConstructionYearlyLevelised / Misc.MonthsPerYear;
 
 
@@ -188,18 +225,21 @@ namespace Hive.IO.Results
         /// Net Present Value of operational costs of systems, over building lifetime.
         /// </summary>
         [JsonProperty]
+        [Cost, Operational, Systems, Lifetime]
         public double TotalCostOperationalSystems => TotalCostOperationalSystemsYearly * BuildingLifetime;
 
         /// <summary>
         /// OPEX for maitaing systems + energy costs of the systems
         /// </summary>
         [JsonProperty]
+        [Cost, Operational, Systems, Yearly]
         public double TotalCostOperationalSystemsYearly => TotalCostOperationalSystemsMonthly.Sum();
 
         /// <summary>
         /// OPEX for maitaing systems + energy costs of the systems
         /// </summary>
         [JsonProperty]
+        [Cost, Operational, Systems, Monthly]
         public double[] TotalCostOperationalSystemsMonthly { get; private set; }
 
 
@@ -208,27 +248,37 @@ namespace Hive.IO.Results
 
         #region Total Losses and Gains
         [JsonProperty]
+        [Energy, Yearly]
         public double TotalOpaqueTransmissionHeatLosses { get; private set; }
         [JsonProperty]
+        [Energy, Yearly]
         public double TotalWindowTransmissionHeatLosses { get; private set; }
         [JsonProperty]
+        [Energy, Yearly]
         public double TotalVentilationHeatLosses { get; private set; }
         [JsonProperty]
+        [Energy, Yearly]
         public double TotalOpaqueTransmissionHeatGains { get; private set; }
         [JsonProperty]
+        [Energy, Yearly]
         public double TotalWindowTransmissionHeatGains { get; private set; }
         [JsonProperty]
+        [Energy, Yearly]
         public double TotalVentilationHeatGains { get; private set; }
 
         [JsonProperty]
+        [Energy, Yearly]
         public double TotalInternalGains { get; private set; }
         [JsonProperty]
+        [Energy, Yearly]
         public double TotalSolarGains { get; private set; }
 
         [JsonProperty]
+        [Energy, Yearly]
         public double TotalSystemLosses { get; private set; }
 
         [JsonProperty]
+        [Energy, Yearly]
         public List<double[]> MonthlySolarGainsPerWindow { get; private set; }
 
         #endregion
@@ -658,7 +708,7 @@ namespace Hive.IO.Results
             return building.Zones.SelectMany(z => z.Windows.Select(w => w.Area)).ToList();
         }
 
-        public static double [] GetTotalMonthlySurplusHeating(Building.Building building, List<ConversionTech> conversionTech)
+        public static double[] GetTotalMonthlySurplusHeating(Building.Building building, List<ConversionTech> conversionTech)
         {
 
             double[] totalHeatGenerated = new double[Misc.MonthsPerYear];
@@ -673,34 +723,34 @@ namespace Hive.IO.Results
                 foreach (var zone in building.Zones)
                     totalHeatLoads[i] += zone.ConsumedHeatingMonthly[i];
 
-            foreach(var tech in conversionTech)
+            foreach (var tech in conversionTech)
             {
                 if (tech.IsHeating) //in case of CHP, I know that it is the first OutputCarrier... no good coding. FIX ME... 
                 {
-                    for(int i=0; i<totalHeatGenerated.Length; i++)
+                    for (int i = 0; i < totalHeatGenerated.Length; i++)
                     {
                         totalHeatGenerated[i] += tech.OutputCarriers[0].EnergyMonthlyCumulative[i];
                     }
                 }
             }
 
-            var result = Enumerable.Zip(totalHeatLoads, totalHeatGenerated, (a, b) => a - b).ToArray(); 
-            for(int i=0; i<result.Length; i++)
+            var result = Enumerable.Zip(totalHeatLoads, totalHeatGenerated, (a, b) => a - b).ToArray();
+            for (int i = 0; i < result.Length; i++)
                 result[i] = result[i] < 0.0 ? Math.Abs(result[i]) : 0.0;
 
             return result;
         }
 
-        public static double [] GetTotalMonthlyActiveCooling(List<ConversionTech> conversionTech)
+        public static double[] GetTotalMonthlyActiveCooling(List<ConversionTech> conversionTech)
         {
             double[] result = new double[Misc.MonthsPerYear];
             for (int i = 0; i < result.Length; i++)
                 result[i] = 0.0;
-            foreach(var tech in conversionTech)
+            foreach (var tech in conversionTech)
             {
                 if (tech.IsCooling)
                 {
-                    for(int i=0; i<result.Length; i++)
+                    for (int i = 0; i < result.Length; i++)
                     {
                         result[i] += tech.OutputCarriers[0].EnergyMonthlyCumulative[i];
                     }
@@ -712,7 +762,7 @@ namespace Hive.IO.Results
 
 
         // this is not final demand, because final demand could be negative (e.g. from surplus PV). But this is how much electricity we actually consume. we need to know for the Sankey diagram
-        public static double [] GetTotalMonthlyConsumedElectricity(Building.Building building, List<ConversionTech> conversionTech)
+        public static double[] GetTotalMonthlyConsumedElectricity(Building.Building building, List<ConversionTech> conversionTech)
         {
             // go through all zones and get
             // building.Zones[0].ConsumedElectricityMonthly.Sum()
@@ -732,9 +782,9 @@ namespace Hive.IO.Results
 
             foreach (var tech in conversionTech)
             {
-                if(tech is HeatPump)
+                if (tech is HeatPump)
                 {
-                    for(int i=0; i<result.Length; i++)
+                    for (int i = 0; i < result.Length; i++)
                     {
                         result[i] += tech.InputCarrier.EnergyMonthlyCumulative[i]; // inputcarrier is always Electricity in HeatPump
                     }
@@ -745,7 +795,7 @@ namespace Hive.IO.Results
         }
 
 
-        public static Tuple<double [], double[]> GetTotalMonthlyPurchasedAndFeedInElectricity(List<ConversionTech> conversionTech)
+        public static Tuple<double[], double[]> GetTotalMonthlyPurchasedAndFeedInElectricity(List<ConversionTech> conversionTech)
         {
             double[] purchased = new double[Misc.MonthsPerYear];
             double[] feedIn = new double[Misc.MonthsPerYear];
@@ -754,11 +804,11 @@ namespace Hive.IO.Results
                 purchased[i] = 0.0;
                 feedIn[i] = 0.0;
             }
-            foreach(var tech in conversionTech)
+            foreach (var tech in conversionTech)
             {
-                if(tech is DirectElectricity)
+                if (tech is DirectElectricity)
                 {
-                    for(int i=0; i<purchased.Length; i++)
+                    for (int i = 0; i < purchased.Length; i++)
                     {
                         double _elec = tech.InputCarrier.EnergyMonthlyCumulative[i];
                         if (_elec > 0.0)
@@ -768,7 +818,7 @@ namespace Hive.IO.Results
                     }
                 }
             }
-            return new Tuple<double[], double []>(purchased, feedIn);
+            return new Tuple<double[], double[]>(purchased, feedIn);
         }
 
 
@@ -958,7 +1008,7 @@ namespace Hive.IO.Results
                     {
                         result[i] += tech.InputCarrier.EnergyMonthlyCumulative[i] * tech.InputCarrier.PrimaryEnergyFactor;
                     }
-                    if(tech is DirectElectricity)
+                    if (tech is DirectElectricity)
                     {
                         if (tech.InputCarrier.EnergyMonthlyCumulative[i] > 0)
                             result[i] += tech.InputCarrier.EnergyMonthlyCumulative[i] * tech.InputCarrier.PrimaryEnergyFactor;
@@ -1007,9 +1057,9 @@ namespace Hive.IO.Results
                     // only for fuel based and grid electricity. not for Heatpumps, because electricity from heatpumps will be attributed to consumed electricity (Outgoing arrows in Sankey)
                     if (tech is SurfaceBasedTech == false && tech is HeatPump == false)
                     {
-                        if(tech.InputCarrier.EnergyMonthlyCumulative[i] > 0.0) // don't take negative values
+                        if (tech.InputCarrier.EnergyMonthlyCumulative[i] > 0.0) // don't take negative values
                             result[i] += ((tech.InputCarrier.EnergyMonthlyCumulative[i] * tech.InputCarrier.PrimaryEnergyFactor) - tech.OutputCarriers[0].EnergyMonthlyCumulative[i]);
-                        
+
                     }
                 }
             }
@@ -1028,19 +1078,19 @@ namespace Hive.IO.Results
                         result += zone.OpaqueTransmissionHeatLossesMonthly.Where(x => x > 0.0).Sum();
                         break;
                     case "Qt_transparent_positive":
-                        result += zone.TransparentTransmissionHeatLossesMonthly.Where(x=> x > 0.0).Sum();
+                        result += zone.TransparentTransmissionHeatLossesMonthly.Where(x => x > 0.0).Sum();
                         break;
                     case "Qv_positive":
-                        result += zone.VentilationHeatLossesMonthly.Where(x=> x > 0.0).Sum();
+                        result += zone.VentilationHeatLossesMonthly.Where(x => x > 0.0).Sum();
                         break;
                     case "Qt_opaque_negative":
-                        result += Math.Abs(zone.OpaqueTransmissionHeatLossesMonthly.Where(x=> x <= 0.0).Sum());
+                        result += Math.Abs(zone.OpaqueTransmissionHeatLossesMonthly.Where(x => x <= 0.0).Sum());
                         break;
                     case "Qt_transparent_negative":
-                        result += Math.Abs(zone.TransparentTransmissionHeatLossesMonthly.Where(x=> x <= 0.0).Sum());
+                        result += Math.Abs(zone.TransparentTransmissionHeatLossesMonthly.Where(x => x <= 0.0).Sum());
                         break;
                     case "Qv_negative":
-                        result += Math.Abs(zone.VentilationHeatLossesMonthly.Where(x=> x <= 0.0).Sum());
+                        result += Math.Abs(zone.VentilationHeatLossesMonthly.Where(x => x <= 0.0).Sum());
                         break;
                     case "Qi":
                         result += zone.InternalHeatGainsMonthly.Sum();
