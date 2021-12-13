@@ -70,6 +70,21 @@ namespace Hive.IO.Forms
             // set up gridConversion
             gridConversion.AutoGenerateColumns = false;
             gridConversion.Columns.Clear();
+            gridConversion.Columns.Add(new DataGridViewButtonColumn()
+            {
+                Name = "AddDelete",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+                FillWeight = 0.2f,
+                DataPropertyName = "Edit",
+                ReadOnly = true
+            });
+            gridConversion.Columns.Add(new DataGridViewComboBoxColumn()
+            {
+                Name = "Conversion",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+                FillWeight = 0.6f,
+                DataPropertyName = "Name",
+            });
             gridConversion.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "Source",
@@ -79,13 +94,6 @@ namespace Hive.IO.Forms
                 ReadOnly = true
             });
             // conversionColumn.Items.AddRange(ConversionTechPropertiesViewModel.AllNames.ToArray<object>());
-            gridConversion.Columns.Add(new DataGridViewComboBoxColumn()
-            {
-                Name = "Conversion",
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
-                FillWeight = 0.6f,
-                DataPropertyName = "Name",
-            });
             gridConversion.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "EndUse",
@@ -308,6 +316,44 @@ namespace Hive.IO.Forms
 
         private void gridConversion_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
+            if (gridConversion.SelectedRows.Count > 0)
+            {
+                foreach (DataGridViewRow item in gridConversion.SelectedRows)
+                {
+                    gridConversion.Rows.RemoveAt(item.Index);
+                }
+            }
+            //int row = gridConversion.CurrentCell.RowIndex;
+            //gridConversion.Rows.RemoveAt(row);
+
+
+            //add new row
+            else
+            { 
+                foreach (var row in gridConversion.Rows.Cast<DataGridViewRow>())
+                {
+                    var conversionTech = row.DataBoundItem as ConversionTechPropertiesViewModel;
+                    var nameCell = (DataGridViewComboBoxCell)row.Cells[1];
+
+                    try
+                    {
+                        _updatingGrid = true;
+                        nameCell.Items.Clear();
+                    }
+                    finally
+                    {
+                        _updatingGrid = false;
+                    }
+
+                    nameCell.Items.AddRange(conversionTech?.ValidNames.ToArray<object>() ?? ConversionTechPropertiesViewModel.AllNames.ToArray<object>());
+
+                    nameCell.ReadOnly = conversionTech?.IsParametricDefined ?? false;
+                    nameCell.DisplayStyle = conversionTech == null || conversionTech.IsEditable
+                        ? DataGridViewComboBoxDisplayStyle.DropDownButton
+                        : DataGridViewComboBoxDisplayStyle.Nothing;
+                }
+            }
+
 
         }
     }

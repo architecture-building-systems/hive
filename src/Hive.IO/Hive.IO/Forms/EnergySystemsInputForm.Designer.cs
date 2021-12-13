@@ -32,9 +32,6 @@
             this.tabConversion = new System.Windows.Forms.TabPage();
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
             this.gridConversion = new System.Windows.Forms.DataGridView();
-            this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Conversion = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.EndUse = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ConversionProperties = new Hive.IO.Forms.Controls.ConversionTechPropertiesBase();
             this.tabEmission = new System.Windows.Forms.TabPage();
             this.tableLayoutEmission = new System.Windows.Forms.TableLayoutPanel();
@@ -43,6 +40,10 @@
             this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.emitterProperties = new Hive.IO.Forms.Controls.EmitterProperties();
+            this.AddDelete = new System.Windows.Forms.DataGridViewButtonColumn();
+            this.Conversion = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.EndUse = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl.SuspendLayout();
             this.tabConversion.SuspendLayout();
             this.tableLayoutPanelMain.SuspendLayout();
@@ -58,20 +59,20 @@
             this.tabControl.Controls.Add(this.tabEmission);
             this.tabControl.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl.Location = new System.Drawing.Point(0, 0);
-            this.tabControl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabControl.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(1122, 532);
+            this.tabControl.Size = new System.Drawing.Size(1683, 831);
             this.tabControl.TabIndex = 0;
             // 
             // tabConversion
             // 
             this.tabConversion.Controls.Add(this.tableLayoutPanelMain);
-            this.tabConversion.Location = new System.Drawing.Point(4, 25);
-            this.tabConversion.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabConversion.Location = new System.Drawing.Point(8, 39);
+            this.tabConversion.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.tabConversion.Name = "tabConversion";
-            this.tabConversion.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tabConversion.Size = new System.Drawing.Size(1114, 503);
+            this.tabConversion.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tabConversion.Size = new System.Drawing.Size(1667, 784);
             this.tabConversion.TabIndex = 0;
             this.tabConversion.Text = "Conversion";
             this.tabConversion.UseVisualStyleBackColor = true;
@@ -83,13 +84,13 @@
             this.tableLayoutPanelMain.Controls.Add(this.gridConversion, 0, 0);
             this.tableLayoutPanelMain.Controls.Add(this.ConversionProperties, 0, 1);
             this.tableLayoutPanelMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanelMain.Location = new System.Drawing.Point(4, 4);
-            this.tableLayoutPanelMain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanelMain.Location = new System.Drawing.Point(6, 6);
+            this.tableLayoutPanelMain.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.tableLayoutPanelMain.Name = "tableLayoutPanelMain";
             this.tableLayoutPanelMain.RowCount = 2;
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
-            this.tableLayoutPanelMain.Size = new System.Drawing.Size(1106, 495);
+            this.tableLayoutPanelMain.Size = new System.Drawing.Size(1655, 772);
             this.tableLayoutPanelMain.TabIndex = 0;
             // 
             // gridConversion
@@ -98,19 +99,20 @@
             this.gridConversion.AllowUserToResizeRows = false;
             this.gridConversion.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridConversion.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Source,
+            this.AddDelete,
             this.Conversion,
+            this.Source,
             this.EndUse});
             this.gridConversion.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridConversion.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.gridConversion.Location = new System.Drawing.Point(4, 4);
-            this.gridConversion.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gridConversion.Location = new System.Drawing.Point(6, 6);
+            this.gridConversion.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.gridConversion.MultiSelect = false;
             this.gridConversion.Name = "gridConversion";
             this.gridConversion.RowHeadersVisible = false;
             this.gridConversion.RowHeadersWidth = 102;
             this.gridConversion.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.gridConversion.Size = new System.Drawing.Size(1098, 140);
+            this.gridConversion.Size = new System.Drawing.Size(1643, 219);
             this.gridConversion.TabIndex = 0;
             this.gridConversion.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridConversion_CellContentClick);
             this.gridConversion.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridConversion_CellValueChanged);
@@ -119,48 +121,25 @@
             this.gridConversion.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridView_DataError);
             this.gridConversion.SelectionChanged += new System.EventHandler(this.gridConversion_SelectionChanged);
             // 
-            // Source
-            // 
-            this.Source.HeaderText = "Source";
-            this.Source.MinimumWidth = 12;
-            this.Source.Name = "Source";
-            this.Source.ReadOnly = true;
-            this.Source.Width = 250;
-            // 
-            // Conversion
-            // 
-            this.Conversion.HeaderText = "Conversion";
-            this.Conversion.MinimumWidth = 12;
-            this.Conversion.Name = "Conversion";
-            this.Conversion.Width = 250;
-            // 
-            // EndUse
-            // 
-            this.EndUse.HeaderText = "EndUse";
-            this.EndUse.MinimumWidth = 12;
-            this.EndUse.Name = "EndUse";
-            this.EndUse.ReadOnly = true;
-            this.EndUse.Width = 250;
-            // 
             // ConversionProperties
             // 
             this.ConversionProperties.BackColor = System.Drawing.SystemColors.Window;
             this.ConversionProperties.Conversion = null;
             this.ConversionProperties.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.ConversionProperties.Location = new System.Drawing.Point(1, 149);
-            this.ConversionProperties.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.ConversionProperties.Location = new System.Drawing.Point(2, 233);
+            this.ConversionProperties.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ConversionProperties.Name = "ConversionProperties";
-            this.ConversionProperties.Size = new System.Drawing.Size(1104, 345);
+            this.ConversionProperties.Size = new System.Drawing.Size(1651, 537);
             this.ConversionProperties.TabIndex = 1;
             // 
             // tabEmission
             // 
             this.tabEmission.Controls.Add(this.tableLayoutEmission);
-            this.tabEmission.Location = new System.Drawing.Point(4, 25);
-            this.tabEmission.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabEmission.Location = new System.Drawing.Point(8, 39);
+            this.tabEmission.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.tabEmission.Name = "tabEmission";
-            this.tabEmission.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tabEmission.Size = new System.Drawing.Size(1114, 503);
+            this.tabEmission.Padding = new System.Windows.Forms.Padding(6, 6, 6, 6);
+            this.tabEmission.Size = new System.Drawing.Size(1667, 784);
             this.tabEmission.TabIndex = 1;
             this.tabEmission.Text = "Emission";
             this.tabEmission.UseVisualStyleBackColor = true;
@@ -169,17 +148,16 @@
             // 
             this.tableLayoutEmission.ColumnCount = 1;
             this.tableLayoutEmission.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutEmission.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
+            this.tableLayoutEmission.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 15F));
             this.tableLayoutEmission.Controls.Add(this.gridEmission, 0, 0);
             this.tableLayoutEmission.Controls.Add(this.emitterProperties, 0, 1);
             this.tableLayoutEmission.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutEmission.Location = new System.Drawing.Point(4, 4);
-            this.tableLayoutEmission.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tableLayoutEmission.Location = new System.Drawing.Point(6, 6);
             this.tableLayoutEmission.Name = "tableLayoutEmission";
             this.tableLayoutEmission.RowCount = 2;
             this.tableLayoutEmission.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tableLayoutEmission.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
-            this.tableLayoutEmission.Size = new System.Drawing.Size(1106, 495);
+            this.tableLayoutEmission.Size = new System.Drawing.Size(1655, 772);
             this.tableLayoutEmission.TabIndex = 0;
             // 
             // gridEmission
@@ -193,14 +171,14 @@
             this.dataGridViewTextBoxColumn2});
             this.gridEmission.Dock = System.Windows.Forms.DockStyle.Fill;
             this.gridEmission.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.gridEmission.Location = new System.Drawing.Point(4, 4);
-            this.gridEmission.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.gridEmission.Location = new System.Drawing.Point(6, 6);
+            this.gridEmission.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.gridEmission.MultiSelect = false;
             this.gridEmission.Name = "gridEmission";
             this.gridEmission.RowHeadersVisible = false;
             this.gridEmission.RowHeadersWidth = 102;
             this.gridEmission.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.gridEmission.Size = new System.Drawing.Size(1098, 140);
+            this.gridEmission.Size = new System.Drawing.Size(1643, 219);
             this.gridEmission.TabIndex = 1;
             this.gridEmission.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridEmission_CellValueChanged);
             this.gridEmission.CurrentCellDirtyStateChanged += new System.EventHandler(this.gridEmission_CurrentCellDirtyStateChanged);
@@ -236,20 +214,50 @@
             this.emitterProperties.BackColor = System.Drawing.SystemColors.Window;
             this.emitterProperties.Dock = System.Windows.Forms.DockStyle.Fill;
             this.emitterProperties.Emitter = null;
-            this.emitterProperties.Location = new System.Drawing.Point(1, 149);
-            this.emitterProperties.Margin = new System.Windows.Forms.Padding(1, 1, 1, 1);
+            this.emitterProperties.Location = new System.Drawing.Point(2, 233);
+            this.emitterProperties.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.emitterProperties.Name = "emitterProperties";
-            this.emitterProperties.Size = new System.Drawing.Size(1104, 345);
+            this.emitterProperties.Size = new System.Drawing.Size(1651, 537);
             this.emitterProperties.TabIndex = 2;
+            // 
+            // AddDelete
+            // 
+            this.AddDelete.HeaderText = "Edit";
+            this.AddDelete.MinimumWidth = 10;
+            this.AddDelete.Name = "AddDelete";
+            this.AddDelete.Width = 200;
+            // 
+            // Conversion
+            // 
+            this.Conversion.HeaderText = "Conversion";
+            this.Conversion.MinimumWidth = 12;
+            this.Conversion.Name = "Conversion";
+            this.Conversion.Width = 250;
+            // 
+            // Source
+            // 
+            this.Source.HeaderText = "Source";
+            this.Source.MinimumWidth = 12;
+            this.Source.Name = "Source";
+            this.Source.ReadOnly = true;
+            this.Source.Width = 250;
+            // 
+            // EndUse
+            // 
+            this.EndUse.HeaderText = "EndUse";
+            this.EndUse.MinimumWidth = 12;
+            this.EndUse.Name = "EndUse";
+            this.EndUse.ReadOnly = true;
+            this.EndUse.Width = 250;
             // 
             // EnergySystemsInputForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(8F, 16F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1122, 532);
+            this.ClientSize = new System.Drawing.Size(1683, 831);
             this.Controls.Add(this.tabControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(6, 6, 6, 6);
             this.Name = "EnergySystemsInputForm";
             this.Text = "EnergySystemsInputForm";
             this.Load += new System.EventHandler(this.EnergySystemsInputForm_Load);
@@ -271,9 +279,6 @@
         private System.Windows.Forms.TabPage tabEmission;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanelMain;
         private System.Windows.Forms.DataGridView gridConversion;
-        private System.Windows.Forms.DataGridViewTextBoxColumn Source;
-        private System.Windows.Forms.DataGridViewComboBoxColumn Conversion;
-        private System.Windows.Forms.DataGridViewTextBoxColumn EndUse;
         private Controls.ConversionTechPropertiesBase ConversionProperties;
         private System.Windows.Forms.TableLayoutPanel tableLayoutEmission;
         private System.Windows.Forms.DataGridView gridEmission;
@@ -281,5 +286,9 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private Controls.EmitterProperties emitterProperties;
+        private System.Windows.Forms.DataGridViewButtonColumn AddDelete;
+        private System.Windows.Forms.DataGridViewComboBoxColumn Conversion;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Source;
+        private System.Windows.Forms.DataGridViewTextBoxColumn EndUse;
     }
 }
