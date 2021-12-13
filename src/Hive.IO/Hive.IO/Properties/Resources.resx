@@ -118,23 +118,32 @@
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
   <assembly alias="System.Windows.Forms" name="System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089" />
+  <data name="asi" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnergySystems\asi.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="asi_grey_panel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnergySystems\asi_grey_panel.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="CdTe" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\EnergySystems\CdTe.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CIGS" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\EnergySystems\CIGS.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="cigs1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnergySystems\cigs.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="flat_plate" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\EnergySystems\flat_plate.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="cigs_integrated" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnergySystems\cigs_integrated.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="flexible_cigs" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnergySystems\flexible_cigs.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="gc_efficiency" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\gc_efficiency.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
-  <data name="HIT" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\EnergySystems\HIT.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
-  </data>
   <data name="Hive_Logo" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\Hive_Logo.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="hjt" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnergySystems\hjt.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="IOCore_Distconvtech" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IOCore_Distconvtech.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
@@ -214,11 +223,38 @@
   <data name="IO_Visualizer" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\IO_Visualizer.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Monocristalline" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\EnergySystems\Monocristalline.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="lof_golden" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnergySystems\lof_golden.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="Polycristalline" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\EnergySystems\Polycristalline.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  <data name="lof_green" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnergySystems\lof_green.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lof_lavender" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnergySystems\lof_lavender.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lof_red" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnergySystems\lof_red.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lof_steel" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnergySystems\lof_steel.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="lof_terracotta" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnergySystems\lof_terracotta.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="monocrystalline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnergySystems\monocrystalline.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mono_facade" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnergySystems\mono_facade.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mono_facade_blue" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnergySystems\mono_facade_blue.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="mono_roof" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnergySystems\mono_roof.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="polycrystalline" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnergySystems\polycrystalline.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="pvt_efficiency" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\pvt_efficiency.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
@@ -226,10 +262,10 @@
   <data name="pv_efficiency" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\pv_efficiency.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
   </data>
+  <data name="solaxess_white" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnergySystems\solaxess_white.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="st_efficiency" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\st_efficiency.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
-  </data>
-  <data name="vacume_tube" type="System.Resources.ResXFileRef, System.Windows.Forms">
-    <value>..\Resources\EnergySystems\vacume_tube.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
