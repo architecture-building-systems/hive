@@ -30,23 +30,23 @@
         {
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabConversion = new System.Windows.Forms.TabPage();
-            this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
-            this.gridConversion = new System.Windows.Forms.DataGridView();
-            this.tabEmission = new System.Windows.Forms.TabPage();
-            this.tableLayoutEmission = new System.Windows.Forms.TableLayoutPanel();
-            this.gridEmission = new System.Windows.Forms.DataGridView();
             this.button1 = new System.Windows.Forms.Button();
             this.button2 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
+            this.gridConversion = new System.Windows.Forms.DataGridView();
+            this.Conversion = new System.Windows.Forms.DataGridViewComboBoxColumn();
+            this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.EndUse = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.tabEmission = new System.Windows.Forms.TabPage();
             this.button4 = new System.Windows.Forms.Button();
+            this.button3 = new System.Windows.Forms.Button();
+            this.tableLayoutEmission = new System.Windows.Forms.TableLayoutPanel();
+            this.gridEmission = new System.Windows.Forms.DataGridView();
             this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.dataGridViewTextBoxColumn1 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ConversionProperties = new Hive.IO.Forms.Controls.ConversionTechPropertiesBase();
             this.emitterProperties = new Hive.IO.Forms.Controls.EmitterProperties();
-            this.Conversion = new System.Windows.Forms.DataGridViewComboBoxColumn();
-            this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.EndUse = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabControl.SuspendLayout();
             this.tabConversion.SuspendLayout();
             this.tableLayoutPanelMain.SuspendLayout();
@@ -82,6 +82,26 @@
             this.tabConversion.Text = "Conversion";
             this.tabConversion.UseVisualStyleBackColor = true;
             // 
+            // button1
+            // 
+            this.button1.Location = new System.Drawing.Point(9, 12);
+            this.button1.Name = "button1";
+            this.button1.Size = new System.Drawing.Size(118, 118);
+            this.button1.TabIndex = 1;
+            this.button1.Text = "Add New Entry";
+            this.button1.UseVisualStyleBackColor = true;
+            this.button1.Click += new System.EventHandler(this.button1_Click);
+            // 
+            // button2
+            // 
+            this.button2.Location = new System.Drawing.Point(9, 132);
+            this.button2.Name = "button2";
+            this.button2.Size = new System.Drawing.Size(118, 120);
+            this.button2.TabIndex = 2;
+            this.button2.Text = "Delete Entry";
+            this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
+            // 
             // tableLayoutPanelMain
             // 
             this.tableLayoutPanelMain.ColumnCount = 1;
@@ -100,6 +120,8 @@
             // 
             // gridConversion
             // 
+            this.gridConversion.AllowUserToAddRows = false;
+            this.gridConversion.AllowUserToDeleteRows = false;
             this.gridConversion.AllowUserToResizeColumns = false;
             this.gridConversion.AllowUserToResizeRows = false;
             this.gridConversion.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -118,12 +140,34 @@
             this.gridConversion.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.gridConversion.Size = new System.Drawing.Size(1519, 237);
             this.gridConversion.TabIndex = 0;
-            this.gridConversion.CellContentClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridConversion_CellContentClick);
             this.gridConversion.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridConversion_CellValueChanged);
             this.gridConversion.CurrentCellDirtyStateChanged += new System.EventHandler(this.gridConversion_CurrentCellDirtyStateChanged);
             this.gridConversion.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.gridConversion_DataBindingComplete);
             this.gridConversion.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridView_DataError);
             this.gridConversion.SelectionChanged += new System.EventHandler(this.gridConversion_SelectionChanged);
+            // 
+            // Conversion
+            // 
+            this.Conversion.HeaderText = "Conversion";
+            this.Conversion.MinimumWidth = 12;
+            this.Conversion.Name = "Conversion";
+            this.Conversion.Width = 250;
+            // 
+            // Source
+            // 
+            this.Source.HeaderText = "Source";
+            this.Source.MinimumWidth = 12;
+            this.Source.Name = "Source";
+            this.Source.ReadOnly = true;
+            this.Source.Width = 250;
+            // 
+            // EndUse
+            // 
+            this.EndUse.HeaderText = "EndUse";
+            this.EndUse.MinimumWidth = 12;
+            this.EndUse.Name = "EndUse";
+            this.EndUse.ReadOnly = true;
+            this.EndUse.Width = 250;
             // 
             // tabEmission
             // 
@@ -138,6 +182,26 @@
             this.tabEmission.TabIndex = 1;
             this.tabEmission.Text = "Emission";
             this.tabEmission.UseVisualStyleBackColor = true;
+            // 
+            // button4
+            // 
+            this.button4.Location = new System.Drawing.Point(9, 132);
+            this.button4.Name = "button4";
+            this.button4.Size = new System.Drawing.Size(118, 118);
+            this.button4.TabIndex = 2;
+            this.button4.Text = "Delete Entry";
+            this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
+            // 
+            // button3
+            // 
+            this.button3.Location = new System.Drawing.Point(8, 12);
+            this.button3.Name = "button3";
+            this.button3.Size = new System.Drawing.Size(118, 118);
+            this.button3.TabIndex = 1;
+            this.button3.Text = "Add New Entry";
+            this.button3.UseVisualStyleBackColor = true;
+            this.button3.Click += new System.EventHandler(this.button3_Click);
             // 
             // tableLayoutEmission
             // 
@@ -156,6 +220,8 @@
             // 
             // gridEmission
             // 
+            this.gridEmission.AllowUserToAddRows = false;
+            this.gridEmission.AllowUserToDeleteRows = false;
             this.gridEmission.AllowUserToResizeColumns = false;
             this.gridEmission.AllowUserToResizeRows = false;
             this.gridEmission.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
@@ -179,44 +245,6 @@
             this.gridEmission.DataBindingComplete += new System.Windows.Forms.DataGridViewBindingCompleteEventHandler(this.gridEmission_DataBindingComplete);
             this.gridEmission.DataError += new System.Windows.Forms.DataGridViewDataErrorEventHandler(this.dataGridView_DataError);
             this.gridEmission.SelectionChanged += new System.EventHandler(this.gridEmission_SelectionChanged);
-            // 
-            // button1
-            // 
-            this.button1.Location = new System.Drawing.Point(9, 12);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(118, 118);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Add New Entry";
-            this.button1.UseVisualStyleBackColor = true;
-            // 
-            // button2
-            // 
-            this.button2.Location = new System.Drawing.Point(9, 132);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(118, 120);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Delete Entry";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.button2_Click);
-            // 
-            // button3
-            // 
-            this.button3.Location = new System.Drawing.Point(8, 12);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(118, 118);
-            this.button3.TabIndex = 1;
-            this.button3.Text = "Add New Entry";
-            this.button3.UseVisualStyleBackColor = true;
-            // 
-            // button4
-            // 
-            this.button4.Location = new System.Drawing.Point(9, 132);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(118, 118);
-            this.button4.TabIndex = 2;
-            this.button4.Text = "Delete Entry";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // dataGridViewComboBoxColumn1
             // 
@@ -262,29 +290,6 @@
             this.emitterProperties.Name = "emitterProperties";
             this.emitterProperties.Size = new System.Drawing.Size(1653, 519);
             this.emitterProperties.TabIndex = 2;
-            // 
-            // Conversion
-            // 
-            this.Conversion.HeaderText = "Conversion";
-            this.Conversion.MinimumWidth = 12;
-            this.Conversion.Name = "Conversion";
-            this.Conversion.Width = 250;
-            // 
-            // Source
-            // 
-            this.Source.HeaderText = "Source";
-            this.Source.MinimumWidth = 12;
-            this.Source.Name = "Source";
-            this.Source.ReadOnly = true;
-            this.Source.Width = 250;
-            // 
-            // EndUse
-            // 
-            this.EndUse.HeaderText = "EndUse";
-            this.EndUse.MinimumWidth = 12;
-            this.EndUse.Name = "EndUse";
-            this.EndUse.ReadOnly = true;
-            this.EndUse.Width = 250;
             // 
             // EnergySystemsInputForm
             // 

@@ -72,12 +72,8 @@ namespace Hive.IO.Forms
             gridConversion.Columns.Clear();
             gridConversion.Columns.Add(new DataGridViewButtonColumn()
             {
-                Name = "Edit",
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
-                FillWeight = 0.2f,
-                DataPropertyName = "Edit",
-                ReadOnly = true
-            });
+                Visible = false
+            }) ;
             gridConversion.Columns.Add(new DataGridViewComboBoxColumn()
             {
                 Name = "Conversion",
@@ -314,48 +310,7 @@ namespace Hive.IO.Forms
 
         #endregion tabEmission
 
-        private void gridConversion_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-            if (gridConversion.SelectedRows.Count > 0)
-            {
-                foreach (DataGridViewRow item in gridConversion.SelectedRows)
-                {
-                    gridConversion.Rows.RemoveAt(item.Index);
-                }
-            }
-            //int row = gridConversion.CurrentCell.RowIndex;
-            //gridConversion.Rows.RemoveAt(row);
-
-
-            //add new row
-            else
-            { 
-                foreach (var row in gridConversion.Rows.Cast<DataGridViewRow>())
-                {
-                    var conversionTech = row.DataBoundItem as ConversionTechPropertiesViewModel;
-                    var nameCell = (DataGridViewComboBoxCell)row.Cells[1];
-
-                    try
-                    {
-                        _updatingGrid = true;
-                        nameCell.Items.Clear();
-                    }
-                    finally
-                    {
-                        _updatingGrid = false;
-                    }
-
-                    nameCell.Items.AddRange(conversionTech?.ValidNames.ToArray<object>() ?? ConversionTechPropertiesViewModel.AllNames.ToArray<object>());
-
-                    nameCell.ReadOnly = conversionTech?.IsParametricDefined ?? false;
-                    nameCell.DisplayStyle = conversionTech == null || conversionTech.IsEditable
-                        ? DataGridViewComboBoxDisplayStyle.DropDownButton
-                        : DataGridViewComboBoxDisplayStyle.Nothing;
-                }
-            }
-
-
-        }
+        
 
         private void tableLayoutPanelMain_Paint(object sender, PaintEventArgs e)
         {
@@ -393,6 +348,22 @@ namespace Hive.IO.Forms
             {
                 MessageBox.Show("Please select one row");
             }
+        }
+
+        //click on add entry to insert new row in gridConversion
+        private void button1_Click(object sender, EventArgs e)
+        {
+            DataGridViewRow row = (DataGridViewRow)gridConversion.Rows[0].Clone();
+            gridConversion.Rows.Add(row);
+            //gridConversion.Rows.Add(1);
+        }
+
+        //click on add entry to insert new row in gridEmission
+        private void button3_Click(object sender, EventArgs e)
+        {
+            DataGridViewRow row = (DataGridViewRow)gridConversion.Rows[0].Clone();
+            gridConversion.Rows.Add(row);
+            //gridConversion.Rows.Add(1);
         }
     }
 }
