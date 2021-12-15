@@ -95,6 +95,7 @@
     <Compile Include="EnergySystems\Storage.cs" />
     <Compile Include="EnergySystems\SurfaceBasedTech.cs" />
     <Compile Include="EnergySystems\Ventilation.cs" />
+    <Compile Include="Environment\Epw.cs" />
     <Compile Include="Forms\BuildingInputForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -163,11 +164,16 @@
     <Compile Include="GhDistributors\GhDistConversionTech.cs" />
     <Compile Include="GhDistributors\GhDistEmitter.cs" />
     <Compile Include="GhDistributors\GhDistEnvironment.cs" />
+    <Compile Include="GhDistributors\GhDistEpw.cs" />
     <Compile Include="GhDistributors\GhDistResults.cs" />
     <Compile Include="GhDistributors\GhDistResultsLoads.cs" />
     <Compile Include="GhDistributors\GhDistSIA.cs" />
     <Compile Include="GhDistributors\GhDistSolarSimulation.cs" />
     <Compile Include="GhDistributors\GhDistSolarTech.cs" />
+    <Compile Include="GhEnergySystems\BoilerSimple.cs" />
+    <Compile Include="GhEnergySystems\BoilerTimeResolved.cs" />
+    <Compile Include="GhEnergySystems\ChpSimple.cs" />
+    <Compile Include="GhEnergySystems\ChpTimeResolved.cs" />
     <Compile Include="GhInputOutput\GhResultsParameter.cs" />
     <Compile Include="GhMergers\GhChiller.cs" />
     <Compile Include="GhMergers\GhCHP.cs" />
@@ -391,6 +397,13 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IOCore_DistEmitter.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\EnergySystems_Boiler_Simple.png" />
+    <Content Include="Resources\EnergySystems_Boiler_TimeResult.png" />
+    <Content Include="Resources\EnergySystems_Combined.png" />
+    <Content Include="Resources\EnergySystems_Combined_TimeResult.png" />
+    <Content Include="Resources\Misc_EPW_reader.png" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
