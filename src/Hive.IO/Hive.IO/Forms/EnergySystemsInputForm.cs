@@ -356,5 +356,10 @@ namespace Hive.IO.Forms
 
 
         }
+
+        private void tableLayoutPanelMain_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
     }
 }
