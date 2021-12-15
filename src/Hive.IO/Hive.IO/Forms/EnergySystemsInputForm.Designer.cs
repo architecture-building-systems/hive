@@ -44,11 +44,9 @@
             this.dataGridViewTextBoxColumn2 = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.ConversionProperties = new Hive.IO.Forms.Controls.ConversionTechPropertiesBase();
             this.emitterProperties = new Hive.IO.Forms.Controls.EmitterProperties();
-            this.Edit = new System.Windows.Forms.DataGridViewButtonColumn();
             this.Conversion = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EndUse = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.Column1 = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.tabControl.SuspendLayout();
             this.tabConversion.SuspendLayout();
             this.tableLayoutPanelMain.SuspendLayout();
@@ -106,11 +104,9 @@
             this.gridConversion.AllowUserToResizeRows = false;
             this.gridConversion.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.gridConversion.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
-            this.Edit,
             this.Conversion,
             this.Source,
-            this.EndUse,
-            this.Column1});
+            this.EndUse});
             this.gridConversion.Dock = System.Windows.Forms.DockStyle.Right;
             this.gridConversion.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
             this.gridConversion.Location = new System.Drawing.Point(130, 6);
@@ -201,6 +197,7 @@
             this.button2.TabIndex = 2;
             this.button2.Text = "Delete Entry";
             this.button2.UseVisualStyleBackColor = true;
+            this.button2.Click += new System.EventHandler(this.button2_Click);
             // 
             // button3
             // 
@@ -219,6 +216,7 @@
             this.button4.TabIndex = 2;
             this.button4.Text = "Delete Entry";
             this.button4.UseVisualStyleBackColor = true;
+            this.button4.Click += new System.EventHandler(this.button4_Click);
             // 
             // dataGridViewComboBoxColumn1
             // 
@@ -265,13 +263,6 @@
             this.emitterProperties.Size = new System.Drawing.Size(1653, 519);
             this.emitterProperties.TabIndex = 2;
             // 
-            // Edit
-            // 
-            this.Edit.HeaderText = "Edit";
-            this.Edit.MinimumWidth = 10;
-            this.Edit.Name = "Edit";
-            this.Edit.Width = 200;
-            // 
             // Conversion
             // 
             this.Conversion.HeaderText = "Conversion";
@@ -294,13 +285,6 @@
             this.EndUse.Name = "EndUse";
             this.EndUse.ReadOnly = true;
             this.EndUse.Width = 250;
-            // 
-            // Column1
-            // 
-            this.Column1.HeaderText = "Column1";
-            this.Column1.MinimumWidth = 10;
-            this.Column1.Name = "Column1";
-            this.Column1.Width = 200;
             // 
             // EnergySystemsInputForm
             // 
@@ -342,10 +326,8 @@
         private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
-        private System.Windows.Forms.DataGridViewButtonColumn Edit;
         private System.Windows.Forms.DataGridViewComboBoxColumn Conversion;
         private System.Windows.Forms.DataGridViewTextBoxColumn Source;
         private System.Windows.Forms.DataGridViewTextBoxColumn EndUse;
-        private System.Windows.Forms.DataGridViewCheckBoxColumn Column1;
     }
 }

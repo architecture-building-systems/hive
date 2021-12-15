@@ -72,7 +72,7 @@ namespace Hive.IO.Forms
             gridConversion.Columns.Clear();
             gridConversion.Columns.Add(new DataGridViewButtonColumn()
             {
-                Name = "AddDelete",
+                Name = "Edit",
                 AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
                 FillWeight = 0.2f,
                 DataPropertyName = "Edit",
@@ -360,6 +360,39 @@ namespace Hive.IO.Forms
         private void tableLayoutPanelMain_Paint(object sender, PaintEventArgs e)
         {
 
+        }
+
+        private void button2_Click(object sender, EventArgs e)
+        {
+            gridConversion.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            if (gridConversion.SelectedRows.Count > 0)
+            {
+                foreach (DataGridViewRow item in gridConversion.SelectedRows)
+                {
+                    gridConversion.Rows.RemoveAt(item.Index);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select one row");
+            }
+
+        }
+
+        private void button4_Click(object sender, EventArgs e)
+        {
+            gridEmission.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
+            if (gridEmission.SelectedRows.Count > 0)
+            {
+                foreach (DataGridViewRow item in gridEmission.SelectedRows)
+                {
+                    gridEmission.Rows.RemoveAt(item.Index);
+                }
+            }
+            else
+            {
+                MessageBox.Show("Please select one row");
+            }
         }
     }
 }
