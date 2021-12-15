@@ -145,7 +145,7 @@ namespace Hive.IO.Forms
         /// <param name="e"></param>
         private void gridConversion_SelectionChanged(object sender, EventArgs e)
         {
-            if (gridConversion.CurrentRow.DataBoundItem == null)
+            if (gridConversion.CurrentRow?.DataBoundItem == null)
             {
                 return;
             }
@@ -229,7 +229,7 @@ namespace Hive.IO.Forms
         /// <param name="e"></param>
         private void gridEmission_SelectionChanged(object sender, EventArgs e)
         {
-            if (gridEmission.CurrentRow.DataBoundItem == null)
+            if (gridEmission.CurrentRow?.DataBoundItem == null)
             {
                 return;
             }
@@ -317,7 +317,7 @@ namespace Hive.IO.Forms
 
         }
 
-        private void button2_Click(object sender, EventArgs e)
+        private void deleteConversionTech_Click(object sender, EventArgs e)
         {
             gridConversion.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             if (gridConversion.SelectedRows.Count > 0)
@@ -334,7 +334,7 @@ namespace Hive.IO.Forms
 
         }
 
-        private void button4_Click(object sender, EventArgs e)
+        private void deleteEmission_Click(object sender, EventArgs e)
         {
             gridEmission.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             if (gridEmission.SelectedRows.Count > 0)
@@ -351,19 +351,21 @@ namespace Hive.IO.Forms
         }
 
         //click on add entry to insert new row in gridConversion
-        private void button1_Click(object sender, EventArgs e)
+        private void addConversionTech_Click(object sender, EventArgs e)
         {
-            DataGridViewRow row = (DataGridViewRow)gridConversion.Rows[0].Clone();
-            gridConversion.Rows.Add(row);
-            //gridConversion.Rows.Add(1);
+            var data = (BindingList<ConversionTechPropertiesViewModel>)gridConversion.DataSource;
+            data.Insert(0, new ConversionTechPropertiesViewModel());
         }
 
         //click on add entry to insert new row in gridEmission
-        private void button3_Click(object sender, EventArgs e)
+        private void addEmission_Click(object sender, EventArgs e)
         {
-            DataGridViewRow row = (DataGridViewRow)gridConversion.Rows[0].Clone();
-            gridConversion.Rows.Add(row);
-            //gridConversion.Rows.Add(1);
+            var data = (BindingList<EmitterPropertiesViewModel>)gridEmission.DataSource;
+            data.Insert(0, new EmitterPropertiesViewModel()
+            {
+                Name = "Radiator",
+                IsHeating = true
+            });
         }
     }
 }

@@ -34,7 +34,7 @@ namespace Hive.IO.Forms
         /// </summary>
         public string Name
         {
-            get => _name ?? "Photovoltaic (PV)";
+            get => _name ?? "Radiator";
             set
             {
                 if (AllNames.Contains(value))
