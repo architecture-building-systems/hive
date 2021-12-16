@@ -141,3 +141,4 @@ Ankh.NoLoad
 
 src/Hive.IO/packages/
 .vscode/
+src/Hive.IO/Hive.IO/Resources/EnergySystems/*.psd
