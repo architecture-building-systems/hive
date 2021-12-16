@@ -22,7 +22,7 @@ namespace Hive.IO.GhDistributors
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("EPW", "EPW", "Outputs the data associated with a .epw weather file as a Hive.IO.Epw object, to be used with the EPW Distributor.", GH_ParamAccess.item);
+            pManager.AddTextParameter("EPWFilepath", "EPWFilepath", "Outputs the filepath of the .epw weather file belonging to Hive Environment. Can be used to e.g. open the weather file in another component.", GH_ParamAccess.item);
             pManager.AddGenericParameter("NaturalGas", "NaturalGas", "NaturalGas energy carrier", GH_ParamAccess.item);
             pManager.AddGenericParameter("BioGas", "BioGas", "BioGas energy carrier", GH_ParamAccess.item);
             pManager.AddGenericParameter("WoodPellets", "WoodPellets", "WoodPellets energy carrier", GH_ParamAccess.item);
@@ -45,7 +45,7 @@ namespace Hive.IO.GhDistributors
             {
                 // bad programming here... I know the order of my inputs, so I can loop...
                 // I do have EnergyCarrier.Name... but that is not robust to use... implement enum?
-                DA.SetData(0, environment.EpwData);
+                DA.SetData(0, environment.EpwData.FilePath);
                 for(int i=0; i<environment.EnergyPotentials.Length; i++)
                     DA.SetData(i+1, environment.EnergyPotentials[i]);
             }

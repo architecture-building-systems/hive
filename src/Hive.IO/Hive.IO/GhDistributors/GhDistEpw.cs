@@ -21,6 +21,7 @@ namespace Hive.IO.GhMisc
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("EPW", "EPW", "The instance of type <Hive.IO.EPW> that represents a .epw weather file", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Run", "Run", "Runs the reading / parsing of the EPW data.", GH_ParamAccess.item);
         }
 
 
@@ -28,7 +29,7 @@ namespace Hive.IO.GhMisc
         {
             pManager.AddNumberParameter("Latitude", "Latitude", "Latitude in deg", GH_ParamAccess.item);
             pManager.AddNumberParameter("Longitude", "Longitude", "Longitude in deg", GH_ParamAccess.item);
-            pManager.AddTextParameter("City, Country", "City-Country", "City and Country", GH_ParamAccess.item);
+            pManager.AddTextParameter("City, Country", "City-Country", "City and Country", GH_ParamAccess.list);
             pManager.AddNumberParameter("GHI", "GHI", "Global Horizontal Irradiance, in Wh/m2.", GH_ParamAccess.list);
             pManager.AddNumberParameter("DNI", "DNI", "Direct Normal Irradiance, in Wh/m2.", GH_ParamAccess.list);
             pManager.AddNumberParameter("DHI", "DHI", "Diffuse Horizontal Irradiance, in Wh/m2.", GH_ParamAccess.list);
@@ -45,12 +46,18 @@ namespace Hive.IO.GhMisc
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            Epw epw = new Epw();
-            if (!DA.GetData(0, ref epw)) return;
+            string epwPath = "";
+            if (!DA.GetData(0, ref epwPath)) return;
+
+            bool runParser = false;
+            DA.GetData(1, ref runParser);
+
+            Epw epw = new Epw() { FilePath = @epwPath};
+            if (runParser) epw.Parse();
 
             DA.SetData(0, epw.Latitude);
             DA.SetData(1, epw.Longitude);
-            DA.SetData(2, new Tuple<string,string>(epw.City, epw.Country));
+            DA.SetDataList(2, new string[] { epw.City, epw.Country });
             DA.SetDataList(3, epw.GHI);
             DA.SetDataList(4, epw.DNI);
             DA.SetDataList(5, epw.DHI);
