@@ -3,67 +3,94 @@
         {
             "ThermalEfficiency": 0.0, 
             "Description": "Polycristalline modules consist of silicon wafer based cells that typically come in classic blue or black color. The PV cell wafers consist of multiple smaller crystals, which can show as a camouflage-like pattern on the cells. Generally, they can be colored more easily than monocrystalline cells and are slightly less expensive but also less efficient than monocrystalline cells. This type of PV is, with some exceptions, not suitable for curved applications. Customized designs (size, shape and colors) of cells and modules are possible at the expense of efficiency losses and increased costs.", 
-            "SpecificCapitalCost": 633.656, 
-            "ElectricEfficiency": 0.206, 
+            "Image": "monocrystalline", 
+            "SpecificCapitalCost": 384.8973607, 
+            "ElectricEfficiency": 0.188, 
             "Lifetime": 30.0, 
-            "SpecificEmbodiedEmissions": 171.598, 
-            "Name": "Polycristalline"
+            "SpecificEmbodiedEmissions": 107.111437, 
+            "Name": "Monocrystalline"
         }, 
         {
             "ThermalEfficiency": 0.0, 
             "Description": "Monocristalline PV modules consist of silicon wafer based cells that typically come in classic blue or black color. It is currently the most popular PV cell technology. The cells usually have rounded corners due to production processes. Monocristalline PV modules are more efficient and also more expensive compared to polycrystalline modules. This type of PV is, with some exceptions, not suitable for curved applications. Customized designs (size, shape and colors) of cells and modules are possible at the expense of efficiency losses and increased costs.", 
-            "SpecificCapitalCost": 701.328, 
-            "ElectricEfficiency": 0.228, 
+            "Image": "polycrystalline", 
+            "SpecificCapitalCost": 381.5594974, 
+            "ElectricEfficiency": 0.16, 
             "Lifetime": 30.0, 
-            "SpecificEmbodiedEmissions": 189.924, 
-            "Name": "Monocristalline"
+            "SpecificEmbodiedEmissions": 104.9827544, 
+            "Name": "Polycrystalline Silicon"
         }, 
         {
             "ThermalEfficiency": 0.0, 
             "Description": "CIGS modules can be very thin, as they are not based on wafers but on deposited thin-films. This makes them flexible and suitable for applications on curved surfaces. They are of black color and modules often do not have visible spacing between cells, making a more homogeneous impression. Current modules do not reach efficiencies similar to silicon based modules and prices can still be high. The technology is expected to keep improving in the near future. Compared to crystalline silicon cells, thin-film CIGS cells show substantially lower green-house gas emissions but higher human toxicity.", 
-            "SpecificCapitalCost": 592.8, 
-            "ElectricEfficiency": 0.156, 
+            "Image": "cdte", 
+            "SpecificCapitalCost": 436.0653035, 
+            "ElectricEfficiency": 0.173, 
             "Lifetime": 30.0, 
-            "SpecificEmbodiedEmissions": 121.68, 
-            "Name": "CIGS"
-        }, 
-        {
-            "ThermalEfficiency": 0.0, 
-            "Description": "CdTe based modules can be very thin, as they are not based on wafers but on deposited thin-films. They exist in rigid and flexible form and are usually of black color. The appearance is homogeneous as there is no spacing between cells. Efficiencies are not yet as high as for silicon based cells but improving rapidly. Compared to crystalline silicon cells, thin-film CdTe cells show substantially lower green-house gas emissions but higher human toxicity.", 
-            "SpecificCapitalCost": 691.6, 
-            "ElectricEfficiency": 0.182, 
-            "Lifetime": 30.0, 
-            "SpecificEmbodiedEmissions": 78.806, 
+            "SpecificEmbodiedEmissions": 65.14919874, 
             "Name": "CdTe"
         }, 
         {
             "ThermalEfficiency": 0.0, 
-            "Description": "HIT modules consist of silicon wafer based cells with an additional intrinsic silicon layer. From an aesthetic point of view, they are similar to monocrystalline modules showing the classic blue or black colors. The additional layer leads to an increased efficiency but also to higher cost. This type of PV is generally not suitable for curved applications.", 
-            "SpecificCapitalCost": 642.884, 
-            "ElectricEfficiency": 0.209, 
+            "Description": "CdTe based modules can be very thin, as they are not based on wafers but on deposited thin-films. They exist in rigid and flexible form and are usually of black color. The appearance is homogeneous as there is no spacing between cells. Efficiencies are not yet as high as for silicon based cells but improving rapidly. Compared to crystalline silicon cells, thin-film CdTe cells show substantially lower green-house gas emissions but higher human toxicity.", 
+            "Image": "cigs", 
+            "SpecificCapitalCost": 464.419654, 
+            "ElectricEfficiency": 0.142, 
             "Lifetime": 30.0, 
-            "SpecificEmbodiedEmissions": 174.097, 
-            "Name": "HIT"
+            "SpecificEmbodiedEmissions": 92.59901077, 
+            "Name": "CIGS"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "Amorphous silicon (a-Si) is the non-crystalline allotropic form of the semiconductor silicon. It has a high absorption capacity and can therefore be used in solar cells with very small layer thicknesses (usually about a factor of 100 smaller than in crystalline silicon), saving on material costs and compensating for performance deficiencies caused by its comparably low industry-maximum efficiency which is about 13%.", 
+            "Image": "asi", 
+            "SpecificCapitalCost": 158.1046756, 
+            "ElectricEfficiency": 0.08, 
+            "Lifetime": 30.0, 
+            "SpecificEmbodiedEmissions": 80.0, 
+            "Name": "Amorphous Silicon"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "HJT modules consist of silicon wafer based cells with an additional intrinsic silicon layer. From an aesthetic point of view, they are similar to monocrystalline modules showing the classic blue or black colors. The additional layer leads to an increased efficiency but also to higher cost. This type of PV is generally not suitable for curved applications.", 
+            "Image": "hjt", 
+            "SpecificCapitalCost": 392.5079775, 
+            "ElectricEfficiency": 0.2103, 
+            "Lifetime": 30.0, 
+            "SpecificEmbodiedEmissions": 144.2732025, 
+            "Name": "Heterojunction Monocrystalline"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "A benefit of thin film photovoltaic cells is their ability to be produced in a manner that permits flexible modules. These flexible CIGS panels can be applied to curved surfaces with ease. They are also exceptionally light and benefit from no heavy weight or carbon intensive frame.", 
+            "Image": "flexible_cigs", 
+            "SpecificCapitalCost": 355.0412661, 
+            "ElectricEfficiency": 0.11, 
+            "Lifetime": 30.0, 
+            "SpecificEmbodiedEmissions": 17.5, 
+            "Name": "Flexible CIGS"
         }
     ], 
     "Solar Thermal (ST)": [
         {
             "ThermalEfficiency": 0.45, 
             "Description": "Evacuated tube collectors are used when high water temperatures are required. They can reach temperature levels of over 100\\u00b0C. Several tubes are installed next to each other. The appearance is not a homogeneous surface. Fa\\u00e7ade integration is possible to some extent.", 
+            "Image": "", 
             "SpecificCapitalCost": 2000.0, 
             "ElectricEfficiency": 0.0, 
             "Lifetime": 30.0, 
             "SpecificEmbodiedEmissions": 208.0, 
-            "Name": "vacume_tube"
+            "Name": "Vacuum Tube"
         }, 
         {
             "ThermalEfficiency": 0.45, 
             "Description": "Flat plate collectors are the most commonly used technology. They reach temperature levels of typically <100\\u00b0C before the fluid evaporates. They appear as a homogenous black surface and are usually not spread over a whole roof. Fa\\u00e7ade integration is possible. Customized designs (size, shape and colors) are possible at the expense of efficiency losses and increased costs.", 
+            "Image": "", 
             "SpecificCapitalCost": 2000.0, 
             "ElectricEfficiency": 0.0, 
             "Lifetime": 30.0, 
             "SpecificEmbodiedEmissions": 184.0, 
-            "Name": "flat_plate"
+            "Name": "Flat Plate"
         }
     ]
 }
