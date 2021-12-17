@@ -21,12 +21,14 @@ namespace Hive.IO.GhMisc
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddGenericParameter("EPW", "EPW", "The instance of type <Hive.IO.EPW> that represents a .epw weather file", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("Run", "Run", "Runs the reading / parsing of the EPW data.", GH_ParamAccess.item);
+            pManager.AddBooleanParameter("WriteLists", "WriteLists", "Additionally to an epw-hive-object, this component will dump out GH_Numbers of weather data if set to true.", GH_ParamAccess.item, false);
+            pManager[1].Optional = true;
         }
 
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
+            pManager.AddGenericParameter("epw", "epw", "epw hive object, containing all weather file info", GH_ParamAccess.item);
             pManager.AddNumberParameter("Latitude", "Latitude", "Latitude in deg", GH_ParamAccess.item);
             pManager.AddNumberParameter("Longitude", "Longitude", "Longitude in deg", GH_ParamAccess.item);
             pManager.AddTextParameter("City, Country", "City-Country", "City and Country", GH_ParamAccess.list);
@@ -49,26 +51,30 @@ namespace Hive.IO.GhMisc
             string epwPath = "";
             if (!DA.GetData(0, ref epwPath)) return;
 
-            bool runParser = false;
-            DA.GetData(1, ref runParser);
+            bool writeGHLists = false;
+            DA.GetData(1, ref writeGHLists);
 
             Epw epw = new Epw() { FilePath = @epwPath};
-            if (runParser) epw.Parse();
-
-            DA.SetData(0, epw.Latitude);
-            DA.SetData(1, epw.Longitude);
-            DA.SetDataList(2, new string[] { epw.City, epw.Country });
-            DA.SetDataList(3, epw.GHI);
-            DA.SetDataList(4, epw.DNI);
-            DA.SetDataList(5, epw.DHI);
-            DA.SetDataList(6, epw.DryBulbTemperature);
-            DA.SetDataList(7, epw.DewPointTemperature);
-            DA.SetDataList(8, epw.RelativeHumidity);
-            DA.SetDataList(9, epw.GHIMonthly);
-            DA.SetDataList(10, epw.DryBulbTemperatureMonthly);
-            DA.SetDataList(11, epw.RelativeHumidityMonthly);
-            DA.SetData(12, epw.AmbientTemperatureCarrier);
-            DA.SetData(13, epw.TimeZone);
+            epw.Parse();
+            DA.SetData(0, epw);
+            
+            if (writeGHLists)
+            {
+                DA.SetData(1, epw.Latitude);
+                DA.SetData(2, epw.Longitude);
+                DA.SetDataList(3, new string[] { epw.City, epw.Country });
+                DA.SetDataList(4, epw.GHI);
+                DA.SetDataList(5, epw.DNI);
+                DA.SetDataList(6, epw.DHI);
+                DA.SetDataList(7, epw.DryBulbTemperature);
+                DA.SetDataList(8, epw.DewPointTemperature);
+                DA.SetDataList(9, epw.RelativeHumidity);
+                DA.SetDataList(10, epw.GHIMonthly);
+                DA.SetDataList(11, epw.DryBulbTemperatureMonthly);
+                DA.SetDataList(12, epw.RelativeHumidityMonthly);
+                DA.SetData(13, epw.AmbientTemperatureCarrier);
+                DA.SetData(14, epw.TimeZone);
+            }
         }
 
 
