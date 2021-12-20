@@ -6,9 +6,9 @@ using System.Linq;
 
 namespace Hive.IO.GhEnergySystems
 {
-    public class BoilerTimeResolved : GH_Component
+    public class GhBoilerTimeResolved : GH_Component
     {
-        public BoilerTimeResolved()
+        public GhBoilerTimeResolved()
           : base("Boiler time resolved Energy System", "BoilerTimeResolved",
               "Calculates time resolved consumed fuel, operating cost and carbon emissions of a boiler to meet heating loads.",
               "[hive]", "Energy Systems")
