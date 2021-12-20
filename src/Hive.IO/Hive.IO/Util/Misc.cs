@@ -12,7 +12,9 @@ namespace Hive.IO
         /// </summary>
         public const int MonthsPerYear = 12;
 
+        public const int DaysPerYear = 365;
         public static readonly int[] DaysPerMonth = new int[12] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+        public const int DaysPerWeek = 7;
 
         public const int HoursPerDay = 24;
         public static readonly int[] HoursPerMonth = DaysPerMonth.Select(d => d*HoursPerDay).ToArray();
@@ -45,6 +47,7 @@ namespace Hive.IO
         public const double Kelvin = 273.15;
 
         public const string DefaultConstructionType = "default"; // For using fixed tau values instead of variable for SIA 380 demand calc
+
 
         public static double[] GetAverageMonthlyValue(double[] annualTimeSeries)
         {

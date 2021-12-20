@@ -87,6 +87,8 @@
     <Compile Include="Building\Sia2024Record.cs" />
     <Compile Include="Building\Sia380ConstructionRecord.cs" />
     <Compile Include="Building\Sia2024Schedules.cs" />
+    <Compile Include="Core\AdaptiveComfort.cs" />
+    <Compile Include="Core\Sia380.cs" />
     <Compile Include="EnergySystems\CombustionTech.cs" />
     <Compile Include="EnergySystems\Carrier.cs" />
     <Compile Include="EnergySystems\Emitter.cs" />
@@ -161,6 +163,8 @@
     <Compile Include="Forms\VisualizerPlotProperties.Designer.cs">
       <DependentUpon>VisualizerPlotProperties.cs</DependentUpon>
     </Compile>
+    <Compile Include="GhCore\GhAdaptiveComfort.cs" />
+    <Compile Include="GhCore\GhSIA380.cs" />
     <Compile Include="GhDistributors\GhDistConversionTech.cs" />
     <Compile Include="GhDistributors\GhDistEmitter.cs" />
     <Compile Include="GhDistributors\GhDistEnvironment.cs" />

@@ -30,7 +30,7 @@ def main(badger_file):
         
         try:
             mytemplate = Template(COMPONENT_TEMPLATE, strict_undefined=True, default_filters=['decode.utf8'], input_encoding='utf-8', output_encoding='utf-8')
-            text = mytemplate.render(register_inputs= inputs,
+            text = mytemplate.render_unicode(register_inputs= inputs,
                                     register_outputs = outputs,
                                     set_inputs= set_inputs,
                                     set_outputs= set_outputs,
@@ -50,7 +50,7 @@ def main(badger_file):
             
             filename = component['abbreviation'] + '.cs'
             path = os.path.join(os.path.dirname(config_path), filename)
-            with open(path, 'w') as file:
+            with open(path, 'w', encoding="utf-8") as file:
                 file.write(text)
         except:
             traceback = RichTraceback()
@@ -72,7 +72,7 @@ GH_PARAMETER_MAP = {
     'curve': "Curve",
     'field': "Field",
     'filepath': "FilePath",
-    'generic': "GenericObject",
+    'generic': "Generic",
     'geometry': "Geometry",
     'group': "Group",
     'guid': "Guid",
@@ -130,6 +130,7 @@ def RegisterOutputParams(component):
 def SolvePrefix(component):
     text = []
     for i, input in enumerate(component['inputs']):
+        input['name'] = input['name'].replace(' ', '_')
         input['cstype'] = CS_TYPE_MAP[input['type']]
         if input['access'] == 'list':
             input['list'] = 'List'
@@ -147,6 +148,7 @@ def SolvePrefix(component):
     
     for i, output in enumerate(component['outputs']):
         output['cstype'] = CS_TYPE_MAP[output['type']]
+        output['name'] = output['name'].replace(' ', '_')
         if output['access'] == 'list':
             output['list'] = 'List'
             output['cstype'] = 'List<' + input['cstype'] + '>'
@@ -285,6 +287,6 @@ namespace Hive.IO.Gh${subcategory}
 SOLVE_INSTANCE = "// TODO"
 
 if __name__ == '__main__':
-    filename = "epw_reader\\Hive.Core.epw_reader.json"
+    filename = "sia380\\Hive.Core.sia380.json"
     config_path = os.path.join(os.path.dirname(__file__), filename)
     main(config_path)
