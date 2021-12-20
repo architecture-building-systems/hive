@@ -61,6 +61,8 @@ namespace Hive.IO.GhCore
             if (!DA.GetDataList(0, tilt)) return;
             List<double> azimuth = new List<double>();
             if (!DA.GetDataList(1, azimuth)) return;
+            if (tilt.Count == 0 || azimuth.Count == 0) throw new ArgumentException("Tilt or aizmuth have no values. Are you sure there is at least one window?");
+
             List<double> DHI = new List<double>();
             if (!DA.GetDataList(2, DHI)) return;
             List<double> DNI = new List<double>();
@@ -82,7 +84,7 @@ namespace Hive.IO.GhCore
 
             // Calc and output
             var annualPotential = ComputeAnnualPotential(tilt.ToArray(), azimuth.ToArray(), DHI, DNI, latitude, longitude, solarazi, solaralti, Aw, timezone);
-            DA.SetData(0, annualPotential);
+            DA.SetDataList(0, annualPotential);
         }
 
         public double[] ComputeAnnualPotential(
