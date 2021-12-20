@@ -250,5 +250,14 @@ namespace Hive.IO
             var versionAttribute = assemblyInformationalVersion[0] as AssemblyInformationalVersionAttribute;
             return versionAttribute.InformationalVersion;
         }
+
+        // from https://stackoverflow.com/questions/1014005/how-to-populate-instantiate-a-c-sharp-array-with-a-single-value
+        public static void Populate<T>(this T[] arr, T value)
+        {
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = value;
+            }
+        }
     }
 }

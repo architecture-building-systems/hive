@@ -113,6 +113,16 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Core_Solar_Potentials_Unobstructed {
+            get {
+                object obj = ResourceManager.GetObject("Core_Solar_Potentials_Unobstructed", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap flexible_cigs {
             get {
                 object obj = ResourceManager.GetObject("flexible_cigs", resourceCulture);
