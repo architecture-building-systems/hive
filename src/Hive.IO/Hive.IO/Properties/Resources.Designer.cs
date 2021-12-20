@@ -146,6 +146,7 @@ namespace Hive.IO.Properties {
         internal static System.Drawing.Bitmap EnergySystems_Combined_TimeResult {
             get {
                 object obj = ResourceManager.GetObject("EnergySystems_Combined_TimeResult", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
 
