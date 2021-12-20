@@ -10,7 +10,7 @@ namespace Hive.IO.GhMisc
     {
         public GhDistEpw()
           : base("Distributor EPW", "DistEPW",
-              "Distributes the Hive.IO.EPW Class, which gathers data from .epw weather files",
+              "Distributes a given Hive.IO.EPW Class or parsed via a given path, which gathers data from .epw weather files. Note that if a valid path is given, it will override the EPW object.",
               "[hive]", "Misc")
         {
         }
@@ -20,15 +20,18 @@ namespace Hive.IO.GhMisc
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddGenericParameter("EPW", "EPW", "The instance of type <Hive.IO.EPW> that represents a .epw weather file", GH_ParamAccess.item);
-            pManager.AddBooleanParameter("WriteLists", "WriteLists", "Additionally to an epw-hive-object, this component will dump out GH_Numbers of weather data if set to true.", GH_ParamAccess.item, false);
+            pManager.AddGenericParameter("EPW", "EPW", "EPW weather file data stored as a Hive object of type <Hive.IO.EPW>", GH_ParamAccess.item);
+            pManager[0].Optional = true;
+            pManager.AddTextParameter("EPWFilepath", "EPWFilepath", "The path to a .epw weather file. Overrides the 'EPW' parameter if non-null and path is valid.", GH_ParamAccess.item);
             pManager[1].Optional = true;
+            pManager.AddBooleanParameter("WriteLists", "WriteLists", "Additionally to an epw-hive-object, this component will dump out GH_Numbers of weather data if set to true.", GH_ParamAccess.item, false);
+            pManager[2].Optional = true;
         }
 
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("epw", "epw", "epw hive object, containing all weather file info", GH_ParamAccess.item);
+            pManager.AddGenericParameter("EPW", "EPW", "EPW weather file data stored as a Hive object of type <Hive.IO.EPW>", GH_ParamAccess.item);
             pManager.AddNumberParameter("Latitude", "Latitude", "Latitude in deg", GH_ParamAccess.item);
             pManager.AddNumberParameter("Longitude", "Longitude", "Longitude in deg", GH_ParamAccess.item);
             pManager.AddTextParameter("City, Country", "City-Country", "City and Country", GH_ParamAccess.list);
@@ -49,16 +52,24 @@ namespace Hive.IO.GhMisc
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             string epwPath = "";
-            if (!DA.GetData(0, ref epwPath)) return;
+            Epw epw = null;
+
+            // if a path is given, override the EPW object
+            if (DA.GetData(1, ref epwPath))
+            {
+                epw = new Epw() { FilePath = @epwPath };
+                epw.Parse();
+                DA.SetData(0, epw);
+            }
+            // if no path given and EPW object is null, return null
+            else if (!DA.GetData(0, ref epw)) return;
 
             bool writeGHLists = false;
-            DA.GetData(1, ref writeGHLists);
+            DA.GetData(2, ref writeGHLists);
 
-            Epw epw = new Epw() { FilePath = @epwPath};
-            epw.Parse();
             DA.SetData(0, epw);
-            
-            if (writeGHLists)
+
+            if (epw != null && writeGHLists)
             {
                 DA.SetData(1, epw.Latitude);
                 DA.SetData(2, epw.Longitude);

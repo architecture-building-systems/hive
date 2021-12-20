@@ -32,6 +32,7 @@ namespace Hive.IO.Environment
         {
             this.Geometry = geometry;
             this.EpwData = new Epw() { FilePath = @epwFilePath };
+            this.EpwData.Parse();
         }
 
         // setting all inpuit energy carriers as part of Hive.IO.Environment
