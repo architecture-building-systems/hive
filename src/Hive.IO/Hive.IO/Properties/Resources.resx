@@ -145,6 +145,9 @@
   <data name="cigs_integrated" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\EnergySystems\cigs_integrated.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="flat_plate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnergySystems\flat_plate.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
   <data name="flexible_cigs" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\EnergySystems\flexible_cigs.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
@@ -282,5 +285,8 @@
   </data>
   <data name="st_efficiency" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\st_efficiency.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="vacuum_tube" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\EnergySystems\vacuum_tube.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
