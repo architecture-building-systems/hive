@@ -170,10 +170,10 @@
     <Compile Include="GhDistributors\GhDistSIA.cs" />
     <Compile Include="GhDistributors\GhDistSolarSimulation.cs" />
     <Compile Include="GhDistributors\GhDistSolarTech.cs" />
-    <Compile Include="GhEnergySystems\BoilerSimple.cs" />
-    <Compile Include="GhEnergySystems\BoilerTimeResolved.cs" />
-    <Compile Include="GhEnergySystems\ChpSimple.cs" />
-    <Compile Include="GhEnergySystems\ChpTimeResolved.cs" />
+    <Compile Include="GhEnergySystems\GhBoilerSimple.cs" />
+    <Compile Include="GhEnergySystems\GhBoilerTimeResolved.cs" />
+    <Compile Include="GhEnergySystems\GhChpSimple.cs" />
+    <Compile Include="GhEnergySystems\GhChpTimeResolved.cs" />
     <Compile Include="GhInputOutput\GhResultsParameter.cs" />
     <Compile Include="GhMergers\GhChiller.cs" />
     <Compile Include="GhMergers\GhCHP.cs" />

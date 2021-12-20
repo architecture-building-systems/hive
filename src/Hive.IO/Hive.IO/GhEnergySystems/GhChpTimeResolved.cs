@@ -27,9 +27,9 @@ namespace Hive.IO.GhEnergySystems
     //     - htg_gen: generated heating energy
     //     - elec_gen: generated electricity
     // 
-    public class ChpTimeResolved : GH_Component
+    public class GhChpTimeResolved : GH_Component
     {
-        public ChpTimeResolved()
+        public GhChpTimeResolved()
           : base("Combined Heat and Power time resolved Energy System", "ChpTimeResolved",
               "Calculates time resolved heating or electricity generation, consumed fuel, operating cost and carbon emissions from a Combined Heat and Power system.",
               "[hive]", "Energy Systems")

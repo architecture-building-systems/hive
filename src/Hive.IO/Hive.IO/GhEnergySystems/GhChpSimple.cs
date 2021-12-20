@@ -17,9 +17,9 @@ namespace Hive.IO.GhEnergySystems
     //     - eta (efficiency from gas to elec)
     //     - htp (heat-to-power ratio)
     // 
-    public class ChpSimple : GH_Component
+    public class GhChpSimple : GH_Component
     {
-        public ChpSimple()
+        public GhChpSimple()
           : base("Combined Heat and Power Energy System", "ChpSimple",
               "Calculates total heating or electricity generation, consumed fuel, operating cost and carbon emissions from a Combined Heat and Power system.",
               "[hive]", "Energy Systems")

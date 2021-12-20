@@ -4,7 +4,7 @@ using Grasshopper.Kernel;
 
 namespace Hive.IO.GhEnergySystems
 {
-    public class BoilerSimple : GH_Component
+    public class GhBoilerSimple : GH_Component
     {
         /// <summary>
         // could be gas, oil, bio boiler
@@ -20,7 +20,7 @@ namespace Hive.IO.GhEnergySystems
         //     - cost [CHF]
         //     - carbon emissions [kgCO2eq.]        
         /// </summary>
-        public BoilerSimple()
+        public GhBoilerSimple()
           : base("Boiler Energy System", "BoilerSimple",
               "Calculates total operating cost and carbon emissions of a boiler to meet heating loads.",
               "[hive]", "Energy Systems")
