@@ -3,18 +3,18 @@ using System.Collections.Generic;
 using System.Linq;
 using Grasshopper.Kernel;
 
-namespace Hive.IO.GhDistributors
+namespace Hive.IO.GhInputOutput
 {
-    public class GhDistResultsLoads : GH_Component
+    public class GhResultsExposerPreDefined : GH_Component
     {
-        public GhDistResultsLoads()
-          : base("Distributor Results Loads Hive", "HiveDistResultsLoads",
-              "Distributor for Hive results with loads, gains, losses",
-              "[hive]", "IO-Core")
+        public GhResultsExposerPreDefined()
+          : base("Results Exposer Hive PreDef", "HiveResultsExposerPreDef",
+              "Exposes pre-defined Hive results from <Hive.Results> into regular GH_Numbers that can be read in Grasshopper: Loads, gains, losses.",
+              "[hive]", "IO")
         {
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.quarternary;
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
 
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)

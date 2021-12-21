@@ -9,12 +9,12 @@ using Rhino.Geometry;
 
 namespace Hive.IO.GhInputOutput
 {
-    public class GhResults : GH_Component
+    public class GhResultsCreator : GH_Component
     {
 
-        public GhResults()
-          : base("Results Hive", "HiveResults",
-              "Hive Results of type <Hive.IO.Results.Results>, containing all simulation results from within the simulation core.",
+        public GhResultsCreator()
+          : base("Results Creator Hive", "HiveResultsCreator",
+              "Merges everything from the Simulation Core into a Hive Results of type <Hive.IO.Results.Results>, containing all simulation results.",
               "[hive]", "IO-Core")
         {
         }

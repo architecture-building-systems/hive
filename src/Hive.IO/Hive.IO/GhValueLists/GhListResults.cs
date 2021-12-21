@@ -17,15 +17,15 @@ namespace Hive.IO.GhValueLists
     {
         public GhListResults()
         {
-            this.Name = "Hive Results Type";
+            this.Name = "Results Type";
             this.NickName = "HiveResultsType";
             this.Description = "Names of possible results to extract from <Hive.IO.Results.Results>, sorted by KPI, time resolution, and more.";
             this.Category = "[hive]";
-            this.SubCategory = "IO-Core";
+            this.SubCategory = "IO";
             Load();
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.quarternary;
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
 
         private void Load()
         {
@@ -80,7 +80,7 @@ namespace Hive.IO.GhValueLists
             }
         }
 
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.IO_Para_InputSIAroom; // FIXME
+       // protected override System.Drawing.Bitmap Icon => Properties.Resources.IO_Para_InputSIAroom; // FIXME
 
         public override Guid ComponentGuid => new Guid("7CD42802-4586-4821-B511-F07A819A3E2D");
     }

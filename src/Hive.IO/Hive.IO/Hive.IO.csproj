@@ -165,8 +165,8 @@
     <Compile Include="GhDistributors\GhDistEmitter.cs" />
     <Compile Include="GhDistributors\GhDistEnvironment.cs" />
     <Compile Include="GhDistributors\GhDistEpw.cs" />
-    <Compile Include="GhDistributors\GhDistResults.cs" />
-    <Compile Include="GhDistributors\GhDistResultsLoads.cs" />
+    <Compile Include="GhInputOutput\GhResultsExposer.cs" />
+    <Compile Include="GhInputOutput\GhResultsExposerPreDefined.cs" />
     <Compile Include="GhDistributors\GhDistSIA.cs" />
     <Compile Include="GhDistributors\GhDistSolarSimulation.cs" />
     <Compile Include="GhDistributors\GhDistSolarTech.cs" />
@@ -189,7 +189,7 @@
     <Compile Include="GhParametricInputs\GhConversionTech.cs" />
     <Compile Include="GhParametricInputs\GhSIARoom.cs" />
     <Compile Include="GhParametricInputs\GhSolarSystems.cs" />
-    <Compile Include="GhInputOutput\GhResults.cs" />
+    <Compile Include="GhInputOutput\GhResultsCreator.cs" />
     <Compile Include="GhInputOutput\GhVisualizer.cs" />
     <Compile Include="Environment\Environment.cs" />
     <Compile Include="GhInputOutput\GhBuilding.cs" />

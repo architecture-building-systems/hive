@@ -11,7 +11,7 @@ namespace Hive.IO.GhMisc
         public GhDistEpw()
           : base("Distributor EPW", "DistEPW",
               "Distributes a given Hive.IO.EPW Class or parsed via a given path, which gathers data from .epw weather files. Note that if a valid path is given, it will override the EPW object.",
-              "[hive]", "Misc")
+              "[hive]", "Weather")
         {
         }
 
@@ -24,7 +24,7 @@ namespace Hive.IO.GhMisc
             pManager[0].Optional = true;
             pManager.AddTextParameter("EPWFilepath", "EPWFilepath", "The path to a .epw weather file. Overrides the 'EPW' parameter if non-null and path is valid.", GH_ParamAccess.item);
             pManager[1].Optional = true;
-            pManager.AddBooleanParameter("WriteLists", "WriteLists", "Additionally to an epw-hive-object, this component will dump out GH_Numbers of weather data if set to true.", GH_ParamAccess.item, false);
+            pManager.AddBooleanParameter("WriteGHNumbers", "WriteGHNumbers", "Additionally to an epw-hive-object, this component will dump out GH_Numbers of weather data if set to true.", GH_ParamAccess.item, false);
             pManager[2].Optional = true;
         }
 
@@ -62,10 +62,15 @@ namespace Hive.IO.GhMisc
                 DA.SetData(0, epw);
             }
             // if no path given and EPW object is null, return null
-            else if (!DA.GetData(0, ref epw)) return;
+            else if (!DA.GetData(0, ref epw))
+            {
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Neither epw-path nor epw-hive-object are provided as inputs.");
+                return;
+            }
 
             bool writeGHLists = false;
             DA.GetData(2, ref writeGHLists);
+            if (!writeGHLists) AddRuntimeMessage(GH_RuntimeMessageLevel.Remark, "WriteGHNumbers is set to false; no GH_Numbers will be written.");
 
             DA.SetData(0, epw);
 
