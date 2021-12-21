@@ -75,7 +75,7 @@
         {
             "ThermalEfficiency": 0.45, 
             "Description": "Evacuated tube collectors are used when high water temperatures are required. They can reach temperature levels of over 100\\u00b0C. Several tubes are installed next to each other. The appearance is not a homogeneous surface. Fa\\u00e7ade integration is possible to some extent.", 
-            "Image": "vacuum_tube", 
+            "Image": "", 
             "SpecificCapitalCost": 2000.0, 
             "ElectricEfficiency": 0.0, 
             "Lifetime": 30.0, 
@@ -85,7 +85,7 @@
         {
             "ThermalEfficiency": 0.45, 
             "Description": "Flat plate collectors are the most commonly used technology. They reach temperature levels of typically <100\\u00b0C before the fluid evaporates. They appear as a homogenous black surface and are usually not spread over a whole roof. Fa\\u00e7ade integration is possible. Customized designs (size, shape and colors) are possible at the expense of efficiency losses and increased costs.", 
-            "Image": "flat_plate", 
+            "Image": "", 
             "SpecificCapitalCost": 2000.0, 
             "ElectricEfficiency": 0.0, 
             "Lifetime": 30.0, 

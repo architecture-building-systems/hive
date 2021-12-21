@@ -70,17 +70,6 @@ namespace Hive.IO.Forms
             // set up gridConversion
             gridConversion.AutoGenerateColumns = false;
             gridConversion.Columns.Clear();
-            gridConversion.Columns.Add(new DataGridViewButtonColumn()
-            {
-                Visible = false
-            }) ;
-            gridConversion.Columns.Add(new DataGridViewComboBoxColumn()
-            {
-                Name = "Conversion",
-                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
-                FillWeight = 0.6f,
-                DataPropertyName = "Name",
-            });
             gridConversion.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "Source",
@@ -90,6 +79,13 @@ namespace Hive.IO.Forms
                 ReadOnly = true
             });
             // conversionColumn.Items.AddRange(ConversionTechPropertiesViewModel.AllNames.ToArray<object>());
+            gridConversion.Columns.Add(new DataGridViewComboBoxColumn()
+            {
+                Name = "Conversion",
+                AutoSizeMode = DataGridViewAutoSizeColumnMode.Fill,
+                FillWeight = 0.6f,
+                DataPropertyName = "Name",
+            });
             gridConversion.Columns.Add(new DataGridViewTextBoxColumn()
             {
                 Name = "EndUse",
@@ -145,7 +141,7 @@ namespace Hive.IO.Forms
         /// <param name="e"></param>
         private void gridConversion_SelectionChanged(object sender, EventArgs e)
         {
-            if (gridConversion.CurrentRow?.DataBoundItem == null)
+            if (gridConversion.CurrentRow.DataBoundItem == null)
             {
                 return;
             }
@@ -229,7 +225,7 @@ namespace Hive.IO.Forms
         /// <param name="e"></param>
         private void gridEmission_SelectionChanged(object sender, EventArgs e)
         {
-            if (gridEmission.CurrentRow?.DataBoundItem == null)
+            if (gridEmission.CurrentRow.DataBoundItem == null)
             {
                 return;
             }
@@ -310,62 +306,9 @@ namespace Hive.IO.Forms
 
         #endregion tabEmission
 
-        
-
-        private void tableLayoutPanelMain_Paint(object sender, PaintEventArgs e)
+        private void gridConversion_CellContentClick(object sender, DataGridViewCellEventArgs e)
         {
 
-        }
-
-        private void deleteConversionTech_Click(object sender, EventArgs e)
-        {
-            gridConversion.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            if (gridConversion.SelectedRows.Count > 0)
-            {
-                foreach (DataGridViewRow item in gridConversion.SelectedRows)
-                {
-                    gridConversion.Rows.RemoveAt(item.Index);
-                }
-            }
-            else
-            {
-                MessageBox.Show("Please select one row");
-            }
-
-        }
-
-        private void deleteEmission_Click(object sender, EventArgs e)
-        {
-            gridEmission.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
-            if (gridEmission.SelectedRows.Count > 0)
-            {
-                foreach (DataGridViewRow item in gridEmission.SelectedRows)
-                {
-                    gridEmission.Rows.RemoveAt(item.Index);
-                }
-            }
-            else
-            {
-                MessageBox.Show("Please select one row");
-            }
-        }
-
-        //click on add entry to insert new row in gridConversion
-        private void addConversionTech_Click(object sender, EventArgs e)
-        {
-            var data = (BindingList<ConversionTechPropertiesViewModel>)gridConversion.DataSource;
-            data.Insert(0, new ConversionTechPropertiesViewModel());
-        }
-
-        //click on add entry to insert new row in gridEmission
-        private void addEmission_Click(object sender, EventArgs e)
-        {
-            var data = (BindingList<EmitterPropertiesViewModel>)gridEmission.DataSource;
-            data.Insert(0, new EmitterPropertiesViewModel()
-            {
-                Name = "Radiator",
-                IsHeating = true
-            });
         }
     }
 }

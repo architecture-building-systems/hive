@@ -14,7 +14,7 @@ namespace Hive.IO.Forms
     {
         public EnergySystemsInputViewModel()
         {
-            ConversionTechnologies = new BindingList<ConversionTechPropertiesViewModel>
+            ConversionTechnologies = new ObservableCollection<ConversionTechPropertiesViewModel>
             {
                 new ConversionTechPropertiesViewModel
                 {
@@ -26,7 +26,7 @@ namespace Hive.IO.Forms
                 }
             };
 
-            Emitters = new BindingList<EmitterPropertiesViewModel>
+            Emitters = new ObservableCollection<EmitterPropertiesViewModel>
             {
                 new EmitterPropertiesViewModel
                 {
@@ -48,10 +48,10 @@ namespace Hive.IO.Forms
             };
         }
 
-        public BindingList<EmitterPropertiesViewModel> Emitters { get; }
+        public ObservableCollection<EmitterPropertiesViewModel> Emitters { get; }
         public ICollectionView EmitterPropertiesView => CollectionViewSource.GetDefaultView(Emitters);
 
-        public BindingList<ConversionTechPropertiesViewModel> ConversionTechnologies { get; }
+        public ObservableCollection<ConversionTechPropertiesViewModel> ConversionTechnologies { get; }
 
         public ICollectionView ConversionTechnologiesView =>
             CollectionViewSource.GetDefaultView(ConversionTechnologies);
