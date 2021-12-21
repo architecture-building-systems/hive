@@ -79,8 +79,8 @@ namespace Hive.IO.GhCore
             if (!DA.GetDataList(6, Envelope_surface_areas)) return;
             List<string> Envelope_surface_types = new List<string>();
             if (!DA.GetDataList(7, Envelope_surface_types)) return;
-            if (!DA.GetDataTree(8, out GH_Structure<double> Surface_irradiation)) return;
-            if (!DA.GetDataTree(9, out GH_Structure<double> Surface_irradiation_unobstructed)) return;
+            if (!DA.GetDataTree(8, out GH_Structure<GH_Number> Surface_irradiation)) return;
+            if (!DA.GetDataTree(9, out GH_Structure<GH_Number> Surface_irradiation_unobstructed)) return;
             double G_value = new double();
             if (!DA.GetData(10, ref G_value)) return;
             double G_value_with_sunscreen = new double();

@@ -6,6 +6,7 @@ using Grasshopper;
 using Hive.IO;
 using System.Collections;
 using Grasshopper.Kernel.Data;
+using Grasshopper.Kernel.Types;
 
 //using dt = datatree;
 
@@ -106,13 +107,13 @@ namespace Hive.Core
             Dictionary<string, object> room_properties,
             Dictionary<string, object> room_schedules,
             double floor_area,
-            double[] T_e_hourly,
+            List<double> T_e_hourly,
             List<double> T_i_ub_hourly,
             List<double> T_i_lb_hourly,
-            double[] surface_areas,
-            string[] surface_type,
-            DataTree<double> srf_irrad_obstr_tree,
-            DataTree<double> srf_irrad_unobstr_tree,
+            List<double> surface_areas,
+            List<string> surface_type,
+            GH_Structure<GH_Number> srf_irrad_obstr_tree,
+            GH_Structure<GH_Number> srf_irrad_unobstr_tree,
             double g_value,
             double g_value_total,
             double setpoint_shading,
@@ -313,7 +314,7 @@ namespace Hive.Core
             // assign room properties to individual surfaces
             //    surface_type = ["opaque", "opaque", "transp", "transp"]
             //    surface_areas = [44.0, 62.3, 4.0, 5.2]
-            var num_surfaces = surface_type.Count();
+            var num_surfaces = surface_type.Count();    
             
             // Average out the hours of occupancy, lighting, appliances
             var P_total_hours = (double)room_properties["Vollaststunden pro Jahr (Personen)"];
@@ -399,13 +400,13 @@ namespace Hive.Core
             // formatting the grasshopper tree that contains solar irradiation time series for each window
             // could be changed later to also include solar irradiation on opaque surfaces...
             // ...would need to be adapted in the 'for surface in range(num_surfaces):' loop as well then
-            object Q_s_tr_per_surface = null;
-            object Q_s_tr_per_surface_jagged = null;
-            object Q_s_tr_per_surface_jagged_hourly = null;
+            GH_Structure<GH_Number> Q_s_tr_per_surface = null;
+            GH_Structure<GH_Number> Q_s_tr_per_surface_jagged = null;
+            GH_Structure<GH_Number> Q_s_tr_per_surface_jagged_hourly = null;
 
-            if (windows_count == 0 || srf_irrad_obstr_tree.Branch(0).Count == 0 && srf_irrad_unobstr_tree.BranchCount == 0)
+            if (windows_count == 0 || srf_irrad_unobstr_tree.Branches?.Count == 0 && srf_irrad_obstr_tree.Branches?[0].Count == 0)
             {
-                Q_s_tr_per_surface = new DataTree<double>();
+                Q_s_tr_per_surface = new GH_Structure<GH_Number>();
                 //{
                 //    new List<object> {
                 //        0.0
@@ -416,8 +417,8 @@ namespace Hive.Core
             }
             else
             {
-                if (srf_irrad_unobstr_tree.BranchCount != windows_count)
-                    throw new ArgumentException($"The number of branches for the solar radiation tree ({srf_irrad_unobstr_tree.BranchCount}) does not match the number of windows ({windows_count})");
+                if (srf_irrad_unobstr_tree.Branches.Count != windows_count)
+                    throw new ArgumentException($"The number of branches for the solar radiation tree ({srf_irrad_unobstr_tree.Branches.Count}) does not match the number of windows ({windows_count})");
                 // Monthly
                 Q_s_tr_per_surface_jagged = calculate_Q_s(run_obstructed_simulation, srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, windows_areas, hourly: false);
                 // Transpose to per timestep
@@ -940,10 +941,10 @@ namespace Hive.Core
             return eta_g;
         }
 
-        List<object> calculate_Q_s(
+        GH_Structure<GH_Number> calculate_Q_s(
             bool run_obstr,
-            DataTree<double> tree_obstr,
-            DataTree<double> tree_unobstr,
+            GH_Structure<GH_Number> tree_obstr,
+            GH_Structure<GH_Number> tree_unobstr,
             double g_value,
             double g_value_total,
             double setpoint,
@@ -956,14 +957,14 @@ namespace Hive.Core
                 tree = tree_unobstr;
             }
             var Q_array = new List<object>();
-            foreach (var i in Enumerable.Range(0, tree.BranchCount))
+            foreach (var i in Enumerable.Range(0, tree.Branches.Count))
             {
                 var row = new List<double>();
                 var win_area = win_areas[i];
-                var branch = tree.Branch(i);
+                var branch = tree.Branches[i];
                 foreach (var j in Enumerable.Range(0, branch.Count))
                 {
-                    var irrad = branch[j] / win_area;
+                    var irrad = branch[j].Value / win_area;
                     if (irrad > setpoint)
                     {
                         irrad *= g_value_total;
@@ -1055,17 +1056,17 @@ namespace Hive.Core
         //    return monthly;
         //}
 
-        List<List<double>> transpose_jagged_2D_array(List<List<double>> array)
+        List<List<double>> transpose_jagged_2D_array(GH_Structure<GH_Number> array)
         {
             var transposed_array = new List<List<double>>();
-            var len_d1 = array.Count;
-            var len_d2 = array[0].Count;
+            var len_d1 = array.Branches.Count;
+            var len_d2 = array.Branches[0].Count;
             foreach (var i in Enumerable.Range(0, len_d2))
             {
                 var transposed_row = new List<double>();
                 foreach (var j in Enumerable.Range(0, len_d1))
                 {
-                    transposed_row.Add(array[j][i]);
+                    transposed_row.Add(array.Branches[j][i].Value);
                 }
                 transposed_array.Add(transposed_row); // TODO check this
             }
