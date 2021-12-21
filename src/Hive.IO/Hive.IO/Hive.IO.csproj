@@ -192,6 +192,11 @@
     <Compile Include="GhValueLists\GhListResults.cs" />
     <Compile Include="Plots\AmrPlotConstants.cs" />
     <Compile Include="Plots\LifetimeAmrPlot.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Results\ResultsExposeForGhListAttribute.cs" />
     <Compile Include="Util\HiveCategoryIcon.cs" />
     <Compile Include="Util\HiveIOInfo.cs" />
@@ -216,11 +221,6 @@
     <Compile Include="Plots\DrawingExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EnergySystems\ConversionTech.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Results\Results.cs" />
     <Compile Include="Building\Zone.cs" />
     <Compile Include="Util\JsonResource.cs" />
@@ -258,8 +258,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -286,15 +286,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\Hive_Logo.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\EnergySystems\CdTe.jpg" />
-    <Resource Include="Resources\EnergySystems\HIT.jpg" />
-    <Resource Include="Resources\EnergySystems\CIGS.jpg" />
-    <Resource Include="Resources\EnergySystems\flat_plate.jpg" />
-    <Resource Include="Resources\EnergySystems\Monocristalline.jpg" />
-    <Resource Include="Resources\EnergySystems\Polycristalline.jpg" />
-    <Resource Include="Resources\EnergySystems\vacume_tube.jpg" />
   </ItemGroup>
   <ItemGroup>
     <None Include="Resources\IO_Results_Param.png" />
@@ -392,6 +383,63 @@
   <ItemGroup>
     <None Include="Resources\IOCore_DistEmitter.png" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EnergySystems\monocrystalline.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EnergySystems\polycrystalline.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EnergySystems\asi.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EnergySystems\asi_grey_panel.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EnergySystems\cigs.jpeg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EnergySystems\cigs_integrated.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EnergySystems\flexible_cigs.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EnergySystems\hjt.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EnergySystems\lof_golden.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EnergySystems\lof_green.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EnergySystems\lof_lavender.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EnergySystems\lof_red.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EnergySystems\lof_steel.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EnergySystems\lof_terracotta.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EnergySystems\mono_facade.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EnergySystems\mono_facade_blue.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EnergySystems\mono_roof.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="Resources\EnergySystems\solaxess_white.png" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Include="Resources\EnergySystems\cdte.jpg" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -401,7 +449,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>Copy "$(TargetPath)" "%25AppData%25\Grasshopper\Libraries\$(ProjectName).gha"</PostBuildEvent>
+    <PostBuildEvent>Copy "$(TargetPath)" "%25AppData%25\Grasshopper\Libraries\Hive\$(ProjectName).gha"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <FallbackCulture>en-US</FallbackCulture>
