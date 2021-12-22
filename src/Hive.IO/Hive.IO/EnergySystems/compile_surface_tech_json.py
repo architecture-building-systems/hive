@@ -17,8 +17,8 @@ def compile_surface_tech_to_json():
     JSON_OUT = "surface_tech_module_types.json"
     JSON_PATH = os.path.join(OUT_DIR, JSON_OUT)
 
-    CSV_FILES = ["pv_efficiency.csv", "st_efficiency.csv"] # not yet supported: "pvt_efficiency.csv"
-    CATEGORIES = ["Photovoltaic (PV)", "Solar Thermal (ST)"] # not yet supported:"Photovoltaic and Thermal (PVT)"
+    CSV_FILES = ["pv_efficiency.csv", "st_efficiency.csv", "bipv_efficiency.csv"] # not yet supported: "pvt_efficiency.csv"
+    CATEGORIES = ["Photovoltaic (PV)", "Solar Thermal (ST)", "Building Integrated Photovoltaic (BIPV)"] # not yet supported:"Photovoltaic and Thermal (PVT)"
 
     HEADERS = {
         "Type": str,

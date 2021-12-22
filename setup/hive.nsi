@@ -111,7 +111,7 @@ Section "Base Installation" Base_Installation_Section
     File "..\src\Hive.Core\solar\_build\Hive.Core.solar.ghpy"
     File "..\src\Hive.Core\solar_tech\_build\Hive.Core.solar_tech.ghpy"    
     File "..\src\Hive.Core\solar_tech\_build\Hive.Core.solar_tech.gha"
-    File "..\src\Hive.Core\combustion\_build\Hive.Core.combustion.ghpy"
+    ; File "..\src\Hive.Core\combustion\_build\Hive.Core.combustion.ghpy"
     File "..\src\Hive.Core\cooling\_build\Hive.Core.cooling.ghpy"
     File "..\src\Hive.Core\heatpumps\_build\Hive.Core.heatpumps.ghpy"
 
