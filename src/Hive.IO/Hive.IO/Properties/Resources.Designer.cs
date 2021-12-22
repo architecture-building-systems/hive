@@ -19,7 +19,7 @@ namespace Hive.IO.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -113,6 +113,16 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Core_Solar_Potentials_Unobstructed {
+            get {
+                object obj = ResourceManager.GetObject("Core_Solar_Potentials_Unobstructed", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap EnergySystems_Boiler_Simple {
             get {
                 object obj = ResourceManager.GetObject("EnergySystems_Boiler_Simple", resourceCulture);
@@ -149,7 +159,7 @@ namespace Hive.IO.Properties {
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
-
+        
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
@@ -525,16 +535,6 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Misc_EPW_reader {
-            get {
-                object obj = ResourceManager.GetObject("Misc_EPW_reader", resourceCulture);
-                return ((System.Drawing.Bitmap)(obj));
-            }
-        }
-        
-        /// <summary>
-        ///   Looks up a localized resource of type System.Drawing.Bitmap.
-        /// </summary>
         internal static System.Drawing.Bitmap mono_facade {
             get {
                 object obj = ResourceManager.GetObject("mono_facade", resourceCulture);
@@ -631,6 +631,16 @@ namespace Hive.IO.Properties {
         internal static System.Drawing.Bitmap vacuum_tube {
             get {
                 object obj = ResourceManager.GetObject("vacuum_tube", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Weather_EPW_reader {
+            get {
+                object obj = ResourceManager.GetObject("Weather_EPW_reader", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

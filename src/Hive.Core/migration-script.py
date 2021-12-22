@@ -30,7 +30,7 @@ def main(badger_file):
         
         try:
             mytemplate = Template(COMPONENT_TEMPLATE, strict_undefined=True, default_filters=['decode.utf8'], input_encoding='utf-8', output_encoding='utf-8')
-            text = mytemplate.render(register_inputs= inputs,
+            text = mytemplate.render_unicode(register_inputs= inputs,
                                     register_outputs = outputs,
                                     set_inputs= set_inputs,
                                     set_outputs= set_outputs,
@@ -285,6 +285,6 @@ namespace Hive.IO.Gh${subcategory}
 SOLVE_INSTANCE = "// TODO"
 
 if __name__ == '__main__':
-    filename = "epw_reader\\Hive.Core.epw_reader.json"
+    filename = "solar\\Hive.Core.solar.json"
     config_path = os.path.join(os.path.dirname(__file__), filename)
     main(config_path)

@@ -94,7 +94,7 @@ namespace Hive.IO.GhMisc
         }
 
 
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Misc_EPW_reader;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Weather_EPW_reader;
 
 
         public override Guid ComponentGuid => new Guid("79B7F941-CB32-47FB-8475-E535CB045A23");
