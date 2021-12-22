@@ -9,7 +9,7 @@ namespace Hive.IO.GhMisc
     public class GhDistEpw : GH_Component
     {
         public GhDistEpw()
-          : base("Distributor EPW", "DistEPW",
+          : base("Distributor EPW", "HiveDistEPW",
               "Distributes a given Hive.IO.EPW Class or parsed via a given path, which gathers data from .epw weather files. Note that if a valid path is given, it will override the EPW object.",
               "[hive]", "Weather")
         {
