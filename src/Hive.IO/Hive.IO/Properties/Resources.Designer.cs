@@ -113,9 +113,9 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap Core_Solar_Potentials_Unobstructed1 {
+        internal static System.Drawing.Bitmap Core_Solar_Potentials_Unobstructed {
             get {
-                object obj = ResourceManager.GetObject("Core_Solar_Potentials_Unobstructed1", resourceCulture);
+                object obj = ResourceManager.GetObject("Core_Solar_Potentials_Unobstructed", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -617,8 +617,7 @@ namespace Hive.IO.Properties {
         
         /// <summary>
         ///   Looks up a localized string similar to Type,electric efficiency,thermal efficiency,cost per kWp,cost per m2,life cycle GHG factor kgCO2eq per kWp,life cycle GHG factor kgCO2eq per m2,Lifetime,Description,Image
-        ///Vacuum Tube,0,0.45,4444.444444,2000,462.2222222,208,30,Evacuated tube collectors are used when high water temperatures are required. They can reach temperature levels of over 100\u00b0C. Several tubes are installed next to each other. The appearance is not a homogeneous surface. Fa\u00e7ade integration is possible to some extent.,
-        ///Flat P [rest of string was truncated]&quot;;.
+        ///Vacuum Tube,0,0.45,4444.444444,2000,462.2222222,208,30,Evacuated tube collectors are used when high water temperatures are required. They can reach temperature levels of over 100\u00b0C. Several tubes are installed next to each other. The appearance is not a homogeneous surface. Fa\u00e7ade integration is possible to some extent.,vacuum_t [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string st_efficiency {
             get {
