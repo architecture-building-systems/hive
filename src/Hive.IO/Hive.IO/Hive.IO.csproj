@@ -1,4 +1,4 @@
-﻿<?xml version="1.0" encoding="utf-8"?>
+<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -99,6 +99,7 @@
     <Compile Include="EnergySystems\Storage.cs" />
     <Compile Include="EnergySystems\SurfaceBasedTech.cs" />
     <Compile Include="EnergySystems\Ventilation.cs" />
+    <Compile Include="Environment\Epw.cs" />
     <Compile Include="Forms\BuildingInputForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -164,15 +165,19 @@
     <Compile Include="Forms\VisualizerPlotProperties.Designer.cs">
       <DependentUpon>VisualizerPlotProperties.cs</DependentUpon>
     </Compile>
-    <Compile Include="GhCore\GhSolarUnobstructed.cs" />
     <Compile Include="GhDistributors\GhDistConversionTech.cs" />
     <Compile Include="GhDistributors\GhDistEmitter.cs" />
     <Compile Include="GhDistributors\GhDistEnvironment.cs" />
-    <Compile Include="GhDistributors\GhDistResults.cs" />
-    <Compile Include="GhDistributors\GhDistResultsLoads.cs" />
+    <Compile Include="GhDistributors\GhDistEpw.cs" />
+    <Compile Include="GhInputOutput\GhResultsExposer.cs" />
+    <Compile Include="GhInputOutput\GhResultsExposerPreDefined.cs" />
     <Compile Include="GhDistributors\GhDistSIA.cs" />
     <Compile Include="GhDistributors\GhDistSolarSimulation.cs" />
     <Compile Include="GhDistributors\GhDistSolarTech.cs" />
+    <Compile Include="GhEnergySystems\GhBoilerSimple.cs" />
+    <Compile Include="GhEnergySystems\GhBoilerTimeResolved.cs" />
+    <Compile Include="GhEnergySystems\GhChpSimple.cs" />
+    <Compile Include="GhEnergySystems\GhChpTimeResolved.cs" />
     <Compile Include="GhInputOutput\GhResultsParameter.cs" />
     <Compile Include="GhMergers\GhChiller.cs" />
     <Compile Include="GhMergers\GhCHP.cs" />
@@ -188,7 +193,7 @@
     <Compile Include="GhParametricInputs\GhConversionTech.cs" />
     <Compile Include="GhParametricInputs\GhSIARoom.cs" />
     <Compile Include="GhParametricInputs\GhSolarSystems.cs" />
-    <Compile Include="GhInputOutput\GhResults.cs" />
+    <Compile Include="GhInputOutput\GhResultsCreator.cs" />
     <Compile Include="GhInputOutput\GhVisualizer.cs" />
     <Compile Include="Environment\Environment.cs" />
     <Compile Include="GhInputOutput\GhBuilding.cs" />
@@ -389,6 +394,11 @@
     <None Include="Resources\IOCore_DistEmitter.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Resources\EnergySystems_Boiler_Simple.png" />
+    <Content Include="Resources\EnergySystems_Boiler_TimeResult.png" />
+    <Content Include="Resources\EnergySystems_Combined.png" />
+    <Content Include="Resources\EnergySystems_Combined_TimeResult.png" />
+    <Content Include="Resources\Misc_EPW_reader.png" />
     <None Include="Resources\EnergySystems\monocrystalline.png" />
   </ItemGroup>
   <ItemGroup>

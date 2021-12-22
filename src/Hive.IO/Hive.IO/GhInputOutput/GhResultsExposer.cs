@@ -1,18 +1,18 @@
 ﻿using System;
 using Grasshopper.Kernel;
 
-namespace Hive.IO.GhDistributors
+namespace Hive.IO.GhInputOutput
 {
-    public class GhDistResults : GH_Component
+    public class GhResultsExposer : GH_Component
     {
-        public GhDistResults()
-          : base("Distributor Results Hive", "HiveDistResults",
-              "Distributor for Hive results",
-              "[hive]", "IO-Core")
+        public GhResultsExposer()
+          : base("Results Exposer Hive", "HiveResultsExposer",
+              "Exposes Hive results from <Hive.Results> into regular GH_Numbers that can be read in Grasshopper",
+              "[hive]", "IO")
         {
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.quarternary;
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
 
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)

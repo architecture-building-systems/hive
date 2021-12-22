@@ -113,6 +113,47 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap EnergySystems_Boiler_Simple {
+            get {
+                object obj = ResourceManager.GetObject("EnergySystems_Boiler_Simple", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EnergySystems_Boiler_TimeResult {
+            get {
+                object obj = ResourceManager.GetObject("EnergySystems_Boiler_TimeResult", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EnergySystems_Combined {
+            get {
+                object obj = ResourceManager.GetObject("EnergySystems_Combined", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EnergySystems_Combined_TimeResult {
+            get {
+                object obj = ResourceManager.GetObject("EnergySystems_Combined_TimeResult", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        // internal static System.Drawing.Bitmap flat_plate {
         internal static System.Drawing.Bitmap Core_Solar_Potentials_Unobstructed {
             get {
                 object obj = ResourceManager.GetObject("Core_Solar_Potentials_Unobstructed", resourceCulture);
@@ -478,6 +519,16 @@ namespace Hive.IO.Properties {
         internal static System.Drawing.Bitmap lof_terracotta {
             get {
                 object obj = ResourceManager.GetObject("lof_terracotta", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Misc_EPW_reader {
+            get {
+                object obj = ResourceManager.GetObject("Misc_EPW_reader", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
