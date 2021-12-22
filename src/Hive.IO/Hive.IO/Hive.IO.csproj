@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="12.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
@@ -394,11 +394,11 @@
     <None Include="Resources\IOCore_DistEmitter.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\EnergySystems_Boiler_Simple.png" />
-    <Content Include="Resources\EnergySystems_Boiler_TimeResult.png" />
-    <Content Include="Resources\EnergySystems_Combined.png" />
-    <Content Include="Resources\EnergySystems_Combined_TimeResult.png" />
-    <Content Include="Resources\Misc_EPW_reader.png" />
+    <Content Include="Resources\Icons\EnergySystems_Boiler_Simple.png" />
+    <Content Include="Resources\Icons\EnergySystems_Boiler_TimeResult.png" />
+    <Content Include="Resources\Icons\EnergySystems_Combined.png" />
+    <Content Include="Resources\Icons\EnergySystems_Combined_TimeResult.png" />
+    <Content Include="Resources\Icons\Weather_EPW_reader.png" />
     <None Include="Resources\EnergySystems\monocrystalline.png" />
   </ItemGroup>
   <ItemGroup>

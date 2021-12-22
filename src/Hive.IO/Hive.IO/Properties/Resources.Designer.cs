@@ -163,6 +163,16 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap flat_plate {
+            get {
+                object obj = ResourceManager.GetObject("flat_plate", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap flexible_cigs {
             get {
                 object obj = ResourceManager.GetObject("flexible_cigs", resourceCulture);
@@ -613,6 +623,16 @@ namespace Hive.IO.Properties {
         internal static string st_efficiency {
             get {
                 return ResourceManager.GetString("st_efficiency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap vacuum_tube {
+            get {
+                object obj = ResourceManager.GetObject("vacuum_tube", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
