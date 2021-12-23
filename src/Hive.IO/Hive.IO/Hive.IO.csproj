@@ -44,6 +44,10 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="SolarModel">
+      <HintPath>..\..\..\setup\SolarModel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Specialized, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Collections.Specialized.4.3.0\lib\net46\System.Collections.Specialized.dll</HintPath>
@@ -165,12 +169,13 @@
     </Compile>
     <Compile Include="GhCore\GhAdaptiveComfort.cs" />
     <Compile Include="GhCore\GhSIA380.cs" />
+    <Compile Include="GhCore\GhSolarUnobstructed.cs" />
     <Compile Include="GhDistributors\GhDistConversionTech.cs" />
     <Compile Include="GhDistributors\GhDistEmitter.cs" />
     <Compile Include="GhDistributors\GhDistEnvironment.cs" />
     <Compile Include="GhDistributors\GhDistEpw.cs" />
-    <Compile Include="GhDistributors\GhDistResults.cs" />
-    <Compile Include="GhDistributors\GhDistResultsLoads.cs" />
+    <Compile Include="GhInputOutput\GhResultsExposer.cs" />
+    <Compile Include="GhInputOutput\GhResultsExposerPreDefined.cs" />
     <Compile Include="GhDistributors\GhDistSIA.cs" />
     <Compile Include="GhDistributors\GhDistSolarSimulation.cs" />
     <Compile Include="GhDistributors\GhDistSolarTech.cs" />
@@ -193,7 +198,7 @@
     <Compile Include="GhParametricInputs\GhConversionTech.cs" />
     <Compile Include="GhParametricInputs\GhSIARoom.cs" />
     <Compile Include="GhParametricInputs\GhSolarSystems.cs" />
-    <Compile Include="GhInputOutput\GhResults.cs" />
+    <Compile Include="GhInputOutput\GhResultsCreator.cs" />
     <Compile Include="GhInputOutput\GhVisualizer.cs" />
     <Compile Include="Environment\Environment.cs" />
     <Compile Include="GhInputOutput\GhBuilding.cs" />
@@ -280,6 +285,7 @@
     <EmbeddedResource Include="EnergySystems\surface_tech_module_types.json" />
     <EmbeddedResource Include="EnergySystems\emitter_defaults.json" />
     <None Include="packages.config" />
+    <None Include="Resources\bipv_efficiency.csv" />
     <None Include="Resources\gc_efficiency.csv" />
     <None Include="Resources\pvt_efficiency.csv" />
     <None Include="Resources\pv_efficiency.csv" />
@@ -394,11 +400,13 @@
     <None Include="Resources\IOCore_DistEmitter.png" />
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Resources\EnergySystems_Boiler_Simple.png" />
-    <Content Include="Resources\EnergySystems_Boiler_TimeResult.png" />
-    <Content Include="Resources\EnergySystems_Combined.png" />
-    <Content Include="Resources\EnergySystems_Combined_TimeResult.png" />
-    <Content Include="Resources\Misc_EPW_reader.png" />
+    <Content Include="Resources\EnergySystems\flat_plate.jpg" />
+    <Content Include="Resources\EnergySystems\vacuum_tube.jpg" />
+    <Content Include="Resources\Icons\EnergySystems_Boiler_Simple.png" />
+    <Content Include="Resources\Icons\EnergySystems_Boiler_TimeResult.png" />
+    <Content Include="Resources\Icons\EnergySystems_Combined.png" />
+    <Content Include="Resources\Icons\EnergySystems_Combined_TimeResult.png" />
+    <Content Include="Resources\Icons\Weather_EPW_reader.png" />
     <None Include="Resources\EnergySystems\monocrystalline.png" />
   </ItemGroup>
   <ItemGroup>
@@ -454,7 +462,9 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Resources\EnergySystems\cdte.jpg" />
+    <Content Include="Resources\Icons\Core_Solar_Potentials_Unobstructed.png" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

@@ -71,6 +71,198 @@
             "Name": "Flexible CIGS"
         }
     ], 
+    "Building Integrated Photovoltaic (BIPV)": [
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "These grey a-Si BIPV panels mimic a standard rain screen cladding system and can be configured in many shapes and sizes. While a-Si has reached a point in the market where other thin films are seen as more productive and valuable many companies still produce market-ready a-Si based BIPV products.", 
+            "Image": "asi_grey_panel", 
+            "SpecificCapitalCost": 550.0, 
+            "ElectricEfficiency": 0.147, 
+            "Lifetime": 30.0, 
+            "SpecificEmbodiedEmissions": 125.2713166, 
+            "Name": "facade-integrated Amorphous Silicon"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "These glass-glass construction BIPV panels hold polycrystalline cells with a colored film to allow them to mimic more common building materials. This has a slight reduciton on efficiency but is often cited in reviews of BIPV aesthetics as beneficial.", 
+            "Image": "lof_steel", 
+            "SpecificCapitalCost": 572.4246994, 
+            "ElectricEfficiency": 0.184, 
+            "Lifetime": 30.0, 
+            "SpecificEmbodiedEmissions": 291.0, 
+            "Name": "facade-integrated Polycrystalline"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "These glass-glass construction BIPV panels hold polycrystalline cells with a colored film to allow them to mimic more common building materials. This has a slight reduciton on efficiency but is often cited in reviews of BIPV aesthetics as beneficial.", 
+            "Image": "lof_red", 
+            "SpecificCapitalCost": 572.4246994, 
+            "ElectricEfficiency": 0.1472, 
+            "Lifetime": 30.0, 
+            "SpecificEmbodiedEmissions": 291.0, 
+            "Name": "facade-integrated Polycrystalline"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "These glass-glass construction BIPV panels hold polycrystalline cells with a colored film to allow them to mimic more common building materials. This has a slight reduciton on efficiency but is often cited in reviews of BIPV aesthetics as beneficial.", 
+            "Image": "lof_green", 
+            "SpecificCapitalCost": 572.4246994, 
+            "ElectricEfficiency": 0.15456, 
+            "Lifetime": 30.0, 
+            "SpecificEmbodiedEmissions": 291.0, 
+            "Name": "facade-integrated Polycrystalline"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "These glass-glass construction BIPV panels hold polycrystalline cells with a colored film to allow them to mimic more common building materials. This has a slight reduciton on efficiency but is often cited in reviews of BIPV aesthetics as beneficial.", 
+            "Image": "lof_lavender", 
+            "SpecificCapitalCost": 572.4246994, 
+            "ElectricEfficiency": 0.15088, 
+            "Lifetime": 30.0, 
+            "SpecificEmbodiedEmissions": 291.0, 
+            "Name": "facade-integrated Polycrystalline"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "These glass-glass construction BIPV panels hold polycrystalline cells with a colored film to allow them to mimic more common building materials. This has a slight reduciton on efficiency but is often cited in reviews of BIPV aesthetics as beneficial.", 
+            "Image": "lof_golden", 
+            "SpecificCapitalCost": 725.071286, 
+            "ElectricEfficiency": 0.164, 
+            "Lifetime": 30.0, 
+            "SpecificEmbodiedEmissions": 291.0, 
+            "Name": "facade-integrated Polycrystalline"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "These glass-glass construction BIPV panels hold polycrystalline cells with a colored film to allow them to mimic more common building materials. This has a slight reduciton on efficiency but is often cited in reviews of BIPV aesthetics as beneficial.", 
+            "Image": "lof_terracotta", 
+            "SpecificCapitalCost": 877.7178725, 
+            "ElectricEfficiency": 0.166, 
+            "Lifetime": 30.0, 
+            "SpecificEmbodiedEmissions": 291.0, 
+            "Name": "facade-integrated Polycrystalline"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "This white solar panel consists of a film deposited above a collection of monocrystalline cells. The white film brings about a clear reduction in module performance, but provides a very desriable finish for the modules on the whole.", 
+            "Image": "solaxess_white", 
+            "SpecificCapitalCost": 337.5, 
+            "ElectricEfficiency": 0.106, 
+            "Lifetime": 30.0, 
+            "SpecificEmbodiedEmissions": 38.25, 
+            "Name": "facade-integrated Monocrystalline"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "These glass-glass construction BIPV panels hold polycrystalline cells with a colored film to allow them to mimic more common building materials. This has a slight reduciton on efficiency but is often cited in reviews of BIPV aesthetics as beneficial.", 
+            "Image": "lof_steel", 
+            "SpecificCapitalCost": 351.087149, 
+            "ElectricEfficiency": 0.184, 
+            "Lifetime": 30.0, 
+            "SpecificEmbodiedEmissions": 291.0, 
+            "Name": "roof-integrated Polycrystalline"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "These glass-glass construction BIPV panels hold polycrystalline cells with a colored film to allow them to mimic more common building materials. This has a slight reduciton on efficiency but is often cited in reviews of BIPV aesthetics as beneficial.", 
+            "Image": "lof_red", 
+            "SpecificCapitalCost": 351.087149, 
+            "ElectricEfficiency": 0.1472, 
+            "Lifetime": 30.0, 
+            "SpecificEmbodiedEmissions": 291.0, 
+            "Name": "roof-integrated Polycrystalline"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "These glass-glass construction BIPV panels hold polycrystalline cells with a colored film to allow them to mimic more common building materials. This has a slight reduciton on efficiency but is often cited in reviews of BIPV aesthetics as beneficial.", 
+            "Image": "lof_green", 
+            "SpecificCapitalCost": 351.087149, 
+            "ElectricEfficiency": 0.15456, 
+            "Lifetime": 30.0, 
+            "SpecificEmbodiedEmissions": 291.0, 
+            "Name": "roof-integrated Polycrystalline"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "These glass-glass construction BIPV panels hold polycrystalline cells with a colored film to allow them to mimic more common building materials. This has a slight reduciton on efficiency but is often cited in reviews of BIPV aesthetics as beneficial.", 
+            "Image": "lof_lavender", 
+            "SpecificCapitalCost": 351.087149, 
+            "ElectricEfficiency": 0.15088, 
+            "Lifetime": 30.0, 
+            "SpecificEmbodiedEmissions": 291.0, 
+            "Name": "roof-integrated Polycrystalline"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "These glass-glass construction BIPV panels hold polycrystalline cells with a colored film to allow them to mimic more common building materials. This has a slight reduciton on efficiency but is often cited in reviews of BIPV aesthetics as beneficial.", 
+            "Image": "lof_golden", 
+            "SpecificCapitalCost": 725.071286, 
+            "ElectricEfficiency": 0.164, 
+            "Lifetime": 30.0, 
+            "SpecificEmbodiedEmissions": 291.0, 
+            "Name": "roof-integrated Polycrystalline"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "These glass-glass construction BIPV panels hold polycrystalline cells with a colored film to allow them to mimic more common building materials. This has a slight reduciton on efficiency but is often cited in reviews of BIPV aesthetics as beneficial.", 
+            "Image": "lof_terracotta", 
+            "SpecificCapitalCost": 877.7178725, 
+            "ElectricEfficiency": 0.166, 
+            "Lifetime": 30.0, 
+            "SpecificEmbodiedEmissions": 291.0, 
+            "Name": "roof-integrated Polycrystalline"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "This white solar panel consists of a film deposited above a collection of monocrystalline cells. The white film brings about a clear reduction in module performance, but provides a very desriable finish for the modules on the whole.", 
+            "Image": "solaxess_white", 
+            "SpecificCapitalCost": 207.0, 
+            "ElectricEfficiency": 0.106, 
+            "Lifetime": 30.0, 
+            "SpecificEmbodiedEmissions": 38.25, 
+            "Name": "roof-integrated Monocrystalline"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "These grey CIGS BIPV panels mimic a standard rain screen cladding system and can be configured in many shapes and sizes.", 
+            "Image": "cigs_integrated", 
+            "SpecificCapitalCost": 785.7768924, 
+            "ElectricEfficiency": 0.1136, 
+            "Lifetime": 30.0, 
+            "SpecificEmbodiedEmissions": 145.0, 
+            "Name": "facade-integrated CIGS"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "These monocrystalline BIPV products come in a variety of tints that make them very suitable for retrofit projects.", 
+            "Image": "mono_facade_blue", 
+            "SpecificCapitalCost": 471.9583206, 
+            "ElectricEfficiency": 0.123076923, 
+            "Lifetime": 40.0, 
+            "SpecificEmbodiedEmissions": 52.30769231, 
+            "Name": "roof-integrated Monocrystalline"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "This is a standard facade panel system based on a monocrystalline cell construction. It can be easily applied in new construction and retrofit situations.", 
+            "Image": "mono_facade", 
+            "SpecificCapitalCost": 905.9419465, 
+            "ElectricEfficiency": 0.171428571, 
+            "Lifetime": 40.0, 
+            "SpecificEmbodiedEmissions": 52.30769231, 
+            "Name": "facade-integrated Monocrystalline"
+        }, 
+        {
+            "ThermalEfficiency": 0.0, 
+            "Description": "This is a standard roof panel system based on a monocrystalline cell construction. It can be easily applied in new construction and retrofit situations.", 
+            "Image": "mono_roof", 
+            "SpecificCapitalCost": 657.3705179, 
+            "ElectricEfficiency": 0.171428571, 
+            "Lifetime": 40.0, 
+            "SpecificEmbodiedEmissions": 52.30769231, 
+            "Name": "roof-integrated Monocrystalline"
+        }
+    ], 
     "Solar Thermal (ST)": [
         {
             "ThermalEfficiency": 0.45, 

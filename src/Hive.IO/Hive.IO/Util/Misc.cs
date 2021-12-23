@@ -257,6 +257,16 @@ namespace Hive.IO
             return versionAttribute.InformationalVersion;
         }
 
+        // from https://stackoverflow.com/questions/1014005/how-to-populate-instantiate-a-c-sharp-array-with-a-single-value
+        public static void Populate<T>(this T[] arr, T value)
+        {
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = value;
+            }
+
+        }
+        
         // From https://stackoverflow.com/a/406576
         public static int[] Slice(this int[] source, int start, int stop)
         {

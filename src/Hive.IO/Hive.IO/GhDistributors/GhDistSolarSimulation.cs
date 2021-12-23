@@ -96,7 +96,7 @@ namespace Hive.IO.GhDistributors
             Point3d centroid = AreaMassProperties.Compute(building.Zones[0].Floors[0].BrepGeometry).Centroid;
 
             List<Mesh> environmentList = new List<Mesh>();
-            if (environment != null && environment.Geometry != null)
+            if (environment?.Geometry != null)
             {
                 foreach (Mesh msh in environment.Geometry)
                     environmentList.Add(msh);

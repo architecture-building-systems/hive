@@ -23,9 +23,9 @@ echo Building Hive.Core...
 cd %HIVE_DIR%\src\Hive.Core\
 "%IPY%" "%HB%" epw_reader\Hive.Core.epw_reader.json
 "%IPY%" "%HB%" sia380\Hive.Core.sia380.json
-"%IPY%" "%HB%" solar\Hive.Core.solar.json
+@REM "%IPY%" "%HB%" solar\Hive.Core.solar.json
 "%IPY%" "%HB%" solar_tech\Hive.Core.solar_tech.json
-"%IPY%" "%HB%" combustion\Hive.Core.combustion.json
+@REM "%IPY%" "%HB%" combustion\Hive.Core.combustion.json
 "%IPY%" "%HB%" cooling\Hive.Core.cooling.json
 "%IPY%" "%HB%" heatpumps\Hive.Core.heatpumps.json
 echo ...Done
@@ -52,7 +52,7 @@ cd %HIVE_DIR%\src\Hive.Core\
 "%IPY%" "%HIVE_WIKI_PY%" sia380\Hive.Core.sia380.json
 "%IPY%" "%HIVE_WIKI_PY%" solar\Hive.Core.solar.json
 "%IPY%" "%HIVE_WIKI_PY%" solar_tech\Hive.Core.solar_tech.json
-"%IPY%" "%HIVE_WIKI_PY%" combustion\Hive.Core.combustion.json
+@REM "%IPY%" "%HIVE_WIKI_PY%" combustion\Hive.Core.combustion.json
 "%IPY%" "%HIVE_WIKI_PY%" cooling\Hive.Core.cooling.json
 "%IPY%" "%HIVE_WIKI_PY%" heatpumps\Hive.Core.heatpumps.json
 
