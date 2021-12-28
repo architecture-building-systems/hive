@@ -9,11 +9,11 @@ namespace Hive.IO.Core
         const int MONTHS_IN_YEAR = 12;
         const int HOURS_IN_YEAR = 8760;
 
-        public readonly List<double> Setpoints = new List<double>();
-        public readonly List<double> SetpointsUB80 = new List<double>();
-        public readonly List<double> SetpointsLB80 = new List<double>();
-        public readonly List<double> SetpointsUB90 = new List<double>();
-        public readonly List<double> SetpointsLB90 = new List<double>();
+        public readonly double[] Setpoints;
+        public readonly double[] SetpointsUB80;
+        public readonly double[] SetpointsLB80;
+        public readonly double[] SetpointsUB90;
+        public readonly double[] SetpointsLB90;
 
         // 
         //     Computes adaptive thermal comfort according to Thermal Comfort - PLEA Notes 3. Auliciems and Szokolay 2007
@@ -27,18 +27,30 @@ namespace Hive.IO.Core
             // where T_n is adaptive thermal comfort temperature and T_m is mean monthly ambient temp
             // for 90% acceptability limits, T_n +/- 2.5 K, for 80 % T_n +/- 3.5 K
 
+            int resolution = AmbientTemperature.Count;
+
             // Check temperature length
-            if (AmbientTemperature.Count != MONTHS_IN_YEAR || AmbientTemperature.Count != HOURS_IN_YEAR) 
-                throw new ArgumentException("Only hourly or monthly averaged temperatures are supported.");
-                
-            for (int i = 0; i < AmbientTemperature.Count; i++)
+            if (resolution == MONTHS_IN_YEAR || resolution == HOURS_IN_YEAR)
             {
-                var sp = 21.5 + 0.11 * AmbientTemperature[i];
-                Setpoints[i] = sp;
-                SetpointsUB80[i] = sp + 3.5;
-                SetpointsLB80[i] = sp - 3.5;
-                SetpointsUB90[i] = sp + 2.5;
-                SetpointsLB90[i] = sp - 2.5;
+                Setpoints = new double[resolution];
+                SetpointsUB80 = new double[resolution];
+                SetpointsLB80 = new double[resolution];
+                SetpointsUB90 = new double[resolution];
+                SetpointsLB90 = new double[resolution];
+
+                for (int i = 0; i < AmbientTemperature.Count; i++)
+                {
+                    var sp = 21.5 + 0.11 * AmbientTemperature[i];
+                    Setpoints[i] = sp;
+                    SetpointsUB80[i] = sp + 3.5;
+                    SetpointsLB80[i] = sp - 3.5;
+                    SetpointsUB90[i] = sp + 2.5;
+                    SetpointsLB90[i] = sp - 2.5;
+                }
+            }
+            else
+            {
+                throw new ArgumentException("Only hourly or monthly averaged temperatures are supported.");
             }
         }
     }

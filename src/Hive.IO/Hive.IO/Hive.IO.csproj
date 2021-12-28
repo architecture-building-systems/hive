@@ -402,6 +402,8 @@
   <ItemGroup>
     <Content Include="Resources\EnergySystems\flat_plate.jpg" />
     <Content Include="Resources\EnergySystems\vacuum_tube.jpg" />
+    <Content Include="Resources\Icons\Demand_AdaptiveComfort.png" />
+    <Content Include="Resources\Icons\Demand_SIA380.png" />
     <Content Include="Resources\Icons\EnergySystems_Boiler_Simple.png" />
     <Content Include="Resources\Icons\EnergySystems_Boiler_TimeResult.png" />
     <Content Include="Resources\Icons\EnergySystems_Combined.png" />

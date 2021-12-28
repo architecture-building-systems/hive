@@ -17,7 +17,7 @@ namespace Hive.IO.GhDemand
         {
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.secondary;
+        public override GH_Exposure Exposure => GH_Exposure.tertiary;
 
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
@@ -51,10 +51,10 @@ namespace Hive.IO.GhDemand
         }
 
 
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Core_AdaptiveComfort;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Demand_AdaptiveComfort;
 
 
-        public override Guid ComponentGuid => new Guid("83d5d815-a306-4555-81f8-887132d0711f");
+        public override Guid ComponentGuid => new Guid("C3FF0855-3459-428C-B3C5-3A2203DC75C9");
 
     }
 }

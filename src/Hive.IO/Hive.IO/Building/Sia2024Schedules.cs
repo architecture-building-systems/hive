@@ -33,6 +33,11 @@ namespace Hive.IO.Building
         public DeviceSchedule DeviceSchedule { get; set; }
         public LightingSchedule LightingSchedule { get; set; }
         public SetpointSchedule SetpointSchedule { get; set; }
+
+        public new static ZoneSchedules FromJson(string json)
+        {
+            return JsonConvert.DeserializeObject<ZoneSchedules>(json);
+        }
     }
 
     public struct OccupancySchedule
@@ -105,5 +110,6 @@ namespace Hive.IO.Building
         {
             return JsonConvert.SerializeObject(Lookup(roomType));
         }
+
     }
 }

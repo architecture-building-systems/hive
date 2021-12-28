@@ -19,7 +19,7 @@ namespace Hive.IO.GhCore
         {
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.secondary;
+        public override GH_Exposure Exposure => GH_Exposure.tertiary;
 
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
@@ -32,8 +32,8 @@ namespace Hive.IO.GhCore
             pManager.AddNumberParameter("Setpoints lower bounds", "SetpointsLB", "Hourly room temperature setpoints in Â°C (lower bound).", GH_ParamAccess.list);
             pManager.AddNumberParameter("Envelope surface areas", "SurfaceAreas", "Envelope surface areas of all external room surfaces in m^2.", GH_ParamAccess.list);
             pManager.AddTextParameter("Envelope surface types", "SurfaceTypes", "Envelope surface types of all external room surfaces. Either 'opaque' or 'transp'.", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Surface irradiation", "Q_s_tree", "Surface irradiation per transparent surface. Grasshopper tree, with each branch representing a transparent surface and containing 8760 timeseries of solar irradiation in Wh.", GH_ParamAccess.tree);
-            pManager.AddGenericParameter("Surface irradiation unobstructed", "Q_s_tree_unobstructed", "Unobstructed surface irradiation per surface. This tree is used, if the obstructed data (parameter above) is null. Grasshopper tree, same as parameter above.", GH_ParamAccess.tree);
+            pManager.AddNumberParameter("Surface irradiation", "Q_s_tree", "Surface irradiation per transparent surface. Grasshopper tree, with each branch representing a transparent surface and containing 8760 timeseries of solar irradiation in Wh.", GH_ParamAccess.tree);
+            pManager.AddNumberParameter("Surface irradiation unobstructed", "Q_s_tree_unobstructed", "Unobstructed surface irradiation per surface. This tree is used, if the obstructed data (parameter above) is null. Grasshopper tree, same as parameter above.", GH_ParamAccess.tree);
             pManager.AddNumberParameter("G value", "gValue", "G value of windows", GH_ParamAccess.item);
             pManager.AddNumberParameter("G value with sunscreen", "gValueTotal", "G value total including sunscreen ('Sonnenschutz') of windows", GH_ParamAccess.item);
             pManager.AddNumberParameter("Setpoint sunscreen", "SetpointSunscreen", "Shading setpoint for activating sunscreen of windows, in W/m^2", GH_ParamAccess.item);
@@ -63,9 +63,9 @@ namespace Hive.IO.GhCore
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            Dictionary<string, object> Room_properties = new Dictionary<string, object>();
+            string Room_properties = "";
             if (!DA.GetData(0, ref Room_properties)) return;
-            Dictionary<string, object> Room_schedules = new Dictionary<string, object>();
+            string Room_schedules = "";
             if (!DA.GetData(1, ref Room_schedules)) return;
             double Floor_area = new double();
             if (!DA.GetData(2, ref Floor_area)) return;
@@ -120,11 +120,11 @@ namespace Hive.IO.GhCore
             DA.SetDataList(7, sia380.Q_s_out);
             DA.SetDataList(8, sia380.Q_T_opaque_out);
             DA.SetDataList(9, sia380.Q_T_transparent_out);
-            DA.SetDataTree(10, sia380.GainsSolarPerTransparent);
+            DA.SetDataTree(10, sia380.Q_s_tr_tree);
         }
 
 
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.Core_SIA380;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.Demand_SIA380;
 
 
         public override Guid ComponentGuid => new Guid("DD8A3675-FB4D-49FF-886C-4AD1DEDFF34C");
