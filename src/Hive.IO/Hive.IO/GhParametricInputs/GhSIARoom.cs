@@ -31,9 +31,6 @@ namespace Hive.IO.GhParametricInputs
             pManager.AddNumberParameter("capacitancePerFloorArea", "capacitancePerFloorArea", "Room specific heat capacity ('Waermespeicherfaehigkeit des Raumes'), in Wh/(m^2*K)", GH_ParamAccess.item);
             pManager.AddNumberParameter("coolingSetpoint", "coolingSetpoint", "Cooling setpoint 'Raumlufttemperatur Auslegung Kuehlung (Sommer)'. in deg Celsius", GH_ParamAccess.item);
             pManager.AddNumberParameter("heatingSetpoint", "heatingSetpoint", "Heating setpoint 'Raumlufttemperatur Auslegung Heizen (Winter)'. in deg Celsius", GH_ParamAccess.item);
-            pManager.AddNumberParameter("floorArea", "floorArea", "Floor area 'Nettogeschossflaeche' in m^2", GH_ParamAccess.item);
-            pManager.AddNumberParameter("envelopeArea", "envelopeArea", "Envelope Area 'Thermische Gebaeudehuellflaeche' in m^2", GH_ParamAccess.item);
-            pManager.AddNumberParameter("glazingRatio", "glazingRatio", "Glazing ratio 'Glasanteil' [0.0, 1.0]", GH_ParamAccess.item);
             pManager.AddNumberParameter("UValueOpaque", "UValueOpaque", "U-value opaque construction 'U-Wert opake Bauteile', in W/(m^2K)", GH_ParamAccess.item);
             pManager.AddNumberParameter("UValueTransparent", "UValueTransparent", "U-value transparent construction 'U-Wert Fenster', in W/^(m^2K)", GH_ParamAccess.item);
             pManager.AddNumberParameter("gValue", "gValue", "g-value of windows 'Gesamtenergiedurchlassgrad Verglasung' [0.0, 1.0]", GH_ParamAccess.item);
@@ -76,9 +73,6 @@ namespace Hive.IO.GhParametricInputs
             DA.GetData(2, ref siaRoom.CapacitancePerFloorArea);
             DA.GetData(3, ref siaRoom.CoolingSetpoint);
             DA.GetData(4, ref siaRoom.HeatingSetpoint);
-            DA.GetData(5, ref siaRoom.FloorArea);
-            DA.GetData(6, ref siaRoom.EnvelopeArea);
-            DA.GetData(7, ref siaRoom.GlazingRatio);
             DA.GetData(8, ref siaRoom.UValueOpaque);
             DA.GetData(9, ref siaRoom.UValueTransparent);
             DA.GetData(10, ref siaRoom.GValue);
