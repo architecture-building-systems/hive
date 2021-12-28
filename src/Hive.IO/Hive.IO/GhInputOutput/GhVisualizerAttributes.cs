@@ -147,6 +147,15 @@ namespace Hive.IO.GhInputOutput
             return GH_ObjectResponse.Release;
         }
 
+        public override GH_ObjectResponse RespondToMouseMove(GH_Canvas sender, GH_CanvasMouseEvent e)
+        {
+            if (InnerBounds.Contains(e.CanvasLocation)){
+                System.Diagnostics.Debug.WriteLine(e.CanvasLocation.ToString());
+            }
+
+            return base.RespondToMouseMove(sender, e);
+        }
+
         protected override void Render(GH_Canvas canvas, Graphics graphics, GH_CanvasChannel channel)
         {
             if (channel == GH_CanvasChannel.Wires && Owner.SourceCount > 0)
