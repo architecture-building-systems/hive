@@ -4,11 +4,9 @@ using System.Diagnostics;
 using System;
 using Grasshopper;
 using Hive.IO;
-using System.Collections;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using Hive.IO.Building;
-using System.Linq;
 
 //using dt = datatree;
 
@@ -261,13 +259,6 @@ namespace Hive.Core
             double Phi_A_hourly = 0.0;
             double Phi_L_hourly = 0.0;
 
-            //if (debug)
-            //{
-            //    DEBUG_MODE = true;
-            //}
-
-            // PARSE INPUTS
-
             // Assert inputs hourly
 
             // Checks if adaptive comfort enabled / possible
@@ -286,31 +277,28 @@ namespace Hive.Core
             var room_schedules = ZoneSchedules.FromJson(room_schedules_json);
 
             floorArea = floor_area;
-            //room_properties = cleanDictForNaN(room_properties);
 
             // f_sh = 0.9  # sia2024, p.12, 1.3.1.9 Reduktion solare Wärmeeinträge
             // g = room_properties["Gesamtenergiedurchlassgrad Verglasung"]
-            TauFixed = room_properties.RoomConstant; //(double)room_properties["Zeitkonstante"];
-            Cm = room_properties.CapacitancePerFloorArea; //(double)room_properties["Waermespeicherfaehigkeit des Raumes"];
-            // U_value_opaque = room_properties["U-Wert opake Bauteile"]
-            // U_value_transparent = room_properties["U-Wert Fenster"]
-            var U_value_floors = room_properties.UValueFloors; //(double)room_properties["U-Wert Boeden"];
-            var U_value_roofs = room_properties.UValueRoofs; //(double)room_properties["U-Wert Daecher"];
-            var U_value_walls = room_properties.UValueWalls; //(double)room_properties["U-Wert Waende"];
-            var U_value_windows = room_properties.UValueTransparent; //(double)room_properties["U-Wert Fenster"];
+            TauFixed = room_properties.RoomConstant;
+            Cm = room_properties.CapacitancePerFloorArea; 
+            var U_value_floors = room_properties.UValueFloors; 
+            var U_value_roofs = room_properties.UValueRoofs; 
+            var U_value_walls = room_properties.UValueWalls; 
+            var U_value_windows = room_properties.UValueTransparent; 
             UValues = new Dictionary<string, double> {
                 { "floor", U_value_floors},
                 { "roof", U_value_roofs},
                 { "wall", U_value_walls},
                 { "window", U_value_windows}
             };
-            var Vdot_e_spec = room_properties.AirChangeRate; //(double)room_properties["Aussenluft-Volumenstrom (pro NGF)"];
-            var Vdot_inf_spec = room_properties.Infiltration; //(double)room_properties["Aussenluft-Volumenstrom durch Infiltration"];
-            var eta_rec = room_properties.HeatRecovery; //(double)room_properties["Temperatur-Aenderungsgrad der Waermerueckgewinnung"];
-            var Phi_P_per_m2 = room_properties.OccupantLoads; //(double)room_properties["Waermeeintragsleistung Personen (bei 24.0 deg C, bzw. 70 W)"];
-            var Phi_L_per_m2 = room_properties.LightingLoads; //(double)room_properties["Waermeeintragsleistung der Raumbeleuchtung"];
-            var Phi_A_per_m2 = room_properties.EquipmentLoads; //(double)room_properties["Waermeeintragsleistung der Geraete"];
-            var Q_dhw_year = room_properties.DomesticHotWaterLoads; //(double)room_properties["Jaehrlicher Waermebedarf fuer Warmwasser"];
+            var Vdot_e_spec = room_properties.AirChangeRate;
+            var Vdot_inf_spec = room_properties.Infiltration;
+            var eta_rec = room_properties.HeatRecovery;
+            var Phi_P_per_m2 = room_properties.OccupantLoads; 
+            var Phi_L_per_m2 = room_properties.LightingLoads; 
+            var Phi_A_per_m2 = room_properties.EquipmentLoads; 
+            var Q_dhw_year = room_properties.DomesticHotWaterLoads;
             var Q_dhw_hourly = Q_dhw_year / HOURS_PER_YEAR * floor_area;
             var Q_dhw_monthly = (from h in HOURS_PER_MONTH
                                  select (Q_dhw_hourly * h)).ToArray();
@@ -321,9 +309,9 @@ namespace Hive.Core
             var num_surfaces = surface_type.Count();    
             
             // Average out the hours of occupancy, lighting, appliances
-            var P_total_hours = room_properties.OccupantYearlyHours; //(double)room_properties["Vollaststunden pro Jahr (Personen)"];
-            var L_total_hours = room_properties.LightingYearlyHours; //(double)room_properties["Jaehrliche Vollaststunden der Raumbeleuchtung"];
-            var A_total_hours = room_properties.EquipmentYearlyHours; //(double)room_properties["Jaehrliche Vollaststunden der Geraete"];
+            var P_total_hours = room_properties.OccupantYearlyHours;
+            var L_total_hours = room_properties.LightingYearlyHours; 
+            var A_total_hours = room_properties.EquipmentYearlyHours; 
 
             if (hourly)
             {
@@ -354,16 +342,16 @@ namespace Hive.Core
             }
             else
             {
-                var setpoint_ub = room_properties.CoolingSetpoint; //(double)room_properties["Raumlufttemperatur Auslegung Kuehlung (Sommer)"];
-                var setpoint_lb = room_properties.HeatingSetpoint; //(double)room_properties["Raumlufttemperatur Auslegung Heizen (Winter)"];
+                var setpoint_ub = room_properties.CoolingSetpoint;
+                var setpoint_lb = room_properties.HeatingSetpoint;
                 T_i_ub = Enumerable.Repeat(setpoint_ub, MonthsPerYear).ToArray();
                 T_i_lb = Enumerable.Repeat(setpoint_lb, MonthsPerYear).ToArray();
                 if (hourly)
                 {
                     T_i_ub_hourly = new List<double>();
                     T_i_lb_hourly = new List<double>();
-                    var setback_ub = room_properties.CoolingSetback; //(double)room_properties["Raumlufttemperatur Auslegung Kuehlung (Sommer) - Absenktemperatur"];
-                    var setback_lb = room_properties.HeatingSetback; //(double)room_properties["Raumlufttemperatur Auslegung Heizen (Winter) - Absenktemperatur"];
+                    var setback_ub = room_properties.CoolingSetback; 
+                    var setback_lb = room_properties.HeatingSetback;
                     foreach (var day in Enumerable.Range(0, DAYS_PER_YEAR))
                     {
                         foreach (var hour in Enumerable.Range(0, HOURS_PER_DAY))
@@ -401,13 +389,8 @@ namespace Hive.Core
             int windows_count = windows_areas.Count;
 
             // Solar
-            // formatting the grasshopper tree that contains solar irradiation time series for each window
-            // could be changed later to also include solar irradiation on opaque surfaces...
-            // ...would need to be adapted in the 'for surface in range(num_surfaces):' loop as well then
             double[,] Q_s_tr_per_timestep_per_surface = null;
             double[,] Q_s_tr_per_timestep_per_surface_hourly = null;
-            //GH_Structure<GH_Number> Q_s_tr_per_surface_jagged = null;
-            //GH_Structure<GH_Number> Q_s_tr_per_surface_jagged_hourly = null;
 
             if (windows_count == 0 || srf_irrad_unobstr_tree.Branches?.Count == 0 && srf_irrad_obstr_tree.Branches?[0].Count == 0)
             {
@@ -419,22 +402,11 @@ namespace Hive.Core
             {
                 if (srf_irrad_unobstr_tree.Branches.Count != windows_count)
                     throw new ArgumentException($"The number of branches for the solar radiation tree ({srf_irrad_unobstr_tree.Branches.Count}) does not match the number of windows ({windows_count})");
-                //// Monthly
-                //Q_s_tr_per_surface_jagged = calculate_Q_s(run_obstructed_simulation, srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, windows_areas, hourly: false);
-                //// Transpose to per timestep
-                //Q_s_tr_per_surface = transpose_jagged_2D_array(Q_s_tr_per_surface_jagged);
-                //if (hourly)
-                //{
-                //    Q_s_tr_per_surface_jagged_hourly = calculate_Q_s(run_obstructed_simulation, srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, windows_areas, hourly: true);
-                //    // Transpose to per timestep
-                //    Q_s_tr_per_surface_hourly = transpose_jagged_2D_array(Q_s_tr_per_surface_jagged_hourly);
-                //}
 
-                // Monthly
-                Q_s_tr_per_timestep_per_surface = calculate_Q_s_new(run_obstructed_simulation, srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, windows_areas, hourly: false);
+                Q_s_tr_per_timestep_per_surface = calculate_Q_s(run_obstructed_simulation, srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, windows_areas, hourly: false);
                 if (hourly)
                 {
-                    Q_s_tr_per_timestep_per_surface_hourly = calculate_Q_s_new(run_obstructed_simulation, srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, windows_areas, hourly: true);
+                    Q_s_tr_per_timestep_per_surface_hourly = calculate_Q_s(run_obstructed_simulation, srf_irrad_obstr_tree, srf_irrad_unobstr_tree, g_value, g_value_total, setpoint_shading, windows_areas, hourly: true);
                 }
             }
 
@@ -544,39 +516,6 @@ namespace Hive.Core
             }
 
             // Prepare solar datatrees
-            //if (hourly && Q_s_tr_per_surface_jagged_hourly != null)
-            //{
-            //    if (DEBUG_MODE)
-            //    {
-            //        Q_s_tr_tree = Q_s_tr_per_surface_jagged_hourly;
-            //    }
-            //    else
-            //    {
-            //        Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged_hourly, source: new List<object> {
-            //            0,
-            //            0
-            //        });
-            //    }
-            //}
-            //else if (!hourly && Q_s_tr_per_surface_jagged != null)
-            //{
-            //    if (DEBUG_MODE)
-            //    {
-            //        Q_s_tr_tree = Q_s_tr_per_surface_jagged;
-            //    }
-            //    else
-            //    {
-            //        Q_s_tr_tree = th.list_to_tree(Q_s_tr_per_surface_jagged, source: new List<object> {
-            //            0,
-            //            0
-            //        });
-            //    }
-            //}
-            //else
-            //{
-            //    Q_s_tr_tree = null;
-            //}
-
             Q_s_tr_tree = hourly ? TransposeAndConvertQs(Q_s_tr_per_timestep_per_surface_hourly) : TransposeAndConvertQs(Q_s_tr_per_timestep_per_surface);
 
             // in kWh per month or per hour
@@ -781,21 +720,13 @@ namespace Hive.Core
                 double Q_H_ = Q_T_lb + Q_V_lb - eta_g_heating * (Q_i + Q_s);
                 double Q_H_no_hr = Q_T_lb + Q_V_lb_no_hr - eta_g_heating_no_hr * (Q_i + Q_s);
                 double Q_H_nat_vent = Q_T_lb + Q_V_lb_nat_vent - eta_g_heating_nat_vent * (Q_i + Q_s);
-                //var Q_H_options = negatives_to_zero(new List<double> {
-                //        Q_H_,
-                //        Q_H_no_hr,
-                //        Q_H_nat_vent
-                //    });
+
                 // cooling demand (Kältebedarf), Q_K
                 // calculating different cases with/without heat recovery, with/without natural ventilation (hr)
                 double Q_K_ = Q_i + Q_s - eta_g_cooling * (Q_T_ub + Q_V_ub);
                 double Q_K_no_hr = Q_i + Q_s - eta_g_cooling_no_hr * (Q_T_ub + Q_V_ub_no_hr);
                 double Q_K_nat_vent = Q_i + Q_s - eta_g_cooling_nat_vent * (Q_T_ub + Q_V_ub_nat_vent);
-                //var Q_K_options = negatives_to_zero(new List<double> {
-                //        Q_K_,
-                //        Q_K_no_hr,
-                //        Q_K_nat_vent
-                //    });
+
                 // take smaller value of both comfort set points and remember the index
                 if (use_natural_ventilation)
                 {
@@ -807,12 +738,7 @@ namespace Hive.Core
                     (Q_H, Q_H_index) = FindLowestLoad(Q_H_, Q_H_no_hr);
                     (Q_K, Q_K_index) = FindLowestLoad(Q_K_, Q_K_no_hr);
                 }
-#if debug
-                if (Q_K > 0.01 && Q_K_index == 2)
-                {
-                    Console.WriteLine(t.ToString() + " cooled by nat_vent T_e = " + T_e[t].ToString() + " C");
-                }
-#endif
+
                 // either subtract heating from cooling, but then also account for that in losses/gains by subtracting those too
                 // or just take the higher load of both and then take the corresponding losses/gains
                 // demand = Q_K + Q_H  # sometimes we have both cooling and heating. so subtract one from another
@@ -868,20 +794,11 @@ namespace Hive.Core
             }
         }
 
-        Dictionary<string, object> cleanDictForNaN(Dictionary<string, object> d)
-        {
-            foreach (var k in d.Keys)
-            {
-                var v = d[k];
-                if ((v is double vDouble && double.IsNaN(vDouble))
-                    || (v is string vString && vString.Equals("NaN")))
-                {
-                    d[k] = 0.0;
-                }
-            }
-            return d;
-        }
-
+        /// <summary>
+        /// Converts numbers from Wh to kWh
+        /// </summary>
+        /// <param name="Q"></param>
+        /// <returns></returns>
         double[] ToKWh(IEnumerable<double> Q)
         {
             return Q.Select(x => x / 1000.0).ToArray();
@@ -972,7 +889,7 @@ namespace Hive.Core
             return eta_g;
         }
 
-        double[,] calculate_Q_s_new(bool run_obstr,
+        double[,] calculate_Q_s(bool run_obstr,
             GH_Structure<GH_Number> tree_obstr, GH_Structure<GH_Number> tree_unobstr,
             double g_value, double g_value_total, double setpoint,
             List<double> win_areas, bool hourly)
@@ -1023,52 +940,6 @@ namespace Hive.Core
             return Q_array;
         }
 
-        List<List<double>> calculate_Q_s(
-            bool run_obstr,
-            GH_Structure<GH_Number> tree_obstr,
-            GH_Structure<GH_Number> tree_unobstr,
-            double g_value,
-            double g_value_total,
-            double setpoint,
-            List<double> win_areas,
-            bool hourly = false)
-        {
-            var tree = tree_obstr;
-            if (run_obstr == false)
-            {
-                tree = tree_unobstr;
-            }
-            List<List<double>> Q_array = new List<List<double>>(); //new double[win_areas.Count, hourly ? HOURS_PER_YEAR : MonthsPerYear];
-            foreach (var i in Enumerable.Range(0, tree.Branches.Count))
-            {
-                var row = new List<double>();
-                var win_area = win_areas[i];
-                var branch = tree.Branches[i];
-                foreach (var j in Enumerable.Range(0, branch.Count))
-                {
-                    var irrad = branch[j].Value / win_area;
-                    if (irrad > setpoint)
-                    {
-                        irrad *= g_value_total;
-                    }
-                    else
-                    {
-                        irrad *= g_value;
-                    }
-                    row.Add(irrad * win_area);
-                }
-                if (hourly)
-                {
-                    Q_array.Add(row);
-                }
-                else
-                {
-                    Q_array.Add(get_monthly_sum(row).ToList());
-                }
-            }
-            return Q_array;
-        }
-
         // Precalculates the constant part of natural ventilation calc 
         //             _______________________________
         //     
@@ -1114,46 +985,8 @@ namespace Hive.Core
         }
 
         // UTILS
-        double[] get_monthly_sum(IEnumerable<double> hourly) => Misc.GetCumulativeMonthlyValue(hourly.ToArray());
-        //{
-        //    var monthly = new List<object>();
-        //    foreach (var month in Enumerable.Range(0, MonthsPerYear))
-        //    {
-        //        var start = Convert.ToInt32(HOURS_PER_DAY * DAYS_PER_MONTH[0::month].Sum());
-        //        var end = Convert.ToInt32(HOURS_PER_DAY * DAYS_PER_MONTH[0::(month + 1)].Sum());
-        //        monthly.append(hourly[start::end].Sum());
-        //    }
-        //    return monthly;
-        //}
 
         double[] get_monthly_avg(IEnumerable<double> hourly) => Misc.GetAverageMonthlyValue(hourly.ToArray());
-        //{
-        //    var monthly = new List<object>();
-        //    foreach (var month in Enumerable.Range(0, MonthsPerYear))
-        //    {
-        //        var start = Convert.ToInt32(HOURS_PER_DAY * DAYS_PER_MONTH[0::month].Sum());
-        //        var end = Convert.ToInt32(HOURS_PER_DAY * DAYS_PER_MONTH[0::(month + 1)].Sum());
-        //        monthly.append(hourly[start::end].Sum() / (end - start));
-        //    }
-        //    return monthly;
-        //}
-
-        //GH_Structure<GH_Number> transpose_jagged_2D_array(GH_Structure<GH_Number> array)
-        //{
-        //    var transposed_array = new GH_Structure<GH_Number>();
-        //    var len_d1 = array.Branches.Count;
-        //    var len_d2 = array.Branches[0].Count;
-        //    foreach (var i in Enumerable.Range(0, len_d2))
-        //    {
-        //        var transposed_row = new List<double>();
-        //        foreach (var j in Enumerable.Range(0, len_d1))
-        //        {
-        //            transposed_row.Add(array.Branches[j][i].Value);
-        //        }
-        //        transposed_array(transposed_row); // TODO check this
-        //    }
-        //    return transposed_array;
-        //}
 
         // 
         //     Converts the encoded schedules for occupancy, devices, lighting, and setpoints into hourly schedules.
@@ -1226,71 +1059,5 @@ namespace Hive.Core
             }
             return Tuple.Create(P_hourly.ToArray(), A_hourly.ToArray(), L_hourly.ToArray(), S_hourly.ToArray());
         }
-
-        //public static object test()
-        //{
-        //    // Arrange
-        //    var testdir = os.path.abspath(os.path.join(os.path.dirname(os.path.abspath(@__file__)), "..\\..\\..\\tests\\Hive.Core\\sia380"));
-        //    var path_testdata = os.path.join(testdir, "testdata.json");
-        //    var path_results = os.path.join(testdir, "results.json");
-        //    using (var f = open(path_testdata, "r"))
-        //    {
-        //        kwargs = json.loads(f.read(), encoding: "utf-8");
-        //    }
-        //    kwargs["srf_irrad_obstr_tree"] = dt.DataTree(new List<object> {
-        //        new List<object> {
-        //            0.0
-        //        } * 8760
-        //    });
-        //    kwargs["srf_irrad_unobstr_tree"] = dt.DataTree(kwargs["srf_irrad_unobstr_tree"]);
-        //    kwargs["debug"] = true;
-        //    // Act
-        //    var results = main(kwargs);
-        //    // Assert
-        //    var _tup_1 = results;
-        //    var Q_Heat = _tup_1.Item1;
-        //    var Q_dhw = _tup_1.Item2;
-        //    var Q_Cool = _tup_1.Item3;
-        //    var Q_Elec = _tup_1.Item4;
-        //    var Q_T = _tup_1.Item5;
-        //    var Q_V = _tup_1.Item6;
-        //    var Q_i = _tup_1.Item7;
-        //    var Q_s = _tup_1.Item8;
-        //    var Q_T_op = _tup_1.Item9;
-        //    var Q_T_tr = _tup_1.Item10;
-        //    var Q_s_tr_tree = _tup_1.Item11;
-        //    // with open(os.path.join(testdir, "results_variable_tau.json"), 'w') as f:
-        //    //     data = {
-        //    //         "Q_Heat": Q_Heat, 
-        //    //         "Q_dhw": Q_dhw, 
-        //    //         "Q_Cool": Q_Cool,
-        //    //         "Q_Elec": Q_Elec,
-        //    //         "Q_T": Q_T,
-        //    //         "Q_V": Q_V,
-        //    //         "Q_i": Q_i,
-        //    //         "Q_s": Q_s,
-        //    //         "Q_T_op": Q_T_op,
-        //    //         "Q_T_tr": Q_T_tr,
-        //    //         "Q_s_tr_tree": Q_s_tr_tree 
-        //    //     }
-        //    //     json.dump(data, f, indent=4)
-        //    Console.WriteLine("Q_Cool = " + Q_Cool.Sum().ToString());
-        //    Console.WriteLine("Q_Heat = " + Q_Heat.Sum().ToString());
-        //    // t_start = 168 * HOURS_PER_DAY
-        //    // t_end = t_start + 7 * HOURS_PER_DAY
-        //    // import matplotlib.pyplot as plt
-        //    // X = range(t_start, t_end)
-        //    // plt.plot(X, Q_Cool[t_start:t_end], label='Q_Cool')
-        //    // plt.plot(X, Q_Heat[t_start:t_end], label='Q_Heat')
-        //    // plt.plot(X, Q_dhw[t_start:t_end], label='Q_dhw')
-        //    // plt.plot(X, Q_T[t_start:t_end], ':c', label='Q_T')
-        //    // plt.plot(X, Q_V[t_start:t_end], ':b', label='Q_V')
-        //    // plt.plot(X, Q_i[t_start:t_end], ':g', label='Q_i')
-        //    // plt.plot(X, Q_s[t_start:t_end], ':r', label='Q_s')
-        //    // plt.plot(X, kwargs['T_e_hourly'][t_start:t_end])
-        //    // plt.plot(X, kwargs['T_i_ub_hourly'][t_start:t_end])
-        //    // plt.plot(X, kwargs['T_i_lb_hourly'][t_start:t_end])
-        //    // plt.show()
-        //}
     }
 }
