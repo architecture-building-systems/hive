@@ -203,6 +203,16 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap EnergySystems_Heatpump_AirSource {
+            get {
+                object obj = ResourceManager.GetObject("EnergySystems_Heatpump_AirSource", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap flat_plate {
             get {
                 object obj = ResourceManager.GetObject("flat_plate", resourceCulture);
