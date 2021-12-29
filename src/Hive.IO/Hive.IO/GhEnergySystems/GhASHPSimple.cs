@@ -3,7 +3,7 @@ using Grasshopper.Kernel;
 
 namespace Hive.IO.GhEnergySystems
 {
-    public class GhHeatpumpSimple : GH_Component
+    public class GhASHPSimple : GH_Component
     {
 
         //Simple heat pump calculation according to Energy and Climate Systems lecture FS 2019
@@ -15,7 +15,7 @@ namespace Hive.IO.GhEnergySystems
 
         //output:
         //E = electricity loads[kWh]
-        public GhHeatpumpSimple()
+        public GhASHPSimple()
             : base("Heat pump Energy System", "HeatPumpSimple",
               "Calculates total consumed electricity of a simple heat pump, given a Coefficient of Performance, to meet heating energy demand.",
               "[hive]", "Energy Systems"
