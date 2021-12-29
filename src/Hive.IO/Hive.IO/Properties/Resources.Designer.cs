@@ -173,6 +173,16 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap EnergySystems_Chiller_TimeResult {
+            get {
+                object obj = ResourceManager.GetObject("EnergySystems_Chiller_TimeResult", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap EnergySystems_Combined {
             get {
                 object obj = ResourceManager.GetObject("EnergySystems_Combined", resourceCulture);

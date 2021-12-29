@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using Grasshopper.Kernel;
@@ -51,6 +50,7 @@ namespace Hive.IO.GhEnergySystems
             var cost = new double[horizon];
             var carbon = new double[horizon];
             var gas_consumed = new double[horizon];
+
             foreach (var t in Enumerable.Range(0, horizon))
             {
                 gas_consumed[t] = heating_loads[t] * eta[t];

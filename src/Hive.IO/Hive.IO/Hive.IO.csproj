@@ -175,6 +175,7 @@
     <Compile Include="GhDistributors\GhDistEnvironment.cs" />
     <Compile Include="GhDistributors\GhDistEpw.cs" />
     <Compile Include="GhEnergySystems\GhChillerSimple.cs" />
+    <Compile Include="GhEnergySystems\GhChillerTimeResolved.cs" />
     <Compile Include="GhInputOutput\GhResultsExposer.cs" />
     <Compile Include="GhInputOutput\GhResultsExposerPreDefined.cs" />
     <Compile Include="GhDistributors\GhDistSIA.cs" />
@@ -405,6 +406,7 @@
     <Content Include="Resources\EnergySystems\vacuum_tube.jpg" />
     <None Include="Resources\EnergySystems_Chiller_Simple.bmp" />
     <None Include="Resources\energysystems_chiller.png" />
+    <None Include="Resources\energysystems_chiller_timeresult.png" />
     <Content Include="Resources\Icons\Demand_AdaptiveComfort.png" />
     <Content Include="Resources\Icons\Demand_SIA380.png" />
     <Content Include="Resources\Icons\EnergySystems_Boiler_Simple.png" />
