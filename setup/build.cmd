@@ -26,8 +26,8 @@ cd %HIVE_DIR%\src\Hive.Core\
 @REM "%IPY%" "%HB%" solar\Hive.Core.solar.json
 "%IPY%" "%HB%" solar_tech\Hive.Core.solar_tech.json
 @REM "%IPY%" "%HB%" combustion\Hive.Core.combustion.json
-"%IPY%" "%HB%" cooling\Hive.Core.cooling.json
-"%IPY%" "%HB%" heatpumps\Hive.Core.heatpumps.json
+@REM "%IPY%" "%HB%" cooling\Hive.Core.cooling.json
+@REM "%IPY%" "%HB%" heatpumps\Hive.Core.heatpumps.json
 echo ...Done
 
 @REM Build Hive.IO (only the main csproj, not tests)
@@ -59,8 +59,8 @@ cd %HIVE_DIR%\src\Hive.Core\
 "%IPY%" "%HIVE_WIKI_PY%" solar\Hive.Core.solar.json
 "%IPY%" "%HIVE_WIKI_PY%" solar_tech\Hive.Core.solar_tech.json
 @REM "%IPY%" "%HIVE_WIKI_PY%" combustion\Hive.Core.combustion.json
-"%IPY%" "%HIVE_WIKI_PY%" cooling\Hive.Core.cooling.json
-"%IPY%" "%HIVE_WIKI_PY%" heatpumps\Hive.Core.heatpumps.json
+@REM "%IPY%" "%HIVE_WIKI_PY%" cooling\Hive.Core.cooling.json
+@REM "%IPY%" "%HIVE_WIKI_PY%" heatpumps\Hive.Core.heatpumps.json
 
 cd %HIVE_BUILD_DIR%
 echo ...Done

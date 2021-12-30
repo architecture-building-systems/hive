@@ -177,7 +177,7 @@
     <Compile Include="GhEnergySystems\GhChillerSimple.cs" />
     <Compile Include="GhEnergySystems\GhChillerTimeResolved.cs" />
     <Compile Include="GhEnergySystems\GhHeatpumpCOP.cs" />
-    <Compile Include="GhEnergySystems\GhASHPSimple.cs" />
+    <Compile Include="GhEnergySystems\GhHeatpumpSimple.cs" />
     <Compile Include="GhEnergySystems\GhASHPTimeResolved.cs" />
     <Compile Include="GhInputOutput\GhResultsExposer.cs" />
     <Compile Include="GhInputOutput\GhResultsExposerPreDefined.cs" />

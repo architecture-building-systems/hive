@@ -3,7 +3,7 @@ using Grasshopper.Kernel;
 
 namespace Hive.IO.GhEnergySystems
 {
-    internal class GhHeatpumpCOP : GH_Component
+    public class GhHeatpumpCOP : GH_Component
     {
         //Simple COP calculation for heat pumps, from lectures Energy and Climate Systems FS 2019
 
