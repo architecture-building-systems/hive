@@ -213,6 +213,7 @@
     <Compile Include="GhSolar\GhPVNoct.cs" />
     <Compile Include="GhSolar\GhPVSimple.cs" />
     <Compile Include="GhSolar\GhSTSimple.cs" />
+    <Compile Include="GhSolar\GhSTTimeResolved.cs" />
     <Compile Include="GhValueLists\GhListResults.cs" />
     <Compile Include="Plots\AmrPlotConstants.cs" />
     <Compile Include="Plots\LifetimeAmrPlot.cs" />
@@ -411,6 +412,7 @@
   <ItemGroup>
     <Content Include="Resources\EnergySystems\flat_plate.jpg" />
     <Content Include="Resources\EnergySystems\vacuum_tube.jpg" />
+    <None Include="Resources\solar_Solarthermaltimeresult.png" />
     <None Include="Resources\solar_solarthermal.png" />
     <None Include="Resources\solar_PVtimeresult.png" />
     <None Include="Resources\solar_OrientationFactor.png" />
