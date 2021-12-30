@@ -26,7 +26,7 @@ namespace Hive.IO.GhEnergySystems
         {
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.secondary;
+        public override GH_Exposure Exposure => GH_Exposure.primary;
 
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
