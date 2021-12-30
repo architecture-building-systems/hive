@@ -41,7 +41,7 @@ namespace Hive.IO.GhEnergySystems
             double Q = 0.0;
             if (!DA.GetData(0, ref Q)) return;
             double COP = 0.0;
-            if (!DA.GetData(0, ref COP)) return;
+            if (!DA.GetData(1, ref COP)) return;
 
             var E = Q / COP;
 

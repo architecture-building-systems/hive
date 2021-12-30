@@ -209,6 +209,7 @@
     <Compile Include="GhInputOutput\GhBuilding.cs" />
     <Compile Include="GhDistributors\GhMainDistributor.cs" />
     <Compile Include="GhInputOutput\GhVisualizerAttributes.cs" />
+    <Compile Include="GhSolar\GhPVSimple.cs" />
     <Compile Include="GhValueLists\GhListResults.cs" />
     <Compile Include="Plots\AmrPlotConstants.cs" />
     <Compile Include="Plots\LifetimeAmrPlot.cs" />
@@ -407,6 +408,7 @@
   <ItemGroup>
     <Content Include="Resources\EnergySystems\flat_plate.jpg" />
     <Content Include="Resources\EnergySystems\vacuum_tube.jpg" />
+    <None Include="Resources\solar_PV.png" />
     <None Include="Resources\EnergySystems_Chiller_Simple.bmp" />
     <None Include="Resources\energysystems_chiller.png" />
     <None Include="Resources\energysystems_chiller_timeresult.png" />
