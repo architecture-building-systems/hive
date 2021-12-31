@@ -728,6 +728,16 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Solar_SumTimeSeries {
+            get {
+                object obj = ResourceManager.GetObject("Solar_SumTimeSeries", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap solaxess_white {
             get {
                 object obj = ResourceManager.GetObject("solaxess_white", resourceCulture);
