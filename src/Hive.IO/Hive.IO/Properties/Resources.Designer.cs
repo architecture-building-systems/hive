@@ -19,7 +19,7 @@ namespace Hive.IO.Properties {
     // class via a tool like ResGen or Visual Studio.
     // To add or remove a member, edit your .ResX file then rerun ResGen
     // with the /str option, or rebuild your VS project.
-    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "16.0.0.0")]
+    [global::System.CodeDom.Compiler.GeneratedCodeAttribute("System.Resources.Tools.StronglyTypedResourceBuilder", "17.0.0.0")]
     [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
     [global::System.Runtime.CompilerServices.CompilerGeneratedAttribute()]
     internal class Resources {
@@ -83,9 +83,19 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap CdTe {
+        internal static System.Drawing.Bitmap cdte {
             get {
-                object obj = ResourceManager.GetObject("CdTe", resourceCulture);
+                object obj = ResourceManager.GetObject("cdte", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap cigs {
+            get {
+                object obj = ResourceManager.GetObject("cigs", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -103,9 +113,59 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        internal static System.Drawing.Bitmap cigs1 {
+        internal static System.Drawing.Bitmap Core_Solar_Potentials_Unobstructed {
             get {
-                object obj = ResourceManager.GetObject("cigs1", resourceCulture);
+                object obj = ResourceManager.GetObject("Core_Solar_Potentials_Unobstructed", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EnergySystems_Boiler_Simple {
+            get {
+                object obj = ResourceManager.GetObject("EnergySystems_Boiler_Simple", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EnergySystems_Boiler_TimeResult {
+            get {
+                object obj = ResourceManager.GetObject("EnergySystems_Boiler_TimeResult", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EnergySystems_Combined {
+            get {
+                object obj = ResourceManager.GetObject("EnergySystems_Combined", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EnergySystems_Combined_TimeResult {
+            get {
+                object obj = ResourceManager.GetObject("EnergySystems_Combined_TimeResult", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap flat_plate {
+            get {
+                object obj = ResourceManager.GetObject("flat_plate", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -523,7 +583,7 @@ namespace Hive.IO.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type,electric efficiency,thermal efficiency,cost per m2,cost per kWp,life cycle GHG factor kgCO2eq per m2,life cycle GHG factor kgCO2eq per kWp,Lifetime,Description,ignore_category,ignore_module description,ignore_cell technology,ignore_module film tint,ignore_module weight (kg),ignore_module dimensions,ignore_module area (sqm.),ignore_module density (kg/sqm.),ignore_module rating(Wp),ignore_module efficiency,ignore_Euro per Wp (installed),ignore_Euro per sqm.,ignore_power density (Wp/sqm),ignore_GWP Intens [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Type,electric efficiency,thermal efficiency,cost per m2,cost per kWp,life cycle GHG factor kgCO2eq per m2,life cycle GHG factor kgCO2eq per kWp,Lifetime,Description,Image,ignore_category,ignore_module description,ignore_cell technology,ignore_module film tint,ignore_module weight (kg),ignore_module dimensions,ignore_module area (sqm.),ignore_module density (kg/sqm.),ignore_module rating(Wp),ignore_module efficiency,ignore_Euro per Wp (installed),ignore_Euro per sqm.,ignore_power density (Wp/sqm),ignore_GWP  [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string pv_efficiency {
             get {
@@ -556,13 +616,32 @@ namespace Hive.IO.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Type,electric efficiency,thermal efficiency,cost per kWp,cost per m2,life cycle GHG factor kgCO2eq per kWp,life cycle GHG factor kgCO2eq per m2,Lifetime,Description
-        ///vacume_tube,0,0.45,4444.444444,2000,462.2222222,208,30,&quot;Evacuated tube collectors are used when high water temperatures are required. They can reach temperature levels of over 100\u00b0C. Several tubes are installed next to each other. The appearance is not a homogeneous surface. Fa\u00e7ade integration is possible to some extent.&quot;,
-        ///flat_plate [rest of string was truncated]&quot;;.
+        ///   Looks up a localized string similar to Type,electric efficiency,thermal efficiency,cost per kWp,cost per m2,life cycle GHG factor kgCO2eq per kWp,life cycle GHG factor kgCO2eq per m2,Lifetime,Description,Image
+        ///Vacuum Tube,0,0.45,4444.444444,2000,462.2222222,208,30,Evacuated tube collectors are used when high water temperatures are required. They can reach temperature levels of over 100\u00b0C. Several tubes are installed next to each other. The appearance is not a homogeneous surface. Fa\u00e7ade integration is possible to some extent.,vacuum_t [rest of string was truncated]&quot;;.
         /// </summary>
         internal static string st_efficiency {
             get {
                 return ResourceManager.GetString("st_efficiency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap vacuum_tube {
+            get {
+                object obj = ResourceManager.GetObject("vacuum_tube", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized resource of type System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Weather_EPW_reader {
+            get {
+                object obj = ResourceManager.GetObject("Weather_EPW_reader", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
     }

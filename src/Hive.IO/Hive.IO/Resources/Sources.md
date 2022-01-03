@@ -68,15 +68,7 @@ https://www.fensterversand.com/?cid=25
 
 ### PV
 
-From [pv_efficiency.csv](pv_efficiency.csv)
-
-|PV tech | electric efficiency | thermal efficiency | cost per m2 | cost per kWp | life cycle GHG factor kgCO2eq per m2 | life cycle GHG factor kgCO2eq per kWp | Lifetime |
-| -|-|-|-|-|-|-|-|
-|polycristalline | 0.206 | 0 | 633.656 | 3076 | 171.598 | 833 | 30|
-|monocristalline | 0.228 | 0 | 701.328 | 3076 | 189.924 | 833 | 30|
-|CIGS | 0.156 | 0 | 592.8 | 3800 | 121.68 | 780 | 30|
-|CdTe | 0.182 | 0 | 691.6 | 3800 | 78.806 | 433 | 30|
-|HIT | 0.209 | 0 | 642.884 | 3076 | 174.097 | 833 | 30 |
+See [pv_efficiency.csv](pv_efficiency.csv)
 
 Source for carbon footprint of PV technologies: https://treeze.ch/fileadmin/user_upload/downloads/Publications/Case_Studies/Energy/Future-PV-LCA-IEA-PVPS-Task-12-March-2015.pdf
 
@@ -95,16 +87,13 @@ CIGS: 781 kgCO2eq/kWp
 
 Kosten: Quelle unbekannt.
 
+### BIPV
+
+See [bipv_efficiency.csv](bipv_efficiency.csv)
+
 ### PVT
 
-From [pvt_efficiency.csv](pvt_efficiency.csv)
-
-|PVT tech | electric efficiency | thermal efficiency | cost per m2 | life cycle GHG factor kgCO2eq per m2|
-|-|-|-|-|-|
-|PVT_cheap | NaN | NaN | NaN | NaN|
-|PVT_normal | NaN | NaN | NaN | NaN|
-|PVT_high_tech | NaN | NaN | NaN | NaN |
-|PVT | 0.17 | 0.3 | NaN | 400 |
+See [pvt_efficiency.csv](pvt_efficiency.csv)
 
 Für embodied emissions: https://doi.org/10.1016/j.rser.2015.10.156 
 
@@ -112,12 +101,7 @@ Thermal efficiency: Diese hängt stark von der supply and return temperature ab.
 
 ### Solar Thermal ST
 
-From [st_efficiency.csv](st_efficiency.csv)
-
-|ST tech | electric efficiency | thermal efficiency | cost per kWp | cost per m2 | life cycle GHG factor kgCO2eq per kWp | life cycle GHG factor kgCO2eq per m2
-|-|-|-|-|-|-|-|
-|vacume_tube | 0 | 0.45 | 4444.444444 | 2000 | 462.2222222 | 208 |
-|flat_plate | 0 | 0.45 | 4444.444444 | 2000 | 408.8888889 | 184 |
+See [st_efficiency.csv](st_efficiency.csv)
 
 Kosten: etwa 2000CHF/m2 gemäss: https://tachionframework.com/603/client/res/603/docs/Usermanual_de.pdf
 

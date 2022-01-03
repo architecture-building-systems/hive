@@ -10,10 +10,13 @@ namespace Hive.IO
         /// <summary>
         /// Typical calendar year
         /// </summary>
-        public static readonly int[] DaysPerMonth = new int[12] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-        public const int HoursPerDay = 24;
-        public const int HoursPerYear = 8760;
         public const int MonthsPerYear = 12;
+
+        public static readonly int[] DaysPerMonth = new int[12] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+
+        public const int HoursPerDay = 24;
+        public static readonly int[] HoursPerMonth = DaysPerMonth.Select(d => d*HoursPerDay).ToArray();
+        public const int HoursPerYear = 8760;
 
         public static readonly string[] MonthNames =
         {
@@ -249,6 +252,34 @@ namespace Hive.IO
 
             var versionAttribute = assemblyInformationalVersion[0] as AssemblyInformationalVersionAttribute;
             return versionAttribute.InformationalVersion;
+        }
+
+        // from https://stackoverflow.com/questions/1014005/how-to-populate-instantiate-a-c-sharp-array-with-a-single-value
+        public static void Populate<T>(this T[] arr, T value)
+        {
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = value;
+            }
+
+        }
+        
+        // From https://stackoverflow.com/a/406576
+        public static int[] Slice(this int[] source, int start, int stop)
+        {
+            int length = stop - start;
+            int[] destfoo = new int[length];
+            Array.Copy(source, 0, destfoo, 0, length);
+            return destfoo;
+        }
+
+        // From https://stackoverflow.com/a/406576
+        public static double[] Slice(this double[] source, int start, int stop)
+        {
+            int length = stop - start;
+            double[] destfoo = new double[length];
+            Array.Copy(source, start, destfoo, 0, length);
+            return destfoo;
         }
     }
 }

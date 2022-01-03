@@ -207,7 +207,7 @@ namespace Hive.IO.Forms
         //        $"pack://application:,,,/Hive.IO,Culture=neutral,PublicKeyToken=null;component/Resources/EnergySystems/{ModuleType.Name}.jpg"))
         //    : null;
 
-        public System.Drawing.Image TechnologyImage => IsSurfaceTech ? (System.Drawing.Image) Properties.Resources.ResourceManager.GetObject(ModuleType.Name) : null;
+        public System.Drawing.Image TechnologyImage => IsSurfaceTech && ModuleType.Image != null ? (System.Drawing.Image) Properties.Resources.ResourceManager.GetObject(ModuleType.Image) : null;
 
         public double Area
         {
@@ -530,5 +530,6 @@ namespace Hive.IO.Forms
         public double SpecificEmbodiedEmissions;
         public double Lifetime;
         public string Description;
+        public string Image { get; set; }
     }
 }

@@ -124,10 +124,10 @@
   <data name="asi_grey_panel" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\EnergySystems\asi_grey_panel.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="CdTe" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="cdte" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\EnergySystems\CdTe.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
-  <data name="cigs1" type="System.Resources.ResXFileRef, System.Windows.Forms">
+  <data name="cigs" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\EnergySystems\cigs.jpeg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
   <data name="cigs_integrated" type="System.Resources.ResXFileRef, System.Windows.Forms">
@@ -267,5 +267,29 @@
   </data>
   <data name="st_efficiency" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\st_efficiency.csv;System.String, mscorlib, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089;Windows-1252</value>
+  </data>
+  <data name="Core_Solar_Potentials_Unobstructed" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\core_solar_potentials_unobstructed.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EnergySystems_Boiler_Simple" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\energysystems_boiler_simple.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EnergySystems_Boiler_TimeResult" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\energysystems_boiler_timeresult.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EnergySystems_Combined" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\energysystems_combined.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="EnergySystems_Combined_TimeResult" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\energysystems_combined_timeresult.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Weather_EPW_reader" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\weather_epw_reader.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="flat_plate" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\energysystems\flat_plate.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="vacuum_tube" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\energysystems\vacuum_tube.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
 </root>
