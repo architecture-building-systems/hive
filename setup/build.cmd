@@ -37,6 +37,12 @@ cd %HIVE_DIR%\src\Hive.IO\Hive.IO\
 %PYTHON% Building\generate_sia2024_schedules_json.py
 %PYTHON% EnergySystems\compile_surface_tech_json.py
 "%MSBUILD%" Hive.IO.csproj /p:PreBuildEvent="" /p:PostBuildEvent=""
+
+
+@REM if you want to run unit tests
+@REM SET VSTEST=%PROGRAMFILES(x86)%\Microsoft Visual Studio\2019\Community\Common7\IDE\Extensions\TestPlatform\vstest.console.exe
+@REM "%VSTEST%" "..\Hive.IO\UnitTests\bin\Release\UnitTests.dll"
+
 echo ...Done
 
 @REM Build Installer
@@ -49,8 +55,8 @@ echo ...Done
 echo Generating Component Documentation for Wiki...
 cd %HIVE_DIR%\src\Hive.Core\
 "%IPY%" "%HIVE_WIKI_PY%" epw_reader\Hive.Core.epw_reader.json
-"%IPY%" "%HIVE_WIKI_PY%" sia380\Hive.Core.sia380.json
-"%IPY%" "%HIVE_WIKI_PY%" solar\Hive.Core.solar.json
+:: "%IPY%" "%HIVE_WIKI_PY%" sia380\Hive.Core.sia380.json
+:: "%IPY%" "%HIVE_WIKI_PY%" solar\Hive.Core.solar.json
 "%IPY%" "%HIVE_WIKI_PY%" solar_tech\Hive.Core.solar_tech.json
 @REM "%IPY%" "%HIVE_WIKI_PY%" combustion\Hive.Core.combustion.json
 "%IPY%" "%HIVE_WIKI_PY%" cooling\Hive.Core.cooling.json

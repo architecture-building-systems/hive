@@ -91,6 +91,8 @@
     <Compile Include="Building\Sia2024Record.cs" />
     <Compile Include="Building\Sia380ConstructionRecord.cs" />
     <Compile Include="Building\Sia2024Schedules.cs" />
+    <Compile Include="Core\AdaptiveComfort.cs" />
+    <Compile Include="Core\Sia380.cs" />
     <Compile Include="EnergySystems\CombustionTech.cs" />
     <Compile Include="EnergySystems\Carrier.cs" />
     <Compile Include="EnergySystems\Emitter.cs" />
@@ -165,6 +167,8 @@
     <Compile Include="Forms\VisualizerPlotProperties.Designer.cs">
       <DependentUpon>VisualizerPlotProperties.cs</DependentUpon>
     </Compile>
+    <Compile Include="GhCore\GhAdaptiveComfort.cs" />
+    <Compile Include="GhCore\GhSIA380.cs" />
     <Compile Include="GhCore\GhSolarUnobstructed.cs" />
     <Compile Include="GhDistributors\GhDistConversionTech.cs" />
     <Compile Include="GhDistributors\GhDistEmitter.cs" />
@@ -398,6 +402,8 @@
   <ItemGroup>
     <Content Include="Resources\EnergySystems\flat_plate.jpg" />
     <Content Include="Resources\EnergySystems\vacuum_tube.jpg" />
+    <Content Include="Resources\Icons\Demand_AdaptiveComfort.png" />
+    <Content Include="Resources\Icons\Demand_SIA380.png" />
     <Content Include="Resources\Icons\EnergySystems_Boiler_Simple.png" />
     <Content Include="Resources\Icons\EnergySystems_Boiler_TimeResult.png" />
     <Content Include="Resources\Icons\EnergySystems_Combined.png" />

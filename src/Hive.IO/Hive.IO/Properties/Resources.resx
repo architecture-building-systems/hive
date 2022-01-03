@@ -292,4 +292,10 @@
   <data name="vacuum_tube" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\resources\energysystems\vacuum_tube.jpg;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="Demand_AdaptiveComfort" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\demand_adaptivecomfort.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Demand_SIA380" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\resources\icons\demand_sia380.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>
