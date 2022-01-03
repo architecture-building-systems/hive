@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Grasshopper.Kernel.Types;
 using Grasshopper.Kernel;
 using Hive.IO.EnergySystems;
-using Hive.Core;
+using Hive.IO.Core;
 using Grasshopper;
 using Grasshopper.Kernel.Data;
 
@@ -19,7 +19,7 @@ namespace Hive.IO.GhCore
         {
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.tertiary;
+        public override GH_Exposure Exposure => GH_Exposure.primary;
 
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
