@@ -91,10 +91,8 @@ namespace Hive.IO.GhDistributors
             {
                 switch (hiveInput.Value)
                 {
-                    case BuildingIntegratedPV valueBIPV:
-                        srfBasedTech.Add(valueBIPV); break;
-                    case Photovoltaic valuePV:                      
-                        srfBasedTech.Add(valuePV); break;
+                    case Photovoltaic valuePV:      //BuildingIntegratedPV is recognized by its base class                 
+                        srfBasedTech.Add(valuePV); break;   // BuildingIntegratedPV remains BuildingIntegratedPV
                     case SolarThermal valueST:                      
                         srfBasedTech.Add(valueST); break;
                     case PVT valuePVT:                              

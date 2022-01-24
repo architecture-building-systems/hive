@@ -116,9 +116,9 @@ namespace Hive.IO.GhMergers
             var solarTechInfused = new List<SurfaceBasedTech>();
             for(int i=0; i<solarTech.Count; i++)
             {
-                if (solarTech[i] is Photovoltaic)
+                if (solarTech[i] is Photovoltaic)   // BuildingIntegratedPV is a subclass, therefore not necessary to check specifically
                 {
-                    var tech = solarTech[i] as Photovoltaic;
+                    var tech = solarTech[i] as Photovoltaic;    // BuildingIntegratedPV will stay a BuildingIntegratedPV
                     if (simple)
                     {
                         if (useTree)
@@ -135,25 +135,25 @@ namespace Hive.IO.GhMergers
                     }
                     solarTechInfused.Add(tech);
                 }
-                if (solarTech[i] is BuildingIntegratedPV)
-                {
-                    var tech = solarTech[i] as BuildingIntegratedPV;
-                    if (simple)
-                    {
-                        if (useTree)
-                            tech.SetInputComputeOutputSimple(IHourlyLists[i].ToArray());
-                        else
-                            tech.SetInputComputeOutputSimple(irradHourlyMatrix[i]);
-                    }
-                    else
-                    {
-                        if (useTree)
-                            tech.SetInputComputeOutput(IHourlyLists[i].ToArray(), air);
-                        else
-                            tech.SetInputComputeOutput(irradHourlyMatrix[i], air);
-                    }
-                    solarTechInfused.Add(tech);
-                }
+                //if (solarTech[i] is BuildingIntegratedPV)
+                //{
+                //    var tech = solarTech[i] as BuildingIntegratedPV;
+                //    if (simple)
+                //    {
+                //        if (useTree)
+                //            tech.SetInputComputeOutputSimple(IHourlyLists[i].ToArray());
+                //        else
+                //            tech.SetInputComputeOutputSimple(irradHourlyMatrix[i]);
+                //    }
+                //    else
+                //    {
+                //        if (useTree)
+                //            tech.SetInputComputeOutput(IHourlyLists[i].ToArray(), air);
+                //        else
+                //            tech.SetInputComputeOutput(irradHourlyMatrix[i], air);
+                //    }
+                //    solarTechInfused.Add(tech);
+                //}
                 else if (solarTech[i] is SolarThermal)
                 {
                     var tech = solarTech[i] as SolarThermal;
