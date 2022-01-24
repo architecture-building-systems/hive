@@ -174,6 +174,7 @@ namespace Hive.IO.Forms
             = new Dictionary<string, Func<ConversionTechPropertiesBase>>
             {
                 {"Photovoltaic (PV)", () => new Controls.SurfaceTechnologyProperties()},
+                {"Building Integrated Photovoltaic (BIPV)", () => new Controls.SurfaceTechnologyProperties()},
                 {"Solar Thermal (ST)", () => new Controls.SurfaceTechnologyProperties()}, // same as PV...
                 {"Boiler (Gas)", () => new Controls.GasBoilerProperties()},
                 {"CHP", () => new Controls.ChpProperties()},

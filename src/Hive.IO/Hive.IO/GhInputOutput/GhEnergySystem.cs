@@ -248,7 +248,7 @@ namespace Hive.IO.GhInputOutput
                         break;
 
                     case BuildingIntegratedPV buildingIntegratedPV:
-                        ctvm.Name = "Building Integrated Photovoltaic1 (BIPV)";
+                        ctvm.Name = "Building Integrated Photovoltaic (BIPV)";
                         ctvm.SetProperties(buildingIntegratedPV);
                         var bipvSurface = new SurfaceViewModel
                         {
