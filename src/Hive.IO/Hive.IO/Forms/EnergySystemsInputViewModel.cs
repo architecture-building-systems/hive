@@ -23,6 +23,10 @@ namespace Hive.IO.Forms
                 new ConversionTechPropertiesViewModel
                 {
                     Name = "Boiler (Gas)"
+                },
+                new ConversionTechPropertiesViewModel
+                {
+                    Name = "Building Integrated Photovoltaic (BIPV)"
                 }
             };
 

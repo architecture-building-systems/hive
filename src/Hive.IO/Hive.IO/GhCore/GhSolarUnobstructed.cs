@@ -28,8 +28,8 @@ namespace Hive.IO.GhCore
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("Tilt", "Tilt", "Panel tilt in degree", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Azimuth", "Azimuth", "Panel azimuth in degree", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Tilt", "Tilt", "Panel tilt in degree", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Azimuth", "Azimuth", "Panel azimuth in degree", GH_ParamAccess.item);
             pManager.AddNumberParameter("DHI", "DHI", "Diffuse Horizontal Irradiance time series, 8760 values in [W/m²] from a weatherfile.", GH_ParamAccess.list);
             pManager.AddNumberParameter("DNI", "DNI", "Direct Normal Irradiance time series, 8760 values in [W/m²] from a weatherfile.", GH_ParamAccess.list);
             pManager.AddNumberParameter("Latitude", "Latitude", "Latitude of the location. Default value is for Zurich, Switzerland", GH_ParamAccess.item, LatitudeDefault);
@@ -57,11 +57,10 @@ namespace Hive.IO.GhCore
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Required params
-            List<double> tilt = new List<double>();
-            if (!DA.GetDataList(0, tilt)) return;
-            List<double> azimuth = new List<double>();
-            if (!DA.GetDataList(1, azimuth)) return;
-            if (tilt.Count == 0 || azimuth.Count == 0) throw new ArgumentException("Tilt or aizmuth have no values. Are you sure there is at least one window?");
+            double tilt = 0.0;
+            if (!DA.GetData(0, ref tilt)) return;
+            double azimuth = 0.0;
+            if (!DA.GetData(1, ref azimuth)) return;
 
             List<double> DHI = new List<double>();
             if (!DA.GetDataList(2, DHI)) return;
@@ -83,12 +82,12 @@ namespace Hive.IO.GhCore
             DA.GetData(9, ref timezone);
 
             // Calc and output
-            var annualPotential = ComputeAnnualPotential(tilt.ToArray(), azimuth.ToArray(), DHI, DNI, latitude, longitude, solarazi, solaralti, Aw, timezone);
+            var annualPotential = ComputeAnnualPotential(tilt, azimuth, DHI, DNI, latitude, longitude, solarazi, solaralti, Aw, timezone);
             DA.SetDataList(0, annualPotential);
         }
 
         public double[] ComputeAnnualPotential(
-            double[] tilt, double[] azimuth,
+            double tilt, double azimuth,
             List<double> DHI, List<double> DNI,
             double latitude, double longitude,
             List<double> solarazi, List<double> solaralti,
@@ -145,9 +144,9 @@ namespace Hive.IO.GhCore
 
             // Calculation points
             // TODO will these arrays be modified in SolarModel? Do we need to create copies?
-            var p = new sm.Sensorpoints(tilt, azimuth, coord.ToArray(), normal.ToArray(), recursion);
-            p.SetSimpleSkyMT(tilt, paropts);
-            p.SetSimpleGroundReflectionMT(tilt, albedo, weather, sunvectors.ToArray(), paropts);
+            var p = new sm.Sensorpoints(new double[1]{tilt}, new double[1] { azimuth }, coord.ToArray(), normal.ToArray(), recursion);
+            p.SetSimpleSkyMT(new double[1] { tilt }, paropts);
+            p.SetSimpleGroundReflectionMT(new double[1] { tilt }, albedo, weather, sunvectors.ToArray(), paropts);
             p.CalcIrradiationMT(weather, sunvectors.ToArray(), paropts);
 
             var total = new double[horizon];
