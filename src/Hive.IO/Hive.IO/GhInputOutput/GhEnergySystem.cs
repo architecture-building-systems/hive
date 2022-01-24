@@ -104,6 +104,10 @@ namespace Hive.IO.GhInputOutput
                         conversionTech.Add(new Photovoltaic(solarProperties.InvestmentCost,
                             solarProperties.EmbodiedEmissions, solarProperties.Lifetime, solarProperties.MeshSurface, solarProperties.Technology,
                             solarProperties.ElectricEfficiency, solarProperties.PerformanceRatio, solarProperties.SurfaceTransmittance));
+                    else if (solarProperties.Type == "BIPV")
+                        conversionTech.Add(new BuildingIntegratedPV(solarProperties.InvestmentCost,
+                            solarProperties.EmbodiedEmissions, solarProperties.Lifetime, solarProperties.MeshSurface, solarProperties.Technology,
+                            solarProperties.ElectricEfficiency, solarProperties.PerformanceRatio, solarProperties.SurfaceTransmittance));
                     else if (solarProperties.Type == "PVT")
                         conversionTech.Add(new PVT(solarProperties.InvestmentCost, solarProperties.EmbodiedEmissions, solarProperties.Lifetime,
                             solarProperties.MeshSurface, solarProperties.Technology, solarProperties.ElectricEfficiency,
@@ -243,6 +247,19 @@ namespace Hive.IO.GhInputOutput
                         ctvm.SetProperties(gasBoiler);
                         break;
 
+                    case BuildingIntegratedPV buildingIntegratedPV:
+                        ctvm.Name = "Building Integrated Photovoltaic1 (BIPV)";
+                        ctvm.SetProperties(buildingIntegratedPV);
+                        var bipvSurface = new SurfaceViewModel
+                        {
+                            Area = AreaMassProperties.Compute(buildingIntegratedPV.SurfaceGeometry).Area,
+                            Name = $"srf{surfaceIndex++}",
+                            Mesh = buildingIntegratedPV.SurfaceGeometry
+                        };
+                        bipvSurface.Connection = ctvm;
+                        _viewModel.Surfaces.Add(bipvSurface);
+                        break;
+
                     case Photovoltaic photovoltaic:
                         ctvm.Name = "Photovoltaic (PV)";
                         ctvm.SetProperties(photovoltaic);
@@ -255,6 +272,7 @@ namespace Hive.IO.GhInputOutput
                         pvSurface.Connection = ctvm;
                         _viewModel.Surfaces.Add(pvSurface);
                         break;
+
 
                     case SolarThermal solarThermal:
                         ctvm.Name = "Solar Thermal (ST)";
@@ -352,6 +370,13 @@ namespace Hive.IO.GhInputOutput
                             foreach (var sm in ct.SelectedSurfaces)
                                 result.Add(new Photovoltaic(specificCapitalCost, specificEmbodiedEmissions, lifetime, sm.Mesh,
                                     "FIXME: PV",
+                                    efficiency, performanceRatio, surfaceTransmittance));
+                            break;
+                        case "Building Integrated Photovoltaic (BIPV)":
+                            ct.AvailableSurfaces = _viewModel.SurfacesForConversion(ct);
+                            foreach (var sm in ct.SelectedSurfaces)
+                                result.Add(new BuildingIntegratedPV(specificCapitalCost, specificEmbodiedEmissions, lifetime, sm.Mesh,
+                                    "FIXME: BIPV",
                                     efficiency, performanceRatio, surfaceTransmittance));
                             break;
                         case "Solar Thermal (ST)":

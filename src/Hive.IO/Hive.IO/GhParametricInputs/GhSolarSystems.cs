@@ -10,7 +10,7 @@ namespace Hive.IO.GhParametricInputs
 {
     internal class SolarTechProperties
     {
-        public string Type; //{'PV', 'PVT', 'ST', 'GC'}
+        public string Type; //{'PV', 'BIPV', 'PVT', 'ST', 'GC'}
         public string Technology; // e.g. 'Monocrystalline. Not really necessary, just for information
         public double ElectricEfficiency;
         public double ThermalEfficiency;

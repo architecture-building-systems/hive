@@ -57,11 +57,13 @@ namespace Hive.IO.GhDistributors
             //List<SolarThermal> st = new List<SolarThermal>();
 
             List<double> etas_PV = new List<double>();
+            List<double> etas_BIPV = new List<double>();
             List<double> etas_ST = new List<double>();
             List<double> etas_PVT_el = new List<double>();
             List<double> etas_PVT_therm = new List<double>();
 
             List<double> A_PV = new List<double>();
+            List<double> A_BIPV = new List<double>();
             List<double> A_ST = new List<double>();
             List<double> A_PVT = new List<double>();
 
@@ -73,6 +75,11 @@ namespace Hive.IO.GhDistributors
                         Photovoltaic _pv = (Photovoltaic)tech;
                         etas_PV.Add(_pv.RefEfficiencyElectric);
                         A_PV.Add(AreaMassProperties.Compute(_pv.SurfaceGeometry).Area);
+                        break;
+                    case "Hive.IO.EnergySystems.BuildingIntegratedPV":
+                        BuildingIntegratedPV _bipv = (BuildingIntegratedPV)tech;
+                        etas_BIPV.Add(_bipv.RefEfficiencyElectric);
+                        A_BIPV.Add(AreaMassProperties.Compute(_bipv.SurfaceGeometry).Area);
                         break;
                     case "Hive.IO.EnergySystems.SolarThermal":
                         SolarThermal _st = (SolarThermal) tech;
@@ -94,10 +101,12 @@ namespace Hive.IO.GhDistributors
 
             DA.SetDataList(0, etas_PV);
             DA.SetDataList(1, A_PV);
-            DA.SetDataList(2, etas_ST);
-            DA.SetDataList(3, A_ST);
-            DA.SetDataList(4, etas_PVT_el);
-            DA.SetDataList(5, etas_PVT_therm);
+            DA.SetDataList(2, etas_BIPV);
+            DA.SetDataList(3, A_BIPV);
+            DA.SetDataList(4, etas_ST);
+            DA.SetDataList(5, A_ST);
+            DA.SetDataList(6, etas_PVT_el);
+            DA.SetDataList(7, etas_PVT_therm);
         }
 
 

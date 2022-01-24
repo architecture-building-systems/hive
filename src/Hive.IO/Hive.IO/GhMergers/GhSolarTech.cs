@@ -135,6 +135,25 @@ namespace Hive.IO.GhMergers
                     }
                     solarTechInfused.Add(tech);
                 }
+                if (solarTech[i] is BuildingIntegratedPV)
+                {
+                    var tech = solarTech[i] as BuildingIntegratedPV;
+                    if (simple)
+                    {
+                        if (useTree)
+                            tech.SetInputComputeOutputSimple(IHourlyLists[i].ToArray());
+                        else
+                            tech.SetInputComputeOutputSimple(irradHourlyMatrix[i]);
+                    }
+                    else
+                    {
+                        if (useTree)
+                            tech.SetInputComputeOutput(IHourlyLists[i].ToArray(), air);
+                        else
+                            tech.SetInputComputeOutput(irradHourlyMatrix[i], air);
+                    }
+                    solarTechInfused.Add(tech);
+                }
                 else if (solarTech[i] is SolarThermal)
                 {
                     var tech = solarTech[i] as SolarThermal;
