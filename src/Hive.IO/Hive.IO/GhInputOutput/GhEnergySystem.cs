@@ -69,6 +69,9 @@ namespace Hive.IO.GhInputOutput
 
         private void ShowForm()
         {
+           // _viewModel.ConversionTechnologies._availableSurfaces;
+
+            //AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Attention! There are surface geometries in the Hizard that have not been assigned to any solar energy technology yet:"); 
             var form = new EnergySystemsInputForm();
             form.ShowDialog(_viewModel);
             ExpireSolution(true);
@@ -77,6 +80,9 @@ namespace Hive.IO.GhInputOutput
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            //_viewModel.ConversionTechnologies._availableSurfaces;
+
+            //AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Attention! There are surface geometries in the Hizard that have not been assigned to any solar energy technology yet:"); 
             var solarObjects = new List<GH_ObjectWrapper>();
             DA.GetDataList(0, solarObjects);
 
