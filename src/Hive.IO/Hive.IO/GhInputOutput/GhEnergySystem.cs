@@ -69,6 +69,7 @@ namespace Hive.IO.GhInputOutput
 
         private void ShowForm()
         {
+            
             var form = new EnergySystemsInputForm();
             form.ShowDialog(_viewModel);
             ExpireSolution(true);
@@ -77,7 +78,14 @@ namespace Hive.IO.GhInputOutput
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            var solarObjects = new List<GH_ObjectWrapper>();
+            //_viewModel.ConversionTechnologies
+            if(_viewModel.FreeSurfaces.Count() != 0)
+            {
+                //string freesurfaces[] = _viewModel.FreeSurfaces.ToArray();
+                var w = GH_RuntimeMessageLevel.Warning;
+                AddRuntimeMessage(w, String.Format("Attention! There are surface geometries in the Hizard that have not been assigned to any solar energy technology yet: {0}", _viewModel.FreeSurfaces));
+            }
+                var solarObjects = new List<GH_ObjectWrapper>();
             DA.GetDataList(0, solarObjects);
 
             var meshList = new List<Mesh>();
