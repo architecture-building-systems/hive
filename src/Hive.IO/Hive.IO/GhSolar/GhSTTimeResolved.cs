@@ -25,10 +25,10 @@ namespace Hive.IO.GhSolar
         {
             pManager.AddNumberParameter("T_in", "T_in", "Inlet temperature into the Solar Thermal Collector [°C], time series.", GH_ParamAccess.list);
             pManager.AddNumberParameter("T_amb", "T_amb", "Ambient air temperature at the collector [°C], time series.", GH_ParamAccess.list);
-            pManager.AddNumberParameter("OpticEff", "OpticEff", "Optical efficiency [-]", GH_ParamAccess.list);
-            pManager.AddNumberParameter("HeatLoss", "HeatLoss", "Heat loss coefficient [W/m2K]", GH_ParamAccess.list);
+            pManager.AddNumberParameter("OpticEff", "OpticEff", "Optical efficiency [-]", GH_ParamAccess.item);
+            pManager.AddNumberParameter("HeatLoss", "HeatLoss", "Heat loss coefficient [W/m2K]", GH_ParamAccess.item);
             pManager.AddNumberParameter("Irrad", "Irrad", "Irradiance on collector [W/m2], time series", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Area", "Area", "Surface area of the collector [m2]", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Area", "Area", "Surface area of the collector [m2]", GH_ParamAccess.item);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)

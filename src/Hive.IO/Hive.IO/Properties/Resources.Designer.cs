@@ -688,6 +688,16 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Solar_PerformanceRatio {
+            get {
+                object obj = ResourceManager.GetObject("Solar_PerformanceRatio", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Solar_PV_Simple {
             get {
                 object obj = ResourceManager.GetObject("Solar_PV_Simple", resourceCulture);

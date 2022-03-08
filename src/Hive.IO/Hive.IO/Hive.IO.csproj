@@ -210,6 +210,7 @@
     <Compile Include="GhDistributors\GhMainDistributor.cs" />
     <Compile Include="GhInputOutput\GhVisualizerAttributes.cs" />
     <Compile Include="GhSolar\GhOrientationFactor.cs" />
+    <Compile Include="GhSolar\GhSolarPerformanceRatioReader.cs" />
     <Compile Include="GhSolar\GhPVNoct.cs" />
     <Compile Include="GhSolar\GhPVSimple.cs" />
     <Compile Include="GhSolar\GhSTSimple.cs" />
@@ -413,6 +414,7 @@
   <ItemGroup>
     <Content Include="Resources\EnergySystems\flat_plate.jpg" />
     <Content Include="Resources\EnergySystems\vacuum_tube.jpg" />
+    <None Include="Resources\solar_PerformanceRatio.png" />
     <None Include="Resources\solar_SumTimeSeries.png" />
     <None Include="Resources\solar_Solarthermaltimeresult.png" />
     <None Include="Resources\solar_solarthermal.png" />

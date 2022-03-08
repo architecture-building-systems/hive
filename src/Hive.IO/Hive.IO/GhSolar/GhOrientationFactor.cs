@@ -16,13 +16,13 @@ namespace Hive.IO.GhSolar
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("G_flat", "G_flat", "Global irradiation, i.e. on the flat, in [kWh/m2]", GH_ParamAccess.list);
-            pManager.AddNumberParameter("G_angled", "G_angled", "Irradiation on an angle in [kWh/m2]", GH_ParamAccess.list);
+            pManager.AddNumberParameter("G_flat", "G_flat", "Global irradiation, i.e. on the flat, in [kWh/m2]", GH_ParamAccess.item);
+            pManager.AddNumberParameter("G_angled", "G_angled", "Irradiation on an angle in [kWh/m2]", GH_ParamAccess.item);
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("OF", "OF", "Orientation factor as a fraction [0.0, >1.0]", GH_ParamAccess.list);
+            pManager.AddNumberParameter("OF", "OF", "Orientation factor as a fraction [0.0, >1.0]", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)

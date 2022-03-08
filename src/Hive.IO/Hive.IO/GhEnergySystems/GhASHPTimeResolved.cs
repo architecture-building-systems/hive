@@ -35,9 +35,9 @@ namespace Hive.IO.GhEnergySystems
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("Q_th", "Q_th", "Heating load, time resolved [kW]", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Q_th", "Q_th", "Heating load, time resolved [kW]", GH_ParamAccess.list);
             pManager.AddNumberParameter("T_supply", "T_supply", "Supply temperature of ASHP [°C]", GH_ParamAccess.item);
-            pManager.AddNumberParameter("T_amb,t", "T_amb,t", "Ambient air temperature, time resolved [°C]", GH_ParamAccess.item);
+            pManager.AddNumberParameter("T_amb,t", "T_amb,t", "Ambient air temperature, time resolved [°C]", GH_ParamAccess.list);
             pManager.AddNumberParameter("PI_HP,1", "PI_1", "Technology parameter 1 for ASHP", GH_ParamAccess.item);
             pManager.AddNumberParameter("PI_HP,2", "PI_2", "Technology parameter 2 for ASHP", GH_ParamAccess.item);
             pManager.AddNumberParameter("PI_HP,3", "PI_3", "Technology parameter 3 for ASHP", GH_ParamAccess.item);
@@ -46,7 +46,7 @@ namespace Hive.IO.GhEnergySystems
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("x_el", "x_el", "Electricity demand to fulfil heating load [kW]", GH_ParamAccess.item);
+            pManager.AddNumberParameter("x_el", "x_el", "Electricity demand to fulfill heating load [kW]", GH_ParamAccess.item);
             pManager.AddNumberParameter("COP", "COP", "COP of ASHP [-]", GH_ParamAccess.item);
         }
 
