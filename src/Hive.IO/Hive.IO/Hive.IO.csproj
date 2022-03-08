@@ -210,9 +210,9 @@
     <Compile Include="GhDistributors\GhMainDistributor.cs" />
     <Compile Include="GhInputOutput\GhVisualizerAttributes.cs" />
     <Compile Include="GhSolar\GhOrientationFactor.cs" />
-    <Compile Include="GhSolar\GhSolarPerformanceRatioReader.cs" />
     <Compile Include="GhSolar\GhPVNoct.cs" />
     <Compile Include="GhSolar\GhPVSimple.cs" />
+    <Compile Include="GhSolar\GhSolarPerformanceRatioReader.cs" />
     <Compile Include="GhSolar\GhSTSimple.cs" />
     <Compile Include="GhSolar\GhSTTimeResolved.cs" />
     <Compile Include="GhSolar\GhSumOverTimePeriod.cs" />

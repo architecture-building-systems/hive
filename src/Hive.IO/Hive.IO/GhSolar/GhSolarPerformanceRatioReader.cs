@@ -18,7 +18,7 @@ namespace Hive.IO.GhSolar
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("performance_scenario", "perf_scen", "Scenario for performance ratio, like dirty roof, clean facade, shaded roof, etc", GH_ParamAccess.list);
+            pManager.AddNumberParameter("performance_scenario", "perf_scen", "Scenario for performance ratio, like dirty roof, clean facade, shaded roof, etc", GH_ParamAccess.item);
         }
 
         protected override void RegisterOutputParams(GH_OutputParamManager pManager)
@@ -28,8 +28,11 @@ namespace Hive.IO.GhSolar
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            List<object> perf_scen = new List<object>();
-            if (!DA.GetDataList(0, perf_scen)) return;
+/*            List<object> perf_scen = new List<object>();
+            if (!DA.GetDataList(0, perf_scen)) return;*/
+
+            double perf_scen = 0.0;
+            if (!DA.GetData(0, ref perf_scen)) return;
 
             System.Diagnostics.Debug.WriteLine(perf_scen);
 
