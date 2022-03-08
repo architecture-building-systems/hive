@@ -30,10 +30,10 @@ namespace Hive.IO.GhSolar
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddNumberParameter("Global_Irradiation", "G", "Global horizontal irradiation, in [kWh/m²]", GH_ParamAccess.item);
-            pManager.AddNumberParameter("FormFactor", "F_f", "Form factor, also known as orientation factor, that defines how much of the global annual irradiation is effectively used, depending on the angle of the PV surface. Fractional value [0.0, >1.0]. (Default: 1.0)", GH_ParamAccess.item);
-            pManager.AddNumberParameter("SurfaceArea", "A", "PV surface are in [m²]. (Default: 1.0)", GH_ParamAccess.item);
-            pManager.AddNumberParameter("PVEfficiency", "eta_PV", "PV technology efficiency, fractional value [0.0, 1.0]. (Default: 0.15)", GH_ParamAccess.item);
-            pManager.AddNumberParameter("PerformanceRatio", "PR", "Performance Ratio, depends on how well the PV is exposed (shaded, not) and how clean it is (dirty, dusty, super clean). Fractional [0.0, 1.0]. (Default: 0.75)", GH_ParamAccess.item);
+            pManager.AddNumberParameter("FormFactor", "F_f", "Form factor, also known as orientation factor, that defines how much of the global annual irradiation is effectively used, depending on the angle of the PV surface. Fractional value [0.0, >1.0]. (Default: 1.0)", GH_ParamAccess.item, 1.0);
+            pManager.AddNumberParameter("SurfaceArea", "A", "PV surface are in [m²]. (Default: 1.0)", GH_ParamAccess.item, 1.0);
+            pManager.AddNumberParameter("PVEfficiency", "eta_PV", "PV technology efficiency, fractional value [0.0, 1.0]. (Default: 0.15)", GH_ParamAccess.item, 0.15);
+            pManager.AddNumberParameter("PerformanceRatio", "PR", "Performance Ratio, depends on how well the PV is exposed (shaded, not) and how clean it is (dirty, dusty, super clean). Fractional [0.0, 1.0]. (Default: 0.75)", GH_ParamAccess.item, 0.75);
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)

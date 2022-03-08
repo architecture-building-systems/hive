@@ -24,12 +24,12 @@ namespace Hive.IO.GhSolar
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("A", "A", "Area of PV system in [m²].Default is 1.0", GH_ParamAccess.item);
-            pManager.AddNumberParameter("eta_PVref", "eta_PVref", "Reference PV efficiency under NOCT in [-]. Default is 0.15", GH_ParamAccess.item);
-            pManager.AddNumberParameter("beta", "beta", "Temperature coefficient [-]. Default is 0.004", GH_ParamAccess.item);
-            pManager.AddNumberParameter("NOCT", "NOCT", "Nominal operating cell temperature in [°C]. Default is 45.0", GH_ParamAccess.item);
-            pManager.AddNumberParameter("NOCT_ref", "NOCT_ref", "Reference temperature in [°C]. Default is 20.0", GH_ParamAccess.item);
-            pManager.AddNumberParameter("NOCT_sol", "NOCT_sol", "Reference irradiance in [W/m²]. Default is 800.0", GH_ParamAccess.item);
+            pManager.AddNumberParameter("A", "A", "Area of PV system in [m²].Default is 1.0", GH_ParamAccess.item, 1.0);
+            pManager.AddNumberParameter("eta_PVref", "eta_PVref", "Reference PV efficiency under NOCT in [-]. Default is 0.15", GH_ParamAccess.item, 0.15);
+            pManager.AddNumberParameter("beta", "beta", "Temperature coefficient [-]. Default is 0.004", GH_ParamAccess.item, 0.004);
+            pManager.AddNumberParameter("NOCT", "NOCT", "Nominal operating cell temperature in [°C]. Default is 45.0", GH_ParamAccess.item, 45.0);
+            pManager.AddNumberParameter("NOCT_ref", "NOCT_ref", "Reference temperature in [°C]. Default is 20.0", GH_ParamAccess.item, 20.0);
+            pManager.AddNumberParameter("NOCT_sol", "NOCT_sol", "Reference irradiance in [W/m²]. Default is 800.0", GH_ParamAccess.item, 800.0);
             pManager.AddNumberParameter("T_amb", "T_amb", "Ambient temperature hourly time series, 8760 entries, in [°C]", GH_ParamAccess.list);
             pManager.AddNumberParameter("I", "I", "Solar irradiance on the panel. Time series with 8760 entries, in [W/m²]", GH_ParamAccess.list);
         }
