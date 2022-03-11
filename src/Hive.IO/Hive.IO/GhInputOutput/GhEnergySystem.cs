@@ -78,12 +78,15 @@ namespace Hive.IO.GhInputOutput
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            //_viewModel.ConversionTechnologies
+           
             if(_viewModel.FreeSurfaces.Count() != 0)
             {
-                //string freesurfaces[] = _viewModel.FreeSurfaces.ToArray();
                 var w = GH_RuntimeMessageLevel.Warning;
-                AddRuntimeMessage(w, String.Format("Attention! There are surface geometries in the Hizard that have not been assigned to any solar energy technology yet: {0}", _viewModel.FreeSurfaces));
+                List<string> list = new List<string>();
+                foreach (var srf in _viewModel.FreeSurfaces)
+                    list.Add(srf.Name);
+                string[] surfaces = list.ToArray();
+                AddRuntimeMessage(w, String.Format("Attention! There are surface geometries in the Hizard that have not been assigned to any solar energy technology yet: {0}", string.Join(" ,", surfaces)));
             }
                 var solarObjects = new List<GH_ObjectWrapper>();
             DA.GetDataList(0, solarObjects);
