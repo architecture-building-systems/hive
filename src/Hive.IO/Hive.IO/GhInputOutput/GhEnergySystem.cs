@@ -86,7 +86,7 @@ namespace Hive.IO.GhInputOutput
                 foreach (var srf in _viewModel.FreeSurfaces)
                     list.Add(srf.Name);
                 string[] surfaces = list.ToArray();
-                AddRuntimeMessage(w, String.Format("Attention! There are surface geometries in the Hizard that have not been assigned to any solar energy technology yet: {0}", string.Join(" ,", surfaces)));
+                AddRuntimeMessage(w, String.Format("Attention! There are surface geometries in the Hizard that have not been assigned to any solar energy technology yet:\n- {0}", string.Join("\n- ", surfaces)));
             }
                 var solarObjects = new List<GH_ObjectWrapper>();
             DA.GetDataList(0, solarObjects);
