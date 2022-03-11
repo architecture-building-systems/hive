@@ -52,6 +52,7 @@ namespace Hive.IO.Forms
             };
         }
 
+        //public IEnumerable<SurfaceViewModel> _availableSurfaces = ConversionTechPropertiesViewModel.
         public BindingList<EmitterPropertiesViewModel> Emitters { get; }
         public ICollectionView EmitterPropertiesView => CollectionViewSource.GetDefaultView(Emitters);
 
@@ -82,5 +83,7 @@ namespace Hive.IO.Forms
                 sm => sm.Connection == null || sm.Connection == vm || !sm.Connection.IsSurfaceTech ||
                       !ConversionTechnologies.Contains(sm.Connection));
         }
+
+       
     }
 }
