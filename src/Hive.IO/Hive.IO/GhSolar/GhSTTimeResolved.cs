@@ -13,9 +13,9 @@ namespace Hive.IO.GhSolar
         //found in: 10.1016/j.apenergy.2016.07.055
 
         public GhSTTimeResolved() :
-            base("Solar Thermal time resolved Energy System", "SolarThermalTimeResolved",
+            base("Solar Thermal time resolved Energy System C#", "SolarThermalTimeResolved",
                 "Calculates the time resolved heating energy generation from a solar thermal collector in [kWh]. Also outputs its time resolved efficiency.",
-                "[hive]", "Solar")
+                "[hive]", "Solar C#")
         {
         }
 
@@ -86,7 +86,7 @@ namespace Hive.IO.GhSolar
 
         protected override System.Drawing.Bitmap Icon => Properties.Resources.Solar_ST_TimeResult;
 
-        public override Guid ComponentGuid => new Guid("694bc052-0bc9-44ca-82a9-dfdf591665b4");
-
+        //public override Guid ComponentGuid => new Guid("694bc052-0bc9-44ca-82a9-dfdf591665b4");
+        public override Guid ComponentGuid => Guid.NewGuid();
     }
 }

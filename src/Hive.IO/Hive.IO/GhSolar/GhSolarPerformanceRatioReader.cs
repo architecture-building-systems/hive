@@ -8,9 +8,9 @@ namespace Hive.IO.GhSolar
     public class GhSolarPerformanceRatioReader : GH_Component
     {
         public GhSolarPerformanceRatioReader() :
-            base("Solar Performance Ratio Reader", "PerformanceRatioReader",
+            base("Solar Performance Ratio Reader C#", "PerformanceRatioReader",
                 "Converts a Solar Performance Ratio Json to a numeric value",
-                "[hive]", "Solar")
+                "[hive]", "Solar C#")
         {
         }
 
@@ -41,6 +41,7 @@ namespace Hive.IO.GhSolar
 
         protected override System.Drawing.Bitmap Icon => Properties.Resources.Solar_PerformanceRatio;
 
-        public override Guid ComponentGuid => new Guid("6ff9899d-64a9-46ef-817c-f1521fa605e1");
+        //public override Guid ComponentGuid => new Guid("6ff9899d-64a9-46ef-817c-f1521fa605e1");
+        public override Guid ComponentGuid => Guid.NewGuid();
     }
 }

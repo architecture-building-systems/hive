@@ -22,9 +22,9 @@ namespace Hive.IO.GhEnergySystems
         // 
 
         public GhChillerSimple() :
-            base("Chiller Energy System", "ChillerSimple",
+            base("Chiller Energy System C#", "ChillerSimple",
                 "Calculates total operating cost and carbon emissions of a chiller (split A/C) to meet cooling loads.", 
-                "[hive]", "Energy Systems")
+                "[hive]", "Energy Systems C#")
         {
         }
 
@@ -69,7 +69,7 @@ namespace Hive.IO.GhEnergySystems
         protected override System.Drawing.Bitmap Icon => Properties.Resources.EnergySystems_Chiller_Simple;
 
 
-        public override Guid ComponentGuid => new Guid("bc45371e-6be4-49e3-9da4-996700c57cc1");
-
+        //public override Guid ComponentGuid => new Guid("bc45371e-6be4-49e3-9da4-996700c57cc1");
+        public override Guid ComponentGuid => Guid.NewGuid();
     }
 }

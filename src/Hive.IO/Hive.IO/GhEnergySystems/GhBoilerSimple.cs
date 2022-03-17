@@ -20,9 +20,9 @@ namespace Hive.IO.GhEnergySystems
         //     - carbon emissions [kgCO2eq.]        
         /// </summary>
         public GhBoilerSimple()
-          : base("Boiler Energy System", "BoilerSimple",
+          : base("Boiler Energy System C#", "BoilerSimple",
               "Calculates total operating cost and carbon emissions of a boiler to meet heating loads.",
-              "[hive]", "Energy Systems")
+              "[hive]", "Energy Systems C#")
         {
         }
 

@@ -5,18 +5,18 @@ using Grasshopper.Kernel;
 
 using sm = SolarModel;
 
-namespace Hive.IO.GhCore
+namespace Hive.IO.GhSolar
 {
     public class GhSolarUnobstructed : GH_Component
     {
         public GhSolarUnobstructed()
-          : base("Solar Potentials Unobstructed", "SolarPotentialsUnobstructed",
+          : base("Solar Potentials Unobstructed C#", "SolarPotentialsUnobstructed",
               "Calculates solar irradiance on an unobstructed plane, using GhSolar.gha and SolarModel.dll (https://github.com/christophwaibel/GH_Solar_V2)",
-              "[hive]", "Solar")
+              "[hive]", "Solar C#")
         {
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.primary;
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
 
         #region defaults
         const double LatitudeDefault = 47.36667;

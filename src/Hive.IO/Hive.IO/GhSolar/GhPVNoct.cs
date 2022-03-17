@@ -14,9 +14,9 @@ namespace Hive.IO.GhSolar
         //- PV system area
 
         public GhPVNoct() :
-            base("Photovoltaic time resolved Energy System", "PvTimeResolved",
+            base("Photovoltaic time resolved Energy System C#", "PvTimeResolved",
                 "Calculates time resolved electricity generation and cell efficiency of a photovoltaic panel based on the Nominal Operating Cell Temperature method, Eqt. A.10 in doi: 10.1016/j.apenergy.2019.03.177",
-                "[hive]", "Solar")
+                "[hive]", "Solar C#")
         {
         }
 
@@ -88,6 +88,7 @@ namespace Hive.IO.GhSolar
 
         protected override System.Drawing.Bitmap Icon => Properties.Resources.Solar_PV_TimeResult;
 
-        public override Guid ComponentGuid => new Guid("05dca691-8d6b-455c-a8d4-3cf0c98eaf7e");
+        //public override Guid ComponentGuid => new Guid("05dca691-8d6b-455c-a8d4-3cf0c98eaf7e");
+        public override Guid ComponentGuid => Guid.NewGuid();
     }
 }

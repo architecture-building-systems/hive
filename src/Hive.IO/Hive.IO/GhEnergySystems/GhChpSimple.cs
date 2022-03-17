@@ -20,9 +20,9 @@ namespace Hive.IO.GhEnergySystems
     public class GhChpSimple : GH_Component
     {
         public GhChpSimple()
-          : base("Combined Heat and Power Energy System", "ChpSimple",
+          : base("Combined Heat and Power Energy System C#", "ChpSimple",
               "Calculates total heating or electricity generation, consumed fuel, operating cost and carbon emissions from a Combined Heat and Power system.",
-              "[hive]", "Energy Systems")
+              "[hive]", "Energy Systems C#")
         {
         }
 
@@ -96,5 +96,5 @@ namespace Hive.IO.GhEnergySystems
 
 
         public override Guid ComponentGuid => new Guid("15ea9737-e422-4e02-bec8-44fdf1531568");
-    }
+    }  
 }

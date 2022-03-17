@@ -169,7 +169,7 @@
     </Compile>
     <Compile Include="GhCore\GhAdaptiveComfort.cs" />
     <Compile Include="GhCore\GhSIA380.cs" />
-    <Compile Include="GhCore\GhSolarUnobstructed.cs" />
+    <Compile Include="GhSolar\GhSolarUnobstructed.cs" />
     <Compile Include="GhDistributors\GhDistConversionTech.cs" />
     <Compile Include="GhDistributors\GhDistEmitter.cs" />
     <Compile Include="GhDistributors\GhDistEnvironment.cs" />

@@ -25,9 +25,9 @@ namespace Hive.IO.GhEnergySystems
         //-x_el,t[kW]
 
         public GhASHPTimeResolved() :
-            base("Air Source Heat Pump time resolved Energy System", "AshpTimeResolved",
+            base("Air Source Heat Pump time resolved Energy System C#", "AshpTimeResolved",
                 "Calculates the time resolved Coefficient of Performance (COP) of an air source heat pump, as well as consumed electricity of the heat pump, to meet heating energy demand.",
-                "[hive]", "Energy Systems")
+                "[hive]", "Energy Systems C#")
         {
         }
 
@@ -89,7 +89,7 @@ namespace Hive.IO.GhEnergySystems
 
         protected override System.Drawing.Bitmap Icon => Properties.Resources.EnergySystems_Heatpump_AirScource_TimeResult;
 
-        public override Guid ComponentGuid => new Guid("b41bbc9d-1b0f-4b8c-8485-5f666ae7be5f");
-
+        //public override Guid ComponentGuid => new Guid("b41bbc9d-1b0f-4b8c-8485-5f666ae7be5f");
+        public override Guid ComponentGuid => Guid.NewGuid();
     }
 }

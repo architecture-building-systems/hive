@@ -25,9 +25,9 @@ namespace Hive.IO.GhEnergySystems
         //    - COP of chiller [-]
 
         public GhChillerTimeResolved() :
-            base("Chiller time resolved Energy System", "ChillerTimeResolved",
+            base("Chiller time resolved Energy System C#", "ChillerTimeResolved",
                 "Calculates time resolved operating cost and carbon emissions of a chiller (split A/C) to meet cooling loads.",
-                "[hive]", "Energy Systems")
+                "[hive]", "Energy Systems C#")
         {
         }
 
@@ -90,7 +90,8 @@ namespace Hive.IO.GhEnergySystems
 
         protected override System.Drawing.Bitmap Icon => Properties.Resources.EnergySystems_Chiller_TimeResult;
 
-        public override Guid ComponentGuid => new Guid("699ed23d-ea43-4905-ae2b-0a242bda7eb0");
+        //public override Guid ComponentGuid => new Guid("699ed23d-ea43-4905-ae2b-0a242bda7eb0");
+        public override Guid ComponentGuid => Guid.NewGuid();
     }
 }
 

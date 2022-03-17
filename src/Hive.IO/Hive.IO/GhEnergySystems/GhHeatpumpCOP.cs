@@ -18,9 +18,9 @@ namespace Hive.IO.GhEnergySystems
         //    - COP_W : coefficient of performance[-]
 
         public GhHeatpumpCOP() :
-            base("Heat pump COP Energy System", "HpCopSimple",
+            base("Heat pump COP Energy System C#", "HpCopSimple",
                 "Calculates the Coefficient of Performance (COP) of a simple heat pump.",
-                "[hive]", "Energy Systems")
+                "[hive]", "Energy Systems C#")
         {
         }
 
@@ -58,7 +58,7 @@ namespace Hive.IO.GhEnergySystems
 
         protected override System.Drawing.Bitmap Icon => Properties.Resources.EnergySystems_Heatpump_COP;
 
-        public override Guid ComponentGuid => new Guid("844f55ec-acf3-4f26-bc4a-dda72ae6a5ea");
-
+        //public override Guid ComponentGuid => new Guid("844f55ec-acf3-4f26-bc4a-dda72ae6a5ea");
+        public override Guid ComponentGuid => Guid.NewGuid();
     }
 }

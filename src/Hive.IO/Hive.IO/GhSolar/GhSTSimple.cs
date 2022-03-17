@@ -6,9 +6,9 @@ namespace Hive.IO.GhSolar
     public class GhSTSimple : GH_Component
     {
         public GhSTSimple() 
-            : base("Solar Thermal Energy System", "SolarThermalSimple",
+            : base("Solar Thermal Energy System C#", "SolarThermalSimple",
                   "Calculates the total yield of a solar thermal collector using simplified equation (Q_th = G * F_F * A * eta_K * R_V)",
-                  "[hive]", "Solar")
+                  "[hive]", "Solar C#")
         {
         }
 
@@ -49,7 +49,8 @@ namespace Hive.IO.GhSolar
 
         protected override System.Drawing.Bitmap Icon => Properties.Resources.Solar_ST_Simple;
 
-        public override Guid ComponentGuid => new Guid("b1ddb905-855d-4997-b22b-e33aa58e7ab8");
+        //public override Guid ComponentGuid => new Guid("b1ddb905-855d-4997-b22b-e33aa58e7ab8");
+        public override Guid ComponentGuid => Guid.NewGuid();
 
     }
 }

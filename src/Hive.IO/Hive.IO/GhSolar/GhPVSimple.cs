@@ -19,9 +19,9 @@ namespace Hive.IO.GhSolar
         //- E_PV - PV electricity generation[kWh]
 
         public GhPVSimple() :
-            base("Photovoltaic Energy System", "PvSimple",
+            base("Photovoltaic Energy System C#", "PvSimple",
                 "Calculates total photovoltaic electricity generation using simplified a equation (E_PV = G * F_F * A * eta_PV * PR)", 
-                "[hive]", "Solar")
+                "[hive]", "Solar C#")
         {
         }
 
@@ -62,6 +62,7 @@ namespace Hive.IO.GhSolar
 
         protected override System.Drawing.Bitmap Icon => Properties.Resources.Solar_PV_Simple;
 
-        public override Guid ComponentGuid => new Guid("49efa3bc-c59f-4b77-9adb-761e45f67aea");
+        //public override Guid ComponentGuid => new Guid("49efa3bc-c59f-4b77-9adb-761e45f67aea");
+        public override Guid ComponentGuid => Guid.NewGuid();
     }
 }

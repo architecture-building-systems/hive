@@ -13,9 +13,9 @@ namespace Hive.IO.GhSolar
         //- year
 
         public GhSumOverTimePeriod() :
-            base("Summarize PV electricity yield", "SumPvYield",
+            base("Summarize PV electricity yield C#", "SumPvYield",
                 "Summarizes the PV electricity yield per specified time period, e.g. monthly, daily, or entire year.",
-                "[hive]", "Solar")
+                "[hive]", "Solar C#")
         {
         }
 
@@ -91,6 +91,7 @@ namespace Hive.IO.GhSolar
 
         protected override System.Drawing.Bitmap Icon => Properties.Resources.Solar_SumTimeSeries;
 
-        public override Guid ComponentGuid => new Guid("9d0764bf-ebc8-4d61-92a7-8c6e7297def9");
+        //public override Guid ComponentGuid => new Guid("9d0764bf-ebc8-4d61-92a7-8c6e7297def9");
+        public override Guid ComponentGuid => Guid.NewGuid();
     }
 }

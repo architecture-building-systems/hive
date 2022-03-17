@@ -16,9 +16,9 @@ namespace Hive.IO.GhEnergySystems
         //output:
         //E = electricity loads[kWh]
         public GhHeatpumpSimple()
-            : base("Heat pump Energy System", "HeatPumpSimple",
+            : base("Heat pump Energy System C#", "HeatPumpSimple",
               "Calculates total consumed electricity of a simple heat pump, given a Coefficient of Performance, to meet heating energy demand.",
-              "[hive]", "Energy Systems"
+              "[hive]", "Energy Systems C#"
             )
         {
         }
@@ -50,6 +50,7 @@ namespace Hive.IO.GhEnergySystems
 
         protected override System.Drawing.Bitmap Icon => Properties.Resources.EnergySystems_Heatpump_AirSource;
 
-        public override Guid ComponentGuid => new Guid("1a1f54f6-9955-4168-9c4a-da5d669022f2");
+        //public override Guid ComponentGuid => new Guid("1a1f54f6-9955-4168-9c4a-da5d669022f2");
+        public override Guid ComponentGuid => Guid.NewGuid();
     }
 }

@@ -6,9 +6,9 @@ namespace Hive.IO.GhSolar
     public class GhOrientationFactor : GH_Component
     {
         public GhOrientationFactor() :
-            base("Solar Orientation Factor", "OrientationFactor",
+            base("Solar Orientation Factor C#", "OrientationFactor",
                 "Solar orientation factor of a surface",
-                "[hive]", "Solar")
+                "[hive]", "Solar C#")
         {
         }
 
@@ -39,6 +39,7 @@ namespace Hive.IO.GhSolar
 
         protected override System.Drawing.Bitmap Icon => Properties.Resources.Solar_OrientationFactor;
 
-        public override Guid ComponentGuid => new Guid("dfde3d64-e63d-4715-a6b9-b045920d8c97");
+        //public override Guid ComponentGuid => new Guid("dfde3d64-e63d-4715-a6b9-b045920d8c97");
+        public override Guid ComponentGuid => Guid.NewGuid();
     }
 }
