@@ -212,11 +212,11 @@
     <Compile Include="GhSolar\GhOrientationFactor.cs" />
     <Compile Include="GhSolar\GhPVNoct.cs" />
     <Compile Include="GhSolar\GhPVSimple.cs" />
-    <Compile Include="GhSolar\GhSolarPerformanceRatioReader.cs" />
     <Compile Include="GhSolar\GhSTSimple.cs" />
     <Compile Include="GhSolar\GhSTTimeResolved.cs" />
     <Compile Include="GhSolar\GhSumOverTimePeriod.cs" />
     <Compile Include="GhValueLists\GhListResults.cs" />
+    <Compile Include="GhValueLists\GhPerformanceRatioList.cs" />
     <Compile Include="Plots\AmrPlotConstants.cs" />
     <Compile Include="Plots\LifetimeAmrPlot.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -299,6 +299,7 @@
     <None Include="packages.config" />
     <None Include="Resources\bipv_efficiency.csv" />
     <None Include="Resources\gc_efficiency.csv" />
+    <None Include="Resources\performance_ratio.csv" />
     <None Include="Resources\pvt_efficiency.csv" />
     <None Include="Resources\pv_efficiency.csv" />
     <None Include="Resources\st_efficiency.csv" />
