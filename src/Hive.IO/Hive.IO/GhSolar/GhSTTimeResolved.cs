@@ -53,13 +53,13 @@ namespace Hive.IO.GhSolar
             List<double> T_amb = new List<double>();
             if (!DA.GetDataList(1, T_amb)) return;
             double FRtaualpha = 0.0;
-            if (!DA.GetData(0, ref FRtaualpha)) return;
+            if (!DA.GetData(2, ref FRtaualpha)) return;
             double FRUL = 0.0;
-            if (!DA.GetData(0, ref FRUL)) return;
+            if (!DA.GetData(3, ref FRUL)) return;
             List<double> irradiance = new List<double>();
-            if (!DA.GetDataList(6, irradiance)) return;
+            if (!DA.GetDataList(4, irradiance)) return;
             double A = 0.0;
-            if (!DA.GetData(0, ref A)) return;
+            if (!DA.GetData(5, ref A)) return;
 
             var horizon = new[] { T_in.Count, T_amb.Count, irradiance.Count }.Min();
 
@@ -80,13 +80,12 @@ namespace Hive.IO.GhSolar
                 heating[i] = irradiance[i] * eta[i] * A / 1000.0;
             }
 
-            DA.SetData(0, heating);
-            DA.SetData(1, eta);
+            DA.SetDataList(0, heating);
+            DA.SetDataList(1, eta);
         }
 
         protected override System.Drawing.Bitmap Icon => Properties.Resources.Solar_ST_TimeResult;
 
-        //public override Guid ComponentGuid => new Guid("694bc052-0bc9-44ca-82a9-dfdf591665b4");
-        public override Guid ComponentGuid => Guid.NewGuid();
+        public override Guid ComponentGuid => new Guid("8e7920e0-e4b6-4ec1-b01f-29273b3e5d1d");
     }
 }

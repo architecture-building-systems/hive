@@ -28,23 +28,23 @@ namespace Hive.IO.GhSolar
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddNumberParameter("Tilt", "Tilt", "Panel tilt in degree", GH_ParamAccess.list);
-            pManager.AddNumberParameter("Azimuth", "Azimuth", "Panel azimuth in degree", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Tilt", "Tilt", "Panel tilt in degree", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Azimuth", "Azimuth", "Panel azimuth in degree", GH_ParamAccess.item);
             pManager.AddNumberParameter("DHI", "DHI", "Diffuse Horizontal Irradiance time series, 8760 values in [W/m²] from a weatherfile.", GH_ParamAccess.list);
             pManager.AddNumberParameter("DNI", "DNI", "Direct Normal Irradiance time series, 8760 values in [W/m²] from a weatherfile.", GH_ParamAccess.list);
+            
             pManager.AddNumberParameter("Latitude", "Latitude", "Latitude of the location. Default value is for Zurich, Switzerland", GH_ParamAccess.item, LatitudeDefault);
+            pManager[4].Optional = true;
             pManager.AddNumberParameter("Longitude", "Longitude", "Longitude of the location. Default value is for Zurich, Switzerland", GH_ParamAccess.item, LongitudeDefault);
+            pManager[5].Optional = true;
             pManager.AddNumberParameter("SolarAzi", "Solarazi", "8760 time series of solar azimuth angles in [°], e.g from a weatherfile. If no data provided, azimuth will be calculated according to Blanco-Muriel (2001).", GH_ParamAccess.list, new List<double>());
             pManager[6].Optional = true;
             pManager.AddNumberParameter("SolarAlti", "Solaralti", "8760 time series of solar altitude angles in [°], e.g from a weatherfile. If no data provided, altitude will be calculated according to Blanco-Muriel (2001).", GH_ParamAccess.list, new List<double>());
             pManager[7].Optional = true;
             pManager.AddNumberParameter("Aw", "Aw", "Panel surface area. optional", GH_ParamAccess.item, AwDefault);
+            pManager[8].Optional = true;
             pManager.AddIntegerParameter("Timezone", "Timezone", "timezone?", GH_ParamAccess.item, TimezoneDefault);
-
-            for (int i = 0; i < pManager.ParamCount; i++)
-            {
-                pManager[i].Optional = true;
-            }
+            pManager[9].Optional = true;
         }
 
 
@@ -57,12 +57,10 @@ namespace Hive.IO.GhSolar
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             // Required params
-            List<double> tilt = new List<double>();
-            if (!DA.GetDataList(0, tilt)) return;
-            List<double> azimuth = new List<double>();
-            if (!DA.GetDataList(1, azimuth)) return;
-            if (tilt.Count == 0 || azimuth.Count == 0) throw new ArgumentException("Tilt or aizmuth have no values. Are you sure there is at least one window?");
-
+            double tilt = new double();
+            if (!DA.GetData(0, ref tilt)) return;
+            double azimuth = new double();
+            if (!DA.GetData(1, ref azimuth)) return;
             List<double> DHI = new List<double>();
             if (!DA.GetDataList(2, DHI)) return;
             List<double> DNI = new List<double>();
@@ -83,12 +81,12 @@ namespace Hive.IO.GhSolar
             DA.GetData(9, ref timezone);
 
             // Calc and output
-            var annualPotential = ComputeAnnualPotential(tilt.ToArray(), azimuth.ToArray(), DHI, DNI, latitude, longitude, solarazi, solaralti, Aw, timezone);
+            var annualPotential = ComputeAnnualPotential(tilt, azimuth, DHI, DNI, latitude, longitude, solarazi, solaralti, Aw, timezone);
             DA.SetDataList(0, annualPotential);
         }
 
         public double[] ComputeAnnualPotential(
-            double[] tilt, double[] azimuth,
+            double tilt, double azimuth,
             List<double> DHI, List<double> DNI,
             double latitude, double longitude,
             List<double> solarazi, List<double> solaralti,

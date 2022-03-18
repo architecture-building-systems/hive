@@ -69,7 +69,6 @@ namespace Hive.IO.GhEnergySystems
         protected override System.Drawing.Bitmap Icon => Properties.Resources.EnergySystems_Chiller_Simple;
 
 
-        //public override Guid ComponentGuid => new Guid("bc45371e-6be4-49e3-9da4-996700c57cc1");
-        public override Guid ComponentGuid => Guid.NewGuid();
+        public override Guid ComponentGuid => new Guid("442d18ba-ed3f-4f21-aa81-17b0fd331ec6");
     }
 }

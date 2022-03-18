@@ -50,7 +50,6 @@ namespace Hive.IO.GhEnergySystems
 
         protected override System.Drawing.Bitmap Icon => Properties.Resources.EnergySystems_Heatpump_AirSource;
 
-        //public override Guid ComponentGuid => new Guid("1a1f54f6-9955-4168-9c4a-da5d669022f2");
-        public override Guid ComponentGuid => Guid.NewGuid();
+        public override Guid ComponentGuid => new Guid("29d3b83b-038f-4b19-8667-aad256f6b1e4");
     }
 }

@@ -46,8 +46,8 @@ namespace Hive.IO.GhEnergySystems
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddNumberParameter("x_el", "x_el", "Electricity demand to fulfill heating load [kW]", GH_ParamAccess.item);
-            pManager.AddNumberParameter("COP", "COP", "COP of ASHP [-]", GH_ParamAccess.item);
+            pManager.AddNumberParameter("x_el", "x_el", "Electricity demand to fulfill heating load [kW]", GH_ParamAccess.list);
+            pManager.AddNumberParameter("COP", "COP", "COP of ASHP [-]", GH_ParamAccess.list);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
@@ -82,14 +82,13 @@ namespace Hive.IO.GhEnergySystems
                 x_el[t] = Q_th[t] / COP[t];
             }
 
-            DA.SetData(0, x_el);
-            DA.SetData(1, COP);
+            DA.SetDataList(0, x_el);
+            DA.SetDataList(1, COP);
 
         }
 
         protected override System.Drawing.Bitmap Icon => Properties.Resources.EnergySystems_Heatpump_AirScource_TimeResult;
 
-        //public override Guid ComponentGuid => new Guid("b41bbc9d-1b0f-4b8c-8485-5f666ae7be5f");
-        public override Guid ComponentGuid => Guid.NewGuid();
+        public override Guid ComponentGuid => new Guid("959a2b0b-c23d-4700-93af-b9301ce415b7");
     }
 }

@@ -82,16 +82,15 @@ namespace Hive.IO.GhEnergySystems
                 total_emissions[t] = elec_load[t] * elec_emissions[t];
             }
 
-            DA.SetData(0, elec_load);
-            DA.SetData(1, total_cost);
-            DA.SetData(2, total_emissions);
-            DA.SetData(2, COP);
+            DA.SetDataList(0, elec_load);
+            DA.SetDataList(1, total_cost);
+            DA.SetDataList(2, total_emissions);
+            DA.SetDataList(3, COP);
         }
 
         protected override System.Drawing.Bitmap Icon => Properties.Resources.EnergySystems_Chiller_TimeResult;
 
-        //public override Guid ComponentGuid => new Guid("699ed23d-ea43-4905-ae2b-0a242bda7eb0");
-        public override Guid ComponentGuid => Guid.NewGuid();
+        public override Guid ComponentGuid => new Guid("e6b97781-f103-41f2-b967-1254e8e9e220");
     }
 }
 

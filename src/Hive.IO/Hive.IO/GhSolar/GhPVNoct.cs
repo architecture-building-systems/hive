@@ -68,8 +68,8 @@ namespace Hive.IO.GhSolar
                 pv_yield[i] = A * eta_pv[i] * I[i];
             }
 
-            DA.SetData(0, pv_yield);
-            DA.SetData(1, eta_pv);
+            DA.SetDataList(0, pv_yield);
+            DA.SetDataList(1, eta_pv);
         }
 
         public double[] pv_efficiency(double eta_PVref, double beta, double NOCT, double NOCT_ref, double NOCT_sol, List<double> T_amb, List<double> I)
@@ -88,7 +88,6 @@ namespace Hive.IO.GhSolar
 
         protected override System.Drawing.Bitmap Icon => Properties.Resources.Solar_PV_TimeResult;
 
-        //public override Guid ComponentGuid => new Guid("05dca691-8d6b-455c-a8d4-3cf0c98eaf7e");
-        public override Guid ComponentGuid => Guid.NewGuid();
+        public override Guid ComponentGuid => new Guid("342c928a-31d4-4092-b20f-462595b699ed");
     }
 }

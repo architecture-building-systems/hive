@@ -58,9 +58,9 @@ namespace Hive.IO.GhEnergySystems
                 carbon[t] = gas_consumed[t] * carrier_emissions[t];
             }
 
-            DA.SetData(0, gas_consumed);
-            DA.SetData(1, cost);
-            DA.SetData(2, carbon);
+            DA.SetDataList(0, gas_consumed);
+            DA.SetDataList(1, cost);
+            DA.SetDataList(2, carbon);
         }
 
 

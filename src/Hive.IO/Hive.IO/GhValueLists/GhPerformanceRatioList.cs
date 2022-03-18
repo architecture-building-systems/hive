@@ -39,6 +39,6 @@ namespace Hive.IO.GhValueLists
             }
         }
 
-        public override Guid ComponentGuid => Guid.NewGuid();
+        public override Guid ComponentGuid => new Guid("882c3d9f-af08-4577-b945-68bcc77cb9df");
     }
 }

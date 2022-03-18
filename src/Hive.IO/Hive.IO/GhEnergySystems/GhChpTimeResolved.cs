@@ -41,12 +41,13 @@ namespace Hive.IO.GhEnergySystems
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddTextParameter("htg_or_elec_in", "str", "Heating or electricity in as loads? {'heating_in', 'elec_in'}. (default: 'heating_in')", GH_ParamAccess.item);
+            pManager.AddTextParameter("htg_or_elec_in", "str", "Heating or electricity in as loads? {'heating_in', 'elec_in'}. (default: 'heating_in')", GH_ParamAccess.item, "heating_in");
             pManager.AddNumberParameter("loads", "loads", "Loads in [kWh], time series. Either heating or electricity loads that need to be supplied.", GH_ParamAccess.list);
             pManager.AddNumberParameter("eta", "eta", "Electric efficiency of CHP, i.e. from fuel into electricity [-]", GH_ParamAccess.item);
             pManager.AddNumberParameter("htp", "htp", "Heat-to-power ratio, i.e. how much heat comes with generated electricity [-]. E.g. htp=1.5 will yield in 1.5 kW heat for 1 kW elec", GH_ParamAccess.item);
             pManager.AddNumberParameter("fuelcost", "cost", "Fuel cost [CHF/kWh], time series", GH_ParamAccess.list);
             pManager.AddNumberParameter("fuelemissions", "carbon", "Fuel emissions [kgCO2/kWh], time series", GH_ParamAccess.list);
+            pManager[0].Optional = true;
         }
 
 
@@ -63,8 +64,7 @@ namespace Hive.IO.GhEnergySystems
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             string htg_or_elec_in = "heating_in";
-            DA.GetData(0, ref htg_or_elec_in);
-            
+            if (!DA.GetData(0, ref htg_or_elec_in)) return;
             List<double> loads = new List<double>();
             if (!DA.GetDataList(1, loads)) return;
             double eta = new double();
@@ -111,11 +111,11 @@ namespace Hive.IO.GhEnergySystems
                 total_emissions.Add(fuel[i] * fuel_emissions[i]);
             }
 
-            DA.SetData(0, fuel);
-            DA.SetData(1, total_cost);
-            DA.SetData(2, total_emissions);
-            DA.SetData(3, htg_gen);
-            DA.SetData(4, elec_gen);
+            DA.SetDataList(0, fuel);
+            DA.SetDataList(1, total_cost);
+            DA.SetDataList(2, total_emissions);
+            DA.SetDataList(3, htg_gen);
+            DA.SetDataList(4, elec_gen);
         }
 
 

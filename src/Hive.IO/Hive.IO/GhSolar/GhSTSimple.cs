@@ -49,8 +49,7 @@ namespace Hive.IO.GhSolar
 
         protected override System.Drawing.Bitmap Icon => Properties.Resources.Solar_ST_Simple;
 
-        //public override Guid ComponentGuid => new Guid("b1ddb905-855d-4997-b22b-e33aa58e7ab8");
-        public override Guid ComponentGuid => Guid.NewGuid();
+        public override Guid ComponentGuid => new Guid("841d16df-763a-475f-91c1-41398e583d7d");
 
     }
 }
