@@ -103,6 +103,19 @@ namespace Hive.IO.GhInputOutput
             }
         }
 
+        private bool InYAXisBounds = false;
+        private RectangleF YAxisBounds
+        {
+            get
+            {
+                var YAxisBounds = InnerBounds;
+                YAxisBounds.Height -= TitleBarHeight + 45;
+                YAxisBounds.Offset(10, TitleBarHeight + 20);
+                YAxisBounds.Width = 65;
+                return YAxisBounds;
+            }
+        }
+
         private RectangleF MenuPanelBounds =>
             new RectangleF(InnerBounds.X, InnerBounds.Y, InnerBounds.Width, TitleBarHeight);
         protected override void Layout()
@@ -136,21 +149,31 @@ namespace Hive.IO.GhInputOutput
 
         public override GH_ObjectResponse RespondToMouseDoubleClick(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
-            // show properties dialog
-            var propertiesDialog = new VisualizerPlotProperties();
-            propertiesDialog.PlotParameters = Owner.PlotProperties;
-            propertiesDialog.ShowDialog();
+            // show properties dialog if mouse is in Y axis box
+            if (YAxisBounds.Contains(e.CanvasLocation))
+            {
+                var propertiesDialog = new VisualizerPlotProperties();
+                propertiesDialog.PlotParameters = Owner.PlotProperties;
+                propertiesDialog.ShowDialog();
 
-            Owner.ExpirePreview(true);
-            Owner.ExpireSolution(true);
-
+                Owner.ExpirePreview(true);
+                Owner.ExpireSolution(true);
+            }
+            
             return GH_ObjectResponse.Release;
         }
 
+        //this might be a really bad idea performance-wise?
         public override GH_ObjectResponse RespondToMouseMove(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
-            if (InnerBounds.Contains(e.CanvasLocation)){
-                System.Diagnostics.Debug.WriteLine(e.CanvasLocation.ToString());
+            if (YAxisBounds.Contains(e.CanvasLocation)){
+                InYAXisBounds = true;
+                sender.Invalidate();
+            }
+            else
+            {
+                InYAXisBounds = false;
+                sender.Invalidate();
             }
 
             return base.RespondToMouseMove(sender, e);
@@ -167,11 +190,18 @@ namespace Hive.IO.GhInputOutput
             RenderBackground(graphics);
             RenderPlot(graphics);
             RenderTitleBar(graphics);
+            RenderYAxisBox(graphics);
         }
 
         private void RenderBackground(Graphics graphics) => graphics.FillRectangle(new SolidBrush(Color.White), InnerBounds);
 
-
+        private void RenderYAxisBox(Graphics graphics)
+        {
+            if (InYAXisBounds)
+            {
+                graphics.DrawRectangleF(new Pen(Color.Gray, 2), YAxisBounds);
+            }
+        }
         /// <summary>
         ///     Render the title bar at the top with the dropdown for selecting the plot and the
         ///     operational performance metrics.
