@@ -109,8 +109,8 @@ namespace Hive.IO.GhInputOutput
             get
             {
                 var YAxisBounds = InnerBounds;
-                YAxisBounds.Height -= TitleBarHeight + 45;
-                YAxisBounds.Offset(10, TitleBarHeight + 20);
+                YAxisBounds.Height -= TitleBarHeight + 55;
+                YAxisBounds.Offset(10, TitleBarHeight + 30);
                 YAxisBounds.Width = 65;
                 return YAxisBounds;
             }
