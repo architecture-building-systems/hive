@@ -143,9 +143,9 @@ namespace Hive.IO.GhSolar
 
             // Calculation points
             // TODO will these arrays be modified in SolarModel? Do we need to create copies?
-            var p = new sm.Sensorpoints(tilt, azimuth, coord.ToArray(), normal.ToArray(), recursion);
-            p.SetSimpleSkyMT(tilt, paropts);
-            p.SetSimpleGroundReflectionMT(tilt, albedo, weather, sunvectors.ToArray(), paropts);
+            var p = new sm.Sensorpoints(new double[1]{ tilt }, new double[1] { azimuth }, coord.ToArray(), normal.ToArray(), recursion);
+            p.SetSimpleSkyMT(new double[1] { tilt }, paropts);
+            p.SetSimpleGroundReflectionMT(new double[1] { tilt }, albedo, weather, sunvectors.ToArray(), paropts);
             p.CalcIrradiationMT(weather, sunvectors.ToArray(), paropts);
 
             var total = new double[horizon];
