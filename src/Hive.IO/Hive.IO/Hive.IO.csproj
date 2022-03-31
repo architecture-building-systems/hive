@@ -168,6 +168,7 @@
       <DependentUpon>VisualizerPlotProperties.cs</DependentUpon>
     </Compile>
     <Compile Include="GhCore\GhAdaptiveComfort.cs" />
+    <Compile Include="GhCore\GhSIA2024RoomReader.cs" />
     <Compile Include="GhCore\GhSIA380.cs" />
     <Compile Include="GhCore\GhSolarUnobstructed.cs" />
     <Compile Include="GhDistributors\GhDistConversionTech.cs" />
