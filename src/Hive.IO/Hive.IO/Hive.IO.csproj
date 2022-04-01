@@ -329,6 +329,7 @@
     <None Include="Resources\Icons\IOCore_DistEmitter.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\demand_SIAroomreader.png" />
     <Content Include="Resources\EnergySystems\flat_plate.jpg" />
     <Content Include="Resources\EnergySystems\vacuum_tube.jpg" />
     <Content Include="Resources\Icons\Demand_AdaptiveComfort.png" />
