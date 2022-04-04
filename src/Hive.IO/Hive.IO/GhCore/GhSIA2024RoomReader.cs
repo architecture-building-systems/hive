@@ -14,13 +14,13 @@ namespace Hive.IO.GhCore
     public class GhSIA2024RoomReader : GH_Component
     {
         public GhSIA2024RoomReader()
-          : base("SIA 2024 Room Reader C#", "Sia2024Reader",
+          : base("SIA 2024 Room Reader", "Sia2024Reader",
               "Reads room values and properties from a SIA 2024 Json",
-              "[hive]", "Demand C#")
+              "[hive]", "Demand")
         {
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.secondary;
+        public override GH_Exposure Exposure => GH_Exposure.primary;
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
