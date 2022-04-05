@@ -1,12 +1,7 @@
 ﻿using Grasshopper.Kernel.Special;
 using System;
-using Hive.IO.Results;
-using System.Linq;
+using Hive.IO.Util;
 using System.Collections.Generic;
-using System.IO;
-using Grasshopper.Kernel.Expressions;
-using Grasshopper.Kernel.Data;
-using System.Text.RegularExpressions;
 using Grasshopper.Kernel;
 
 namespace Hive.IO.GhValueLists
@@ -25,17 +20,24 @@ namespace Hive.IO.GhValueLists
 
         public override GH_Exposure Exposure => GH_Exposure.tertiary;
 
+        public struct PerformanceRatioListItem
+        {
+            public string Scenario;
+            public string PerformanceRatio;
+        }
+
+        private static List<PerformanceRatioListItem> performanceRatios_; //JsonResource backing field
+
+        public static string ResourceName = "Hive.IO.GhValueLists.performance_ratios.json";
+
+        List<PerformanceRatioListItem> performanceRatios => JsonResource.ReadRecords(ResourceName, ref performanceRatios_);
+
         private void Load()
         {
-            string[] lines = System.IO.File.ReadAllLines("../Resources/performance_ratio.csv");
-            lines = lines.Skip(1).ToArray();
-
-            Dictionary<string, string> performanceRatio = lines.Select(line => line.Split(',')).ToDictionary(line => line[0], line => line[1]);
-
             this.ListItems.Clear();
-            foreach(var item in performanceRatio)
+            foreach(var item in performanceRatios)
             {
-                this.ListItems.Add(new GH_ValueListItem(item.Key, item.Value));
+                this.ListItems.Add(new GH_ValueListItem(item.Scenario, item.PerformanceRatio));
             }
         }
 

@@ -296,6 +296,7 @@
     <EmbeddedResource Include="EnergySystems\conversion_technology_defaults.json" />
     <EmbeddedResource Include="EnergySystems\surface_tech_module_types.json" />
     <EmbeddedResource Include="EnergySystems\emitter_defaults.json" />
+    <EmbeddedResource Include="GhValueLists\performance_ratios.json" />
     <None Include="packages.config" />
     <None Include="Resources\bipv_efficiency.csv" />
     <None Include="Resources\gc_efficiency.csv" />
