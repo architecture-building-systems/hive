@@ -14,9 +14,19 @@ namespace Hive.IO.Forms
     {
         private Dictionary<string, string> _plotParameters;
 
+        private int locationX;
+        private int locationY;
         public VisualizerPlotProperties()
         {
+            this.locationX = Cursor.Position.X;
+            this.locationY = Cursor.Position.Y;
+            Load += new EventHandler(VisualizerPlotProperties_Load);
             InitializeComponent();
+        }
+
+        private void VisualizerPlotProperties_Load(object sender, System.EventArgs e)
+        {
+            this.SetDesktopLocation(locationX, locationY);
         }
 
         /// <summary>

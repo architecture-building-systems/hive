@@ -66,7 +66,7 @@ namespace Hive.IO.Plots
         public IVisualizerPlot _currentPlot;
 
 
-        private string Category => _currentPanel.Category;
+        public string Category => _currentPanel.Category;
 
 
         public MenuButtonPanel CreatePerformancePanel()
