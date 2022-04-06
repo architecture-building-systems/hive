@@ -143,6 +143,16 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap Demand_SIARoomReader {
+            get {
+                object obj = ResourceManager.GetObject("Demand_SIARoomReader", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap EnergySystems_Boiler_Simple {
             get {
                 object obj = ResourceManager.GetObject("EnergySystems_Boiler_Simple", resourceCulture);

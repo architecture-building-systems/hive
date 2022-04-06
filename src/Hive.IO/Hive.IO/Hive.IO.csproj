@@ -168,6 +168,7 @@
       <DependentUpon>VisualizerPlotProperties.cs</DependentUpon>
     </Compile>
     <Compile Include="GhCore\GhAdaptiveComfort.cs" />
+    <Compile Include="GhCore\GhSIA2024RoomReader.cs" />
     <Compile Include="GhCore\GhSIA380.cs" />
     <Compile Include="GhSolar\GhSolarUnobstructed.cs" />
     <Compile Include="GhDistributors\GhDistConversionTech.cs" />
@@ -342,6 +343,7 @@
     <None Include="Resources\Icons\IOCore_DistEmitter.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\demand_SIAroomreader.png" />
     <Content Include="Resources\EnergySystems\flat_plate.jpg" />
     <Content Include="Resources\EnergySystems\vacuum_tube.jpg" />
     <None Include="Resources\solar_PerformanceRatio.png" />
