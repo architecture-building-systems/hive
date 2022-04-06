@@ -286,6 +286,20 @@ namespace Hive.IO.EnergySystems
         }
     }
 
+    /// <summary>
+    /// Buildung Integrated PV
+    /// </summary>
+
+    public class BuildingIntegratedPV : Photovoltaic
+    {
+       
+        public BuildingIntegratedPV(double investmentCost, double embodiedGhg, double lifetime, Mesh surfaceGeometry, string detailedName,
+            double refEfficiencyElectric, double PR, double f_cover)
+            : base(investmentCost, embodiedGhg, lifetime, surfaceGeometry,detailedName,refEfficiencyElectric, PR, f_cover)
+        {
+        }
+    }
+
 
     /// <summary>
     /// Solar Thermal

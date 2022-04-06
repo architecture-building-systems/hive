@@ -263,7 +263,8 @@ namespace Hive.IO.Forms
         /// <param name="stateProperty"></param>
         private void UpdateTextBox(TextBox textBox, bool? editableOverride = null)
         {
-            bool editable = editableOverride ?? State.IsEditable;
+            
+            bool editable = State.IsEditable ? editableOverride ?? State.IsEditable : false;
 
             var stateProperty = textBox.Tag.ToString();
             textBox.Text = State.GetType().GetProperty(stateProperty).GetValue(State) as string;

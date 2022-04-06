@@ -10,7 +10,7 @@ using Hive.IO.Building;
 
 //using dt = datatree;
 
-namespace Hive.Core
+namespace Hive.IO.Core
 {
     public class Sia380
     {

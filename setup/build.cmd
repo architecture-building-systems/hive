@@ -56,8 +56,8 @@ echo ...Done
 echo Generating Component Documentation for Wiki...
 cd %HIVE_DIR%\src\Hive.Core\
 "%IPY%" "%HIVE_WIKI_PY%" epw_reader\Hive.Core.epw_reader.json
-"%IPY%" "%HIVE_WIKI_PY%" sia380\Hive.Core.sia380.json
-"%IPY%" "%HIVE_WIKI_PY%" solar\Hive.Core.solar.json
+:: "%IPY%" "%HIVE_WIKI_PY%" sia380\Hive.Core.sia380.json
+:: "%IPY%" "%HIVE_WIKI_PY%" solar\Hive.Core.solar.json
 "%IPY%" "%HIVE_WIKI_PY%" solar_tech\Hive.Core.solar_tech.json
 "%IPY%" "%HIVE_WIKI_PY%" combustion\Hive.Core.combustion.json
 "%IPY%" "%HIVE_WIKI_PY%" cooling\Hive.Core.cooling.json

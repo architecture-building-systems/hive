@@ -180,6 +180,12 @@ namespace Hive.IO.GhInputOutput
                 try
                 {
                     siaRoom = Sia2024RecordEx.FromJson(json);
+
+                    //floorArea, envelopeArea, glazingRatio from geometry, not from parametric inputs
+                    siaRoom.FloorArea = Convert.ToDouble(_buildingInputState.FloorArea);
+                    siaRoom.EnvelopeArea = Convert.ToDouble(_buildingInputState.EnvelopeArea);
+                    siaRoom.GlazingRatio = Convert.ToDouble(_buildingInputState.GlazingRatio);
+
                     Message = "";
                 }
                 catch (Exception e)
