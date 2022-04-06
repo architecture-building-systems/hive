@@ -1,4 +1,3 @@
-
 using System;
 using System.Collections.Generic;
 using Grasshopper.Kernel;
@@ -9,9 +8,9 @@ namespace Hive.IO.GhEnergySystems
     public class GhBoilerTimeResolved : GH_Component
     {
         public GhBoilerTimeResolved()
-          : base("Boiler time resolved Energy System", "BoilerTimeResolved",
+          : base("Boiler time resolved Energy System C#", "BoilerTimeResolved",
               "Calculates time resolved consumed fuel, operating cost and carbon emissions of a boiler to meet heating loads.",
-              "[hive]", "Energy Systems")
+              "[hive]", "Energy Systems C#")
         {
         }
 
@@ -51,6 +50,7 @@ namespace Hive.IO.GhEnergySystems
             var cost = new double[horizon];
             var carbon = new double[horizon];
             var gas_consumed = new double[horizon];
+
             foreach (var t in Enumerable.Range(0, horizon))
             {
                 gas_consumed[t] = heating_loads[t] * eta[t];
@@ -58,9 +58,9 @@ namespace Hive.IO.GhEnergySystems
                 carbon[t] = gas_consumed[t] * carrier_emissions[t];
             }
 
-            DA.SetData(0, gas_consumed);
-            DA.SetData(1, cost);
-            DA.SetData(2, carbon);
+            DA.SetDataList(0, gas_consumed);
+            DA.SetDataList(1, cost);
+            DA.SetDataList(2, carbon);
         }
 
 

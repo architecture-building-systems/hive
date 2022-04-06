@@ -169,11 +169,16 @@
     </Compile>
     <Compile Include="GhCore\GhAdaptiveComfort.cs" />
     <Compile Include="GhCore\GhSIA380.cs" />
-    <Compile Include="GhCore\GhSolarUnobstructed.cs" />
+    <Compile Include="GhSolar\GhSolarUnobstructed.cs" />
     <Compile Include="GhDistributors\GhDistConversionTech.cs" />
     <Compile Include="GhDistributors\GhDistEmitter.cs" />
     <Compile Include="GhDistributors\GhDistEnvironment.cs" />
     <Compile Include="GhDistributors\GhDistEpw.cs" />
+    <Compile Include="GhEnergySystems\GhChillerSimple.cs" />
+    <Compile Include="GhEnergySystems\GhChillerTimeResolved.cs" />
+    <Compile Include="GhEnergySystems\GhHeatpumpCOP.cs" />
+    <Compile Include="GhEnergySystems\GhHeatpumpSimple.cs" />
+    <Compile Include="GhEnergySystems\GhASHPTimeResolved.cs" />
     <Compile Include="GhInputOutput\GhResultsExposer.cs" />
     <Compile Include="GhInputOutput\GhResultsExposerPreDefined.cs" />
     <Compile Include="GhDistributors\GhDistSIA.cs" />
@@ -204,7 +209,14 @@
     <Compile Include="GhInputOutput\GhBuilding.cs" />
     <Compile Include="GhDistributors\GhMainDistributor.cs" />
     <Compile Include="GhInputOutput\GhVisualizerAttributes.cs" />
+    <Compile Include="GhSolar\GhOrientationFactor.cs" />
+    <Compile Include="GhSolar\GhPVNoct.cs" />
+    <Compile Include="GhSolar\GhPVSimple.cs" />
+    <Compile Include="GhSolar\GhSTSimple.cs" />
+    <Compile Include="GhSolar\GhSTTimeResolved.cs" />
+    <Compile Include="GhSolar\GhSumOverTimePeriod.cs" />
     <Compile Include="GhValueLists\GhListResults.cs" />
+    <Compile Include="GhValueLists\GhPerformanceRatioList.cs" />
     <Compile Include="Plots\AmrPlotConstants.cs" />
     <Compile Include="Plots\LifetimeAmrPlot.cs" />
     <Compile Include="Properties\Resources.Designer.cs">
@@ -284,9 +296,11 @@
     <EmbeddedResource Include="EnergySystems\conversion_technology_defaults.json" />
     <EmbeddedResource Include="EnergySystems\surface_tech_module_types.json" />
     <EmbeddedResource Include="EnergySystems\emitter_defaults.json" />
+    <EmbeddedResource Include="GhValueLists\performance_ratios.json" />
     <None Include="packages.config" />
     <None Include="Resources\bipv_efficiency.csv" />
     <None Include="Resources\gc_efficiency.csv" />
+    <None Include="Resources\performance_ratio.csv" />
     <None Include="Resources\pvt_efficiency.csv" />
     <None Include="Resources\pv_efficiency.csv" />
     <None Include="Resources\st_efficiency.csv" />
@@ -330,6 +344,19 @@
   <ItemGroup>
     <Content Include="Resources\EnergySystems\flat_plate.jpg" />
     <Content Include="Resources\EnergySystems\vacuum_tube.jpg" />
+    <None Include="Resources\solar_PerformanceRatio.png" />
+    <None Include="Resources\solar_SumTimeSeries.png" />
+    <None Include="Resources\solar_Solarthermaltimeresult.png" />
+    <None Include="Resources\solar_solarthermal.png" />
+    <None Include="Resources\solar_PVtimeresult.png" />
+    <None Include="Resources\solar_OrientationFactor.png" />
+    <None Include="Resources\solar_PV.png" />
+    <None Include="Resources\EnergySystems_Chiller_Simple.bmp" />
+    <None Include="Resources\energysystems_chiller.png" />
+    <None Include="Resources\energysystems_chiller_timeresult.png" />
+    <None Include="Resources\energysystems_heatpump_airsource.png" />
+    <None Include="Resources\energysystems_heatpump_COP.png" />
+    <None Include="Resources\energysystems_heatpump_airsource_timeresult.png" />
     <Content Include="Resources\Icons\Demand_AdaptiveComfort.png" />
     <Content Include="Resources\Icons\Demand_SIA380.png" />
     <Content Include="Resources\Icons\EnergySystems_Boiler_Simple.png" />
