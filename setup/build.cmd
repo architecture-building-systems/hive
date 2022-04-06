@@ -22,7 +22,7 @@ CD %HIVE_BUILD_DIR%
 echo Building Hive.Core...
 cd %HIVE_DIR%\src\Hive.Core\
 "%IPY%" "%HB%" epw_reader\Hive.Core.epw_reader.json
-@REM "%IPY%" "%HB%" sia380\Hive.Core.sia380.json
+"%IPY%" "%HB%" sia380\Hive.Core.sia380.json
 @REM "%IPY%" "%HB%" solar\Hive.Core.solar.json
 "%IPY%" "%HB%" solar_tech\Hive.Core.solar_tech.json
 "%IPY%" "%HB%" combustion\Hive.Core.combustion.json

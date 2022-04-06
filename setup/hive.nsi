@@ -106,7 +106,7 @@ Section "Base Installation" Base_Installation_Section
 
     # Hive.Core and dependencies
     File "..\src\Hive.Core\epw_reader\_build\Hive.Core.epw_reader.ghpy"
-    ; File "..\src\Hive.Core\sia380\_build\Hive.Core.sia380.ghpy"
+    File "..\src\Hive.Core\sia380\_build\Hive.Core.sia380.ghpy"
     File "..\src\Hive.Core\sia380\_build\Hive.Core.sia380.gha"
     File "..\src\Hive.Core\solar\_build\Hive.Core.solar.ghpy"
     File "..\src\Hive.Core\solar_tech\_build\Hive.Core.solar_tech.ghpy"    
