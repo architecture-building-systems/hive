@@ -3,6 +3,10 @@
     "Source": "Solar",
     "EndUse": "Electricity demand"
   },
+  "Building Integrated Photovoltaic (BIPV)": {
+    "Source": "Solar",
+    "EndUse": "Electricity demand"
+  },
   "Solar Thermal (ST)": {
     "Source": "Solar",
     "EndUse": "Electricity demand"

@@ -10,7 +10,7 @@ namespace Hive.IO.GhParametricInputs
 {
     internal class SolarTechProperties
     {
-        public string Type; //{'PV', 'PVT', 'ST', 'GC'}
+        public string Type; //{'PV', 'BIPV', 'PVT', 'ST', 'GC'}
         public string Technology; // e.g. 'Monocrystalline. Not really necessary, just for information
         public double ElectricEfficiency;
         public double ThermalEfficiency;
@@ -46,11 +46,8 @@ namespace Hive.IO.GhParametricInputs
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddMeshParameter("Mesh", "Mesh", "Mesh surface of the solar system", GH_ParamAccess.list);
-
             pManager.AddTextParameter("Type", "Type", "Type of solar system {'PV', 'PVT', 'ST', 'GC'} standing for Photovoltaic (PV), Hybrid PV and Solar Thermal (PVT), Solar Thermal (ST), Ground Collector (GC)", GH_ParamAccess.item);
-
             pManager.AddTextParameter("Technology", "Technology", "Specific technology of solar systen, e.g. Polycrystalline, Monocrystalline, etc.", GH_ParamAccess.item);
-
             pManager.AddNumberParameter("EfficiencyElectric", "EfficiencyElectric", "Electric Efficiency [0.0, 1.0]", GH_ParamAccess.item);
             pManager.AddNumberParameter("EfficiencyThermal", "EfficiencyThermal", "Thermal Efficiency [0.0, 1.0]", GH_ParamAccess.item);
             pManager.AddNumberParameter("PerformanceRatio", "PerformanceRatio", "Performance Ratio [0.0, 1.0]", GH_ParamAccess.item);
@@ -64,7 +61,7 @@ namespace Hive.IO.GhParametricInputs
         /// </summary>
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
-            pManager.AddGenericParameter("solarTech", "solarTech", "solarTech", GH_ParamAccess.list);
+            pManager.AddGenericParameter("SolarTech", "SolarTech", "SolarTech", GH_ParamAccess.list);
         }
 
         /// <summary>
@@ -92,10 +89,8 @@ namespace Hive.IO.GhParametricInputs
                 solarTech.MeshSurface = mesh;
                 solarTechList.Add(solarTech);
             }
-            //string solarTechJson = JsonConvert.SerializeObject(solarTech);
-            DA.SetDataList(0, solarTechList);
 
-            //DA.SetData(0, mesh);
+            DA.SetDataList(0, solarTechList);
         }
 
 

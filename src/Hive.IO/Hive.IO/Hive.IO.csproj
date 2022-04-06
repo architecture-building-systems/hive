@@ -44,6 +44,10 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
+    <Reference Include="SolarModel">
+      <HintPath>..\..\..\setup\SolarModel.dll</HintPath>
+      <Private>True</Private>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Collections.Specialized, Version=4.0.2.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a, processorArchitecture=MSIL">
       <HintPath>..\packages\System.Collections.Specialized.4.3.0\lib\net46\System.Collections.Specialized.dll</HintPath>
@@ -87,6 +91,8 @@
     <Compile Include="Building\Sia2024Record.cs" />
     <Compile Include="Building\Sia380ConstructionRecord.cs" />
     <Compile Include="Building\Sia2024Schedules.cs" />
+    <Compile Include="Core\AdaptiveComfort.cs" />
+    <Compile Include="Core\Sia380.cs" />
     <Compile Include="EnergySystems\CombustionTech.cs" />
     <Compile Include="EnergySystems\Carrier.cs" />
     <Compile Include="EnergySystems\Emitter.cs" />
@@ -95,6 +101,7 @@
     <Compile Include="EnergySystems\Storage.cs" />
     <Compile Include="EnergySystems\SurfaceBasedTech.cs" />
     <Compile Include="EnergySystems\Ventilation.cs" />
+    <Compile Include="Environment\Epw.cs" />
     <Compile Include="Forms\BuildingInputForm.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -160,14 +167,27 @@
     <Compile Include="Forms\VisualizerPlotProperties.Designer.cs">
       <DependentUpon>VisualizerPlotProperties.cs</DependentUpon>
     </Compile>
+    <Compile Include="GhCore\GhAdaptiveComfort.cs" />
+    <Compile Include="GhCore\GhSIA380.cs" />
+    <Compile Include="GhSolar\GhSolarUnobstructed.cs" />
     <Compile Include="GhDistributors\GhDistConversionTech.cs" />
     <Compile Include="GhDistributors\GhDistEmitter.cs" />
     <Compile Include="GhDistributors\GhDistEnvironment.cs" />
-    <Compile Include="GhDistributors\GhDistResults.cs" />
-    <Compile Include="GhDistributors\GhDistResultsLoads.cs" />
+    <Compile Include="GhDistributors\GhDistEpw.cs" />
+    <Compile Include="GhEnergySystems\GhChillerSimple.cs" />
+    <Compile Include="GhEnergySystems\GhChillerTimeResolved.cs" />
+    <Compile Include="GhEnergySystems\GhHeatpumpCOP.cs" />
+    <Compile Include="GhEnergySystems\GhHeatpumpSimple.cs" />
+    <Compile Include="GhEnergySystems\GhASHPTimeResolved.cs" />
+    <Compile Include="GhInputOutput\GhResultsExposer.cs" />
+    <Compile Include="GhInputOutput\GhResultsExposerPreDefined.cs" />
     <Compile Include="GhDistributors\GhDistSIA.cs" />
     <Compile Include="GhDistributors\GhDistSolarSimulation.cs" />
     <Compile Include="GhDistributors\GhDistSolarTech.cs" />
+    <Compile Include="GhEnergySystems\GhBoilerSimple.cs" />
+    <Compile Include="GhEnergySystems\GhBoilerTimeResolved.cs" />
+    <Compile Include="GhEnergySystems\GhChpSimple.cs" />
+    <Compile Include="GhEnergySystems\GhChpTimeResolved.cs" />
     <Compile Include="GhInputOutput\GhResultsParameter.cs" />
     <Compile Include="GhMergers\GhChiller.cs" />
     <Compile Include="GhMergers\GhCHP.cs" />
@@ -183,15 +203,27 @@
     <Compile Include="GhParametricInputs\GhConversionTech.cs" />
     <Compile Include="GhParametricInputs\GhSIARoom.cs" />
     <Compile Include="GhParametricInputs\GhSolarSystems.cs" />
-    <Compile Include="GhInputOutput\GhResults.cs" />
+    <Compile Include="GhInputOutput\GhResultsCreator.cs" />
     <Compile Include="GhInputOutput\GhVisualizer.cs" />
     <Compile Include="Environment\Environment.cs" />
     <Compile Include="GhInputOutput\GhBuilding.cs" />
     <Compile Include="GhDistributors\GhMainDistributor.cs" />
     <Compile Include="GhInputOutput\GhVisualizerAttributes.cs" />
+    <Compile Include="GhSolar\GhOrientationFactor.cs" />
+    <Compile Include="GhSolar\GhPVNoct.cs" />
+    <Compile Include="GhSolar\GhPVSimple.cs" />
+    <Compile Include="GhSolar\GhSTSimple.cs" />
+    <Compile Include="GhSolar\GhSTTimeResolved.cs" />
+    <Compile Include="GhSolar\GhSumOverTimePeriod.cs" />
     <Compile Include="GhValueLists\GhListResults.cs" />
+    <Compile Include="GhValueLists\GhPerformanceRatioList.cs" />
     <Compile Include="Plots\AmrPlotConstants.cs" />
     <Compile Include="Plots\LifetimeAmrPlot.cs" />
+    <Compile Include="Properties\Resources.Designer.cs">
+      <AutoGen>True</AutoGen>
+      <DesignTime>True</DesignTime>
+      <DependentUpon>Resources.resx</DependentUpon>
+    </Compile>
     <Compile Include="Results\ResultsExposeForGhListAttribute.cs" />
     <Compile Include="Util\HiveCategoryIcon.cs" />
     <Compile Include="Util\HiveIOInfo.cs" />
@@ -216,11 +248,6 @@
     <Compile Include="Plots\DrawingExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="EnergySystems\ConversionTech.cs" />
-    <Compile Include="Properties\Resources.Designer.cs">
-      <AutoGen>True</AutoGen>
-      <DesignTime>True</DesignTime>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
     <Compile Include="Results\Results.cs" />
     <Compile Include="Building\Zone.cs" />
     <Compile Include="Util\JsonResource.cs" />
@@ -258,8 +285,8 @@
     </EmbeddedResource>
     <EmbeddedResource Include="Properties\Resources.resx">
       <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
       <SubType>Designer</SubType>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <ItemGroup>
@@ -269,129 +296,132 @@
     <EmbeddedResource Include="EnergySystems\conversion_technology_defaults.json" />
     <EmbeddedResource Include="EnergySystems\surface_tech_module_types.json" />
     <EmbeddedResource Include="EnergySystems\emitter_defaults.json" />
+    <EmbeddedResource Include="GhValueLists\performance_ratios.json" />
     <None Include="packages.config" />
+    <None Include="Resources\bipv_efficiency.csv" />
     <None Include="Resources\gc_efficiency.csv" />
+    <None Include="Resources\performance_ratio.csv" />
     <None Include="Resources\pvt_efficiency.csv" />
     <None Include="Resources\pv_efficiency.csv" />
     <None Include="Resources\st_efficiency.csv" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IO_Environment_.png" />
+    <None Include="Resources\Icons\IO_Solartech.png" />
+    <None Include="Resources\Icons\Hive_Logo.png" />
+    <None Include="Resources\Icons\IO_Results_Param.png" />
+    <None Include="Resources\Icons\IO_Visualizer.png" />
+    <None Include="Resources\Icons\IO_Para_Inputensys.png" />
+    <None Include="Resources\Icons\IOCore_Distributorergyemitter.png" />
+    <None Include="Resources\Icons\IOCore_DistSolarsym.png" />
+    <None Include="Resources\Icons\IOCore_Mergerelectricalsustation.png" />
+    <None Include="Resources\Icons\IOCore_Distensys.png" />
+    <None Include="Resources\Icons\IO_Building.png" />
+    <None Include="Resources\Icons\IO_CoreDistributor.png" />
+    <None Include="Resources\Icons\IO_CoreMerger.png" />
+    <None Include="Resources\Icons\IO_Energysytems.png" />
+    <None Include="Resources\Icons\IO_Environment.png" />
+    <None Include="Resources\Icons\IO_Para_Inputen.png" />
+    <None Include="Resources\Icons\IO_Para_Inputenergyemitter.png" />
+    <None Include="Resources\Icons\IO_Para_Inputenvpot.png" />
+    <None Include="Resources\Icons\IO_Para_InputSIAroom.png" />
+    <None Include="Resources\Icons\IOCore_Distconvtech.png" />
+    <None Include="Resources\Icons\IOCore_Distenergyemitter.png" />
+    <None Include="Resources\Icons\IOCore_Distenergysystems.png" />
+    <None Include="Resources\Icons\IOCore_Distenv.png" />
+    <None Include="Resources\Icons\IOCore_DistSIAroom.png" />
+    <None Include="Resources\Icons\IOCore_DistSolarsim.png" />
+    <None Include="Resources\Icons\IOCore_Distsolartech.png" />
+    <None Include="Resources\Icons\IOCore_Merger_Gasboiler.png" />
+    <None Include="Resources\Icons\IOCore_Mergerchiller.png" />
+    <None Include="Resources\Icons\IOCore_Mergercombinedheatpower.png" />
+    <None Include="Resources\Icons\IOCore_Mergercoolingexchanger.png" />
+    <None Include="Resources\Icons\IOCore_Mergerelectricalstation.png" />
+    <None Include="Resources\Icons\IOCore_Mergerheatpump.png" />
+    <None Include="Resources\Icons\IOCore_Mergersolartech.png" />
+    <None Include="Resources\Icons\IO_Para_InputSolarTech.png" />
+    <None Include="Resources\Icons\IOCore_DistEmitter.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IO_Solartech_.png" />
+    <Content Include="Resources\EnergySystems\flat_plate.jpg" />
+    <Content Include="Resources\EnergySystems\vacuum_tube.jpg" />
+    <None Include="Resources\solar_PerformanceRatio.png" />
+    <None Include="Resources\solar_SumTimeSeries.png" />
+    <None Include="Resources\solar_Solarthermaltimeresult.png" />
+    <None Include="Resources\solar_solarthermal.png" />
+    <None Include="Resources\solar_PVtimeresult.png" />
+    <None Include="Resources\solar_OrientationFactor.png" />
+    <None Include="Resources\solar_PV.png" />
+    <None Include="Resources\EnergySystems_Chiller_Simple.bmp" />
+    <None Include="Resources\energysystems_chiller.png" />
+    <None Include="Resources\energysystems_chiller_timeresult.png" />
+    <None Include="Resources\energysystems_heatpump_airsource.png" />
+    <None Include="Resources\energysystems_heatpump_COP.png" />
+    <None Include="Resources\energysystems_heatpump_airsource_timeresult.png" />
+    <Content Include="Resources\Icons\Demand_AdaptiveComfort.png" />
+    <Content Include="Resources\Icons\Demand_SIA380.png" />
+    <Content Include="Resources\Icons\EnergySystems_Boiler_Simple.png" />
+    <Content Include="Resources\Icons\EnergySystems_Boiler_TimeResult.png" />
+    <Content Include="Resources\Icons\EnergySystems_Combined.png" />
+    <Content Include="Resources\Icons\EnergySystems_Combined_TimeResult.png" />
+    <Content Include="Resources\Icons\Weather_EPW_reader.png" />
+    <None Include="Resources\EnergySystems\monocrystalline.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IO_Solartech.png" />
+    <None Include="Resources\EnergySystems\polycrystalline.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\Hive_Logo.png" />
+    <None Include="Resources\EnergySystems\asi.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\EnergySystems\CdTe.jpg" />
-    <Resource Include="Resources\EnergySystems\HIT.jpg" />
-    <Resource Include="Resources\EnergySystems\CIGS.jpg" />
-    <Resource Include="Resources\EnergySystems\flat_plate.jpg" />
-    <Resource Include="Resources\EnergySystems\Monocristalline.jpg" />
-    <Resource Include="Resources\EnergySystems\Polycristalline.jpg" />
-    <Resource Include="Resources\EnergySystems\vacume_tube.jpg" />
+    <None Include="Resources\EnergySystems\asi_grey_panel.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IO_Results_Param.png" />
+    <None Include="Resources\EnergySystems\cigs.jpeg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IO_Visualizer.png" />
+    <None Include="Resources\EnergySystems\cigs_integrated.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IO_Para_Inputensys.png" />
+    <None Include="Resources\EnergySystems\flexible_cigs.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IOCore_Distributorergyemitter.png" />
+    <None Include="Resources\EnergySystems\hjt.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IOCore_DistSolarsym.png" />
+    <None Include="Resources\EnergySystems\lof_golden.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IOCore_Mergerelectricalsustation.png" />
+    <None Include="Resources\EnergySystems\lof_green.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IOCore_Distensys.png" />
+    <None Include="Resources\EnergySystems\lof_lavender.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IO_Building.png" />
+    <None Include="Resources\EnergySystems\lof_red.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IO_CoreDistributor.png" />
+    <None Include="Resources\EnergySystems\lof_steel.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IO_CoreMerger.png" />
+    <None Include="Resources\EnergySystems\lof_terracotta.jpg" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IO_Energysytems.png" />
+    <None Include="Resources\EnergySystems\mono_facade.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IO_Environment.png" />
+    <None Include="Resources\EnergySystems\mono_facade_blue.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IO_Para_Inputen.png" />
+    <None Include="Resources\EnergySystems\mono_roof.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IO_Para_Inputenergyemitter.png" />
+    <None Include="Resources\EnergySystems\solaxess_white.png" />
   </ItemGroup>
   <ItemGroup>
-    <None Include="Resources\IO_Para_Inputenvpot.png" />
+    <Content Include="Resources\EnergySystems\cdte.jpg" />
+    <Content Include="Resources\Icons\Core_Solar_Potentials_Unobstructed.png" />
   </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IO_Para_InputSIAroom.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IOCore_Distconvtech.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IOCore_Distenergyemitter.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IOCore_Distenergysystems.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IOCore_Distenv.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IOCore_DistSIAroom.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IOCore_DistSolarsim.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IOCore_Distsolartech.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IOCore_Merger_Gasboiler.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IOCore_Mergerchiller.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IOCore_Mergercombinedheatpower.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IOCore_Mergercoolingexchanger.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IOCore_Mergerelectricalstation.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IOCore_Mergerheatpump.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IOCore_Mergersolartech.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IO_Para_InputSolarTech.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <None Include="Resources\IOCore_DistEmitter.png" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.
@@ -401,7 +431,7 @@
   </Target>
   -->
   <PropertyGroup>
-    <PostBuildEvent>Copy "$(TargetPath)" "%25AppData%25\Grasshopper\Libraries\$(ProjectName).gha"</PostBuildEvent>
+    <PostBuildEvent>Copy "$(TargetPath)" "%25AppData%25\Grasshopper\Libraries\Hive\$(ProjectName).gha"</PostBuildEvent>
   </PropertyGroup>
   <PropertyGroup>
     <FallbackCulture>en-US</FallbackCulture>

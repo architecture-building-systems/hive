@@ -38,8 +38,8 @@ namespace Hive.IO.GhInputOutput
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            string path = null;
-            if (!DA.GetData(0, ref path)) return;
+            string epwPath = null;
+            if (!DA.GetData(0, ref epwPath)) return;
 
             List<Mesh> geometry = new List<Mesh>();
             DA.GetDataList(1, geometry);
@@ -49,7 +49,7 @@ namespace Hive.IO.GhInputOutput
 
 
             Mesh[] geometryArray = geometry.Count > 0 ? geometry.ToArray() : null;
-            Environment.Environment environment = new Environment.Environment(path, geometryArray);
+            Environment.Environment environment = new Environment.Environment(epwPath, geometryArray);
             if (potentials == null)
             {
                 environment.SetDefaultEnergyPotentials();    // replace this with inputs from the windows form later

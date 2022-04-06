@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
+using System.Runtime.InteropServices;
 using Rhino.Geometry;
 
 namespace Hive.IO
@@ -10,10 +11,45 @@ namespace Hive.IO
         /// <summary>
         /// Typical calendar year
         /// </summary>
-        public static readonly int[] DaysPerMonth = new int[12] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
-        public const int HoursPerDay = 24;
-        public const int HoursPerYear = 8760;
         public const int MonthsPerYear = 12;
+
+        public const int DaysPerYear = 365;
+        public static readonly int[] DaysPerMonth = new int[12] { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
+        public const int DaysPerWeek = 7;
+
+        public const int HoursPerDay = 24;
+        public static readonly int[] HoursPerMonth = DaysPerMonth.Select(d => d*HoursPerDay).ToArray();
+        public static readonly int[] HoursPerMonthIndexEnd = new int[]
+        {
+            744,
+            1416,
+            2160,
+            2880,
+            3624,
+            4344,
+            5088,
+            5832,
+            6552,
+            7296,
+            8016,
+            8760
+        };
+        public static readonly int[] HoursPerMonthIndexStart = new int[]
+        {
+            0,
+            744,
+            1416,
+            2160,
+            2880,
+            3624,
+            4344,
+            5088,
+            5832,
+            6552,
+            7296,
+            8016
+        };
+        public const int HoursPerYear = 8760;
 
         public static readonly string[] MonthNames =
         {
@@ -42,6 +78,7 @@ namespace Hive.IO
         public const double Kelvin = 273.15;
 
         public const string DefaultConstructionType = "default"; // For using fixed tau values instead of variable for SIA 380 demand calc
+
 
         public static double[] GetAverageMonthlyValue(double[] annualTimeSeries)
         {
@@ -249,6 +286,60 @@ namespace Hive.IO
 
             var versionAttribute = assemblyInformationalVersion[0] as AssemblyInformationalVersionAttribute;
             return versionAttribute.InformationalVersion;
+        }
+
+        // from https://stackoverflow.com/questions/1014005/how-to-populate-instantiate-a-c-sharp-array-with-a-single-value
+        public static void Populate<T>(this T[] arr, T value)
+        {
+            for (int i = 0; i < arr.Length; i++)
+            {
+                arr[i] = value;
+            }
+
+        }
+        
+        // From https://stackoverflow.com/a/406576
+        public static int[] Slice(this int[] source, int start, int stop)
+        {
+            int length = stop - start;
+            int[] destfoo = new int[length];
+            Array.Copy(source, 0, destfoo, 0, length);
+            return destfoo;
+        }
+
+        // From https://stackoverflow.com/a/406576
+        public static double[] Slice(this double[] source, int start, int stop)
+        {
+            int length = stop - start;
+            double[] destfoo = new double[length];
+            Array.Copy(source, start, destfoo, 0, length);
+            return destfoo;
+        }
+
+        // From https://newbedev.com/how-to-get-a-complete-row-or-column-from-2d-array-in-c
+        public static T[] GetRow<T>(this T[,] array, int row)
+        {
+            if (!typeof(T).IsPrimitive)
+                throw new InvalidOperationException("Not supported for managed types.");
+
+            if (array == null)
+                throw new ArgumentNullException("The array is null.");
+
+            int cols = array.GetUpperBound(1) + 1;
+            T[] result = new T[cols];
+
+            int size;
+
+            if (typeof(T) == typeof(bool))
+                size = 1;
+            else if (typeof(T) == typeof(char))
+                size = 2;
+            else
+                size = Marshal.SizeOf<T>();
+
+            Buffer.BlockCopy(array, row * cols * size, result, 0, cols * size);
+
+            return result;
         }
     }
 }

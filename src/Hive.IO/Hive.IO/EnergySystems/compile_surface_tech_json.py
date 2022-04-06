@@ -17,8 +17,8 @@ def compile_surface_tech_to_json():
     JSON_OUT = "surface_tech_module_types.json"
     JSON_PATH = os.path.join(OUT_DIR, JSON_OUT)
 
-    CSV_FILES = ["pv_efficiency.csv", "st_efficiency.csv"] # not yet supported: "pvt_efficiency.csv"
-    CATEGORIES = ["Photovoltaic (PV)", "Solar Thermal (ST)"] # not yet supported:"Photovoltaic and Thermal (PVT)"
+    CSV_FILES = ["pv_efficiency.csv", "st_efficiency.csv", "bipv_efficiency.csv"] # not yet supported: "pvt_efficiency.csv"
+    CATEGORIES = ["Photovoltaic (PV)", "Solar Thermal (ST)", "Building Integrated Photovoltaic (BIPV)"] # not yet supported:"Photovoltaic and Thermal (PVT)"
 
     HEADERS = {
         "Type": str,
@@ -29,7 +29,8 @@ def compile_surface_tech_to_json():
         "life cycle GHG factor kgCO2eq per m2": float,
         "life cycle GHG factor kgCO2eq per kWp": float,
         "Lifetime": float,
-        "Description": str
+        "Description": str,
+        "Image": str
     }
 
     HEADERS_MAP = {
@@ -41,7 +42,8 @@ def compile_surface_tech_to_json():
         "life cycle GHG factor kgCO2eq per m2": "SpecificEmbodiedEmissions",
         "life cycle GHG factor kgCO2eq per kWp": None,
         "Lifetime": "Lifetime", 
-        "Description": "Description"
+        "Description": "Description",
+        "Image": "Image"
     }
     
     print("Compiling Surface Tech Module Types...")
@@ -55,7 +57,7 @@ def compile_surface_tech_to_json():
         with open(file_path, "r") as fp:
             reader = csv.DictReader(fp)
             csv_headers = set(reader.fieldnames)
-            assert (all(h in HEADERS.keys() for h in csv_headers)), "Missing headers in '" + filename + "' : " + str(set(HEADERS.keys()) - csv_headers)
+            assert (all(h in csv_headers for h in HEADERS.keys())), "Missing headers in '" + filename + "' : " + str(set(HEADERS.keys()) - csv_headers)
             for row in reader:
                 record = dict()
                 for csv_header, json_header in HEADERS_MAP.items():

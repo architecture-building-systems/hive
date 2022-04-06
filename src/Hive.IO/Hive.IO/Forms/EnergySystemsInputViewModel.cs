@@ -14,7 +14,7 @@ namespace Hive.IO.Forms
     {
         public EnergySystemsInputViewModel()
         {
-            ConversionTechnologies = new ObservableCollection<ConversionTechPropertiesViewModel>
+            ConversionTechnologies = new BindingList<ConversionTechPropertiesViewModel>
             {
                 new ConversionTechPropertiesViewModel
                 {
@@ -23,10 +23,14 @@ namespace Hive.IO.Forms
                 new ConversionTechPropertiesViewModel
                 {
                     Name = "Boiler (Gas)"
+                },
+                new ConversionTechPropertiesViewModel
+                {
+                    Name = "Building Integrated Photovoltaic (BIPV)"
                 }
             };
 
-            Emitters = new ObservableCollection<EmitterPropertiesViewModel>
+            Emitters = new BindingList<EmitterPropertiesViewModel>
             {
                 new EmitterPropertiesViewModel
                 {
@@ -48,10 +52,11 @@ namespace Hive.IO.Forms
             };
         }
 
-        public ObservableCollection<EmitterPropertiesViewModel> Emitters { get; }
+        //public IEnumerable<SurfaceViewModel> _availableSurfaces = ConversionTechPropertiesViewModel.
+        public BindingList<EmitterPropertiesViewModel> Emitters { get; }
         public ICollectionView EmitterPropertiesView => CollectionViewSource.GetDefaultView(Emitters);
 
-        public ObservableCollection<ConversionTechPropertiesViewModel> ConversionTechnologies { get; }
+        public BindingList<ConversionTechPropertiesViewModel> ConversionTechnologies { get; }
 
         public ICollectionView ConversionTechnologiesView =>
             CollectionViewSource.GetDefaultView(ConversionTechnologies);
@@ -78,5 +83,7 @@ namespace Hive.IO.Forms
                 sm => sm.Connection == null || sm.Connection == vm || !sm.Connection.IsSurfaceTech ||
                       !ConversionTechnologies.Contains(sm.Connection));
         }
+
+       
     }
 }

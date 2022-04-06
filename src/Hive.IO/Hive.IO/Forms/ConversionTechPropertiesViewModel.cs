@@ -38,7 +38,10 @@ namespace Hive.IO.Forms
         public ConversionTechPropertiesViewModel()
         {
             Name = "Photovoltaic (PV)";
+            Name = "Building Integrated Photovoltaic (BIPV)";
         }
+
+
 
         private static Dictionary<string, ConversionTechDefaults> Defaults =>
             JsonResource.ReadRecords(ConversionTechDefaults.ResourceName, ref _defaults);
@@ -191,6 +194,12 @@ namespace Hive.IO.Forms
                             _performanceRatio = _performanceRatioDefaultST;
                             _surfaceTransmittance = _f_coverDefault;
                             break;
+                        case "Building Integrated Photovoltaic (BIPV)":
+                            _efficiency = _moduleType.ElectricEfficiency;
+                            _performanceRatio = _performanceRatioDefaultPV;
+                            _surfaceTransmittance = _f_coverDefault;
+                            break;
+
                     }
 
                     _specificCapitalCost = _moduleType.SpecificCapitalCost;
@@ -207,7 +216,7 @@ namespace Hive.IO.Forms
         //        $"pack://application:,,,/Hive.IO,Culture=neutral,PublicKeyToken=null;component/Resources/EnergySystems/{ModuleType.Name}.jpg"))
         //    : null;
 
-        public System.Drawing.Image TechnologyImage => IsSurfaceTech ? (System.Drawing.Image) Properties.Resources.ResourceManager.GetObject(ModuleType.Name) : null;
+        public System.Drawing.Image TechnologyImage => IsSurfaceTech && ModuleType.Image != null ? (System.Drawing.Image) Properties.Resources.ResourceManager.GetObject(ModuleType.Image) : null;
 
         public double Area
         {
@@ -229,9 +238,9 @@ namespace Hive.IO.Forms
             get { return $"{(_efficiency * Area):0.00}"; }
         }
 
-        public bool IsSurfaceTech => Name == "Photovoltaic (PV)" || Name == "Solar Thermal (ST)";
+        public bool IsSurfaceTech => Name == "Photovoltaic (PV)" || Name == "Solar Thermal (ST)" || Name == "Building Integrated Photovoltaic (BIPV)";
 
-        public bool IsPV => Name == "Photovoltaic (PV)";
+        public bool IsPV => Name == "Photovoltaic (PV)" || Name == "Building Integrated Photovoltaic (BIPV)";
 
         public bool IsST => Name == "Solar Thermal (ST)";
 
@@ -465,6 +474,30 @@ namespace Hive.IO.Forms
             };
         }
 
+        public void SetProperties(BuildingIntegratedPV buildingIntegratedPV)
+        {
+            ConversionTech = buildingIntegratedPV;
+
+            _efficiency = buildingIntegratedPV.RefEfficiencyElectric;
+            _performanceRatio = buildingIntegratedPV.PR;
+            _surfaceTransmittance = buildingIntegratedPV.f_cover;
+            _capacity = buildingIntegratedPV.Capacity;
+            _specificCapitalCost = buildingIntegratedPV.SpecificInvestmentCost;
+            _specificEmbodiedEmissions = buildingIntegratedPV.SpecificEmbodiedGhg;
+            _lifetime = buildingIntegratedPV.Lifetime;
+            _moduleType = new ModuleTypeRecord
+            {
+                Name = "<custom>",
+                ElectricEfficiency = buildingIntegratedPV.RefEfficiencyElectric,
+                PerformanceRatio = buildingIntegratedPV.PR,
+                SurfaceTransmittance = buildingIntegratedPV.f_cover,
+                SpecificCapitalCost = buildingIntegratedPV.SpecificInvestmentCost,
+                SpecificEmbodiedEmissions = buildingIntegratedPV.SpecificEmbodiedGhg,
+                Lifetime = buildingIntegratedPV.Lifetime,
+                ThermalEfficiency = 0.00
+            };
+        }
+
         public void SetProperties(SolarThermal solarThermal)
         {
             ConversionTech = solarThermal;
@@ -530,5 +563,6 @@ namespace Hive.IO.Forms
         public double SpecificEmbodiedEmissions;
         public double Lifetime;
         public string Description;
+        public string Image { get; set; }
     }
 }
