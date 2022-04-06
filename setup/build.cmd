@@ -25,7 +25,7 @@ cd %HIVE_DIR%\src\Hive.Core\
 @REM "%IPY%" "%HB%" sia380\Hive.Core.sia380.json
 @REM "%IPY%" "%HB%" solar\Hive.Core.solar.json
 "%IPY%" "%HB%" solar_tech\Hive.Core.solar_tech.json
-@REM "%IPY%" "%HB%" combustion\Hive.Core.combustion.json
+"%IPY%" "%HB%" combustion\Hive.Core.combustion.json
 "%IPY%" "%HB%" cooling\Hive.Core.cooling.json
 "%IPY%" "%HB%" heatpumps\Hive.Core.heatpumps.json
 echo ...Done
@@ -36,6 +36,7 @@ cd %HIVE_DIR%\src\Hive.IO\Hive.IO\
 %PYTHON% Building\compile_sia2024_json.py
 %PYTHON% Building\generate_sia2024_schedules_json.py
 %PYTHON% EnergySystems\compile_surface_tech_json.py
+%PYTHON% GhValueLists\compile_performance_ratios_json.py
 "%MSBUILD%" Hive.IO.csproj /p:PreBuildEvent="" /p:PostBuildEvent=""
 
 
@@ -58,7 +59,7 @@ cd %HIVE_DIR%\src\Hive.Core\
 :: "%IPY%" "%HIVE_WIKI_PY%" sia380\Hive.Core.sia380.json
 :: "%IPY%" "%HIVE_WIKI_PY%" solar\Hive.Core.solar.json
 "%IPY%" "%HIVE_WIKI_PY%" solar_tech\Hive.Core.solar_tech.json
-@REM "%IPY%" "%HIVE_WIKI_PY%" combustion\Hive.Core.combustion.json
+"%IPY%" "%HIVE_WIKI_PY%" combustion\Hive.Core.combustion.json
 "%IPY%" "%HIVE_WIKI_PY%" cooling\Hive.Core.cooling.json
 "%IPY%" "%HIVE_WIKI_PY%" heatpumps\Hive.Core.heatpumps.json
 

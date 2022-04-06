@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using Grasshopper.GUI;
@@ -92,6 +93,11 @@ namespace Hive.IO.GhInputOutput
 
         private RectangleF InnerBounds => Bounds.CloneInflate(-Padding, -Padding);
 
+        private List<string> AxisLimitPlots = new List<string>{ "Hive.IO.Plots.DemandMonthlyPlot", 
+            "Hive.IO.Plots.DemandMonthlyNormalizedPlot", 
+            "Hive.IO.Plots.SolarGainsPerWindowPlot",
+            "Hive.IO.Plots.SolarGainsPerWindowNormalizedPlot"};
+
         private RectangleF PlotBounds
         {
             get
@@ -100,6 +106,19 @@ namespace Hive.IO.GhInputOutput
                 plotBounds.Height -= TitleBarHeight;
                 plotBounds.Offset(0, TitleBarHeight);
                 return plotBounds;
+            }
+        }
+
+        private bool InYAXisBounds = false;
+        private RectangleF YAxisBounds
+        {
+            get
+            {
+                var YAxisBounds = InnerBounds;
+                YAxisBounds.Height -= TitleBarHeight + 55;
+                YAxisBounds.Offset(10, TitleBarHeight + 30);
+                YAxisBounds.Width = 65;
+                return YAxisBounds;
             }
         }
 
@@ -136,15 +155,34 @@ namespace Hive.IO.GhInputOutput
 
         public override GH_ObjectResponse RespondToMouseDoubleClick(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
-            // show properties dialog
-            var propertiesDialog = new VisualizerPlotProperties();
-            propertiesDialog.PlotParameters = Owner.PlotProperties;
-            propertiesDialog.ShowDialog();
+            // show properties dialog if mouse is in Y axis box
+            if (YAxisBounds.Contains(e.CanvasLocation) && AxisLimitPlots.Contains(_plotSelector._currentPlot.ToString()))
+            {
+                var propertiesDialog = new VisualizerPlotProperties();
+                propertiesDialog.PlotParameters = Owner.PlotProperties;
+                propertiesDialog.ShowDialog();
 
-            Owner.ExpirePreview(true);
-            Owner.ExpireSolution(true);
-
+                Owner.ExpirePreview(true);
+                Owner.ExpireSolution(true);
+            }
+            
             return GH_ObjectResponse.Release;
+        }
+
+        //this might be a really bad idea performance-wise?
+        public override GH_ObjectResponse RespondToMouseMove(GH_Canvas sender, GH_CanvasMouseEvent e)
+        {
+            if (YAxisBounds.Contains(e.CanvasLocation) && AxisLimitPlots.Contains(_plotSelector._currentPlot.ToString()))
+            {
+                InYAXisBounds = true;
+                sender.Invalidate();
+            }
+            else
+            {
+                InYAXisBounds = false;
+                sender.Invalidate();
+            }
+            return base.RespondToMouseMove(sender, e);
         }
 
         protected override void Render(GH_Canvas canvas, Graphics graphics, GH_CanvasChannel channel)
@@ -158,11 +196,18 @@ namespace Hive.IO.GhInputOutput
             RenderBackground(graphics);
             RenderPlot(graphics);
             RenderTitleBar(graphics);
+            RenderYAxisBox(graphics);
         }
 
         private void RenderBackground(Graphics graphics) => graphics.FillRectangle(new SolidBrush(Color.White), InnerBounds);
 
-
+        private void RenderYAxisBox(Graphics graphics)
+        {
+            if (InYAXisBounds)
+            {
+                graphics.DrawRectangleF(new Pen(Color.Gray, 2), YAxisBounds);
+            }
+        }
         /// <summary>
         ///     Render the title bar at the top with the dropdown for selecting the plot and the
         ///     operational performance metrics.

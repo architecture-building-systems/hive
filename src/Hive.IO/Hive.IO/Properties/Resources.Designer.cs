@@ -173,6 +173,26 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap EnergySystems_Chiller_Simple {
+            get {
+                object obj = ResourceManager.GetObject("EnergySystems_Chiller_Simple", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EnergySystems_Chiller_TimeResult {
+            get {
+                object obj = ResourceManager.GetObject("EnergySystems_Chiller_TimeResult", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap EnergySystems_Combined {
             get {
                 object obj = ResourceManager.GetObject("EnergySystems_Combined", resourceCulture);
@@ -186,6 +206,36 @@ namespace Hive.IO.Properties {
         internal static System.Drawing.Bitmap EnergySystems_Combined_TimeResult {
             get {
                 object obj = ResourceManager.GetObject("EnergySystems_Combined_TimeResult", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EnergySystems_Heatpump_AirScource_TimeResult {
+            get {
+                object obj = ResourceManager.GetObject("EnergySystems_Heatpump_AirScource_TimeResult", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EnergySystems_Heatpump_AirSource {
+            get {
+                object obj = ResourceManager.GetObject("EnergySystems_Heatpump_AirSource", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap EnergySystems_Heatpump_COP {
+            get {
+                object obj = ResourceManager.GetObject("EnergySystems_Heatpump_COP", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -613,7 +663,7 @@ namespace Hive.IO.Properties {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Type,electric efficiency,thermal efficiency,cost per m2,cost per kWp,life cycle GHG factor kgCO2eq per m2,life cycle GHG factor kgCO2eq per kWp,Lifetime,Description,ignore_category,ignore_module description,ignore_cell technology,ignore_module film tint,ignore_module weight (kg),ignore_module dimensions,ignore_module area (sqm.),ignore_module density (kg/sqm.),ignore_module rating(Wp),ignore_module efficiency,ignore_Euro per Wp (installed),ignore_Euro per sqm.,ignore_power density (Wp/sqm),ignore_GWP Intens [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Type,electric efficiency,thermal efficiency,cost per m2,cost per kWp,life cycle GHG factor kgCO2eq per m2,life cycle GHG factor kgCO2eq per kWp,Lifetime,Description,Image,ignore_category,ignore_module description,ignore_cell technology,ignore_module film tint,ignore_module weight (kg),ignore_module dimensions,ignore_module area (sqm.),ignore_module density (kg/sqm.),ignore_module rating(Wp),ignore_module efficiency,ignore_Euro per Wp (installed),ignore_Euro per sqm.,ignore_power density (Wp/sqm),ignore_GWP  [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string pv_efficiency {
             get {
@@ -632,6 +682,76 @@ namespace Hive.IO.Properties {
         internal static string pvt_efficiency {
             get {
                 return ResourceManager.GetString("pvt_efficiency", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Solar_OrientationFactor {
+            get {
+                object obj = ResourceManager.GetObject("Solar_OrientationFactor", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Solar_PerformanceRatio {
+            get {
+                object obj = ResourceManager.GetObject("Solar_PerformanceRatio", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Solar_PV_Simple {
+            get {
+                object obj = ResourceManager.GetObject("Solar_PV_Simple", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Solar_PV_TimeResult {
+            get {
+                object obj = ResourceManager.GetObject("Solar_PV_TimeResult", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Solar_ST_Simple {
+            get {
+                object obj = ResourceManager.GetObject("Solar_ST_Simple", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Solar_ST_TimeResult {
+            get {
+                object obj = ResourceManager.GetObject("Solar_ST_TimeResult", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Solar_SumTimeSeries {
+            get {
+                object obj = ResourceManager.GetObject("Solar_SumTimeSeries", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
             }
         }
         
