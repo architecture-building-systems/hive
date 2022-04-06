@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
 using Grasshopper.GUI;
@@ -92,6 +93,11 @@ namespace Hive.IO.GhInputOutput
 
         private RectangleF InnerBounds => Bounds.CloneInflate(-Padding, -Padding);
 
+        private List<string> AxisLimitPlots = new List<string>{ "Hive.IO.Plots.DemandMonthlyPlot", 
+            "Hive.IO.Plots.DemandMonthlyNormalizedPlot", 
+            "Hive.IO.Plots.SolarGainsPerWindowPlot",
+            "Hive.IO.Plots.SolarGainsPerWindowNormalizedPlot"};
+
         private RectangleF PlotBounds
         {
             get
@@ -150,7 +156,7 @@ namespace Hive.IO.GhInputOutput
         public override GH_ObjectResponse RespondToMouseDoubleClick(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
             // show properties dialog if mouse is in Y axis box
-            if (YAxisBounds.Contains(e.CanvasLocation) && _plotSelector.Category == "S")
+            if (YAxisBounds.Contains(e.CanvasLocation) && AxisLimitPlots.Contains(_plotSelector._currentPlot.ToString()))
             {
                 var propertiesDialog = new VisualizerPlotProperties();
                 propertiesDialog.PlotParameters = Owner.PlotProperties;
@@ -166,7 +172,7 @@ namespace Hive.IO.GhInputOutput
         //this might be a really bad idea performance-wise?
         public override GH_ObjectResponse RespondToMouseMove(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
-            if (YAxisBounds.Contains(e.CanvasLocation) && _plotSelector.Category == "S")
+            if (YAxisBounds.Contains(e.CanvasLocation) && AxisLimitPlots.Contains(_plotSelector._currentPlot.ToString()))
             {
                 InYAXisBounds = true;
                 sender.Invalidate();
