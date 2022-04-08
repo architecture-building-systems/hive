@@ -95,7 +95,7 @@ namespace Hive.IO.GhMergers
             var additionalelec = new List<double>();
             var totalRenewableHeat = new List<double>();
             var totalRenewableElec = new List<double>();
-            double[] energyRenewable;
+            double[] energyRenewable = null;
             var elecPurchased = new List<double>();
 
             if (hourly == false)
@@ -130,9 +130,9 @@ namespace Hive.IO.GhMergers
                 foreach (var pvOrSt in solarTech) {
                     if (pvOrSt != null)
                         energyRenewable = pvOrSt.OutputCarriers[0].EnergyMonthlyCumulative;
-                    if (pvOrSt.GetType == Photovoltaic || pvOrSt.GetType == BuildingIntegratedPV)
+                    if (pvOrSt.GetType() == typeof(Photovoltaic) || pvOrSt.GetType() == typeof(BuildingIntegratedPV))
                         totalRenewableElec = (List<double>)totalRenewableElec.Zip(energyRenewable, (x, y) => x + y);
-                    else if (pvOrSt.GetType == SolarThermal)
+                    else if (pvOrSt.GetType() == typeof(SolarThermal))
                         totalRenewableHeat = (List<double>)totalRenewableHeat.Zip(energyRenewable, (x, y) => x + y);
 
 
@@ -144,9 +144,9 @@ namespace Hive.IO.GhMergers
                 {
                     if (pvOrSt != null)
                         energyRenewable = pvOrSt.OutputCarriers[0].Energy;
-                    if (pvOrSt.GetType == Photovoltaic || pvOrSt.GetType == BuildingIntegratedPV)
+                    if (pvOrSt.GetType() == typeof(Photovoltaic) || pvOrSt.GetType() == typeof(BuildingIntegratedPV))
                         totalRenewableElec = (List<double>)totalRenewableElec.Zip(energyRenewable, (x, y) => x + y);
-                    else if (pvOrSt.GetType == SolarThermal)
+                    else if (pvOrSt.GetType() == typeof(SolarThermal))
                         totalRenewableHeat = (List<double>)totalRenewableHeat.Zip(energyRenewable, (x, y) => x + y);
                 }
             }
