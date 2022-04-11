@@ -155,10 +155,11 @@ namespace Hive.IO.GhInputOutput
 
         public override GH_ObjectResponse RespondToMouseDoubleClick(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
+            var currentPlot = _plotSelector._currentPlot.ToString();
             // show properties dialog if mouse is in Y axis box
-            if (YAxisBounds.Contains(e.CanvasLocation) && AxisLimitPlots.Contains(_plotSelector._currentPlot.ToString()))
+            if (YAxisBounds.Contains(e.CanvasLocation) && AxisLimitPlots.Contains(currentPlot))
             {
-                var propertiesDialog = new VisualizerPlotProperties();
+                var propertiesDialog = new VisualizerPlotProperties(currentPlot);
                 propertiesDialog.PlotParameters = Owner.PlotProperties;
                 propertiesDialog.ShowDialog();
 
@@ -172,7 +173,8 @@ namespace Hive.IO.GhInputOutput
         //this might be a really bad idea performance-wise?
         public override GH_ObjectResponse RespondToMouseMove(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
-            if (YAxisBounds.Contains(e.CanvasLocation) && AxisLimitPlots.Contains(_plotSelector._currentPlot.ToString()))
+            var currentPlot = _plotSelector._currentPlot.ToString();            
+            if (YAxisBounds.Contains(e.CanvasLocation) && AxisLimitPlots.Contains(currentPlot))
             {
                 InYAXisBounds = true;
                 sender.Invalidate();

@@ -16,10 +16,16 @@ namespace Hive.IO.Forms
 
         private int locationX;
         private int locationY;
-        public VisualizerPlotProperties()
+        private bool IsNormalizedAxis = false;
+        private bool IsSolarGainsPlot = false;
+        public VisualizerPlotProperties(string currentPlot)
         {
             this.locationX = Cursor.Position.X;
             this.locationY = Cursor.Position.Y;
+
+            IsNormalizedAxis = currentPlot.Contains("Normalized") ? true : false;
+            IsSolarGainsPlot = currentPlot.Contains("SolarGains") ? true : false;
+
             Load += new EventHandler(VisualizerPlotProperties_Load);
             InitializeComponent();
         }
@@ -27,6 +33,11 @@ namespace Hive.IO.Forms
         private void VisualizerPlotProperties_Load(object sender, System.EventArgs e)
         {
             this.SetDesktopLocation(locationX, locationY);
+
+            if (IsSolarGainsPlot)
+            {
+                this.tabControl1.SelectedTab = this.tabPage2;
+            }
         }
 
         /// <summary>
