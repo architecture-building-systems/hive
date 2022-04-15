@@ -33,11 +33,8 @@ namespace Hive.IO.Forms
         private void VisualizerPlotProperties_Load(object sender, System.EventArgs e)
         {
             this.SetDesktopLocation(locationX, locationY);
+            this.tabControl1.SelectedTab = IsSolarGainsPlot ? this.tabPage2 : this.tabPage1;
 
-            if (IsSolarGainsPlot)
-            {
-                this.tabControl1.SelectedTab = this.tabPage2;
-            }
         }
 
         /// <summary>
