@@ -40,6 +40,19 @@ namespace Hive.IO.Plots
                 });
             }
 
+            double? axisMinimum = new double();
+            double? axisMaximum = new double();
+            if (Normalize)
+            {
+                axisMinimum = plotParameters.ReadDouble("SolarGainsNormalized-Axis-Minimum");
+                axisMaximum = plotParameters.ReadDouble("SolarGainsNormalized-Axis-Maximum");
+            } else
+            {
+                axisMinimum = plotParameters.ReadDouble("SolarGains-Axis-Minimum");
+                axisMaximum = plotParameters.ReadDouble("SolarGains-Axis-Maximum");
+            }
+            
+            
             // add the axes
             var axis = new LinearAxis
             {
@@ -47,13 +60,12 @@ namespace Hive.IO.Plots
                 Key = "Irradiation",
                 Title = Units
             };
-            var axisMinimum = plotParameters.ReadDouble("SolarGains-Axis-Minimum");
+            
             if (axisMinimum.HasValue)
             {
                 axis.Minimum = axisMinimum.Value;
             }
-
-            var axisMaximum = plotParameters.ReadDouble("SolarGains-Axis-Maximum");
+            
             if (axisMaximum.HasValue)
             {
                 axis.Maximum = axisMaximum.Value;
