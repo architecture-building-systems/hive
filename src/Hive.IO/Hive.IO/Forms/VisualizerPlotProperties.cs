@@ -49,10 +49,21 @@ namespace Hive.IO.Forms
                 _plotParameters = value;
 
                 // add the data to the controls
-                txtEnergyDemandMinimum.Text = ReadParameter("EnergyDemandMonthly-Axis-Minimum");
-                txtEnergyDemandMaximum.Text = ReadParameter("EnergyDemandMonthly-Axis-Maximum");
-                txtSolarGainsMinimum.Text = ReadParameter("SolarGains-Axis-Minimum");
-                txtSolarGainsMaximum.Text = ReadParameter("SolarGains-Axis-Maximum");
+                if (!IsNormalizedAxis)
+                {
+                    txtEnergyDemandMinimum.Text = ReadParameter("EnergyDemandMonthly-Axis-Minimum");
+                    txtEnergyDemandMaximum.Text = ReadParameter("EnergyDemandMonthly-Axis-Maximum");
+                    txtSolarGainsMinimum.Text = ReadParameter("SolarGains-Axis-Minimum");
+                    txtSolarGainsMaximum.Text = ReadParameter("SolarGains-Axis-Maximum");
+                } else
+                {
+                    txtEnergyDemandMinimum.Text = ReadParameter("EnergyDemandNormalized-Axis-Minimum");
+                    txtEnergyDemandMaximum.Text = ReadParameter("EnergyDemandNormalized-Axis-Maximum");
+                    txtSolarGainsMinimum.Text = ReadParameter("SolarGainsNormalized-Axis-Minimum");
+                    txtSolarGainsMaximum.Text = ReadParameter("SolarGainsNormalized-Axis-Maximum");
+                }
+                
+                
             }
         }
 
@@ -78,10 +89,20 @@ namespace Hive.IO.Forms
         /// <param name="e"></param>
         private void btnSave_Click(object sender, EventArgs e)
         {
-            WriteDoubleParameter("EnergyDemandMonthly-Axis-Minimum", txtEnergyDemandMinimum.Text);
-            WriteDoubleParameter("EnergyDemandMonthly-Axis-Maximum", txtEnergyDemandMaximum.Text);
-            WriteDoubleParameter("SolarGains-Axis-Minimum", txtSolarGainsMinimum.Text);
-            WriteDoubleParameter("SolarGains-Axis-Maximum", txtSolarGainsMaximum.Text);
+            if (!IsNormalizedAxis)
+            {
+                WriteDoubleParameter("EnergyDemandMonthly-Axis-Minimum", txtEnergyDemandMinimum.Text);
+                WriteDoubleParameter("EnergyDemandMonthly-Axis-Maximum", txtEnergyDemandMaximum.Text);
+                WriteDoubleParameter("SolarGains-Axis-Minimum", txtSolarGainsMinimum.Text);
+                WriteDoubleParameter("SolarGains-Axis-Maximum", txtSolarGainsMaximum.Text);
+            } else
+            {
+                WriteDoubleParameter("EnergyDemandNormalized-Axis-Minimum", txtEnergyDemandMinimum.Text);
+                WriteDoubleParameter("EnergyDemandNormalized-Axis-Maximum", txtEnergyDemandMaximum.Text);
+                WriteDoubleParameter("SolarGainsNormalized-Axis-Minimum", txtSolarGainsMinimum.Text);
+                WriteDoubleParameter("SolarGainsNormalized-Axis-Maximum", txtSolarGainsMaximum.Text);
+            }
+            
         }
 
         private void btnResetDemandAxis_Click(object sender, EventArgs e)
