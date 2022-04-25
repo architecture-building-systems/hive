@@ -29,8 +29,6 @@ namespace Hive.IO.GhMergers
         {
             pManager.AddGenericParameter("Electricity Carrier", "Electricity", "Electricity energy carrier, e.g. from an electricity grid.", GH_ParamAccess.item);
 
-            //pManager.AddNumberParameter("Electricity Purchased", "elecPurchased", "Purchased electricity time series (kWh). Either annual hourly( 8760), or monthly (12) time series.", GH_ParamAccess.list);
-
             pManager.AddGenericParameter("Direct Electricity", "DirectElectricity", "Direct Electricity of type <Hive.IO.EnergySystems.DirectElectricity>, e.g. an electrical substation, or the connection between the electricity grid and the building.", GH_ParamAccess.item);
 
             pManager.AddBooleanParameter("hourly", "hourly", "toggle switch for true/false", GH_ParamAccess.item);
@@ -92,31 +90,30 @@ namespace Hive.IO.GhMergers
             var heatDemandIn = new List<double>();
             DA.GetDataList(7, heatDemandIn);
 
-            var additionalelec = new List<double>();
-            var totalRenewableHeat = new List<double>();
-            var totalRenewableElec = new List<double>();
-            double[] energyRenewable = null;
-            var elecPurchased = new List<double>();
-
+            IEnumerable<double> additionalelec = null;
+            IEnumerable<double> totalRenewableHeat = null;
+            IEnumerable<double> totalRenewableElec = null;
+            IEnumerable<double> energyRenewable = null;
+            IEnumerable<double> elecPurchased = null;
             if (hourly == false)
             {
                 if (chiller != null && ashp != null)
-                    additionalelec = (List<double>)chiller.InputCarrier.EnergyMonthlyCumulative.Zip(ashp.InputCarrier.EnergyMonthlyCumulative, (x, y) => x + y).Zip(siaElec, (x, y) => x + y);
+                    additionalelec = chiller.InputCarrier.EnergyMonthlyCumulative.Zip(ashp.InputCarrier.EnergyMonthlyCumulative, (x, y) => x + y).Zip(siaElec, (x, y) => x + y);
                 else if (ashp != null && chiller == null)
-                    additionalelec = (List<double>)ashp.InputCarrier.EnergyMonthlyCumulative.Zip(siaElec, (x, y) => x + y);
+                    additionalelec = ashp.InputCarrier.EnergyMonthlyCumulative.Zip(siaElec, (x, y) => x + y);
                 else if (ashp == null && chiller != null)
-                    additionalelec = (List<double>)chiller.InputCarrier.EnergyMonthlyCumulative.Zip(siaElec, (x, y) => x + y);
+                    additionalelec = chiller.InputCarrier.EnergyMonthlyCumulative.Zip(siaElec, (x, y) => x + y);
                 else
                     additionalelec = siaElec;
             }
             else
             {
                 if (chiller != null && ashp != null)
-                    additionalelec = (List<double>)chiller.InputCarrier.Energy.Zip(ashp.InputCarrier.Energy, (x, y) => x + y).Zip(siaElec, (x, y) => x + y);
+                    additionalelec = chiller.InputCarrier.Energy.Zip(ashp.InputCarrier.Energy, (x, y) => x + y).Zip(siaElec, (x, y) => x + y);
                 else if (ashp != null && chiller == null)
-                    additionalelec = (List<double>)ashp.InputCarrier.Energy.Zip(siaElec, (x, y) => x + y);
+                    additionalelec = ashp.InputCarrier.Energy.Zip(siaElec, (x, y) => x + y);
                 else if (ashp == null && chiller != null)
-                    additionalelec = (List<double>)chiller.InputCarrier.Energy.Zip(siaElec, (x, y) => x + y);
+                    additionalelec = chiller.InputCarrier.Energy.Zip(siaElec, (x, y) => x + y);
                 else
                     additionalelec = siaElec;
             }
@@ -127,15 +124,14 @@ namespace Hive.IO.GhMergers
 
             if (hourly == false)
             {
-                foreach (var pvOrSt in solarTech) {
+                foreach (var pvOrSt in solarTech)
+                {
                     if (pvOrSt != null)
                         energyRenewable = pvOrSt.OutputCarriers[0].EnergyMonthlyCumulative;
                     if (pvOrSt.GetType() == typeof(Photovoltaic) || pvOrSt.GetType() == typeof(BuildingIntegratedPV))
-                        totalRenewableElec = (List<double>)totalRenewableElec.Zip(energyRenewable, (x, y) => x + y);
+                        totalRenewableElec = totalRenewableElec.Zip(energyRenewable, (x, y) => x + y);
                     else if (pvOrSt.GetType() == typeof(SolarThermal))
-                        totalRenewableHeat = (List<double>)totalRenewableHeat.Zip(energyRenewable, (x, y) => x + y);
-
-
+                        totalRenewableHeat = totalRenewableHeat.Zip(energyRenewable, (x, y) => x + y);
                 }
             }
             else
@@ -145,13 +141,13 @@ namespace Hive.IO.GhMergers
                     if (pvOrSt != null)
                         energyRenewable = pvOrSt.OutputCarriers[0].Energy;
                     if (pvOrSt.GetType() == typeof(Photovoltaic) || pvOrSt.GetType() == typeof(BuildingIntegratedPV))
-                        totalRenewableElec = (List<double>)totalRenewableElec.Zip(energyRenewable, (x, y) => x + y);
+                        totalRenewableElec = totalRenewableElec.Zip(energyRenewable, (x, y) => x + y);
                     else if (pvOrSt.GetType() == typeof(SolarThermal))
-                        totalRenewableHeat = (List<double>)totalRenewableHeat.Zip(energyRenewable, (x, y) => x + y);
+                        totalRenewableHeat = totalRenewableHeat.Zip(energyRenewable, (x, y) => x + y);
                 }
             }
 
-            elecPurchased = (List<double>)additionalelec.Zip(totalRenewableElec, (x, y) => x - y);
+            elecPurchased = additionalelec.Zip(totalRenewableElec, (x, y) => x - y);
 
             substation.SetInputOutput(elec, elecPurchased.ToArray());
 
