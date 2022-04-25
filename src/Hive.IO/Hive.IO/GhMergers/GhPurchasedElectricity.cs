@@ -91,10 +91,6 @@ namespace Hive.IO.GhMergers
             DA.GetDataList(7, heatDemandIn);
 
             IEnumerable<double> additionalelec = null;
-            IEnumerable<double> totalRenewableHeat = null;
-            IEnumerable<double> totalRenewableElec = null;
-            IEnumerable<double> energyRenewable = null;
-            IEnumerable<double> elecPurchased = null;
             if (hourly == false)
             {
                 if (chiller != null && ashp != null)
@@ -121,6 +117,13 @@ namespace Hive.IO.GhMergers
             var horizon = 8760;
             if (hourly == false)
                 horizon = 12;
+
+
+            IEnumerable<double> totalRenewableHeat = new double[horizon];
+            IEnumerable<double> totalRenewableElec = new double[horizon];
+            IEnumerable<double> energyRenewable = null;
+            IEnumerable<double> elecPurchased = null;
+
 
             if (hourly == false)
             {
