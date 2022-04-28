@@ -24,6 +24,7 @@ namespace Hive.IO.Plots
         protected override PlotModel CreatePlotModel(ResultsPlotting results, Dictionary<string, string> plotParameters)
         {
             var model = new PlotModel {Title = PlotTitle};
+            var irradiationList = new List<double[]>();
 
             // add the data
             for (int i = 0; i < results.IrradiationOnWindows?.Count; i++)
@@ -38,6 +39,7 @@ namespace Hive.IO.Plots
                     LabelFormatString = "{0:0}",
                     LabelPlacement = LabelPlacement.Middle
                 });
+                irradiationList.Add(results.IrradiationOnWindows[i].Select(x => Normalize ? x / windowArea : x ).ToArray());
             }
 
             double? axisMinimum = new double();
@@ -79,7 +81,27 @@ namespace Hive.IO.Plots
                 ItemsSource = Misc.MonthNames
             });
 
+            var irradiation = getMonthlyIrradiation(irradiationList);
+
+            var totalLabel = new OxyPlot.Annotations.TextAnnotation
+            {
+                Text = Normalize ? $" Total: { irradiation.Sum():00} kWh/m²/Year" : $" Total: { irradiation.Sum():00} kWh/Year",
+                TextPosition = new DataPoint(-0.3, (axisMaximum.HasValue ? axisMaximum.Value : irradiation.Max()) *0.93),
+                TextHorizontalAlignment = HorizontalAlignment.Left
+            };
+            model.Annotations.Add(totalLabel);
+
             return model;
+        }
+
+        public List<double> getMonthlyIrradiation(List<double[]> irradiationOnWindows)
+        {
+            var sums = Enumerable.Range(0, irradiationOnWindows[0].Length)
+           .Select(i => irradiationOnWindows.Select(
+                     nums => nums[i]
+                  ).Sum()
+           );
+           return sums.ToList();
         }
     }
 
