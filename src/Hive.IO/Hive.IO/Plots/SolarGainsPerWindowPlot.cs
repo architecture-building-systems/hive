@@ -26,10 +26,10 @@ namespace Hive.IO.Plots
             var model = new PlotModel {Title = PlotTitle};
             var irradiationList = new List<double[]>();
 
+            var windowArea = results.AreasPerWindow.Sum();
             // add the data
             for (int i = 0; i < results.IrradiationOnWindows?.Count; i++)
             {
-                var windowArea = results.AreasPerWindow[i];
                 model.Series.Add(new ColumnSeries
                 {
                     ItemsSource = results.IrradiationOnWindows[i].Select(x => new ColumnItem {Value = Normalize ? x / windowArea : x}),
