@@ -34,6 +34,10 @@ namespace Hive.IO.GhMergers
             pManager.AddNumberParameter("Heating Generated", "heatGenerated", "Generated heating energy time series (kWh). Either annual hourly( 8760), or monthly (12) time series.", GH_ParamAccess.list);
             pManager.AddNumberParameter("Supply Temperature", "suppTemp", "Supply temperature time series of the heated water at the ASHP outlet. Used to calculate COP (Coefficient of Performance) of the ASHP.", GH_ParamAccess.list);
             pManager.AddBooleanParameter("SimpleMode?", "simpleMode?", "Compute simple efficiency? If 'False', Eqt. (8c) from Ashouri et al (2013) is used (10.1016/j.energy.2013.06.053).", GH_ParamAccess.item, true);
+            pManager.AddBooleanParameter("PessimisticCOP?", "PessimisticCOP?",
+                "If simplemode=false, with this boolean you can decide to take the min COP between the simple and the Ashouri COP calculation. \n " +
+                "Ashouri's COP seems sometimes very high, with COP in Zurich not going below 3, while the simple equation leads to extremely high COP at high ambient temperatires.",
+                GH_ParamAccess.item, false);
 
             pManager.AddGenericParameter("Hive Air Source Heat Pump", "ASHP", "Hive Air Source Heat Pump (ASHP) (<Hive.IO.EnergySystems.AirSourceHeatPump>) that will be infused with information from above inputs.", GH_ParamAccess.item);
         }
@@ -67,14 +71,17 @@ namespace Hive.IO.GhMergers
             bool simple = true;
             DA.GetData(4, ref simple);
 
+            bool pessimisticCop = false;
+            DA.GetData(5, ref pessimisticCop);
+
             AirSourceHeatPump ashp = null;
-            DA.GetData(5, ref ashp);
+            DA.GetData(6, ref ashp);
 
 
             if (simple)
                 ashp.SetInputOutputSimple(electricity, air, energyGenerated.ToArray(), supplyTemp.ToArray());
             else
-                ashp.SetInputOutput(electricity, air, energyGenerated.ToArray(), supplyTemp.ToArray());
+                ashp.SetInputOutput(electricity, air, energyGenerated.ToArray(), supplyTemp.ToArray(), pessimisticCop);
 
             DA.SetData(0, ashp);
         }

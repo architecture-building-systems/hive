@@ -175,9 +175,9 @@ namespace Hive.IO.EnergySystems
 
             for (int t = 0; t < horizon; t++)
             {
-                double COP = this.EtaRef * ((tempWarmHorizon[t] + Misc.Kelvin) / ((tempWarmHorizon[t] + Misc.Kelvin) - (tempColdHorizon[t] + Misc.Kelvin)));
-                base.COP[t] = COP;
-                elecConsumed[t] = heatingGenerated[t] / COP;
+                double COPSimple = CopSimple(tempWarmHorizon[t], tempColdHorizon[t]); //this.EtaRef * ((tempWarmHorizon[t] + Misc.Kelvin) / ((tempWarmHorizon[t] + Misc.Kelvin) - (tempColdHorizon[t] + Misc.Kelvin)));
+                base.COP[t] = COPSimple;
+                elecConsumed[t] = heatingGenerated[t] / COPSimple;
                 if (elecConsumed[t] < 0.0) elecConsumed[t] = 0.0;
             }
 
@@ -189,6 +189,10 @@ namespace Hive.IO.EnergySystems
 
         }
 
+        private double CopSimple(double warmFluid, double coldFluid)
+        {
+            return this.EtaRef * ((warmFluid + Misc.Kelvin) / ((warmFluid + Misc.Kelvin) - (coldFluid + Misc.Kelvin)));
+        }
 
         /// <summary>
         /// Ashouri et al 2013. Optimal design and operation of building services using mixed-integer linear programming techniques
@@ -199,7 +203,8 @@ namespace Hive.IO.EnergySystems
         /// <param name="airIn"></param>
         /// <param name="heatingGenerated"></param>
         /// <param name="supplyTemp"></param>
-        public void SetInputOutput(Electricity electricityIn, Air airIn, double[] heatingGenerated, double[] supplyTemp,
+        public void SetInputOutput(Electricity electricityIn, Air airIn, double[] heatingGenerated, double[] supplyTemp, 
+            bool pessimisticCOP = false,
             double pi1 = 13.39, double pi2 = -0.047, double pi3 = 1.109, double pi4 = 0.012)
         {
             int horizon = heatingGenerated.Length;
@@ -209,27 +214,39 @@ namespace Hive.IO.EnergySystems
             var elecPrice = new double[horizon];
             var elecEmissionsFactor = new double[horizon];
             var airTemp = new double[horizon];
+            var supTemp = new double[horizon];
 
             if (horizon == Misc.MonthsPerYear)
             {
                 elecPrice = Misc.GetAverageMonthlyValue(electricityIn.SpecificCost);
                 elecEmissionsFactor = Misc.GetAverageMonthlyValue(electricityIn.SpecificEmissions);
                 airTemp = airIn.TemperatureMonthly;
+                supTemp = Misc.GetAverageMonthlyValue(supplyTemp); // supplyTemp should always be 8760
             }
             else
             {
                 elecPrice = electricityIn.SpecificCost;
                 elecEmissionsFactor = electricityIn.SpecificEmissions;
                 airTemp = airIn.Temperature;
+                supplyTemp.CopyTo(supTemp,0);
             }
 
             for (int t = 0; t < horizon; t++)
             {
-                double COP = pi1 * Math.Exp(pi2 * ((supplyTemp[t] + Misc.Kelvin) - (airTemp[t] + Misc.Kelvin))) + pi3 * Math.Exp(pi4 * ((supplyTemp[t] + Misc.Kelvin) - (airTemp[t] + Misc.Kelvin)));
-                base.COP[t] = COP;
-                elecConsumed[t] = heatingGenerated[t] / COP;
+                double COPAshouri = pi1 * Math.Exp(pi2 * ((supTemp[t] + Misc.Kelvin) - (airTemp[t] + Misc.Kelvin))) + pi3 * Math.Exp(pi4 * ((supTemp[t] + Misc.Kelvin) - (airTemp[t] + Misc.Kelvin)));
+                base.COP[t] = COPAshouri;
+                if (pessimisticCOP)
+                {
+                    double COPSimple = CopSimple(supTemp[t], airTemp[t]);
+                    base.COP[t] = Math.Min(base.COP[t], COPSimple); // always taking the worse COP. The Simple COP calculation leads to extremely high COPs in summer, whereas Ashouri's model doesn't result in COPs < 3.
+                }
+
+                elecConsumed[t] = heatingGenerated[t] / COP[t];
                 if (elecConsumed[t] < 0.0) elecConsumed[t] = 0.0;
             }
+
+
+            
 
             Electricity electricityConsumedCarrier = new Electricity(horizon, elecConsumed, elecPrice, elecEmissionsFactor, electricityIn.PrimaryEnergyFactor);
             base.InputCarrier = electricityConsumedCarrier;
