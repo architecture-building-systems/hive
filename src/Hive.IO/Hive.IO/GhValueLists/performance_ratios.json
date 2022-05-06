@@ -1,0 +1,26 @@
+[
+    {
+        "Scenario": "Roof perfect", 
+        "PerformanceRatio": 0.85
+    }, 
+    {
+        "Scenario": "Roof normal", 
+        "PerformanceRatio": 0.75
+    }, 
+    {
+        "Scenario": "Roof dirty", 
+        "PerformanceRatio": 0.7
+    }, 
+    {
+        "Scenario": "Facade perfect", 
+        "PerformanceRatio": 0.75
+    }, 
+    {
+        "Scenario": "Facade normal", 
+        "PerformanceRatio": 0.7
+    }, 
+    {
+        "Scenario": "Facade shaded", 
+        "PerformanceRatio": 0.6
+    }
+]

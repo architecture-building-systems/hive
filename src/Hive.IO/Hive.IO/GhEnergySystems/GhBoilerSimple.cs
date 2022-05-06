@@ -1,4 +1,3 @@
-
 using System;
 using Grasshopper.Kernel;
 
@@ -21,13 +20,13 @@ namespace Hive.IO.GhEnergySystems
         //     - carbon emissions [kgCO2eq.]        
         /// </summary>
         public GhBoilerSimple()
-          : base("Boiler Energy System", "BoilerSimple",
+          : base("Boiler Energy System C#", "BoilerSimple",
               "Calculates total operating cost and carbon emissions of a boiler to meet heating loads.",
-              "[hive]", "Energy Systems")
+              "[hive]", "Energy Systems C#")
         {
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.secondary;
+        public override GH_Exposure Exposure => GH_Exposure.primary;
 
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)

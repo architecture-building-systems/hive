@@ -56,12 +56,24 @@ namespace Hive.IO.Plots
             };
             model.Series.Add(demandDhw);
 
-            model.Axes.Add(new LinearAxis
+            var axis = new LinearAxis
             {
                 Position = AxisPosition.Left,
                 Key = "Demand",
-                Title = "kWh/m²"
-            });
+                Title = "kWh/m²",
+            };
+            var axisMinimum = plotParameters.ReadDouble("EnergyDemandNormalized-Axis-Minimum");
+            if (axisMinimum.HasValue)
+            {
+                axis.Minimum = axisMinimum.Value;
+            }
+
+            var axisMaximum = plotParameters.ReadDouble("EnergyDemandNormalized-Axis-Maximum");
+            if (axisMaximum.HasValue)
+            {
+                axis.Maximum = axisMaximum.Value;
+            }
+            model.Axes.Add(axis);
 
             model.Axes.Add(new CategoryAxis
             {

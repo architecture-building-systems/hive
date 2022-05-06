@@ -24,11 +24,12 @@ namespace Hive.IO.Plots
         protected override PlotModel CreatePlotModel(ResultsPlotting results, Dictionary<string, string> plotParameters)
         {
             var model = new PlotModel {Title = PlotTitle};
+            var irradiationList = new List<double[]>();
 
+            var windowArea = results.AreasPerWindow.Sum();
             // add the data
             for (int i = 0; i < results.IrradiationOnWindows?.Count; i++)
             {
-                var windowArea = results.AreasPerWindow[i];
                 model.Series.Add(new ColumnSeries
                 {
                     ItemsSource = results.IrradiationOnWindows[i].Select(x => new ColumnItem {Value = Normalize ? x / windowArea : x}),
@@ -38,8 +39,22 @@ namespace Hive.IO.Plots
                     LabelFormatString = "{0:0}",
                     LabelPlacement = LabelPlacement.Middle
                 });
+                irradiationList.Add(results.IrradiationOnWindows[i].Select(x => Normalize ? x / windowArea : x ).ToArray());
             }
 
+            double? axisMinimum = new double();
+            double? axisMaximum = new double();
+            if (Normalize)
+            {
+                axisMinimum = plotParameters.ReadDouble("SolarGainsNormalized-Axis-Minimum");
+                axisMaximum = plotParameters.ReadDouble("SolarGainsNormalized-Axis-Maximum");
+            } else
+            {
+                axisMinimum = plotParameters.ReadDouble("SolarGains-Axis-Minimum");
+                axisMaximum = plotParameters.ReadDouble("SolarGains-Axis-Maximum");
+            }
+            
+            
             // add the axes
             var axis = new LinearAxis
             {
@@ -47,13 +62,12 @@ namespace Hive.IO.Plots
                 Key = "Irradiation",
                 Title = Units
             };
-            var axisMinimum = plotParameters.ReadDouble("SolarGains-Axis-Minimum");
+            
             if (axisMinimum.HasValue)
             {
                 axis.Minimum = axisMinimum.Value;
             }
-
-            var axisMaximum = plotParameters.ReadDouble("SolarGains-Axis-Maximum");
+            
             if (axisMaximum.HasValue)
             {
                 axis.Maximum = axisMaximum.Value;
@@ -67,7 +81,27 @@ namespace Hive.IO.Plots
                 ItemsSource = Misc.MonthNames
             });
 
+            var irradiation = getMonthlyIrradiation(irradiationList);
+
+            var totalLabel = new OxyPlot.Annotations.TextAnnotation
+            {
+                Text = Normalize ? $" Total: { irradiation.Sum():00} kWh/m²/Year" : $" Total: { irradiation.Sum():00} kWh/Year",
+                TextPosition = new DataPoint(-0.3, (axisMaximum.HasValue ? axisMaximum.Value : irradiation.Max()) *0.93),
+                TextHorizontalAlignment = HorizontalAlignment.Left
+            };
+            model.Annotations.Add(totalLabel);
+
             return model;
+        }
+
+        public List<double> getMonthlyIrradiation(List<double[]> irradiationOnWindows)
+        {
+            var sums = Enumerable.Range(0, irradiationOnWindows[0].Length)
+           .Select(i => irradiationOnWindows.Select(
+                     nums => nums[i]
+                  ).Sum()
+           );
+           return sums.ToList();
         }
     }
 
