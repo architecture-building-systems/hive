@@ -10,8 +10,8 @@ SET HIVE_WIKI_DIR=%GIT_DIR%\hive.wiki
 @REM Change these paths accordingly
 @REM Requires python 2.7, likely from conda env.
 SET PYTHON=python
-SET IPY=%PROGRAMFILES%\IronPython 2.7\ipy.exe
-SET HB=%HONEY_BADGER_DIR%\honey-badger.py
+:: SET IPY=%PROGRAMFILES%\IronPython 2.7\ipy.exe
+:: SET HB=%HONEY_BADGER_DIR%\honey-badger.py
 SET HIVE_WIKI_PY= %HIVE_WIKI_DIR%\hbwiki.py
 SET MSBUILD=%PROGRAMFILES(x86)%\Microsoft Visual Studio\2019\Community\MSBuild\Current\Bin\MSBuild.exe
 SET MAKENSIS=%PROGRAMFILES(X86)%\NSIS\makensis.exe
@@ -19,16 +19,16 @@ SET MAKENSIS=%PROGRAMFILES(X86)%\NSIS\makensis.exe
 CD %HIVE_BUILD_DIR%
 
 @REM Build Hive.Core
-echo Building Hive.Core...
-cd %HIVE_DIR%\src\Hive.Core\
-"%IPY%" "%HB%" epw_reader\Hive.Core.epw_reader.json
-"%IPY%" "%HB%" sia380\Hive.Core.sia380.json
-@REM "%IPY%" "%HB%" solar\Hive.Core.solar.json
-"%IPY%" "%HB%" solar_tech\Hive.Core.solar_tech.json
-"%IPY%" "%HB%" combustion\Hive.Core.combustion.json
-"%IPY%" "%HB%" cooling\Hive.Core.cooling.json
-"%IPY%" "%HB%" heatpumps\Hive.Core.heatpumps.json
-echo ...Done
+:: echo Building Hive.Core...
+:: cd %HIVE_DIR%\src\Hive.Core\
+:: "%IPY%" "%HB%" epw_reader\Hive.Core.epw_reader.json
+:: "%IPY%" "%HB%" sia380\Hive.Core.sia380.json
+:: "%IPY%" "%HB%" solar\Hive.Core.solar.json
+:: "%IPY%" "%HB%" solar_tech\Hive.Core.solar_tech.json
+:: "%IPY%" "%HB%" combustion\Hive.Core.combustion.json
+:: "%IPY%" "%HB%" cooling\Hive.Core.cooling.json
+:: "%IPY%" "%HB%" heatpumps\Hive.Core.heatpumps.json
+:: echo ...Done
 
 @REM Build Hive.IO (only the main csproj, not tests)
 echo Building Hive.IO...
@@ -54,14 +54,14 @@ echo ...Done
 
 @REM Generating Component Documentation for Wiki
 echo Generating Component Documentation for Wiki...
-cd %HIVE_DIR%\src\Hive.Core\
-"%IPY%" "%HIVE_WIKI_PY%" epw_reader\Hive.Core.epw_reader.json
+:: cd %HIVE_DIR%\src\Hive.Core\
+:: "%IPY%" "%HIVE_WIKI_PY%" epw_reader\Hive.Core.epw_reader.json
 :: "%IPY%" "%HIVE_WIKI_PY%" sia380\Hive.Core.sia380.json
 :: "%IPY%" "%HIVE_WIKI_PY%" solar\Hive.Core.solar.json
-"%IPY%" "%HIVE_WIKI_PY%" solar_tech\Hive.Core.solar_tech.json
-"%IPY%" "%HIVE_WIKI_PY%" combustion\Hive.Core.combustion.json
-"%IPY%" "%HIVE_WIKI_PY%" cooling\Hive.Core.cooling.json
-"%IPY%" "%HIVE_WIKI_PY%" heatpumps\Hive.Core.heatpumps.json
+:: "%IPY%" "%HIVE_WIKI_PY%" solar_tech\Hive.Core.solar_tech.json
+:: "%IPY%" "%HIVE_WIKI_PY%" combustion\Hive.Core.combustion.json
+:: "%IPY%" "%HIVE_WIKI_PY%" cooling\Hive.Core.cooling.json
+:: "%IPY%" "%HIVE_WIKI_PY%" heatpumps\Hive.Core.heatpumps.json
 
 cd %HIVE_BUILD_DIR%
 echo ...Done

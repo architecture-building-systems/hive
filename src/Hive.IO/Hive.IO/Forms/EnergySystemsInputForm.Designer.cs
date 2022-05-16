@@ -30,16 +30,16 @@
         {
             this.tabControl = new System.Windows.Forms.TabControl();
             this.tabConversion = new System.Windows.Forms.TabPage();
-            this.button1 = new System.Windows.Forms.Button();
-            this.button2 = new System.Windows.Forms.Button();
+            this.deleteConversionTech = new System.Windows.Forms.Button();
+            this.addconversionTech = new System.Windows.Forms.Button();
             this.tableLayoutPanelMain = new System.Windows.Forms.TableLayoutPanel();
             this.gridConversion = new System.Windows.Forms.DataGridView();
             this.Conversion = new System.Windows.Forms.DataGridViewComboBoxColumn();
             this.Source = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.EndUse = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.tabEmission = new System.Windows.Forms.TabPage();
-            this.button4 = new System.Windows.Forms.Button();
-            this.button3 = new System.Windows.Forms.Button();
+            this.deleteEmission = new System.Windows.Forms.Button();
+            this.addEmission = new System.Windows.Forms.Button();
             this.tableLayoutEmission = new System.Windows.Forms.TableLayoutPanel();
             this.gridEmission = new System.Windows.Forms.DataGridView();
             this.dataGridViewComboBoxColumn1 = new System.Windows.Forms.DataGridViewComboBoxColumn();
@@ -65,42 +65,44 @@
             this.tabControl.Margin = new System.Windows.Forms.Padding(6);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(1683, 831);
+            this.tabControl.Size = new System.Drawing.Size(1679, 825);
             this.tabControl.TabIndex = 0;
             // 
             // tabConversion
             // 
-            this.tabConversion.Controls.Add(this.button1);
-            this.tabConversion.Controls.Add(this.button2);
+            this.tabConversion.Controls.Add(this.deleteConversionTech);
+            this.tabConversion.Controls.Add(this.addconversionTech);
             this.tabConversion.Controls.Add(this.tableLayoutPanelMain);
             this.tabConversion.Location = new System.Drawing.Point(8, 39);
             this.tabConversion.Margin = new System.Windows.Forms.Padding(6);
             this.tabConversion.Name = "tabConversion";
             this.tabConversion.Padding = new System.Windows.Forms.Padding(6);
-            this.tabConversion.Size = new System.Drawing.Size(1667, 784);
+            this.tabConversion.Size = new System.Drawing.Size(1663, 778);
             this.tabConversion.TabIndex = 0;
             this.tabConversion.Text = "Conversion";
             this.tabConversion.UseVisualStyleBackColor = true;
             // 
-            // button1
+            // deleteConversionTech
             // 
-            this.button1.Location = new System.Drawing.Point(9, 12);
-            this.button1.Name = "button1";
-            this.button1.Size = new System.Drawing.Size(118, 118);
-            this.button1.TabIndex = 1;
-            this.button1.Text = "Add New Entry";
-            this.button1.UseVisualStyleBackColor = true;
-            this.button1.Click += new System.EventHandler(this.addConversionTech_Click);
+            this.deleteConversionTech.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.deleteConversionTech.Location = new System.Drawing.Point(47, 0);
+            this.deleteConversionTech.Name = "deleteConversionTech";
+            this.deleteConversionTech.Size = new System.Drawing.Size(45, 45);
+            this.deleteConversionTech.TabIndex = 3;
+            this.deleteConversionTech.Text = "-";
+            this.deleteConversionTech.UseVisualStyleBackColor = true;
+            this.deleteConversionTech.Click += new System.EventHandler(this.deleteConversionTech_Click);
             // 
-            // button2
+            // addconversionTech
             // 
-            this.button2.Location = new System.Drawing.Point(9, 132);
-            this.button2.Name = "button2";
-            this.button2.Size = new System.Drawing.Size(118, 120);
-            this.button2.TabIndex = 2;
-            this.button2.Text = "Delete Entry";
-            this.button2.UseVisualStyleBackColor = true;
-            this.button2.Click += new System.EventHandler(this.deleteConversionTech_Click);
+            this.addconversionTech.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addconversionTech.Location = new System.Drawing.Point(0, 0);
+            this.addconversionTech.Name = "addconversionTech";
+            this.addconversionTech.Size = new System.Drawing.Size(45, 45);
+            this.addconversionTech.TabIndex = 2;
+            this.addconversionTech.Text = "+";
+            this.addconversionTech.UseVisualStyleBackColor = true;
+            this.addconversionTech.Click += new System.EventHandler(this.addConversionTech_Click);
             // 
             // tableLayoutPanelMain
             // 
@@ -108,13 +110,14 @@
             this.tableLayoutPanelMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanelMain.Controls.Add(this.gridConversion, 0, 0);
             this.tableLayoutPanelMain.Controls.Add(this.ConversionProperties, 0, 1);
-            this.tableLayoutPanelMain.Location = new System.Drawing.Point(6, 6);
+            this.tableLayoutPanelMain.Location = new System.Drawing.Point(-8, 42);
             this.tableLayoutPanelMain.Margin = new System.Windows.Forms.Padding(6);
             this.tableLayoutPanelMain.Name = "tableLayoutPanelMain";
             this.tableLayoutPanelMain.RowCount = 2;
-            this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 32.25389F));
-            this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 67.74612F));
-            this.tableLayoutPanelMain.Size = new System.Drawing.Size(1655, 772);
+            this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 33.42776F));
+            this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 66.57224F));
+            this.tableLayoutPanelMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanelMain.Size = new System.Drawing.Size(1671, 738);
             this.tableLayoutPanelMain.TabIndex = 0;
             this.tableLayoutPanelMain.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanelMain_Paint);
             // 
@@ -131,14 +134,14 @@
             this.EndUse});
             this.gridConversion.Dock = System.Windows.Forms.DockStyle.Right;
             this.gridConversion.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.gridConversion.Location = new System.Drawing.Point(130, 6);
+            this.gridConversion.Location = new System.Drawing.Point(8, 6);
             this.gridConversion.Margin = new System.Windows.Forms.Padding(6);
             this.gridConversion.MultiSelect = false;
             this.gridConversion.Name = "gridConversion";
             this.gridConversion.RowHeadersVisible = false;
             this.gridConversion.RowHeadersWidth = 102;
             this.gridConversion.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.gridConversion.Size = new System.Drawing.Size(1519, 237);
+            this.gridConversion.Size = new System.Drawing.Size(1657, 234);
             this.gridConversion.TabIndex = 0;
             this.gridConversion.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridConversion_CellValueChanged);
             this.gridConversion.CurrentCellDirtyStateChanged += new System.EventHandler(this.gridConversion_CurrentCellDirtyStateChanged);
@@ -151,7 +154,7 @@
             this.Conversion.HeaderText = "Conversion";
             this.Conversion.MinimumWidth = 12;
             this.Conversion.Name = "Conversion";
-            this.Conversion.Width = 250;
+            this.Conversion.Width = 127;
             // 
             // Source
             // 
@@ -159,7 +162,7 @@
             this.Source.MinimumWidth = 12;
             this.Source.Name = "Source";
             this.Source.ReadOnly = true;
-            this.Source.Width = 250;
+            this.Source.Width = 125;
             // 
             // EndUse
             // 
@@ -167,41 +170,43 @@
             this.EndUse.MinimumWidth = 12;
             this.EndUse.Name = "EndUse";
             this.EndUse.ReadOnly = true;
-            this.EndUse.Width = 250;
+            this.EndUse.Width = 133;
             // 
             // tabEmission
             // 
-            this.tabEmission.Controls.Add(this.button4);
-            this.tabEmission.Controls.Add(this.button3);
+            this.tabEmission.Controls.Add(this.deleteEmission);
+            this.tabEmission.Controls.Add(this.addEmission);
             this.tabEmission.Controls.Add(this.tableLayoutEmission);
             this.tabEmission.Location = new System.Drawing.Point(8, 39);
             this.tabEmission.Margin = new System.Windows.Forms.Padding(6);
             this.tabEmission.Name = "tabEmission";
             this.tabEmission.Padding = new System.Windows.Forms.Padding(6);
-            this.tabEmission.Size = new System.Drawing.Size(1667, 784);
+            this.tabEmission.Size = new System.Drawing.Size(1663, 778);
             this.tabEmission.TabIndex = 1;
             this.tabEmission.Text = "Emission";
             this.tabEmission.UseVisualStyleBackColor = true;
             // 
-            // button4
+            // deleteEmission
             // 
-            this.button4.Location = new System.Drawing.Point(9, 132);
-            this.button4.Name = "button4";
-            this.button4.Size = new System.Drawing.Size(118, 118);
-            this.button4.TabIndex = 2;
-            this.button4.Text = "Delete Entry";
-            this.button4.UseVisualStyleBackColor = true;
-            this.button4.Click += new System.EventHandler(this.deleteEmission_Click);
+            this.deleteEmission.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.deleteEmission.Location = new System.Drawing.Point(47, 0);
+            this.deleteEmission.Name = "deleteEmission";
+            this.deleteEmission.Size = new System.Drawing.Size(45, 45);
+            this.deleteEmission.TabIndex = 2;
+            this.deleteEmission.Text = "-";
+            this.deleteEmission.UseVisualStyleBackColor = true;
+            this.deleteEmission.Click += new System.EventHandler(this.deleteEmission_Click);
             // 
-            // button3
+            // addEmission
             // 
-            this.button3.Location = new System.Drawing.Point(8, 12);
-            this.button3.Name = "button3";
-            this.button3.Size = new System.Drawing.Size(118, 118);
-            this.button3.TabIndex = 1;
-            this.button3.Text = "Add New Entry";
-            this.button3.UseVisualStyleBackColor = true;
-            this.button3.Click += new System.EventHandler(this.addEmission_Click);
+            this.addEmission.Font = new System.Drawing.Font("Microsoft Sans Serif", 12F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
+            this.addEmission.Location = new System.Drawing.Point(0, 0);
+            this.addEmission.Name = "addEmission";
+            this.addEmission.Size = new System.Drawing.Size(45, 45);
+            this.addEmission.TabIndex = 1;
+            this.addEmission.Text = "+";
+            this.addEmission.UseVisualStyleBackColor = true;
+            this.addEmission.Click += new System.EventHandler(this.addEmission_Click);
             // 
             // tableLayoutEmission
             // 
@@ -210,12 +215,12 @@
             this.tableLayoutEmission.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 15F));
             this.tableLayoutEmission.Controls.Add(this.gridEmission, 0, 0);
             this.tableLayoutEmission.Controls.Add(this.emitterProperties, 0, 1);
-            this.tableLayoutEmission.Location = new System.Drawing.Point(4, 6);
+            this.tableLayoutEmission.Location = new System.Drawing.Point(-8, 41);
             this.tableLayoutEmission.Name = "tableLayoutEmission";
             this.tableLayoutEmission.RowCount = 2;
             this.tableLayoutEmission.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 32.25389F));
             this.tableLayoutEmission.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 67.74612F));
-            this.tableLayoutEmission.Size = new System.Drawing.Size(1657, 772);
+            this.tableLayoutEmission.Size = new System.Drawing.Size(1669, 737);
             this.tableLayoutEmission.TabIndex = 0;
             // 
             // gridEmission
@@ -231,14 +236,14 @@
             this.dataGridViewTextBoxColumn2});
             this.gridEmission.Dock = System.Windows.Forms.DockStyle.Right;
             this.gridEmission.EditMode = System.Windows.Forms.DataGridViewEditMode.EditOnEnter;
-            this.gridEmission.Location = new System.Drawing.Point(131, 6);
+            this.gridEmission.Location = new System.Drawing.Point(8, 6);
             this.gridEmission.Margin = new System.Windows.Forms.Padding(6);
             this.gridEmission.MultiSelect = false;
             this.gridEmission.Name = "gridEmission";
             this.gridEmission.RowHeadersVisible = false;
             this.gridEmission.RowHeadersWidth = 102;
             this.gridEmission.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
-            this.gridEmission.Size = new System.Drawing.Size(1520, 237);
+            this.gridEmission.Size = new System.Drawing.Size(1655, 225);
             this.gridEmission.TabIndex = 1;
             this.gridEmission.CellValueChanged += new System.Windows.Forms.DataGridViewCellEventHandler(this.gridEmission_CellValueChanged);
             this.gridEmission.CurrentCellDirtyStateChanged += new System.EventHandler(this.gridEmission_CurrentCellDirtyStateChanged);
@@ -273,11 +278,10 @@
             // 
             this.ConversionProperties.BackColor = System.Drawing.SystemColors.Window;
             this.ConversionProperties.Conversion = null;
-            this.ConversionProperties.Dock = System.Windows.Forms.DockStyle.Right;
-            this.ConversionProperties.Location = new System.Drawing.Point(2, 251);
+            this.ConversionProperties.Location = new System.Drawing.Point(2, 248);
             this.ConversionProperties.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.ConversionProperties.Name = "ConversionProperties";
-            this.ConversionProperties.Size = new System.Drawing.Size(1651, 519);
+            this.ConversionProperties.Size = new System.Drawing.Size(1661, 485);
             this.ConversionProperties.TabIndex = 1;
             // 
             // emitterProperties
@@ -285,19 +289,19 @@
             this.emitterProperties.BackColor = System.Drawing.SystemColors.Window;
             this.emitterProperties.Dock = System.Windows.Forms.DockStyle.Right;
             this.emitterProperties.Emitter = null;
-            this.emitterProperties.Location = new System.Drawing.Point(2, 251);
+            this.emitterProperties.Location = new System.Drawing.Point(14, 239);
             this.emitterProperties.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.emitterProperties.Name = "emitterProperties";
-            this.emitterProperties.Size = new System.Drawing.Size(1653, 519);
+            this.emitterProperties.Size = new System.Drawing.Size(1653, 496);
             this.emitterProperties.TabIndex = 2;
             // 
             // EnergySystemsInputForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(1683, 831);
+            this.AutoSize = true;
+            this.ClientSize = new System.Drawing.Size(1679, 825);
             this.Controls.Add(this.tabControl);
-            this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
             this.Margin = new System.Windows.Forms.Padding(6);
             this.Name = "EnergySystemsInputForm";
             this.Text = "EnergySystemsInputForm";
@@ -324,15 +328,15 @@
         private System.Windows.Forms.TableLayoutPanel tableLayoutEmission;
         private System.Windows.Forms.DataGridView gridEmission;
         private Controls.EmitterProperties emitterProperties;
-        private System.Windows.Forms.Button button1;
-        private System.Windows.Forms.Button button2;
-        private System.Windows.Forms.Button button4;
-        private System.Windows.Forms.Button button3;
         private System.Windows.Forms.DataGridViewComboBoxColumn dataGridViewComboBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn1;
         private System.Windows.Forms.DataGridViewTextBoxColumn dataGridViewTextBoxColumn2;
         private System.Windows.Forms.DataGridViewComboBoxColumn Conversion;
         private System.Windows.Forms.DataGridViewTextBoxColumn Source;
         private System.Windows.Forms.DataGridViewTextBoxColumn EndUse;
+        private System.Windows.Forms.Button addconversionTech;
+        private System.Windows.Forms.Button deleteConversionTech;
+        private System.Windows.Forms.Button deleteEmission;
+        private System.Windows.Forms.Button addEmission;
     }
 }
