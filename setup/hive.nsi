@@ -105,16 +105,16 @@ Section "Base Installation" Base_Installation_Section
     File "SolarModel.dll"
 
     # Hive.Core and dependencies
-    # File "..\src\Hive.Core\epw_reader\_build\Hive.Core.epw_reader.ghpy"
-    # File "..\src\Hive.Core\sia380\_build\Hive.Core.sia380.ghpy"
-    # File "..\src\Hive.Core\sia380\_build\Hive.Core.sia380.gha"
-    # File "..\src\Hive.Core\solar\_build\Hive.Core.solar.ghpy"
-    # File "..\src\Hive.Core\solar_tech\_build\Hive.Core.solar_tech.ghpy"    
-    # File "..\src\Hive.Core\solar_tech\_build\Hive.Core.solar_tech.gha"
-    # File "..\src\Hive.Core\combustion\_build\Hive.Core.combustion.ghpy"
-    # File "..\src\Hive.Core\cooling\_build\Hive.Core.cooling.ghpy"
-    # File "..\src\Hive.Core\heatpumps\_build\Hive.Core.heatpumps.ghpy"
+    File "..\src\Hive.Core\epw_reader\_build\Hive.Core.epw_reader.ghpy"
+    File "..\src\Hive.Core\sia380\_build\Hive.Core.sia380.ghpy"
+    File "..\src\Hive.Core\sia380\_build\Hive.Core.sia380.gha"
+    File "..\src\Hive.Core\solar\_build\Hive.Core.solar.ghpy"
+    File "..\src\Hive.Core\solar_tech\_build\Hive.Core.solar_tech.ghpy"    
+    File "..\src\Hive.Core\solar_tech\_build\Hive.Core.solar_tech.gha"
+    File "..\src\Hive.Core\combustion\_build\Hive.Core.combustion.ghpy"
+    File "..\src\Hive.Core\cooling\_build\Hive.Core.cooling.ghpy"
+    File "..\src\Hive.Core\heatpumps\_build\Hive.Core.heatpumps.ghpy"
 
-    # File "honey-badger-runtime.dll"        
+    File "honey-badger-runtime.dll"        
 
 SectionEnd

@@ -90,7 +90,7 @@
             "ElectricEfficiency": 0.184, 
             "Lifetime": 30.0, 
             "SpecificEmbodiedEmissions": 291.0, 
-            "Name": "facade-integrated Polycrystalline steel"
+            "Name": "facade-integrated Polycrystalline"
         }, 
         {
             "ThermalEfficiency": 0.0, 
@@ -100,7 +100,7 @@
             "ElectricEfficiency": 0.1472, 
             "Lifetime": 30.0, 
             "SpecificEmbodiedEmissions": 291.0, 
-            "Name": "facade-integrated Polycrystalline red"
+            "Name": "facade-integrated Polycrystalline"
         }, 
         {
             "ThermalEfficiency": 0.0, 
@@ -110,7 +110,7 @@
             "ElectricEfficiency": 0.15456, 
             "Lifetime": 30.0, 
             "SpecificEmbodiedEmissions": 291.0, 
-            "Name": "facade-integrated Polycrystalline green"
+            "Name": "facade-integrated Polycrystalline"
         }, 
         {
             "ThermalEfficiency": 0.0, 
@@ -120,7 +120,7 @@
             "ElectricEfficiency": 0.15088, 
             "Lifetime": 30.0, 
             "SpecificEmbodiedEmissions": 291.0, 
-            "Name": "facade-integrated Polycrystalline lavender"
+            "Name": "facade-integrated Polycrystalline"
         }, 
         {
             "ThermalEfficiency": 0.0, 
@@ -130,7 +130,7 @@
             "ElectricEfficiency": 0.164, 
             "Lifetime": 30.0, 
             "SpecificEmbodiedEmissions": 291.0, 
-            "Name": "facade-integrated Polycrystalline golden"
+            "Name": "facade-integrated Polycrystalline"
         }, 
         {
             "ThermalEfficiency": 0.0, 
@@ -140,7 +140,7 @@
             "ElectricEfficiency": 0.166, 
             "Lifetime": 30.0, 
             "SpecificEmbodiedEmissions": 291.0, 
-            "Name": "facade-integrated Polycrystalline terracotta"
+            "Name": "facade-integrated Polycrystalline"
         }, 
         {
             "ThermalEfficiency": 0.0, 
@@ -150,7 +150,7 @@
             "ElectricEfficiency": 0.106, 
             "Lifetime": 30.0, 
             "SpecificEmbodiedEmissions": 38.25, 
-            "Name": "facade-integrated Monocrystalline white"
+            "Name": "facade-integrated Monocrystalline"
         }, 
         {
             "ThermalEfficiency": 0.0, 
@@ -160,7 +160,7 @@
             "ElectricEfficiency": 0.184, 
             "Lifetime": 30.0, 
             "SpecificEmbodiedEmissions": 291.0, 
-            "Name": "roof-integrated Polycrystalline steel"
+            "Name": "roof-integrated Polycrystalline"
         }, 
         {
             "ThermalEfficiency": 0.0, 
@@ -170,7 +170,7 @@
             "ElectricEfficiency": 0.1472, 
             "Lifetime": 30.0, 
             "SpecificEmbodiedEmissions": 291.0, 
-            "Name": "roof-integrated Polycrystalline red"
+            "Name": "roof-integrated Polycrystalline"
         }, 
         {
             "ThermalEfficiency": 0.0, 
@@ -180,7 +180,7 @@
             "ElectricEfficiency": 0.15456, 
             "Lifetime": 30.0, 
             "SpecificEmbodiedEmissions": 291.0, 
-            "Name": "roof-integrated Polycrystalline green"
+            "Name": "roof-integrated Polycrystalline"
         }, 
         {
             "ThermalEfficiency": 0.0, 
@@ -190,7 +190,7 @@
             "ElectricEfficiency": 0.15088, 
             "Lifetime": 30.0, 
             "SpecificEmbodiedEmissions": 291.0, 
-            "Name": "roof-integrated Polycrystalline lavender"
+            "Name": "roof-integrated Polycrystalline"
         }, 
         {
             "ThermalEfficiency": 0.0, 
@@ -200,7 +200,7 @@
             "ElectricEfficiency": 0.164, 
             "Lifetime": 30.0, 
             "SpecificEmbodiedEmissions": 291.0, 
-            "Name": "roof-integrated Polycrystalline golden"
+            "Name": "roof-integrated Polycrystalline"
         }, 
         {
             "ThermalEfficiency": 0.0, 
@@ -210,7 +210,7 @@
             "ElectricEfficiency": 0.166, 
             "Lifetime": 30.0, 
             "SpecificEmbodiedEmissions": 291.0, 
-            "Name": "roof-integrated Polycrystalline terracotta"
+            "Name": "roof-integrated Polycrystalline"
         }, 
         {
             "ThermalEfficiency": 0.0, 
@@ -220,7 +220,7 @@
             "ElectricEfficiency": 0.106, 
             "Lifetime": 30.0, 
             "SpecificEmbodiedEmissions": 38.25, 
-            "Name": "roof-integrated Monocrystalline white"
+            "Name": "roof-integrated Monocrystalline"
         }, 
         {
             "ThermalEfficiency": 0.0, 
@@ -240,7 +240,7 @@
             "ElectricEfficiency": 0.123076923, 
             "Lifetime": 40.0, 
             "SpecificEmbodiedEmissions": 52.30769231, 
-            "Name": "roof-integrated Monocrystalline blue"
+            "Name": "roof-integrated Monocrystalline"
         }, 
         {
             "ThermalEfficiency": 0.0, 

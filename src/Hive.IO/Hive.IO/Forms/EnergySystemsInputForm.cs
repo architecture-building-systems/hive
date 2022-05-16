@@ -368,6 +368,5 @@ namespace Hive.IO.Forms
                 IsHeating = true
             });
         }
-
     }
 }
