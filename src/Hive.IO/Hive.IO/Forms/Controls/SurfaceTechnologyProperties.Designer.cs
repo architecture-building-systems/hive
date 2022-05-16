@@ -28,6 +28,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.label1 = new System.Windows.Forms.Label();
@@ -55,11 +56,15 @@
             this.label12 = new System.Windows.Forms.Label();
             this.txtSpecificCapitalCost = new System.Windows.Forms.TextBox();
             this.txtCapitalCost = new System.Windows.Forms.TextBox();
+            this.textBox1 = new System.Windows.Forms.TextBox();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
+            this.linkLabel2 = new System.Windows.Forms.LinkLabel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.lstAvailableSurfaces = new System.Windows.Forms.ListBox();
             this.label13 = new System.Windows.Forms.Label();
             this.txtArea = new System.Windows.Forms.TextBox();
             this.lblDescription = new System.Windows.Forms.Label();
+            this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.technologyImage)).BeginInit();
@@ -70,8 +75,8 @@
             // tableLayoutPanel1
             // 
             this.tableLayoutPanel1.ColumnCount = 3;
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
-            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 39.04382F));
+            this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 27.55644F));
             this.tableLayoutPanel1.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 33.33333F));
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel2, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.tableLayoutPanel3, 2, 0);
@@ -101,7 +106,7 @@
             this.tableLayoutPanel2.Controls.Add(this.label2, 0, 4);
             this.tableLayoutPanel2.Controls.Add(this.txtSurfaceTransmittance, 1, 4);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(505, 3);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(591, 3);
             this.tableLayoutPanel2.Margin = new System.Windows.Forms.Padding(3, 3, 22, 3);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 6;
@@ -111,7 +116,7 @@
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(477, 761);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(390, 761);
             this.tableLayoutPanel2.TabIndex = 4;
             // 
             // label1
@@ -122,7 +127,7 @@
             this.label1.Location = new System.Drawing.Point(3, 57);
             this.label1.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(232, 25);
+            this.label1.Size = new System.Drawing.Size(189, 25);
             this.label1.TabIndex = 0;
             this.label1.Text = "Module Efficiency";
             // 
@@ -130,10 +135,10 @@
             // 
             this.txtEfficiency.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtEfficiency.Location = new System.Drawing.Point(241, 57);
+            this.txtEfficiency.Location = new System.Drawing.Point(198, 57);
             this.txtEfficiency.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.txtEfficiency.Name = "txtEfficiency";
-            this.txtEfficiency.Size = new System.Drawing.Size(113, 31);
+            this.txtEfficiency.Size = new System.Drawing.Size(91, 31);
             this.txtEfficiency.TabIndex = 2;
             this.txtEfficiency.Tag = "Efficiency";
             this.txtEfficiency.Validating += new System.ComponentModel.CancelEventHandler(this.Validating);
@@ -155,20 +160,20 @@
             this.tableLayoutPanel2.SetColumnSpan(this.cboModuleType, 2);
             this.cboModuleType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboModuleType.FormattingEnabled = true;
-            this.cboModuleType.Location = new System.Drawing.Point(241, 8);
+            this.cboModuleType.Location = new System.Drawing.Point(198, 8);
             this.cboModuleType.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.cboModuleType.Name = "cboModuleType";
-            this.cboModuleType.Size = new System.Drawing.Size(233, 33);
+            this.cboModuleType.Size = new System.Drawing.Size(189, 33);
             this.cboModuleType.TabIndex = 10;
             this.cboModuleType.SelectedIndexChanged += new System.EventHandler(this.cboModuleType_SelectedIndexChanged);
             // 
             // technologyImage
             // 
             this.technologyImage.ImageLocation = "";
-            this.technologyImage.Location = new System.Drawing.Point(4, 195);
+            this.technologyImage.Location = new System.Drawing.Point(4, 214);
             this.technologyImage.Margin = new System.Windows.Forms.Padding(4, 5, 4, 5);
             this.technologyImage.Name = "technologyImage";
-            this.technologyImage.Size = new System.Drawing.Size(230, 359);
+            this.technologyImage.Size = new System.Drawing.Size(187, 359);
             this.technologyImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.technologyImage.TabIndex = 11;
             this.technologyImage.TabStop = false;
@@ -181,7 +186,7 @@
             this.label5.Location = new System.Drawing.Point(3, 104);
             this.label5.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(232, 25);
+            this.label5.Size = new System.Drawing.Size(189, 25);
             this.label5.TabIndex = 12;
             this.label5.Text = "Performance ratio";
             // 
@@ -189,10 +194,10 @@
             // 
             this.txtPerformanceRatio.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtPerformanceRatio.Location = new System.Drawing.Point(241, 104);
+            this.txtPerformanceRatio.Location = new System.Drawing.Point(198, 104);
             this.txtPerformanceRatio.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.txtPerformanceRatio.Name = "txtPerformanceRatio";
-            this.txtPerformanceRatio.Size = new System.Drawing.Size(113, 31);
+            this.txtPerformanceRatio.Size = new System.Drawing.Size(91, 31);
             this.txtPerformanceRatio.TabIndex = 13;
             this.txtPerformanceRatio.Tag = "PerformanceRatio";
             this.txtPerformanceRatio.Validating += new System.ComponentModel.CancelEventHandler(this.Validating);
@@ -205,7 +210,7 @@
             this.label2.Location = new System.Drawing.Point(3, 151);
             this.label2.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(232, 25);
+            this.label2.Size = new System.Drawing.Size(189, 50);
             this.label2.TabIndex = 14;
             this.label2.Text = "Surface Transmittance";
             // 
@@ -213,10 +218,10 @@
             // 
             this.txtSurfaceTransmittance.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtSurfaceTransmittance.Location = new System.Drawing.Point(241, 151);
+            this.txtSurfaceTransmittance.Location = new System.Drawing.Point(198, 151);
             this.txtSurfaceTransmittance.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.txtSurfaceTransmittance.Name = "txtSurfaceTransmittance";
-            this.txtSurfaceTransmittance.Size = new System.Drawing.Size(113, 31);
+            this.txtSurfaceTransmittance.Size = new System.Drawing.Size(91, 31);
             this.txtSurfaceTransmittance.TabIndex = 15;
             this.txtSurfaceTransmittance.Tag = "SurfaceTransmittance";
             this.txtSurfaceTransmittance.Validating += new System.ComponentModel.CancelEventHandler(this.Validating);
@@ -242,24 +247,29 @@
             this.tableLayoutPanel3.Controls.Add(this.label12, 2, 2);
             this.tableLayoutPanel3.Controls.Add(this.txtSpecificCapitalCost, 1, 1);
             this.tableLayoutPanel3.Controls.Add(this.txtCapitalCost, 1, 2);
+            this.tableLayoutPanel3.Controls.Add(this.textBox1, 0, 5);
+            this.tableLayoutPanel3.Controls.Add(this.linkLabel1, 0, 6);
+            this.tableLayoutPanel3.Controls.Add(this.linkLabel2, 0, 7);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(1026, 3);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(1025, 3);
             this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(22, 3, 3, 3);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
-            this.tableLayoutPanel3.RowCount = 5;
+            this.tableLayoutPanel3.RowCount = 8;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(477, 761);
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 54F));
+            this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(478, 761);
             this.tableLayoutPanel3.TabIndex = 3;
             // 
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(342, 196);
+            this.label16.Location = new System.Drawing.Point(343, 196);
             this.label16.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.label16.Name = "label16";
             this.label16.Size = new System.Drawing.Size(87, 25);
@@ -274,7 +284,7 @@
             this.txtEmbodiedEmissions.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.txtEmbodiedEmissions.Name = "txtEmbodiedEmissions";
             this.txtEmbodiedEmissions.ReadOnly = true;
-            this.txtEmbodiedEmissions.Size = new System.Drawing.Size(101, 31);
+            this.txtEmbodiedEmissions.Size = new System.Drawing.Size(102, 31);
             this.txtEmbodiedEmissions.TabIndex = 13;
             this.txtEmbodiedEmissions.Tag = "EmbodiedEmissions";
             // 
@@ -293,7 +303,7 @@
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(342, 149);
+            this.label15.Location = new System.Drawing.Point(343, 149);
             this.label15.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.label15.Name = "label15";
             this.label15.Size = new System.Drawing.Size(132, 25);
@@ -307,7 +317,7 @@
             this.txtSpecificEmbodiedEmissions.Location = new System.Drawing.Point(235, 149);
             this.txtSpecificEmbodiedEmissions.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.txtSpecificEmbodiedEmissions.Name = "txtSpecificEmbodiedEmissions";
-            this.txtSpecificEmbodiedEmissions.Size = new System.Drawing.Size(101, 31);
+            this.txtSpecificEmbodiedEmissions.Size = new System.Drawing.Size(102, 31);
             this.txtSpecificEmbodiedEmissions.TabIndex = 10;
             this.txtSpecificEmbodiedEmissions.Tag = "SpecificEmbodiedEmissions";
             this.txtSpecificEmbodiedEmissions.Validating += new System.ComponentModel.CancelEventHandler(this.Validating);
@@ -339,7 +349,7 @@
             // label8
             // 
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(342, 8);
+            this.label8.Location = new System.Drawing.Point(343, 8);
             this.label8.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.label8.Name = "label8";
             this.label8.Size = new System.Drawing.Size(69, 25);
@@ -354,7 +364,7 @@
             this.txtCapacity.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.txtCapacity.Name = "txtCapacity";
             this.txtCapacity.ReadOnly = true;
-            this.txtCapacity.Size = new System.Drawing.Size(101, 31);
+            this.txtCapacity.Size = new System.Drawing.Size(102, 31);
             this.txtCapacity.TabIndex = 2;
             this.txtCapacity.Tag = "SurfaceTechCapacity";
             // 
@@ -373,7 +383,7 @@
             // label10
             // 
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(342, 55);
+            this.label10.Location = new System.Drawing.Point(343, 55);
             this.label10.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.label10.Name = "label10";
             this.label10.Size = new System.Drawing.Size(114, 25);
@@ -395,7 +405,7 @@
             // label12
             // 
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(342, 102);
+            this.label12.Location = new System.Drawing.Point(343, 102);
             this.label12.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.label12.Name = "label12";
             this.label12.Size = new System.Drawing.Size(69, 25);
@@ -409,7 +419,7 @@
             this.txtSpecificCapitalCost.Location = new System.Drawing.Point(235, 55);
             this.txtSpecificCapitalCost.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.txtSpecificCapitalCost.Name = "txtSpecificCapitalCost";
-            this.txtSpecificCapitalCost.Size = new System.Drawing.Size(101, 31);
+            this.txtSpecificCapitalCost.Size = new System.Drawing.Size(102, 31);
             this.txtSpecificCapitalCost.TabIndex = 7;
             this.txtSpecificCapitalCost.Tag = "SpecificCapitalCost";
             this.txtSpecificCapitalCost.Validating += new System.ComponentModel.CancelEventHandler(this.Validating);
@@ -422,9 +432,42 @@
             this.txtCapitalCost.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.txtCapitalCost.Name = "txtCapitalCost";
             this.txtCapitalCost.ReadOnly = true;
-            this.txtCapitalCost.Size = new System.Drawing.Size(101, 31);
+            this.txtCapitalCost.Size = new System.Drawing.Size(102, 31);
             this.txtCapitalCost.TabIndex = 8;
             this.txtCapitalCost.Tag = "CapitalCost";
+            // 
+            // textBox1
+            // 
+            this.textBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.textBox1.Location = new System.Drawing.Point(26, 254);
+            this.textBox1.Name = "textBox1";
+            this.textBox1.Size = new System.Drawing.Size(180, 31);
+            this.textBox1.TabIndex = 15;
+            this.textBox1.Text = "BIPV Examples";
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.linkLabel1.Location = new System.Drawing.Point(3, 305);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Size = new System.Drawing.Size(226, 54);
+            this.linkLabel1.TabIndex = 16;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "https://www.bipv.ch";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
+            // 
+            // linkLabel2
+            // 
+            this.linkLabel2.AutoSize = true;
+            this.linkLabel2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.linkLabel2.Location = new System.Drawing.Point(3, 359);
+            this.linkLabel2.Name = "linkLabel2";
+            this.linkLabel2.Size = new System.Drawing.Size(226, 402);
+            this.linkLabel2.TabIndex = 17;
+            this.linkLabel2.TabStop = true;
+            this.linkLabel2.Text = "http://explorerise.com";
+            this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
             // 
             // tableLayoutPanel4
             // 
@@ -443,7 +486,7 @@
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 30F));
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel4.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 70F));
-            this.tableLayoutPanel4.Size = new System.Drawing.Size(477, 761);
+            this.tableLayoutPanel4.Size = new System.Drawing.Size(563, 761);
             this.tableLayoutPanel4.TabIndex = 5;
             // 
             // lstAvailableSurfaces
@@ -456,7 +499,7 @@
             this.lstAvailableSurfaces.Location = new System.Drawing.Point(3, 3);
             this.lstAvailableSurfaces.Name = "lstAvailableSurfaces";
             this.lstAvailableSurfaces.SelectionMode = System.Windows.Forms.SelectionMode.MultiExtended;
-            this.lstAvailableSurfaces.Size = new System.Drawing.Size(552, 211);
+            this.lstAvailableSurfaces.Size = new System.Drawing.Size(557, 211);
             this.lstAvailableSurfaces.TabIndex = 0;
             this.lstAvailableSurfaces.Tag = "AvailableSurfaces";
             this.lstAvailableSurfaces.ValueMember = "Name";
@@ -477,7 +520,7 @@
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtArea.Location = new System.Drawing.Point(66, 220);
             this.txtArea.Name = "txtArea";
-            this.txtArea.Size = new System.Drawing.Size(489, 31);
+            this.txtArea.Size = new System.Drawing.Size(494, 31);
             this.txtArea.TabIndex = 2;
             this.txtArea.Tag = "Area";
             // 
@@ -489,9 +532,13 @@
             this.lblDescription.Location = new System.Drawing.Point(3, 262);
             this.lblDescription.Margin = new System.Windows.Forms.Padding(3, 8, 3, 8);
             this.lblDescription.Name = "lblDescription";
-            this.lblDescription.Size = new System.Drawing.Size(552, 491);
+            this.lblDescription.Size = new System.Drawing.Size(557, 491);
             this.lblDescription.TabIndex = 3;
             this.lblDescription.Text = "lblDescription";
+            // 
+            // toolTip1
+            // 
+            this.toolTip1.Popup += new System.Windows.Forms.PopupEventHandler(this.toolTip1_Popup);
             // 
             // SurfaceTechnologyProperties
             // 
@@ -546,5 +593,9 @@
         private System.Windows.Forms.TextBox txtPerformanceRatio;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtSurfaceTransmittance;
+        private System.Windows.Forms.TextBox textBox1;
+        private System.Windows.Forms.LinkLabel linkLabel1;
+        private System.Windows.Forms.LinkLabel linkLabel2;
+        private System.Windows.Forms.ToolTip toolTip1;
     }
 }

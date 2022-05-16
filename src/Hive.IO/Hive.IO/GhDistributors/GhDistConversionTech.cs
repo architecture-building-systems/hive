@@ -34,7 +34,7 @@ namespace Hive.IO.GhDistributors
             pManager.AddGenericParameter("Combined Heat and Power", "CHP", "Hive Combined Heat and Power (CHP)", GH_ParamAccess.item);
             pManager.AddGenericParameter("Heat Exchanger", "HX", "Hive heat exchanger of type <Hive.IO.EnergySystems.HeatCoolExchanger>", GH_ParamAccess.item);
             pManager.AddGenericParameter("Cold Exchanger", "CX", "Hive cold exchanger of type <Hive.IO.EnergySystems.HeatCoolExchanger>", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Direct Electricity", "DirectElectricity", "Hive Direct Electricity, e.g. an electrical substation", GH_ParamAccess.item);
+            pManager.AddGenericParameter("Grid Electricity", "GridElectricity", "Hive Grid Electricity, e.g. from an electrical substation", GH_ParamAccess.item);
         }
 
         protected override void SolveInstance(IGH_DataAccess DA)
