@@ -92,6 +92,8 @@ namespace Hive.IO.Forms.Controls
             technologyImage.Image = Conversion.TechnologyImage;
 
             foreach (var textBox in GetAll(this, typeof(TextBox)).Cast<TextBox>()) UpdateTextBoxText(textBox);
+
+            //toolTip1.SetToolTip(cboModuleType, moduleName);
         }
 
         private void lstAvailableSurfaces_SelectedIndexChanged(object sender, EventArgs e)
@@ -130,6 +132,25 @@ namespace Hive.IO.Forms.Controls
             txtEmbodiedEmissions.Text = $"{Conversion.EmbodiedEmissions:0.0}";
             txtCapitalCost.Text = $"{Conversion.CapitalCost:0.00}";
             txtArea.Text = $"{Conversion.Area:0.00}";
+        }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            
+            this.linkLabel1.LinkVisited = true;
+            System.Diagnostics.Process.Start("https://www.bipv.ch");
+        }
+
+        private void linkLabel2_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            
+            this.linkLabel1.LinkVisited = true;
+            System.Diagnostics.Process.Start("http://explorerise.com");
+        }
+
+        private void toolTip1_Popup(object sender, PopupEventArgs e)
+        {
+            toolTip1.SetToolTip(cboModuleType, cboModuleType.Text);
         }
     }
 }
