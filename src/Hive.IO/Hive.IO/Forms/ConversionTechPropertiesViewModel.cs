@@ -194,11 +194,11 @@ namespace Hive.IO.Forms
                             _performanceRatio = _performanceRatioDefaultST;
                             _surfaceTransmittance = _f_coverDefault;
                             break;
-                        //case "Building Integrated Photovoltaic (BIPV)":
-                        //    _efficiency = _moduleType.ElectricEfficiency;
-                        //    _performanceRatio = _performanceRatioDefaultPV;
-                        //    _surfaceTransmittance = _f_coverDefault;
-                        //    break;
+                        case "Building Integrated Photovoltaic (BIPV)":
+                            _efficiency = _moduleType.ElectricEfficiency;
+                            _performanceRatio = _performanceRatioDefaultPV;
+                            _surfaceTransmittance = _f_coverDefault;
+                            break;
 
                     }
 
