@@ -6,9 +6,9 @@ namespace Hive.IO.GhSolar
     public class GhSTSimple : GH_Component
     {
         public GhSTSimple() 
-            : base("Solar Thermal Energy System C#", "SolarThermalSimple",
+            : base("Solar Thermal Energy System", "SolarThermalSimple",
                   "Calculates the total yield of a solar thermal collector using simplified equation (Q_th = G * F_F * A * eta_K * R_V)",
-                  "[hive]", "Solar C#")
+                  "[hive]", "Solar")
         {
         }
 

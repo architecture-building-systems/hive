@@ -25,9 +25,9 @@ namespace Hive.IO.GhEnergySystems
         //    - COP of chiller [-]
 
         public GhChillerTimeResolved() :
-            base("Chiller time resolved Energy System C#", "ChillerTimeResolved",
+            base("Chiller time resolved Energy System", "ChillerTimeResolved",
                 "Calculates time resolved operating cost and carbon emissions of a chiller (split A/C) to meet cooling loads.",
-                "[hive]", "Energy Systems C#")
+                "[hive]", "Energy Systems")
         {
         }
 

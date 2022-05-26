@@ -30,9 +30,9 @@ namespace Hive.IO.GhEnergySystems
     public class GhChpTimeResolved : GH_Component
     {
         public GhChpTimeResolved()
-          : base("Combined Heat and Power time resolved Energy System C#", "ChpTimeResolved",
+          : base("Combined Heat and Power time resolved Energy System", "ChpTimeResolved",
               "Calculates time resolved heating or electricity generation, consumed fuel, operating cost and carbon emissions from a Combined Heat and Power system.",
-              "[hive]", "Energy Systems C#")
+              "[hive]", "Energy Systems")
         {
         }
 

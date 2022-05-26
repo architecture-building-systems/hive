@@ -6,9 +6,9 @@ namespace Hive.IO.GhSolar
     public class GhOrientationFactor : GH_Component
     {
         public GhOrientationFactor() :
-            base("Solar Orientation Factor C#", "OrientationFactor",
+            base("Solar Orientation Factor", "OrientationFactor",
                 "Solar orientation factor of a surface",
-                "[hive]", "Solar C#")
+                "[hive]", "Solar")
         {
         }
 

@@ -22,9 +22,9 @@ namespace Hive.IO.GhEnergySystems
         // 
 
         public GhChillerSimple() :
-            base("Chiller Energy System C#", "ChillerSimple",
+            base("Chiller Energy System", "ChillerSimple",
                 "Calculates total operating cost and carbon emissions of a chiller (split A/C) to meet cooling loads.", 
-                "[hive]", "Energy Systems C#")
+                "[hive]", "Energy Systems")
         {
         }
 

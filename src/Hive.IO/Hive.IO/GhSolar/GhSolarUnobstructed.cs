@@ -10,9 +10,9 @@ namespace Hive.IO.GhSolar
     public class GhSolarUnobstructed : GH_Component
     {
         public GhSolarUnobstructed()
-          : base("Solar Potentials Unobstructed C#", "SolarPotentialsUnobstructed",
+          : base("Solar Potentials Unobstructed", "SolarPotentialsUnobstructed",
               "Calculates solar irradiance on an unobstructed plane, using GhSolar.gha and SolarModel.dll (https://github.com/christophwaibel/GH_Solar_V2)",
-              "[hive]", "Solar C#")
+              "[hive]", "Solar")
         {
         }
 
