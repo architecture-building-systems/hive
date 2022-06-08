@@ -1,9 +1,8 @@
 # Code Architecture
 
-The HIVE project consists of two main folders: a) `Hive.IO` and b) `Hive.CORE`.
-`Hive.IO` is a Visual Studio project and contains most of the input-output codes for the Hive grasshopper workflow. This includes grasshopper components for inputs into the used simulators, and grasshopper components to visualize results.
+The HIVE project is designed in two layers: (i) the input-output components that a beginner user is exposed to, and (ii) the simulation core with all kinds of grasshopper components for the interested expert user.
 
-`Hive.Core` contains all (well, most) HIVE simulators (e.g. demand, solar, etc.) written in python with Honey-Badger (a compiler for ironpython to build grasshopper components).
+In older Hive versions, we had split it into separate projects (`Hive.IO` in `C#.Net` and `Hive.Core` in `Honeybadger`/`IronPython`). Now, we only have the `.Net` for compatibility reasons.
 
 Some old prosa below that needs to be updated...
 
