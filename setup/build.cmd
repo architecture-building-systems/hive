@@ -4,7 +4,7 @@
 set HIVE_BUILD_DIR=%~dp0
 set GIT_DIR=%HIVE_BUILD_DIR%..\..
 SET HIVE_DIR=%HIVE_BUILD_DIR%..
-SET HONEY_BADGER_DIR=%GIT_DIR%\honey-badger
+:: SET HONEY_BADGER_DIR=%GIT_DIR%\honey-badger
 SET HIVE_WIKI_DIR=%GIT_DIR%\hive.wiki
 
 @REM Change these paths accordingly

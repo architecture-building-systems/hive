@@ -8,9 +8,9 @@ namespace Hive.IO.GhEnergySystems
     public class GhBoilerTimeResolved : GH_Component
     {
         public GhBoilerTimeResolved()
-          : base("Boiler time resolved Energy System C#", "BoilerTimeResolved",
+          : base("Boiler time resolved Energy System", "BoilerTimeResolved",
               "Calculates time resolved consumed fuel, operating cost and carbon emissions of a boiler to meet heating loads.",
-              "[hive]", "Energy Systems C#")
+              "[hive]", "Energy Systems")
         {
         }
 

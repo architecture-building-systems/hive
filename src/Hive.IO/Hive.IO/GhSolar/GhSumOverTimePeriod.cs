@@ -13,9 +13,9 @@ namespace Hive.IO.GhSolar
         //- year
 
         public GhSumOverTimePeriod() :
-            base("Summarize PV electricity yield C#", "SumPvYield",
+            base("Summarize PV electricity yield", "SumPvYield",
                 "Summarizes the PV electricity yield per specified time period, e.g. monthly, daily, or entire year.",
-                "[hive]", "Solar C#")
+                "[hive]", "Solar")
         {
         }
 

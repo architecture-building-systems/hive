@@ -16,9 +16,9 @@ namespace Hive.IO.GhEnergySystems
         //output:
         //E = electricity loads[kWh]
         public GhHeatpumpSimple()
-            : base("Heat pump Energy System C#", "HeatPumpSimple",
+            : base("Heat pump Energy System", "HeatPumpSimple",
               "Calculates total consumed electricity of a simple heat pump, given a Coefficient of Performance, to meet heating energy demand.",
-              "[hive]", "Energy Systems C#"
+              "[hive]", "Energy Systems"
             )
         {
         }
