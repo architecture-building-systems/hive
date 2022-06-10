@@ -78,10 +78,24 @@ namespace Hive.IO.Forms.Controls
             {
                 _initializingControls = false;
             }
+
+
+
         }
 
         private void cboModuleType_SelectedIndexChanged(object sender, EventArgs e)
         {
+
+            ToolTip ToolTip1 = new ToolTip();
+            ToolTip1.SetToolTip(cboModuleType, cboModuleType.SelectedItem.ToString());
+            ToolTip1.AutoPopDelay = 5000;
+            ToolTip1.InitialDelay = 1000;
+            ToolTip1.ReshowDelay = 500;
+            ToolTip1.ShowAlways = true;
+
+
+            //toolTip1.SetToolTip(cboModuleType, cboModuleType.SelectedItem.ToString());
+
             if (_initializingControls) return;
 
             var moduleName = cboModuleType.SelectedItem.ToString();
@@ -93,8 +107,28 @@ namespace Hive.IO.Forms.Controls
 
             foreach (var textBox in GetAll(this, typeof(TextBox)).Cast<TextBox>()) UpdateTextBoxText(textBox);
 
-            //toolTip1.SetToolTip(cboModuleType, moduleName);
         }
+
+        private void cboModuleType_DropDown(object sender, EventArgs e)
+        {
+            ToolTip ToolTip2 = new ToolTip();
+            ToolTip2.SetToolTip(cboModuleType, cboModuleType.SelectedItem.ToString());
+            ToolTip2.AutoPopDelay = 5000;
+            ToolTip2.InitialDelay = 1000;
+            ToolTip2.ReshowDelay = 500;
+            ToolTip2.ShowAlways = true;
+        }
+
+        private void cboModuleType_MouseHover(object sender, EventArgs e)
+        {
+            ToolTip ToolTip3 = new ToolTip();
+            ToolTip3.SetToolTip(cboModuleType, cboModuleType.SelectedItem.ToString());
+            ToolTip3.AutoPopDelay = 5000;
+            ToolTip3.InitialDelay = 1000;
+            ToolTip3.ReshowDelay = 500;
+            ToolTip3.ShowAlways = true;
+        }
+
 
         private void lstAvailableSurfaces_SelectedIndexChanged(object sender, EventArgs e)
         {
@@ -151,6 +185,11 @@ namespace Hive.IO.Forms.Controls
         private void toolTip1_Popup(object sender, PopupEventArgs e)
         {
             toolTip1.SetToolTip(cboModuleType, cboModuleType.Text);
+        }
+
+        private void tableLayoutPanel3_Paint(object sender, PaintEventArgs e)
+        {
+
         }
     }
 }

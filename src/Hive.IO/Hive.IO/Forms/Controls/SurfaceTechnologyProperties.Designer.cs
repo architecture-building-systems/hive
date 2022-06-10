@@ -56,7 +56,6 @@
             this.label12 = new System.Windows.Forms.Label();
             this.txtSpecificCapitalCost = new System.Windows.Forms.TextBox();
             this.txtCapitalCost = new System.Windows.Forms.TextBox();
-            this.textBox1 = new System.Windows.Forms.TextBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
@@ -65,6 +64,7 @@
             this.txtArea = new System.Windows.Forms.TextBox();
             this.lblDescription = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
+            this.label6 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.technologyImage)).BeginInit();
@@ -166,6 +166,9 @@
             this.cboModuleType.Size = new System.Drawing.Size(189, 33);
             this.cboModuleType.TabIndex = 10;
             this.cboModuleType.SelectedIndexChanged += new System.EventHandler(this.cboModuleType_SelectedIndexChanged);
+            this.cboModuleType.DropDown += new System.EventHandler(this.cboModuleType_DropDown);
+            this.cboModuleType.MouseHover += new System.EventHandler(this.cboModuleType_MouseHover);
+
             // 
             // technologyImage
             // 
@@ -247,9 +250,9 @@
             this.tableLayoutPanel3.Controls.Add(this.label12, 2, 2);
             this.tableLayoutPanel3.Controls.Add(this.txtSpecificCapitalCost, 1, 1);
             this.tableLayoutPanel3.Controls.Add(this.txtCapitalCost, 1, 2);
-            this.tableLayoutPanel3.Controls.Add(this.textBox1, 0, 5);
             this.tableLayoutPanel3.Controls.Add(this.linkLabel1, 0, 6);
             this.tableLayoutPanel3.Controls.Add(this.linkLabel2, 0, 7);
+            this.tableLayoutPanel3.Controls.Add(this.label6, 0, 5);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(1025, 3);
             this.tableLayoutPanel3.Margin = new System.Windows.Forms.Padding(22, 3, 3, 3);
@@ -265,6 +268,7 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(478, 761);
             this.tableLayoutPanel3.TabIndex = 3;
+            this.tableLayoutPanel3.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel3_Paint);
             // 
             // label16
             // 
@@ -436,15 +440,6 @@
             this.txtCapitalCost.TabIndex = 8;
             this.txtCapitalCost.Tag = "CapitalCost";
             // 
-            // textBox1
-            // 
-            this.textBox1.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.textBox1.Location = new System.Drawing.Point(26, 254);
-            this.textBox1.Name = "textBox1";
-            this.textBox1.Size = new System.Drawing.Size(180, 31);
-            this.textBox1.TabIndex = 15;
-            this.textBox1.Text = "BIPV Examples";
-            // 
             // linkLabel1
             // 
             this.linkLabel1.AutoSize = true;
@@ -540,6 +535,17 @@
             // 
             this.toolTip1.Popup += new System.Windows.Forms.PopupEventHandler(this.toolTip1_Popup);
             // 
+            // label6
+            // 
+            this.label6.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(36, 257);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(159, 25);
+            this.label6.TabIndex = 18;
+            this.label6.Text = "BIPV Examples";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // SurfaceTechnologyProperties
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -593,9 +599,9 @@
         private System.Windows.Forms.TextBox txtPerformanceRatio;
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.TextBox txtSurfaceTransmittance;
-        private System.Windows.Forms.TextBox textBox1;
         private System.Windows.Forms.LinkLabel linkLabel1;
         private System.Windows.Forms.LinkLabel linkLabel2;
         private System.Windows.Forms.ToolTip toolTip1;
+        private System.Windows.Forms.Label label6;
     }
 }
