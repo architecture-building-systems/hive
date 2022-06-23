@@ -216,6 +216,9 @@
     <Compile Include="GhSolar\GhSTSimple.cs" />
     <Compile Include="GhSolar\GhSTTimeResolved.cs" />
     <Compile Include="GhSolar\GhSumOverTimePeriod.cs" />
+    <Compile Include="GhValueLists\GhSia2024RoomList_Existing.cs" />
+    <Compile Include="GhValueLists\GhSia2024RoomList_Ideal.cs" />
+    <Compile Include="GhValueLists\GhSia2024RoomList_Standard.cs" />
     <Compile Include="GhValueLists\GhListResults.cs" />
     <Compile Include="GhValueLists\GhPerformanceRatioList.cs" />
     <Compile Include="Plots\AmrPlotConstants.cs" />
@@ -298,7 +301,14 @@
     <EmbeddedResource Include="EnergySystems\surface_tech_module_types.json" />
     <EmbeddedResource Include="EnergySystems\emitter_defaults.json" />
     <EmbeddedResource Include="GhValueLists\performance_ratios.json" />
+    <None Include="GhValueLists\201008_SIA2024_Raumdaten_Bestand.json" />
+    <None Include="GhValueLists\201008_SIA2024_Raumdaten_Standardwert.json" />
+    <None Include="GhValueLists\201008_SIA2024_Raumdaten_Zielwert.json" />
+    <None Include="GhValueLists\Hive.Core.sia380.json" />
     <None Include="packages.config" />
+    <None Include="Resources\201008_SIA2024_Raumdaten_Bestand.csv" />
+    <None Include="Resources\201008_SIA2024_Raumdaten_Standardwert.csv" />
+    <None Include="Resources\201008_SIA2024_Raumdaten_Zielwert.csv" />
     <None Include="Resources\bipv_efficiency.csv" />
     <None Include="Resources\gc_efficiency.csv" />
     <None Include="Resources\performance_ratio.csv" />
