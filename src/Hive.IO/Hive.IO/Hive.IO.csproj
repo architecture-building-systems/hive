@@ -303,6 +303,8 @@
     <EmbeddedResource Include="GhValueLists\performance_ratios.json" />
     <None Include="GhValueLists\201008_SIA2024_Raumdaten_Bestand.json" />
     <EmbeddedResource Include="GhValueLists\201008_SIA2024_Raumdaten_Standardwert.json" />
+    <None Include="GhValueLists\SIA2024_rooms_data.json" />
+    <None Include="GhValueLists\201008_SIA2024_Raumdaten_Standardwert.json" />
     <None Include="GhValueLists\201008_SIA2024_Raumdaten_Zielwert.json" />
     <None Include="GhValueLists\Hive.Core.sia380.json" />
     <None Include="packages.config" />

@@ -24,41 +24,12 @@ namespace Hive.IO.GhValueLists
         public struct SIA2024RoomListItem
         {
             public string description;
-            public string Zeitkonstante;
-            public string RaumlufttemperaturAuslegungKuehlungSommer;
-            public string RaumlufttemperaturAuslegungKuehlungSommerAbsenktemperatur;
-            public string RaumlufttemperaturAuslegungHeizenWinter;
-            public string RaumlufttemperaturAuslegungHeizenWinterAbsenktemperatur;
-            public string Nettogeschossflaeche;
-            public string ThermischeGebaeudehuellflaeche;
-            public string Glasanteil;
-            public string UWertOpakeBauteile;
-            public string UWertFenster;
-            public string AbminderungsfaktorfuerFensterrahmen;
-            public string WaermespeicherfaehigkeitdesRaumes;
-            public string AussenluftVolumenstromproNGF;
-            public string AussenluftVolumenstromdurchInfiltration;
-            public string TemperaturAenderungsgradDerWaermerueckgewinnung;
-            public string WaermeeintragsleistungPersonenBei24degCbzw70W;
-            public string WaermeeintragsleistungDerRaumbeleuchtung;
-            public string WaermeeintragsleistungDerGeraete;
-            public string VollaststundenProJahrPersonen;
-            public string JaehrlicheVollaststundenDerRaumbeleuchtung;
-            public string JaehrlicheVollaststundenderGeraete;
-            public string GesamtenergiedurchlassgradVerglasung;
-            public string GesamtenergiedurchlassgradVerglasungUndSonnenschutz;
-            public string KostenOpakeBauteile;
-            public string KostenTransparenteBauteile;
-            public string EmissionenOpakeBauteile;
-            public string EmissionenTransparenteBauteile;
-            public string StrahlungsleistungfuerBetaetigungSonnenschutz;
-            public string JaehrlicherWaermebedarffuerWarmwasser;
 
         }
 
         private static List<SIA2024RoomListItem> roomList_; //JsonResource backing field
 
-        public static string ResourceName = "Hive.IO.GhValueLists.201008_SIA2024_Raumdaten_Standardwert.json";
+        public static string ResourceName = "Hive.IO.GhValueLists.SIA2024_rooms_data.json";
 
         List<SIA2024RoomListItem> roomList =>  JsonResource.ReadRecords(ResourceName, ref roomList_);
 
