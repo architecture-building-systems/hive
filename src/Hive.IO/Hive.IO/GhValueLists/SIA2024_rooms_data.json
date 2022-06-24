@@ -1,0 +1,137 @@
+[
+  {
+    "description": "1.1 Wohnen Mehrfamilienhaus"
+  },
+  {
+    "description": "1.2 Wohnen Einfamilienhaus"
+  },
+  {
+    "description": "2.1 Hotelzimmer"
+  },
+  {
+    "description": "2.2 Empfang, Lobby"
+  },
+  {
+    "description": "3.1 Einzel-, Gruppenbuero"
+  },
+  {
+    "description": "3.2 Grossraumbuero"
+  },
+  {
+    "description": "3.3 Sitzungszimmer"
+  },
+  {
+    "description": "3.4 Schalterhalle, Empfang"
+  },
+  {
+    "description": "4.1 Schulzimmer"
+  },
+  {
+    "description": "4.2 Lehrerzimmer"
+  },
+  {
+    "description": "4.3 Bibliothek"
+  },
+  {
+    "description": "4.4 Hoehrsaal"
+  },
+  {
+    "description": "4.5 Schulfachraum"
+  },
+  {
+    "description": "5.1 Lebensmittelverkauf"
+  },
+  {
+    "description": "5.2 Fachgeschaeft"
+  },
+  {
+    "description": "5.3 Verkauf Moebel, Bau, Garten"
+  },
+  {
+    "description": "6.1 Restaurant"
+  },
+  {
+    "description": "6.2 Selbstbedienungsrestaurant"
+  },
+  {
+    "description": "6.3 Kueche zu Restaurant"
+  },
+  {
+    "description": "6.4 Kueche zu Selbstbedienungsrestaurant"
+  },
+  {
+    "description": "7.1 Vorstellungsraum"
+  },
+  {
+    "description": "7.2 Mehrzweckhalle"
+  },
+  {
+    "description": "7.3 Ausstellungshalle"
+  },
+  {
+    "description": "8.1 Bettenzimmer"
+  },
+  {
+    "description": "8.2 Stationszimmer"
+  },
+  {
+    "description": "8.3 Behandlungsraum"
+  },
+  {
+    "description": "9.1 Produktion (grobe Arbeit)"
+  },
+  {
+    "description": "9.2 Produktion (feine Arbeit)"
+  },
+  {
+    "description": "9.3 Laborraum"
+  },
+  {
+    "description": "10.1 Lagerhalle"
+  },
+  {
+    "description": "11.1 Turnhalle"
+  },
+  {
+    "description": "11.2 Fitnessraum"
+  },
+  {
+    "description": "11.3 Schwimmhalle"
+  },
+  {
+    "description": "12.1 Verkehrsflaeche"
+  },
+  {
+    "description": "12.2 Verkehrsflaeche 24 h"
+  },
+  {
+    "description": "12.3 Treppenhaus"
+  },
+  {
+    "description": "12.4 Nebenraum"
+  },
+  {
+    "description": "12.5 Kueche, Teekueche"
+  },
+  {
+    "description": "12.6 WC, Bad, Dusche"
+  },
+  {
+    "description": "12.7 WC"
+  },
+  {
+    "description": "12.8 Garderobe, Dusche"
+  },
+  {
+    "description": "12.9 Parkhaus"
+  },
+  {
+    "description": "12.10 Wasch- und Trockenraum"
+  },
+  {
+    "description": "12.11 Kuehlraum"
+  },
+  {
+    "description": "12.12 Serverraum"
+  }
+]
