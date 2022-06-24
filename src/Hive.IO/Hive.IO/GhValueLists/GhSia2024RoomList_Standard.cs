@@ -1,6 +1,7 @@
 ﻿using Grasshopper.Kernel.Special;
 using System;
 using Hive.IO.Util;
+using Hive.IO.Building;
 using System.Collections.Generic;
 using Grasshopper.Kernel;
 
@@ -59,14 +60,14 @@ namespace Hive.IO.GhValueLists
 
         public static string ResourceName = "Hive.IO.GhValueLists.201008_SIA2024_Raumdaten_Standardwert.json";
 
-        List<SIA2024RoomListItem> roomList => JsonResource.ReadRecords(ResourceName, ref roomList_);
+        List<SIA2024RoomListItem> roomList =>  JsonResource.ReadRecords(ResourceName, ref roomList_);
 
         private void Load()
         {
             this.ListItems.Clear();
             foreach (var item in roomList)
             {
-                this.ListItems.Add(new GH_ValueListItem(item.description, item.description));
+                this.ListItems.Add(new GH_ValueListItem(item.description, String.Format("\"{0}\"", item.description)));
             }
         }
 
