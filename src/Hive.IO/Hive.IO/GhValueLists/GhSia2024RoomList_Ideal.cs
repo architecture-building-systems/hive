@@ -20,7 +20,7 @@ namespace Hive.IO.GhValueLists
 
         public override GH_Exposure Exposure => GH_Exposure.tertiary;
 
-        public struct SIA2024RoomListItem
+        public struct SIA2024RoomIdealListItem
         {
             public string description;
             public string Zeitkonstante;
@@ -55,11 +55,11 @@ namespace Hive.IO.GhValueLists
 
         }
 
-        private static List<SIA2024RoomListItem> roomList_; //JsonResource backing field
+        private static List<SIA2024RoomIdealListItem> roomList_; //JsonResource backing field
 
-        public static string ResourceName = "Hive.IO.GhValueLists.201008_SIA2024_Raumdaten_Standardwert.json";
+        public static string ResourceName = "Hive.IO.GhValueLists.201008_SIA2024_Raumdaten_Zielwert.json";
 
-        List<SIA2024RoomListItem> roomList => JsonResource.ReadRecords(ResourceName, ref roomList_);
+        List<SIA2024RoomIdealListItem> roomList => JsonResource.ReadRecords(ResourceName, ref roomList_);
 
         private void Load()
         {
