@@ -10,9 +10,9 @@ namespace Hive.IO.GhValueLists
     {
         public GHSia2024RoomList_Ideal()
         {
-            this.Name = "SIA 2024 Standard Rooms";
-            this.NickName = "Sia2024RoomsStandard";
-            this.Description = "A list of SIA 2024 rooms, standard building quality";
+            this.Name = "SSIA 2024 Ideal Room";
+            this.NickName = "Sia2024RoomsIdeal";
+            this.Description = "A list of SIA 2024 rooms, ideal building quality";
             this.Category = "[hive]";
             this.SubCategory = "Demand";
             Load();
@@ -70,6 +70,6 @@ namespace Hive.IO.GhValueLists
             }
         }
 
-        public override Guid ComponentGuid => new Guid("8360f734-0ec9-4a71-8068-eb00ce15d96a");
+        public override Guid ComponentGuid => new Guid("772400f7-ee9a-4e53-b33d-bf0d676f4249");
     }
 }
