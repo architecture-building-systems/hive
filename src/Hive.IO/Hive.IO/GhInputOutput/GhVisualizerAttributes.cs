@@ -36,8 +36,8 @@ namespace Hive.IO.GhInputOutput
             {
                 Color = Color.FromArgb(225, 242, 31),
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
-                UnitText = "kWh",
-                NormalizedUnitText = "kWh/m²",
+                UnitText = "kWh/year",
+                NormalizedUnitText = "kWh/m²/year",
                 Data = (results, normalized) => annualized ? results.TotalEnergy(normalized)/ lifetime : results.TotalEnergy(normalized),
                 Kpi = Kpi.Energy
             };
@@ -45,8 +45,8 @@ namespace Hive.IO.GhInputOutput
             {
                 Color = Color.FromArgb(136, 219, 68),
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
-                UnitText = "kgCO₂",
-                NormalizedUnitText = "kgCO₂/m²",
+                UnitText = "kgCO₂/year",
+                NormalizedUnitText = "kgCO₂/m²/year",
                 Data = (results, normalized) => annualized ? results.TotalEmissions(normalized)/ lifetime : results.TotalEmissions(normalized),
                 Kpi = Kpi.Emissions
             };
@@ -54,8 +54,8 @@ namespace Hive.IO.GhInputOutput
             {
                 Color = Color.FromArgb(222, 180, 109),
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
-                UnitText = "CHF",
-                NormalizedUnitText = "CHF/m²",
+                UnitText = "CHF/year",
+                NormalizedUnitText = "CHF/m²/year",
                 Data = (results, normalized) => annualized ? results.TotalCosts(normalized)/ lifetime : results.TotalCosts(normalized),
                 Kpi = Kpi.Costs
             };
@@ -113,7 +113,7 @@ namespace Hive.IO.GhInputOutput
             }
         }
 
-        private bool InYAXisBounds = false;
+        private bool InYAxisBounds = false;
         private RectangleF YAxisBounds
         {
             get
@@ -178,16 +178,8 @@ namespace Hive.IO.GhInputOutput
         public override GH_ObjectResponse RespondToMouseMove(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
             var currentPlot = _plotSelector._currentPlot.ToString();            
-            if (YAxisBounds.Contains(e.CanvasLocation) && AxisLimitPlots.Contains(currentPlot))
-            {
-                InYAXisBounds = true;
-                sender.Invalidate();
-            }
-            else
-            {
-                InYAXisBounds = false;
-                sender.Invalidate();
-            }
+            InYAxisBounds = YAxisBounds.Contains(e.CanvasLocation) && AxisLimitPlots.Contains(currentPlot) ? true : false;
+            sender.Invalidate();
             return base.RespondToMouseMove(sender, e);
         }
 
@@ -209,11 +201,12 @@ namespace Hive.IO.GhInputOutput
 
         private void RenderYAxisBox(Graphics graphics)
         {
-            if (InYAXisBounds)
+            if (InYAxisBounds)
             {
                 graphics.DrawRectangleF(new Pen(Color.Gray, 2), YAxisBounds);
             }
         }
+
         /// <summary>
         ///     Render the title bar at the top with the dropdown for selecting the plot and the
         ///     operational performance metrics.
