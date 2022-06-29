@@ -28,13 +28,17 @@ namespace Hive.IO.GhInputOutput
 
         public GhVisualizerAttributes(GhVisualizer owner) : base(owner)
         {
+            //Projected Building Lifetime is 80 years
+            bool annualized = true;
+            int lifetime = 80;
+
             var energyKpiConfig = new KpiPlotProperties
             {
                 Color = Color.FromArgb(225, 242, 31),
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
                 UnitText = "kWh",
                 NormalizedUnitText = "kWh/m²",
-                Data = (results, normalized) => results.TotalEnergy(normalized),
+                Data = (results, normalized) => annualized ? results.TotalEnergy(normalized)/ lifetime : results.TotalEnergy(normalized),
                 Kpi = Kpi.Energy
             };
             var emissionsKpiConfig = new KpiPlotProperties
@@ -43,7 +47,7 @@ namespace Hive.IO.GhInputOutput
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
                 UnitText = "kgCO₂",
                 NormalizedUnitText = "kgCO₂/m²",
-                Data = (results, normalized) => results.TotalEmissions(normalized),
+                Data = (results, normalized) => annualized ? results.TotalEmissions(normalized)/ lifetime : results.TotalEmissions(normalized),
                 Kpi = Kpi.Emissions
             };
             var costsKpiConfig = new KpiPlotProperties
@@ -52,7 +56,7 @@ namespace Hive.IO.GhInputOutput
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
                 UnitText = "CHF",
                 NormalizedUnitText = "CHF/m²",
-                Data = (results, normalized) => results.TotalCosts(normalized),
+                Data = (results, normalized) => annualized ? results.TotalCosts(normalized)/ lifetime : results.TotalCosts(normalized),
                 Kpi = Kpi.Costs
             };
 
