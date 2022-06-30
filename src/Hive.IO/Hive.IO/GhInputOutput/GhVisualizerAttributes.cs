@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
+using System.Diagnostics;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
@@ -83,13 +84,15 @@ namespace Hive.IO.GhInputOutput
                 //mbNormalize
             };
 
-            var energyKpiToolTip = new VisualizerToolTip("Energy KPI", "This is the Energy KPI box", _kpiPlots[2]);
-            var emissionKpiToolTip = new VisualizerToolTip("Emissions KPI", "This is the Emissions KPI box", _kpiPlots[1]);
+            var energyKpiToolTip = new VisualizerToolTip("Energy KPI", "This is the Energy KPI box", _kpiPlots[2], new SolidBrush(Color.Red));
+            var emissionKpiToolTip = new VisualizerToolTip("Emissions KPI", "This is the Emissions KPI box", _kpiPlots[1], new SolidBrush(Color.Aqua));
+            var costKpiToolTip = new VisualizerToolTip("Cost KPI", "This is the Cost KPI box", _kpiPlots[0], new SolidBrush(Color.GreenYellow));
 
             _toolTips = new VisualizerToolTip[]
             {
                 energyKpiToolTip,
-                emissionKpiToolTip
+                emissionKpiToolTip,
+                costKpiToolTip
             };
         }
 
@@ -195,6 +198,7 @@ namespace Hive.IO.GhInputOutput
             foreach (var toolTip in _toolTips)
             {
                 toolTip.display = toolTip.associatedElement.Contains(e.CanvasLocation) ? true : false;
+                toolTip.cursorLocation = e.CanvasLocation;
             }
             sender.Invalidate();
             return base.RespondToMouseMove(sender, e);
@@ -226,10 +230,10 @@ namespace Hive.IO.GhInputOutput
         }
 
         private void RenderToolTips(Graphics graphics)
-        {
+        {   
             foreach (var toolTip in _toolTips)
             {
-                if (toolTip.display) { toolTip.Render(graphics, InnerBounds); }
+                if (toolTip.display) { toolTip.Render(graphics); }
             }
         }
 
