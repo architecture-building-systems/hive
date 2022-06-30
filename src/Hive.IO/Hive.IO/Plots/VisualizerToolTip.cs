@@ -18,7 +18,8 @@ namespace Hive.IO.Plots
         private string description;
         private Brush backgroundBrush = new SolidBrush(Color.Red);
         private Pen borderPen = new Pen(Color.FromArgb(217, 217, 217));
-        private Font font = GH_FontServer.Standard;
+        private Font _standardFont = GH_FontServer.Standard;
+        private Font _boldFont = GH_FontServer.StandardBold;
 
         public IVisualizerControl associatedElement;
         public bool display;
@@ -36,24 +37,39 @@ namespace Hive.IO.Plots
         {
         }
 
-        private int width = 200;
-        private int height = 100;
-
+        private int widthPadding = 5;
+        private int heightPadding = 10;
+        private int standardHeight = 100;
+        private int standardWidth = 200;
         public void Render(Graphics graphics) 
         {
+            var measureString = GH_FontServer.MeasureString(description, _standardFont);
+            var stringHeight = measureString.Height;
+            var stringWidth = measureString.Width;
+
+
+            var width = Math.Max(stringWidth + 2*widthPadding, 200);
+            var height = stringHeight;
+
             var brush = new SolidBrush(Color.Black);
 
             // draw box
-            var size = new SizeF(width, height);
+            var size = new SizeF(width, standardHeight);
             var box = new RectangleF(cursorLocation, size);
-            box.Offset(0, -height);
+            box.Offset(0, -standardHeight);
             graphics.DrawRectangle(borderPen, box.Left, box.Top, box.Width, box.Height);
             graphics.FillRectangle(backgroundBrush, box);
 
-            var dataSize = GH_FontServer.MeasureString(description, font);
-            var dataX = box.Left + (box.Width - dataSize.Width) / 2;
-            var dataY = box.Top + box.Height / 2 - (float)dataSize.Height / 2;
-            graphics.DrawString(description, font, brush, dataX, dataY);
+            //draw Title
+            var dataX = box.Left + widthPadding;
+            var dataY = box.Top + heightPadding;
+            graphics.DrawString(title, _boldFont, brush, dataX, dataY);
+
+            //draw description
+            var dataSize = GH_FontServer.MeasureString(description, _standardFont);
+            var unitX = box.Left + widthPadding;
+            var unitY = dataY + dataSize.Height;
+            graphics.DrawString(description, _standardFont, brush, unitX, unitY);
 
         }
     }

@@ -84,8 +84,8 @@ namespace Hive.IO.GhInputOutput
                 //mbNormalize
             };
 
-            var energyKpiToolTip = new VisualizerToolTip("Energy KPI", "This is the Energy KPI box", _kpiPlots[2], new SolidBrush(Color.Red));
-            var emissionKpiToolTip = new VisualizerToolTip("Emissions KPI", "This is the Emissions KPI box", _kpiPlots[1], new SolidBrush(Color.Aqua));
+            var energyKpiToolTip = new VisualizerToolTip("Energy KPI", "Annual operational energy consumption in kWh/year", _kpiPlots[2], new SolidBrush(Color.Red));
+            var emissionKpiToolTip = new VisualizerToolTip("Emissions KPI", "Annual operational and embodied carbon emissions in kgCO2/year. \nEmbodied emissions are annualized by dividing by the expected building lifetime.", _kpiPlots[1], new SolidBrush(Color.Aqua));
             var costKpiToolTip = new VisualizerToolTip("Cost KPI", "This is the Cost KPI box", _kpiPlots[0], new SolidBrush(Color.GreenYellow));
 
             _toolTips = new VisualizerToolTip[]
