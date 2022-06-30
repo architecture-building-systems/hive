@@ -23,6 +23,7 @@ namespace Hive.IO.GhInputOutput
             TitleBarHeight + 15 * GH_FontServer.MeasureString("abc", GH_FontServer.StandardBold).Height;
 
         private readonly KpiPlot[] _kpiPlots;
+        private readonly VisualizerToolTip[] _toolTips;
 
         private readonly PlotSelector _plotSelector = new PlotSelector();
 
@@ -81,6 +82,15 @@ namespace Hive.IO.GhInputOutput
                 energyKpi,
                 //mbNormalize
             };
+
+            var energyKpiToolTip = new VisualizerToolTip("Energy KPI", "This is the Energy KPI box", _kpiPlots[2]);
+            var emissionKpiToolTip = new VisualizerToolTip("Emissions KPI", "This is the Emissions KPI box", _kpiPlots[1]);
+
+            _toolTips = new VisualizerToolTip[]
+            {
+                energyKpiToolTip,
+                emissionKpiToolTip
+            };
         }
 
         // make sure we have a minimum size
@@ -114,6 +124,8 @@ namespace Hive.IO.GhInputOutput
         }
 
         private bool InYAxisBounds = false;
+
+
         private RectangleF YAxisBounds
         {
             get
@@ -174,11 +186,16 @@ namespace Hive.IO.GhInputOutput
             return GH_ObjectResponse.Release;
         }
 
-        //this might be a really bad idea performance-wise?
+        
         public override GH_ObjectResponse RespondToMouseMove(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
-            var currentPlot = _plotSelector._currentPlot.ToString();            
+            var currentPlot = _plotSelector._currentPlot.ToString();
+            //this might be a really bad idea performance-wise?
             InYAxisBounds = YAxisBounds.Contains(e.CanvasLocation) && AxisLimitPlots.Contains(currentPlot) ? true : false;
+            foreach (var toolTip in _toolTips)
+            {
+                toolTip.display = toolTip.associatedElement.Contains(e.CanvasLocation) ? true : false;
+            }
             sender.Invalidate();
             return base.RespondToMouseMove(sender, e);
         }
@@ -195,6 +212,7 @@ namespace Hive.IO.GhInputOutput
             RenderPlot(graphics);
             RenderTitleBar(graphics);
             RenderYAxisBox(graphics);
+            RenderToolTips(graphics);
         }
 
         private void RenderBackground(Graphics graphics) => graphics.FillRectangle(new SolidBrush(Color.White), InnerBounds);
@@ -204,6 +222,14 @@ namespace Hive.IO.GhInputOutput
             if (InYAxisBounds)
             {
                 graphics.DrawRectangleF(new Pen(Color.Gray, 2), YAxisBounds);
+            }
+        }
+
+        private void RenderToolTips(Graphics graphics)
+        {
+            foreach (var toolTip in _toolTips)
+            {
+                if (toolTip.display) { toolTip.Render(graphics, InnerBounds); }
             }
         }
 
