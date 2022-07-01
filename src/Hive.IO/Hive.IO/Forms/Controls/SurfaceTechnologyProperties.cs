@@ -94,7 +94,7 @@ namespace Hive.IO.Forms.Controls
             ToolTip1.ShowAlways = true;
 
 
-            //toolTip1.SetToolTip(cboModuleType, cboModuleType.SelectedItem.ToString());
+            toolTip1.SetToolTip(cboModuleType, cboModuleType.SelectedItem.ToString());
 
             if (_initializingControls) return;
 
@@ -118,7 +118,6 @@ namespace Hive.IO.Forms.Controls
             ToolTip2.ReshowDelay = 500;
             ToolTip2.ShowAlways = true;
         }
-
         private void cboModuleType_MouseHover(object sender, EventArgs e)
         {
             ToolTip ToolTip3 = new ToolTip();
