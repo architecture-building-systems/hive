@@ -92,8 +92,6 @@ namespace Hive.IO.Forms.Controls
             technologyImage.Image = Conversion.TechnologyImage;
 
             foreach (var textBox in GetAll(this, typeof(TextBox)).Cast<TextBox>()) UpdateTextBoxText(textBox);
-
-            //toolTip1.SetToolTip(cboModuleType, moduleName);
         }
 
         private void lstAvailableSurfaces_SelectedIndexChanged(object sender, EventArgs e)

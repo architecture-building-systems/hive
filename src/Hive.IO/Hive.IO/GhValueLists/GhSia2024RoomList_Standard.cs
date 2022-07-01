@@ -11,9 +11,9 @@ namespace Hive.IO.GhValueLists
     {
         public GHSia2024RoomList_Standard()
         {
-            this.Name = "SIA 2024 Standard Rooms";
-            this.NickName = "Sia2024RoomsStandard";
-            this.Description = "A list of SIA 2024 rooms, standard building quality";
+            this.Name = "SIA 2024 Rooms";
+            this.NickName = "Sia2024Rooms";
+            this.Description = "A list of SIA 2024 rooms";
             this.Category = "[hive]";
             this.SubCategory = "Demand";
             Load();
