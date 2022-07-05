@@ -2212,6 +2212,8 @@
   - 12.6 WC, Bad, Dusche
   - 12.7 WC
   - 12.8 Garderobe, Dusche
+  - 12.9 Parkhaus
+  - 12.10 Wasch- und Trockenraum
 
   OccupancySchedule:
     DaysOffPerWeek: 2
