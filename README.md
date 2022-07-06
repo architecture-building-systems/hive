@@ -16,10 +16,10 @@ Furthermore, (C) example Grasshopper files (.gh) can be found in the [Exercises 
 
 ## Info around Hive
 
+[Validation with EnergyPlus](https://github.com/architecture-building-systems/hive/wiki/Validation)
+
 [IBPSA BS 2021 paper](https://www.research-collection.ethz.ch/handle/20.500.11850/527270)
 
 [ETH Teaching Fair](https://learning-teaching-fair.ethz.ch/project/energy-and-climate-systems-iii/)
 
 [A/S Website](https://systems.arch.ethz.ch/demonstrators/hive)
-
-[ETH Energy Blog](https://blogs.ethz.ch/energy/smart-grids/)

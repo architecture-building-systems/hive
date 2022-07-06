@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -96,6 +96,7 @@ namespace Hive.IO.Forms.Controls
 
             lblDescription.Text = Conversion.ModuleType.Description;
             technologyImage.Image = Conversion.TechnologyImage;
+
 
             foreach (var textBox in GetAll(this, typeof(TextBox)).Cast<TextBox>()) UpdateTextBoxText(textBox);
 
