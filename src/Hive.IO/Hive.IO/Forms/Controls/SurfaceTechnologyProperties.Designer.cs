@@ -34,7 +34,7 @@
             this.label1 = new System.Windows.Forms.Label();
             this.txtEfficiency = new System.Windows.Forms.TextBox();
             this.label14 = new System.Windows.Forms.Label();
-            this.cboModuleType = new System.Windows.Forms.ComboBox();
+            this.cboModuleType = new Hive.IO.Forms.Controls.SurfaceTechnologyProperties.JComboBox(this.components);
             this.technologyImage = new System.Windows.Forms.PictureBox();
             this.label5 = new System.Windows.Forms.Label();
             this.txtPerformanceRatio = new System.Windows.Forms.TextBox();
@@ -58,13 +58,13 @@
             this.txtCapitalCost = new System.Windows.Forms.TextBox();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.linkLabel2 = new System.Windows.Forms.LinkLabel();
+            this.label6 = new System.Windows.Forms.Label();
             this.tableLayoutPanel4 = new System.Windows.Forms.TableLayoutPanel();
             this.lstAvailableSurfaces = new System.Windows.Forms.ListBox();
             this.label13 = new System.Windows.Forms.Label();
             this.txtArea = new System.Windows.Forms.TextBox();
             this.lblDescription = new System.Windows.Forms.Label();
             this.toolTip1 = new System.Windows.Forms.ToolTip(this.components);
-            this.label6 = new System.Windows.Forms.Label();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.technologyImage)).BeginInit();
@@ -165,10 +165,9 @@
             this.cboModuleType.Name = "cboModuleType";
             this.cboModuleType.Size = new System.Drawing.Size(189, 33);
             this.cboModuleType.TabIndex = 10;
+            this.cboModuleType.DropDown += new System.EventHandler(this.cboModuleType_MouseHover);
             this.cboModuleType.SelectedIndexChanged += new System.EventHandler(this.cboModuleType_SelectedIndexChanged);
-            this.cboModuleType.DropDown += new System.EventHandler(this.cboModuleType_DropDown);
             this.cboModuleType.MouseHover += new System.EventHandler(this.cboModuleType_MouseHover);
-
             // 
             // technologyImage
             // 
@@ -268,7 +267,6 @@
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 18F));
             this.tableLayoutPanel3.Size = new System.Drawing.Size(478, 761);
             this.tableLayoutPanel3.TabIndex = 3;
-            this.tableLayoutPanel3.Paint += new System.Windows.Forms.PaintEventHandler(this.tableLayoutPanel3_Paint);
             // 
             // label16
             // 
@@ -464,6 +462,17 @@
             this.linkLabel2.Text = "http://explorerise.com";
             this.linkLabel2.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel2_LinkClicked);
             // 
+            // label6
+            // 
+            this.label6.Anchor = System.Windows.Forms.AnchorStyles.None;
+            this.label6.AutoSize = true;
+            this.label6.Location = new System.Drawing.Point(36, 257);
+            this.label6.Name = "label6";
+            this.label6.Size = new System.Drawing.Size(159, 25);
+            this.label6.TabIndex = 18;
+            this.label6.Text = "BIPV Examples";
+            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
+            // 
             // tableLayoutPanel4
             // 
             this.tableLayoutPanel4.ColumnCount = 2;
@@ -531,21 +540,6 @@
             this.lblDescription.TabIndex = 3;
             this.lblDescription.Text = "lblDescription";
             // 
-            // toolTip1
-            // 
-            this.toolTip1.Popup += new System.Windows.Forms.PopupEventHandler(this.toolTip1_Popup);
-            // 
-            // label6
-            // 
-            this.label6.Anchor = System.Windows.Forms.AnchorStyles.None;
-            this.label6.AutoSize = true;
-            this.label6.Location = new System.Drawing.Point(36, 257);
-            this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(159, 25);
-            this.label6.TabIndex = 18;
-            this.label6.Text = "BIPV Examples";
-            this.label6.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
-            // 
             // SurfaceTechnologyProperties
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
@@ -586,7 +580,7 @@
         private System.Windows.Forms.Label label13;
         private System.Windows.Forms.TextBox txtArea;
         private System.Windows.Forms.Label label14;
-        private System.Windows.Forms.ComboBox cboModuleType;
+        private JComboBox cboModuleType;
         private System.Windows.Forms.Label lblDescription;
         private System.Windows.Forms.PictureBox technologyImage;
         private System.Windows.Forms.Label label3;
