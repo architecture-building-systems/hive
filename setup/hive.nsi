@@ -78,7 +78,6 @@ Section "Base Installation" Base_Installation_Section
     
     # Also delete files from previous install location (Appdata\Grasshopper\Libraries)
     Delete /REBOOTOK "$INSTDIR\..\Hive.Core.epw_reader.ghpy"
-    Delete /REBOOTOK "$INSTDIR\..\GHSolar.gha"
     Delete /REBOOTOK "$INSTDIR\..\Hive.IO.gha"
     Delete /REBOOTOK "$INSTDIR\..\honey-badger-runtime.dll"
     Delete /REBOOTOK "$INSTDIR\..\Newtonsoft.Json.dll"
