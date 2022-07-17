@@ -103,7 +103,13 @@ Section "Base Installation" Base_Installation_Section
     File "..\src\Hive.IO\Hive.IO\bin\OxyPlot.WindowsForms.dll"
     File "GHSolar.gha"
     File "SolarModel.dll"
+    
+    IfFileExists "$INSTDIR\..\ProvingGround.Conduit.gha" 0 file_not_found
+    goto end_of_block
+    file_not_found:
     File "ProvingGround.Conduit.gha"
+    end_of_block:
+
 
     # Hive.Core and dependencies
     # File "..\src\Hive.Core\epw_reader\_build\Hive.Core.epw_reader.ghpy"
