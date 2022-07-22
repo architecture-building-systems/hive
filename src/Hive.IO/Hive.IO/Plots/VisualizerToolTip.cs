@@ -25,16 +25,12 @@ namespace Hive.IO.Plots
         public bool display;
         public PointF cursorLocation;
 
-        public VisualizerToolTip(string title, string description, IVisualizerControl element, Brush backgroundBrush)
+        public VisualizerToolTip(string title, string description, IVisualizerControl element, Brush backgroundBrush, int descriptionLineLength)
         {
             this.title = title;
-            this.description = description;
+            this.description = FormatDescriptionText(description, descriptionLineLength);
             this.associatedElement = element;
             this.backgroundBrush = backgroundBrush;
-        }
-
-        public VisualizerToolTip(string title, string description, IVisualizerControl element) : this(title, description, element, new SolidBrush(Color.Red))
-        {
         }
 
         private int widthPadding = 5;
@@ -43,20 +39,23 @@ namespace Hive.IO.Plots
         private int standardWidth = 200;
         public void Render(Graphics graphics) 
         {
-            var measureString = GH_FontServer.MeasureString(description, _standardFont);
-            var stringHeight = measureString.Height;
-            var stringWidth = measureString.Width;
+            var titleSize = GH_FontServer.MeasureString(title, _boldFont);
+            var titleHeight = titleSize.Height;
+            var titleWidth = titleSize.Width;
 
+            var descSize = GH_FontServer.MeasureString(description, _standardFont);
+            var descHeight = descSize.Height;
+            var descWidth = descSize.Width;
 
-            var width = Math.Max(stringWidth + 2*widthPadding, 200);
-            var height = stringHeight;
+            var width = Math.Max(descWidth + 2*widthPadding, standardWidth);
+            var height = Math.Max(2*heightPadding + titleHeight + descHeight, standardHeight);
 
             var brush = new SolidBrush(Color.Black);
 
             // draw box
-            var size = new SizeF(width, standardHeight);
+            var size = new SizeF(width, height);
             var box = new RectangleF(cursorLocation, size);
-            box.Offset(0, -standardHeight);
+            box.Offset(0, -height);
             graphics.DrawRectangle(borderPen, box.Left, box.Top, box.Width, box.Height);
             graphics.FillRectangle(backgroundBrush, box);
 
@@ -66,11 +65,25 @@ namespace Hive.IO.Plots
             graphics.DrawString(title, _boldFont, brush, dataX, dataY);
 
             //draw description
-            var dataSize = GH_FontServer.MeasureString(description, _standardFont);
             var unitX = box.Left + widthPadding;
-            var unitY = dataY + dataSize.Height;
+            var unitY = dataY + titleHeight;
             graphics.DrawString(description, _standardFont, brush, unitX, unitY);
 
+        }
+
+        private string FormatDescriptionText(string str, int maxLength)
+        {
+            List<string> subStrings = new List<string>();
+            for (int i = 0; i < str.Length; i += maxLength)
+            {
+                if ((i + maxLength) < str.Length)
+                    subStrings.Add(str.Substring(i, maxLength).Trim());
+                else
+                    subStrings.Add(str.Substring(i).Trim());
+            }
+
+            var descriptionFormatted = string.Join("\n", subStrings);
+            return descriptionFormatted;
         }
     }
 }
