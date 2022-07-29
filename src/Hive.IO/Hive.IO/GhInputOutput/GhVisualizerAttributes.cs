@@ -28,6 +28,8 @@ namespace Hive.IO.GhInputOutput
 
         private readonly PlotSelector _plotSelector = new PlotSelector();
 
+        private Graphics _graphics;
+
         public GhVisualizerAttributes(GhVisualizer owner) : base(owner)
         {
             //Projected Building Lifetime is 80 years
@@ -216,6 +218,7 @@ namespace Hive.IO.GhInputOutput
 
         protected override void Render(GH_Canvas canvas, Graphics graphics, GH_CanvasChannel channel)
         {
+            _graphics = graphics;
             if (channel == GH_CanvasChannel.Wires && Owner.SourceCount > 0)
                 RenderIncomingWires(canvas.Painter, Owner.Sources, Owner.WireDisplay);
             if (channel != GH_CanvasChannel.Objects)
@@ -226,6 +229,7 @@ namespace Hive.IO.GhInputOutput
             RenderPlot(graphics);
             RenderTitleBar(graphics);
             RenderYAxisBox(graphics);
+
             RenderToolTips(graphics);
         }
 

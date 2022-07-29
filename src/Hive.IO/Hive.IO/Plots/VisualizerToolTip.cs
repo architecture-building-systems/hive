@@ -26,6 +26,8 @@ namespace Hive.IO.Plots
         public bool display;
         public PointF cursorLocation;
 
+        private Graphics graphicsBuffer; 
+
         public VisualizerToolTip(string title, string description, IVisualizerControl element, Brush backgroundBrush, int descriptionLineLength)
         {
             this.title = title;
@@ -41,7 +43,7 @@ namespace Hive.IO.Plots
 
         public void Render(Graphics graphics) 
         {
-            Timer waitTime  = new Timer(2000);
+            Timer waitTime  = new Timer(1000);
 
             waitTime.Elapsed += new ElapsedEventHandler((sender, e) => TimedRender(sender, e, graphics));
 
@@ -51,8 +53,6 @@ namespace Hive.IO.Plots
 
         private void TimedRender(Object source, ElapsedEventArgs e, Graphics graphics)
         {
-            Debug.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
-
             if (display)
             {
                 var titleSize = GH_FontServer.MeasureString(title, _boldFont);
