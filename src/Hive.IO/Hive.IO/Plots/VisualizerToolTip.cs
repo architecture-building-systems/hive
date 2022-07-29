@@ -3,6 +3,7 @@ using System.Linq;
 using System.Text;
 using System.Collections.Generic;
 using System.Drawing;
+using System.Timers;
 using System.Diagnostics;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
@@ -37,38 +38,53 @@ namespace Hive.IO.Plots
         private int heightPadding = 10;
         private int standardHeight = 100;
         private int standardWidth = 200;
+
         public void Render(Graphics graphics) 
         {
-            var titleSize = GH_FontServer.MeasureString(title, _boldFont);
-            var titleHeight = titleSize.Height;
-            var titleWidth = titleSize.Width;
+            Timer waitTime  = new Timer(2000);
 
-            var descSize = GH_FontServer.MeasureString(description, _standardFont);
-            var descHeight = descSize.Height;
-            var descWidth = descSize.Width;
+            waitTime.Elapsed += new ElapsedEventHandler((sender, e) => TimedRender(sender, e, graphics));
 
-            var width = Math.Max(descWidth + 2*widthPadding, standardWidth);
-            var height = Math.Max(2*heightPadding + titleHeight + descHeight, standardHeight);
+            waitTime.Enabled = true;
+            waitTime.AutoReset = false;
+        }
 
-            var brush = new SolidBrush(Color.Black);
+        private void TimedRender(Object source, ElapsedEventArgs e, Graphics graphics)
+        {
+            Debug.WriteLine("The Elapsed event was raised at {0}", e.SignalTime);
 
-            // draw box
-            var size = new SizeF(width, height);
-            var box = new RectangleF(cursorLocation, size);
-            box.Offset(0, -height);
-            graphics.DrawRectangle(borderPen, box.Left, box.Top, box.Width, box.Height);
-            graphics.FillRectangle(backgroundBrush, box);
+            if (display)
+            {
+                var titleSize = GH_FontServer.MeasureString(title, _boldFont);
+                var titleHeight = titleSize.Height;
+                var titleWidth = titleSize.Width;
 
-            //draw Title
-            var dataX = box.Left + widthPadding;
-            var dataY = box.Top + heightPadding;
-            graphics.DrawString(title, _boldFont, brush, dataX, dataY);
+                var descSize = GH_FontServer.MeasureString(description, _standardFont);
+                var descHeight = descSize.Height;
+                var descWidth = descSize.Width;
 
-            //draw description
-            var unitX = box.Left + widthPadding;
-            var unitY = dataY + titleHeight;
-            graphics.DrawString(description, _standardFont, brush, unitX, unitY);
+                var width = Math.Max(descWidth + 2 * widthPadding, standardWidth);
+                var height = Math.Max(2 * heightPadding + titleHeight + descHeight, standardHeight);
 
+                var brush = new SolidBrush(Color.Black);
+
+                // draw box
+                var size = new SizeF(width, height);
+                var box = new RectangleF(cursorLocation, size);
+                box.Offset(0, -height);
+                graphics.DrawRectangle(borderPen, box.Left, box.Top, box.Width, box.Height);
+                graphics.FillRectangle(backgroundBrush, box);
+
+                //draw Title
+                var dataX = box.Left + widthPadding;
+                var dataY = box.Top + heightPadding;
+                graphics.DrawString(title, _boldFont, brush, dataX, dataY);
+
+                //draw description
+                var unitX = box.Left + widthPadding;
+                var unitY = dataY + titleHeight;
+                graphics.DrawString(description, _standardFont, brush, unitX, unitY);
+            }
         }
 
         private string FormatDescriptionText(string str, int maxLength)
