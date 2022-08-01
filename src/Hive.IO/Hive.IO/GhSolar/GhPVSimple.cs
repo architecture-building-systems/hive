@@ -19,9 +19,9 @@ namespace Hive.IO.GhSolar
         //- E_PV - PV electricity generation[kWh]
 
         public GhPVSimple() :
-            base("Photovoltaic Energy System C#", "PvSimple",
+            base("Photovoltaic Energy System", "PvSimple",
                 "Calculates total photovoltaic electricity generation using simplified a equation (E_PV = G * F_F * A * eta_PV * PR)", 
-                "[hive]", "Solar C#")
+                "[hive]", "Solar")
         {
         }
 

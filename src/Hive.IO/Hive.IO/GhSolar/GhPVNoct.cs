@@ -14,9 +14,9 @@ namespace Hive.IO.GhSolar
         //- PV system area
 
         public GhPVNoct() :
-            base("Photovoltaic time resolved Energy System C#", "PvTimeResolved",
+            base("Photovoltaic time resolved Energy System", "PvTimeResolved",
                 "Calculates time resolved electricity generation and cell efficiency of a photovoltaic panel based on the Nominal Operating Cell Temperature method, Eqt. A.10 in doi: 10.1016/j.apenergy.2019.03.177",
-                "[hive]", "Solar C#")
+                "[hive]", "Solar")
         {
         }
 

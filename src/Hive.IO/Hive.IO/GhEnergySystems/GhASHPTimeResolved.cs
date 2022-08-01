@@ -25,9 +25,9 @@ namespace Hive.IO.GhEnergySystems
         //-x_el,t[kW]
 
         public GhASHPTimeResolved() :
-            base("Air Source Heat Pump time resolved Energy System C#", "AshpTimeResolved",
+            base("Air Source Heat Pump time resolved Energy System", "AshpTimeResolved",
                 "Calculates the time resolved Coefficient of Performance (COP) of an air source heat pump, as well as consumed electricity of the heat pump, to meet heating energy demand.",
-                "[hive]", "Energy Systems C#")
+                "[hive]", "Energy Systems")
         {
         }
 

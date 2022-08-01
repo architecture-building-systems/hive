@@ -18,9 +18,9 @@ namespace Hive.IO.GhEnergySystems
         //    - COP_W : coefficient of performance[-]
 
         public GhHeatpumpCOP() :
-            base("Heat pump COP Energy System C#", "HpCopSimple",
+            base("Heat pump COP Energy System", "HpCopSimple",
                 "Calculates the Coefficient of Performance (COP) of a simple heat pump.",
-                "[hive]", "Energy Systems C#")
+                "[hive]", "Energy Systems")
         {
         }
 
