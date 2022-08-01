@@ -154,21 +154,21 @@ namespace Hive.IO.Forms
             this.tabControl.Controls.Add(this.tabSIA);
             this.tabControl.Controls.Add(this.tabENV);
             this.tabControl.Controls.Add(this.tabIG);
-            this.tabControl.Location = new System.Drawing.Point(0, 156);
-            this.tabControl.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabControl.Location = new System.Drawing.Point(0, 81);
+            this.tabControl.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabControl.Name = "tabControl";
             this.tabControl.SelectedIndex = 0;
-            this.tabControl.Size = new System.Drawing.Size(756, 1060);
+            this.tabControl.Size = new System.Drawing.Size(378, 551);
             this.tabControl.TabIndex = 0;
             // 
             // tabSIA
             // 
             this.tabSIA.Controls.Add(this.tableLayoutSiaMain);
-            this.tabSIA.Location = new System.Drawing.Point(8, 39);
-            this.tabSIA.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabSIA.Location = new System.Drawing.Point(4, 22);
+            this.tabSIA.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabSIA.Name = "tabSIA";
-            this.tabSIA.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tabSIA.Size = new System.Drawing.Size(740, 1013);
+            this.tabSIA.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabSIA.Size = new System.Drawing.Size(370, 525);
             this.tabSIA.TabIndex = 0;
             this.tabSIA.Text = "Geo./Set-points";
             this.tabSIA.UseVisualStyleBackColor = true;
@@ -181,15 +181,15 @@ namespace Hive.IO.Forms
             this.tableLayoutSiaMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutSiaMain.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutSiaMain.Controls.Add(this.panelSiaProperties, 0, 0);
-            this.tableLayoutSiaMain.Location = new System.Drawing.Point(4, 4);
-            this.tableLayoutSiaMain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutSiaMain.Location = new System.Drawing.Point(2, 2);
+            this.tableLayoutSiaMain.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutSiaMain.Name = "tableLayoutSiaMain";
-            this.tableLayoutSiaMain.Padding = new System.Windows.Forms.Padding(8, 15, 8, 8);
+            this.tableLayoutSiaMain.Padding = new System.Windows.Forms.Padding(4, 8, 4, 4);
             this.tableLayoutSiaMain.RowCount = 2;
             this.tableLayoutSiaMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutSiaMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-            this.tableLayoutSiaMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 19F));
-            this.tableLayoutSiaMain.Size = new System.Drawing.Size(740, 967);
+            this.tableLayoutSiaMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tableLayoutSiaMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
+            this.tableLayoutSiaMain.Size = new System.Drawing.Size(370, 503);
             this.tableLayoutSiaMain.TabIndex = 0;
             // 
             // panelSiaProperties
@@ -199,11 +199,11 @@ namespace Hive.IO.Forms
             this.tableLayoutSiaMain.SetColumnSpan(this.panelSiaProperties, 2);
             this.panelSiaProperties.Controls.Add(this.tableLayoutSiaProperties);
             this.panelSiaProperties.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.panelSiaProperties.Location = new System.Drawing.Point(12, 19);
-            this.panelSiaProperties.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.panelSiaProperties.Location = new System.Drawing.Point(6, 10);
+            this.panelSiaProperties.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.panelSiaProperties.Name = "panelSiaProperties";
-            this.panelSiaProperties.Padding = new System.Windows.Forms.Padding(10, 10, 10, 10);
-            this.panelSiaProperties.Size = new System.Drawing.Size(716, 252);
+            this.panelSiaProperties.Padding = new System.Windows.Forms.Padding(5, 5, 5, 5);
+            this.panelSiaProperties.Size = new System.Drawing.Size(358, 145);
             this.panelSiaProperties.TabIndex = 0;
             // 
             // tableLayoutSiaProperties
@@ -234,8 +234,8 @@ namespace Hive.IO.Forms
             this.tableLayoutSiaProperties.Controls.Add(this.txtCoolingSetback, 3, 4);
             this.tableLayoutSiaProperties.Controls.Add(this.checkBoxAdaptiveComfort, 3, 0);
             this.tableLayoutSiaProperties.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutSiaProperties.Location = new System.Drawing.Point(10, 10);
-            this.tableLayoutSiaProperties.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutSiaProperties.Location = new System.Drawing.Point(5, 5);
+            this.tableLayoutSiaProperties.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutSiaProperties.Name = "tableLayoutSiaProperties";
             this.tableLayoutSiaProperties.RowCount = 5;
             this.tableLayoutSiaProperties.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -243,18 +243,18 @@ namespace Hive.IO.Forms
             this.tableLayoutSiaProperties.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutSiaProperties.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutSiaProperties.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutSiaProperties.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 38F));
-            this.tableLayoutSiaProperties.Size = new System.Drawing.Size(694, 230);
+            this.tableLayoutSiaProperties.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutSiaProperties.Size = new System.Drawing.Size(346, 133);
             this.tableLayoutSiaProperties.TabIndex = 0;
             // 
             // label5
             // 
             this.label5.AutoSize = true;
             this.label5.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.1F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label5.Location = new System.Drawing.Point(4, 8);
-            this.label5.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label5.Location = new System.Drawing.Point(2, 4);
+            this.label5.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label5.Name = "label5";
-            this.label5.Size = new System.Drawing.Size(116, 26);
+            this.label5.Size = new System.Drawing.Size(60, 13);
             this.label5.TabIndex = 0;
             this.label5.Text = "Geometry";
             // 
@@ -262,10 +262,10 @@ namespace Hive.IO.Forms
             // 
             this.label6.AutoSize = true;
             this.label6.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.1F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label6.Location = new System.Drawing.Point(350, 8);
-            this.label6.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label6.Location = new System.Drawing.Point(174, 4);
+            this.label6.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label6.Name = "label6";
-            this.label6.Size = new System.Drawing.Size(120, 26);
+            this.label6.Size = new System.Drawing.Size(64, 13);
             this.label6.TabIndex = 1;
             this.label6.Text = "Set-points";
             // 
@@ -273,10 +273,10 @@ namespace Hive.IO.Forms
             // 
             this.label7.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label7.AutoSize = true;
-            this.label7.Location = new System.Drawing.Point(4, 53);
-            this.label7.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label7.Location = new System.Drawing.Point(2, 28);
+            this.label7.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label7.Name = "label7";
-            this.label7.Size = new System.Drawing.Size(156, 25);
+            this.label7.Size = new System.Drawing.Size(75, 13);
             this.label7.TabIndex = 2;
             this.label7.Text = "Floor Area (m²)";
             // 
@@ -284,10 +284,10 @@ namespace Hive.IO.Forms
             // 
             this.label8.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label8.AutoSize = true;
-            this.label8.Location = new System.Drawing.Point(4, 100);
-            this.label8.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label8.Location = new System.Drawing.Point(2, 56);
+            this.label8.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label8.Name = "label8";
-            this.label8.Size = new System.Drawing.Size(149, 25);
+            this.label8.Size = new System.Drawing.Size(73, 13);
             this.label8.TabIndex = 3;
             this.label8.Text = "Wall Area (m²)";
             // 
@@ -295,10 +295,10 @@ namespace Hive.IO.Forms
             // 
             this.label9.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label9.AutoSize = true;
-            this.label9.Location = new System.Drawing.Point(350, 53);
-            this.label9.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label9.Location = new System.Drawing.Point(174, 28);
+            this.label9.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label9.Name = "label9";
-            this.label9.Size = new System.Drawing.Size(86, 25);
+            this.label9.Size = new System.Drawing.Size(44, 13);
             this.label9.TabIndex = 4;
             this.label9.Text = "Heating";
             // 
@@ -306,10 +306,10 @@ namespace Hive.IO.Forms
             // 
             this.label10.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label10.AutoSize = true;
-            this.label10.Location = new System.Drawing.Point(350, 100);
-            this.label10.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label10.Location = new System.Drawing.Point(174, 56);
+            this.label10.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label10.Name = "label10";
-            this.label10.Size = new System.Drawing.Size(85, 25);
+            this.label10.Size = new System.Drawing.Size(42, 13);
             this.label10.TabIndex = 5;
             this.label10.Text = "Cooling";
             // 
@@ -317,10 +317,10 @@ namespace Hive.IO.Forms
             // 
             this.label11.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label11.AutoSize = true;
-            this.label11.Location = new System.Drawing.Point(4, 147);
-            this.label11.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label11.Location = new System.Drawing.Point(2, 84);
+            this.label11.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label11.Name = "label11";
-            this.label11.Size = new System.Drawing.Size(144, 25);
+            this.label11.Size = new System.Drawing.Size(71, 13);
             this.label11.TabIndex = 6;
             this.label11.Text = "Win Area (m²)";
             // 
@@ -328,10 +328,10 @@ namespace Hive.IO.Forms
             // 
             this.label12.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label12.AutoSize = true;
-            this.label12.Location = new System.Drawing.Point(4, 194);
-            this.label12.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label12.Location = new System.Drawing.Point(2, 112);
+            this.label12.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label12.Name = "label12";
-            this.label12.Size = new System.Drawing.Size(152, 25);
+            this.label12.Size = new System.Drawing.Size(75, 13);
             this.label12.TabIndex = 7;
             this.label12.Text = "Roof Area (m²)";
             // 
@@ -340,10 +340,10 @@ namespace Hive.IO.Forms
             this.txtFloorArea.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtFloorArea.Enabled = false;
-            this.txtFloorArea.Location = new System.Drawing.Point(177, 50);
-            this.txtFloorArea.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtFloorArea.Location = new System.Drawing.Point(88, 25);
+            this.txtFloorArea.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtFloorArea.Name = "txtFloorArea";
-            this.txtFloorArea.Size = new System.Drawing.Size(165, 31);
+            this.txtFloorArea.Size = new System.Drawing.Size(82, 20);
             this.txtFloorArea.TabIndex = 8;
             // 
             // txtWallArea
@@ -351,10 +351,10 @@ namespace Hive.IO.Forms
             this.txtWallArea.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtWallArea.Enabled = false;
-            this.txtWallArea.Location = new System.Drawing.Point(177, 97);
-            this.txtWallArea.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtWallArea.Location = new System.Drawing.Point(88, 53);
+            this.txtWallArea.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtWallArea.Name = "txtWallArea";
-            this.txtWallArea.Size = new System.Drawing.Size(165, 31);
+            this.txtWallArea.Size = new System.Drawing.Size(82, 20);
             this.txtWallArea.TabIndex = 9;
             // 
             // txtWinArea
@@ -362,10 +362,10 @@ namespace Hive.IO.Forms
             this.txtWinArea.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtWinArea.Enabled = false;
-            this.txtWinArea.Location = new System.Drawing.Point(177, 144);
-            this.txtWinArea.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtWinArea.Location = new System.Drawing.Point(88, 81);
+            this.txtWinArea.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtWinArea.Name = "txtWinArea";
-            this.txtWinArea.Size = new System.Drawing.Size(165, 31);
+            this.txtWinArea.Size = new System.Drawing.Size(82, 20);
             this.txtWinArea.TabIndex = 10;
             // 
             // txtRoofArea
@@ -373,10 +373,10 @@ namespace Hive.IO.Forms
             this.txtRoofArea.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtRoofArea.Enabled = false;
-            this.txtRoofArea.Location = new System.Drawing.Point(177, 191);
-            this.txtRoofArea.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtRoofArea.Location = new System.Drawing.Point(88, 109);
+            this.txtRoofArea.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtRoofArea.Name = "txtRoofArea";
-            this.txtRoofArea.Size = new System.Drawing.Size(165, 31);
+            this.txtRoofArea.Size = new System.Drawing.Size(82, 20);
             this.txtRoofArea.TabIndex = 11;
             // 
             // txtHeatingSetPoint
@@ -384,10 +384,10 @@ namespace Hive.IO.Forms
             this.txtHeatingSetPoint.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtHeatingSetPoint.Enabled = false;
-            this.txtHeatingSetPoint.Location = new System.Drawing.Point(523, 50);
-            this.txtHeatingSetPoint.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtHeatingSetPoint.Location = new System.Drawing.Point(260, 25);
+            this.txtHeatingSetPoint.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtHeatingSetPoint.Name = "txtHeatingSetPoint";
-            this.txtHeatingSetPoint.Size = new System.Drawing.Size(167, 31);
+            this.txtHeatingSetPoint.Size = new System.Drawing.Size(84, 20);
             this.txtHeatingSetPoint.TabIndex = 12;
             this.txtHeatingSetPoint.Tag = "HeatingSetpoint";
             this.txtHeatingSetPoint.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -397,10 +397,10 @@ namespace Hive.IO.Forms
             this.txtCoolingSetPoint.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtCoolingSetPoint.Enabled = false;
-            this.txtCoolingSetPoint.Location = new System.Drawing.Point(523, 97);
-            this.txtCoolingSetPoint.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtCoolingSetPoint.Location = new System.Drawing.Point(260, 53);
+            this.txtCoolingSetPoint.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtCoolingSetPoint.Name = "txtCoolingSetPoint";
-            this.txtCoolingSetPoint.Size = new System.Drawing.Size(167, 31);
+            this.txtCoolingSetPoint.Size = new System.Drawing.Size(84, 20);
             this.txtCoolingSetPoint.TabIndex = 13;
             this.txtCoolingSetPoint.Tag = "CoolingSetpoint";
             this.txtCoolingSetPoint.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -409,10 +409,10 @@ namespace Hive.IO.Forms
             // 
             this.label41.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label41.AutoSize = true;
-            this.label41.Location = new System.Drawing.Point(350, 194);
-            this.label41.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label41.Location = new System.Drawing.Point(174, 112);
+            this.label41.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label41.Name = "label41";
-            this.label41.Size = new System.Drawing.Size(140, 25);
+            this.label41.Size = new System.Drawing.Size(71, 13);
             this.label41.TabIndex = 15;
             this.label41.Text = "Cool Setback";
             // 
@@ -420,10 +420,10 @@ namespace Hive.IO.Forms
             // 
             this.label38.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label38.AutoSize = true;
-            this.label38.Location = new System.Drawing.Point(350, 147);
-            this.label38.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label38.Location = new System.Drawing.Point(174, 84);
+            this.label38.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label38.Name = "label38";
-            this.label38.Size = new System.Drawing.Size(141, 25);
+            this.label38.Size = new System.Drawing.Size(73, 13);
             this.label38.TabIndex = 16;
             this.label38.Text = "Heat Setback";
             // 
@@ -432,10 +432,10 @@ namespace Hive.IO.Forms
             this.txtHeatingSetback.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtHeatingSetback.Enabled = false;
-            this.txtHeatingSetback.Location = new System.Drawing.Point(523, 144);
-            this.txtHeatingSetback.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtHeatingSetback.Location = new System.Drawing.Point(260, 81);
+            this.txtHeatingSetback.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtHeatingSetback.Name = "txtHeatingSetback";
-            this.txtHeatingSetback.Size = new System.Drawing.Size(167, 31);
+            this.txtHeatingSetback.Size = new System.Drawing.Size(84, 20);
             this.txtHeatingSetback.TabIndex = 17;
             this.txtHeatingSetback.Tag = "HeatingSetback";
             this.txtHeatingSetback.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -445,10 +445,10 @@ namespace Hive.IO.Forms
             this.txtCoolingSetback.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.txtCoolingSetback.Enabled = false;
-            this.txtCoolingSetback.Location = new System.Drawing.Point(523, 191);
-            this.txtCoolingSetback.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtCoolingSetback.Location = new System.Drawing.Point(260, 109);
+            this.txtCoolingSetback.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtCoolingSetback.Name = "txtCoolingSetback";
-            this.txtCoolingSetback.Size = new System.Drawing.Size(167, 31);
+            this.txtCoolingSetback.Size = new System.Drawing.Size(84, 20);
             this.txtCoolingSetback.TabIndex = 18;
             this.txtCoolingSetback.Tag = "CoolingSetback";
             this.txtCoolingSetback.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -460,10 +460,10 @@ namespace Hive.IO.Forms
             this.checkBoxAdaptiveComfort.CheckAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.checkBoxAdaptiveComfort.Checked = true;
             this.checkBoxAdaptiveComfort.CheckState = System.Windows.Forms.CheckState.Checked;
-            this.checkBoxAdaptiveComfort.Location = new System.Drawing.Point(523, 6);
-            this.checkBoxAdaptiveComfort.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.checkBoxAdaptiveComfort.Location = new System.Drawing.Point(260, 2);
+            this.checkBoxAdaptiveComfort.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.checkBoxAdaptiveComfort.Name = "checkBoxAdaptiveComfort";
-            this.checkBoxAdaptiveComfort.Size = new System.Drawing.Size(140, 29);
+            this.checkBoxAdaptiveComfort.Size = new System.Drawing.Size(74, 17);
             this.checkBoxAdaptiveComfort.TabIndex = 20;
             this.checkBoxAdaptiveComfort.Text = "Adaptive?";
             this.checkBoxAdaptiveComfort.UseVisualStyleBackColor = true;
@@ -472,11 +472,11 @@ namespace Hive.IO.Forms
             // tabENV
             // 
             this.tabENV.Controls.Add(this.tableLayoutEnvelopeMain);
-            this.tabENV.Location = new System.Drawing.Point(8, 39);
-            this.tabENV.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabENV.Location = new System.Drawing.Point(4, 22);
+            this.tabENV.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabENV.Name = "tabENV";
-            this.tabENV.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
-            this.tabENV.Size = new System.Drawing.Size(740, 1013);
+            this.tabENV.Padding = new System.Windows.Forms.Padding(2, 2, 2, 2);
+            this.tabENV.Size = new System.Drawing.Size(370, 525);
             this.tabENV.TabIndex = 1;
             this.tabENV.Text = "Envelope";
             this.tabENV.UseVisualStyleBackColor = true;
@@ -495,28 +495,28 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeMain.Controls.Add(this.tableLayoutEnvelopeFloor, 1, 3);
             this.tableLayoutEnvelopeMain.Controls.Add(this.tableLayoutEnvelopeWall, 0, 3);
             this.tableLayoutEnvelopeMain.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutEnvelopeMain.Location = new System.Drawing.Point(4, 4);
-            this.tableLayoutEnvelopeMain.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutEnvelopeMain.Location = new System.Drawing.Point(2, 2);
+            this.tableLayoutEnvelopeMain.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutEnvelopeMain.Name = "tableLayoutEnvelopeMain";
-            this.tableLayoutEnvelopeMain.Padding = new System.Windows.Forms.Padding(8, 15, 8, 8);
+            this.tableLayoutEnvelopeMain.Padding = new System.Windows.Forms.Padding(4, 8, 4, 4);
             this.tableLayoutEnvelopeMain.RowCount = 5;
             this.tableLayoutEnvelopeMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutEnvelopeMain.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutEnvelopeMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 19F));
-            this.tableLayoutEnvelopeMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 385F));
-            this.tableLayoutEnvelopeMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 385F));
-            this.tableLayoutEnvelopeMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 19F));
-            this.tableLayoutEnvelopeMain.Size = new System.Drawing.Size(732, 1005);
+            this.tableLayoutEnvelopeMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
+            this.tableLayoutEnvelopeMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.tableLayoutEnvelopeMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 200F));
+            this.tableLayoutEnvelopeMain.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
+            this.tableLayoutEnvelopeMain.Size = new System.Drawing.Size(366, 521);
             this.tableLayoutEnvelopeMain.TabIndex = 0;
             // 
             // txtCapacitancePerFloorArea
             // 
             this.txtCapacitancePerFloorArea.Dock = System.Windows.Forms.DockStyle.Fill;
             this.txtCapacitancePerFloorArea.Enabled = false;
-            this.txtCapacitancePerFloorArea.Location = new System.Drawing.Point(370, 64);
-            this.txtCapacitancePerFloorArea.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtCapacitancePerFloorArea.Location = new System.Drawing.Point(185, 37);
+            this.txtCapacitancePerFloorArea.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtCapacitancePerFloorArea.Name = "txtCapacitancePerFloorArea";
-            this.txtCapacitancePerFloorArea.Size = new System.Drawing.Size(350, 31);
+            this.txtCapacitancePerFloorArea.Size = new System.Drawing.Size(175, 20);
             this.txtCapacitancePerFloorArea.TabIndex = 22;
             this.txtCapacitancePerFloorArea.Tag = "CapacitancePerFloorArea";
             // 
@@ -524,10 +524,10 @@ namespace Hive.IO.Forms
             // 
             this.label44.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label44.AutoSize = true;
-            this.label44.Location = new System.Drawing.Point(12, 56);
-            this.label44.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label44.Location = new System.Drawing.Point(6, 34);
+            this.label44.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label44.Name = "label44";
-            this.label44.Size = new System.Drawing.Size(281, 50);
+            this.label44.Size = new System.Drawing.Size(139, 26);
             this.label44.TabIndex = 11;
             this.label44.Text = "Capacitance per Floor Area (Wh/m²K)";
             // 
@@ -537,10 +537,10 @@ namespace Hive.IO.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cboBuildingConstruction.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboBuildingConstruction.FormattingEnabled = true;
-            this.cboBuildingConstruction.Location = new System.Drawing.Point(370, 19);
-            this.cboBuildingConstruction.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cboBuildingConstruction.Location = new System.Drawing.Point(185, 10);
+            this.cboBuildingConstruction.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cboBuildingConstruction.Name = "cboBuildingConstruction";
-            this.cboBuildingConstruction.Size = new System.Drawing.Size(350, 33);
+            this.cboBuildingConstruction.Size = new System.Drawing.Size(175, 21);
             this.cboBuildingConstruction.TabIndex = 10;
             this.cboBuildingConstruction.SelectedIndexChanged += new System.EventHandler(this.cboBuildingConstruction_SelectedIndexChanged);
             // 
@@ -548,10 +548,10 @@ namespace Hive.IO.Forms
             // 
             this.label43.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label43.AutoSize = true;
-            this.label43.Location = new System.Drawing.Point(12, 23);
-            this.label43.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label43.Location = new System.Drawing.Point(6, 14);
+            this.label43.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label43.Name = "label43";
-            this.label43.Size = new System.Drawing.Size(259, 25);
+            this.label43.Size = new System.Drawing.Size(128, 13);
             this.label43.TabIndex = 9;
             this.label43.Text = "Building construction type";
             // 
@@ -569,8 +569,8 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeRoof.Controls.Add(this.txtRoofEmissions, 1, 4);
             this.tableLayoutEnvelopeRoof.Controls.Add(this.txtRoofCost, 1, 5);
             this.tableLayoutEnvelopeRoof.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutEnvelopeRoof.Location = new System.Drawing.Point(370, 514);
-            this.tableLayoutEnvelopeRoof.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutEnvelopeRoof.Location = new System.Drawing.Point(185, 273);
+            this.tableLayoutEnvelopeRoof.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutEnvelopeRoof.Name = "tableLayoutEnvelopeRoof";
             this.tableLayoutEnvelopeRoof.RowCount = 7;
             this.tableLayoutEnvelopeRoof.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -580,47 +580,47 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeRoof.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutEnvelopeRoof.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutEnvelopeRoof.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutEnvelopeRoof.Size = new System.Drawing.Size(350, 479);
+            this.tableLayoutEnvelopeRoof.Size = new System.Drawing.Size(175, 242);
             this.tableLayoutEnvelopeRoof.TabIndex = 3;
             // 
             // label25
             // 
             this.label25.AutoSize = true;
             this.label25.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.1F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label25.Location = new System.Drawing.Point(4, 8);
-            this.label25.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label25.Location = new System.Drawing.Point(2, 4);
+            this.label25.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label25.Name = "label25";
-            this.label25.Size = new System.Drawing.Size(62, 26);
+            this.label25.Size = new System.Drawing.Size(34, 13);
             this.label25.TabIndex = 0;
             this.label25.Text = "Roof";
             // 
             // label26
             // 
             this.label26.AutoSize = true;
-            this.label26.Location = new System.Drawing.Point(4, 99);
-            this.label26.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label26.Location = new System.Drawing.Point(2, 54);
+            this.label26.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label26.Name = "label26";
-            this.label26.Size = new System.Drawing.Size(170, 25);
+            this.label26.Size = new System.Drawing.Size(87, 13);
             this.label26.TabIndex = 1;
             this.label26.Text = "U-value (W/m²K)";
             // 
             // label27
             // 
             this.label27.AutoSize = true;
-            this.label27.Location = new System.Drawing.Point(4, 146);
-            this.label27.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label27.Location = new System.Drawing.Point(2, 82);
+            this.label27.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label27.Name = "label27";
-            this.label27.Size = new System.Drawing.Size(226, 25);
+            this.label27.Size = new System.Drawing.Size(111, 13);
             this.label27.TabIndex = 2;
             this.label27.Text = "Emissions (kgCO2/m²)";
             // 
             // label28
             // 
             this.label28.AutoSize = true;
-            this.label28.Location = new System.Drawing.Point(4, 193);
-            this.label28.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label28.Location = new System.Drawing.Point(2, 110);
+            this.label28.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label28.Name = "label28";
-            this.label28.Size = new System.Drawing.Size(149, 25);
+            this.label28.Size = new System.Drawing.Size(74, 13);
             this.label28.TabIndex = 3;
             this.label28.Text = "Cost (CHF/m²)";
             // 
@@ -630,20 +630,20 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeRoof.SetColumnSpan(this.cboRoofTemplate, 2);
             this.cboRoofTemplate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboRoofTemplate.FormattingEnabled = true;
-            this.cboRoofTemplate.Location = new System.Drawing.Point(4, 50);
-            this.cboRoofTemplate.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.cboRoofTemplate.Location = new System.Drawing.Point(2, 25);
+            this.cboRoofTemplate.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.cboRoofTemplate.Name = "cboRoofTemplate";
-            this.cboRoofTemplate.Size = new System.Drawing.Size(342, 33);
+            this.cboRoofTemplate.Size = new System.Drawing.Size(171, 21);
             this.cboRoofTemplate.TabIndex = 4;
             this.cboRoofTemplate.SelectedIndexChanged += new System.EventHandler(this.cboRoofTemplate_SelectedIndexChanged);
             // 
             // txtRoofUValue
             // 
             this.txtRoofUValue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtRoofUValue.Location = new System.Drawing.Point(249, 99);
-            this.txtRoofUValue.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtRoofUValue.Location = new System.Drawing.Point(124, 54);
+            this.txtRoofUValue.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtRoofUValue.Name = "txtRoofUValue";
-            this.txtRoofUValue.Size = new System.Drawing.Size(97, 31);
+            this.txtRoofUValue.Size = new System.Drawing.Size(49, 20);
             this.txtRoofUValue.TabIndex = 5;
             this.txtRoofUValue.Tag = "UValueRoofs";
             this.txtRoofUValue.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -651,10 +651,10 @@ namespace Hive.IO.Forms
             // txtRoofEmissions
             // 
             this.txtRoofEmissions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtRoofEmissions.Location = new System.Drawing.Point(249, 146);
-            this.txtRoofEmissions.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtRoofEmissions.Location = new System.Drawing.Point(124, 82);
+            this.txtRoofEmissions.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtRoofEmissions.Name = "txtRoofEmissions";
-            this.txtRoofEmissions.Size = new System.Drawing.Size(97, 31);
+            this.txtRoofEmissions.Size = new System.Drawing.Size(49, 20);
             this.txtRoofEmissions.TabIndex = 6;
             this.txtRoofEmissions.Tag = "EmissionsRoofs";
             this.txtRoofEmissions.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -662,10 +662,10 @@ namespace Hive.IO.Forms
             // txtRoofCost
             // 
             this.txtRoofCost.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtRoofCost.Location = new System.Drawing.Point(249, 193);
-            this.txtRoofCost.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtRoofCost.Location = new System.Drawing.Point(124, 110);
+            this.txtRoofCost.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtRoofCost.Name = "txtRoofCost";
-            this.txtRoofCost.Size = new System.Drawing.Size(97, 31);
+            this.txtRoofCost.Size = new System.Drawing.Size(49, 20);
             this.txtRoofCost.TabIndex = 7;
             this.txtRoofCost.Tag = "CostRoofs";
             this.txtRoofCost.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -690,8 +690,8 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeWindow.Controls.Add(this.txtWindowGValue, 1, 3);
             this.tableLayoutEnvelopeWindow.Controls.Add(this.txtWindowEmissions, 1, 4);
             this.tableLayoutEnvelopeWindow.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutEnvelopeWindow.Location = new System.Drawing.Point(12, 514);
-            this.tableLayoutEnvelopeWindow.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutEnvelopeWindow.Location = new System.Drawing.Point(6, 273);
+            this.tableLayoutEnvelopeWindow.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutEnvelopeWindow.Name = "tableLayoutEnvelopeWindow";
             this.tableLayoutEnvelopeWindow.RowCount = 9;
             this.tableLayoutEnvelopeWindow.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -702,17 +702,17 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeWindow.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutEnvelopeWindow.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutEnvelopeWindow.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutEnvelopeWindow.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 15F));
-            this.tableLayoutEnvelopeWindow.Size = new System.Drawing.Size(350, 479);
+            this.tableLayoutEnvelopeWindow.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 8F));
+            this.tableLayoutEnvelopeWindow.Size = new System.Drawing.Size(175, 242);
             this.tableLayoutEnvelopeWindow.TabIndex = 2;
             // 
             // txtWindowShadingSetpoint
             // 
             this.txtWindowShadingSetpoint.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtWindowShadingSetpoint.Location = new System.Drawing.Point(249, 296);
-            this.txtWindowShadingSetpoint.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtWindowShadingSetpoint.Location = new System.Drawing.Point(124, 169);
+            this.txtWindowShadingSetpoint.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtWindowShadingSetpoint.Name = "txtWindowShadingSetpoint";
-            this.txtWindowShadingSetpoint.Size = new System.Drawing.Size(97, 31);
+            this.txtWindowShadingSetpoint.Size = new System.Drawing.Size(49, 20);
             this.txtWindowShadingSetpoint.TabIndex = 13;
             this.txtWindowShadingSetpoint.Tag = "ShadingSetpoint";
             this.txtWindowShadingSetpoint.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -720,20 +720,20 @@ namespace Hive.IO.Forms
             // label31
             // 
             this.label31.AutoSize = true;
-            this.label31.Location = new System.Drawing.Point(4, 287);
-            this.label31.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label31.Location = new System.Drawing.Point(2, 166);
+            this.label31.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label31.Name = "label31";
-            this.label31.Size = new System.Drawing.Size(179, 50);
+            this.label31.Size = new System.Drawing.Size(89, 26);
             this.label31.TabIndex = 12;
             this.label31.Text = "Shading setpoint (W/m²)";
             // 
             // txtWindowGValueTotal
             // 
             this.txtWindowGValueTotal.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtWindowGValueTotal.Location = new System.Drawing.Point(249, 240);
-            this.txtWindowGValueTotal.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtWindowGValueTotal.Location = new System.Drawing.Point(124, 138);
+            this.txtWindowGValueTotal.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtWindowGValueTotal.Name = "txtWindowGValueTotal";
-            this.txtWindowGValueTotal.Size = new System.Drawing.Size(97, 31);
+            this.txtWindowGValueTotal.Size = new System.Drawing.Size(49, 20);
             this.txtWindowGValueTotal.TabIndex = 11;
             this.txtWindowGValueTotal.Tag = "GValueTotal";
             this.txtWindowGValueTotal.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -741,30 +741,30 @@ namespace Hive.IO.Forms
             // label30
             // 
             this.label30.AutoSize = true;
-            this.label30.Location = new System.Drawing.Point(4, 240);
-            this.label30.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label30.Location = new System.Drawing.Point(2, 138);
+            this.label30.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label30.Name = "label30";
-            this.label30.Size = new System.Drawing.Size(209, 25);
+            this.label30.Size = new System.Drawing.Size(104, 13);
             this.label30.TabIndex = 10;
             this.label30.Text = "g-value with shading";
             // 
             // label29
             // 
             this.label29.AutoSize = true;
-            this.label29.Location = new System.Drawing.Point(4, 353);
-            this.label29.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label29.Location = new System.Drawing.Point(2, 200);
+            this.label29.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label29.Name = "label29";
-            this.label29.Size = new System.Drawing.Size(149, 25);
+            this.label29.Size = new System.Drawing.Size(74, 13);
             this.label29.TabIndex = 8;
             this.label29.Text = "Cost (CHF/m²)";
             // 
             // txtWindowCost
             // 
             this.txtWindowCost.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtWindowCost.Location = new System.Drawing.Point(249, 353);
-            this.txtWindowCost.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtWindowCost.Location = new System.Drawing.Point(124, 200);
+            this.txtWindowCost.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtWindowCost.Name = "txtWindowCost";
-            this.txtWindowCost.Size = new System.Drawing.Size(97, 31);
+            this.txtWindowCost.Size = new System.Drawing.Size(49, 20);
             this.txtWindowCost.TabIndex = 9;
             this.txtWindowCost.Tag = "TransparentCost";
             this.txtWindowCost.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -773,40 +773,40 @@ namespace Hive.IO.Forms
             // 
             this.label21.AutoSize = true;
             this.label21.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.1F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label21.Location = new System.Drawing.Point(4, 8);
-            this.label21.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label21.Location = new System.Drawing.Point(2, 4);
+            this.label21.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label21.Name = "label21";
-            this.label21.Size = new System.Drawing.Size(96, 26);
+            this.label21.Size = new System.Drawing.Size(52, 13);
             this.label21.TabIndex = 0;
             this.label21.Text = "Window";
             // 
             // label22
             // 
             this.label22.AutoSize = true;
-            this.label22.Location = new System.Drawing.Point(4, 99);
-            this.label22.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label22.Location = new System.Drawing.Point(2, 54);
+            this.label22.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label22.Name = "label22";
-            this.label22.Size = new System.Drawing.Size(170, 25);
+            this.label22.Size = new System.Drawing.Size(87, 13);
             this.label22.TabIndex = 1;
             this.label22.Text = "U-value (W/m²K)";
             // 
             // label23
             // 
             this.label23.AutoSize = true;
-            this.label23.Location = new System.Drawing.Point(4, 146);
-            this.label23.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label23.Location = new System.Drawing.Point(2, 82);
+            this.label23.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label23.Name = "label23";
-            this.label23.Size = new System.Drawing.Size(110, 25);
+            this.label23.Size = new System.Drawing.Size(54, 13);
             this.label23.TabIndex = 2;
             this.label23.Text = "g-value (-)";
             // 
             // label24
             // 
             this.label24.AutoSize = true;
-            this.label24.Location = new System.Drawing.Point(4, 193);
-            this.label24.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label24.Location = new System.Drawing.Point(2, 110);
+            this.label24.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label24.Name = "label24";
-            this.label24.Size = new System.Drawing.Size(226, 25);
+            this.label24.Size = new System.Drawing.Size(111, 13);
             this.label24.TabIndex = 3;
             this.label24.Text = "Emissions (kgCO2/m²)";
             // 
@@ -816,20 +816,20 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeWindow.SetColumnSpan(this.cboWindowTemplate, 2);
             this.cboWindowTemplate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboWindowTemplate.FormattingEnabled = true;
-            this.cboWindowTemplate.Location = new System.Drawing.Point(4, 50);
-            this.cboWindowTemplate.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.cboWindowTemplate.Location = new System.Drawing.Point(2, 25);
+            this.cboWindowTemplate.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.cboWindowTemplate.Name = "cboWindowTemplate";
-            this.cboWindowTemplate.Size = new System.Drawing.Size(342, 33);
+            this.cboWindowTemplate.Size = new System.Drawing.Size(171, 21);
             this.cboWindowTemplate.TabIndex = 4;
             this.cboWindowTemplate.SelectedIndexChanged += new System.EventHandler(this.cboWindowTemplate_SelectedIndexChanged);
             // 
             // txtWindowUValue
             // 
             this.txtWindowUValue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtWindowUValue.Location = new System.Drawing.Point(249, 99);
-            this.txtWindowUValue.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtWindowUValue.Location = new System.Drawing.Point(124, 54);
+            this.txtWindowUValue.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtWindowUValue.Name = "txtWindowUValue";
-            this.txtWindowUValue.Size = new System.Drawing.Size(97, 31);
+            this.txtWindowUValue.Size = new System.Drawing.Size(49, 20);
             this.txtWindowUValue.TabIndex = 5;
             this.txtWindowUValue.Tag = "UValueTransparent";
             this.txtWindowUValue.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -837,10 +837,10 @@ namespace Hive.IO.Forms
             // txtWindowGValue
             // 
             this.txtWindowGValue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtWindowGValue.Location = new System.Drawing.Point(249, 146);
-            this.txtWindowGValue.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtWindowGValue.Location = new System.Drawing.Point(124, 82);
+            this.txtWindowGValue.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtWindowGValue.Name = "txtWindowGValue";
-            this.txtWindowGValue.Size = new System.Drawing.Size(97, 31);
+            this.txtWindowGValue.Size = new System.Drawing.Size(49, 20);
             this.txtWindowGValue.TabIndex = 6;
             this.txtWindowGValue.Tag = "GValue";
             this.txtWindowGValue.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -848,10 +848,10 @@ namespace Hive.IO.Forms
             // txtWindowEmissions
             // 
             this.txtWindowEmissions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtWindowEmissions.Location = new System.Drawing.Point(249, 193);
-            this.txtWindowEmissions.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtWindowEmissions.Location = new System.Drawing.Point(124, 110);
+            this.txtWindowEmissions.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtWindowEmissions.Name = "txtWindowEmissions";
-            this.txtWindowEmissions.Size = new System.Drawing.Size(97, 31);
+            this.txtWindowEmissions.Size = new System.Drawing.Size(49, 20);
             this.txtWindowEmissions.TabIndex = 7;
             this.txtWindowEmissions.Tag = "TransparentEmissions";
             this.txtWindowEmissions.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -870,8 +870,8 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeFloor.Controls.Add(this.txtFloorEmissions, 1, 4);
             this.tableLayoutEnvelopeFloor.Controls.Add(this.txtFloorCost, 1, 5);
             this.tableLayoutEnvelopeFloor.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutEnvelopeFloor.Location = new System.Drawing.Point(370, 129);
-            this.tableLayoutEnvelopeFloor.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutEnvelopeFloor.Location = new System.Drawing.Point(185, 73);
+            this.tableLayoutEnvelopeFloor.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutEnvelopeFloor.Name = "tableLayoutEnvelopeFloor";
             this.tableLayoutEnvelopeFloor.RowCount = 7;
             this.tableLayoutEnvelopeFloor.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -880,48 +880,48 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeFloor.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutEnvelopeFloor.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutEnvelopeFloor.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutEnvelopeFloor.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-            this.tableLayoutEnvelopeFloor.Size = new System.Drawing.Size(350, 377);
+            this.tableLayoutEnvelopeFloor.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tableLayoutEnvelopeFloor.Size = new System.Drawing.Size(175, 196);
             this.tableLayoutEnvelopeFloor.TabIndex = 1;
             // 
             // label17
             // 
             this.label17.AutoSize = true;
             this.label17.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.1F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label17.Location = new System.Drawing.Point(4, 8);
-            this.label17.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label17.Location = new System.Drawing.Point(2, 4);
+            this.label17.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label17.Name = "label17";
-            this.label17.Size = new System.Drawing.Size(66, 26);
+            this.label17.Size = new System.Drawing.Size(35, 13);
             this.label17.TabIndex = 0;
             this.label17.Text = "Floor";
             // 
             // label18
             // 
             this.label18.AutoSize = true;
-            this.label18.Location = new System.Drawing.Point(4, 99);
-            this.label18.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label18.Location = new System.Drawing.Point(2, 54);
+            this.label18.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label18.Name = "label18";
-            this.label18.Size = new System.Drawing.Size(170, 25);
+            this.label18.Size = new System.Drawing.Size(87, 13);
             this.label18.TabIndex = 1;
             this.label18.Text = "U-value (W/m²K)";
             // 
             // label19
             // 
             this.label19.AutoSize = true;
-            this.label19.Location = new System.Drawing.Point(4, 146);
-            this.label19.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label19.Location = new System.Drawing.Point(2, 82);
+            this.label19.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label19.Name = "label19";
-            this.label19.Size = new System.Drawing.Size(226, 25);
+            this.label19.Size = new System.Drawing.Size(111, 13);
             this.label19.TabIndex = 2;
             this.label19.Text = "Emissions (kgCO2/m²)";
             // 
             // label20
             // 
             this.label20.AutoSize = true;
-            this.label20.Location = new System.Drawing.Point(4, 193);
-            this.label20.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label20.Location = new System.Drawing.Point(2, 110);
+            this.label20.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label20.Name = "label20";
-            this.label20.Size = new System.Drawing.Size(149, 25);
+            this.label20.Size = new System.Drawing.Size(74, 13);
             this.label20.TabIndex = 3;
             this.label20.Text = "Cost (CHF/m²)";
             // 
@@ -931,20 +931,20 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeFloor.SetColumnSpan(this.cboFloorTemplate, 2);
             this.cboFloorTemplate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboFloorTemplate.FormattingEnabled = true;
-            this.cboFloorTemplate.Location = new System.Drawing.Point(4, 50);
-            this.cboFloorTemplate.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.cboFloorTemplate.Location = new System.Drawing.Point(2, 25);
+            this.cboFloorTemplate.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.cboFloorTemplate.Name = "cboFloorTemplate";
-            this.cboFloorTemplate.Size = new System.Drawing.Size(342, 33);
+            this.cboFloorTemplate.Size = new System.Drawing.Size(171, 21);
             this.cboFloorTemplate.TabIndex = 4;
             this.cboFloorTemplate.SelectedIndexChanged += new System.EventHandler(this.cboFloorTemplate_SelectedIndexChanged);
             // 
             // txtFloorUValue
             // 
             this.txtFloorUValue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtFloorUValue.Location = new System.Drawing.Point(249, 99);
-            this.txtFloorUValue.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtFloorUValue.Location = new System.Drawing.Point(124, 54);
+            this.txtFloorUValue.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtFloorUValue.Name = "txtFloorUValue";
-            this.txtFloorUValue.Size = new System.Drawing.Size(97, 31);
+            this.txtFloorUValue.Size = new System.Drawing.Size(49, 20);
             this.txtFloorUValue.TabIndex = 5;
             this.txtFloorUValue.Tag = "UValueFloors";
             this.txtFloorUValue.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -952,10 +952,10 @@ namespace Hive.IO.Forms
             // txtFloorEmissions
             // 
             this.txtFloorEmissions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtFloorEmissions.Location = new System.Drawing.Point(249, 146);
-            this.txtFloorEmissions.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtFloorEmissions.Location = new System.Drawing.Point(124, 82);
+            this.txtFloorEmissions.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtFloorEmissions.Name = "txtFloorEmissions";
-            this.txtFloorEmissions.Size = new System.Drawing.Size(97, 31);
+            this.txtFloorEmissions.Size = new System.Drawing.Size(49, 20);
             this.txtFloorEmissions.TabIndex = 6;
             this.txtFloorEmissions.Tag = "EmissionsFloors";
             this.txtFloorEmissions.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -963,10 +963,10 @@ namespace Hive.IO.Forms
             // txtFloorCost
             // 
             this.txtFloorCost.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtFloorCost.Location = new System.Drawing.Point(249, 193);
-            this.txtFloorCost.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtFloorCost.Location = new System.Drawing.Point(124, 110);
+            this.txtFloorCost.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtFloorCost.Name = "txtFloorCost";
-            this.txtFloorCost.Size = new System.Drawing.Size(97, 31);
+            this.txtFloorCost.Size = new System.Drawing.Size(49, 20);
             this.txtFloorCost.TabIndex = 7;
             this.txtFloorCost.Tag = "CostFloors";
             this.txtFloorCost.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -985,8 +985,8 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeWall.Controls.Add(this.txtWallEmissions, 1, 4);
             this.tableLayoutEnvelopeWall.Controls.Add(this.txtWallCost, 1, 5);
             this.tableLayoutEnvelopeWall.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutEnvelopeWall.Location = new System.Drawing.Point(12, 129);
-            this.tableLayoutEnvelopeWall.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutEnvelopeWall.Location = new System.Drawing.Point(6, 73);
+            this.tableLayoutEnvelopeWall.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutEnvelopeWall.Name = "tableLayoutEnvelopeWall";
             this.tableLayoutEnvelopeWall.RowCount = 8;
             this.tableLayoutEnvelopeWall.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -996,49 +996,49 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeWall.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutEnvelopeWall.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutEnvelopeWall.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutEnvelopeWall.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-            this.tableLayoutEnvelopeWall.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
-            this.tableLayoutEnvelopeWall.Size = new System.Drawing.Size(350, 377);
+            this.tableLayoutEnvelopeWall.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tableLayoutEnvelopeWall.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
+            this.tableLayoutEnvelopeWall.Size = new System.Drawing.Size(175, 196);
             this.tableLayoutEnvelopeWall.TabIndex = 0;
             // 
             // label13
             // 
             this.label13.AutoSize = true;
             this.label13.Font = new System.Drawing.Font("Microsoft Sans Serif", 8.1F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point, ((byte)(0)));
-            this.label13.Location = new System.Drawing.Point(4, 8);
-            this.label13.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label13.Location = new System.Drawing.Point(2, 4);
+            this.label13.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label13.Name = "label13";
-            this.label13.Size = new System.Drawing.Size(59, 26);
+            this.label13.Size = new System.Drawing.Size(32, 13);
             this.label13.TabIndex = 0;
             this.label13.Text = "Wall";
             // 
             // label14
             // 
             this.label14.AutoSize = true;
-            this.label14.Location = new System.Drawing.Point(4, 99);
-            this.label14.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label14.Location = new System.Drawing.Point(2, 54);
+            this.label14.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label14.Name = "label14";
-            this.label14.Size = new System.Drawing.Size(170, 25);
+            this.label14.Size = new System.Drawing.Size(87, 13);
             this.label14.TabIndex = 1;
             this.label14.Text = "U-value (W/m²K)";
             // 
             // label15
             // 
             this.label15.AutoSize = true;
-            this.label15.Location = new System.Drawing.Point(4, 146);
-            this.label15.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label15.Location = new System.Drawing.Point(2, 82);
+            this.label15.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label15.Name = "label15";
-            this.label15.Size = new System.Drawing.Size(226, 25);
+            this.label15.Size = new System.Drawing.Size(111, 13);
             this.label15.TabIndex = 2;
             this.label15.Text = "Emissions (kgCO2/m²)";
             // 
             // label16
             // 
             this.label16.AutoSize = true;
-            this.label16.Location = new System.Drawing.Point(4, 193);
-            this.label16.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label16.Location = new System.Drawing.Point(2, 110);
+            this.label16.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label16.Name = "label16";
-            this.label16.Size = new System.Drawing.Size(149, 25);
+            this.label16.Size = new System.Drawing.Size(74, 13);
             this.label16.TabIndex = 3;
             this.label16.Text = "Cost (CHF/m²)";
             // 
@@ -1048,20 +1048,20 @@ namespace Hive.IO.Forms
             this.tableLayoutEnvelopeWall.SetColumnSpan(this.cboWallTemplate, 2);
             this.cboWallTemplate.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboWallTemplate.FormattingEnabled = true;
-            this.cboWallTemplate.Location = new System.Drawing.Point(4, 50);
-            this.cboWallTemplate.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.cboWallTemplate.Location = new System.Drawing.Point(2, 25);
+            this.cboWallTemplate.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.cboWallTemplate.Name = "cboWallTemplate";
-            this.cboWallTemplate.Size = new System.Drawing.Size(342, 33);
+            this.cboWallTemplate.Size = new System.Drawing.Size(171, 21);
             this.cboWallTemplate.TabIndex = 4;
             this.cboWallTemplate.SelectedIndexChanged += new System.EventHandler(this.cboWallTemplate_SelectedIndexChanged);
             // 
             // txtWallUValue
             // 
             this.txtWallUValue.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtWallUValue.Location = new System.Drawing.Point(249, 99);
-            this.txtWallUValue.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtWallUValue.Location = new System.Drawing.Point(124, 54);
+            this.txtWallUValue.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtWallUValue.Name = "txtWallUValue";
-            this.txtWallUValue.Size = new System.Drawing.Size(97, 31);
+            this.txtWallUValue.Size = new System.Drawing.Size(49, 20);
             this.txtWallUValue.TabIndex = 5;
             this.txtWallUValue.Tag = "UValueWalls";
             this.txtWallUValue.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -1069,10 +1069,10 @@ namespace Hive.IO.Forms
             // txtWallEmissions
             // 
             this.txtWallEmissions.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtWallEmissions.Location = new System.Drawing.Point(249, 146);
-            this.txtWallEmissions.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtWallEmissions.Location = new System.Drawing.Point(124, 82);
+            this.txtWallEmissions.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtWallEmissions.Name = "txtWallEmissions";
-            this.txtWallEmissions.Size = new System.Drawing.Size(97, 31);
+            this.txtWallEmissions.Size = new System.Drawing.Size(49, 20);
             this.txtWallEmissions.TabIndex = 6;
             this.txtWallEmissions.Tag = "EmissionsWalls";
             this.txtWallEmissions.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -1080,10 +1080,10 @@ namespace Hive.IO.Forms
             // txtWallCost
             // 
             this.txtWallCost.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtWallCost.Location = new System.Drawing.Point(249, 193);
-            this.txtWallCost.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.txtWallCost.Location = new System.Drawing.Point(124, 110);
+            this.txtWallCost.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.txtWallCost.Name = "txtWallCost";
-            this.txtWallCost.Size = new System.Drawing.Size(97, 31);
+            this.txtWallCost.Size = new System.Drawing.Size(49, 20);
             this.txtWallCost.TabIndex = 7;
             this.txtWallCost.Tag = "CostWalls";
             this.txtWallCost.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -1091,11 +1091,11 @@ namespace Hive.IO.Forms
             // tabIG
             // 
             this.tabIG.Controls.Add(this.tableLayoutInternalGains);
-            this.tabIG.Location = new System.Drawing.Point(8, 39);
-            this.tabIG.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tabIG.Location = new System.Drawing.Point(4, 22);
+            this.tabIG.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tabIG.Name = "tabIG";
             this.tabIG.RightToLeft = System.Windows.Forms.RightToLeft.Yes;
-            this.tabIG.Size = new System.Drawing.Size(740, 1013);
+            this.tabIG.Size = new System.Drawing.Size(370, 525);
             this.tabIG.TabIndex = 2;
             this.tabIG.Text = "Internal Gains/Ventilation";
             this.tabIG.UseVisualStyleBackColor = true;
@@ -1127,9 +1127,9 @@ namespace Hive.IO.Forms
             this.tableLayoutInternalGains.Controls.Add(this.txtEquipmentYearlyHours, 1, 5);
             this.tableLayoutInternalGains.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutInternalGains.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutInternalGains.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutInternalGains.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutInternalGains.Name = "tableLayoutInternalGains";
-            this.tableLayoutInternalGains.Padding = new System.Windows.Forms.Padding(8, 15, 8, 8);
+            this.tableLayoutInternalGains.Padding = new System.Windows.Forms.Padding(4, 8, 4, 4);
             this.tableLayoutInternalGains.RightToLeft = System.Windows.Forms.RightToLeft.No;
             this.tableLayoutInternalGains.RowCount = 15;
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -1138,7 +1138,7 @@ namespace Hive.IO.Forms
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 31F));
+            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 16F));
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
@@ -1146,39 +1146,40 @@ namespace Hive.IO.Forms
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 19F));
-            this.tableLayoutInternalGains.Size = new System.Drawing.Size(740, 1013);
+            this.tableLayoutInternalGains.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
+            this.tableLayoutInternalGains.Size = new System.Drawing.Size(370, 525);
             this.tableLayoutInternalGains.TabIndex = 0;
             // 
             // checkBoxNaturalVentilation
             // 
             this.checkBoxNaturalVentilation.AutoSize = true;
-            this.checkBoxNaturalVentilation.Location = new System.Drawing.Point(14, 623);
-            this.checkBoxNaturalVentilation.Margin = new System.Windows.Forms.Padding(6, 4, 6, 4);
+            this.checkBoxNaturalVentilation.Location = new System.Drawing.Point(7, 343);
+            this.checkBoxNaturalVentilation.Margin = new System.Windows.Forms.Padding(3, 2, 3, 2);
             this.checkBoxNaturalVentilation.Name = "checkBoxNaturalVentilation";
-            this.checkBoxNaturalVentilation.Size = new System.Drawing.Size(111, 29);
+            this.checkBoxNaturalVentilation.Size = new System.Drawing.Size(59, 17);
             this.checkBoxNaturalVentilation.TabIndex = 20;
             this.checkBoxNaturalVentilation.Text = "Enable";
             this.checkBoxNaturalVentilation.UseVisualStyleBackColor = true;
+            this.checkBoxNaturalVentilation.CheckedChanged += new System.EventHandler(this.checkBoxNaturalVentilation_CheckedChanged);
             // 
             // label45
             // 
             this.label45.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label45.AutoSize = true;
-            this.label45.Location = new System.Drawing.Point(14, 584);
-            this.label45.Margin = new System.Windows.Forms.Padding(6, 10, 6, 10);
+            this.label45.Location = new System.Drawing.Point(7, 323);
+            this.label45.Margin = new System.Windows.Forms.Padding(3, 5, 3, 5);
             this.label45.Name = "label45";
-            this.label45.Size = new System.Drawing.Size(350, 25);
+            this.label45.Size = new System.Drawing.Size(175, 13);
             this.label45.TabIndex = 19;
             this.label45.Text = "Natural Ventilation?";
             // 
             // txtHeatRecovery
             // 
             this.txtHeatRecovery.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtHeatRecovery.Location = new System.Drawing.Point(38, 535);
-            this.txtHeatRecovery.Margin = new System.Windows.Forms.Padding(30, 8, 30, 8);
+            this.txtHeatRecovery.Location = new System.Drawing.Point(19, 294);
+            this.txtHeatRecovery.Margin = new System.Windows.Forms.Padding(15, 4, 15, 4);
             this.txtHeatRecovery.Name = "txtHeatRecovery";
-            this.txtHeatRecovery.Size = new System.Drawing.Size(302, 31);
+            this.txtHeatRecovery.Size = new System.Drawing.Size(151, 20);
             this.txtHeatRecovery.TabIndex = 18;
             this.txtHeatRecovery.Tag = "HeatRecovery";
             // 
@@ -1186,20 +1187,20 @@ namespace Hive.IO.Forms
             // 
             this.label42.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label42.AutoSize = true;
-            this.label42.Location = new System.Drawing.Point(12, 494);
-            this.label42.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label42.Location = new System.Drawing.Point(6, 273);
+            this.label42.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label42.Name = "label42";
-            this.label42.Size = new System.Drawing.Size(354, 25);
+            this.label42.Size = new System.Drawing.Size(177, 13);
             this.label42.TabIndex = 17;
             this.label42.Text = "Heat recovery (-)";
             // 
             // txtInfiltration
             // 
             this.txtInfiltration.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtInfiltration.Location = new System.Drawing.Point(38, 447);
-            this.txtInfiltration.Margin = new System.Windows.Forms.Padding(30, 8, 30, 8);
+            this.txtInfiltration.Location = new System.Drawing.Point(19, 245);
+            this.txtInfiltration.Margin = new System.Windows.Forms.Padding(15, 4, 15, 4);
             this.txtInfiltration.Name = "txtInfiltration";
-            this.txtInfiltration.Size = new System.Drawing.Size(302, 31);
+            this.txtInfiltration.Size = new System.Drawing.Size(151, 20);
             this.txtInfiltration.TabIndex = 16;
             this.txtInfiltration.Tag = "Infiltration";
             // 
@@ -1207,20 +1208,20 @@ namespace Hive.IO.Forms
             // 
             this.label40.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label40.AutoSize = true;
-            this.label40.Location = new System.Drawing.Point(12, 406);
-            this.label40.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label40.Location = new System.Drawing.Point(6, 224);
+            this.label40.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label40.Name = "label40";
-            this.label40.Size = new System.Drawing.Size(354, 25);
+            this.label40.Size = new System.Drawing.Size(177, 13);
             this.label40.TabIndex = 15;
             this.label40.Text = "Infiltration (m³/m²h)";
             // 
             // txtAirChangeRate
             // 
             this.txtAirChangeRate.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtAirChangeRate.Location = new System.Drawing.Point(38, 359);
-            this.txtAirChangeRate.Margin = new System.Windows.Forms.Padding(30, 8, 30, 8);
+            this.txtAirChangeRate.Location = new System.Drawing.Point(19, 196);
+            this.txtAirChangeRate.Margin = new System.Windows.Forms.Padding(15, 4, 15, 4);
             this.txtAirChangeRate.Name = "txtAirChangeRate";
-            this.txtAirChangeRate.Size = new System.Drawing.Size(302, 31);
+            this.txtAirChangeRate.Size = new System.Drawing.Size(151, 20);
             this.txtAirChangeRate.TabIndex = 14;
             this.txtAirChangeRate.Tag = "AirChangeRate";
             // 
@@ -1228,10 +1229,10 @@ namespace Hive.IO.Forms
             // 
             this.label39.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label39.AutoSize = true;
-            this.label39.Location = new System.Drawing.Point(12, 318);
-            this.label39.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label39.Location = new System.Drawing.Point(6, 175);
+            this.label39.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label39.Name = "label39";
-            this.label39.Size = new System.Drawing.Size(354, 25);
+            this.label39.Size = new System.Drawing.Size(177, 13);
             this.label39.TabIndex = 13;
             this.label39.Text = "Volumetric air flow (m³/m²h)";
             // 
@@ -1239,10 +1240,10 @@ namespace Hive.IO.Forms
             // 
             this.label32.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label32.AutoSize = true;
-            this.label32.Location = new System.Drawing.Point(374, 23);
-            this.label32.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label32.Location = new System.Drawing.Point(187, 12);
+            this.label32.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label32.Name = "label32";
-            this.label32.Size = new System.Drawing.Size(354, 25);
+            this.label32.Size = new System.Drawing.Size(177, 13);
             this.label32.TabIndex = 2;
             this.label32.Text = "People load hours (h)";
             // 
@@ -1250,10 +1251,10 @@ namespace Hive.IO.Forms
             // 
             this.label33.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label33.AutoSize = true;
-            this.label33.Location = new System.Drawing.Point(12, 23);
-            this.label33.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label33.Location = new System.Drawing.Point(6, 12);
+            this.label33.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label33.Name = "label33";
-            this.label33.Size = new System.Drawing.Size(354, 25);
+            this.label33.Size = new System.Drawing.Size(177, 13);
             this.label33.TabIndex = 1;
             this.label33.Text = "People heat (W/m²)";
             // 
@@ -1261,10 +1262,10 @@ namespace Hive.IO.Forms
             // 
             this.label34.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label34.AutoSize = true;
-            this.label34.Location = new System.Drawing.Point(12, 111);
-            this.label34.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label34.Location = new System.Drawing.Point(6, 61);
+            this.label34.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label34.Name = "label34";
-            this.label34.Size = new System.Drawing.Size(354, 25);
+            this.label34.Size = new System.Drawing.Size(177, 13);
             this.label34.TabIndex = 3;
             this.label34.Text = "Light heat (W/m²)";
             // 
@@ -1272,10 +1273,10 @@ namespace Hive.IO.Forms
             // 
             this.label35.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label35.AutoSize = true;
-            this.label35.Location = new System.Drawing.Point(374, 111);
-            this.label35.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label35.Location = new System.Drawing.Point(187, 61);
+            this.label35.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label35.Name = "label35";
-            this.label35.Size = new System.Drawing.Size(354, 25);
+            this.label35.Size = new System.Drawing.Size(177, 13);
             this.label35.TabIndex = 4;
             this.label35.Text = "Light load hours (h)";
             // 
@@ -1283,10 +1284,10 @@ namespace Hive.IO.Forms
             // 
             this.label36.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label36.AutoSize = true;
-            this.label36.Location = new System.Drawing.Point(12, 199);
-            this.label36.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label36.Location = new System.Drawing.Point(6, 110);
+            this.label36.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label36.Name = "label36";
-            this.label36.Size = new System.Drawing.Size(354, 25);
+            this.label36.Size = new System.Drawing.Size(177, 13);
             this.label36.TabIndex = 5;
             this.label36.Text = "Equipment heat (W/m²)";
             // 
@@ -1294,20 +1295,20 @@ namespace Hive.IO.Forms
             // 
             this.label37.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.label37.AutoSize = true;
-            this.label37.Location = new System.Drawing.Point(374, 199);
-            this.label37.Margin = new System.Windows.Forms.Padding(4, 8, 4, 8);
+            this.label37.Location = new System.Drawing.Point(187, 110);
+            this.label37.Margin = new System.Windows.Forms.Padding(2, 4, 2, 4);
             this.label37.Name = "label37";
-            this.label37.Size = new System.Drawing.Size(354, 25);
+            this.label37.Size = new System.Drawing.Size(177, 13);
             this.label37.TabIndex = 6;
             this.label37.Text = "Equipment load hours";
             // 
             // txtOccupantLoads
             // 
             this.txtOccupantLoads.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtOccupantLoads.Location = new System.Drawing.Point(38, 64);
-            this.txtOccupantLoads.Margin = new System.Windows.Forms.Padding(30, 8, 30, 8);
+            this.txtOccupantLoads.Location = new System.Drawing.Point(19, 33);
+            this.txtOccupantLoads.Margin = new System.Windows.Forms.Padding(15, 4, 15, 4);
             this.txtOccupantLoads.Name = "txtOccupantLoads";
-            this.txtOccupantLoads.Size = new System.Drawing.Size(302, 31);
+            this.txtOccupantLoads.Size = new System.Drawing.Size(151, 20);
             this.txtOccupantLoads.TabIndex = 7;
             this.txtOccupantLoads.Tag = "OccupantLoads";
             this.txtOccupantLoads.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -1315,10 +1316,10 @@ namespace Hive.IO.Forms
             // txtOccupantYearlyHours
             // 
             this.txtOccupantYearlyHours.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtOccupantYearlyHours.Location = new System.Drawing.Point(400, 64);
-            this.txtOccupantYearlyHours.Margin = new System.Windows.Forms.Padding(30, 8, 30, 8);
+            this.txtOccupantYearlyHours.Location = new System.Drawing.Point(200, 33);
+            this.txtOccupantYearlyHours.Margin = new System.Windows.Forms.Padding(15, 4, 15, 4);
             this.txtOccupantYearlyHours.Name = "txtOccupantYearlyHours";
-            this.txtOccupantYearlyHours.Size = new System.Drawing.Size(302, 31);
+            this.txtOccupantYearlyHours.Size = new System.Drawing.Size(151, 20);
             this.txtOccupantYearlyHours.TabIndex = 8;
             this.txtOccupantYearlyHours.Tag = "OccupantYearlyHours";
             this.txtOccupantYearlyHours.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -1326,10 +1327,10 @@ namespace Hive.IO.Forms
             // txtLightingLoads
             // 
             this.txtLightingLoads.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtLightingLoads.Location = new System.Drawing.Point(38, 152);
-            this.txtLightingLoads.Margin = new System.Windows.Forms.Padding(30, 8, 30, 8);
+            this.txtLightingLoads.Location = new System.Drawing.Point(19, 82);
+            this.txtLightingLoads.Margin = new System.Windows.Forms.Padding(15, 4, 15, 4);
             this.txtLightingLoads.Name = "txtLightingLoads";
-            this.txtLightingLoads.Size = new System.Drawing.Size(302, 31);
+            this.txtLightingLoads.Size = new System.Drawing.Size(151, 20);
             this.txtLightingLoads.TabIndex = 9;
             this.txtLightingLoads.Tag = "LightingLoads";
             this.txtLightingLoads.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -1337,10 +1338,10 @@ namespace Hive.IO.Forms
             // txtLightingYearlyHours
             // 
             this.txtLightingYearlyHours.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtLightingYearlyHours.Location = new System.Drawing.Point(400, 152);
-            this.txtLightingYearlyHours.Margin = new System.Windows.Forms.Padding(30, 8, 30, 8);
+            this.txtLightingYearlyHours.Location = new System.Drawing.Point(200, 82);
+            this.txtLightingYearlyHours.Margin = new System.Windows.Forms.Padding(15, 4, 15, 4);
             this.txtLightingYearlyHours.Name = "txtLightingYearlyHours";
-            this.txtLightingYearlyHours.Size = new System.Drawing.Size(302, 31);
+            this.txtLightingYearlyHours.Size = new System.Drawing.Size(151, 20);
             this.txtLightingYearlyHours.TabIndex = 10;
             this.txtLightingYearlyHours.Tag = "LightingYearlyHours";
             this.txtLightingYearlyHours.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -1348,10 +1349,10 @@ namespace Hive.IO.Forms
             // txtEquipmentLoads
             // 
             this.txtEquipmentLoads.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtEquipmentLoads.Location = new System.Drawing.Point(38, 240);
-            this.txtEquipmentLoads.Margin = new System.Windows.Forms.Padding(30, 8, 30, 8);
+            this.txtEquipmentLoads.Location = new System.Drawing.Point(19, 131);
+            this.txtEquipmentLoads.Margin = new System.Windows.Forms.Padding(15, 4, 15, 4);
             this.txtEquipmentLoads.Name = "txtEquipmentLoads";
-            this.txtEquipmentLoads.Size = new System.Drawing.Size(302, 31);
+            this.txtEquipmentLoads.Size = new System.Drawing.Size(151, 20);
             this.txtEquipmentLoads.TabIndex = 11;
             this.txtEquipmentLoads.Tag = "EquipmentLoads";
             this.txtEquipmentLoads.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -1359,10 +1360,10 @@ namespace Hive.IO.Forms
             // txtEquipmentYearlyHours
             // 
             this.txtEquipmentYearlyHours.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.txtEquipmentYearlyHours.Location = new System.Drawing.Point(400, 240);
-            this.txtEquipmentYearlyHours.Margin = new System.Windows.Forms.Padding(30, 8, 30, 8);
+            this.txtEquipmentYearlyHours.Location = new System.Drawing.Point(200, 131);
+            this.txtEquipmentYearlyHours.Margin = new System.Windows.Forms.Padding(15, 4, 15, 4);
             this.txtEquipmentYearlyHours.Name = "txtEquipmentYearlyHours";
-            this.txtEquipmentYearlyHours.Size = new System.Drawing.Size(302, 31);
+            this.txtEquipmentYearlyHours.Size = new System.Drawing.Size(151, 20);
             this.txtEquipmentYearlyHours.TabIndex = 12;
             this.txtEquipmentYearlyHours.Tag = "EquipmentYearlyHours";
             this.txtEquipmentYearlyHours.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
@@ -1382,15 +1383,15 @@ namespace Hive.IO.Forms
             this.tableLayoutPanel1.Controls.Add(this.cboBuildingUseType, 1, 0);
             this.tableLayoutPanel1.Controls.Add(this.label1, 0, 0);
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
-            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.tableLayoutPanel1.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
-            this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(8, 8, 8, 8);
+            this.tableLayoutPanel1.Padding = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.tableLayoutPanel1.RowCount = 4;
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle());
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 19F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(756, 152);
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 10F));
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(378, 79);
             this.tableLayoutPanel1.TabIndex = 1;
             // 
             // cboBuildingQuality
@@ -1399,10 +1400,10 @@ namespace Hive.IO.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cboBuildingQuality.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboBuildingQuality.FormattingEnabled = true;
-            this.cboBuildingQuality.Location = new System.Drawing.Point(382, 94);
-            this.cboBuildingQuality.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cboBuildingQuality.Location = new System.Drawing.Point(191, 56);
+            this.cboBuildingQuality.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cboBuildingQuality.Name = "cboBuildingQuality";
-            this.cboBuildingQuality.Size = new System.Drawing.Size(362, 33);
+            this.cboBuildingQuality.Size = new System.Drawing.Size(181, 21);
             this.cboBuildingQuality.TabIndex = 9;
             this.cboBuildingQuality.SelectedIndexChanged += new System.EventHandler(this.cboBuildingQuality_SelectedIndexChanged);
             // 
@@ -1410,10 +1411,10 @@ namespace Hive.IO.Forms
             // 
             this.label3.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label3.AutoSize = true;
-            this.label3.Location = new System.Drawing.Point(12, 98);
-            this.label3.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label3.Location = new System.Drawing.Point(6, 60);
+            this.label3.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label3.Name = "label3";
-            this.label3.Size = new System.Drawing.Size(158, 25);
+            this.label3.Size = new System.Drawing.Size(77, 13);
             this.label3.TabIndex = 8;
             this.label3.Text = "Building quality";
             // 
@@ -1423,10 +1424,10 @@ namespace Hive.IO.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cboRoomType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboRoomType.FormattingEnabled = true;
-            this.cboRoomType.Location = new System.Drawing.Point(382, 53);
-            this.cboRoomType.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cboRoomType.Location = new System.Drawing.Point(191, 31);
+            this.cboRoomType.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cboRoomType.Name = "cboRoomType";
-            this.cboRoomType.Size = new System.Drawing.Size(362, 33);
+            this.cboRoomType.Size = new System.Drawing.Size(181, 21);
             this.cboRoomType.TabIndex = 7;
             this.cboRoomType.SelectedIndexChanged += new System.EventHandler(this.cboRoomType_SelectedIndexChanged);
             // 
@@ -1434,10 +1435,10 @@ namespace Hive.IO.Forms
             // 
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(12, 57);
-            this.label2.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label2.Location = new System.Drawing.Point(6, 35);
+            this.label2.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(115, 25);
+            this.label2.Size = new System.Drawing.Size(58, 13);
             this.label2.TabIndex = 6;
             this.label2.Text = "Room type";
             // 
@@ -1447,10 +1448,10 @@ namespace Hive.IO.Forms
             | System.Windows.Forms.AnchorStyles.Right)));
             this.cboBuildingUseType.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cboBuildingUseType.FormattingEnabled = true;
-            this.cboBuildingUseType.Location = new System.Drawing.Point(382, 12);
-            this.cboBuildingUseType.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.cboBuildingUseType.Location = new System.Drawing.Point(191, 6);
+            this.cboBuildingUseType.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.cboBuildingUseType.Name = "cboBuildingUseType";
-            this.cboBuildingUseType.Size = new System.Drawing.Size(362, 33);
+            this.cboBuildingUseType.Size = new System.Drawing.Size(181, 21);
             this.cboBuildingUseType.TabIndex = 5;
             this.cboBuildingUseType.SelectedIndexChanged += new System.EventHandler(this.cboBuildingUseType_SelectedIndexChanged);
             // 
@@ -1458,24 +1459,24 @@ namespace Hive.IO.Forms
             // 
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(12, 16);
-            this.label1.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.label1.Location = new System.Drawing.Point(6, 10);
+            this.label1.Margin = new System.Windows.Forms.Padding(2, 0, 2, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(177, 25);
+            this.label1.Size = new System.Drawing.Size(87, 13);
             this.label1.TabIndex = 2;
             this.label1.Text = "Building use type";
             // 
             // BuildingInputForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(12F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.ClientSize = new System.Drawing.Size(758, 1217);
+            this.ClientSize = new System.Drawing.Size(379, 633);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Controls.Add(this.tabControl);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedToolWindow;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.Margin = new System.Windows.Forms.Padding(2, 2, 2, 2);
             this.Name = "BuildingInputForm";
             this.Text = "hizard | Building";
             this.Load += new System.EventHandler(this.BuildingInputForm_Load);
