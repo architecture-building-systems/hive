@@ -47,20 +47,17 @@ namespace Hive.IO.Core
         const double C_P = 1005;
         #endregion
 
-        #region Parameters
-        double H_V;
-        bool use_natural_ventilation;
-        bool use_fixed_time_constant;
-        double floorArea;
-        Dictionary<string, double> UValues;
-        double TauFixed;
-        double Cm;
-        double H_V_no_heat_recovery;
-        double Vdot_nat_vent_constant;
-        double H_T_op;
-        double H_T_tr;
-        double H_T;
-        #endregion Parameters
+
+        private double H_V;
+        private double floorArea;
+        private Dictionary<string, double> UValues;
+        private double TauFixed;
+        private double Cm;
+        private double H_V_no_heat_recovery;
+        private double H_T_op;
+        private double H_T_tr;
+        private double H_T;
+
 
         #region Results
         public double[] Q_Heat { get; private set; }
@@ -490,7 +487,8 @@ namespace Hive.IO.Core
                     var eta_g_t = calculate_step(month, T_e, T_i_ub, T_i_lb, 
                         t_P, t_A, t_L, 
                         Phi_P, Phi_A, Phi_L, 
-                        Q_s_tr_per_timestep_per_surface, run_hourly: false, eta_g_t: null, only_return_eta_g: true);
+                        Q_s_tr_per_timestep_per_surface, Vdot_nat_vent_constant, use_natural_ventilation, use_fixed_time_constant,
+                        run_hourly: false, eta_g_t: null, only_return_eta_g: true);
                     
                     foreach (var hour in Enumerable.Range(0, HOURS_PER_MONTH[month]))
                     {
@@ -499,7 +497,8 @@ namespace Hive.IO.Core
                             T_e_hourly.ToArray(), T_i_ub_hourly.ToArray(), T_i_lb_hourly.ToArray(), 
                             t_P_hourly, t_A_hourly, t_L_hourly, 
                             Phi_P_hourly, Phi_A_hourly, Phi_L_hourly, 
-                            Q_s_tr_per_timestep_per_surface_hourly, run_hourly: true, eta_g_t: eta_g_t);
+                            Q_s_tr_per_timestep_per_surface_hourly, Vdot_nat_vent_constant, use_natural_ventilation, use_fixed_time_constant, 
+                            run_hourly: true, eta_g_t: eta_g_t);
                     }
                     
                     end_hour += HOURS_PER_MONTH[month];
@@ -511,7 +510,8 @@ namespace Hive.IO.Core
                         T_e, T_i_ub, T_i_lb, 
                         t_P, t_A, t_L, 
                         Phi_P, Phi_A, Phi_L, 
-                        Q_s_tr_per_timestep_per_surface, run_hourly: false);
+                        Q_s_tr_per_timestep_per_surface, Vdot_nat_vent_constant, use_natural_ventilation, use_fixed_time_constant, 
+                        run_hourly: false);
                 }
             }
 
@@ -558,7 +558,8 @@ namespace Hive.IO.Core
                 double[] T_e, double[] T_i_ub, double[] T_i_lb,
                 double[] t_P, double[] t_A, double[] t_L,
                 double Phi_P, double Phi_A, double Phi_L,
-                double[,] Q_s_tr_per_surface,
+                double[,] Q_s_tr_per_surface, double Vdot_nat_vent_constant, 
+                bool use_natural_ventilation, bool use_fixed_time_constant,
                 bool run_hourly = false,
                 Tuple<double,double,double,double,double,double> eta_g_t = null, bool only_return_eta_g = false)
         {

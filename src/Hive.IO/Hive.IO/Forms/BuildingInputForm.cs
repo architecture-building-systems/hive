@@ -369,14 +369,16 @@ namespace Hive.IO.Forms
         private ToolTip hizardToolTip = new ToolTip() { InitialDelay = 100 };
 
         private const string toolTipAdaptiveComfortInfoMessage = "Adaptive Comfort adjusts setpoints dynamically " +
-                "based on ambient temperature \nand assumptions about metabolic rates and clothing factors.";
+                                                                 "based on ambient temperature \nand assumptions about metabolic rates and clothing factors. \n" +
+                                                                 "!!! Please note: Activating this checkbox will deviate the loads calculation from the SIA 380 Norm. !!!";
         private string toolTipAdaptiveComfortWarningMessage(string roomType) =>
             toolTipAdaptiveComfortInfoMessage +
             "\n\nWARNING: Adaptive Comfort is likely not appropriate \n" +
             $"for room type {roomType}";
 
         private const string toolTipNaturalVentilationInfoMessage = "Natural Ventilation enables single sided natural ventilation" + "\n" +
-            "based on simplified calculations of CIBSE AM10: Natural Ventilation in Non-Domestic Buildings";
+            "based on simplified calculations of CIBSE AM10: Natural Ventilation in Non-Domestic Buildings. \n" +
+            "!!! Please note: Activating this checkbox will deviate the loads calculation from the SIA 380 Norm. !!!";
 
         private const string toolTipSetbackInfoMessage = "Only used during hourly demand calculation, which is currently WIP";
 
