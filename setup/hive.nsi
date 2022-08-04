@@ -52,7 +52,7 @@ RequestExecutionLevel user
 ;--------------------------------
 ;Installer Sections
 
-Section "Hive Installation" Base_Installation_Section
+Section "Hive" Base_Installation_Section
     SectionIn RO  # this section is required
     SetOutPath "$INSTDIR"
 
@@ -126,7 +126,7 @@ Section "Hive Installation" Base_Installation_Section
 
 SectionEnd
 
-Section "Conduit Installation" Conduit_Installation_Section
+Section "Conduit" Conduit_Installation_Section
 
 IfFileExists "$INSTDIR\..\ProvingGround.Conduit.gha" 0 file_not_found
     goto end_of_block
@@ -136,7 +136,7 @@ IfFileExists "$INSTDIR\..\ProvingGround.Conduit.gha" 0 file_not_found
 
 SectionEnd
 
-LangString DESC_Section1 ${LANG_ENGLISH} "This is Hive."
+LangString DESC_Section1 ${LANG_ENGLISH} "Base Hive installation."
 LangString DESC_Section2 ${LANG_ENGLISH} "This is a test description. Installs the Conduit plugin by Proving Ground Apps."
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
