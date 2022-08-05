@@ -43,14 +43,47 @@ namespace Hive.IO.Plots
 
         public void Render(Graphics graphics) 
         {
+            /*
             Timer waitTime  = new Timer(1000);
 
             waitTime.Elapsed += new ElapsedEventHandler((sender, e) => TimedRender(sender, e, graphics));
 
             waitTime.Enabled = true;
             waitTime.AutoReset = false;
+            */
+
+            var titleSize = GH_FontServer.MeasureString(title, _boldFont);
+            var titleHeight = titleSize.Height;
+            var titleWidth = titleSize.Width;
+
+            var descSize = GH_FontServer.MeasureString(description, _standardFont);
+            var descHeight = descSize.Height;
+            var descWidth = descSize.Width;
+
+            var width = Math.Max(descWidth + 2 * widthPadding, standardWidth);
+            var height = Math.Max(2 * heightPadding + titleHeight + descHeight, standardHeight);
+
+            var brush = new SolidBrush(Color.Black);
+
+            // draw box
+            var size = new SizeF(width, height);
+            var box = new RectangleF(cursorLocation, size);
+            box.Offset(0, -height);
+            graphics.DrawRectangle(borderPen, box.Left, box.Top, box.Width, box.Height);
+            graphics.FillRectangle(backgroundBrush, box);
+
+            //draw Title
+            var dataX = box.Left + widthPadding;
+            var dataY = box.Top + heightPadding;
+            graphics.DrawString(title, _boldFont, brush, dataX, dataY);
+
+            //draw description
+            var unitX = box.Left + widthPadding;
+            var unitY = dataY + titleHeight;
+            graphics.DrawString(description, _standardFont, brush, unitX, unitY);
         }
 
+        /*
         private void TimedRender(Object source, ElapsedEventArgs e, Graphics graphics)
         {
             if (display)
@@ -86,6 +119,7 @@ namespace Hive.IO.Plots
                 graphics.DrawString(description, _standardFont, brush, unitX, unitY);
             }
         }
+        */
 
         private string FormatDescriptionText(string str, int maxLength)
         {
