@@ -59,6 +59,7 @@ Section "Base Installation" Base_Installation_Section
     # first, delete any "old" files (some of them have been renamed...)
     Delete /REBOOTOK "$INSTDIR\Hive.Core.epw_reader.ghpy"
     Delete /REBOOTOK "$INSTDIR\GHSolar.gha"
+    Delete /REBOOTOK "$INSTDIR\ProvingGround.Conduit.gha"
     Delete /REBOOTOK "$INSTDIR\Hive.IO.gha"
     Delete /REBOOTOK "$INSTDIR\honey-badger-runtime.dll"
     Delete /REBOOTOK "$INSTDIR\Newtonsoft.Json.dll"
@@ -77,7 +78,6 @@ Section "Base Installation" Base_Installation_Section
     
     # Also delete files from previous install location (Appdata\Grasshopper\Libraries)
     Delete /REBOOTOK "$INSTDIR\..\Hive.Core.epw_reader.ghpy"
-    Delete /REBOOTOK "$INSTDIR\..\GHSolar.gha"
     Delete /REBOOTOK "$INSTDIR\..\Hive.IO.gha"
     Delete /REBOOTOK "$INSTDIR\..\honey-badger-runtime.dll"
     Delete /REBOOTOK "$INSTDIR\..\Newtonsoft.Json.dll"
@@ -103,6 +103,13 @@ Section "Base Installation" Base_Installation_Section
     File "..\src\Hive.IO\Hive.IO\bin\OxyPlot.WindowsForms.dll"
     File "GHSolar.gha"
     File "SolarModel.dll"
+    
+    IfFileExists "$INSTDIR\..\ProvingGround.Conduit.gha" 0 file_not_found
+    goto end_of_block
+    file_not_found:
+    File "ProvingGround.Conduit.gha"
+    end_of_block:
+
 
     # Hive.Core and dependencies
     # File "..\src\Hive.Core\epw_reader\_build\Hive.Core.epw_reader.ghpy"
