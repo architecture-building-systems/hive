@@ -2401,7 +2401,7 @@
       - 0.8
       - 0.8
   DeviceSchedule:
-    LoadWhenUnoccupied: 10
+    LoadWhenUnoccupied: 0.1
     DailyProfile:
       - 0.1
       - 0.1
@@ -2475,7 +2475,7 @@
       - 0.8
       - 0.8
   DeviceSchedule:
-    LoadWhenUnoccupied: 10
+    LoadWhenUnoccupied: 0.1
     DailyProfile:
       - 0.1
       - 0.1
