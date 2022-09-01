@@ -136,8 +136,8 @@ IfFileExists "$INSTDIR\..\ProvingGround.Conduit.gha" 0 file_not_found
 
 SectionEnd
 
-LangString DESC_Section1 ${LANG_ENGLISH} "Base Hive installation."
-LangString DESC_Section2 ${LANG_ENGLISH} "This is a test description. Installs the Conduit plugin by Proving Ground Apps."
+LangString DESC_Section1 ${LANG_ENGLISH} "Installs the Hive plugin for Grasshopper."
+LangString DESC_Section2 ${LANG_ENGLISH} "Installs the Conduit plugin by Proving Ground Apps. Conduit is used within Hive for certain chart visualizations. Visit https://apps.proving$\nground.io/conduit/ for more information."
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${Base_Installation_Section} $(DESC_Section1)
