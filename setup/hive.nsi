@@ -52,7 +52,7 @@ RequestExecutionLevel user
 ;--------------------------------
 ;Installer Sections
 
-Section "Base Installation" Base_Installation_Section
+Section "Hive" Base_Installation_Section
     SectionIn RO  # this section is required
     SetOutPath "$INSTDIR"
 
@@ -125,3 +125,21 @@ Section "Base Installation" Base_Installation_Section
     # File "honey-badger-runtime.dll"        
 
 SectionEnd
+
+Section "Conduit" Conduit_Installation_Section
+
+IfFileExists "$INSTDIR\..\ProvingGround.Conduit.gha" 0 file_not_found
+    goto end_of_block
+    file_not_found:
+    File "ProvingGround.Conduit.gha"
+    end_of_block:
+
+SectionEnd
+
+LangString DESC_Section1 ${LANG_ENGLISH} "Installs the Hive plugin for Grasshopper."
+LangString DESC_Section2 ${LANG_ENGLISH} "Installs the Conduit plugin by Proving Ground Apps. Conduit is used within Hive for certain chart visualizations. Visit https://apps.proving$\nground.io/conduit/ for more information."
+
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+  !insertmacro MUI_DESCRIPTION_TEXT ${Base_Installation_Section} $(DESC_Section1)
+  !insertmacro MUI_DESCRIPTION_TEXT ${Conduit_Installation_Section} $(DESC_Section2)
+!insertmacro MUI_FUNCTION_DESCRIPTION_END
