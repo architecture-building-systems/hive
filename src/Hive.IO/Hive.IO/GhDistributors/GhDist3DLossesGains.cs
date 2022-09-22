@@ -79,11 +79,8 @@ namespace Hive.IO.GhDistributors
                 for (int m = 0; m < months; m++)
                 {
                     totalLossesPerWindow[i] += ((monthlyTransmWindows[m] / totWinArea) * transparentSurfaceAreas[i]);
-                    for (int window = 0; window < transparentSurfaceAreas.Count; window++)
-                    {
-                        var branch = monthlySolarPerWin.Branches[window];
-                        totalGainsPerWindow[i] += branch[m].Value;
-                    }
+                    var branch = monthlySolarPerWin.Branches[i];
+                    totalGainsPerWindow[i] += branch[m].Value;
                 }
             }
 
