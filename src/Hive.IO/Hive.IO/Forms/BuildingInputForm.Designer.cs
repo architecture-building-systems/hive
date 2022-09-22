@@ -1182,6 +1182,8 @@ namespace Hive.IO.Forms
             this.txtHeatRecovery.Size = new System.Drawing.Size(151, 20);
             this.txtHeatRecovery.TabIndex = 18;
             this.txtHeatRecovery.Tag = "HeatRecovery";
+            this.txtHeatRecovery.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
+
             // 
             // label42
             // 
@@ -1203,6 +1205,9 @@ namespace Hive.IO.Forms
             this.txtInfiltration.Size = new System.Drawing.Size(151, 20);
             this.txtInfiltration.TabIndex = 16;
             this.txtInfiltration.Tag = "Infiltration";
+            this.txtInfiltration.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
+
+
             // 
             // label40
             // 
@@ -1224,6 +1229,8 @@ namespace Hive.IO.Forms
             this.txtAirChangeRate.Size = new System.Drawing.Size(151, 20);
             this.txtAirChangeRate.TabIndex = 14;
             this.txtAirChangeRate.Tag = "AirChangeRate";
+            this.txtAirChangeRate.Validating += new System.ComponentModel.CancelEventHandler(this.TextBox_TextChanged);
+
             // 
             // label39
             // 
