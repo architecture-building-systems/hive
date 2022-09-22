@@ -27,7 +27,6 @@ namespace Hive.IO.Plots
         private readonly KpiPlotProperties _properties;
 
         private readonly Font _standardFont;
-        private readonly Font _smallFont;
         private RectangleF _bounds = RectangleF.Empty;
 
         /// <summary>
@@ -38,7 +37,6 @@ namespace Hive.IO.Plots
         {
             _standardFont = GH_FontServer.Standard;
             _boldFont = GH_FontServer.StandardBold;
-            _smallFont = GH_FontServer.Small;
             _properties = properties;
             _penWidth = GH_FontServer.MeasureString("abc", _standardFont).Height;
         }
@@ -112,9 +110,9 @@ namespace Hive.IO.Plots
             var dataY = bounds.Top + bounds.Height / 2 - (float) dataSize.Height / 2;
             graphics.DrawString(data, _boldFont, brush, dataX, dataY);
             // center unit below data
-            var unitX = bounds.Left + (bounds.Width - GH_FontServer.StringWidth(UnitText, _smallFont)) / 2;
+            var unitX = bounds.Left + (bounds.Width - GH_FontServer.StringWidth(UnitText, _standardFont)) / 2;
             var unitY = dataY + dataSize.Height;
-            graphics.DrawString(UnitText, _smallFont, brush, unitX, unitY);
+            graphics.DrawString(UnitText, _standardFont, brush, unitX, unitY);
         }
 
         public void NewData(Results.Results results)

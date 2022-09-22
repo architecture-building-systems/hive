@@ -52,7 +52,7 @@ RequestExecutionLevel user
 ;--------------------------------
 ;Installer Sections
 
-Section "Hive" Base_Installation_Section
+Section "Base Installation" Base_Installation_Section
     SectionIn RO  # this section is required
     SetOutPath "$INSTDIR"
 
@@ -143,3 +143,4 @@ LangString DESC_Section2 ${LANG_ENGLISH} "Installs the Conduit plugin by Proving
   !insertmacro MUI_DESCRIPTION_TEXT ${Base_Installation_Section} $(DESC_Section1)
   !insertmacro MUI_DESCRIPTION_TEXT ${Conduit_Installation_Section} $(DESC_Section2)
 !insertmacro MUI_FUNCTION_DESCRIPTION_END
+SectionEnd

@@ -4456,7 +4456,7 @@
     }, 
     {
         "RoomType": "12.10 Wasch- und Trockenraum", 
-        "DaysOffPerWeek": 0, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
             "Default": 0.0, 
             "DailyProfile": [
@@ -4515,7 +4515,7 @@
                 0.0
             ]
         }, 
-        "DaysUsedPerYear": 365, 
+        "DaysUsedPerYear": 261, 
         "YearlyProfile": [
             0.8, 
             0.8, 
@@ -4531,32 +4531,32 @@
             0.8
         ], 
         "DeviceSchedule": {
-            "Default": 0.1, 
+            "Default": 0, 
             "DailyProfile": [
-                0.1, 
-                0.1, 
-                0.1, 
-                0.1, 
-                0.1, 
-                0.1, 
-                0.1, 
-                0.2, 
-                0.4, 
-                0.6, 
-                0.8, 
-                0.8, 
-                0.4, 
-                0.6, 
-                0.8, 
-                0.8, 
-                0.4, 
-                0.2, 
-                0.1, 
-                0.1, 
-                0.1, 
-                0.1, 
-                0.1, 
-                0.1
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0
             ]
         }, 
         "SetpointSchedule": {
@@ -5806,7 +5806,7 @@
     }, 
     {
         "RoomType": "12.8 Garderobe, Dusche", 
-        "DaysOffPerWeek": 1, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
             "Default": 0.0, 
             "DailyProfile": [
@@ -5865,7 +5865,7 @@
                 0.0
             ]
         }, 
-        "DaysUsedPerYear": 313, 
+        "DaysUsedPerYear": 261, 
         "YearlyProfile": [
             0.8, 
             0.8, 
@@ -5941,7 +5941,7 @@
     }, 
     {
         "RoomType": "12.9 Parkhaus", 
-        "DaysOffPerWeek": 0, 
+        "DaysOffPerWeek": 2, 
         "OccupancySchedule": {
             "Default": 0.0, 
             "DailyProfile": [
@@ -6000,7 +6000,7 @@
                 0.0
             ]
         }, 
-        "DaysUsedPerYear": 365, 
+        "DaysUsedPerYear": 261, 
         "YearlyProfile": [
             0.8, 
             0.8, 
@@ -6016,32 +6016,32 @@
             0.8
         ], 
         "DeviceSchedule": {
-            "Default": 0.1, 
+            "Default": 0, 
             "DailyProfile": [
-                0.1, 
-                0.1, 
-                0.1, 
-                0.1, 
-                0.1, 
-                0.1, 
-                0.1, 
-                0.2, 
-                0.4, 
-                0.6, 
-                0.8, 
-                0.8, 
-                0.4, 
-                0.6, 
-                0.8, 
-                0.8, 
-                0.4, 
-                0.2, 
-                0.1, 
-                0.1, 
-                0.1, 
-                0.1, 
-                0.1, 
-                0.1
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0, 
+                0
             ]
         }, 
         "SetpointSchedule": {

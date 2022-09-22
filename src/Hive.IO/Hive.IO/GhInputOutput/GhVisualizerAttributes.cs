@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Drawing;
 using System.Windows.Forms;
-using System.Diagnostics;
 using Grasshopper.GUI;
 using Grasshopper.GUI.Canvas;
 using Grasshopper.Kernel;
@@ -24,43 +23,36 @@ namespace Hive.IO.GhInputOutput
             TitleBarHeight + 15 * GH_FontServer.MeasureString("abc", GH_FontServer.StandardBold).Height;
 
         private readonly KpiPlot[] _kpiPlots;
-        private readonly VisualizerToolTip[] _toolTips;
 
         private readonly PlotSelector _plotSelector = new PlotSelector();
 
-        private Graphics _graphics;
-
         public GhVisualizerAttributes(GhVisualizer owner) : base(owner)
         {
-            //Projected Building Lifetime is 80 years
-            bool annualized = true;
-            int lifetime = 80;
-
             var energyKpiConfig = new KpiPlotProperties
             {
                 Color = Color.FromArgb(225, 242, 31),
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
-                UnitText = "kWh/year",
-                NormalizedUnitText = "kWh/m²/year",
-                Data = (results, normalized) => annualized ? results.TotalEnergy(normalized)/ lifetime : results.TotalEnergy(normalized),
+                UnitText = "kWh",
+                NormalizedUnitText = "kWh/m²",
+                Data = (results, normalized) => results.TotalEnergy(normalized),
                 Kpi = Kpi.Energy
             };
             var emissionsKpiConfig = new KpiPlotProperties
             {
                 Color = Color.FromArgb(136, 219, 68),
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
-                UnitText = "kgCO₂/year",
-                NormalizedUnitText = "kgCO₂/m²/year",
-                Data = (results, normalized) => annualized ? results.TotalEmissions(normalized)/ lifetime : results.TotalEmissions(normalized),
+                UnitText = "kgCO₂",
+                NormalizedUnitText = "kgCO₂/m²",
+                Data = (results, normalized) => results.TotalEmissions(normalized),
                 Kpi = Kpi.Emissions
             };
             var costsKpiConfig = new KpiPlotProperties
             {
                 Color = Color.FromArgb(222, 180, 109),
                 BenchmarkFailedColor = Color.FromArgb(166, 78, 2),
-                UnitText = "CHF/year",
-                NormalizedUnitText = "CHF/m²/year",
-                Data = (results, normalized) => annualized ? results.TotalCosts(normalized)/ lifetime : results.TotalCosts(normalized),
+                UnitText = "CHF",
+                NormalizedUnitText = "CHF/m²",
+                Data = (results, normalized) => results.TotalCosts(normalized),
                 Kpi = Kpi.Costs
             };
 
@@ -84,27 +76,6 @@ namespace Hive.IO.GhInputOutput
                 emissionsKpi,
                 energyKpi,
                 //mbNormalize
-            };
-
-            var energyKpiToolTip = new VisualizerToolTip(
-                "Energy KPI",
-                "Annual operational final energy consumption for heating, cooling, electricity and domestic hot water.", 
-                _kpiPlots[2], new SolidBrush(Color.LightBlue), 70);
-
-            var emissionKpiToolTip = new VisualizerToolTip("Emissions KPI",
-                "Annual operational carbon emissions for heating, cooling, electricity and domestic hot water, and annualized embodied carbon emissions of the building construction considering the expected building lifetime.", 
-                _kpiPlots[1], new SolidBrush(Color.LightBlue), 70);
-
-            var costKpiToolTip = new VisualizerToolTip(
-                "Cost KPI",
-                "Annual operational cost for heating, cooling, electricity and domestic hot water, and annualized construction cost considering the expected building lifetime.", 
-                _kpiPlots[0], new SolidBrush(Color.LightBlue), 70);
-
-            _toolTips = new VisualizerToolTip[]
-            {
-                energyKpiToolTip,
-                emissionKpiToolTip,
-                costKpiToolTip
             };
         }
 
@@ -138,9 +109,7 @@ namespace Hive.IO.GhInputOutput
             }
         }
 
-        private bool InYAxisBounds = false;
-
-
+        private bool InYAXisBounds = false;
         private RectangleF YAxisBounds
         {
             get
@@ -201,24 +170,25 @@ namespace Hive.IO.GhInputOutput
             return GH_ObjectResponse.Release;
         }
 
-        
+        //this might be a really bad idea performance-wise?
         public override GH_ObjectResponse RespondToMouseMove(GH_Canvas sender, GH_CanvasMouseEvent e)
         {
-            var currentPlot = _plotSelector._currentPlot.ToString();
-            //this might be a really bad idea performance-wise?
-            InYAxisBounds = YAxisBounds.Contains(e.CanvasLocation) && AxisLimitPlots.Contains(currentPlot) ? true : false;
-            foreach (var toolTip in _toolTips)
+            var currentPlot = _plotSelector._currentPlot.ToString();            
+            if (YAxisBounds.Contains(e.CanvasLocation) && AxisLimitPlots.Contains(currentPlot))
             {
-                toolTip.display = toolTip.associatedElement.Contains(e.CanvasLocation) ? true : false;
-                toolTip.cursorLocation = e.CanvasLocation;
+                InYAXisBounds = true;
+                sender.Invalidate();
             }
-            sender.Invalidate();
+            else
+            {
+                InYAXisBounds = false;
+                sender.Invalidate();
+            }
             return base.RespondToMouseMove(sender, e);
         }
 
         protected override void Render(GH_Canvas canvas, Graphics graphics, GH_CanvasChannel channel)
         {
-            _graphics = graphics;
             if (channel == GH_CanvasChannel.Wires && Owner.SourceCount > 0)
                 RenderIncomingWires(canvas.Painter, Owner.Sources, Owner.WireDisplay);
             if (channel != GH_CanvasChannel.Objects)
@@ -229,28 +199,17 @@ namespace Hive.IO.GhInputOutput
             RenderPlot(graphics);
             RenderTitleBar(graphics);
             RenderYAxisBox(graphics);
-
-            RenderToolTips(graphics);
         }
 
         private void RenderBackground(Graphics graphics) => graphics.FillRectangle(new SolidBrush(Color.White), InnerBounds);
 
         private void RenderYAxisBox(Graphics graphics)
         {
-            if (InYAxisBounds)
+            if (InYAXisBounds)
             {
                 graphics.DrawRectangleF(new Pen(Color.Gray, 2), YAxisBounds);
             }
         }
-
-        private void RenderToolTips(Graphics graphics)
-        {   
-            foreach (var toolTip in _toolTips)
-            {
-                if (toolTip.display) { toolTip.Render(graphics); }
-            }
-        }
-
         /// <summary>
         ///     Render the title bar at the top with the dropdown for selecting the plot and the
         ///     operational performance metrics.
