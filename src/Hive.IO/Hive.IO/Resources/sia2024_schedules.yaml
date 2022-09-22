@@ -2211,10 +2211,6 @@
 - RoomType:
   - 12.6 WC, Bad, Dusche
   - 12.7 WC
-  - 12.8 Garderobe, Dusche
-  - 12.9 Parkhaus
-  - 12.10 Wasch- und Trockenraum
-
   OccupancySchedule:
     DaysOffPerWeek: 2
     DaysUsedPerYear: 261
@@ -2283,6 +2279,228 @@
       - 0
       - 0
       - 0
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 0
+
+- RoomType:
+  - 12.8 Garderobe, Dusche
+  OccupancySchedule:
+    DaysOffPerWeek: 1
+    DaysUsedPerYear: 313
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.4
+      - 0.6
+      - 0.8
+      - 0.8
+      - 0.4
+      - 0.6
+      - 0.8
+      - 0.8
+      - 0.4
+      - 0.2
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DeviceSchedule:
+    LoadWhenUnoccupied: 0
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 0
+
+- RoomType:
+  - 12.9 Parkhaus
+  OccupancySchedule:
+    DaysOffPerWeek: 0
+    DaysUsedPerYear: 365
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.4
+      - 0.6
+      - 0.8
+      - 0.8
+      - 0.4
+      - 0.6
+      - 0.8
+      - 0.8
+      - 0.4
+      - 0.2
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DeviceSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.2
+      - 0.4
+      - 0.6
+      - 0.8
+      - 0.8
+      - 0.4
+      - 0.6
+      - 0.8
+      - 0.8
+      - 0.4
+      - 0.2
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+  LightingSchedule:
+    HoursPerDay: 11
+    HoursPerNight: 0
+
+- RoomType:
+  - 12.10 Wasch- und Trockenraum
+  OccupancySchedule:
+    DaysOffPerWeek: 0
+    DaysUsedPerYear: 365
+    DailyProfile:
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0.2
+      - 0.4
+      - 0.6
+      - 0.8
+      - 0.8
+      - 0.4
+      - 0.6
+      - 0.8
+      - 0.8
+      - 0.4
+      - 0.2
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+      - 0
+    YearlyProfile:
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+      - 0.8
+  DeviceSchedule:
+    LoadWhenUnoccupied: 0.1
+    DailyProfile:
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.2
+      - 0.4
+      - 0.6
+      - 0.8
+      - 0.8
+      - 0.4
+      - 0.6
+      - 0.8
+      - 0.8
+      - 0.4
+      - 0.2
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
+      - 0.1
   LightingSchedule:
     HoursPerDay: 11
     HoursPerNight: 0
