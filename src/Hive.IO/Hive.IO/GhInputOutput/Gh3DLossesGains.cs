@@ -64,66 +64,69 @@ namespace Hive.IO.GhInputOutput
             var gainsPerWindow = new List<double>();
             if (!DA.GetDataList(6, gainsPerWindow)) return;
 
-            var lossesPerWindowScaled = lossesPerWindow.Select(i => i * scaleFactor).ToList();
-            var lossesPerOpaqueScaled = lossesPerOpaque.Select(i => i * scaleFactor).ToList();
-            var gainsPerWindowScaled = gainsPerWindow.Select(i => i * scaleFactor).ToList();
 
-            //Anchor points
-            var wallLossAnchors = new List<Point3d>();
-            var windowLossAnchors = new List<Point3d>();
-            var windowGainAnchors = new List<Point3d>();
-
-            foreach (Brep wall in walls)
+            if (display)
             {
-                var amp = AreaMassProperties.Compute(wall);
-                wallLossAnchors.Add(amp.Centroid);
+                var lossesPerWindowScaled = lossesPerWindow.Select(i => i * scaleFactor).ToList();
+                var lossesPerOpaqueScaled = lossesPerOpaque.Select(i => i * scaleFactor).ToList();
+                var gainsPerWindowScaled = gainsPerWindow.Select(i => i * scaleFactor).ToList();
+
+                //Anchor points
+                var wallLossAnchors = new List<Point3d>();
+                var windowLossAnchors = new List<Point3d>();
+                var windowGainAnchors = new List<Point3d>();
+
+                foreach (Brep wall in walls)
+                {
+                    var amp = AreaMassProperties.Compute(wall);
+                    wallLossAnchors.Add(amp.Centroid);
+                }
+
+                foreach (Brep window in windows)
+                {
+                    var amp = AreaMassProperties.Compute(window);
+                    windowLossAnchors.Add(amp.Centroid);
+                }
+
+                //Vectors
+                var wallLossVectors = new List<Vector3d>();
+                var windowLossVectors = new List<Vector3d>();
+                var windowGainVectors = new List<Vector3d>();
+
+                for (int i = 0; i < walls.Count(); i++)
+                {
+                    var wall = walls[i];
+                    Vector3d vector = wall.Faces[0].NormalAt(wallLossAnchors[i][0], wallLossAnchors[i][1]);
+                    Vector3d scaledVector = Vector3d.Multiply(vector, lossesPerOpaqueScaled[i]);
+                    wallLossVectors.Add(scaledVector);
+                }
+
+                for (int i = 0; i < windows.Count(); i++)
+                {
+                    var window = windows[i];
+                    Vector3d vector = window.Faces[0].NormalAt(windowLossAnchors[i][0], windowLossAnchors[i][1]);
+                    Vector3d scaledVectorLoss = Vector3d.Multiply(vector, lossesPerWindowScaled[i]);
+                    windowLossVectors.Add(scaledVectorLoss);
+
+                    Vector3d scaledVectorGain = Vector3d.Multiply(vector, gainsPerWindowScaled[i]);
+                    scaledVectorGain.Reverse();
+                    windowGainVectors.Add(scaledVectorGain);
+                }
+
+                //Re-calculate anchor points for the scaled gain vectors that point at the windows
+                for(int i = 0; i < windows.Count(); i++)
+                {
+                    Point3d gainAnchor = windowLossAnchors[i] - windowGainVectors[i];
+                    windowGainAnchors.Add(gainAnchor);
+                }
+
+                DA.SetDataList(0, windowLossAnchors);
+                DA.SetDataList(1, windowLossVectors);
+                DA.SetDataList(2, windowGainAnchors);
+                DA.SetDataList(3, windowGainVectors);
+                DA.SetDataList(4, wallLossAnchors);
+                DA.SetDataList(5, wallLossVectors);
             }
-
-            foreach (Brep window in windows)
-            {
-                var amp = AreaMassProperties.Compute(window);
-                windowLossAnchors.Add(amp.Centroid);
-            }
-
-            //Vectors
-            var wallLossVectors = new List<Vector3d>();
-            var windowLossVectors = new List<Vector3d>();
-            var windowGainVectors = new List<Vector3d>();
-
-            for (int i = 0; i < walls.Count(); i++)
-            {
-                Vector3d vector = walls[i].Faces[0].NormalAt(wallLossAnchors[i][0], wallLossAnchors[i][1]);
-                Vector3d scaledVector = Vector3d.Multiply(vector, lossesPerOpaqueScaled[i]);
-                wallLossVectors.Add(scaledVector);
-            }
-
-            for (int i = 0; i < windows.Count(); i++)
-            {
-                Vector3d vector = windows[i].Faces[0].NormalAt(windowLossAnchors[i][0], windowLossAnchors[i][1]);
-                Vector3d scaledVector = Vector3d.Multiply(vector, lossesPerWindowScaled[i]);
-                windowLossVectors.Add(scaledVector);
-            }
-
-            for (int i = 0; i < windows.Count(); i++)
-            {
-                Vector3d vector = windows[i].Faces[0].NormalAt(windowLossAnchors[i][0], windowLossAnchors[i][1]);
-                Vector3d scaledVector = Vector3d.Multiply(vector, gainsPerWindowScaled[i]);
-                scaledVector.Reverse();
-                windowGainVectors.Add(scaledVector);
-            }
-
-            for(int i = 0; i < windows.Count(); i++)
-            {
-                Point3d gainAnchor = windowLossAnchors[i] - windowGainVectors[i];
-                windowGainAnchors.Add(gainAnchor);
-            }
-
-            DA.SetDataList(0, windowLossAnchors);
-            DA.SetDataList(1, windowLossVectors);
-            DA.SetDataList(2, windowGainAnchors);
-            DA.SetDataList(3, windowGainVectors);
-            DA.SetDataList(4, wallLossAnchors);
-            DA.SetDataList(5, wallLossVectors);
         }
 
         /// <summary>
