@@ -85,7 +85,14 @@ namespace Hive.IO.GhInputOutput
                 foreach (Brep window in windows)
                 {
                     var amp = AreaMassProperties.Compute(window);
-                    windowLossAnchors.Add(amp.Centroid);
+                    var centroid = amp.Centroid;
+
+                    //offset the anchors for gain/loss vectors on the windows, so they dont overlap
+                    var curvature = window.Faces[0].CurvatureAt(centroid[0], centroid[1]);
+                    Vector3d curvDir = curvature.Direction(1);
+
+                    windowLossAnchors.Add(centroid + curvDir);
+                    windowGainAnchors.Add(centroid - curvDir);
                 }
 
                 //Vectors
@@ -113,12 +120,13 @@ namespace Hive.IO.GhInputOutput
                     windowGainVectors.Add(scaledVectorGain);
                 }
 
-                //Re-calculate anchor points for the scaled gain vectors that point at the windows
+                //Re-calculate anchor points for the scaled gain vectors that point at the windows, so the tip of the vector is directly at the window outside
                 for(int i = 0; i < windows.Count(); i++)
                 {
-                    Point3d gainAnchor = windowLossAnchors[i] - windowGainVectors[i];
-                    windowGainAnchors.Add(gainAnchor);
+                    Point3d gainAnchor = windowGainAnchors[i] - windowGainVectors[i];
+                    windowGainAnchors[i] = gainAnchor;
                 }
+
 
                 DA.SetDataList(0, windowLossAnchors);
                 DA.SetDataList(1, windowLossVectors);
