@@ -171,6 +171,7 @@
     <Compile Include="GhCore\GhSIA2024RoomReader.cs" />
     <Compile Include="GhCore\GhSIA380.cs" />
     <Compile Include="GhDistributors\GhDist3DLossesGains.cs" />
+    <Compile Include="GhInputOutput\Gh3DArrowDisplay.cs" />
     <Compile Include="GhInputOutput\Gh3DLossesGains.cs" />
     <Compile Include="GhSolar\GhSolarUnobstructed.cs" />
     <Compile Include="GhDistributors\GhDistConversionTech.cs" />
