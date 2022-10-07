@@ -64,7 +64,7 @@ namespace Hive.IO.GhDistributors
                 title2 = "Window Irradiance(W)";
             }
 
-            DA.SetData(0, data);
+            DA.SetDataList(0, data);
             DA.SetData(1, title1);
             DA.SetData(2, title2);
         }
