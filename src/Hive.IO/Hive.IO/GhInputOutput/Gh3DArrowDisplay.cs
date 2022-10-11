@@ -74,16 +74,16 @@ namespace Hive.IO.GhInputOutput
             var wallLossVectors = new List<Vector3d>();
             if (!DA.GetDataList(6, wallLossVectors)) return;
 
-            var windowLossBrep = GetBrep(windowLossAnchors, windowLossVectors);
-            var windowGainBrep = GetBrep(windowGainAnchors, windowGainVectors);
-            var wallLossBrep = GetBrep(wallLossAnchors, wallLossVectors);
+            var windowLossBrep = GetBrep(windowLossAnchors, windowLossVectors, false);
+            var windowGainBrep = GetBrep(windowGainAnchors, windowGainVectors, true);
+            var wallLossBrep = GetBrep(wallLossAnchors, wallLossVectors, false);
 
             DA.SetDataList(0, windowLossBrep);
             DA.SetDataList(1, windowGainBrep);
             DA.SetDataList(2, wallLossBrep);
         }
 
-        private List<Brep> GetBrep(List<Point3d> anchors, List<Vector3d> vectors)
+        private List<Brep> GetBrep(List<Point3d> anchors, List<Vector3d> vectors, bool gainVector)
         {
             const double radius = 0.3;
             var arrows = new List<Brep>();
@@ -93,19 +93,25 @@ namespace Hive.IO.GhInputOutput
                 var brepsToJoin = new List<Brep>();
                 var orig = anchors[i];
                 var vec = vectors[i];
-                Plane pln = new Plane(orig, vec);
+                var unitVec = vec;
+                unitVec.Unitize();
+
+                //calculate origin plane for cylinders
+                Plane pln = gainVector ? new Plane(orig - unitVec, vec) : new Plane(orig, vec);
 
                 Circle circle = new Circle(pln, radius);
                 Cylinder cylinder = new Cylinder(circle, vec.Length);
                 Brep brepCyl = cylinder.ToBrep(true, true);
                 arrows.Add(brepCyl);
 
-                Plane conepln = new Plane(orig + vec, Vector3d.Negate(vec));
+                //calculate origin plane for cones
+                var lossOrigin = orig + vec + unitVec;
+                var gainOrigin = orig + vec;
+
+                Plane conepln = gainVector ? new Plane(gainOrigin, Vector3d.Negate(vec)) : new Plane(lossOrigin, Vector3d.Negate(vec));
                 Cone cone = new Cone(conepln, 1, 0.5);
                 Brep brepCone = cone.ToBrep(true);
                 arrows.Add(brepCone);
-
-                //arrows.Add(Brep.JoinBreps(brepsToJoin, 1.0)[0]);
             }
 
             return arrows;
