@@ -6,6 +6,7 @@ using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
+using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace Hive.IO.GhInputOutput
 {
@@ -74,13 +75,34 @@ namespace Hive.IO.GhInputOutput
             var wallLossVectors = new List<Vector3d>();
             if (!DA.GetDataList(6, wallLossVectors)) return;
 
-            var windowLossBrep = GetBrep(windowLossAnchors, windowLossVectors, false);
-            var windowGainBrep = GetBrep(windowGainAnchors, windowGainVectors, true);
-            var wallLossBrep = GetBrep(wallLossAnchors, wallLossVectors, false);
+            var preview1 = new GH_PreviewUtil();
+            var preview2 = new GH_PreviewUtil();
+            var preview3 = new GH_PreviewUtil();
 
-            DA.SetDataList(0, windowLossBrep);
-            DA.SetDataList(1, windowGainBrep);
-            DA.SetDataList(2, wallLossBrep);
+            if (displayMode == 0)
+            {
+                preview1.Enabled = false;
+                preview2.Enabled = false;
+                preview3.Enabled = false;
+
+                var windowLossBrep = GetBrep(windowLossAnchors, windowLossVectors, false);
+                var windowGainBrep = GetBrep(windowGainAnchors, windowGainVectors, true);
+                var wallLossBrep = GetBrep(wallLossAnchors, wallLossVectors, false);
+
+                DA.SetDataList(0, windowLossBrep);
+                DA.SetDataList(1, windowGainBrep);
+                DA.SetDataList(2, wallLossBrep);
+            } 
+            else if (displayMode == 1)
+            {
+                preview1.Enabled = true;
+                preview2.Enabled = true;
+                preview3.Enabled = true;
+
+                SetPreviewVectors(windowLossAnchors, windowLossVectors, preview1, System.Drawing.Color.Blue);
+                SetPreviewVectors(windowGainAnchors, windowGainVectors, preview2, System.Drawing.Color.LimeGreen);
+                SetPreviewVectors(wallLossAnchors, wallLossVectors, preview3, System.Drawing.Color.Red);
+            }
         }
 
         private List<Brep> GetBrep(List<Point3d> anchors, List<Vector3d> vectors, bool gainVector)
@@ -115,6 +137,16 @@ namespace Hive.IO.GhInputOutput
             }
 
             return arrows;
+        }
+
+        private void SetPreviewVectors(List<Point3d> anchors, List<Vector3d> vectors, GH_PreviewUtil preview, System.Drawing.Color color)
+        {
+            preview.WireColour = color;
+            for (int i = 0; i < anchors.Count; i++)
+            {
+                var line = new Line(anchors[i], vectors[i]);
+                preview.AddVector(line);
+            }
         }
 
         /// <summary>
