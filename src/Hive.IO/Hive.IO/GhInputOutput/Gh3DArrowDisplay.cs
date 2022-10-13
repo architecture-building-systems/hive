@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Drawing;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -46,15 +47,25 @@ namespace Hive.IO.GhInputOutput
             pManager.AddGenericParameter("Wall loss arrows", "WallLossArrows", "", GH_ParamAccess.list);
         }
 
+        private List<Line> windowLossLines = new List<Line>();
+        private List<Line> windowGainLines = new List<Line>();
+        private List<Line> wallLossLines = new List<Line>();
+
+        private List<Color> Colors;
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="DA"></param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            var displayModes = new List<int> { 0, 1 };
+            var displayModes = new List<int> { 0, 1};
 
             int displayMode = 0;
             DA.GetData(0, ref displayMode);
             if (!displayModes.Contains(displayMode))
             {
-                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Not a valid display mode. Display modes are 0, 1. Reverting to default mode 0");
+                AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Not a valid display mode. Display modes are 0, 1, 2. Reverting to default mode 0");
             }
 
             //Window Loss
@@ -75,16 +86,28 @@ namespace Hive.IO.GhInputOutput
             var wallLossVectors = new List<Vector3d>();
             if (!DA.GetDataList(6, wallLossVectors)) return;
 
-            var preview1 = new GH_PreviewUtil();
-            var preview2 = new GH_PreviewUtil();
-            var preview3 = new GH_PreviewUtil();
+            windowLossLines.Clear();
+            windowGainLines.Clear();
+            wallLossLines.Clear();
 
             if (displayMode == 0)
             {
-                preview1.Enabled = false;
-                preview2.Enabled = false;
-                preview3.Enabled = false;
+                Colors = new List<Color>() { Color.Blue, Color.LimeGreen, Color.Red };
 
+                windowLossLines = MakeLines(windowLossAnchors, windowLossVectors);
+                windowGainLines = MakeLines(windowGainAnchors, windowGainVectors);
+                wallLossLines = MakeLines(wallLossAnchors, wallLossVectors);
+            } 
+            else if (displayMode == 1)
+            {
+                Colors = new List<Color>() { Color.FromArgb(255, 255, 0), Color.FromArgb(255, 0, 0), Color.FromArgb(0, 0, 255) };
+
+                windowLossLines = MakeLines(windowLossAnchors, windowLossVectors);
+                windowGainLines = MakeLines(windowGainAnchors, windowGainVectors);
+                wallLossLines = MakeLines(wallLossAnchors, wallLossVectors);
+            }
+            else if (displayMode == 2)
+            {
                 var windowLossBrep = GetBrep(windowLossAnchors, windowLossVectors, false);
                 var windowGainBrep = GetBrep(windowGainAnchors, windowGainVectors, true);
                 var wallLossBrep = GetBrep(wallLossAnchors, wallLossVectors, false);
@@ -92,16 +115,6 @@ namespace Hive.IO.GhInputOutput
                 DA.SetDataList(0, windowLossBrep);
                 DA.SetDataList(1, windowGainBrep);
                 DA.SetDataList(2, wallLossBrep);
-            } 
-            else if (displayMode == 1)
-            {
-                preview1.Enabled = true;
-                preview2.Enabled = true;
-                preview3.Enabled = true;
-
-                SetPreviewVectors(windowLossAnchors, windowLossVectors, preview1, System.Drawing.Color.Blue);
-                SetPreviewVectors(windowGainAnchors, windowGainVectors, preview2, System.Drawing.Color.LimeGreen);
-                SetPreviewVectors(wallLossAnchors, wallLossVectors, preview3, System.Drawing.Color.Red);
             }
         }
 
@@ -112,7 +125,6 @@ namespace Hive.IO.GhInputOutput
 
             for (int i = 0; i < anchors.Count; i++)
             {
-                var brepsToJoin = new List<Brep>();
                 var orig = anchors[i];
                 var vec = vectors[i];
                 var unitVec = vec;
@@ -139,14 +151,25 @@ namespace Hive.IO.GhInputOutput
             return arrows;
         }
 
-        private void SetPreviewVectors(List<Point3d> anchors, List<Vector3d> vectors, GH_PreviewUtil preview, System.Drawing.Color color)
+        private List<Line> MakeLines(List<Point3d> anchors, List<Vector3d> vectors)
         {
-            preview.WireColour = color;
+            var lines = new List<Line>();
+
             for (int i = 0; i < anchors.Count; i++)
             {
-                var line = new Line(anchors[i], vectors[i]);
-                preview.AddVector(line);
+                lines.Add(new Line(anchors[i], vectors[i]));
             }
+
+            return lines;
+        }
+
+        public override void DrawViewportWires(IGH_PreviewArgs args)
+        {
+            base.DrawViewportWires(args);
+
+            args.Display.DrawArrows(windowLossLines, Colors[0]);
+            args.Display.DrawArrows(windowGainLines, Colors[1]);
+            args.Display.DrawArrows(wallLossLines, Colors[2]);
         }
 
         /// <summary>
