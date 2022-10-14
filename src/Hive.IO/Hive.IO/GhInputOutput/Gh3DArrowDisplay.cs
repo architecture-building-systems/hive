@@ -6,8 +6,8 @@ using System.Text;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
+using Grasshopper.GUI.Gradient;
 using Rhino.Geometry;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement.StartPanel;
 
 namespace Hive.IO.GhInputOutput
 {
@@ -51,7 +51,9 @@ namespace Hive.IO.GhInputOutput
         private List<Line> windowGainLines = new List<Line>();
         private List<Line> wallLossLines = new List<Line>();
 
-        private List<Color> Colors;
+        private List<Color> windowLossColors = new List<Color>();
+        private List<Color> windowGainColors = new List<Color>();
+        private List<Color> wallLossColors = new List<Color>();
 
         /// <summary>
         /// 
@@ -59,13 +61,14 @@ namespace Hive.IO.GhInputOutput
         /// <param name="DA"></param>
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            var displayModes = new List<int> { 0, 1};
+            var displayModes = new List<int> { 0, 1, 2, 3};
 
             int displayMode = 0;
             DA.GetData(0, ref displayMode);
             if (!displayModes.Contains(displayMode))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Not a valid display mode. Display modes are 0, 1, 2. Reverting to default mode 0");
+                displayMode = 0;
             }
 
             //Window Loss
@@ -90,23 +93,42 @@ namespace Hive.IO.GhInputOutput
             windowGainLines.Clear();
             wallLossLines.Clear();
 
+            windowLossColors.Clear();
+            windowGainColors.Clear();
+            wallLossColors.Clear();
+
             if (displayMode == 0)
             {
-                Colors = new List<Color>() { Color.Blue, Color.LimeGreen, Color.Red };
+                windowLossColors = Enumerable.Repeat(Color.Blue, windowLossVectors.Count).ToList();
+                windowGainColors = Enumerable.Repeat(Color.LimeGreen, windowGainVectors.Count).ToList();
+                wallLossColors = Enumerable.Repeat(Color.Red, wallLossVectors.Count).ToList(); 
 
                 windowLossLines = MakeLines(windowLossAnchors, windowLossVectors);
                 windowGainLines = MakeLines(windowGainAnchors, windowGainVectors);
                 wallLossLines = MakeLines(wallLossAnchors, wallLossVectors);
             } 
+            //display only losses
             else if (displayMode == 1)
             {
-                Colors = new List<Color>() { Color.FromArgb(255, 255, 0), Color.FromArgb(255, 0, 0), Color.FromArgb(0, 0, 255) };
+                var colors = CalculateGradientColors(new List<List<Vector3d>>{ windowLossVectors, wallLossVectors });
+                windowLossColors = colors[0];
+                wallLossColors = colors[1];
 
                 windowLossLines = MakeLines(windowLossAnchors, windowLossVectors);
                 windowGainLines = MakeLines(windowGainAnchors, windowGainVectors);
                 wallLossLines = MakeLines(wallLossAnchors, wallLossVectors);
             }
+            //display only gains
             else if (displayMode == 2)
+            {
+                var colors = CalculateGradientColors(new List<List<Vector3d>> { windowGainVectors });
+                windowGainColors = colors[0];
+
+                windowLossLines = MakeLines(windowLossAnchors, windowLossVectors);
+                windowGainLines = MakeLines(windowGainAnchors, windowGainVectors);
+                wallLossLines = MakeLines(wallLossAnchors, wallLossVectors);
+            }
+            else if (displayMode == 3)
             {
                 var windowLossBrep = GetBrep(windowLossAnchors, windowLossVectors, false);
                 var windowGainBrep = GetBrep(windowGainAnchors, windowGainVectors, true);
@@ -163,13 +185,59 @@ namespace Hive.IO.GhInputOutput
             return lines;
         }
 
+        private List<List<Color>> CalculateGradientColors(List<List<Vector3d>> vectors)
+        {
+            var vectorColors = new List<List<Color>>();
+
+            var minLength = vectors.SelectMany(vectorList => vectorList).Select(vector => vector.Length).Min();
+            var maxLength = vectors.SelectMany(vectorList => vectorList).Select(vector => vector.Length).Max();
+
+            var gradient = new GH_Gradient();
+            gradient.AddGrip(new GH_Grip(minLength, Color.Blue));
+            gradient.AddGrip(new GH_Grip((maxLength + minLength)/2, Color.Red));
+            gradient.AddGrip(new GH_Grip(maxLength, Color.Yellow));
+
+            for (int i = 0; i < vectors.Count; i++)
+            {
+                var colors = new List<Color>();
+                foreach(var vector in vectors[i])
+                {
+                    var color = gradient.ColourAt(vector.Length);
+                    colors.Add(color);
+                }
+                vectorColors.Add(colors);
+            }
+
+            return vectorColors;
+        }
+
         public override void DrawViewportWires(IGH_PreviewArgs args)
         {
             base.DrawViewportWires(args);
 
-            args.Display.DrawArrows(windowLossLines, Colors[0]);
-            args.Display.DrawArrows(windowGainLines, Colors[1]);
-            args.Display.DrawArrows(wallLossLines, Colors[2]);
+            if(windowLossColors.Count != 0)
+            {
+                for (int i = 0; i < windowLossLines.Count; i++)
+                {
+                    args.Display.DrawArrow(windowLossLines[i], windowLossColors[i]);
+                }
+            }
+
+            if (windowGainColors.Count != 0)
+            {
+                for (int i = 0; i < windowGainLines.Count; i++)
+                {
+                    args.Display.DrawArrow(windowGainLines[i], windowGainColors[i]);
+                }
+            }
+
+            if (wallLossColors.Count != 0)
+            {
+                for (int i = 0; i < wallLossLines.Count; i++)
+                {
+                    args.Display.DrawArrow(wallLossLines[i], wallLossColors[i]);
+                }
+            }
         }
 
         /// <summary>
