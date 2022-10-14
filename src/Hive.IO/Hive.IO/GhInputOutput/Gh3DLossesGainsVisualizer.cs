@@ -1,8 +1,9 @@
 ﻿using System;
-using System.Drawing;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading.Tasks;
+using System.Drawing;
 using Grasshopper.Kernel;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
@@ -11,11 +12,11 @@ using Rhino.Geometry;
 
 namespace Hive.IO.GhInputOutput
 {
-    public class Gh3DArrowDisplay : GH_Component
+    public class Gh3DLossesGainsVisualizer : GH_Component
     {
-        public Gh3DArrowDisplay()
-          : base("Gh3DArrowDisplay", "Gh3DArrowDisplay",
-              "Draw arrows to display gains and losses through walls/windows",
+        public Gh3DLossesGainsVisualizer()
+          : base("3DLossesGainsVisualizer", "3DLossesGainsVisualizer",
+              "Display vectors to represent gains/losses in 3D",
               "[hive]", "IO-Core")
         {
         }
@@ -24,23 +25,15 @@ namespace Hive.IO.GhInputOutput
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
+            pManager.AddBooleanParameter("Display Toggle", "DisplayToggle", "Boolean toggle to display arrows",GH_ParamAccess.item);
+            pManager.AddNumberParameter("Value scale factor", "ScaleFactor", "Value to scale size of vectors", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Display Mode", "DisplayMode", "Display Modes: 0 = All gains and losses, 1 = All losses, 2 = Only wall losses, 3 = Only window losses, 4 = Only windows gains", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Color Mode", "ColorMode", "Color according to type (wall loss, windows loss, window gain) or according to value", GH_ParamAccess.item);
-            pManager.AddGenericParameter("Window loss anchor points", "WindowLossAnchors", "Starting points of loss arrows for windows", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Window loss vectors", "WindowLossVectors", "Vectors of loss arrows for windows", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Window gain anchor points", "WindowGainAnchors", "Starting points of gain arrows for windows", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Window gain vectors", "WindowGainVectors", "Vectors of gain arrows for walls", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Wall loss anchor points", "WallLossAnchors", "Starting points of loss arrows for walls", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Wall loss vectors", "WallLossVectors", "Vectors of loss arrows for walls", GH_ParamAccess.list);
-            pManager.AddGenericParameter("Window center anchors", "WindowCenterAnchors", "Center points of arrows for windows", GH_ParamAccess.list);
-            //pManager.AddGenericParameter("Wall gain anchor points", "WallGainAnchors", "Starting points of gain arrows for walls", GH_ParamAccess.list);
-            //pManager.AddGenericParameter("Wall gain vectors", "WallGainVectors", "Vectors of gain arrows for walls", GH_ParamAccess.list);
-            //pManager.AddGenericParameter("Window loss color", "WindowLossColor", "Color of loss arrows for windows (optional)", GH_ParamAccess.item);
-            //pManager.AddGenericParameter("Window gain color", "WindowGainColor", "Color of gain arrows for windows (optional)", GH_ParamAccess.item);
-            //pManager.AddGenericParameter("Wall loss color", "WallLossColor", "Color of loss arrows for walls (optional)", GH_ParamAccess.item);
-
-            pManager[0].Optional = true;
-            pManager[1].Optional = true;
+            pManager.AddGenericParameter("Walls surface collection", "Walls", "Collection of all walls", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Windows surface collection", "Windows", "Collection of all windows", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Total Losses Per Window", "TotLossPerWin", "Total transmission losses per window surface, in kWh", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Total Losses Per Opaque", "TotLossPerOpaq", "Total transmission losses per opaque surface, in kWh", GH_ParamAccess.list);
+            pManager.AddNumberParameter("Total Gains Per Window", "TotGainsPerWin", "Total solar gains per window surface, in kWh", GH_ParamAccess.list);
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
@@ -48,6 +41,7 @@ namespace Hive.IO.GhInputOutput
             pManager.AddGenericParameter("Window loss arrows", "WindowLossArrows", "", GH_ParamAccess.list);
             pManager.AddGenericParameter("Window gain arrows", "WindowGainArrows", "", GH_ParamAccess.list);
             pManager.AddGenericParameter("Wall loss arrows", "WallLossArrows", "", GH_ParamAccess.list);
+
         }
 
         private List<Line> windowLossLines = new List<Line>();
@@ -61,15 +55,16 @@ namespace Hive.IO.GhInputOutput
         private List<int> displayModes = new List<int> { 0, 1, 2, 3, 4 };
         private List<int> colorModes = new List<int> { 0, 1 };
 
-        /// <summary>
-        /// 
-        /// </summary>
-        /// <param name="DA"></param>
+        private bool display = false;
+
         protected override void SolveInstance(IGH_DataAccess DA)
         {
+            DA.GetData(0, ref display);
+            var scaleFactor = 1.0;
+            DA.GetData(1, ref scaleFactor);
 
             int displayMode = 0;
-            DA.GetData(0, ref displayMode);
+            DA.GetData(2, ref displayMode);
             if (!displayModes.Contains(displayMode))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Not a valid display mode. Display modes are 0, 1, 2, 3, 4. Reverting to default mode 0");
@@ -77,34 +72,88 @@ namespace Hive.IO.GhInputOutput
             }
 
             int colorMode = 0;
-            DA.GetData(1, ref colorMode);
+            DA.GetData(3, ref colorMode);
             if (!colorModes.Contains(colorMode))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Not a valid color mode. Display modes are 0 or 1. Reverting to default mode 0");
                 colorMode = 0;
             }
 
-            //Window Loss
-            var windowLossAnchors = new List<Point3d>();
-            if (!DA.GetDataList(2, windowLossAnchors)) return;
-            var windowLossVectors = new List<Vector3d>();
-            if (!DA.GetDataList(3, windowLossVectors)) return;
+            var walls = new List<Brep>();
+            if (!DA.GetDataList(4, walls)) return;
+            var windows = new List<Brep>();
+            if (!DA.GetDataList(5, windows)) return;
 
-            //Window Gain
-            var windowGainAnchors = new List<Point3d>();
-            if (!DA.GetDataList(4, windowGainAnchors)) return;
-            var windowGainVectors = new List<Vector3d>();
-            if (!DA.GetDataList(5, windowGainVectors)) return;
+            var lossesPerWindow = new List<double>();
+            if (!DA.GetDataList(6, lossesPerWindow)) return;
+            var lossesPerOpaque = new List<double>();
+            if (!DA.GetDataList(7, lossesPerOpaque)) return;
+            var gainsPerWindow = new List<double>();
+            if (!DA.GetDataList(8, gainsPerWindow)) return;
 
-            //Wall Loss
+            var lossesPerWindowScaled = lossesPerWindow.Select(i => i * scaleFactor).ToList();
+            var lossesPerOpaqueScaled = lossesPerOpaque.Select(i => i * scaleFactor).ToList();
+            var gainsPerWindowScaled = gainsPerWindow.Select(i => i * scaleFactor).ToList();
+
+            //Anchor points
             var wallLossAnchors = new List<Point3d>();
-            if (!DA.GetDataList(6, wallLossAnchors)) return;
-            var wallLossVectors = new List<Vector3d>();
-            if (!DA.GetDataList(7, wallLossVectors)) return;
-
-            //Window centers
+            var windowLossAnchors = new List<Point3d>();
+            var windowGainAnchors = new List<Point3d>();
             var windowCenterAnchors = new List<Point3d>();
-            if (!DA.GetDataList(8, windowCenterAnchors)) return;
+
+            foreach (Brep wall in walls)
+            {
+                var amp = AreaMassProperties.Compute(wall);
+                wallLossAnchors.Add(amp.Centroid);
+            }
+
+            foreach (Brep window in windows)
+            {
+                var amp = AreaMassProperties.Compute(window);
+                var centroid = amp.Centroid;
+                windowCenterAnchors.Add(centroid);
+
+                //offset the anchors for gain/loss vectors on the windows, so they dont overlap
+                var curvature = window.Faces[0].CurvatureAt(centroid[0], centroid[1]);
+                Vector3d curvDir = curvature.Direction(1);
+
+                windowLossAnchors.Add(centroid + curvDir);
+                windowGainAnchors.Add(centroid - curvDir);
+            }
+
+            //Vectors
+            var wallLossVectors = new List<Vector3d>();
+            var windowLossVectors = new List<Vector3d>();
+            var windowGainVectors = new List<Vector3d>();
+
+            for (int i = 0; i < walls.Count(); i++)
+            {
+                var wall = walls[i];
+                Vector3d vector = wall.Faces[0].NormalAt(wallLossAnchors[i][0], wallLossAnchors[i][1]);
+                Vector3d scaledVector = Vector3d.Multiply(vector, lossesPerOpaqueScaled[i]);
+                wallLossVectors.Add(scaledVector);
+            }
+
+            for (int i = 0; i < windows.Count(); i++)
+            {
+                var window = windows[i];
+                Vector3d vector = window.Faces[0].NormalAt(windowLossAnchors[i][0], windowLossAnchors[i][1]);
+                Vector3d scaledVectorLoss = Vector3d.Multiply(vector, lossesPerWindowScaled[i]);
+                windowLossVectors.Add(scaledVectorLoss);
+
+                Vector3d scaledVectorGain = Vector3d.Multiply(vector, gainsPerWindowScaled[i]);
+                scaledVectorGain.Reverse();
+                windowGainVectors.Add(scaledVectorGain);
+            }
+
+            //Re-calculate anchor points for the scaled gain vectors that point at the windows, so the tip of the vector is directly at the window outside
+            for(int i = 0; i < windows.Count(); i++)
+            {
+                Point3d gainAnchor = windowGainAnchors[i] - windowGainVectors[i];
+                windowGainAnchors[i] = gainAnchor;
+            }
+
+            /////////////////////////////////////////////// DRAW VECTORS //////////////////////////////////////////////////////////////////////////////////////
 
             windowLossLines.Clear();
             windowGainLines.Clear();
@@ -130,11 +179,11 @@ namespace Hive.IO.GhInputOutput
                 windowLossLines = MakeLines(windowLossAnchors, windowLossVectors);
                 windowGainLines = MakeLines(windowGainAnchors, windowGainVectors);
                 wallLossLines = MakeLines(wallLossAnchors, wallLossVectors);
-            } 
+            }
             //display wall and window losses
             else if (displayMode == 1)
             {
-                var colors = CalculateGradientColors(new List<List<Vector3d>>{ windowLossVectors, wallLossVectors }, colorMode, displayMode, typeColorArray);
+                var colors = CalculateGradientColors(new List<List<Vector3d>> { windowLossVectors, wallLossVectors }, colorMode, displayMode, typeColorArray);
                 windowLossColors = colors[0];
                 wallLossColors = colors[1];
 
@@ -169,7 +218,7 @@ namespace Hive.IO.GhInputOutput
                 windowGainColors = colors[0];
 
                 //offset the starting points for the gain vectors by the vector themselves, so the arrow point is on the window
-                for( int i = 0; i < windowCenterAnchors.Count; i++)
+                for (int i = 0; i < windowCenterAnchors.Count; i++)
                 {
                     windowCenterAnchors[i] = windowCenterAnchors[i] - windowGainVectors[i];
                 }
@@ -201,7 +250,7 @@ namespace Hive.IO.GhInputOutput
                 if (displayMode == 0)
                 {
                     vectorColors = typeColorArray;
-                } 
+                }
                 else if (displayMode == 1)
                 {
                     vectorColors.Add(typeColorArray[0]);
@@ -228,13 +277,13 @@ namespace Hive.IO.GhInputOutput
 
             var gradient = new GH_Gradient();
             gradient.AddGrip(new GH_Grip(minLength, Color.Blue));
-            gradient.AddGrip(new GH_Grip((maxLength + minLength)/2, Color.Red));
+            gradient.AddGrip(new GH_Grip((maxLength + minLength) / 2, Color.Red));
             gradient.AddGrip(new GH_Grip(maxLength, Color.Yellow));
 
             for (int i = 0; i < vectors.Count; i++)
             {
                 var colors = new List<Color>();
-                foreach(var vector in vectors[i])
+                foreach (var vector in vectors[i])
                 {
                     var color = gradient.ColourAt(vector.Length);
                     colors.Add(color);
@@ -249,27 +298,30 @@ namespace Hive.IO.GhInputOutput
         {
             base.DrawViewportWires(args);
 
-            if(windowLossColors.Count != 0)
+            if (display)
             {
-                for (int i = 0; i < windowLossLines.Count; i++)
+                if (windowLossColors.Count != 0)
                 {
-                    args.Display.DrawArrow(windowLossLines[i], windowLossColors[i]);
+                    for (int i = 0; i < windowLossLines.Count; i++)
+                    {
+                        args.Display.DrawArrow(windowLossLines[i], windowLossColors[i]);
+                    }
                 }
-            }
 
-            if (windowGainColors.Count != 0)
-            {
-                for (int i = 0; i < windowGainLines.Count; i++)
+                if (windowGainColors.Count != 0)
                 {
-                    args.Display.DrawArrow(windowGainLines[i], windowGainColors[i]);
+                    for (int i = 0; i < windowGainLines.Count; i++)
+                    {
+                        args.Display.DrawArrow(windowGainLines[i], windowGainColors[i]);
+                    }
                 }
-            }
 
-            if (wallLossColors.Count != 0)
-            {
-                for (int i = 0; i < wallLossLines.Count; i++)
+                if (wallLossColors.Count != 0)
                 {
-                    args.Display.DrawArrow(wallLossLines[i], wallLossColors[i]);
+                    for (int i = 0; i < wallLossLines.Count; i++)
+                    {
+                        args.Display.DrawArrow(wallLossLines[i], wallLossColors[i]);
+                    }
                 }
             }
         }
@@ -292,7 +344,7 @@ namespace Hive.IO.GhInputOutput
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("10dae766-9880-440d-a9bf-07eadcca0402"); }
+            get { return new Guid("59a5de85-7066-4610-b7d1-3ae430e8829e"); }
         }
     }
 }
