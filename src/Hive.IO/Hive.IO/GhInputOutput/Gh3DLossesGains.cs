@@ -40,6 +40,7 @@ namespace Hive.IO.GhInputOutput
             pManager.AddGenericParameter("Window gain vectors", "WindowGainVectors", "Vectors of gain arrows for walls", GH_ParamAccess.list);
             pManager.AddGenericParameter("Wall loss anchor points", "WallLossAnchors", "Starting points of loss arrows for walls", GH_ParamAccess.list);
             pManager.AddGenericParameter("Wall loss vectors", "WallLossVectors", "Vectors of loss arrows for walls", GH_ParamAccess.list);
+            pManager.AddGenericParameter("Window center anchor points", "WindowCenterAnchors", "Center points of arrows for windows", GH_ParamAccess.list);
             //pManager.AddGenericParameter("Wall gain anchor points", "WallGainAnchors", "Starting points of gain arrows for walls", GH_ParamAccess.list);
             //pManager.AddGenericParameter("Wall gain vectors", "WallGainVectors", "Vectors of gain arrows for walls", GH_ParamAccess.list);
 
@@ -75,6 +76,7 @@ namespace Hive.IO.GhInputOutput
                 var wallLossAnchors = new List<Point3d>();
                 var windowLossAnchors = new List<Point3d>();
                 var windowGainAnchors = new List<Point3d>();
+                var windowCenterAnchors = new List<Point3d>();
 
                 foreach (Brep wall in walls)
                 {
@@ -86,6 +88,7 @@ namespace Hive.IO.GhInputOutput
                 {
                     var amp = AreaMassProperties.Compute(window);
                     var centroid = amp.Centroid;
+                    windowCenterAnchors.Add(centroid);
 
                     //offset the anchors for gain/loss vectors on the windows, so they dont overlap
                     var curvature = window.Faces[0].CurvatureAt(centroid[0], centroid[1]);
@@ -134,6 +137,8 @@ namespace Hive.IO.GhInputOutput
                 DA.SetDataList(3, windowGainVectors);
                 DA.SetDataList(4, wallLossAnchors);
                 DA.SetDataList(5, wallLossVectors);
+                DA.SetDataList(6, windowCenterAnchors);
+
             }
         }
 
