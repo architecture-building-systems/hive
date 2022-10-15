@@ -1,15 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Drawing;
 using Grasshopper.Kernel;
-using Grasshopper.Kernel.Data;
-using Grasshopper.Kernel.Types;
 using Grasshopper.GUI.Gradient;
 using Rhino.Geometry;
-using System.Drawing.Text;
+using Rhino.Display;
 
 namespace Hive.IO.GhInputOutput
 {
@@ -27,6 +23,7 @@ namespace Hive.IO.GhInputOutput
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
             pManager.AddBooleanParameter("Display Toggle", "DisplayToggle", "Boolean toggle to display arrows",GH_ParamAccess.item);
+            pManager.AddBooleanParameter("Display Values", "DisplayValues", "Boolean toggle to display values at tips of arrows", GH_ParamAccess.item);
             pManager.AddNumberParameter("Value scale factor", "ScaleFactor", "Value to scale size of vectors", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Display Mode", "DisplayMode", "Display Modes: 0 = All gains and losses, 1 = All losses, 2 = Only wall losses, 3 = Only window losses, 4 = Only windows gains", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Color Mode", "ColorMode", "Color according to type (wall loss, windows loss, window gain) or according to value", GH_ParamAccess.item);
@@ -55,16 +52,22 @@ namespace Hive.IO.GhInputOutput
         private List<int> displayModes = new List<int> { 0, 1, 2, 3, 4 };
         private List<int> colorModes = new List<int> { 0, 1 };
 
+        private List<double> lossesPerWindow = new List<double>();
+        private List<double> lossesPerOpaque = new List<double>();
+        private List<double> gainsPerWindow = new List<double>();
+
         private bool display = false;
+        private bool values = false;
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
             DA.GetData(0, ref display);
+            DA.GetData(1, ref values);
             var scaleFactor = 1.0;
-            DA.GetData(1, ref scaleFactor);
+            DA.GetData(2, ref scaleFactor);
 
             int displayMode = 0;
-            DA.GetData(2, ref displayMode);
+            DA.GetData(3, ref displayMode);
             if (!displayModes.Contains(displayMode))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Not a valid display mode. Display modes are 0, 1, 2, 3, 4. Reverting to default mode 0");
@@ -72,7 +75,7 @@ namespace Hive.IO.GhInputOutput
             }
 
             int colorMode = 0;
-            DA.GetData(3, ref colorMode);
+            DA.GetData(4, ref colorMode);
             if (!colorModes.Contains(colorMode))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Not a valid color mode. Display modes are 0 or 1. Reverting to default mode 0");
@@ -80,16 +83,13 @@ namespace Hive.IO.GhInputOutput
             }
 
             var walls = new List<Brep>();
-            if (!DA.GetDataList(4, walls)) return;
+            if (!DA.GetDataList(5, walls)) return;
             var windows = new List<Brep>();
-            if (!DA.GetDataList(5, windows)) return;
+            if (!DA.GetDataList(6, windows)) return;
 
-            var lossesPerWindow = new List<double>();
-            if (!DA.GetDataList(6, lossesPerWindow)) return;
-            var lossesPerOpaque = new List<double>();
-            if (!DA.GetDataList(7, lossesPerOpaque)) return;
-            var gainsPerWindow = new List<double>();
-            if (!DA.GetDataList(8, gainsPerWindow)) return;
+            if (!DA.GetDataList(7, lossesPerWindow)) return;
+            if (!DA.GetDataList(8, lossesPerOpaque)) return;
+            if (!DA.GetDataList(9, gainsPerWindow)) return;
 
             /////////////////////////////////////////////// CALCULATE VECTORS & ORIGIN POINTS //////////////////////////////////////////////////////////////////////////////////////
 
@@ -310,6 +310,14 @@ namespace Hive.IO.GhInputOutput
                     for (int i = 0; i < windowLossLines.Count; i++)
                     {
                         args.Display.DrawArrow(windowLossLines[i], windowLossColors[i]);
+
+                        if (values)
+                        {
+                            var text = new Text3d(Math.Round(lossesPerWindow[i], 1).ToString(), new Plane(windowLossLines[i].To, windowLossLines[i].Direction), 0.5);
+                            //var text2 = new Text3d(Math.Round(lossesPerWindow[i], 1).ToString());
+                            //text2.Height = 0.5;
+                            args.Display.Draw3dText(text, windowLossColors[i], windowLossLines[i].To);
+                        }
                     }
                 }
 
@@ -318,6 +326,14 @@ namespace Hive.IO.GhInputOutput
                     for (int i = 0; i < windowGainLines.Count; i++)
                     {
                         args.Display.DrawArrow(windowGainLines[i], windowGainColors[i]);
+
+                        if (values)
+                        {
+                            var text = new Text3d(Math.Round(gainsPerWindow[i], 1).ToString(), new Plane(windowGainLines[i].To, Vector3d.Negate(windowGainLines[i].Direction)), 0.5);
+                            //var text2 = new Text3d(Math.Round(gainsPerWindow[i], 1).ToString());
+                            //text2.Height = 0.5;
+                            args.Display.Draw3dText(text, windowGainColors[i], windowGainLines[i].To);
+                        }
                     }
                 }
 
@@ -326,6 +342,14 @@ namespace Hive.IO.GhInputOutput
                     for (int i = 0; i < wallLossLines.Count; i++)
                     {
                         args.Display.DrawArrow(wallLossLines[i], wallLossColors[i]);
+
+                        if(values)
+                        {
+                            var text = new Text3d(Math.Round(lossesPerOpaque[i], 1).ToString(), new Plane(wallLossLines[i].To, wallLossLines[i].Direction), 0.5);
+                            //var text2 = new Text3d(Math.Round(lossesPerOpaque[i], 1).ToString());
+                            //text2.Height = 0.5;
+                            args.Display.Draw3dText(text, wallLossColors[i], wallLossLines[i].To);
+                        }
                     }
                 }
             }
