@@ -9,6 +9,7 @@ using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using Grasshopper.GUI.Gradient;
 using Rhino.Geometry;
+using System.Drawing.Text;
 
 namespace Hive.IO.GhInputOutput
 {
@@ -41,7 +42,6 @@ namespace Hive.IO.GhInputOutput
             pManager.AddGenericParameter("Window loss arrows", "WindowLossArrows", "", GH_ParamAccess.list);
             pManager.AddGenericParameter("Window gain arrows", "WindowGainArrows", "", GH_ParamAccess.list);
             pManager.AddGenericParameter("Wall loss arrows", "WallLossArrows", "", GH_ParamAccess.list);
-
         }
 
         private List<Line> windowLossLines = new List<Line>();
@@ -91,6 +91,8 @@ namespace Hive.IO.GhInputOutput
             var gainsPerWindow = new List<double>();
             if (!DA.GetDataList(8, gainsPerWindow)) return;
 
+            /////////////////////////////////////////////// CALCULATE VECTORS & ORIGIN POINTS //////////////////////////////////////////////////////////////////////////////////////
+
             var lossesPerWindowScaled = lossesPerWindow.Select(i => i * scaleFactor).ToList();
             var lossesPerOpaqueScaled = lossesPerOpaque.Select(i => i * scaleFactor).ToList();
             var gainsPerWindowScaled = gainsPerWindow.Select(i => i * scaleFactor).ToList();
@@ -113,12 +115,15 @@ namespace Hive.IO.GhInputOutput
                 var centroid = amp.Centroid;
                 windowCenterAnchors.Add(centroid);
 
-                //offset the anchors for gain/loss vectors on the windows, so they dont overlap
-                var curvature = window.Faces[0].CurvatureAt(centroid[0], centroid[1]);
-                Vector3d curvDir = curvature.Direction(1);
+                //get two points next tot the centroid as origin points for the window loss and gain vectors,
+                //so they dont overlap when displayed simultaneously
+                var nurbs = window.Faces[0].ToNurbsSurface();
+                nurbs.IncreaseDegreeU(2);
+                nurbs.IncreaseDegreeV(3);
 
-                windowLossAnchors.Add(centroid + curvDir);
-                windowGainAnchors.Add(centroid - curvDir);
+                var pointsList = nurbs.Points.ToList();
+                windowLossAnchors.Add(new Point3d(pointsList[5].X, pointsList[5].Y, pointsList[5].Z));
+                windowGainAnchors.Add(new Point3d(pointsList[6].X, pointsList[6].Y, pointsList[6].Z));
             }
 
             //Vectors
