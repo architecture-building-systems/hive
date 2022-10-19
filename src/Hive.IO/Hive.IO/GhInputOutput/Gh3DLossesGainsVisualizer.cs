@@ -24,7 +24,8 @@ namespace Hive.IO.GhInputOutput
         {
             pManager.AddBooleanParameter("Display Toggle", "DisplayToggle", "Boolean toggle to display arrows",GH_ParamAccess.item);
             pManager.AddBooleanParameter("Display Values", "DisplayValues", "Boolean toggle to display values at tips of arrows", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Value scale factor", "ScaleFactor", "Value to scale size of vectors", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Scale Midpoint", "ScaleMidpoint", "Set which value maps to 0.5 for the arrow scaling", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Scale Length", "ScaleLength", "Scale all arrow lengths", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Display Mode", "DisplayMode", "Display Modes: 0 = All gains and losses, 1 = All losses, 2 = Only wall losses, 3 = Only window losses, 4 = Only windows gains", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Color Mode", "ColorMode", "Color according to type (wall loss, windows loss, window gain) or according to value", GH_ParamAccess.item);
             pManager.AddGenericParameter("Walls surface collection", "Walls", "Collection of all walls", GH_ParamAccess.list);
@@ -60,11 +61,15 @@ namespace Hive.IO.GhInputOutput
         {
             DA.GetData(0, ref display);
             DA.GetData(1, ref values);
-            var scaleFactor = 1.0;
-            DA.GetData(2, ref scaleFactor);
+
+            int midpoint = new int();
+            if (!DA.GetData(2, ref midpoint)) return;
+
+            int scaleLength = new int();
+            if (!DA.GetData(3, ref scaleLength)) return;
 
             int displayMode = 0;
-            DA.GetData(3, ref displayMode);
+            DA.GetData(4, ref displayMode);
             if (!displayModes.Contains(displayMode))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Not a valid display mode. Display modes are 0, 1, 2, 3, 4. Reverting to default mode 0");
@@ -72,7 +77,7 @@ namespace Hive.IO.GhInputOutput
             }
 
             int colorMode = 0;
-            DA.GetData(4, ref colorMode);
+            DA.GetData(5, ref colorMode);
             if (!colorModes.Contains(colorMode))
             {
                 AddRuntimeMessage(GH_RuntimeMessageLevel.Warning, "Not a valid color mode. Display modes are 0 or 1. Reverting to default mode 0");
@@ -80,19 +85,23 @@ namespace Hive.IO.GhInputOutput
             }
 
             var walls = new List<Brep>();
-            if (!DA.GetDataList(5, walls)) return;
+            if (!DA.GetDataList(6, walls)) return;
             var windows = new List<Brep>();
-            if (!DA.GetDataList(6, windows)) return;
+            if (!DA.GetDataList(7, windows)) return;
 
-            if (!DA.GetDataList(7, lossesPerWindow)) return;
-            if (!DA.GetDataList(8, lossesPerOpaque)) return;
-            if (!DA.GetDataList(9, gainsPerWindow)) return;
+            lossesPerOpaque.Clear();
+            lossesPerWindow.Clear();
+            gainsPerWindow.Clear();
+
+            if (!DA.GetDataList(8, lossesPerWindow)) return;
+            if (!DA.GetDataList(9, lossesPerOpaque)) return;
+            if (!DA.GetDataList(10, gainsPerWindow)) return;
 
             /////////////////////////////////////////////// CALCULATE VECTORS & ORIGIN POINTS //////////////////////////////////////////////////////////////////////////////////////
 
-            var lossesPerWindowScaled = lossesPerWindow.Select(i => i * scaleFactor).ToList();
-            var lossesPerOpaqueScaled = lossesPerOpaque.Select(i => i * scaleFactor).ToList();
-            var gainsPerWindowScaled = gainsPerWindow.Select(i => i * scaleFactor).ToList();
+            var lossesPerWindowScaled = lossesPerWindow.Select(i => (1 - midpoint / (midpoint + i)) * scaleLength).ToList();
+            var lossesPerOpaqueScaled = lossesPerOpaque.Select(i => (1 - midpoint / (midpoint + i)) * scaleLength).ToList();
+            var gainsPerWindowScaled = gainsPerWindow.Select(i => (1 - midpoint / (midpoint + i)) * scaleLength).ToList();
 
             //Anchor points
             var wallLossAnchors = new List<Point3d>();
@@ -173,7 +182,7 @@ namespace Hive.IO.GhInputOutput
 
             if (displayMode == 0)
             {
-                var colors = CalculateGradientColors(new List<List<Vector3d>> { windowLossVectors, windowGainVectors, wallLossVectors }, colorMode, displayMode, typeColorArray);
+                var colors = CalculateGradientColors(new List<List<double>> { lossesPerWindow, gainsPerWindow, lossesPerOpaque }, colorMode, displayMode, typeColorArray);
                 windowLossColors = colors[0];
                 windowGainColors = colors[1];
                 wallLossColors = colors[2];
@@ -185,7 +194,7 @@ namespace Hive.IO.GhInputOutput
             //display wall and window losses
             else if (displayMode == 1)
             {
-                var colors = CalculateGradientColors(new List<List<Vector3d>> { windowLossVectors, wallLossVectors }, colorMode, displayMode, typeColorArray);
+                var colors = CalculateGradientColors(new List<List<double>> { lossesPerWindow, lossesPerOpaque }, colorMode, displayMode, typeColorArray);
                 windowLossColors = colors[0];
                 wallLossColors = colors[1];
 
@@ -196,7 +205,7 @@ namespace Hive.IO.GhInputOutput
             //display only wall losses
             else if (displayMode == 2)
             {
-                var colors = CalculateGradientColors(new List<List<Vector3d>> { wallLossVectors }, colorMode, displayMode, typeColorArray);
+                var colors = CalculateGradientColors(new List<List<double>> { lossesPerOpaque }, colorMode, displayMode, typeColorArray);
                 wallLossColors = colors[0];
 
                 windowLossLines = MakeLines(windowCenterAnchors, windowLossVectors);
@@ -206,7 +215,7 @@ namespace Hive.IO.GhInputOutput
             //display only window losses
             else if (displayMode == 3)
             {
-                var colors = CalculateGradientColors(new List<List<Vector3d>> { windowLossVectors }, colorMode, displayMode, typeColorArray);
+                var colors = CalculateGradientColors(new List<List<double>> { lossesPerWindow }, colorMode, displayMode, typeColorArray);
                 windowLossColors = colors[0];
 
                 windowLossLines = MakeLines(windowCenterAnchors, windowLossVectors);
@@ -216,7 +225,7 @@ namespace Hive.IO.GhInputOutput
             //display only gains
             else if (displayMode == 4)
             {
-                var colors = CalculateGradientColors(new List<List<Vector3d>> { windowGainVectors }, colorMode, displayMode, typeColorArray);
+                var colors = CalculateGradientColors(new List<List<double>> { gainsPerWindow }, colorMode, displayMode, typeColorArray);
                 windowGainColors = colors[0];
 
                 //offset the starting points for the gain vectors by the vector themselves, so the arrow point is on the window
@@ -243,7 +252,7 @@ namespace Hive.IO.GhInputOutput
             return lines;
         }
 
-        private List<List<Color>> CalculateGradientColors(List<List<Vector3d>> vectors, int colorMode, int displayMode, List<List<Color>> typeColorArray)
+        private List<List<Color>> CalculateGradientColors(List<List<double>> values, int colorMode, int displayMode, List<List<Color>> typeColorArray)
         {
             var vectorColors = new List<List<Color>>();
 
@@ -274,20 +283,20 @@ namespace Hive.IO.GhInputOutput
                 return vectorColors;
             }
 
-            var minLength = vectors.SelectMany(vectorList => vectorList).Select(vector => vector.Length).Min();
-            var maxLength = vectors.SelectMany(vectorList => vectorList).Select(vector => vector.Length).Max();
+            var minLength = values.SelectMany(valueList => valueList).Select(value => value).Min();
+            var maxLength = values.SelectMany(valueList => valueList).Select(value => value).Max();
 
             var gradient = new GH_Gradient();
             gradient.AddGrip(new GH_Grip(minLength, Color.Blue));
             gradient.AddGrip(new GH_Grip((maxLength + minLength) / 2, Color.Red));
             gradient.AddGrip(new GH_Grip(maxLength, Color.Yellow));
 
-            for (int i = 0; i < vectors.Count; i++)
+            for (int i = 0; i < values.Count; i++)
             {
                 var colors = new List<Color>();
-                foreach (var vector in vectors[i])
+                foreach (var value in values[i])
                 {
-                    var color = gradient.ColourAt(vector.Length);
+                    var color = gradient.ColourAt(value);
                     colors.Add(color);
                 }
                 vectorColors.Add(colors);
