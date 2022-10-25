@@ -44,10 +44,6 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="ProvingGround.Conduit, Version=2018.11.19.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\..\..\setup\ProvingGround.Conduit.dll</HintPath>
-    </Reference>
     <Reference Include="SolarModel">
       <HintPath>..\..\..\setup\SolarModel.dll</HintPath>
       <Private>True</Private>
@@ -223,7 +219,6 @@
     <Compile Include="GhValueLists\GhSia2024RoomList_Standard.cs" />
     <Compile Include="GhValueLists\GhListResults.cs" />
     <Compile Include="GhValueLists\GhPerformanceRatioList.cs" />
-    <Compile Include="HiveConduit\HiveConduitChart.cs" />
     <Compile Include="Plots\AmrPlotConstants.cs" />
     <Compile Include="Plots\LifetimeAmrPlot.cs" />
     <Compile Include="Plots\VisualizerToolTip.cs" />

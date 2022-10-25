@@ -1,13 +1,15 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.29326.143
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32228.430
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hive.IO", "Hive.IO\Hive.IO.csproj", "{1747808E-543C-4DA4-8FB1-B5EBC8B80C77}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestVisualizer", "TestVisualizer\TestVisualizer.csproj", "{CE013650-1F89-43FD-BB23-6DD17C1B63B7}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{F428C773-38A5-45E6-BDCF-130706D3C826}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProvingGround.Conduit", "..\..\..\conduit\ProvingGround.Conduit\ProvingGround.Conduit.csproj", "{64B74309-AE5D-49FA-B70E-FA638AE1E5CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -27,6 +29,10 @@ Global
 		{F428C773-38A5-45E6-BDCF-130706D3C826}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{F428C773-38A5-45E6-BDCF-130706D3C826}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{F428C773-38A5-45E6-BDCF-130706D3C826}.Release|Any CPU.Build.0 = Release|Any CPU
+		{64B74309-AE5D-49FA-B70E-FA638AE1E5CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{64B74309-AE5D-49FA-B70E-FA638AE1E5CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{64B74309-AE5D-49FA-B70E-FA638AE1E5CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{64B74309-AE5D-49FA-B70E-FA638AE1E5CE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
