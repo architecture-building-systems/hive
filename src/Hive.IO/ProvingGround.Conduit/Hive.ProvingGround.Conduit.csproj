@@ -7,12 +7,13 @@
     <ProjectGuid>{64B74309-AE5D-49FA-B70E-FA638AE1E5CE}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Hive.ProvingGround.Conduit</RootNamespace>
+    <RootNamespace>ProvingGround.Conduit</RootNamespace>
     <AssemblyName>Hive.ProvingGround.Conduit</AssemblyName>
-    <TargetFrameworkVersion>v4.5</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <NuGetPackageImportStamp>
     </NuGetPackageImportStamp>
+    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>

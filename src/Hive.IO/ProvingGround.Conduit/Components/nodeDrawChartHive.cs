@@ -150,6 +150,8 @@ namespace ProvingGround.Conduit.Components
             pManager.AddGenericParameter("Color Palette", "Palette", "Optional color palette to use for chart (otherwise default is used)", GH_ParamAccess.item); // opt 11
             pManager.AddGenericParameter("Font", "Font", "Optional font style to use for chart (otherwise default is used)", GH_ParamAccess.item); // opt 11
             pManager.AddGenericParameter("Chart Settings", "Settings", "Optional chart settings created in setup of alternate chart component", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Tick Amount", "Tick Amount", "Optional fixed number of y-axis tick marks, overrides all tick frequency inputs", GH_ParamAccess.item);
+            pManager.AddNumberParameter("Tick Frequency", "Tick Frequency", "Optional input to set the tick frequency, overrides tick frequency from chart setup menu.", GH_ParamAccess.item);
 
             pManager[2].Optional = true;
             pManager[3].Optional = true;
@@ -160,6 +162,8 @@ namespace ProvingGround.Conduit.Components
             pManager[8].Optional = true;
             pManager[9].Optional = true;
             pManager[10].Optional = true;
+            pManager[11].Optional = true;
+            pManager[12].Optional = true;
 
         }
 
@@ -395,16 +399,36 @@ namespace ProvingGround.Conduit.Components
             List<string> m_ticks = new List<string>();
             List<double> m_tickGroups = new List<double>();
 
+            int tickNumber = 0;
+            double tickFrequency = 0;
+            DA.GetData(11, ref tickNumber);
+            DA.GetData(12, ref tickFrequency);
+
             if (_chartStyle.HasTicks && m_valueRange.Length > 0 & _chartStyle.TickFrequency > 0)
             {
-                int m_tickCount = Math.Max(1, (int)Math.Floor(m_valueRange.Length / _chartStyle.TickFrequency)) + 1;
+                int m_tickCount = 0;
+
+                if (tickNumber > 0)
+                {
+                    m_tickCount = tickNumber;
+                    _chartStyle.TickFrequency = m_valueRange.Length / m_tickCount;
+                }
+                else if (tickFrequency > 0)
+                {
+                    _chartStyle.TickFrequency = tickFrequency;
+                    m_tickCount = Math.Max(1, (int)Math.Floor(m_valueRange.Length / _chartStyle.TickFrequency)) + 1;
+                }
+                else
+                {
+                    m_tickCount = Math.Max(1, (int)Math.Floor(m_valueRange.Length / _chartStyle.TickFrequency)) + 1;
+                }
 
                 for (int i = 0; i < m_tickCount; i++)
                 {
                     string m_thisTick = (m_valueRange.T0 + i * _chartStyle.TickFrequency).ToString(_chartStyle.ValueFormat);
                     m_ticks.Add(m_thisTick);
 
-                    if(i < m_tickCount - 1) m_tickGroups.Add(_chartStyle.TickFrequency);
+                    if (i < m_tickCount - 1) m_tickGroups.Add(_chartStyle.TickFrequency);
                 }
 
                 m_tickGroups.Add(m_valueRange.Length % _chartStyle.TickFrequency);
