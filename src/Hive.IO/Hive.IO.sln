@@ -9,7 +9,7 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TestVisualizer", "TestVisua
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "UnitTests", "UnitTests\UnitTests.csproj", "{F428C773-38A5-45E6-BDCF-130706D3C826}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ProvingGround.Conduit", "..\..\..\conduit\ProvingGround.Conduit\ProvingGround.Conduit.csproj", "{64B74309-AE5D-49FA-B70E-FA638AE1E5CE}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Hive.ProvingGround.Conduit", "ProvingGround.Conduit\Hive.ProvingGround.Conduit.csproj", "{64B74309-AE5D-49FA-B70E-FA638AE1E5CE}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
