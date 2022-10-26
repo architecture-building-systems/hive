@@ -26,15 +26,15 @@ using ProvingGround.Conduit.UI;
 
 namespace ProvingGround.Conduit.Components
 {
-    public class nodeFont : GH_Component
+    public class nodeFontHive : GH_Component
     {
         #region Register Node
 
         /// <summary>
         /// Load Node Template
         /// </summary>
-        public nodeFont()
-            : base("Conduit Font", "Font", "Custom font settings for Conduit", "Proving Ground", "HUD")
+        public nodeFontHive()
+            : base("Conduit Font", "Font", "Custom font settings for Conduit", "[hive]", "Misc")
         {
 
         }
@@ -52,7 +52,7 @@ namespace ProvingGround.Conduit.Components
         /// </summary>
         public override Guid ComponentGuid
         {
-            get { return new Guid("c3396783-f85e-4086-aa67-f6899da0bdcf"); }
+            get { return new Guid("59333df8-c8fc-4844-9ea1-61e13e2cea63"); }
         }
         #endregion
 

@@ -21,11 +21,10 @@ using System.Windows.Interop;
 using Grasshopper.Kernel.Data;
 using Grasshopper.Kernel.Types;
 using GH_IO.Serialization;
-using System.Runtime.Remoting.Metadata.W3cXsd2001;
 
 namespace ProvingGround.Conduit.Components
 {
-    public class nodeDrawChartHive : GH_Component
+    public class nodeDrawChart : GH_Component
     {
 
         #region Private members
@@ -48,8 +47,8 @@ namespace ProvingGround.Conduit.Components
         /// <param name="description">The description of this component. Be succinct but clear. You can supply whole sentences.</param>
         /// <param name="category">The category of this component. The category controls in which tab the component will end up.</param>
         /// <param name="subCategory">the SubCategory for this component. The SubCategory controls in which panel the component will end up.</param>
-        public nodeDrawChartHive() 
-            : base("Hive Conduit Chart", "HiveConduitChart", "Conduit Chart Component with customized functionality for Hive", "[hive]", "misc")
+        public nodeDrawChart()
+            : base("Conduit Chart", "Chart", "A Conduit chart object", "[hive]", "Misc")
         {
             _chartStyle = new clsChartStyleDynamic(this);
             _chartStyle.ChartType = "Column";
@@ -64,7 +63,7 @@ namespace ProvingGround.Conduit.Components
         {
             get
             {
-                return new Guid("ca71862b-3564-48bd-b0b8-ac69249d78c1");
+                return new Guid("81b3fddb-c3d6-40ac-a0a2-53d250dcf819");
             }
         }
 
@@ -105,7 +104,7 @@ namespace ProvingGround.Conduit.Components
             formChartStyle m_chartStyle = new formChartStyle(_chartStyle.CategoryAxisColor, _chartStyle.ValueAxisColor);
             m_chartStyle.DataContext = _chartStyle;
             WindowInteropHelper ownerHelper = new WindowInteropHelper(m_chartStyle);
-            
+
             ownerHelper.Owner = Grasshopper.Instances.DocumentEditor.Handle;
 
             m_chartStyle.Show();
@@ -150,8 +149,6 @@ namespace ProvingGround.Conduit.Components
             pManager.AddGenericParameter("Color Palette", "Palette", "Optional color palette to use for chart (otherwise default is used)", GH_ParamAccess.item); // opt 11
             pManager.AddGenericParameter("Font", "Font", "Optional font style to use for chart (otherwise default is used)", GH_ParamAccess.item); // opt 11
             pManager.AddGenericParameter("Chart Settings", "Settings", "Optional chart settings created in setup of alternate chart component", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("Tick Amount", "Tick Amount", "Optional fixed number of y-axis tick marks, overrides all tick frequency inputs", GH_ParamAccess.item);
-            pManager.AddNumberParameter("Tick Frequency", "Tick Frequency", "Optional input to set the tick frequency, overrides tick frequency from chart setup menu.", GH_ParamAccess.item);
 
             pManager[2].Optional = true;
             pManager[3].Optional = true;
@@ -162,8 +159,6 @@ namespace ProvingGround.Conduit.Components
             pManager[8].Optional = true;
             pManager[9].Optional = true;
             pManager[10].Optional = true;
-            pManager[11].Optional = true;
-            pManager[12].Optional = true;
 
         }
 
@@ -207,7 +202,7 @@ namespace ProvingGround.Conduit.Components
 
             Interval m_valueRange = new Interval();
 
-            
+
 
             // Get input variables
             DA.GetData(0, ref m_bounds);
@@ -279,7 +274,7 @@ namespace ProvingGround.Conduit.Components
             if (m_chartSetup != null)
             {
                 try
-                { 
+                {
                     _chartStyle = m_chartSetup;
                 }
                 catch { _chartStyle = new clsChartStyleDynamic(this); }
@@ -319,7 +314,7 @@ namespace ProvingGround.Conduit.Components
 
             List<iDrawObject> m_chartObjects = new List<iDrawObject>();
 
-            
+
             clsCurveStyle m_defaultCurveStyle = new clsCurveStyle() { styleName = "Default Curve", unset = true };
 
             // A category chart reflects one with multiple categories, but only one set of data (meant to be groups)
@@ -399,29 +394,9 @@ namespace ProvingGround.Conduit.Components
             List<string> m_ticks = new List<string>();
             List<double> m_tickGroups = new List<double>();
 
-            int tickNumber = 0;
-            double tickFrequency = 0;
-            DA.GetData(11, ref tickNumber);
-            DA.GetData(12, ref tickFrequency);
-
             if (_chartStyle.HasTicks && m_valueRange.Length > 0 & _chartStyle.TickFrequency > 0)
             {
-                int m_tickCount = 0;
-
-                if (tickNumber > 0)
-                {
-                    m_tickCount = tickNumber;
-                    _chartStyle.TickFrequency = m_valueRange.Length / m_tickCount;
-                }
-                else if (tickFrequency > 0)
-                {
-                    _chartStyle.TickFrequency = tickFrequency;
-                    m_tickCount = Math.Max(1, (int)Math.Floor(m_valueRange.Length / _chartStyle.TickFrequency)) + 1;
-                }
-                else
-                {
-                    m_tickCount = Math.Max(1, (int)Math.Floor(m_valueRange.Length / _chartStyle.TickFrequency)) + 1;
-                }
+                int m_tickCount = Math.Max(1, (int)Math.Floor(m_valueRange.Length / _chartStyle.TickFrequency)) + 1;
 
                 for (int i = 0; i < m_tickCount; i++)
                 {
@@ -530,7 +505,7 @@ namespace ProvingGround.Conduit.Components
 
             if (_chartStyle.ShowValueAxis)
             {
-                m_axisLines.Add(m_orientation == enumOrientation.Horizontal ? 
+                m_axisLines.Add(m_orientation == enumOrientation.Horizontal ?
                     new Line(m_body.Corner(0), m_body.Corner(3)) :
                     new Line(m_body.Corner(1), m_body.Corner(2)));
                 m_axisColors.Add(_chartStyle.ValueAxisColor);
@@ -741,7 +716,7 @@ namespace ProvingGround.Conduit.Components
                     }
                     else
                     {
-                        
+
                         for (int j = 0; j < m_branchCount; j++)
                         {
                             double m_thisValue = m_valueSet[i].Count > j ?
@@ -784,7 +759,7 @@ namespace ProvingGround.Conduit.Components
 
 
             // Add chart axes (relies on orientation of body)
-            
+
             DA.SetDataList(0, m_chartObjects);
             DA.SetData(1, _chartStyle);
 
@@ -877,7 +852,7 @@ namespace ProvingGround.Conduit.Components
         private double RotatedHeight(string text, double height)
         {
             return clsUtility.MeasureText(text, height, "Arial", _fontSizer);
-        }        
+        }
 
         private void RotatedText(string labelText, Rectangle3d bounds, double rotation, double textSize, ref List<iDrawObject> chartObjects, clsFontStyle fontStyle)
         {
@@ -906,7 +881,7 @@ namespace ProvingGround.Conduit.Components
         private DrawText TitleText(Rectangle3d bounds, string text, double padding, clsFontStyle fontStyle)
         {
 
-            var m_titleBoundary = clsTiler.VerticalTiles(bounds,new List<double>(){ padding, 1 - (padding * 2) , padding },1, 0, 0)[1];
+            var m_titleBoundary = clsTiler.VerticalTiles(bounds, new List<double>() { padding, 1 - (padding * 2), padding }, 1, 0, 0)[1];
             return new DrawText(new List<string>() { text }, m_titleBoundary, 0, 0, new List<Color>(), false, new acStyle[] { fontStyle });
 
         }
