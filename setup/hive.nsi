@@ -61,6 +61,7 @@ Section "Hive" Base_Installation_Section
     Delete /REBOOTOK "$INSTDIR\GHSolar.gha"
     Delete /REBOOTOK "$INSTDIR\ProvingGround.Conduit.gha"
     Delete /REBOOTOK "$INSTDIR\Hive.IO.gha"
+    Delete /REBOOTOK "$INSTDIR\Hive.ProvingGround.Conduit.gha"
     Delete /REBOOTOK "$INSTDIR\honey-badger-runtime.dll"
     Delete /REBOOTOK "$INSTDIR\Newtonsoft.Json.dll"
     Delete /REBOOTOK "$INSTDIR\OxyPlot.dll"
@@ -103,12 +104,13 @@ Section "Hive" Base_Installation_Section
     File "..\src\Hive.IO\Hive.IO\bin\OxyPlot.WindowsForms.dll"
     File "GHSolar.gha"
     File "SolarModel.dll"
+    File "Hive.ProvingGround.Conduit.gha"
     
-    IfFileExists "$INSTDIR\..\ProvingGround.Conduit.gha" 0 file_not_found
-    goto end_of_block
-    file_not_found:
-    File "ProvingGround.Conduit.gha"
-    end_of_block:
+    #IfFileExists "$INSTDIR\..\ProvingGround.Conduit.gha" 0 file_not_found
+    #goto end_of_block
+    #file_not_found:
+    #File "ProvingGround.Conduit.gha"
+    #end_of_block:
 
 
     # Hive.Core and dependencies
@@ -128,6 +130,8 @@ SectionEnd
 
 Section "Conduit" Conduit_Installation_Section
 
+SectionIn RO
+
 IfFileExists "$INSTDIR\..\ProvingGround.Conduit.gha" 0 file_not_found
     goto end_of_block
     file_not_found:
@@ -137,7 +141,7 @@ IfFileExists "$INSTDIR\..\ProvingGround.Conduit.gha" 0 file_not_found
 SectionEnd
 
 LangString DESC_Section1 ${LANG_ENGLISH} "Installs the Hive plugin for Grasshopper."
-LangString DESC_Section2 ${LANG_ENGLISH} "Installs the Conduit plugin by Proving Ground Apps. Conduit is used within Hive for certain chart visualizations. Visit https://apps.proving$\nground.io/conduit/ for more information."
+LangString DESC_Section2 ${LANG_ENGLISH} "Installs the Conduit plugin by Proving Ground Apps. Visit https://apps.proving$\nground.io/conduit/ for more information. If Conduit is already installed at the default location, this installation will be skipped."
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
   !insertmacro MUI_DESCRIPTION_TEXT ${Base_Installation_Section} $(DESC_Section1)
