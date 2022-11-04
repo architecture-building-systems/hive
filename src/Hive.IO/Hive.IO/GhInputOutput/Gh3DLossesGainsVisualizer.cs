@@ -176,7 +176,7 @@ namespace Hive.IO.GhInputOutput
 
             var typeColorArray = new List<List<Color>>() {
                 Enumerable.Repeat(Color.Blue, windowLossVectors.Count).ToList(),
-                Enumerable.Repeat(Color.LimeGreen, windowGainVectors.Count).ToList(),
+                Enumerable.Repeat(Color.DarkGreen, windowGainVectors.Count).ToList(),
                 Enumerable.Repeat(Color.Red, wallLossVectors.Count).ToList()
             };
 
@@ -305,6 +305,24 @@ namespace Hive.IO.GhInputOutput
             return vectorColors;
         }
 
+        private Plane GetTextPlane(Point3d arrowTip, Vector3d arrowDirection)
+        {
+            var plane = new Plane();
+
+            if (arrowDirection.IsParallelTo(new Vector3d(0, 0, 1)) == 1)
+            {
+                plane = new Plane(arrowTip, new Vector3d(0, 0, 1), new Vector3d(1, 0, 0));
+            } else
+            {
+                plane = new Plane(arrowTip, arrowDirection, new Vector3d(0, 0, 1));
+            }
+
+            return plane;
+        }
+
+        /// <summary>
+        /// Draws the Arrows and their value text into the Viewport
+        /// </summary>
         public override void DrawViewportWires(IGH_PreviewArgs args)
         {
             base.DrawViewportWires(args);
@@ -319,9 +337,8 @@ namespace Hive.IO.GhInputOutput
 
                         if (values)
                         {
-                            var text = new Text3d(Math.Round(lossesPerWindow[i], 1).ToString(), new Plane(windowLossLines[i].To, windowLossLines[i].Direction), 0.5);
-                            //var text2 = new Text3d(Math.Round(lossesPerWindow[i], 1).ToString());
-                            //text2.Height = 0.5;
+                            var textPlane = GetTextPlane(windowLossLines[i].To, windowLossLines[i].Direction);
+                            var text = new Text3d(Math.Round(lossesPerWindow[i], 1).ToString(), textPlane, 0.5);
                             args.Display.Draw3dText(text, windowLossColors[i], windowLossLines[i].To);
                         }
                     }
@@ -335,9 +352,8 @@ namespace Hive.IO.GhInputOutput
 
                         if (values)
                         {
-                            var text = new Text3d(Math.Round(gainsPerWindow[i], 1).ToString(), new Plane(windowGainLines[i].To, Vector3d.Negate(windowGainLines[i].Direction)), 0.5);
-                            //var text2 = new Text3d(Math.Round(gainsPerWindow[i], 1).ToString());
-                            //text2.Height = 0.5;
+                            var textPlane = GetTextPlane(windowGainLines[i].To, Vector3d.Negate(windowGainLines[i].Direction));
+                            var text = new Text3d(Math.Round(gainsPerWindow[i], 1).ToString(), textPlane, 0.5);
                             args.Display.Draw3dText(text, windowGainColors[i], windowGainLines[i].To);
                         }
                     }
@@ -351,9 +367,8 @@ namespace Hive.IO.GhInputOutput
 
                         if(values)
                         {
-                            var text = new Text3d(Math.Round(lossesPerOpaque[i], 1).ToString(), new Plane(wallLossLines[i].To, wallLossLines[i].Direction), 0.5);
-                            //var text2 = new Text3d(Math.Round(lossesPerOpaque[i], 1).ToString());
-                            //text2.Height = 0.5;
+                            var textPlane = GetTextPlane(wallLossLines[i].To, wallLossLines[i].Direction);
+                            var text = new Text3d(Math.Round(lossesPerOpaque[i], 1).ToString(), textPlane, 0.5);
                             args.Display.Draw3dText(text, wallLossColors[i], wallLossLines[i].To);
                         }
                     }
