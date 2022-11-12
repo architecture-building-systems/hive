@@ -27,7 +27,7 @@ namespace Hive.IO.GhInputOutput
             pManager.AddIntegerParameter("Scale Midpoint", "ScaleMidpoint", "Set which value maps to 0.5 for the arrow scaling", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Scale Length", "ScaleLength", "Scale all arrow lengths", GH_ParamAccess.item);
             pManager.AddIntegerParameter("Display Mode", "DisplayMode", "Display Modes: 0 = All gains and losses, 1 = All losses, 2 = Only wall losses, 3 = Only window losses, 4 = Only windows gains", GH_ParamAccess.item);
-            pManager.AddIntegerParameter("Color Mode", "ColorMode", "Color according to type (wall loss, windows loss, window gain) or according to value", GH_ParamAccess.item);
+            pManager.AddIntegerParameter("Color Mode", "ColorMode", "Color Mode: 0 = Color according to type (wall loss, windows loss, window gain), or 1 = according to value", GH_ParamAccess.item);
             pManager.AddGenericParameter("Walls surface collection", "Walls", "Collection of all walls", GH_ParamAccess.list);
             pManager.AddGenericParameter("Windows surface collection", "Windows", "Collection of all windows", GH_ParamAccess.list);
             pManager.AddNumberParameter("Total Losses Per Window", "TotLossPerWin", "Total transmission losses per window surface, in kWh", GH_ParamAccess.list);
