@@ -18,7 +18,7 @@ namespace Hive.IO.GhInputOutput
         {
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.secondary;
+        public override GH_Exposure Exposure => GH_Exposure.quarternary;
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
@@ -376,18 +376,9 @@ namespace Hive.IO.GhInputOutput
             }
         }
 
-        /// <summary>
-        /// Provides an Icon for the component.
-        /// </summary>
-        protected override System.Drawing.Bitmap Icon
-        {
-            get
-            {
-                //You can add image files to your project resources and access them like this:
-                // return Resources.IconForThisComponent;
-                return null;
-            }
-        }
+
+        // TO DO: change with own icon
+        protected override Bitmap Icon => Properties.Resources.IO_Visualizer;
 
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.
