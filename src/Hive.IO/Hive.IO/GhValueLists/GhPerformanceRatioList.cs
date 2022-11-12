@@ -14,11 +14,11 @@ namespace Hive.IO.GhValueLists
             this.NickName = "PerformanceRatio";
             this.Description = "A list of solar performance ratios";
             this.Category = "[hive]";
-            this.SubCategory = "Solar C#";
+            this.SubCategory = "Solar";
             Load();
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.tertiary;
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
 
         public struct PerformanceRatioListItem
         {
