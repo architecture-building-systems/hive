@@ -25,7 +25,7 @@ Furthermore, (C) example Grasshopper files (.gh) can be found in the [Exercises 
 [A/S Website](https://systems.arch.ethz.ch/demonstrators/hive)
 
 
-## Depndencies
+## Dependencies
 
 We use:
 - [OxyPlot](https://oxyplot.github.io/)
