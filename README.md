@@ -23,3 +23,14 @@ Furthermore, (C) example Grasshopper files (.gh) can be found in the [Exercises 
 [ETH Teaching Fair](https://learning-teaching-fair.ethz.ch/project/energy-and-climate-systems-iii/)
 
 [A/S Website](https://systems.arch.ethz.ch/demonstrators/hive)
+
+
+## Depndencies
+
+We use:
+- [OxyPlot](https://oxyplot.github.io/)
+- [Newtonsoft](https://www.newtonsoft.com/json)
+- [Conduit](https://bitbucket.org/architecture-building-systems/conduit-hive)
+- [GH_Solar](https://github.com/christophwaibel/GH_Solar_V2)
+
+All libraries are installed automatically with the Hive installer.
