@@ -170,6 +170,7 @@
     <Compile Include="GhCore\GhAdaptiveComfort.cs" />
     <Compile Include="GhCore\GhSIA2024RoomReader.cs" />
     <Compile Include="GhCore\GhSIA380.cs" />
+    <Compile Include="GhDistributors\GhDistConduit.cs" />
     <Compile Include="GhDistributors\GhDist3DLossesGains.cs" />
     <Compile Include="GhInputOutput\Gh3DLossesGainsVisualizer.cs" />
     <Compile Include="GhSolar\GhSolarUnobstructed.cs" />
