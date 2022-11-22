@@ -15,44 +15,6 @@ def compile_tree_schedules_to_json():
     JSON_PATH = os.path.join(OUT_DIR, JSON_OUT)
 
     filename = "tree_schedules.csv"
-
-    HEADERS = {
-        "walnut": str,
-        "sycamore": str,
-        "birch": str,
-        "mallow": str,
-        "oak": str,
-        "maple": str,
-        "willow": str,
-        "dogwood": str,
-        "katsura": str,
-        "fruiting": str,
-        "witch_hazel": str,
-        "staff_vine": str,
-        "olive": str,
-        "viburnum": str,
-        "bamboo": str,
-        "conifer": str
-    }
-
-    HEADERS_MAP = {
-        "walnut": "walnut",
-        "sycamore": "sycamore",
-        "birch": "birch",
-        "mallow": "mallow",
-        "oak": "oak",
-        "maple": "maple",
-        "willow": "willow",
-        "dogwood": "dogwood",
-        "katsura": "katsura",
-        "fruiting": "fruiting",
-        "witch_hazel": "witch_hazel",
-        "staff_vine": "staff_vine",
-        "olive": "olive",
-        "viburnum": "viburnum",
-        "bamboo": "bamboo",
-        "conifer": "conifer"
-    }
     
     print("Compiling tree schedules...")
     data = dict()
@@ -60,22 +22,33 @@ def compile_tree_schedules_to_json():
     file_path = os.path.join(RESOURCES_DIR, filename)
     assert os.path.exists(file_path), "File does not exist: " + file_path
     
-    records = []
     with open(file_path, "r") as fp:
         reader = csv.DictReader(fp)
-        csv_headers = set(reader.fieldnames)
-        assert (all(h in csv_headers for h in HEADERS.keys())), "Missing headers in '" + filename + "' : " + str(set(HEADERS.keys()) - csv_headers)
-        for row in reader:
-            record = dict()
-            for csv_header, json_header in HEADERS_MAP.items():
-                if not json_header: continue
-                try:
-                    record[json_header] = HEADERS[csv_header](row[csv_header])
-                except ValueError:
-                    record[json_header] = 0.0
-            
-            records.append(record)
-    data = records
+
+        out = [{
+            "walnut": row["walnut"],
+            "sycamore": row["sycamore"], 
+            "birch": row["birch"], 
+            "mallow": row["mallow"],
+            "oak": row["oak"],
+            "maple": row["maple"],
+            "willow": row["willow"],
+            "dogwood": row["dogwood"],
+            "katsura": row["katsura"],
+            "fruiting": row["fruiting"],
+            "witch_hazel": row["witch_hazel"],
+            "staff_vine": row["staff_vine"],
+            "olive": row["olive"],
+            "viburnum": row["viburnum"],
+            "bamboo": row["bamboo"],
+            "conifer": row["conifer"],
+            } 
+        for row in reader]
+
+        keys = out[0].keys()
+        ref_out = {key: [float(i[key]) for i in out ] for key in keys}
+
+    data = ref_out
     
     with open(JSON_PATH, "w") as fp:
         json.dump(data, fp, indent=4, encoding="utf8")
