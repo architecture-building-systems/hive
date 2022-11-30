@@ -305,6 +305,7 @@
     <EmbeddedResource Include="EnergySystems\emitter_defaults.json" />
     <EmbeddedResource Include="GhValueLists\performance_ratios.json" />
     <EmbeddedResource Include="GhValueLists\SIA2024_rooms_data.json" />
+    <None Include="GhSolar\tree_schedules.json" />
     <None Include="packages.config" />
     <None Include="Resources\201008_SIA2024_Raumdaten_Bestand.csv" />
     <None Include="Resources\201008_SIA2024_Raumdaten_Standardwert.csv" />
@@ -353,6 +354,7 @@
     <None Include="Resources\Icons\IOCore_DistEmitter.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\IOCore_DistConduit.png" />
     <None Include="Resources\demand_SIAroomreader.png" />
     <Content Include="Resources\EnergySystems\flat_plate.jpg" />
     <Content Include="Resources\EnergySystems\vacuum_tube.jpg" />

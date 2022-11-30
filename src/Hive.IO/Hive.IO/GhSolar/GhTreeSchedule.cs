@@ -23,7 +23,10 @@ namespace Hive.IO.GhValueLists
 
         public override GH_Exposure Exposure => GH_Exposure.secondary;
 
-        //var values = JsonConvert.DeserializeObject<Dictionary<string, string>>(tree_schedules.json);
+        Dictionary<string, List<double>> treeSchedules = new Dictionary<string, List<double>>();
+
+        public static string ResourceName = "Hive.IO.GhSolar.tree_schedules.json";
+        dynamic TreeSchedules => JsonResource.ReadRecords(ResourceName, ref treeSchedules);
 
         protected override void RegisterInputParams(GH_InputParamManager pManager)
         {
@@ -40,6 +43,8 @@ namespace Hive.IO.GhValueLists
         {
             string type = "";
             if (!DA.GetData(0, ref type)) return;
+
+
 
 
         }
