@@ -415,6 +415,16 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap IOCore_DistConduit {
+            get {
+                object obj = ResourceManager.GetObject("IOCore_DistConduit", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap IOCore_Distconvtech {
             get {
                 object obj = ResourceManager.GetObject("IOCore_Distconvtech", resourceCulture);
@@ -663,7 +673,7 @@ namespace Hive.IO.Properties {
         }
         
         /// <summary>
-        ///   Sucht eine lokalisierte Zeichenfolge, die Type,electric efficiency,thermal efficiency,cost per m2,cost per kWp,life cycle GHG factor kgCO2eq per m2,life cycle GHG factor kgCO2eq per kWp,Lifetime,Description,Image,ignore_category,ignore_module description,ignore_cell technology,ignore_module film tint,ignore_module weight (kg),ignore_module dimensions,ignore_module area (sqm.),ignore_module density (kg/sqm.),ignore_module rating(Wp),ignore_module efficiency,ignore_Euro per Wp (installed),ignore_Euro per sqm.,ignore_power density (Wp/sqm),ignore_GWP  [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
+        ///   Sucht eine lokalisierte Zeichenfolge, die Type,electric efficiency,thermal efficiency,cost per m2,cost per kWp,life cycle GHG factor kgCO2eq per m2,life cycle GHG factor kgCO2eq per kWp,Lifetime,Description,ignore_category,ignore_module description,ignore_cell technology,ignore_module film tint,ignore_module weight (kg),ignore_module dimensions,ignore_module area (sqm.),ignore_module density (kg/sqm.),ignore_module rating(Wp),ignore_module efficiency,ignore_Euro per Wp (installed),ignore_Euro per sqm.,ignore_power density (Wp/sqm),ignore_GWP Intens [Rest der Zeichenfolge wurde abgeschnitten]&quot;; ähnelt.
         /// </summary>
         internal static string pv_efficiency {
             get {
