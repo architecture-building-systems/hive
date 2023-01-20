@@ -256,7 +256,7 @@ namespace Hive.IO
         /// <param name="interestRate">The real discount rate (includes inflation)</param>
         /// <param name="projectLifetime">The duration of the entire projects lifetime</param>
         /// <returns>Levelised values in units provided for duration of projectLifetime.</returns>
-        public static double ComputeLevelisedValues(double[] valuesNonLevelised, double interestRate, double projectLifetime)
+        public static double ComputeAnnualizedValues(double[] valuesNonLevelised, double interestRate, double projectLifetime)
         {
             // From (with real discount rate) https://www.homerenergy.com/products/pro/docs/latest/capital_recovery_factor.html
             double CapitalRecoveryFactor(double i, double N) => i != 0 ? i * Math.Pow(1 + i, N) / (Math.Pow(1 + i, N) - 1) : 1;

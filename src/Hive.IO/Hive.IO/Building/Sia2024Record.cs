@@ -211,6 +211,7 @@ namespace Hive.IO.Building
             set => _emissionsWalls = value;
         }
 
+       
         /// <summary>
         ///     Serialize to JSON - using the interchange format used in the Hive.Core components.
         /// </summary>
@@ -273,7 +274,22 @@ namespace Hive.IO.Building
         public static Sia2024Record FromJson(string json)
         {
             var d = JsonConvert.DeserializeObject<Dictionary<string, object>>(json); // TODO why not deserialise to Sia2024Record with JsonProperty name set to german keys?
-            Func<string, double?> readValueOrNull = key => d.ContainsKey(key) ? (double?) d[key] : null;
+            
+            // in one case ("Heat Recovery" in "Bestand Wohnen"), the value was "NaN" as a string and couldn't be cast into a double
+            Func<string, double?> readValueOrNull = key => 
+            {
+                try
+                {
+                    if (d.ContainsKey(key))
+                        return (double?)d[key];
+                    else
+                        return null;
+                }
+                catch
+                {
+                    return 0.0;
+                }
+            };
             Func<string, bool> readValueOrFalse = key => d.ContainsKey(key) ? (bool)d[key] : false;
 
             return new Sia2024Record
@@ -296,7 +312,7 @@ namespace Hive.IO.Building
                 WindowFrameReduction = (double) d["Abminderungsfaktor fuer Fensterrahmen"],
                 AirChangeRate = (double) d["Aussenluft-Volumenstrom (pro NGF)"],
                 Infiltration = (double) d["Aussenluft-Volumenstrom durch Infiltration"],
-                HeatRecovery = (double) d["Temperatur-Aenderungsgrad der Waermerueckgewinnung"],
+                HeatRecovery = (double) readValueOrNull("Temperatur-Aenderungsgrad der Waermerueckgewinnung"),
                 OccupantLoads = (double) d["Waermeeintragsleistung Personen (bei 24.0 deg C, bzw. 70 W)"],
                 LightingLoads = (double) d["Waermeeintragsleistung der Raumbeleuchtung"],
                 EquipmentLoads = (double) d["Waermeeintragsleistung der Geraete"],
