@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Drawing;
 using System.Linq;
 using System.Windows;
@@ -71,7 +72,9 @@ namespace Hive.IO.Forms
         {
             cboBuildingUseType.Items.Clear();
             cboBuildingUseType.Items.AddRange(State.BuildingUseTypes.ToArray<object>());
+            string translated = Translate(State.BuildingUseType);
             cboBuildingUseType.SelectedItem = State.BuildingUseType;
+            cboBuildingUseType. = translated;
             cboBuildingUseType.Enabled = State.IsEditable;
 
             cboRoomType.Items.Clear();
@@ -389,6 +392,15 @@ namespace Hive.IO.Forms
         private void textBoxSetback_MouseHover(object sender, EventArgs e)
         {
             hizardToolTip.Show(toolTipSetbackInfoMessage, (TextBox)sender);
+        }
+
+        private string Translate(string German)
+        {
+            Dictionary<string, string> English = new Dictionary<string, string>();
+
+            English.Add("Wohnen", "Living");
+
+            return English[German];
         }
 
         #endregion ToolTips
