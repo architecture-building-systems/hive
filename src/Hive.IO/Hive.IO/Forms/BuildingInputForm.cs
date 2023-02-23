@@ -19,6 +19,10 @@ namespace Hive.IO.Forms
     public partial class BuildingInputForm : Form
     {
         private bool _rendering = false;
+        private bool english = true;
+
+        private Dictionary<string, string> ForwardDictionary = new Dictionary<string, string>();
+        private Dictionary<string, string> BackwardDictionary = new Dictionary<string, string>();
 
         public BuildingInputState State { get; private set; } = new BuildingInputState(Sia2024Record.First(), new Zone(), true);
 
@@ -48,6 +52,10 @@ namespace Hive.IO.Forms
             hizardToolTip.SetToolTip(this.txtFloorArea, toolTipFloorArea);
             hizardToolTip.SetToolTip(this.label7, toolTipFloorArea);
 
+            //build Dictionary
+            ForwardDictionary = getForwardDictionary();
+            BackwardDictionary = ForwardDictionary.ToDictionary((i) => i.Value, (i) => i.Key);
+
             RenderState();
         }
 
@@ -70,23 +78,46 @@ namespace Hive.IO.Forms
 
         private void UpdateSiaComboBoxes()
         {
+            //Building Use Type
             cboBuildingUseType.Items.Clear();
-            cboBuildingUseType.Items.AddRange(State.BuildingUseTypes.ToArray<object>());
-            string translated = Translate(State.BuildingUseType);
-            cboBuildingUseType.SelectedItem = State.BuildingUseType;
-            cboBuildingUseType. = translated;
+            if (english) {
+                cboBuildingUseType.Items.AddRange(Translate(State.BuildingUseTypes, ForwardDictionary).ToArray<object>());
+                cboBuildingUseType.SelectedItem = ForwardDictionary[State.BuildingUseType];
+            } else {
+                cboBuildingUseType.Items.AddRange(State.BuildingUseTypes.ToArray<object>());
+                cboBuildingUseType.SelectedItem = State.BuildingUseType;
+            }
             cboBuildingUseType.Enabled = State.IsEditable;
 
+            //Room Type
             cboRoomType.Items.Clear();
-            cboRoomType.Items.AddRange(State.RoomTypes.ToArray<object>());
-            cboRoomType.SelectedItem = State.RoomType;
+            if (english)
+            {
+                cboRoomType.Items.AddRange(Translate(State.RoomTypes, ForwardDictionary).ToArray<object>());
+                cboRoomType.SelectedItem = ForwardDictionary[State.RoomType];
+            }
+            else
+            {
+                cboRoomType.Items.AddRange(State.RoomTypes.ToArray<object>());
+                cboRoomType.SelectedItem = State.RoomType;
+            }
             cboRoomType.Enabled = State.IsEditable;
 
+            //Building Quality
             cboBuildingQuality.Items.Clear();
-            cboBuildingQuality.Items.AddRange(State.Qualities.ToArray<object>());
-            cboBuildingQuality.SelectedItem = State.Quality;
+            if (english)
+            {
+                cboBuildingQuality.Items.AddRange(Translate(State.Qualities, ForwardDictionary).ToArray<object>());
+                cboBuildingQuality.SelectedItem = ForwardDictionary[State.Quality];
+            }
+            else
+            {
+                cboBuildingQuality.Items.AddRange(State.Qualities.ToArray<object>());
+                cboBuildingQuality.SelectedItem = State.Quality;
+            }
             cboBuildingQuality.Enabled = State.IsEditable;
 
+            //Building Construction
             cboBuildingConstruction.Items.Clear();
             cboBuildingConstruction.Items.AddRange(State.Constructions.ToArray<object>());
             cboBuildingConstruction.SelectedItem = State.Construction;
@@ -117,7 +148,7 @@ namespace Hive.IO.Forms
                 return;
             }
 
-            State.BuildingUseType = cboBuildingUseType.SelectedItem as string;
+            State.BuildingUseType = english ? BackwardDictionary[cboBuildingUseType.SelectedItem as string] : cboBuildingUseType.SelectedItem as string;
             RenderState();
         }
 
@@ -128,7 +159,7 @@ namespace Hive.IO.Forms
                 return;
             }
 
-            State.RoomType = cboRoomType.SelectedItem as string;
+            State.RoomType = english ? BackwardDictionary[cboRoomType.SelectedItem as string] : cboRoomType.SelectedItem as string;
             RenderState();
         }
 
@@ -139,7 +170,7 @@ namespace Hive.IO.Forms
                 return;
             }
 
-            State.Quality = cboBuildingQuality.SelectedItem as string;
+            State.Quality = english ? BackwardDictionary[cboBuildingQuality.SelectedItem as string] : cboBuildingQuality.SelectedItem as string;
             RenderState();
         }
 
@@ -394,13 +425,97 @@ namespace Hive.IO.Forms
             hizardToolTip.Show(toolTipSetbackInfoMessage, (TextBox)sender);
         }
 
-        private string Translate(string German)
+
+        private IEnumerable<string> Translate(IEnumerable<string> _stringList, Dictionary<string, string> English)
         {
-            Dictionary<string, string> English = new Dictionary<string, string>();
+            var englishList = new List<string>();
+            foreach(string german in _stringList)
+            {
+                englishList.Add(English[german]);
+            }
 
-            English.Add("Wohnen", "Living");
+            return englishList;
+        }
 
-            return English[German];
+        private Dictionary<string, string> getForwardDictionary()
+        {
+            Dictionary<string, string> fwd = new Dictionary<string, string>();
+
+            fwd.Add("Wohnen", "Living");
+            fwd.Add("Hotel", "Hotel");
+            fwd.Add("Buero", "Office");
+            fwd.Add("Schule", "School");
+            fwd.Add("Verkauf", "Retail");
+            fwd.Add("Restaurant", "Restaurant");
+            fwd.Add("Halle", "Hall");
+            fwd.Add("Spital", "Hospital");
+            fwd.Add("Werkstatt", "Workshop");
+            fwd.Add("Lager", "Storage");
+            fwd.Add("Sport", "Sports");
+            fwd.Add("Diverses", "Miscellaneous");
+
+            fwd.Add("1.1 Wohnen Mehrfamilienhaus", "1.1 Multi family home");
+            fwd.Add("1.2 Wohnen Einfamilienhaus", "1.2 Single family home");
+
+            fwd.Add("2.1 Hotelzimmer", "2.1 Hotel room");
+            fwd.Add("2.2 Empfang, Lobby", "2.1 Reception, Lobby");
+
+            fwd.Add("3.1 Einzel-, Gruppenbuero", "3.1 Single-, group office");
+            fwd.Add("3.2 Grossraumbuero", "3.2 Open plan office");
+            fwd.Add("3.3 Sitzungszimmer", "3.3 Meeting room");
+            fwd.Add("3.4 Schalterhalle, Empfang", "3.4 Counter hall, Reception");
+
+            fwd.Add("4.1 Schulzimmer", "4.1 Classroom");
+            fwd.Add("4.2 Lehrerzimmer", "4.2 Staffroom");
+            fwd.Add("4.3 Bibliothek", "4.3 Library");
+            fwd.Add("4.4 Hoehrsaal", "4.4 Lecture hall");
+            fwd.Add("4.5 Schulfachraum", "4.5 School subject room");
+
+            fwd.Add("5.1 Lebensmittelverkauf", "5.1 Grocery sales");
+            fwd.Add("5.2 Fachgeschaeft", "5.2 Specialty shop");
+            fwd.Add("5.3 Verkauf Moebel, Bau, Garten", "5.3 Furniture, Hardware, Garden");
+
+            fwd.Add("6.1 Restaurant", "6.1 Restaurant");
+            fwd.Add("6.2 Selbstbedienungsrestaurant", "6.2 Self-service restaurant");
+            fwd.Add("6.3 Kueche zu Restaurant", "6.3 Restaurant kitchen");
+            fwd.Add("6.4 Kueche zu Selbstbedienungsrestaurant", "6.4 Self-service restaurant kitchen");
+
+            fwd.Add("7.1 Vorstellungsraum", "7.1 Presentation room");
+            fwd.Add("7.2 Mehrzweckhalle", "7.2 Multi-purpose hall");
+            fwd.Add("7.3 Ausstellungshalle", "7.3 Exhibition hall");
+
+            fwd.Add("8.1 Bettenzimmer", "8.1 Beds room");
+            fwd.Add("8.2 Stationszimmer", "8.2 Ward room");
+            fwd.Add("8.3 Behandlungsraum", "8.3 Treatment room");
+
+            fwd.Add("9.1 Produktion (grobe Arbeit)", "9.1 Production (rough works)");
+            fwd.Add("9.2 Produktion (feine Arbeit)", "9.2 Production (fine works)");
+            fwd.Add("9.3 Laborraum", "9.3 Laboratory");
+
+            fwd.Add("10.1 Lagerhalle", "10.1 Storage hall");
+
+            fwd.Add("11.1 Turnhalle", "11.1 Sports hall");
+            fwd.Add("11.2 Fitnessraum", "11.2 Gym");
+            fwd.Add("11.3 Schwimmhalle", "11.3 Swimming pool");
+
+            fwd.Add("12.1 Verkehrsflaeche", "12.1 Traffic area");
+            fwd.Add("12.2 Verkehrsflaeche 24 h", "12.2 Traffic area 24 h");
+            fwd.Add("12.3 Treppenhaus", "12.3 Stairwell");
+            fwd.Add("12.4 Nebenraum", "12.4 Adjoining room");
+            fwd.Add("12.5 Kueche, Teekueche", "12.5 Kitchen");
+            fwd.Add("12.6 WC, Bad, Dusche", "12.5 Toilet, Shower, Bathroom");
+            fwd.Add("12.7 WC", "12.7 Toilet");
+            fwd.Add("12.8 Garderobe, Dusche", "12.8 Changing room, Shower");
+            fwd.Add("12.9 Parkhaus", "12.9 Parking garage");
+            fwd.Add("12.10 Wasch- und Trockenraum", "12.10 Laundry and drying room");
+            fwd.Add("12.11 Kuehlraum", "12.11 Cold storage room");
+            fwd.Add("12.12 Serverraum", "12.12 Server room");
+
+            fwd.Add("Standardwert", "Standard value");
+            fwd.Add("Bestand", "Stock value");
+            fwd.Add("Zielwert", "Target value");
+
+            return fwd;
         }
 
         #endregion ToolTips
