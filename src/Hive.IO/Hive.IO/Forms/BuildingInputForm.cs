@@ -534,7 +534,7 @@ namespace Hive.IO.Forms
             fwd.Add("12.12 Serverraum", "12.12 Server room");
 
             fwd.Add("Standardwert", "Standard value");
-            fwd.Add("Bestand", "Stock value");
+            fwd.Add("Bestand", "Existing building");
             fwd.Add("Zielwert", "Target value");
 
             return fwd;
