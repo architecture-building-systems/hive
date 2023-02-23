@@ -123,6 +123,16 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap de_icon {
+            get {
+                object obj = ResourceManager.GetObject("de_icon", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Demand_AdaptiveComfort {
             get {
                 object obj = ResourceManager.GetObject("Demand_AdaptiveComfort", resourceCulture);
@@ -146,6 +156,16 @@ namespace Hive.IO.Properties {
         internal static System.Drawing.Bitmap Demand_SIARoomReader {
             get {
                 object obj = ResourceManager.GetObject("Demand_SIARoomReader", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap en_icon {
+            get {
+                object obj = ResourceManager.GetObject("en_icon", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
