@@ -1473,6 +1473,7 @@ namespace Hive.IO.Forms
             this.buttonDE.Size = new System.Drawing.Size(31, 19);
             this.buttonDE.TabIndex = 0;
             this.buttonDE.UseVisualStyleBackColor = true;
+            this.buttonDE.Click += new System.EventHandler(this.buttonDE_Clicked);
             // 
             // buttonEN
             // 
@@ -1483,6 +1484,7 @@ namespace Hive.IO.Forms
             this.buttonEN.Size = new System.Drawing.Size(31, 19);
             this.buttonEN.TabIndex = 1;
             this.buttonEN.UseVisualStyleBackColor = true;
+            this.buttonEN.Click += new System.EventHandler(this.buttonEN_Clicked);
             // 
             // txtWallCost
             // 

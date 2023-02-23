@@ -76,6 +76,28 @@ namespace Hive.IO.Forms
             }
         }
 
+        private void buttonDE_Clicked(object sender, EventArgs e)
+        {
+            if (_rendering)
+            {
+                return;
+            }
+
+            english = false;
+            RenderState();
+        }
+
+        private void buttonEN_Clicked(object sender, EventArgs e)
+        {
+            if (_rendering)
+            {
+                return;
+            }
+
+            english = true;
+            RenderState();
+        }
+
         private void UpdateSiaComboBoxes()
         {
             //Building Use Type
