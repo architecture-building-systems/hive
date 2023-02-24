@@ -13,13 +13,8 @@ namespace Hive.IO.GhSolar
 {
     public class GhTreeGenerator : GH_Component
     {
-        public GhTreeGenerator()
+        public GhTreeGenerator() : base("Tree Generator", "TreeGenerator", "Generates random boxes as input for the Tree Schedules", "[hive]", "Solar")
         {
-            this.Name = "Tree Generator";
-            this.NickName = "TreeGenerator";
-            this.Description = "Generates random boxes as input for the Tree Schedules";
-            this.Category = "[hive]";
-            this.SubCategory = "Solar";
         }
 
         public override GH_Exposure Exposure => GH_Exposure.secondary;
