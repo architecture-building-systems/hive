@@ -219,6 +219,7 @@
     <Compile Include="GhSolar\GhSTSimple.cs" />
     <Compile Include="GhSolar\GhSTTimeResolved.cs" />
     <Compile Include="GhSolar\GhSumOverTimePeriod.cs" />
+    <Compile Include="GhSolar\GhTreeGenerator.cs" />
     <Compile Include="GhSolar\GhTreeSchedule.cs" />
     <Compile Include="GhValueLists\GhSia2024RoomList_Standard.cs" />
     <Compile Include="GhValueLists\GhListResults.cs" />
