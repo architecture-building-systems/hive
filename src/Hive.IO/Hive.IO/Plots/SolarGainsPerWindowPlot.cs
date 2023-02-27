@@ -96,12 +96,16 @@ namespace Hive.IO.Plots
 
         public List<double> getMonthlyIrradiation(List<double[]> irradiationOnWindows)
         {
-            var sums = Enumerable.Range(0, irradiationOnWindows[0].Length)
-           .Select(i => irradiationOnWindows.Select(
-                     nums => nums[i]
-                  ).Sum()
-           );
-           return sums.ToList();
+            if (irradiationOnWindows.Count() > 0)
+            {
+                var sums = Enumerable.Range(0, irradiationOnWindows[0].Length)
+               .Select(i => irradiationOnWindows.Select(
+                         nums => nums[i]
+                      ).Sum()
+               );
+               return sums.ToList();
+            }
+            return new List<double> { 0};
         }
     }
 

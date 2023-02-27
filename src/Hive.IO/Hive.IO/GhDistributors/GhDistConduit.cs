@@ -69,7 +69,7 @@ namespace Hive.IO.GhDistributors
             DA.SetData(2, title2);
         }
 
-        //protected override System.Drawing.Bitmap Icon => Properties.Resources.IOCore_Distconvtech;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.IOCore_DistConduit;
 
         public override Guid ComponentGuid => new Guid("d4c71228-b0bd-4c8b-b24e-a73164189fcd");
     }

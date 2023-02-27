@@ -78,17 +78,7 @@ namespace Hive.IO.GhInputOutput
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-           
-            if(_viewModel.FreeSurfaces.Count() != 0)
-            {
-                var w = GH_RuntimeMessageLevel.Warning;
-                List<string> list = new List<string>();
-                foreach (var srf in _viewModel.FreeSurfaces)
-                    list.Add(srf.Name);
-                string[] surfaces = list.ToArray();
-                AddRuntimeMessage(w, String.Format("Attention! There are surface geometries in the Hizard that have not been assigned to any solar energy technology yet:\n- {0}", string.Join("\n- ", surfaces)));
-            }
-                var solarObjects = new List<GH_ObjectWrapper>();
+            var solarObjects = new List<GH_ObjectWrapper>();
             DA.GetDataList(0, solarObjects);
 
             var meshList = new List<Mesh>();
@@ -179,6 +169,16 @@ namespace Hive.IO.GhInputOutput
 
             // create a viewmodel for the form (note, it get's set to null when the input values change...)
             CreateViewModel(conversionTech, meshList, emitters);
+
+            if (_viewModel.FreeSurfaces.Count() != 0)
+            {
+                var w = GH_RuntimeMessageLevel.Warning;
+                List<string> list = new List<string>();
+                foreach (var srf in _viewModel.FreeSurfaces)
+                    list.Add(srf.Name);
+                string[] surfaces = list.ToArray();
+                AddRuntimeMessage(w, String.Format("Attention! There are surface geometries in the Hizard that have not been assigned to any solar energy technology yet:\n- {0}", string.Join("\n- ", surfaces)));
+            }
 
             // the result might be changed by opening the form,
             // so we need to create it based on the view model (the result of the form)

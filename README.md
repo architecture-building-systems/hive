@@ -18,7 +18,7 @@ Furthermore, (C) example Grasshopper files (.gh) can be found in the [Exercises 
 
 [Validation with EnergyPlus](https://github.com/architecture-building-systems/hive/wiki/Validation)
 
-[IBPSA BS 2021 paper](https://www.research-collection.ethz.ch/handle/20.500.11850/527270)
+[IBPSA BS 2021 paper](https://doi.org/10.26868/25222708.2021.30526)
 
 [ETH Teaching Fair](https://learning-teaching-fair.ethz.ch/project/energy-and-climate-systems-iii/)
 

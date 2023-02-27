@@ -847,7 +847,7 @@ namespace Hive.IO.Results
                 }
             }
 
-            return Misc.ComputeLevelisedValues(costsYearly, interestRate, buildingLifetime);
+            return Misc.ComputeAnnualizedValues(costsYearly, interestRate, buildingLifetime);
         }
 
         public static double GetTotalCostOperationalConstructionYearlyLevelized(Building.Building building, double interestRate, double buildingLifetime)
@@ -868,7 +868,7 @@ namespace Hive.IO.Results
                 }
             }
 
-            return Misc.ComputeLevelisedValues(costsYearly, interestRate, buildingLifetime);
+            return Misc.ComputeAnnualizedValues(costsYearly, interestRate, buildingLifetime);
         }
 
         // FIX ME energy costs?
@@ -907,7 +907,7 @@ namespace Hive.IO.Results
                 }
             }
 
-            return Misc.ComputeLevelisedValues(emissionsYearly, 0.0, buildingLifetime);
+            return Misc.ComputeAnnualizedValues(emissionsYearly, 0.0, buildingLifetime);
         }
 
         public static double GetTotalEmissionsOperationalConstructionYearlyLevelized(Building.Building building, double buildingLifetime)
@@ -937,7 +937,7 @@ namespace Hive.IO.Results
                 }
             }
 
-            return Misc.ComputeLevelisedValues(emissionsYearly, 0.0, buildingLifetime);
+            return Misc.ComputeAnnualizedValues(emissionsYearly, 0.0, buildingLifetime);
         }
 
         public static double[] GetTotalEmissionsOperationalSystemsMonthly(List<ConversionTech> conversionTech)
