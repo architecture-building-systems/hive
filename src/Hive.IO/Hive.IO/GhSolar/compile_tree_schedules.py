@@ -46,7 +46,7 @@ def compile_tree_schedules_to_json():
         for row in reader]
 
         keys = out[0].keys()
-        ref_out = {key: [float(i[key]) for i in out ] for key in keys}
+        ref_out = {key: [float(i[key]) for i in out] for key in keys}
 
     data = ref_out
     
