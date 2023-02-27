@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
-using static Hive.IO.GhValueLists.GhPerformanceRatioList;
+using System.Reflection;
 
 namespace Hive.IO.GhValueLists
 {
@@ -23,13 +23,28 @@ namespace Hive.IO.GhValueLists
 
         public override GH_Exposure Exposure => GH_Exposure.secondary;
 
-        public struct TreeSchedule
+        public class TreeSchedules
         {
-            public string TreeType;
-            public List<double> Schedule;
+            public List<double> fruiting { get; set; }
+            public List<double> mallow { get; set; }
+            public List<double> viburnum { get; set; }
+            public List<double> willow { get; set; }
+            public List<double> witch_hazel { get; set; }
+            public List<double> sycamore { get; set; }
+            public List<double> oak { get; set; }
+            public List<double> walnut { get; set; }
+            public List<double> katsura { get; set; }
+            public List<double> dogwood { get; set; }
+            public List<double> conifer { get; set; }
+            public List<double> olive { get; set; }
+            public List<double> bamboo { get; set; }
+            public List<double> staff_vine { get; set; }
+            public List<double> birch { get; set; }
+            public List<double> maple { get; set; }
         }
 
-        private static List<TreeSchedule> treeSchedules_; //JsonResource backing field
+        private static TreeSchedules treeSchedules_; //JsonResource backing field
+        TreeSchedules treeSchedules = new TreeSchedules();
 
         public static string ResourceName = "Hive.IO.GhSolar.tree_schedules.json";
         
@@ -48,14 +63,12 @@ namespace Hive.IO.GhValueLists
         {
             string treeType = "";
             if (!DA.GetData(0, ref treeType)) return;
-
-            List<TreeSchedule> treeSchedules = new List<TreeSchedule>();
                 
             treeSchedules = JsonResource.ReadRecords(ResourceName, ref treeSchedules_);
 
-            var schedule = treeSchedules[0];
+            var schedule = treeSchedules.GetType().GetProperty(treeType).GetValue(treeSchedules) as IEnumerable<double>;
 
-            DA.SetData(0, schedule);
+            DA.SetDataList(0, schedule);
         }
 
         public override Guid ComponentGuid => new Guid("53ffee32-d80e-48a3-bc1f-07e3b0e411d7");
