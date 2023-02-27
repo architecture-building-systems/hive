@@ -37,6 +37,7 @@ cd %HIVE_DIR%\src\Hive.IO\Hive.IO\
 %PYTHON% Building\generate_sia2024_schedules_json.py
 %PYTHON% EnergySystems\compile_surface_tech_json.py
 %PYTHON% GhValueLists\compile_performance_ratios_json.py
+%PYTHON% GhSolar\compile_tree_schedules.py
 "%MSBUILD%" Hive.IO.csproj /p:PreBuildEvent="" /p:PostBuildEvent=""
 
 
