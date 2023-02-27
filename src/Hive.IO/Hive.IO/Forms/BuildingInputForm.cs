@@ -463,7 +463,7 @@ namespace Hive.IO.Forms
         {
             Dictionary<string, string> fwd = new Dictionary<string, string>();
 
-            fwd.Add("Wohnen", "Living");
+            fwd.Add("Wohnen", "Residential");
             fwd.Add("Hotel", "Hotel");
             fwd.Add("Buero", "Office");
             fwd.Add("Schule", "School");
