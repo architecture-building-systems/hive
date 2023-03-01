@@ -89,16 +89,16 @@ namespace Hive.IO.GhInputOutput
             var energyKpiToolTip = new VisualizerToolTip(
                 "Energy KPI",
                 "Annual operational final energy consumption for heating, cooling, electricity and domestic hot water.", 
-                _kpiPlots[2], new SolidBrush(Color.LightBlue), 70);
+                _kpiPlots[2], new SolidBrush(Color.FromArgb(180, 225, 242, 31)), 70);
 
             var emissionKpiToolTip = new VisualizerToolTip("Emissions KPI",
                 "Annual operational carbon emissions for heating, cooling, electricity and domestic hot water, and annualized embodied carbon emissions of the building construction considering the expected building lifetime.", 
-                _kpiPlots[1], new SolidBrush(Color.LightBlue), 70);
+                _kpiPlots[1], new SolidBrush(Color.FromArgb(180, 136, 219, 68)), 70);
 
             var costKpiToolTip = new VisualizerToolTip(
                 "Cost KPI",
                 "Annual operational cost for heating, cooling, electricity and domestic hot water, and annualized construction cost considering the expected building lifetime.", 
-                _kpiPlots[0], new SolidBrush(Color.LightBlue), 70);
+                _kpiPlots[0], new SolidBrush(Color.FromArgb(180, 222, 180, 109)), 70);
 
             _toolTips = new VisualizerToolTip[]
             {
