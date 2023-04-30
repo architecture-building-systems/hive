@@ -346,4 +346,16 @@
   <data name="en_icon" type="System.Resources.ResXFileRef, System.Windows.Forms">
     <value>..\Resources\en_icon.png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
   </data>
+  <data name="IOCore_DistLossesGains" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\signal-2023-04-11-230143_002 (Benutzerdefiniert).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="IOCore_VisualizerLossesGains" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\signal-2023-04-11-230325_002 (Benutzerdefiniert).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Solar_TreeGenerator" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\signal-2023-04-11-213625_002 (Benutzerdefiniert).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
+  <data name="Solar_TreeSchedules" type="System.Resources.ResXFileRef, System.Windows.Forms">
+    <value>..\Resources\signal-2023-04-11-221004_002 (Benutzerdefiniert).png;System.Drawing.Bitmap, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a</value>
+  </data>
 </root>

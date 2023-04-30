@@ -485,6 +485,16 @@ namespace Hive.IO.Properties {
         /// <summary>
         ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap IOCore_DistLossesGains {
+            get {
+                object obj = ResourceManager.GetObject("IOCore_DistLossesGains", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap IOCore_DistSIAroom {
             get {
                 object obj = ResourceManager.GetObject("IOCore_DistSIAroom", resourceCulture);
@@ -578,6 +588,16 @@ namespace Hive.IO.Properties {
         internal static System.Drawing.Bitmap IOCore_Mergersolartech {
             get {
                 object obj = ResourceManager.GetObject("IOCore_Mergersolartech", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap IOCore_VisualizerLossesGains {
+            get {
+                object obj = ResourceManager.GetObject("IOCore_VisualizerLossesGains", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }
@@ -781,6 +801,26 @@ namespace Hive.IO.Properties {
         internal static System.Drawing.Bitmap Solar_SumTimeSeries {
             get {
                 object obj = ResourceManager.GetObject("Solar_SumTimeSeries", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Solar_TreeGenerator {
+            get {
+                object obj = ResourceManager.GetObject("Solar_TreeGenerator", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Sucht eine lokalisierte Ressource vom Typ System.Drawing.Bitmap.
+        /// </summary>
+        internal static System.Drawing.Bitmap Solar_TreeSchedules {
+            get {
+                object obj = ResourceManager.GetObject("Solar_TreeSchedules", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

@@ -357,6 +357,10 @@
     <None Include="Resources\Icons\IOCore_DistEmitter.png" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\signal-2023-04-11-230325_002 %28Benutzerdefiniert%29.png" />
+    <None Include="Resources\signal-2023-04-11-230143_002 %28Benutzerdefiniert%29.png" />
+    <None Include="Resources\signal-2023-04-11-221004_002 %28Benutzerdefiniert%29.png" />
+    <None Include="Resources\signal-2023-04-11-213625_002 %28Benutzerdefiniert%29.png" />
     <None Include="Resources\IOCore_DistConduit.png" />
     <None Include="Resources\demand_SIAroomreader.png" />
     <None Include="Resources\de_icon.png" />
