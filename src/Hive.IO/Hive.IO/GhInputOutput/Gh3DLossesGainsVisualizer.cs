@@ -12,13 +12,13 @@ namespace Hive.IO.GhInputOutput
     public class Gh3DLossesGainsVisualizer : GH_Component
     {
         public Gh3DLossesGainsVisualizer()
-          : base("3DLossesGainsVisualizer", "3DLossesGainsVisualizer",
+          : base("3D Losses Gains Visualizer", "3DLossesGainsVisualizer",
               "Display vectors to represent gains/losses in 3D",
-              "[hive]", "IO-Core")
+              "[hive]", "IO")
         {
         }
 
-        public override GH_Exposure Exposure => GH_Exposure.quarternary;
+        public override GH_Exposure Exposure => GH_Exposure.secondary;
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
@@ -376,9 +376,7 @@ namespace Hive.IO.GhInputOutput
             }
         }
 
-
-        // TO DO: change with own icon
-        protected override Bitmap Icon => Properties.Resources.IO_Visualizer;
+        protected override Bitmap Icon => Properties.Resources.IOCore_VisualizerLossesGains;
 
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.

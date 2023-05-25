@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using System.Reflection;
+using System.Drawing;
 
 namespace Hive.IO.GhValueLists
 {
@@ -70,6 +71,8 @@ namespace Hive.IO.GhValueLists
 
             DA.SetDataList(0, schedule);
         }
+
+        protected override Bitmap Icon => Properties.Resources.Solar_TreeSchedules;
 
         public override Guid ComponentGuid => new Guid("53ffee32-d80e-48a3-bc1f-07e3b0e411d7");
     }

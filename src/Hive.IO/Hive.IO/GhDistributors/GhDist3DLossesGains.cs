@@ -14,7 +14,7 @@ namespace Hive.IO.GhDistributors
         /// Initializes a new instance of the MyComponent1 class.
         /// </summary>
         public GhDist3DLossesGains()
-          : base("Dist3DLossesGains", "Dist3DLossesGains",
+          : base("Distributor 3D Losses Gains", "Dist3DLossesGains",
               "Distributor for the 3D Losses and Gains arrows, getting data from the SIA380 simulator",
               "[hive]", "IO-Core")
         {
@@ -101,7 +101,7 @@ namespace Hive.IO.GhDistributors
         }
 
         // TO DO: change with own icon
-        protected override System.Drawing.Bitmap Icon => Properties.Resources.IOCore_DistSIAroom;
+        protected override System.Drawing.Bitmap Icon => Properties.Resources.IOCore_DistLossesGains;
 
         /// <summary>
         /// Gets the unique ID for this component. Do not change this ID after release.

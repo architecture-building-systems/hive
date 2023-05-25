@@ -8,10 +8,13 @@
     <OutputType>WinExe</OutputType>
     <RootNamespace>TestVisualizer</RootNamespace>
     <AssemblyName>TestVisualizer</AssemblyName>
-    <TargetFrameworkVersion>v4.7.2</TargetFrameworkVersion>
+    <TargetFrameworkVersion>v4.8</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <AutoGenerateBindingRedirects>true</AutoGenerateBindingRedirects>
     <Deterministic>true</Deterministic>
+    <TargetFrameworkProfile />
+    <NuGetPackageImportStamp>
+    </NuGetPackageImportStamp>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <PlatformTarget>AnyCPU</PlatformTarget>
@@ -33,14 +36,17 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="Eto">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Rhino 6\System\Eto.dll</HintPath>
+    <Reference Include="Eto, Version=2.7.0.0, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
+      <HintPath>..\packages\RhinoCommon.7.29.23107.3001\lib\net48\Eto.dll</HintPath>
     </Reference>
-    <Reference Include="Grasshopper">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Rhino 6\Plug-ins\Grasshopper\Grasshopper.dll</HintPath>
+    <Reference Include="GH_IO, Version=7.29.23107.3001, Culture=neutral, PublicKeyToken=6a29997d2e6b4f97, processorArchitecture=MSIL">
+      <HintPath>..\packages\Grasshopper.7.29.23107.3001\lib\net48\GH_IO.dll</HintPath>
     </Reference>
-    <Reference Include="Newtonsoft.Json, Version=12.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
-      <HintPath>..\packages\Newtonsoft.Json.12.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
+    <Reference Include="Grasshopper, Version=7.29.23107.3001, Culture=neutral, PublicKeyToken=dda4f5ec2cd80803, processorArchitecture=MSIL">
+      <HintPath>..\packages\Grasshopper.7.29.23107.3001\lib\net48\Grasshopper.dll</HintPath>
+    </Reference>
+    <Reference Include="Newtonsoft.Json, Version=13.0.0.0, Culture=neutral, PublicKeyToken=30ad4fe6b2a6aeed, processorArchitecture=MSIL">
+      <HintPath>..\packages\Newtonsoft.Json.13.0.3\lib\net45\Newtonsoft.Json.dll</HintPath>
     </Reference>
     <Reference Include="OxyPlot, Version=2.0.0.0, Culture=neutral, PublicKeyToken=638079a8f0bd61e9, processorArchitecture=MSIL">
       <HintPath>..\packages\OxyPlot.Core.2.0.0\lib\net45\OxyPlot.dll</HintPath>
@@ -50,8 +56,11 @@
     </Reference>
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="RhinoCommon">
-      <HintPath>..\..\..\..\..\..\..\..\Program Files\Rhino 6\System\RhinoCommon.dll</HintPath>
+    <Reference Include="Rhino.UI, Version=7.29.23107.3001, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
+      <HintPath>..\packages\RhinoCommon.7.29.23107.3001\lib\net48\Rhino.UI.dll</HintPath>
+    </Reference>
+    <Reference Include="RhinoCommon, Version=7.29.23107.3001, Culture=neutral, PublicKeyToken=552281e97c755530, processorArchitecture=MSIL">
+      <HintPath>..\packages\RhinoCommon.7.29.23107.3001\lib\net48\RhinoCommon.dll</HintPath>
     </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
@@ -77,6 +86,7 @@
     <Compile Include="Properties\Resources.Designer.cs">
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
     </Compile>
     <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
@@ -99,4 +109,13 @@
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <Import Project="..\packages\RhinoCommon.7.29.23107.3001\build\net48\RhinoCommon.targets" Condition="Exists('..\packages\RhinoCommon.7.29.23107.3001\build\net48\RhinoCommon.targets')" />
+  <Target Name="EnsureNuGetPackageBuildImports" BeforeTargets="PrepareForBuild">
+    <PropertyGroup>
+      <ErrorText>This project references NuGet package(s) that are missing on this computer. Use NuGet Package Restore to download them.  For more information, see http://go.microsoft.com/fwlink/?LinkID=322105. The missing file is {0}.</ErrorText>
+    </PropertyGroup>
+    <Error Condition="!Exists('..\packages\RhinoCommon.7.29.23107.3001\build\net48\RhinoCommon.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\RhinoCommon.7.29.23107.3001\build\net48\RhinoCommon.targets'))" />
+    <Error Condition="!Exists('..\packages\Grasshopper.7.29.23107.3001\build\net48\Grasshopper.targets')" Text="$([System.String]::Format('$(ErrorText)', '..\packages\Grasshopper.7.29.23107.3001\build\net48\Grasshopper.targets'))" />
+  </Target>
+  <Import Project="..\packages\Grasshopper.7.29.23107.3001\build\net48\Grasshopper.targets" Condition="Exists('..\packages\Grasshopper.7.29.23107.3001\build\net48\Grasshopper.targets')" />
 </Project>

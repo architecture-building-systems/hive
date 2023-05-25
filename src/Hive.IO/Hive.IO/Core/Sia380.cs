@@ -810,21 +810,21 @@ namespace Hive.IO.Core
         /// </summary>
         /// <param name="sequence"></param>
         /// <returns></returns>
-        Tuple<double, int> FindLowestLoad(params double[] sequence)
+        (double, int) FindLowestLoad(params double[] sequence)
         {
             var minValue = sequence[0];
             int index = 0;
             for (int i = 0; i < sequence.Count(); i++)
             {
                 // if negative, we take it as menaing 0 load. Therefore can return as the min value.
-                if (sequence[i] < 0.0) return Tuple.Create(0.0, i);
+                if (sequence[i] < 0.0) return (0.0, i);
                 else if (sequence[i] < minValue)
                 {
                     minValue = sequence[i]; // TODO is it a reference??
                     index = i;
                 }
             }
-            return Tuple.Create(minValue, index);
+            return (minValue, index);
         }
 
         double[] negatives_to_zero<T>(T values) where T : IEnumerable<double>

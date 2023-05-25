@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Grasshopper.Kernel.Types;
 using Rhino.Geometry;
 using static System.Windows.Forms.VisualStyles.VisualStyleElement.Rebar;
+using System.Drawing;
 
 namespace Hive.IO.GhSolar
 {
@@ -84,7 +85,7 @@ namespace Hive.IO.GhSolar
             DA.SetDataList(0, treeBreps);
         }
 
-        
+        protected override Bitmap Icon => Properties.Resources.Solar_TreeGenerator;
 
         public override Guid ComponentGuid => new Guid("c2434e20-9254-4aac-a6a9-e0574efe9827");
     }
