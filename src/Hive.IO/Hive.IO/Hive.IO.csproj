@@ -235,6 +235,7 @@
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
     <Compile Include="Results\ResultsExposeForGhListAttribute.cs" />
+    <Compile Include="Util\GhTrimChecker.cs" />
     <Compile Include="Util\HiveCategoryIcon.cs" />
     <Compile Include="Util\HiveIOInfo.cs" />
     <Compile Include="Util\Misc.cs" />
