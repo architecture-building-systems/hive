@@ -74,23 +74,29 @@ namespace Hive.IO.GhParametricInputs
         {
             var meshes = new List<Mesh>();
             DA.GetDataList(0, meshes);
-            
+
             var Type;
-            var Technology;
-            var ElectricEfficiency;
-            var ThermalEfficiency;
-            var InvestmentCost;
-            var EmbodiedEmissions;
-            var PerformanceRatio;
-            var SurfaceTransmittance;
-            
             DA.GetData(1, ref Type);
+
+            var Technology;
             DA.GetData(2, ref Technology);
+
+            var ElectricEfficiency;
             DA.GetData(3, ref ElectricEfficiency);
+
+            var ThermalEfficiency;
             DA.GetData(4, ref ThermalEfficiency);
+
+            var InvestmentCost;
             DA.GetData(5, ref InvestmentCost);
+
+            var EmbodiedEmissions;
             DA.GetData(6, ref EmbodiedEmissions);
+
+            var PerformanceRatio;
             DA.GetData(7, ref PerformanceRatio);
+
+            var SurfaceTransmittance;
             DA.GetData(8, ref SurfaceTransmittance);
 
             var solarTechList = new List<SolarTechProperties>();
@@ -98,14 +104,15 @@ namespace Hive.IO.GhParametricInputs
             {
                 var solarTech = new SolarTechProperties();
                 solarTech.MeshSurface = mesh;
-                solarTech.Type = Type;
+                solarTech.Type = type;
                 solarTech.Technology = Technology;
+                solarTech.ElectricEfficiency = ElectricEfficiency;
                 solarTech.ThermalEfficiency = ThermalEfficiency;
-                solartTech.ElectricEfficiency = ElectricEfficiency;
                 solarTech.InvestmentCost = InvestmentCost;
                 solarTech.EmbodiedEmissions = EmbodiedEmissions;
                 solarTech.PerformanceRatio = PerformanceRatio;
-                solarTech.SurfaceTransmittance = SurfaceTransmittance;
+                solarTech.SurfaceTransmittance = SurfaceBasedTech;
+
                 solarTechList.Add(solarTech);
             }
 
