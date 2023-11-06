@@ -75,43 +75,38 @@ namespace Hive.IO.GhParametricInputs
             var meshes = new List<Mesh>();
             DA.GetDataList(0, meshes);
 
-            var Type;
-            DA.GetData(1, ref Type);
-
-            var Technology;
-            DA.GetData(2, ref Technology);
-
-            var ElectricEfficiency;
-            DA.GetData(3, ref ElectricEfficiency);
-
-            var ThermalEfficiency;
-            DA.GetData(4, ref ThermalEfficiency);
-
-            var InvestmentCost;
-            DA.GetData(5, ref InvestmentCost);
-
-            var EmbodiedEmissions;
-            DA.GetData(6, ref EmbodiedEmissions);
-
-            var PerformanceRatio;
-            DA.GetData(7, ref PerformanceRatio);
-
-            var SurfaceTransmittance;
-            DA.GetData(8, ref SurfaceTransmittance);
+            string solarTechType = null;
+            DA.GetData(1, ref solarTechType);
+            string solarTechTechnology = null;
+            DA.GetData(2, ref solarTechTechnology);
+            double solarTechElectricEfficiency = 0.0; 
+            DA.GetData(3, ref solarTechElectricEfficiency);
+            double solarTechThermalEfficiency = 0.0;
+            DA.GetData(4, ref solarTechThermalEfficiency);
+            double solarTechInvestmentCost = 0.0;
+            DA.GetData(5, ref solarTechInvestmentCost);
+            double solarTechEmbodiedEmissions = 0.0;
+            DA.GetData(6, ref solarTechEmbodiedEmissions);
+            double solarTechPerformanceRatio = 0.0;
+            DA.GetData(7, ref solarTechPerformanceRatio);
+            double solarTechSurfaceTransmittance = 0.0;
+            DA.GetData(8, ref solarTechSurfaceTransmittance);
 
             var solarTechList = new List<SolarTechProperties>();
             foreach (var mesh in meshes)
             {
-                var solarTech = new SolarTechProperties();
-                solarTech.MeshSurface = mesh;
-                solarTech.Type = type;
-                solarTech.Technology = Technology;
-                solarTech.ElectricEfficiency = ElectricEfficiency;
-                solarTech.ThermalEfficiency = ThermalEfficiency;
-                solarTech.InvestmentCost = InvestmentCost;
-                solarTech.EmbodiedEmissions = EmbodiedEmissions;
-                solarTech.PerformanceRatio = PerformanceRatio;
-                solarTech.SurfaceTransmittance = SurfaceBasedTech;
+                var solarTech = new SolarTechProperties
+                {
+                    MeshSurface = mesh,
+                    Type = solarTechType,
+                    Technology = solarTechTechnology,
+                    ElectricEfficiency = solarTechElectricEfficiency,
+                    ThermalEfficiency = solarTechThermalEfficiency,
+                    InvestmentCost = solarTechInvestmentCost,
+                    EmbodiedEmissions = solarTechEmbodiedEmissions, 
+                    PerformanceRatio = solarTechPerformanceRatio,
+                    SurfaceTransmittance = solarTechSurfaceTransmittance
+                };
 
                 solarTechList.Add(solarTech);
             }
