@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 
 using Grasshopper.Kernel;
+using Hive.IO.EnergySystems;
+using Hive.IO.Forms;
 using Rhino.Geometry;
 //using Newtonsoft.Json;
 
@@ -73,20 +75,39 @@ namespace Hive.IO.GhParametricInputs
             var meshes = new List<Mesh>();
             DA.GetDataList(0, meshes);
 
-            var solarTech = new SolarTechProperties();
-            DA.GetData(1, ref solarTech.Type);
-            DA.GetData(2, ref solarTech.Technology);
-            DA.GetData(3, ref solarTech.ElectricEfficiency);
-            DA.GetData(4, ref solarTech.ThermalEfficiency);
-            DA.GetData(5, ref solarTech.InvestmentCost);
-            DA.GetData(6, ref solarTech.EmbodiedEmissions);
-            DA.GetData(7, ref solarTech.PerformanceRatio);
-            DA.GetData(8, ref solarTech.SurfaceTransmittance);
+            string solarTechType = null;
+            DA.GetData(1, ref solarTechType);
+            string solarTechTechnology = null;
+            DA.GetData(2, ref solarTechTechnology);
+            double solarTechElectricEfficiency = 0.0; 
+            DA.GetData(3, ref solarTechElectricEfficiency);
+            double solarTechThermalEfficiency = 0.0;
+            DA.GetData(4, ref solarTechThermalEfficiency);
+            double solarTechInvestmentCost = 0.0;
+            DA.GetData(5, ref solarTechInvestmentCost);
+            double solarTechEmbodiedEmissions = 0.0;
+            DA.GetData(6, ref solarTechEmbodiedEmissions);
+            double solarTechPerformanceRatio = 0.0;
+            DA.GetData(7, ref solarTechPerformanceRatio);
+            double solarTechSurfaceTransmittance = 0.0;
+            DA.GetData(8, ref solarTechSurfaceTransmittance);
 
             var solarTechList = new List<SolarTechProperties>();
             foreach (var mesh in meshes)
             {
-                solarTech.MeshSurface = mesh;
+                var solarTech = new SolarTechProperties
+                {
+                    MeshSurface = mesh,
+                    Type = solarTechType,
+                    Technology = solarTechTechnology,
+                    ElectricEfficiency = solarTechElectricEfficiency,
+                    ThermalEfficiency = solarTechThermalEfficiency,
+                    InvestmentCost = solarTechInvestmentCost,
+                    EmbodiedEmissions = solarTechEmbodiedEmissions, 
+                    PerformanceRatio = solarTechPerformanceRatio,
+                    SurfaceTransmittance = solarTechSurfaceTransmittance
+                };
+
                 solarTechList.Add(solarTech);
             }
 
