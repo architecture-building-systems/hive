@@ -27,7 +27,8 @@ namespace Hive.IO.GhInputOutput
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
-            pManager.AddBrepParameter("Brep collection", "Breps", "Collection of all Breps", GH_ParamAccess.list);
+            pManager.AddBrepParameter("Building Brep collection", "Buildings", "Collection of all building Breps", GH_ParamAccess.list);
+            pManager.AddBrepParameter("Windows collection", "Windows", "Collection of all windows", GH_ParamAccess.list);
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
@@ -45,18 +46,21 @@ namespace Hive.IO.GhInputOutput
             var breps = new List<Brep>();
             if (!DA.GetDataList(0, breps)) return;
 
-            var modifier = new List<string> { "void glow bldgOpaq", "0", "0", "4", "1\t1\t1", "0" };
+            var windows = new List<Brep>();
+            if (!DA.GetDataList(1, windows)) return;
 
-            File.WriteAllLines(fullPath, modifier);
+            var modifierBldg = new List<string> { "void glow bldgOpaq", "0", "0", "4", "1\t1\t1", "0" };
+            var modifierWndw = new List<string> { "void glow wndwOpaq", "0", "0", "4", "2\t2\t2", "0" };
+
+            File.WriteAllLines(fullPath, modifierBldg);
+            File.AppendAllLines(fullPath, modifierWndw);
 
             foreach (Brep brep in breps)
             {
                 var counter = 0;
-                
 
                 foreach (BrepFace face in brep.Faces)
                 {
-              
                     var vertex_count = 0;
                     var vertexes = new List<string>();
 
@@ -67,30 +71,49 @@ namespace Hive.IO.GhInputOutput
                         vertexes.Add(sep_string);
 
                         vertex_count += 3;
-                        
-                    }
 
-                    var header = new List<string> { "bldgOpaq polygon bldgOpaq." + counter, "0", "0", vertex_count.ToString()};
+                    }
+                    var header = new List<string> { "bldgOpaq polygon bldgOpaq." + counter, "0", "0", vertex_count.ToString() };
 
                     counter++;
-                    
+
                     File.AppendAllLines(fullPath, header);
                     File.AppendAllLines(fullPath, vertexes);
-
                 }
             }
 
-            //run eplus
-            string exe = @"objview";
-            string arguments = "examples/test.rad";
-            RunRadiance(exe, arguments);
+            foreach (Brep surf in windows)
+            {
+                var counter = 0;
+                var vertex_count = 0;
+                var vertexes = new List<string>();
 
-            //DA.SetDataList(0, vertexes);
+                foreach (Rhino.Geometry.Point vertice in surf.Vertices)
+                {
+                    var v_string = vertice.Location.ToString();
+                    var sep_string = v_string.Replace(",", "    ");
+                    vertexes.Add(sep_string);
 
-            //File.WriteAllLines(fullPath, vertexes);
+                    vertex_count += 3;
 
+                }
+                var header = new List<string> { "wndwOpaq polygon wndwOpaq." + counter, "0", "0", vertex_count.ToString() };
 
+                counter++;
+
+                File.AppendAllLines(fullPath, header);
+                File.AppendAllLines(fullPath, vertexes);
+            }
         }
+
+        //run eplus
+        string exe = @"objview";
+        string arguments = "examples/test.rad";
+        //RunRadiance(exe, arguments);
+
+        //DA.SetDataList(0, vertexes);
+
+
 
         internal static void RunRadiance(string FileName, string command)
         {
