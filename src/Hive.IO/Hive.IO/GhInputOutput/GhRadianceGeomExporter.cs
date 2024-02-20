@@ -1,16 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Drawing;
 using Grasshopper.Kernel;
-using Grasshopper.GUI.Gradient;
 using Rhino.Geometry;
-using Rhino.Display;
 using System.IO;
-using System.Globalization;
 using System.Diagnostics;
-using System.Windows.Shapes;
-using Eto.Forms;
+using System.Windows;
+
 
 namespace Hive.IO.GhInputOutput
 {
@@ -27,27 +22,41 @@ namespace Hive.IO.GhInputOutput
 
         protected override void RegisterInputParams(GH_Component.GH_InputParamManager pManager)
         {
+            pManager.AddTextParameter("Radiance bin folder location", "Rad bin", "Location of the Radiance bin folder on disc", GH_ParamAccess.item);
             pManager.AddBrepParameter("Building Brep collection", "Buildings", "Collection of all building Breps", GH_ParamAccess.list);
             pManager.AddBrepParameter("Windows collection", "Windows", "Collection of all windows", GH_ParamAccess.list);
+            pManager.AddPointParameter("Camera position", "Cam position", "Position of the camera viewpoint", GH_ParamAccess.item);
+            pManager.AddVectorParameter("Camera direction", "Cam direction", "Direction of the camera view", GH_ParamAccess.item);
         }
 
         protected override void RegisterOutputParams(GH_Component.GH_OutputParamManager pManager)
         {
             pManager.AddPointParameter("Vertex collection", "vertexes", "Collection of all vertexes", GH_ParamAccess.list);
+            pManager.AddTextParameter("Output path", "outpath", "Path to rendered output image", GH_ParamAccess.list);
         }
 
 
         protected override void SolveInstance(IGH_DataAccess DA)
         {
-            string folder = @"C:\Radiance\bin\examples\";
+            string folder = @"C:\Radiance\bin\";
+            string exampleFolder = @"examples";
             string fileName = "test.rad";
-            string fullPath = folder + fileName;
+
+            DA.GetData(0, ref folder);
+
+            string fullPath = folder + exampleFolder + "\\" + fileName;
 
             var breps = new List<Brep>();
-            if (!DA.GetDataList(0, breps)) return;
+            if (!DA.GetDataList(1, breps)) return;
 
             var windows = new List<Brep>();
-            if (!DA.GetDataList(1, windows)) return;
+            if (!DA.GetDataList(2, windows)) return;
+
+            Point3d camPosition = new Point3d();
+            if (!DA.GetData(3, ref camPosition)) return;
+
+            Vector3d camDirection = new Vector3d();
+            if (!DA.GetData(4, ref camDirection)) return;
 
             var modifierBldg = new List<string> { "void glow bldgOpaq", "0", "0", "4", "1\t1\t1", "0" };
             var modifierWndw = new List<string> { "void glow wndwOpaq", "0", "0", "4", "2\t2\t2", "0" };
@@ -82,9 +91,10 @@ namespace Hive.IO.GhInputOutput
                 }
             }
 
+            int windowCounter = 0;
             foreach (Brep surf in windows)
             {
-                var counter = 0;
+                
                 var vertex_count = 0;
                 var vertexes = new List<string>();
 
@@ -97,33 +107,47 @@ namespace Hive.IO.GhInputOutput
                     vertex_count += 3;
 
                 }
-                var header = new List<string> { "wndwOpaq polygon wndwOpaq." + counter, "0", "0", vertex_count.ToString() };
+                var header = new List<string> { "wndwOpaq polygon wndwOpaq." + windowCounter, "0", "0", vertex_count.ToString() };
 
-                counter++;
+                windowCounter++;
 
                 File.AppendAllLines(fullPath, header);
                 File.AppendAllLines(fullPath, vertexes);
             }
+
+            //rpict -vta -vh 180 -vv 180 -vp 0 0 2.5 -vd 0 1 0 -vu 0 0 1 -ab 0 -av 1 1 1 octree.oct | ra_tiff -b - output.tif
+
+            string octreeCommand = @"oconv -f " + exampleFolder + "/test.rad > " + exampleFolder + "/octree.oct";
+            string renderCommand = @"rpict -x 512 -y 512 -vta -vh 180 -vv 180 -vp " + camPosition.X + " " + camPosition.Y + " " + camPosition.Z + " -vd " + camDirection.X + " " + camDirection.Y + " " + camDirection.Z + " -vu 0 0 1 -ab 0 -av 1 1 1 examples/octree.oct | ra_tiff -b - examples/output.tif";
+
+            RunRadiance(folder, octreeCommand, renderCommand);
+
+            //DA.SetDataList(0, vertexes);
+            DA.SetData(1, folder + exampleFolder + "\\output.tif");
+
         }
 
-        //run eplus
-        string exe = @"objview";
-        string arguments = "examples/test.rad";
-        //RunRadiance(exe, arguments);
-
-        //DA.SetDataList(0, vertexes);
-
-
-
-        internal static void RunRadiance(string FileName, string command)
+        internal static void RunRadiance(string folder, string octree, string render)
         {
-            string exe = FileName;
-            Process P = new Process();
-            //P.StartInfo.WindowStyle = ProcessWindowStyle.Hidden;
-            P.StartInfo.FileName = "cmd.exe";
-            P.StartInfo.Arguments = @"/C dir";
-            P.Start();
-            P.WaitForExit();
+            ProcessStartInfo cmdStartInfo = new ProcessStartInfo();
+            cmdStartInfo.FileName = @"C:\Windows\System32\cmd.exe";
+            cmdStartInfo.RedirectStandardOutput = true;
+            cmdStartInfo.RedirectStandardError = true;
+            cmdStartInfo.RedirectStandardInput = true;
+            cmdStartInfo.UseShellExecute = false;
+            cmdStartInfo.CreateNoWindow = true;
+
+            Process cmdProcess = new Process();
+            cmdProcess.StartInfo = cmdStartInfo;
+            cmdProcess.EnableRaisingEvents = true;
+            cmdProcess.Start();
+
+            cmdProcess.StandardInput.WriteLine("cd " + folder);
+            cmdProcess.StandardInput.WriteLine(octree);
+            cmdProcess.StandardInput.WriteLine(render);
+            cmdProcess.StandardInput.WriteLine("exit");
+
+            cmdProcess.WaitForExit();
         }
 
 
