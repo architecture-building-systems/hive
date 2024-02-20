@@ -59,14 +59,16 @@ namespace Hive.IO.GhInputOutput
             if (!DA.GetData(4, ref camDirection)) return;
 
             var modifierBldg = new List<string> { "void glow bldgOpaq", "0", "0", "4", "1\t1\t1", "0" };
-            var modifierWndw = new List<string> { "void glow wndwOpaq", "0", "0", "4", "2\t2\t2", "0" };
+            //var modifierWndw = new List<string> { "void glow wndwOpaq", "0", "0", "4", "2\t2\t2", "0" };
+            var matPlastic = new List<string> { "void plastic matte_green", "0", "0", "5 .2 .6 .25 0 0" };
 
             File.WriteAllLines(fullPath, modifierBldg);
-            File.AppendAllLines(fullPath, modifierWndw);
+            File.AppendAllLines(fullPath, matPlastic);
 
+            var polygonCounter = 0;
             foreach (Brep brep in breps)
             {
-                var counter = 0;
+                
 
                 foreach (BrepFace face in brep.Faces)
                 {
@@ -82,9 +84,9 @@ namespace Hive.IO.GhInputOutput
                         vertex_count += 3;
 
                     }
-                    var header = new List<string> { "bldgOpaq polygon bldgOpaq." + counter, "0", "0", vertex_count.ToString() };
+                    var header = new List<string> { "bldgOpaq polygon bldgOpaq." + polygonCounter, "0", "0", vertex_count.ToString() };
 
-                    counter++;
+                    polygonCounter++;
 
                     File.AppendAllLines(fullPath, header);
                     File.AppendAllLines(fullPath, vertexes);
@@ -107,7 +109,7 @@ namespace Hive.IO.GhInputOutput
                     vertex_count += 3;
 
                 }
-                var header = new List<string> { "wndwOpaq polygon wndwOpaq." + windowCounter, "0", "0", vertex_count.ToString() };
+                var header = new List<string> { "matte_green polygon matte_green." + windowCounter, "0", "0", vertex_count.ToString() };
 
                 windowCounter++;
 
