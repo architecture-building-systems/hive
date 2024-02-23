@@ -6,6 +6,7 @@ using System.IO;
 using System.Diagnostics;
 using System.Linq;
 using System.Windows.Media.Media3D;
+using System.Security.Policy;
 
 
 namespace Hive.IO.GhInputOutput
@@ -59,7 +60,7 @@ namespace Hive.IO.GhInputOutput
             if (!DA.GetData(4, ref camDirection)) return;
 
             var modifierBldg = new List<string> { "void glow bldgOpaq", "0", "0", "4", "1\t1\t1", "0" };
-            var matPlastic = new List<string> { "void plastic matte_green", "0", "0", "5 .2 .6 .25 0 0" };
+            var matPlastic = new List<string> { "void plastic wndw", "0", "0", "5 .2 .6 .25 0 0" };
 
             File.WriteAllLines(fullPath, modifierBldg);
             File.AppendAllLines(fullPath, matPlastic);
@@ -83,13 +84,8 @@ namespace Hive.IO.GhInputOutput
                 }
 
                 List<Point3d> distinct_v = vertexes.Distinct().ToList();
-                var len = distinct_v.Count;
 
-                var centerX = distinct_v.Sum(x => x.X) / len;
-                var centerY = distinct_v.Sum(x => x.Y) / len;
-                var centerZ = distinct_v.Sum(x => x.Z) / len;
-
-                Point3d centerP = new Point3d(centerX, centerY, centerZ);
+                Point3d centerP = CalculateCenter(distinct_v);
 
                 Point3d firstP = distinct_v[0];
 
@@ -117,22 +113,16 @@ namespace Hive.IO.GhInputOutput
 
                 if (result < 0)
                 {
-                    var header = new List<string> { "bldgOpaq polygon bldgOpaq." + polygonCounter, "0", "0", (vertex_count).ToString() };
+                    WriteGeometryToRadFile("bldgOpaq", polygonCounter, vertex_count, vertex_strings_list, fullPath);
 
                     polygonCounter++;
-
-                    File.AppendAllLines(fullPath, header);
-                    File.AppendAllLines(fullPath, vertex_strings_list);
                 } else
                 {
-                    var header = new List<string> { "bldgOpaq polygon bldgOpaq." + polygonCounter, "0", "0", (vertex_count).ToString() };
-
-                    polygonCounter++;
-
                     vertex_strings_list.Reverse();
 
-                    File.AppendAllLines(fullPath, header);
-                    File.AppendAllLines(fullPath, vertex_strings_list);
+                    WriteGeometryToRadFile("bldgOpaq", polygonCounter, vertex_count, vertex_strings_list, fullPath);
+
+                    polygonCounter++;
                 }
             }
 
@@ -141,31 +131,28 @@ namespace Hive.IO.GhInputOutput
             {
 
                 var vertex_count = 0;
-                var vertexes = new List<string>();
+                var vertexes = new List<Point3d>();
+                var vertex_strings = new List<string>();
 
                 foreach (Rhino.Geometry.Point vertice in surf.Vertices)
                 {
                     var v_string = vertice.Location.ToString();
                     var sep_string = v_string.Replace(",", "    ");
-                    vertexes.Add(sep_string);
+                    vertex_strings.Add(sep_string);
+                    vertexes.Add(vertice.Location);
 
                     vertex_count += 3;
                 }
-                var header = new List<string> { "matte_green polygon matte_green." + windowCounter, "0", "0", vertex_count.ToString() };
+
+                WriteGeometryToRadFile("wndw", windowCounter, vertex_count, vertex_strings, fullPath);
 
                 windowCounter++;
 
-                File.AppendAllLines(fullPath, header);
-                File.AppendAllLines(fullPath, vertexes);
+                vertex_strings.Reverse();
 
-                var header2 = new List<string> { "matte_green polygon matte_green." + windowCounter, "0", "0", vertex_count.ToString() };
+                WriteGeometryToRadFile("wndw", windowCounter, vertex_count, vertex_strings, fullPath);
 
                 windowCounter++;
-
-                vertexes.Reverse();
-
-                File.AppendAllLines(fullPath, header2);
-                File.AppendAllLines(fullPath, vertexes);
             }
 
             //rpict -vta -vh 180 -vv 180 -vp 0 0 2.5 -vd 0 1 0 -vu 0 0 1 -ab 0 -av 1 1 1 octree.oct | ra_tiff -b - output.tif
@@ -213,6 +200,27 @@ namespace Hive.IO.GhInputOutput
             return dot;
         }
 
+        public static Point3d CalculateCenter(List<Point3d> v)
+        {
+            var len = v.Count;
+
+            var centerX = v.Sum(x => x.X) / len;
+            var centerY = v.Sum(x => x.Y) / len;
+            var centerZ = v.Sum(x => x.Z) / len;
+
+            Point3d centerP = new Point3d(centerX, centerY, centerZ);
+
+            return centerP;
+        }
+
+        public static void WriteGeometryToRadFile(string name, int itemCount, int vertexCount, List<string> stringList, string path)
+        {
+            var header = new List<string> { name + " polygon " + name +"." + itemCount, "0", "0", (vertexCount).ToString() };
+
+            File.AppendAllLines(path, header);
+            File.AppendAllLines(path, stringList);
+        }
+
         internal static void RunRadiance(string folder, string octree, string render)
         {
             ProcessStartInfo cmdStartInfo = new ProcessStartInfo();
@@ -235,8 +243,6 @@ namespace Hive.IO.GhInputOutput
 
             cmdProcess.WaitForExit();
         }
-
-
 
         //protected override Bitmap Icon => Properties.Resources.IOCore_VisualizerLossesGains;
 
