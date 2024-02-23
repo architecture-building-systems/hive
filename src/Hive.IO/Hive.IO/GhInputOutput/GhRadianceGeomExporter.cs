@@ -65,72 +65,6 @@ namespace Hive.IO.GhInputOutput
             File.AppendAllLines(fullPath, matPlastic);
 
             var polygonCounter = 0;
-            //foreach (Brep brep in breps)
-            //{
-
-            //    foreach (BrepFace face in brep.Faces)
-            //    {
-            //        var vertex_count = 0;
-            //        var vertexes = new List<string>();
-
-            //        foreach (Rhino.Geometry.Point vertice in face.ToBrep().Vertices)
-            //        {
-            //            var v_string = vertice.Location.ToString();
-            //            var sep_string = v_string.Replace(",", "    ");
-            //            vertexes.Add(sep_string);
-
-            //            vertex_count += 3;
-
-            //        }
-            //        var header = new List<string> { "bldgOpaq polygon bldgOpaq." + polygonCounter, "0", "0", vertex_count.ToString() };
-
-            //        polygonCounter++;
-
-            //        File.AppendAllLines(fullPath, header);
-            //        File.AppendAllLines(fullPath, vertexes);
-            //    }
-            //}
-
-            //foreach (Brep brep in breps)
-            //{
-            //    int vertex_count = 0;
-            //    List<string> vertexes = new List<string>();
-
-            //    BrepEdgeList BrepEdges = brep.Edges;
-
-            //    for (int i = 0; i < BrepEdges.Count; i++)
-            //    {
-            //        var points = "";
-            //        if (i == 0)
-            //        {
-            //            points = findConnectionPoints(BrepEdges, i, BrepEdges.Count - 1);
-            //        }
-            //        else
-            //        {
-            //            points = findConnectionPoints(BrepEdges, i - 1, i);
-            //        }
-
-            //        vertexes.Add(points);
-            //        vertex_count += 3;
-            //    }
-
-            //    var header = new List<string> { "bldgOpaq polygon bldgOpaq." + polygonCounter, "0", "0", (vertex_count).ToString() };
-
-            //    polygonCounter++;
-
-            //    File.AppendAllLines(fullPath, header);
-            //    File.AppendAllLines(fullPath, vertexes);
-
-            //    var header2 = new List<string> { "bldgOpaq polygon bldgOpaq." + polygonCounter, "0", "0", (vertex_count).ToString() };
-
-            //    polygonCounter++;
-
-            //    vertexes.Reverse();
-
-            //    File.AppendAllLines(fullPath, header2);
-            //    File.AppendAllLines(fullPath, vertexes);
-
-            //}
 
             Vector3D up = new Vector3D(1, 1, 1);
 
@@ -246,30 +180,6 @@ namespace Hive.IO.GhInputOutput
             DA.SetData(1, folder + exampleFolder + "\\output.tif");
 
         }
-
-        //internal static string findConnectionPoints(BrepEdgeList brepEdges, int i, int j)
-        //{
-        //    var s1 = brepEdges[i].StartVertex.Location;
-        //    var e1 = brepEdges[i].EndVertex.Location;
-
-        //    var s2 = brepEdges[j].StartVertex.Location;
-        //    var e2 = brepEdges[j].EndVertex.Location;
-
-        //    var v = new List<Point3d>() { s1, e1, s2, e2 };
-
-        //    var connectionPoint = v.GroupBy(x => x).Where(g => g.Count() > 1).Select(y => y.Key).ToList();
-
-        //    var result = "";
-
-        //    if (connectionPoint.Count > 0) {
-        //        result = connectionPoint[0].ToString().Replace(",", "   ");
-        //    } else
-        //    {
-        //        result = "0 0 0";
-        //    }
-
-        //    return result;
-        //}
 
         public static float AngleBetweenThreePoints(Vector3D up, Point3d centerP, Point3d firstP, Point3d currentP)
         {
