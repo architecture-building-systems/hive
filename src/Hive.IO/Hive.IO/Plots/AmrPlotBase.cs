@@ -215,8 +215,8 @@ namespace Hive.IO.Plots
 
         private void RenderLeftAxis(Graphics graphics)
         {
-            graphics.DrawStringVertical("Buildings", BoldFont, TextBrush, BuildingsLeftAxisBounds);
-            graphics.DrawStringVertical("Systems", BoldFont, TextBrush, SystemsLeftAxisBounds);
+            graphics.DrawStringVertical("Building / Construction", BoldFont, TextBrush, BuildingsLeftAxisBounds);
+            graphics.DrawStringVertical("Energy System", BoldFont, TextBrush, SystemsLeftAxisBounds);
         }
 
         private void RenderRightAxis(Graphics graphics)
