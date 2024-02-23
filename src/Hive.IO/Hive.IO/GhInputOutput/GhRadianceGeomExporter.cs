@@ -132,6 +132,8 @@ namespace Hive.IO.GhInputOutput
 
             //}
 
+            Vector3D up = new Vector3D(1, 1, 1);
+
             foreach (Brep brep in breps)
             {
                 int vertex_count = 0;
@@ -157,36 +159,47 @@ namespace Hive.IO.GhInputOutput
 
                 Point3d firstP = distinct_v[0];
 
-                var up = new Vector3D(1, 1, 1);
-
-                var angles = new List<(string vertex, double angle)>();
+                var angles_strings = new List<(string vertex, double angle)>();
+                var angles = new List<(Point3d vertex, double angle)>();
 
                 foreach (var v in distinct_v)
                 {
                     var angle = AngleBetweenThreePoints(up, centerP, firstP, v);
-                    angles.Add((v.ToString().Replace(",", " "), angle));
+                    angles_strings.Add((v.ToString().Replace(",", " "), angle));
+                    angles.Add((v, angle));
                     Debug.Print(angle.ToString());
                     vertex_count += 3;
                 }
 
+                angles_strings.Sort((a, b) => a.angle.CompareTo(b.angle));
                 angles.Sort((a, b) => a.angle.CompareTo(b.angle));
+
+                var vertex_strings_list = angles_strings.Select(x => x.vertex).ToList();
                 var vertex_list = angles.Select(x => x.vertex).ToList();
 
-                var header = new List<string> { "bldgOpaq polygon bldgOpaq." + polygonCounter, "0", "0", (vertex_count).ToString() };
+                //decide which ordering (counter/clockwise) of polygons results in a normal vector that points towards the camera,
+                //so only that vertex list is written to the .rad file
+                var result = PointOnWhichSide(centerP, camPosition, vertex_list);
 
-                polygonCounter++;
+                if (result < 0)
+                {
+                    var header = new List<string> { "bldgOpaq polygon bldgOpaq." + polygonCounter, "0", "0", (vertex_count).ToString() };
 
-                File.AppendAllLines(fullPath, header);
-                File.AppendAllLines(fullPath, vertex_list);
+                    polygonCounter++;
 
-                var header2 = new List<string> { "bldgOpaq polygon bldgOpaq." + polygonCounter, "0", "0", (vertex_count).ToString() };
+                    File.AppendAllLines(fullPath, header);
+                    File.AppendAllLines(fullPath, vertex_strings_list);
+                } else
+                {
+                    var header = new List<string> { "bldgOpaq polygon bldgOpaq." + polygonCounter, "0", "0", (vertex_count).ToString() };
 
-                polygonCounter++;
+                    polygonCounter++;
 
-                vertex_list.Reverse();
+                    vertex_strings_list.Reverse();
 
-                File.AppendAllLines(fullPath, header);
-                File.AppendAllLines(fullPath, vertex_list);
+                    File.AppendAllLines(fullPath, header);
+                    File.AppendAllLines(fullPath, vertex_strings_list);
+                }
             }
 
             int windowCounter = 0;
@@ -203,7 +216,6 @@ namespace Hive.IO.GhInputOutput
                     vertexes.Add(sep_string);
 
                     vertex_count += 3;
-
                 }
                 var header = new List<string> { "matte_green polygon matte_green." + windowCounter, "0", "0", vertex_count.ToString() };
 
@@ -218,7 +230,7 @@ namespace Hive.IO.GhInputOutput
 
                 vertexes.Reverse();
 
-                File.AppendAllLines(fullPath, header);
+                File.AppendAllLines(fullPath, header2);
                 File.AppendAllLines(fullPath, vertexes);
             }
 
@@ -276,6 +288,19 @@ namespace Hive.IO.GhInputOutput
             var test = Vector3D.DotProduct(up, cross);
             if (test < 0.0) angle = -angle;
             return (float)angle;
+        }
+
+        public static double PointOnWhichSide(Point3d center, Point3d cam, List<Point3d> v)
+        {
+            Vector3d camVector = center - cam; //maybe the other way around?
+
+            Vector3d refVector1 = v[1] - v[0];
+            Vector3d refVector2 = v[2] - v[0];
+
+            var normal = Vector3D.CrossProduct(new Vector3D(refVector1.X, refVector1.Y, refVector1.Z), new Vector3D(refVector2.X, refVector2.Y, refVector2.Z));
+            var dot = Vector3D.DotProduct(normal, new Vector3D(camVector.X, camVector.Y, camVector.Z));
+
+            return dot;
         }
 
         internal static void RunRadiance(string folder, string octree, string render)
