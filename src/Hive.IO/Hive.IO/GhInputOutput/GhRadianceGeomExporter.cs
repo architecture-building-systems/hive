@@ -158,7 +158,7 @@ namespace Hive.IO.GhInputOutput
             //rpict -vta -vh 180 -vv 180 -vp 0 0 2.5 -vd 0 1 0 -vu 0 0 1 -ab 0 -av 1 1 1 octree.oct | ra_tiff -b - output.tif
             //+ exampleFolder + "/sky_overcast.mat " + exampleFolder + "/sky.rad "
 
-            string octreeCommand = @"oconv -f " + exampleFolder + "/test.rad > " + exampleFolder + "/octree.oct";
+            string octreeCommand = @"oconv -f " + exampleFolder + "/sky_overcast.mat " + exampleFolder + "/sky.rad " + exampleFolder + "/test.rad > " + exampleFolder + "/octree.oct";
             string renderCommand = @"rpict -x 512 -y 512 -vta -vh 180 -vv 180 -vp " + camPosition.X + " " + camPosition.Y + " " + camPosition.Z + " -vd " + camDirection.X + " " + camDirection.Y + " " + camDirection.Z + " -vu 0 0 1 -ab 0 -av 1 1 1 examples/octree.oct | ra_tiff -b - examples/output.tif";
 
             RunRadiance(folder, octreeCommand, renderCommand);
