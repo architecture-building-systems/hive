@@ -59,11 +59,13 @@ namespace Hive.IO.GhInputOutput
             Vector3d camDirection = new Vector3d();
             if (!DA.GetData(4, ref camDirection)) return;
 
-            var modifierBldg = new List<string> { "void glow bldgOpaq", "0", "0", "4", "1\t1\t1", "0" };
-            var matPlastic = new List<string> { "void plastic wndw", "0", "0", "5 .2 .6 .25 0 0" };
+            var matBldg = new List<string> { "void plastic bldgOpaq", "0", "0", "5", "1 0 0 0 0" };
+            var matWndw = new List<string> { "void plastic wndw", "0", "0", "5 0 0.69 0.15  0 0" };
+            var matGround = new List<string> { "void plastic ground", "0", "0", "5 1 1 0 0 0" };
 
-            File.WriteAllLines(fullPath, modifierBldg);
-            File.AppendAllLines(fullPath, matPlastic);
+            File.WriteAllLines(fullPath, matBldg);
+            File.AppendAllLines(fullPath, matWndw);
+            File.AppendAllLines(fullPath, matGround);
 
             var polygonCounter = 0;
 
@@ -159,7 +161,7 @@ namespace Hive.IO.GhInputOutput
             //+ exampleFolder + "/sky_overcast.mat " + exampleFolder + "/sky.rad "
 
             string octreeCommand = @"oconv -f " + exampleFolder + "/sky_overcast.mat " + exampleFolder + "/sky.rad " + exampleFolder + "/test.rad > " + exampleFolder + "/octree.oct";
-            string renderCommand = @"rpict -x 512 -y 512 -vta -vh 180 -vv 180 -vp " + camPosition.X + " " + camPosition.Y + " " + camPosition.Z + " -vd " + camDirection.X + " " + camDirection.Y + " " + camDirection.Z + " -vu 0 0 1 -ab 0 -av 1 1 1 examples/octree.oct | ra_tiff -b - examples/output.tif";
+            string renderCommand = @"rpict -x 512 -y 512 -vta -vh 180 -vv 180 -vp " + camPosition.X + " " + camPosition.Y + " " + camPosition.Z + " -vd " + camDirection.X + " " + camDirection.Y + " " + camDirection.Z + " -vu 0 0 1 -ab 0 -av 1 1 1 examples/octree.oct | ra_tiff - examples/output.tif";
 
             RunRadiance(folder, octreeCommand, renderCommand);
 
