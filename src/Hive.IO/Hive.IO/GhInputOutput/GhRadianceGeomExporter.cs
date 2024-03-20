@@ -226,9 +226,11 @@ namespace Hive.IO.GhInputOutput
         internal static void RunRadiance(string folder, string octree, string render)
         {
             ProcessStartInfo cmdStartInfo = new ProcessStartInfo();
+            cmdStartInfo.WorkingDirectory = folder;
+            cmdStartInfo.EnvironmentVariables["RAYPATH"] = "C:\\Radiance\\lib";
             cmdStartInfo.FileName = @"C:\Windows\System32\cmd.exe";
-            cmdStartInfo.RedirectStandardOutput = true;
-            cmdStartInfo.RedirectStandardError = true;
+            //cmdStartInfo.RedirectStandardOutput = true;
+            //cmdStartInfo.RedirectStandardError = true;
             cmdStartInfo.RedirectStandardInput = true;
             cmdStartInfo.UseShellExecute = false;
             cmdStartInfo.CreateNoWindow = true;
@@ -238,7 +240,7 @@ namespace Hive.IO.GhInputOutput
             cmdProcess.EnableRaisingEvents = true;
             cmdProcess.Start();
 
-            cmdProcess.StandardInput.WriteLine("cd " + folder);
+            //cmdProcess.StandardInput.WriteLine("cd " + folder);
             cmdProcess.StandardInput.WriteLine(octree);
             cmdProcess.StandardInput.WriteLine(render);
             cmdProcess.StandardInput.WriteLine("exit");
